@@ -52,7 +52,7 @@ types:
         type: u2
 #instances:
 #  relocations:
-#    position-abs: relocations_ofs
+#    pos: relocations_ofs
 #    type: relocation
 #    repeat: expr
 #    repeat-expr: mz_header.qty_relocations

@@ -76,5 +76,5 @@ types:
         type: u4
 instances:
   image:
-    position-abs: file_header.bitmap_ofs
+    pos: file_header.bitmap_ofs
     size-eos: true

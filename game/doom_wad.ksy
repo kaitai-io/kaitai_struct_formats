@@ -25,19 +25,19 @@ types:
     instances:
       contents:
         io: _root._io
-        position-abs: offset
+        pos: offset
         size: size
         if: name != "THINGS\0\0" and name != "LINEDEFS"
       things_contents:
         io: _root._io
-        position-abs: offset
+        pos: offset
         size: size
         if: name == "THINGS\0\0"
         type: thing
         repeat: eos
       linedef_contents:
         io: _root._io
-        position-abs: offset
+        pos: offset
         size: size
         if: name == "LINEDEFS"
         type: linedef
@@ -72,7 +72,7 @@ types:
         type: u2
 instances:
   index:
-    position-abs: index_offset
+    pos: index_offset
     type: index_entry
     repeat: expr
     repeat-expr: qty_index_entries
