@@ -26,3 +26,11 @@ types:
       body:
         pos: offset
         size: size
+instances:
+  filenames:
+    pos: entries.last.offset + entries.last.size
+    type: str
+    size: 15
+    encoding: ASCII
+    repeat: expr
+    repeat-expr: num_files
