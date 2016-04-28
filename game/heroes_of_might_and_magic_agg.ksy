@@ -1,6 +1,6 @@
 meta:
   id: heroes_of_might_and_magic_agg
-  application: Heroes of Might and Game
+  application: Heroes of Might and Magic
   file-extension: agg
   endian: le
 # http://rewiki.regengedanken.de/wiki/.AGG_(Heroes_of_Might_and_Magic)
