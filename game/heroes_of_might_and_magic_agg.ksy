@@ -26,11 +26,15 @@ types:
       body:
         pos: offset
         size: size
+  filename:
+    seq:
+      - id: str
+        type: strz
+        encoding: ASCII
 instances:
   filenames:
     pos: entries.last.offset + entries.last.size
-    type: str
+    type: filename
     size: 15
-    encoding: ASCII
     repeat: expr
     repeat-expr: num_files
