@@ -23,12 +23,13 @@ seq:
   - id: dst_ip_addr
     size: 4
   - id: options
+    type: ipv4_options
     size: ihl_bytes - 20
   - id: tcp_segment_body
     type: tcp_segment
     if: protocol == protocol::tcp
   - id: body
-    size: total_length - 20
+    size: total_length - ihl_bytes
     if: protocol != protocol::tcp
 enums:
   protocol:
@@ -185,3 +186,24 @@ instances:
     value: b1 & 0xf
   ihl_bytes:
     value: ihl * 4
+types:
+  ipv4_options:
+    seq:
+      - id: entries
+        type: ipv4_option
+        repeat: eos
+  ipv4_option:
+    seq:
+      - id: b1
+        type: u1
+      - id: len
+        type: u1
+      - id: body
+        size: 'len > 2 ? len - 2 : 0'
+    instances:
+      copy:
+        value: (b1 & 0b10000000) >> 7
+      opt_class:
+        value: (b1 & 0b01100000) >> 5
+      number:
+        value: (b1 & 0b00011111)
