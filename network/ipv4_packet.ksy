@@ -28,9 +28,12 @@ seq:
   - id: tcp_segment_body
     type: tcp_segment
     if: protocol == protocol::tcp
+  - id: icmp_body
+    type: icmp_packet
+    if: protocol == protocol::icmp
   - id: body
     size: total_length - ihl_bytes
-    if: protocol != protocol::tcp
+    if: protocol != protocol::tcp and protocol != protocol::icmp
 enums:
   protocol:
     # http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml
