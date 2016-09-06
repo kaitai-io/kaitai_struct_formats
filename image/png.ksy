@@ -24,7 +24,6 @@ types:
         if: type == "IHDR"
       - id: body
         size: len
-        process: zlib
         if: type == "IDAT"
       - id: body
         size: len
