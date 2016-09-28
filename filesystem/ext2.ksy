@@ -6,8 +6,8 @@ instances:
   bg1:
     type: block_group
     pos: 1024
-#  root_dir:
-#    value: 'bg1.block_groups[0]'
+  root_dir:
+    value: 'bg1.block_groups[0].inodes[1].block[0].body'
 types:
   block_group:
     seq:
@@ -153,18 +153,18 @@ types:
         size: 2 + 12
     instances:
       block_bitmap:
-        pos: block_bitmap_block * _parent.superblock.block_size
+        pos: block_bitmap_block * _root.bg1.superblock.block_size
         size: 1024
       inode_bitmap:
-        pos: inode_bitmap_block * _parent.superblock.block_size
+        pos: inode_bitmap_block * _root.bg1.superblock.block_size
         size: 1024
       # http://www.nongnu.org/ext2-doc/ext2.html#INODE-TABLE
       # http://www.virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1-10.html
       inodes:
-        pos: inode_table_block * _parent.superblock.block_size
+        pos: inode_table_block * _root.bg1.superblock.block_size
         type: inode
         repeat: expr
-        repeat-expr: _parent.superblock.inodes_per_group
+        repeat-expr: _root.bg1.superblock.inodes_per_group
   inode:
     seq:
       - id: mode
