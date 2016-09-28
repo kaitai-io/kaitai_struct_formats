@@ -7,7 +7,7 @@ instances:
     type: block_group
     pos: 1024
   root_dir:
-    value: 'bg1.block_groups[0].inodes[1].block[0].body'
+    value: bg1.block_groups[0].inodes[1].as_dir
 types:
   block_group:
     seq:
@@ -205,6 +205,11 @@ types:
         type: u4
       - id: osd2
         size: 12
+    instances:
+      as_dir:
+        io: 'block[0].body._io'
+        pos: 0
+        type: dir
   block_ptr:
     seq:
       - id: ptr
@@ -213,3 +218,45 @@ types:
       body:
         pos: ptr * _root.bg1.superblock.block_size
         size: _root.bg1.superblock.block_size
+        type: raw_block
+  raw_block:
+    seq:
+      - id: body
+        size: _root.bg1.superblock.block_size
+  # http://www.nongnu.org/ext2-doc/ext2.html#LINKED-DIRECTORY-ENTRY-STRUCTURE
+  dir:
+    seq:
+      - id: entries
+        type: dir_entry
+        repeat: eos
+  dir_entry:
+    seq:
+      - id: inode_ptr
+        type: u4
+      - id: rec_len
+        type: u2
+      - id: name_len
+        type: u1
+      - id: file_type
+        type: u1
+        enum: file_type
+      - id: name
+        size: name_len
+        type: str
+        encoding: UTF-8
+      - id: padding
+        size: rec_len - name_len - 8
+    instances:
+      inode:
+        value: '_root.bg1.block_groups[(inode_ptr - 1) / _root.bg1.superblock.inodes_per_group].inodes[(inode_ptr - 1) % _root.bg1.superblock.inodes_per_group]'
+    enums:
+      # http://www.nongnu.org/ext2-doc/ext2.html#IFDIR-FILE-TYPE
+      file_type:
+        0: unknown
+        1: reg_file
+        2: dir
+        3: chrdev
+        4: blkdev
+        5: fifo
+        6: sock
+        7: symlink
