@@ -130,9 +130,9 @@ types:
         1: valid_fs
         2: error_fs
       errors:
-        1: continue
-        2: ro
-        3: panic
+        1: act_continue
+        2: act_ro
+        3: act_panic
   # http://www.nongnu.org/ext2-doc/ext2.html#BLOCK-GROUP-DESCRIPTOR-STRUCTURE
   # http://www.virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1-7.html
   bgd:
