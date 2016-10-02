@@ -1,0 +1,193 @@
+meta:
+  id: iso9660
+  file-extension: iso
+types:
+  vol_desc:
+    seq:
+      - id: type
+        type: u1
+      - id: magic
+        contents: "CD001"
+      - id: version
+        type: u1
+      - id: vol_desc_boot_record
+        type: vol_desc_boot_record
+        if: type == 0
+      - id: vol_desc_primary
+        type: vol_desc_primary
+        if: type == 1
+  vol_desc_boot_record:
+    seq:
+      - id: boot_system_id
+        type: str
+        size: 32
+        encoding: UTF-8
+      - id: boot_id
+        type: str
+        size: 32
+        encoding: UTF-8
+  vol_desc_primary:
+    # http://wiki.osdev.org/ISO_9660#The_Primary_Volume_Descriptor
+    seq:
+      - id: unused1
+        contents: [0]
+      - id: system_id
+        type: str
+        size: 32
+        encoding: UTF-8
+      - id: volume_id
+        type: str
+        size: 32
+        encoding: UTF-8
+      - id: unused2
+        contents: [0, 0, 0, 0, 0, 0, 0, 0]
+      - id: vol_space_size
+        type: u4bi
+      - id: unused3
+        contents: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      - id: vol_set_size
+        type: u2bi
+      - id: vol_seq_num
+        type: u2bi
+      - id: logical_block_size
+        type: u2bi
+      - id: path_table_size
+        type: u4bi
+      - id: loc_path_table_le
+        type: u4le
+      - id: loc_opt_path_table_le
+        type: u4le
+      - id: loc_path_table_be
+        type: u4be
+      - id: loc_opt_path_table_be
+        type: u4be
+      - id: root_dir
+        type: dir_entry
+        size: 34
+      - id: vol_set_id
+        type: str
+        size: 128
+        encoding: UTF-8
+      - id: publisher_id
+        type: str
+        size: 128
+        encoding: UTF-8
+      - id: data_preparer_id
+        type: str
+        size: 128
+        encoding: UTF-8
+      - id: application_id
+        type: str
+        size: 128
+        encoding: UTF-8
+      - id: copyright_file_id
+        type: str
+        size: 38
+        encoding: UTF-8
+      - id: abstract_file_id
+        type: str
+        size: 36
+        encoding: UTF-8
+      - id: bibliographic_file_id
+        type: str
+        size: 37
+        encoding: UTF-8
+      - id: vol_create_datetime
+        type: dec_datetime
+      - id: vol_mod_datetime
+        type: dec_datetime
+      - id: vol_expire_datetime
+        type: dec_datetime
+      - id: vol_effective_datetime
+        type: dec_datetime
+      - id: file_structure_version
+        type: u1
+      - id: unused4
+        type: u1
+      - id: application_area
+        size: 512
+#    instances:
+#      path_table:
+#        type: path_table_entry
+#        position_abs: 
+#        repeat: expr
+#        repeat-expr: path_table_size.le
+  dir_entry:
+    seq:
+      - id: length
+        type: u1
+      - id: ext_attr_rec_length
+        type: u1
+      - id: loc_extent
+        type: u4bi
+      - id: size_extent
+        type: u4bi
+      - id: datetime
+        type: datetime
+      - id: file_flags
+        type: u1
+  datetime:
+    seq:
+      - id: year
+        type: u1
+      - id: month
+        type: u1
+      - id: day
+        type: u1
+      - id: hour
+        type: u1
+      - id: minute
+        type: u1
+      - id: sec
+        type: u1
+      - id: timezone
+        type: u1
+  # http://wiki.osdev.org/ISO_9660#Date.2Ftime_format
+  dec_datetime:
+    seq:
+      - id: year
+        type: str
+        size: 4
+        encoding: ASCII
+      - id: month
+        type: str
+        size: 2
+        encoding: ASCII
+      - id: day
+        type: str
+        size: 2
+        encoding: ASCII
+      - id: hour
+        type: str
+        size: 2
+        encoding: ASCII
+      - id: minute
+        type: str
+        size: 2
+        encoding: ASCII
+      - id: sec
+        type: str
+        size: 2
+        encoding: ASCII
+      - id: sec_hundreds
+        type: str
+        size: 2
+        encoding: ASCII
+      - id: timezone
+        type: u1
+  u2bi:
+    seq:
+      - id: le
+        type: u2le
+      - id: be
+        type: u2be
+  u4bi:
+    seq:
+      - id: le
+        type: u4le
+      - id: be
+        type: u4be
+instances:
+  primary_vol_desc:
+    type: vol_desc
+    pos: 32768
