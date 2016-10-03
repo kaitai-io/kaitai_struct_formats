@@ -53,13 +53,13 @@ types:
         type: u2bi
       - id: path_table_size
         type: u4bi
-      - id: loc_path_table_le
+      - id: lba_path_table_le
         type: u4le
-      - id: loc_opt_path_table_le
+      - id: lba_opt_path_table_le
         type: u4le
-      - id: loc_path_table_be
+      - id: lba_path_table_be
         type: u4be
-      - id: loc_opt_path_table_be
+      - id: lba_opt_path_table_be
         type: u4be
       - id: root_dir
         type: dir_entry
@@ -106,19 +106,18 @@ types:
         type: u1
       - id: application_area
         size: 512
-#    instances:
-#      path_table:
-#        type: path_table_entry
-#        position_abs: 
-#        repeat: expr
-#        repeat-expr: path_table_size.le
+    instances:
+      path_table:
+        pos: lba_path_table_le * _root.sector_size
+        size: path_table_size.le
+        type: path_table_le
   dir_entry:
     seq:
-      - id: length
+      - id: len
         type: u1
-      - id: ext_attr_rec_length
+      - id: len_ext_attr_rec
         type: u1
-      - id: loc_extent
+      - id: lba_extent
         type: u4bi
       - id: size_extent
         type: u4bi
@@ -126,6 +125,30 @@ types:
         type: datetime
       - id: file_flags
         type: u1
+  ## http://wiki.osdev.org/ISO_9660#The_Path_Table
+  ## AKA "Path Table Entry"
+  path_table_le:
+    seq:
+      - id: entries
+        type: path_table_entry_le
+        repeat: eos
+  path_table_entry_le:
+    seq:
+      - id: len_dir_name
+        type: u1
+      - id: len_ext_attr_rec
+        type: u1
+      - id: lba_extent
+        type: u4le
+      - id: parent_dir_idx
+        type: u2le
+      - id: dir_name
+        type: str
+        encoding: UTF-8
+        size: len_dir_name
+      - id: padding
+        type: u1
+        if: len_dir_name % 2 == 1
   datetime:
     seq:
       - id: year
@@ -188,6 +211,8 @@ types:
       - id: be
         type: u4be
 instances:
+  sector_size:
+    value: 2048
   primary_vol_desc:
     type: vol_desc
-    pos: 32768
+    pos: 0x010 * sector_size
