@@ -111,10 +111,22 @@ types:
         pos: lba_path_table_le * _root.sector_size
         size: path_table_size.le
         type: path_table_le
+  dir_entries:
+    seq:
+      - id: entries
+        type: dir_entry
+        repeat: until
+        repeat-until: _.len == 0
   dir_entry:
     seq:
       - id: len
         type: u1
+      - id: body
+        type: dir_entry_body
+        size: len - 1
+        if: len > 0
+  dir_entry_body:
+    seq:
       - id: len_ext_attr_rec
         type: u1
       - id: lba_extent
@@ -125,6 +137,33 @@ types:
         type: datetime
       - id: file_flags
         type: u1
+      - id: file_unit_size
+        type: u1
+      - id: interleave_gap_size
+        type: u1
+      - id: vol_seq_num
+        type: u2bi
+      - id: len_file_name
+        type: u1
+      - id: file_name
+        type: str
+        encoding: UTF-8
+        size: len_file_name
+      - id: padding
+        type: u1
+        if: len_file_name % 2 == 0
+      - id: rest
+        size-eos: true
+    instances:
+      extent_as_dir:
+        io: _root._io
+        pos: lba_extent.le * _root.sector_size
+        size: size_extent.le
+        type: dir_entries
+      extent_as_file:
+        io: _root._io
+        pos: lba_extent.le * _root.sector_size
+        size: size_extent.le
   ## http://wiki.osdev.org/ISO_9660#The_Path_Table
   ## AKA "Path Table Entry"
   path_table_le:
