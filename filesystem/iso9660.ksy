@@ -160,10 +160,12 @@ types:
         pos: lba_extent.le * _root.sector_size
         size: size_extent.le
         type: dir_entries
+        if: file_flags & 2 != 0
       extent_as_file:
         io: _root._io
         pos: lba_extent.le * _root.sector_size
         size: size_extent.le
+        if: file_flags & 2 == 0
   ## http://wiki.osdev.org/ISO_9660#The_Path_Table
   ## AKA "Path Table Entry"
   path_table_le:
