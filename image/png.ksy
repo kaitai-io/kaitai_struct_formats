@@ -57,14 +57,6 @@ types:
             # zTXt
       - id: crc
         size: 4
-  # https://www.w3.org/TR/PNG/#11gAMA
-  gama_chunk:
-    seq:
-      - id: gamma_int
-        type: u4
-    instances:
-      gamma_ratio:
-        value: 100000.0 / gamma_int
   # https://www.w3.org/TR/PNG/#11IHDR
   ihdr_chunk:
     seq:
@@ -83,6 +75,28 @@ types:
         type: u1
       - id: interlace_method
         type: u1
+  # https://www.w3.org/TR/PNG/#11PLTE
+  plte_chunk:
+    seq:
+      - id: entries
+        type: rgb
+        repeat: eos
+  rgb:
+    seq:
+      - id: r
+        type: u1
+      - id: g
+        type: u1
+      - id: b
+        type: u1
+  # https://www.w3.org/TR/PNG/#11gAMA
+  gama_chunk:
+    seq:
+      - id: gamma_int
+        type: u4
+    instances:
+      gamma_ratio:
+        value: 100000.0 / gamma_int
   # https://www.w3.org/TR/PNG/#11pHYs
   phys_chunk:
     seq:
@@ -107,20 +121,6 @@ types:
       - id: minute
         type: u1
       - id: second
-        type: u1
-  # https://www.w3.org/TR/PNG/#11PLTE
-  plte_chunk:
-    seq:
-      - id: entries
-        type: rgb
-        repeat: eos
-  rgb:
-    seq:
-      - id: r
-        type: u1
-      - id: g
-        type: u1
-      - id: b
         type: u1
   # https://www.w3.org/TR/PNG/#11tEXt
   text_chunk:
