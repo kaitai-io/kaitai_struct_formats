@@ -20,26 +20,13 @@ types:
         encoding: UTF-8
       - id: body
         size: len
-        type: ihdr_chunk
-        if: type == "IHDR"
-      - id: body
-        size: len
-        if: type == "IDAT"
-      - id: body
-        size: len
-        type: phys_chunk
-        if: type == "pHYs"
-      - id: body
-        size: len
-        type: time_chunk
-        if: type == "tIME"
-      - id: body
-        size: len
-        type: plte_chunk
-        if: type == "PLTE"
-      - id: body
-        size: len
-        if: type != "IHDR" and type != "pHYs" and type != "tIME" and type != "IDAT" and type != "PLTE"
+        type:
+          switch-on: type
+          cases:
+            '"IHDR"': ihdr_chunk
+            '"pHYs"': phys_chunk
+            '"PLTE"': plte_chunk
+            '"tIME"': time_chunk
       - id: crc
         size: 4
   # https://www.w3.org/TR/PNG/#11IHDR
