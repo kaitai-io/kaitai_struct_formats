@@ -41,12 +41,12 @@ types:
             # IEND = empty, thus raw
 
             # Ancillary chunks
-            # cHRM
+            '"cHRM"': chrm_chunk
             '"gAMA"': gama_chunk
             # iCCP
             # sBIT
             # sRGB
-            # bKGD
+            '"bKGD"': bkgd_chunk
             # hIST
             # tRNS
             '"pHYs"': phys_chunk
@@ -89,6 +89,28 @@ types:
         type: u1
       - id: b
         type: u1
+  # https://www.w3.org/TR/PNG/#11cHRM
+  chrm_chunk:
+    seq:
+      - id: white_point
+        type: point
+      - id: red
+        type: point
+      - id: green
+        type: point
+      - id: blue
+        type: point
+  point:
+    seq:
+      - id: x_int
+        type: u4
+      - id: y_int
+        type: u4
+    instances:
+      x:
+        value: x_int / 100000.0
+      y:
+        value: y_int / 100000.0
   # https://www.w3.org/TR/PNG/#11gAMA
   gama_chunk:
     seq:
@@ -97,6 +119,34 @@ types:
     instances:
       gamma_ratio:
         value: 100000.0 / gamma_int
+  # https://www.w3.org/TR/PNG/#11bKGD
+  bkgd_chunk:
+    seq:
+      - id: bkgd
+        type:
+          switch-on: _root.ihdr.color_type
+          cases:
+            color_type::greyscale: bkgd_greyscale
+            color_type::greyscale_alpha: bkgd_greyscale
+            color_type::truecolor: bkgd_truecolor
+            color_type::truecolor_alpha: bkgd_truecolor
+            color_type::indexed: bkgd_indexed
+  bkgd_greyscale:
+    seq:
+      - id: value
+        type: u2
+  bkgd_truecolor:
+    seq:
+      - id: red
+        type: u2
+      - id: green
+        type: u2
+      - id: blue
+        type: u2
+  bkgd_indexed:
+    seq:
+      - id: palette_index
+        type: u1
   # https://www.w3.org/TR/PNG/#11pHYs
   phys_chunk:
     seq:
