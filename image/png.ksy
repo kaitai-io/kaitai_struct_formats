@@ -45,7 +45,7 @@ types:
             '"gAMA"': gama_chunk
             # iCCP
             # sBIT
-            # sRGB
+            '"sRGB"': srgb_chunk
             '"bKGD"': bkgd_chunk
             # hIST
             # tRNS
@@ -119,6 +119,18 @@ types:
     instances:
       gamma_ratio:
         value: 100000.0 / gamma_int
+  # https://www.w3.org/TR/PNG/#11sRGB
+  srgb_chunk:
+    seq:
+      - id: render_intent
+        type: u1
+        enum: intent
+    enums:
+      intent:
+        0: perceptual
+        1: relative_colorimetric
+        2: saturation
+        3: absolute_colorimetric
   # https://www.w3.org/TR/PNG/#11bKGD
   bkgd_chunk:
     seq:
