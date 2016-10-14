@@ -6,6 +6,17 @@ seq:
   # https://www.w3.org/TR/PNG/#5PNG-file-signature
   - id: magic
     contents: [137, 80, 78, 71, 13, 10, 26, 10]
+  # https://www.w3.org/TR/PNG/#11IHDR
+  # Always appears first, stores values referenced by other chunks
+  - id: ihdr_len
+    contents: [0, 0, 0, 13]
+  - id: ihdr_type
+    contents: "IHDR"
+  - id: ihdr
+    type: ihdr_chunk
+  - id: ihdr_crc
+    size: 4
+  # The rest of the chunks
   - id: chunks
     type: chunk
     repeat: eos
@@ -24,14 +35,14 @@ types:
           switch-on: type
           cases:
             # Critical chunks
-            '"IHDR"': ihdr_chunk
+            # '"IHDR"': ihdr_chunk
             '"PLTE"': plte_chunk
             # IDAT = raw
             # IEND = empty, thus raw
 
             # Ancillary chunks
             # cHRM
-            # gAMA
+            '"gAMA"': gama_chunk
             # iCCP
             # sBIT
             # sRGB
@@ -46,6 +57,14 @@ types:
             # zTXt
       - id: crc
         size: 4
+  # https://www.w3.org/TR/PNG/#11gAMA
+  gama_chunk:
+    seq:
+      - id: gamma_int
+        type: u4
+    instances:
+      gamma_ratio:
+        value: 100000.0 / gamma_int
   # https://www.w3.org/TR/PNG/#11IHDR
   ihdr_chunk:
     seq:
