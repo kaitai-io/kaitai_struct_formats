@@ -23,10 +23,27 @@ types:
         type:
           switch-on: type
           cases:
+            # Critical chunks
             '"IHDR"': ihdr_chunk
-            '"pHYs"': phys_chunk
             '"PLTE"': plte_chunk
+            # IDAT = raw
+            # IEND = empty, thus raw
+
+            # Ancillary chunks
+            # cHRM
+            # gAMA
+            # iCCP
+            # sBIT
+            # sRGB
+            # bKGD
+            # hIST
+            # tRNS
+            '"pHYs"': phys_chunk
+            # sPLT
             '"tIME"': time_chunk
+            # iTXt
+            '"tEXt"': text_chunk
+            # zTXt
       - id: crc
         size: 4
   # https://www.w3.org/TR/PNG/#11IHDR
@@ -86,6 +103,16 @@ types:
         type: u1
       - id: b
         type: u1
+  # https://www.w3.org/TR/PNG/#11tEXt
+  text_chunk:
+    seq:
+      - id: keyword
+        type: strz
+        encoding: iso8859-1
+      - id: text
+        type: str
+        size-eos: true
+        encoding: iso8859-1
 enums:
   color_type:
     0: greyscale
