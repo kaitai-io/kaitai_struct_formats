@@ -46,6 +46,9 @@ types:
       - id: meta_event_body
         type: meta_event_body
         if: event_header == 0xff
+      - id: sysex_body
+        type: sysex_event_body
+        if: event_header == 0xf0
       - id: event_body
         type:
           switch-on: event_type
@@ -147,3 +150,9 @@ types:
         value: (b2 << 7) + b1 - 0x4000
       adj_bend_value:
         value: bend_value - 0x4000
+  sysex_event_body:
+    seq:
+      - id: len
+        type: vint
+      - id: data
+        size: len.value
