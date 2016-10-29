@@ -23,6 +23,7 @@ types:
           switch-on: marker
           cases:
             'marker::app0': segment_app0
+            'marker::app1': segment_app1
             'marker::sof0': segment_sof0
             'marker::sos': segment_sos
       - id: image_data
@@ -81,6 +82,16 @@ types:
         0: no_units
         1: pixels_per_inch
         2: pixels_per_cm
+  segment_app1:
+    seq:
+      - id: magic
+        type: strz
+        encoding: ASCII
+      - id: body
+        type:
+          switch-on: magic
+          cases:
+            '"Exif"': exif_in_jpeg
   segment_sof0:
     seq:
       - id: bits_per_sample
@@ -139,6 +150,16 @@ types:
             doc: Scan component selector
           - id: huffman_table
             type: u1
+  # Extra wrapper for EXIF, as there is extra 0 byte that needs to be
+  # parsed. The actual EXIF specification is defined in external .ksy
+  # file, as it is shared with other formats (TIFF, PNG, XCF, etc).
+  exif_in_jpeg:
+    seq:
+      - id: extra_zero
+        contents: [0]
+      - id: data
+        size-eos: true
+        type: exif
 enums:
   component_id:
     1: y
