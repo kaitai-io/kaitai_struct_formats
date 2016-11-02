@@ -32,6 +32,7 @@ types:
           cases:
             '"THINGS\0\0"': things
             '"LINEDEFS"': linedefs
+            '"BLOCKMAP"': blockmap
   things:
     seq:
       - id: entries
@@ -70,6 +71,36 @@ types:
         type: u2
       - id: sidedef_left_idx
         type: u2
+  blockmap:
+    seq:
+      - id: origin_x
+        type: s2
+        doc: Grid origin, X coord
+      - id: origin_y
+        type: s2
+        doc: Grid origin, Y coord
+      - id: num_cols
+        type: s2
+        doc: Number of columns
+      - id: num_rows
+        type: s2
+        doc: Number of rows
+      - id: blocklists
+        type: blocklist
+        repeat: expr
+        repeat-expr: num_cols * num_rows
+        doc: Offsets to blocks
+    types:
+      blocklist:
+        seq:
+          - id: offset
+            type: u2
+        instances:
+          linedefs:
+            pos: offset * 2
+            type: s2
+            repeat: until
+            repeat-until: _ == -1
 instances:
   index:
     pos: index_offset
