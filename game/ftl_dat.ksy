@@ -3,12 +3,12 @@ meta:
   endian: le
   application: Faster Than Light
 seq:
-  - id: smth1
+  - id: num_files
     type: u4
-  - id: file
+  - id: files
     type: file
     repeat: expr
-    repeat-expr: smth1
+    repeat-expr: num_files
 types:
   file:
     seq:
@@ -18,6 +18,7 @@ types:
       meta:
         pos: meta_ofs
         type: meta
+        if: meta_ofs != 0
   meta:
     seq:
       - id: file_size
