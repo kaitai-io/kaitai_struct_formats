@@ -34,6 +34,7 @@ types:
           cases:
             '"THINGS\0\0"': things
             '"LINEDEFS"': linedefs
+            '"VERTEXES"': vertexes
             '"BLOCKMAP"': blockmap
   things:
     seq:
@@ -73,6 +74,17 @@ types:
         type: u2
       - id: sidedef_left_idx
         type: u2
+  vertexes:
+    seq:
+      - id: entries
+        type: vertex
+        repeat: eos
+  vertex:
+    seq:
+      - id: x
+        type: s2
+      - id: y
+        type: s2
   blockmap:
     seq:
       - id: origin_x
