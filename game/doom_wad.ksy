@@ -7,10 +7,12 @@ seq:
     type: str
     size: 4
     encoding: ASCII
-  - id: qty_index_entries
+  - id: num_index_entries
     type: s4
+    doc: Number of entries in the lump index
   - id: index_offset
     type: s4
+    doc: Offset to the start of the index
 types:
   index_entry:
     seq:
@@ -85,25 +87,27 @@ types:
       - id: num_rows
         type: s2
         doc: Number of rows
-      - id: blocklists
+      - id: linedefs_in_block
         type: blocklist
         repeat: expr
         repeat-expr: num_cols * num_rows
-        doc: Offsets to blocks
+        doc: Lists of linedefs for every block
     types:
       blocklist:
         seq:
           - id: offset
             type: u2
+            doc: Offset to the list of linedefs
         instances:
           linedefs:
             pos: offset * 2
             type: s2
             repeat: until
             repeat-until: _ == -1
+            doc: List of linedefs found in this block
 instances:
   index:
     pos: index_offset
     type: index_entry
     repeat: expr
-    repeat-expr: qty_index_entries
+    repeat-expr: num_index_entries
