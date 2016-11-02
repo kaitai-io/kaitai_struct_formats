@@ -27,20 +27,15 @@ types:
         io: _root._io
         pos: offset
         size: size
-        if: name != "THINGS\0\0" and name != "LINEDEFS"
-      things_contents:
-        io: _root._io
-        pos: offset
-        size: size
-        if: name == "THINGS\0\0"
+        type:
+          switch-on: name
+          cases:
+            '"THINGS\0\0"': things
+            '"LINEDEFS"': linedefs
+  things:
+    seq:
+      - id: entries
         type: thing
-        repeat: eos
-      linedef_contents:
-        io: _root._io
-        pos: offset
-        size: size
-        if: name == "LINEDEFS"
-        type: linedef
         repeat: eos
   thing:
     seq:
@@ -54,6 +49,11 @@ types:
         type: u2
       - id: flags
         type: u2
+  linedefs:
+    seq:
+      - id: entries
+        type: linedef
+        repeat: eos
   linedef:
     seq:
       - id: vertex_start_idx
