@@ -34,6 +34,7 @@ types:
           cases:
             '"THINGS\0\0"': things
             '"LINEDEFS"': linedefs
+            '"SIDEDEFS"': sidedefs
             '"VERTEXES"': vertexes
             '"BLOCKMAP"': blockmap
   things:
@@ -74,6 +75,31 @@ types:
         type: u2
       - id: sidedef_left_idx
         type: u2
+  sidedefs:
+    seq:
+      - id: entries
+        type: sidedef
+        repeat: eos
+  sidedef:
+    seq:
+      - id: offset_x
+        type: s2
+      - id: offset_y
+        type: s2
+      - id: upper_texture_name
+        type: str
+        size: 8
+        encoding: ASCII
+      - id: lower_texture_name
+        type: str
+        size: 8
+        encoding: ASCII
+      - id: normal_texture_name
+        type: str
+        size: 8
+        encoding: ASCII
+      - id: sector_id
+        type: s2
   vertexes:
     seq:
       - id: entries
