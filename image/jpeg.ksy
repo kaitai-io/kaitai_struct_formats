@@ -48,6 +48,7 @@ types:
         0xdd: dri # define restart interval
         0xe0: app0
         0xe1: app1
+        0xe2: app2
         0xfe: com # comment
   segment_app0:
     seq:
