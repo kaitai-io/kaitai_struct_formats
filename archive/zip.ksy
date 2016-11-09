@@ -13,15 +13,13 @@ types:
         contents: 'PK'
       - id: section_type
         type: u2
-      - id: central_dir_entry
-        type: central_dir_entry
-        if: section_type == 0x0201
-      - id: local_file
-        type: local_file
-        if: section_type == 0x0403
-      - id: end_of_central_dir
-        type: end_of_central_dir
-        if: section_type == 0x0605
+      - id: body
+        type:
+          switch-on: section_type
+          cases:
+            0x0201: central_dir_entry
+            0x0403: local_file
+            0x0605: end_of_central_dir
   local_file:
     seq:
       - id: header
@@ -125,15 +123,15 @@ types:
         encoding: UTF-8
 enums:
   compression:
-    00: none
-    01: shrunk
-    02: reduced_1
-    03: reduced_2
-    04: reduced_3
-    05: reduced_4
-    06: imploded
-    08: deflated
-    09: enhanced_deflated
+    0: none
+    1: shrunk
+    2: reduced_1
+    3: reduced_2
+    4: reduced_3
+    5: reduced_4
+    6: imploded
+    8: deflated
+    9: enhanced_deflated
     10: pkware_dcl_imploded
     12: bzip2
     14: lzma
