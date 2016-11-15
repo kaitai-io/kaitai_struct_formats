@@ -184,11 +184,105 @@ enums:
     0x74726566: tref
     0x75647461: udta
     0x766d6864: vmhd
+  # http://www.mp4ra.org/filetype.html
   brand:
+    0x33673261: 3g2a
+    0x33676536: 3ge6
+    0x33676539: 3ge9
+    0x33676639: 3gf9
+    0x33676736: 3gg6
+    0x33676739: 3gg9
+    0x33676839: 3gh9
+    0x33676d39: 3gm9
+    0x33677034: 3gp4
+    0x33677035: 3gp5
+    0x33677036: 3gp6
+    0x33677037: 3gp7
+    0x33677038: 3gp8
+    0x33677039: 3gp9
+    0x33677236: 3gr6
+    0x33677239: 3gr9
+    0x33677336: 3gs6
+    0x33677339: 3gs9
+    0x33677439: 3gt9
+    0x41525249: arri
     0x61766331: avc1
+    0x6262786d: bbxm
+    0x43414550: caep
+    0x63617176: caqv
+    0x63636666: ccff
+    0x43446573: cdes
+    0x64613061: da0a
+    0x64613062: da0b
+    0x64613161: da1a
+    0x64613162: da1b
+    0x64613261: da2a
+    0x64613262: da2b
+    0x64613361: da3a
+    0x64613362: da3b
     0x64617368: dash
+    0x64627931: dby1
+    0x646d6231: dmb1
+    0x64736d73: dsms
+    0x64763161: dv1a
+    0x64763162: dv1b
+    0x64763261: dv2a
+    0x64763262: dv2b
+    0x64763361: dv3a
+    0x64763362: dv3b
+    0x64767231: dvr1
+    0x64767431: dvt1
+    0x64786f20: dxo
+    0x656d7367: emsg
+    0x6966726d: ifrm
+    0x69736332: isc2
+    0x69736f32: iso2
+    0x69736f33: iso3
+    0x69736f34: iso4
+    0x69736f35: iso5
     0x69736f36: iso6
     0x69736f6d: isom
+    0x4a325030: j2p0
+    0x4a325031: j2p1
+    0x6a703220: jp2
+    0x6a706d20: jpm
+    0x6a707369: jpsi
+    0x6a707820: jpx
+    0x6a707862: jpxb
+    0x4c434147: lcag
+    0x6c6d7367: lmsg
+    0x4d344120: m4a
+    0x4d344220: m4b
+    0x4d345020: m4p
+    0x4d345620: m4v
+    0x4d46534d: mfsm
+    0x4d475356: mgsv
+    0x6d6a3273: mj2s
+    0x6d6a7032: mjp2
+    0x6d703231: mp21
     0x6d703431: mp41
     0x6d703432: mp42
+    0x6d703731: mp71
+    0x4d505049: mppi
+    0x6d736468: msdh
+    0x6d736978: msix
+    0x4d534e56: msnv
+    0x6e696b6f: niko
+    0x6f646366: odcf
+    0x6f706632: opf2
+    0x6f707832: opx2
+    0x70616e61: pana
+    0x70696666: piff
+    0x706e7669: pnvi
     0x71742020: qt
+    0x72697378: risx
+    0x524f5353: ross
+    0x73647620: sdv
+    0x53454155: seau
+    0x5345424b: sebk
+    0x73656e76: senv
+    0x73696d73: sims
+    0x73697378: sisx
+    0x73737373: ssss
+    0x75767675: uvvu
+    0x58415643: xavc
