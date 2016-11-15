@@ -27,10 +27,11 @@ types:
             'atom_type::dinf': quicktime_mov
             'atom_type::mdia': quicktime_mov
             'atom_type::minf': quicktime_mov
+            'atom_type::moof': quicktime_mov
             'atom_type::moov': quicktime_mov
             'atom_type::stbl': quicktime_mov
+            'atom_type::traf': quicktime_mov
             'atom_type::trak': quicktime_mov
-            'atom_type::udta': quicktime_mov
 
             # Leaf atoms that have some distinct format inside
             'atom_type::ftyp': ftyp_body
@@ -167,6 +168,7 @@ enums:
     0x6d646961: mdia
     0x6d657461: meta
     0x6d696e66: minf
+    0x6d6f6f66: moof
     0x6d6f6f76: moov
     0x6d766864: mvhd
     0x736d6864: smhd
@@ -177,12 +179,16 @@ enums:
     0x7374737a: stsz
     0x73747473: stts
     0x746b6864: tkhd
+    0x74726166: traf
     0x7472616b: trak
     0x74726566: tref
     0x75647461: udta
     0x766d6864: vmhd
   brand:
     0x61766331: avc1
+    0x64617368: dash
+    0x69736f36: iso6
     0x69736f6d: isom
+    0x6d703431: mp41
     0x6d703432: mp42
     0x71742020: qt
