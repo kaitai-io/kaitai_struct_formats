@@ -1,6 +1,6 @@
 meta:
   id: pcap
-#  extension: pcapdump
+  file-extension: pcapdump
   endian: le
 seq:
   - id: header
@@ -108,7 +108,7 @@ types:
 enums:
   linktype:
     # http://www.tcpdump.org/linktypes.html
-    0: null
+    0: null_linktype
     1: ethernet
     3: ax25
     6: ieee802_5
