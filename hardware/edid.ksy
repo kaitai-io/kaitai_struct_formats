@@ -50,3 +50,4 @@ instances:
     value: mfg_year_mod + 1990
   gamma:
     value: (gamma_mod + 100) / 100.0
+    if: gamma_mod != 0xff
