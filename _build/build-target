@@ -1,0 +1,14 @@
+#!/bin/sh
+
+if [ "$#" -ne 2 ]; then
+	echo "Usage: $0 <ksy-dir> <target-dir>"
+	exit 1
+fi
+
+KSY_DIR=$(realpath "$1")
+TARGET_DIR=$(realpath "$2")
+
+mkdir -p "$TARGET_DIR"
+
+cd "$KSY_DIR"
+ksc -- -t all --outdir "$TARGET_DIR" --verbose **/*.ksy

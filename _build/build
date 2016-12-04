@@ -1,0 +1,7 @@
+#!/bin/sh
+
+KSY_DIR=..
+
+./build-target "$KSY_DIR" target
+./build-diagrams target html
+./build-html "$KSY_DIR" target html

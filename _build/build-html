@@ -1,0 +1,253 @@
+#!/usr/bin/env ruby
+
+if ARGV.length != 3
+  puts "Usage: #{File.basename(__FILE__)} <ksy-dir> <target-dir> <html-dir>"
+  exit 1
+end
+
+require 'yaml'
+require 'fileutils'
+require 'erb'
+require 'cgi'
+
+class FormatPagesGenerator
+  LANGS = {
+    'index' => {name: 'Overview'},
+
+    'cpp_stl' => {name: 'C++/STL'},
+    'csharp' => {name: 'C#', ext: 'cs'},
+    'graphviz' => {name: 'GraphViz', ext: 'dot'},
+    'java' => {name: 'Java', ext: 'java'},
+    'javascript' => {name: 'JavaScript', ext: 'js'},
+    'perl' => {name: 'Perl', ext: 'pm'},
+    'php' => {name: 'PHP', ext: 'php'},
+    'python' => {name: 'Python', ext: 'py'},
+    'ruby' => {name: 'Ruby', ext: 'rb'},
+  }
+
+  CATS = {
+    'archive' => {title: 'Archive files', icon: 'archive'},
+    'executable' => {title: 'Executables and byte-code', icon: 'gears'},
+    'filesystem' => {title: 'Filesystems', icon: 'hdd-o'},
+    'game' => {title: 'Game data files', icon: 'gamepad'},
+    'hardware' => {title: 'Hardware protocols', icon: 'microchip'},
+    'image' => {title: 'Image files', icon: 'file-image-o'},
+    'media' => {title: 'Multimedia files', icon: 'video-camera'},
+    'network' => {title: 'Networking protocols', icon: 'sitemap'},
+    'serialization' => {title: 'Serialization protocols'},
+  }
+
+  def initialize(ksy_dir, target_dir, html_dir)
+    @ksy_dir = File.realpath(ksy_dir)
+    @target_dir = File.realpath(target_dir)
+    FileUtils::mkdir_p(html_dir)
+    @html_dir = File.realpath(html_dir)
+
+    @erb_header = erb('header')
+    @erb_fheader = erb('format_header')
+    @erb_base = erb('format_base')
+    @erb_index = erb('format_index')
+    @erb_lang = erb('format_lang')
+    @erb_footer = erb('footer')
+
+    @erb_usage = {}
+    LANGS.each_key { |lang|
+      fn = "usage_#{lang}"
+      @erb_usage[lang] = erb("usage_#{lang}") if FileTest.exists?("#{fn}.html.erb")
+    }
+
+    @base_url = 'http://kaitai.io/'
+
+    @by_cat = {}
+  end
+
+  def run
+    Dir.chdir(@ksy_dir)
+    Dir.glob("**/*.ksy").each { |ksy|
+      begin
+        yaml_str = File.read(ksy)
+        yaml = YAML.load(yaml_str)
+        file_id = yaml['meta']['id']
+        file_dir = "#{@html_dir}/#{file_id}"
+        cat_id = File::dirname(ksy).gsub(/\/.*$/, '')
+
+        puts
+        puts "## #{file_id}"
+        puts
+
+        FileUtils::mkdir_p(file_dir)
+        generate_base_page(file_id, file_dir, yaml, yaml_str, cat_id)
+
+        LANGS.each_key { |lang|
+          next if lang == 'index'
+          copy_target_to_html(file_id, "#{file_dir}/src", lang)
+          generate_lang_page(lang, file_id, file_dir, yaml, yaml_str, cat_id)
+        }
+
+        @by_cat[cat_id] ||= []
+        @by_cat[cat_id] << {
+          :id => file_id,
+          :ksy => ksy,
+        }
+      rescue Psych::SyntaxError => e
+        $stderr.puts "## on file #{ksy.inspect}"
+        $stderr.puts e.inspect
+      end
+    }
+
+    generate_index
+  end
+
+  def generate_base_page(file_id, out_dir, yaml, yaml_str, cat_id)
+    File.open("#{out_dir}/index.html", 'w') { |out|
+      format_name = file_id
+      meta = yaml['meta']
+      cur_lang = 'index'
+      out.write @erb_header.result(binding)
+      out.write @erb_fheader.result(binding)
+      out.write @erb_base.result(binding)
+      out.write @erb_footer.result(binding)
+    }
+  end
+
+  def generate_lang_page(cur_lang, file_id, out_dir, yaml, yaml_str, cat_id)
+    puts "  * generating #{cur_lang} page for #{file_id}"
+    File.open("#{out_dir}/#{cur_lang}.html", 'w') { |out|
+      format_name = file_id
+      meta = yaml['meta']
+      src_files = source_file_names(file_id, cur_lang).map { |fn|
+        path = "src/#{cur_lang}/#{fn}"
+        begin
+          puts "    * reading source file #{out_dir}/#{path}"
+          src = File.read("#{out_dir}/#{path}")
+          src = CGI::escape_html(src)
+        rescue Errno::ENOENT
+          puts "      ... not found!"
+          src = nil
+        end
+        {
+          :filename => fn,
+          :path => path,
+          :src => src,
+        }
+      }.reject { |x| x[:src].nil? }
+
+      usage_attrs = get_usage_attrs(yaml)
+      
+      out.write @erb_header.result(binding)
+      out.write @erb_fheader.result(binding)
+      out.write @erb_lang.result(binding)
+      out.write @erb_footer.result(binding)
+    }
+  end
+  
+  def generate_index
+    File.open("#{@html_dir}/index.html", 'w') { |out|
+      out.write @erb_header.result(binding)
+      out.write @erb_index.result(binding)
+      out.write @erb_footer.result(binding)
+    }
+  end
+
+  def get_usage_attrs(yaml)
+    res = []
+
+    # Try documented seq attributes
+    (yaml['seq'] || []).each { |attr|
+      if attr['id'] and attr['doc']
+        res << usage_attr(attr['id'], attr)
+        break
+      end
+    }
+
+    # Try documented instance attributes
+    (yaml['instances'] || {}).each_pair { |attr_name, attr|
+      if attr['doc']
+        res << usage_attr(attr_name, attr)
+        break
+      end
+    }
+
+    if res.empty?
+      # Try undocumented seq attributes
+      (yaml['seq'] || []).each { |attr|
+        if attr['id']
+          res << usage_attr(attr['id'], attr)
+          break
+        end
+      }
+    end
+
+    if res.empty?
+      # Try undocumented instance attributes
+      (yaml['instances'] || {}).each_pair { |attr_name, attr|
+        res << usage_attr(attr_name, attr)
+        break
+      }
+    end
+
+    res
+  end
+
+  def usage_attr(name, attr)
+    {
+      :name => name,
+      :doc => attr['doc'] || "get #{name.gsub(/_/, ' ')}",
+    }
+  end
+
+  def copy_target_to_html(file_id, out_dir, lang)
+    tgt_dir = "#{out_dir}/#{lang}"
+    FileUtils::mkdir_p(tgt_dir)
+
+    files = source_file_gen_names(file_id, lang)
+
+    files.each { |tgt_file|
+      puts "  * copying #{@target_dir}/#{lang}/#{tgt_file} => #{tgt_dir}/#{File.basename(tgt_file)}"
+      begin
+        FileUtils::cp("#{@target_dir}/#{lang}/#{tgt_file}", "#{tgt_dir}/#{File.basename(tgt_file)}")
+      rescue Errno::ENOENT
+        puts "... file not found"
+      end
+    }
+  end
+
+  def source_file_gen_names(file_id, lang)
+    case lang
+    when 'java'
+      ["src/#{ucc(file_id)}.java"]
+    else
+      source_file_names(file_id, lang)
+    end
+  end
+
+  def source_file_names(file_id, lang)
+    case lang
+    when 'cpp_stl'
+      ["#{file_id}.h", "#{file_id}.cpp"]
+    when 'csharp', 'java', 'javascript', 'perl', 'php'
+      ["#{ucc(file_id)}.#{LANGS[lang][:ext]}"]
+    when 'graphviz', 'ruby', 'python'
+      ["#{file_id}.#{LANGS[lang][:ext]}"]
+    else
+      []
+    end
+  end
+
+  def ucc(name)
+    name.split(/_/).map { |x| x.capitalize }.join
+  end
+
+  def lcc(name)
+    parts = name.split(/_/)
+    parts[0] + parts[1..-1].map { |x| x.capitalize }.join
+  end
+
+  def erb(name)
+    bin_dir = File.expand_path(File.dirname(__FILE__))
+    ERB.new(File.read("#{bin_dir}/#{name}.html.erb"), nil, nil, "_erbout_#{name}")
+  end
+end
+
+fpg = FormatPagesGenerator.new(ARGV[0], ARGV[1], ARGV[2])
+fpg.run

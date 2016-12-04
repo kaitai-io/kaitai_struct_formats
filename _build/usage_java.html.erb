@@ -1,0 +1,14 @@
+<p>Parse a local file and get structure in memory:</p>
+
+<% class_name = ucc(file_id) %>
+
+<pre><code class="java"><%= class_name %> data = <%= class_name %>.fromFile("path/to/local/file.<%= meta['file-extension'] || format_name %>");</code></pre>
+
+<p>Or parse structure from a byte array:</p>
+
+<pre><code class="java">byte[] someArray = new byte[] { ... };
+<%= class_name %> data = new <%= class_name %>(new KaitaiStream(someArray));</code></pre>
+
+<p>After that, one can get various attributes from the structure by invoking getter methods like:</p>
+
+<pre><code class="java"><% usage_attrs.each { |attr| %>data.<%= lcc(attr[:name]) %>() // => <%= attr[:doc] %><% } %></code></pre>

@@ -1,0 +1,71 @@
+<nav>
+    <div class="container">
+    <ol class="breadcrumb">
+        <li><a href="../index.html">Format Gallery</a></li>
+        <li><%= (CATS[cat_id] || {})[:title] || cat_id %></li>
+        <li class="active"><%= format_name %></li>
+    </ol>
+    </div>
+</nav>
+
+<section id="format-meta" class="format">
+    <div class="container">
+        <h1><%= format_name %>:
+            <% if cur_lang == 'index' %>
+            format specification
+            <% elsif cur_lang == 'graphviz' %>
+            GraphViz block diagram (.dot) source
+            <% else %>
+            <%= LANGS[cur_lang][:name] %> parsing library
+            <% end %>
+        </h1>
+
+        <div class="row">
+            <div class="col-md-8">
+                <p><%= meta['doc'] %></p>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-info">
+                    <% if meta['application'] %>
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Application</h3>
+                    </div>
+                    <div class="panel-body">
+                        <%= meta['application'] %>
+                    </div>
+                    <% end %>
+                    <% if meta['file-extension'] %>
+                    <div class="panel-heading">
+                        <h3 class="panel-title">File extension</h3>
+                    </div>
+                    <div class="panel-body">
+                        <%= meta['file-extension'] %>
+                    </div>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+            <p>
+            This page hosts a formal specification of <%= format_name %>
+            using <a href="http://kaitai.io">Kaitai Struct</a>. This
+            specification can be automatically translated into a
+            variety of programming languages to get a parsing library.
+            </p>
+
+            <ul class="nav nav-pills">
+                <% LANGS.each_pair { |lang_id, lang| %>
+                <% if lang_id == cur_lang %>
+                <li class="active">
+                <% else %>
+                <li>
+                <% end %>
+                <a href="<%= lang_id %>.html" title="<%= format_name %> parsing <%= lang[:name] %> library"><%= lang[:name] %></a></li>
+                <% } %>
+            </ul>
+            </div>
+        </div>
+    </div>
+</section>

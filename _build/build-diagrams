@@ -1,0 +1,18 @@
+#!/bin/sh -e
+
+if [ "$#" -ne 2 ]; then
+	echo "Usage: $0 <target-dir> <html-dir>"
+	exit 1
+fi
+
+TARGET_DIR=$(realpath "$1")
+HTML_DIR=$(realpath "$2")
+
+for DOT in "$TARGET_DIR/graphviz/"*.dot; do
+	FILE_ID=$(basename "$DOT" | sed 's/\.dot//')
+	echo "$FILE_ID"
+	FILE_DIR="$HTML_DIR/$FILE_ID"
+	mkdir -p "$FILE_DIR"
+	SVG_FILE="$FILE_DIR/$FILE_ID.svg"
+	dot -Tsvg "$DOT" >"$SVG_FILE" || rm -f "$SVG_FILE"
+done

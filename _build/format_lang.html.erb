@@ -1,0 +1,33 @@
+<% if @erb_usage[cur_lang] %>
+<section id="format-usage" class="format">
+    <div class="container">
+        <h2>Usage</h2>
+
+        <%= @erb_usage[cur_lang].result(binding) %>
+    </div>
+</section>
+<% end %>
+
+<section id="format-lang" class="format">
+    <div class="container">
+        <h2><%= LANGS[cur_lang][:name] %> source code to parse <%= format_name %></h2>
+
+        <% src_files.each { |src| %>
+
+        <h3><%= src[:filename] %></h3>
+
+        <div class="row">
+            <div class="pull-right">
+                <p>
+                    <a href="<%= src[:path] %>" class="btn btn-success">Download <i class="fa fa-download"></i></a>
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <pre><code class="<%= cur_lang %>"><%= src[:src] %></code></pre>
+            
+        </div>
+        <% } %>
+    </div>
+</section>
