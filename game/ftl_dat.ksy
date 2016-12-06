@@ -1,10 +1,12 @@
 meta:
   id: ftl_dat
   endian: le
-  application: Faster Than Light
+  application: Faster Than Light (FTL)
+  file-extension: dat
 seq:
   - id: num_files
     type: u4
+    doc: Number of files in the archive
   - id: files
     type: file
     repeat: expr
