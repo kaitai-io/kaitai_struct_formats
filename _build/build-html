@@ -133,14 +133,14 @@ class FormatPagesGenerator
       }.reject { |x| x[:src].nil? }
 
       usage_attrs = get_usage_attrs(yaml)
-      
+
       out.write @erb_header.result(binding)
       out.write @erb_fheader.result(binding)
       out.write @erb_lang.result(binding)
       out.write @erb_footer.result(binding)
     }
   end
-  
+
   def generate_index
     File.open("#{@html_dir}/index.html", 'w') { |out|
       out.write @erb_header.result(binding)
