@@ -100,8 +100,8 @@ class FormatPagesGenerator
 
   def generate_base_page(file_id, out_dir, yaml, yaml_str, cat_id)
     File.open("#{out_dir}/index.html", 'w') { |out|
-      format_name = file_id
       meta = yaml['meta']
+      format_name = get_format_name(meta)
       cur_lang = 'index'
       out.write @erb_header.result(binding)
       out.write @erb_fheader.result(binding)
@@ -113,8 +113,8 @@ class FormatPagesGenerator
   def generate_lang_page(cur_lang, file_id, out_dir, yaml, yaml_str, cat_id)
     puts "  * generating #{cur_lang} page for #{file_id}"
     File.open("#{out_dir}/#{cur_lang}.html", 'w') { |out|
-      format_name = file_id
       meta = yaml['meta']
+      format_name = get_format_name(meta)
       src_files = source_file_names(file_id, cur_lang).map { |fn|
         path = "src/#{cur_lang}/#{fn}"
         begin
@@ -232,6 +232,31 @@ class FormatPagesGenerator
     else
       []
     end
+  end
+
+  def get_format_name(meta)
+    title = meta['title']
+    return title if title
+
+    ext = meta['file-extension']
+    app = meta['application']
+    if ext
+      name = readable_exts(ext)
+      name << " of #{app}" if app
+      return name
+    end
+
+    meta['id']
+  end
+
+  def readable_exts(ext)
+    name = if ext.is_a?(Array)
+             ext.map { |x| ".#{x}" }.join(' / ')
+           else
+             ".#{ext}"
+           end
+    name << " file format"
+    name
   end
 
   def ucc(name)
