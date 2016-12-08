@@ -1,0 +1,14 @@
+<p>Parse a local file and get structure in memory:</p>
+
+<% class_name = ucc(file_id) %>
+
+<pre><code class="csharp">var Data = <%= class_name %>.FromFile("path/to/local/file.<%= meta['file-extension'] || meta['id'] %>");</code></pre>
+
+<p>Or parse structure from a byte array:</p>
+
+<pre><code class="csharp">byte[] SomeArray = new byte[] { ... };
+var Data = new <%= class_name %>(new KaitaiStream(SomeArray));</code></pre>
+
+<p>After that, one can get various attributes from the structure by accessing properties like:</p>
+
+<pre><code class="csharp"><% usage_attrs.each { |attr| %>Data.<%= ucc(attr[:name]) %> // => <%= attr[:doc] %><% } %></code></pre>
