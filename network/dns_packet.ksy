@@ -1,39 +1,37 @@
 meta:
   id: dns_packet
   title: DNS (No support for Auth-Name + Add-Name for simplicity)
-  application: https://www.ietf.org/rfc/rfc1035.txt
   endian: be
+  # Basic implementation of RFC1035
 seq:
   - id: transaction_id
     doc: "ID to keep track of request/responces"
     type: u2
   - id: flags
-    type: u2
-    doc: "Please add support for bit-flags!"
-    enum: flags_type
-  - id: questions
+    type: flags
+  - id: qdcount
     doc: "How many questions are there"
     type: u2
-  - id: answer_rrs
-    doc: "How many answers are there"
+  - id: ancount
+    doc: "Number of resource records answering the question"
     type: u2
-  - id: authority_rrs
-    doc: "How many authority answers are there"
+  - id: nscount
+    doc: "Number of resource records pointing toward an authority"
     type: u2
-  - id: additional_rrs
-    doc: "How many additional answers are there"
+  - id: arcount
+    doc: "Number of resource records holding additional information"
     type: u2
   - id: queries
     type: query
     repeat: expr
-    repeat-expr: questions
+    repeat-expr: qdcount
   - id: answers
     type: answer
     repeat: expr
-    repeat-expr: answer_rrs
+    repeat-expr: ancount
 types:
   query:
-    seq:
+    seq: 
       - id: name
         type: domain_name
       - id: type
@@ -53,35 +51,41 @@ types:
         type: u2
         enum: class_type
       - id: ttl
-        doc: "Time to live"
-        type: u4
-      - id: data_length
-        doc: "This suggests that multiple domain-names can be returned, unsupported currently due to lack of example"
+        doc: "Time to live (in seconds)"
+        type: s4
+      - id: rdlength
+        doc: "Length in octets of the following payload"
         type: u2
-      - id: domain_name
+      - id: ptrdname
         type: domain_name
+        if: "type == type_type::PTR"
+      - id: address
+        type: address
+        if: "type == type_type::A"
   domain_name:
     seq:
       - id: name
         type: label
         repeat: until
         doc: "Repeat until the length is 0 or it is a pointer (bit-hack to get around lack of OR operator)"
-        repeat-until: "(_.length & 0b00111111) == 0"
+        repeat-until: "_.length == 0 or _.length == 0b1100_0000"
   label:
     seq:
       - id: length
+        doc: "RFC1035 4.1.4: If the first two bits are raised it's a pointer-offset to a previously defined name"
         type: u1
       - id: pointer
-        doc: "RFC1035 4.1.4: The OFFSET field specifies an offset from the start of the message"
-        doc: "If the first two bits are raised it's a pointer-offset to a previously defined name"
+        if: "is_pointer"
         type: pointer
-        if: "((length & 0b11000000)) == 192"
       - id: name
+        if: "not is_pointer"
         doc: "Otherwise its a string the length of the length value"
         type: str
         encoding: "ASCII"
         size: length
-        if: "((length & 0b11000000)) != 192"
+    instances:
+      is_pointer:
+        value: length == 0b1100_0000
   pointer:
     seq:
       - id: pointer
@@ -92,30 +96,65 @@ types:
         io: _root._io
         pos: pointer
         type: domain_name
+  address:
+    seq:
+      - id: ip
+        type: u1
+        repeat: expr
+        repeat-expr: 4
+  flags:
+    seq:
+      - id: flag
+        type: u2
+    instances:
+      qr:
+        value: (flag & 0b1000_0000_0000_0000) >> 15
+      opcode:
+        value: (flag & 0b0111_1000_0000_0000) >> 11
+      aa:
+        value: (flag & 0b0000_0100_0000_0000) >> 10
+      tc:
+        value: (flag & 0b0000_0010_0000_0000) >> 9
+      rd:
+        value: (flag & 0b0000_0001_0000_0000) >> 8
+      ra:
+        value: (flag & 0b0000_0000_1000_0000) >> 7
+      z:
+        value: (flag & 0b0000_0000_0100_0000) >> 6
+      ad:
+        value: (flag & 0b0000_0000_0010_0000) >> 5
+      cd:
+        value: (flag & 0b0000_0000_0001_0000) >> 4
+      rcode:
+        value: (flag & 0b0000_0000_0000_1111) >> 0
+        
 enums:
+  qr:
+    0x0: query
+    0x1: response
   flags_type:
     0x0100: "Query_Standard_Query_Not_Auth_No_Trunc_Recursive_Non_Auth_Unacceptable"
     0x8180: "Response_Standard_Query_Not_Auth_No_Trunc_Recursive_Can_Recurse_No_Auth_Non_Auth_Unacceptable_No_Error"
     0x8183: "Response_Standard_Query_Not_Auth_No_Trunc_Recursive_Can_Recurse_No_Auth_Non_Auth_Unacceptable_No_Such_Name"
   class_type:
-    1: "IN"
-    2: "CS"
-    3: "CH"
-    4: "HS"
+    1: in
+    2: cs
+    3: ch
+    4: hs
   type_type:
-    1: "A"
-    2: "NS"
-    3: "MD"
-    4: "MF"
-    5: "CNAME"
-    6: "SOA"
-    7: "MB"
-    8: "MG"
-    9: "MR"
-    10: "NULL"
-    11: "WKS"
-    12: "PTR"
-    13: "HINFO"
-    14: "MINFO"
-    15: "MX"
-    16: "TXT"
+    1: a
+    2: ns
+    3: md
+    4: mf
+    5: cname
+    6: soe
+    7: mb
+    8: mg
+    9: mr
+    10: "null"
+    11: wks
+    12: ptr
+    13: hinfo
+    14: minfo
+    15: mx
+    16: txt
