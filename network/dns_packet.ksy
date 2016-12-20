@@ -129,13 +129,6 @@ types:
         value: (flag & 0b0000_0000_0000_1111) >> 0
         
 enums:
-  qr:
-    0x0: query
-    0x1: response
-  flags_type:
-    0x0100: "Query_Standard_Query_Not_Auth_No_Trunc_Recursive_Non_Auth_Unacceptable"
-    0x8180: "Response_Standard_Query_Not_Auth_No_Trunc_Recursive_Can_Recurse_No_Auth_Non_Auth_Unacceptable_No_Error"
-    0x8183: "Response_Standard_Query_Not_Auth_No_Trunc_Recursive_Can_Recurse_No_Auth_Non_Auth_Unacceptable_No_Such_Name"
   class_type:
     1: in
     2: cs
