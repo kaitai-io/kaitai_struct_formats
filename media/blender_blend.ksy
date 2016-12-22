@@ -1,6 +1,7 @@
 meta:
   id: blender_blend
   endian: le
+  file-extension: blend
 seq:
   - id: header
     type: header
