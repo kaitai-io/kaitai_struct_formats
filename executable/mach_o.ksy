@@ -191,7 +191,7 @@ types:
             'load_command_type::FUNCTION_STARTS'   : linkedit_data_command
             'load_command_type::DATA_IN_CODE'      : linkedit_data_command
             'load_command_type::CODE_SIGNATURE'    : code_signature_command
-    #-webide-representation: '{type}: {body}'
+    -webide-representation: '{type}: {body}'
   segment_command_64:
     seq:
       - id: segname
@@ -216,7 +216,43 @@ types:
         type: u4
       - id: flags
         type: u4
-    #-webide-representation: '{segname} ({initprot}): offs={fileoff}, size={filesize}'
+      - id: sections
+        type: section_64
+        repeat: expr
+        repeat-expr: nsects
+    types:
+      section_64:
+        seq:
+          - id: sect_name
+            size: 16
+            type: str
+            encoding: ascii
+          - id: seg_name
+            size: 16
+            type: str
+            encoding: ascii
+          - id: addr
+            type: u8
+          - id: size
+            type: u8
+          - id: offset
+            type: u4
+          - id: align
+            type: u4
+          - id: reloff
+            type: u4
+          - id: nreloc
+            type: u4
+          - id: flags
+            type: u4
+          - id: reserved1
+            type: u4
+          - id: reserved2
+            type: u4
+          - id: reserved3
+            type: u4
+        -webide-representation: '{sect_name}: offs={offset}, size={size}'
+    -webide-representation: '{segname} ({initprot}): offs={fileoff}, size={filesize}'
   dyld_info_command:
     seq:
       - id: rebase_off
@@ -294,17 +330,17 @@ types:
       - id: value
         type: strz
         encoding: UTF-8
-    #-webide-representation: '{value}'
+    -webide-representation: '{value}'
   dylinker_command:
     seq:
       - id: name
         type: lc_str
-    #-webide-representation: '{name}'
+    -webide-representation: '{name}'
   uuid_command:
     seq:
       - id: uuid
         size: 16
-    #-webide-representation: 'uuid={uuid}'
+    -webide-representation: 'uuid={uuid}'
   version:
     seq:
       - id: p1
@@ -315,26 +351,26 @@ types:
         type: u1
       - id: release
         type: u1
-    #-webide-representation: '{major}.{minor}'
+    -webide-representation: '{major:dec}.{minor:dec}'
   version_min_command:
     seq:
       - id: version
         type: version
       - id: reserved
         type: version
-    #-webide-representation: 'v:{version}, r:{reserved}'
+    -webide-representation: 'v:{version}, r:{reserved}'
   source_version_command:
     seq:
       - id: version
         type: u8
-    #-webide-representation: 'v:{version}'
+    -webide-representation: 'v:{version:dec}'
   entry_point_command:
     seq:
       - id: entry_off
         type: u8
       - id: stack_size
         type: u8
-    #-webide-representation: 'entry_off={entry_off}, stack_size={stack_size}'
+    -webide-representation: 'entry_off={entry_off}, stack_size={stack_size}'
   dylib_command:
     seq:
       - id: name_offset
@@ -348,7 +384,7 @@ types:
       - id: name
         type: strz
         encoding: utf-8
-    #-webide-representation: '{name}'
+    -webide-representation: '{name}'
   rpath_command:
     seq:
       - id: path_offset
@@ -356,14 +392,14 @@ types:
       - id: path
         type: strz
         encoding: utf-8
-    #-webide-representation: '{path}'
+    -webide-representation: '{path}'
   linkedit_data_command:
     seq:
       - id: data_off
         type: u4
       - id: data_size
         type: u4
-    #-webide-representation: 'offs={data_off}, size={data_size}'
+    -webide-representation: 'offs={data_off}, size={data_size}'
   code_signature_command:
     seq:
       - id: data_off
@@ -434,11 +470,20 @@ types:
           - id: scatter_offset
             type: u4be
             if: version >= 0x20100
+          - id: team_id_offset
+            type: u4be
+            if: version >= 0x20200
         instances:
           ident:
             pos: ident_offset - 8
             type: strz
             encoding: utf-8
+            -webide-parse-mode: eager
+          team_id:
+            pos: team_id_offset - 8
+            type: strz
+            encoding: utf-8
+            -webide-parse-mode: eager
           hashes:
             pos: hash_offset - 8 - hash_size * n_special_slots
             repeat: expr
@@ -475,7 +520,7 @@ types:
             size: length
           - id: padding
             size: 4 - (length & 3)
-        #-webide-representation: "{data}"
+        -webide-representation: "{data}"
       match:
         seq:
           - id: match_op
@@ -495,7 +540,7 @@ types:
             6: greater_than
             7: less_equal
             8: greater_equal
-        #-webide-representation: "{match_op} {data.data:str}"
+        -webide-representation: "{match_op} {data.data:str}"
       expr:
         seq:
           - id: op
@@ -549,12 +594,12 @@ types:
             seq:
               - id: identifier
                 type: data
-            #-webide-representation: "identifier {identifier.data:str}"
+            -webide-representation: "identifier {identifier.data:str}"
           apple_generic_anchor_expr:
             instances:
               value:
                 value: '"anchor apple generic"'
-            #-webide-representation: "anchor apple generic"
+            -webide-representation: "anchor apple generic"
           cert_slot_expr:
             seq:
               - id: value
@@ -566,14 +611,14 @@ types:
                 type: expr
               - id: right
                 type: expr
-            #-webide-representation: "({left}) AND ({right})"
+            -webide-representation: "({left}) AND ({right})"
           or_expr:
             seq:
               - id: left
                 type: expr
               - id: right
                 type: expr
-            #-webide-representation: "({left}) OR ({right})"
+            -webide-representation: "({left}) OR ({right})"
           anchor_hash_expr:
             seq:
               - id: cert_slot
@@ -602,7 +647,7 @@ types:
                 type: data
               - id: match
                 type: match
-            #-webide-representation: "{cert_slot}[{data.data:str}] {match}"
+            -webide-representation: "{cert_slot}[{data.data:str}] {match}"
           cert_generic_expr:
             seq:
               - id: cert_slot
@@ -612,8 +657,8 @@ types:
                 type: data
               - id: match
                 type: match
-            #-webide-representation: "{cert_slot}[{data.data:hex}] {match}"
-        #-webide-representation: '{data}'
+            -webide-representation: "{cert_slot}[{data.data:hex}] {match}"
+        -webide-representation: '{data}'
       requirement:
         seq:
           - id: kind
@@ -624,7 +669,7 @@ types:
         seq:
           - id: data
             size-eos: true
-        #-webide-representation: "{data:str}"
+        -webide-representation: "{data:str}"
       entitlements_blob_index:
         seq:
           - id: type
