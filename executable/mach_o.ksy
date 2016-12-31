@@ -373,6 +373,7 @@ types:
         type: u4
       - id: export_size
         type: u4
+    -webide-representation: 'rebase={rebase_off}, bind={bind_off}, weakBind={weak_bind_off}, lazyBind={lazy_bind_off}, export={export_off}'
     instances:
       rebase:
         io: _root._io
@@ -526,6 +527,28 @@ types:
         type: u4
       - id: str_size
         type: u4
+    instances:
+      symbols:
+        io: _root._io
+        pos: sym_off
+        type: nlist_64
+        repeat: expr
+        repeat-expr: n_syms
+    -webide-representation: "symbols: {n_syms:dec}, strtab: {str_off}"
+    types:
+      nlist_64:
+        seq:
+          - id: un
+            type: u4
+          - id: type
+            type: u1
+          - id: sect
+            type: u1
+          - id: desc
+            type: u2
+          - id: value
+            type: u8
+        -webide-representation: "un={un} type={type} sect={sect} desc={desc} value={value}"
   dysymtab_command:
     seq:
       - id: i_local_sym
@@ -564,6 +587,13 @@ types:
         type: u4
       - id: n_loc_rel
         type: u4
+    instances:
+      indirect_symbols:
+        io: _root._io
+        pos: indirect_sym_off
+        type: u4
+        repeat: expr
+        repeat-expr: n_indirect_syms
   lc_str:
     seq:
       - id: length
@@ -653,6 +683,7 @@ types:
         pos: data_off
         type: cs_blob
         size: data_size
+    -webide-representation: 'offs={data_off}, size={data_size}'        
   cs_blob:
     seq:
       - id: magic
