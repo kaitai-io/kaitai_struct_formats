@@ -205,13 +205,37 @@ types:
       - id: b4
         type: u1
         if: "b3 & 0x80"
+      - id: b5
+        type: u1
+        if: "b4 & 0x80"
+      - id: b6
+        type: u1
+        if: "b5 & 0x80"
+      - id: b7
+        type: u1
+        if: "b6 & 0x80"
+      - id: b8
+        type: u1
+        if: "b7 & 0x80"
+      - id: b9
+        type: u1
+        if: "b8 & 0x80"
+      - id: b10
+        type: u1
+        if: "b9 & 0x80"
     instances:
       value:
         value: >
-          (b1 % 128)             + ((b1 & 0x80 == 0) ? 0 :
-          (b2 % 128) * 128       + ((b2 & 0x80 == 0) ? 0 :
-          (b3 % 128) * 128 * 128 + ((b3 & 0x80 == 0) ? 0 :
-          (b4 % 128) * 128 * 128 * 128)))
+          ((b1  % 128) <<  0) + ((b1 & 0x80 == 0) ? 0 :
+          ((b2  % 128) <<  7) + ((b2 & 0x80 == 0) ? 0 :
+          ((b3  % 128) << 14) + ((b3 & 0x80 == 0) ? 0 :
+          ((b4  % 128) << 21) + ((b4 & 0x80 == 0) ? 0 :
+          ((b5  % 128) << 28) + ((b5 & 0x80 == 0) ? 0 :
+          ((b6  % 128) << 35) + ((b6 & 0x80 == 0) ? 0 :
+          ((b7  % 128) << 42) + ((b7 & 0x80 == 0) ? 0 :
+          ((b8  % 128) << 49) + ((b8 & 0x80 == 0) ? 0 :
+          ((b9  % 128) << 56) + ((b8 & 0x80 == 0) ? 0 :
+          ((b10 % 128) << 63))))))))))
         -webide-parse-mode: eager
     -webide-representation: "{value:dec}"  
   segment_command_64:
@@ -350,41 +374,27 @@ types:
       - id: export_size
         type: u4
     instances:
-      exports:
-        io: _root._io
-        pos: export_off
-        size: export_size
-        type: export_node
       rebase:
         io: _root._io
         pos: rebase_off
         size: rebase_size
         type: rebase_data
+      bind:
+        io: _root._io
+        pos: bind_off
+        size: bind_size
+        type: bind_data
+      lazy_bind:
+        io: _root._io
+        pos: lazy_bind_off
+        size: lazy_bind_size
+        type: lazy_bind_data
+      exports:
+        io: _root._io
+        pos: export_off
+        size: export_size
+        type: export_node
     types:
-      export_node:
-        seq:
-          - id: terminal_size
-            type: uleb128
-          - id: children_count
-            type: u1
-          - id: children
-            type: child
-            repeat: expr
-            repeat-expr: children_count
-        -webide-representation: "{children_count} children, term_size={terminal_size.value}"
-        types:
-          child:
-            seq:
-              - id: name
-                type: strz
-                encoding: ascii
-              - id: node_offset
-                type: uleb128
-            instances:
-              value:
-                pos: node_offset.value
-                type: export_node
-            -webide-representation: "{name}: {node_offset}"
       rebase_data:
         seq:
           - id: items
@@ -427,6 +437,85 @@ types:
             0x60: do_rebase_uleb_times
             0x70: do_rebase_add_address_uleb
             0x80: do_rebase_uleb_times_skipping_uleb
+      bind_item:
+        seq:
+          - id: opcode_and_immediate
+            type: u1
+          - id: uleb
+            type: uleb128
+            if: >
+              opcode == bind_opcode::set_dylib_ordinal_uleb or
+              opcode == bind_opcode::set_append_sleb or
+              opcode == bind_opcode::set_segment_and_offset_uleb or
+              opcode == bind_opcode::add_address_uleb or
+              opcode == bind_opcode::do_bind_add_address_uleb or
+              opcode == bind_opcode::do_bind_uleb_times_skipping_uleb
+          - id: skip
+            type: uleb128
+            if: "opcode == bind_opcode::do_bind_uleb_times_skipping_uleb"
+          - id: symbol
+            type: strz
+            if: "opcode == bind_opcode::set_symbol_trailing_flags_immediate"
+            encoding: ascii
+        instances:
+          opcode:
+            value: "opcode_and_immediate & 0xf0"
+            enum: bind_opcode
+            -webide-parse-mode: eager
+          immediate:
+            value: "opcode_and_immediate & 0x0f"
+            -webide-parse-mode: eager
+        -webide-representation: "{opcode}, imm:{immediate}, uleb:{uleb}, skip:{skip}, symbol:{symbol}"
+      bind_data:
+        seq:
+          - id: items
+            type: bind_item
+            repeat: until
+            repeat-until: _.opcode == bind_opcode::done
+      lazy_bind_data:
+        seq:
+          - id: items
+            type: bind_item
+            repeat: eos
+      export_node:
+        seq:
+          - id: terminal_size
+            type: uleb128
+          - id: children_count
+            type: u1
+          - id: children
+            type: child
+            repeat: expr
+            repeat-expr: children_count
+        -webide-representation: "{children_count} children, term_size={terminal_size.value}"
+        types:
+          child:
+            seq:
+              - id: name
+                type: strz
+                encoding: ascii
+              - id: node_offset
+                type: uleb128
+            instances:
+              value:
+                pos: node_offset.value
+                type: export_node
+            -webide-representation: "{name}: {node_offset}"
+    enums:
+      bind_opcode:
+        0x00: done
+        0x10: set_dylib_ordinal_immediate
+        0x20: set_dylib_ordinal_uleb
+        0x30: set_dylib_special_immediate
+        0x40: set_symbol_trailing_flags_immediate
+        0x50: set_type_immediate
+        0x60: set_append_sleb
+        0x70: set_segment_and_offset_uleb
+        0x80: add_address_uleb
+        0x90: do_bind
+        0xa0: do_bind_add_address_uleb
+        0xb0: do_bind_add_address_immediate_scaled
+        0xc0: do_bind_uleb_times_skipping_uleb
   symtab_command:
     seq:
       - id: sym_off
