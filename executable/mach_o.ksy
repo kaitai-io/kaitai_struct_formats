@@ -251,6 +251,58 @@ types:
             type: u4
           - id: reserved3
             type: u4
+        instances:
+          data:
+            io: _root._io
+            pos: offset
+            size: size
+            type:
+              switch-on: sect_name
+              cases:
+                "'__cstring\0\0\0\0\0\0\0'": string_list
+                "'__objc_methname\0'": string_list
+                "'__objc_classname'": string_list
+                "'__objc_methtype\0'": string_list
+                "'__nl_symbol_ptr\0'": pointer_list
+                "'__got\0\0\0\0\0\0\0\0\0\0\0'": pointer_list
+                "'__la_symbol_ptr\0'": pointer_list
+                "'__cfstring\0\0\0\0\0\0'": cf_string_list
+                "'__objc_classlist'": pointer_list
+                "'__objc_nlclslist'": pointer_list
+                "'__objc_protolist'": pointer_list
+                "'__objc_imageinfo'": pointer_list
+                "'__objc_selrefs\0\0'": pointer_list
+                "'__objc_protorefs'": pointer_list
+                "'__objc_classrefs'": pointer_list
+                "'__objc_superrefs'": pointer_list
+        types:
+          string_list:
+            seq:
+              - id: strings
+                type: strz
+                encoding: ascii
+                repeat: eos
+          pointer_list:
+            seq:
+              - id: items
+                type: u8
+                repeat: eos
+          cf_string:
+            seq:
+              - id: isa
+                type: u8
+              - id: info
+                type: u8
+              - id: data
+                type: u8
+              - id: length
+                type: u8
+            -webide-representation: "isa={isa}, info={info}, data={data}, length={length}"
+          cf_string_list:
+            seq:
+              - id: items
+                type: cf_string
+                repeat: eos
         -webide-representation: '{sect_name}: offs={offset}, size={size}'
     -webide-representation: '{segname} ({initprot}): offs={fileoff}, size={filesize}'
   dyld_info_command:
