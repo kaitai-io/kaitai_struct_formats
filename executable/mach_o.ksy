@@ -327,6 +327,59 @@ types:
         type: u4
       - id: export_size
         type: u4
+    instances:
+      exports:
+        io: _root._io
+        pos: export_off
+        size: export_size
+        type: export_node
+    types:
+      export_node:
+        seq:
+          - id: terminal_size
+            type: uleb128
+          - id: children_count
+            type: u1
+          - id: children
+            type: child
+            repeat: expr
+            repeat-expr: children_count
+        -webide-representation: "{children_count} children, term_size={terminal_size.value}"
+        types:
+          child:
+            seq:
+              - id: name
+                type: strz
+                encoding: ascii
+              - id: node_offset
+                type: uleb128
+            instances:
+              value:
+                pos: node_offset.value
+                type: export_node
+            -webide-representation: "{name}: {node_offset}"
+          uleb128:
+            seq:
+              - id: b1
+                type: u1
+              - id: b2
+                type: u1
+                if: "b1 & 0x80"
+              - id: b3
+                type: u1
+                if: "b2 & 0x80"
+              - id: b4
+                type: u1
+                if: "b3 & 0x80"
+            instances:
+              value:
+                value: >
+                  (b1 % 128)             + ((b1 & 0x80 == 0) ? 0 :
+                  (b2 % 128) * 128       + ((b2 & 0x80 == 0) ? 0 :
+                  (b3 % 128) * 128 * 128 + ((b3 & 0x80 == 0) ? 0 :
+                  (b4 % 128) * 128 * 128 * 128)))
+                -webide-parse-mode: eager
+            -webide-representation: "{value:dec}"
   symtab_command:
     seq:
       - id: sym_off
