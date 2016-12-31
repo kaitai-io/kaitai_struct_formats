@@ -192,6 +192,28 @@ types:
             'load_command_type::DATA_IN_CODE'      : linkedit_data_command
             'load_command_type::CODE_SIGNATURE'    : code_signature_command
     -webide-representation: '{type}: {body}'
+  uleb128:
+    seq:
+      - id: b1
+        type: u1
+      - id: b2
+        type: u1
+        if: "b1 & 0x80"
+      - id: b3
+        type: u1
+        if: "b2 & 0x80"
+      - id: b4
+        type: u1
+        if: "b3 & 0x80"
+    instances:
+      value:
+        value: >
+          (b1 % 128)             + ((b1 & 0x80 == 0) ? 0 :
+          (b2 % 128) * 128       + ((b2 & 0x80 == 0) ? 0 :
+          (b3 % 128) * 128 * 128 + ((b3 & 0x80 == 0) ? 0 :
+          (b4 % 128) * 128 * 128 * 128)))
+        -webide-parse-mode: eager
+    -webide-representation: "{value:dec}"  
   segment_command_64:
     seq:
       - id: segname
@@ -333,6 +355,11 @@ types:
         pos: export_off
         size: export_size
         type: export_node
+      rebase:
+        io: _root._io
+        pos: rebase_off
+        size: rebase_size
+        type: rebase_data
     types:
       export_node:
         seq:
@@ -358,28 +385,48 @@ types:
                 pos: node_offset.value
                 type: export_node
             -webide-representation: "{name}: {node_offset}"
-          uleb128:
+      rebase_data:
+        seq:
+          - id: items
+            type: rebase_item
+            repeat: until
+            repeat-until: _.opcode == opcode::done
+        types:
+          rebase_item:
             seq:
-              - id: b1
+              - id: opcode_and_immediate
                 type: u1
-              - id: b2
-                type: u1
-                if: "b1 & 0x80"
-              - id: b3
-                type: u1
-                if: "b2 & 0x80"
-              - id: b4
-                type: u1
-                if: "b3 & 0x80"
+              - id: uleb
+                type: uleb128
+                if: >
+                  opcode == opcode::set_segment_and_offset_uleb or
+                  opcode == opcode::add_address_uleb or
+                  opcode == opcode::do_rebase_uleb_times or
+                  opcode == opcode::do_rebase_add_address_uleb or
+                  opcode == opcode::do_rebase_uleb_times_skipping_uleb
+              - id: skip
+                type: uleb128
+                if: "opcode == opcode::do_rebase_uleb_times_skipping_uleb"
             instances:
-              value:
-                value: >
-                  (b1 % 128)             + ((b1 & 0x80 == 0) ? 0 :
-                  (b2 % 128) * 128       + ((b2 & 0x80 == 0) ? 0 :
-                  (b3 % 128) * 128 * 128 + ((b3 & 0x80 == 0) ? 0 :
-                  (b4 % 128) * 128 * 128 * 128)))
+              opcode:
+                value: "opcode_and_immediate & 0xf0"
+                enum: opcode
                 -webide-parse-mode: eager
-            -webide-representation: "{value:dec}"
+              immediate:
+                value: "opcode_and_immediate & 0x0f"
+                -webide-parse-mode: eager
+            -webide-representation: "{opcode}, imm:{immediate}, uleb:{uleb}, skip:{skip}"
+        enums:
+          opcode:
+            0x00: done
+            0x10: set_type_immediate
+            0x20: set_segment_and_offset_uleb
+            0x30: add_address_uleb
+            0x40: add_address_immediate_scaled
+            0x50: do_rebase_immediate_times
+            0x60: do_rebase_uleb_times
+            0x70: do_rebase_add_address_uleb
+            0x80: do_rebase_uleb_times_skipping_uleb
   symtab_command:
     seq:
       - id: sym_off
