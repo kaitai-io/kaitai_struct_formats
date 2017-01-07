@@ -321,7 +321,68 @@ types:
                 "'__objc_protorefs'":            pointer_list
                 "'__objc_classrefs'":            pointer_list
                 "'__objc_superrefs'":            pointer_list
+                "'__eh_frame\0\0\0\0\0\0'":      eh_frame
         types:
+          # https://reviews.llvm.org/D15502#b8fe88d5
+          eh_frame:
+            seq:
+              - id: items
+                type: eh_frame_item
+                repeat: eos
+          eh_frame_item:
+            seq:
+              - id: length
+                type: u4
+              - id: length64
+                type: u8
+                if: length == 0xffffffff
+              - id: id
+                type: u4
+              - id: body
+                size: length - 4
+                if: length > 0
+                type:
+                  switch-on: id
+                  cases:
+                    0: cie
+            -webide-representation: '{body}'
+            types:
+              char_chain:
+                seq:
+                  - id: char
+                    type: u1
+                  - id: next
+                    type: char_chain
+                    if: char != 0
+              cie:
+                seq:
+                  - id: version
+                    type: u1
+                  #- id: augmentation_string
+                  #  type: strz
+                  #  encoding: ascii
+                  - id: aug_str
+                    type: char_chain
+                  #- id: eh_data
+                  #  type: u8
+                  #  if: "'eh' in augmentation_string"
+                  - id: code_alignment_factor
+                    type: uleb128
+                  - id: data_alignment_factor
+                    type: uleb128
+                  - id: return_address_register
+                    type: u1
+                  - id: augmentation
+                    type: augmentation_entry
+                    if: 'aug_str.char == 122'
+                -webide-representation: 'v:{version:dec} aug:{augmentation_string} code:{code_alignment_factor} data:{data_alignment_factor} returnReg:{return_address_register}'
+              augmentation_entry:
+                seq:
+                  - id: length
+                    type: uleb128
+                  - id: fde_pointer_encoding
+                    type: u1
+                    if: _parent.aug_str.next.char == 82
           string_list:
             seq:
               - id: strings
@@ -534,8 +595,22 @@ types:
         type: nlist_64
         repeat: expr
         repeat-expr: n_syms
+      strs:
+        io: _root._io
+        pos: str_off
+        type: str_table
+        size: str_size
     -webide-representation: "symbols: {n_syms:dec}, strtab: {str_off}"
     types:
+      str_table:
+        seq:
+          - id: unknown
+            type: u4
+          - id: items
+            type: strz
+            encoding: ascii
+            repeat: until
+            repeat-until: _ == ""
       nlist_64:
         seq:
           - id: un
