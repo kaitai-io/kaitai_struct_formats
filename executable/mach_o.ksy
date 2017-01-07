@@ -549,6 +549,8 @@ types:
             type: child
             repeat: expr
             repeat-expr: children_count
+          - id: terminal
+            size: terminal_size.value
         -webide-representation: "{children_count} children, term_size={terminal_size.value}"
         types:
           child:
