@@ -19,6 +19,11 @@ seq:
     repeat: expr
     repeat-expr: coff_header.number_of_sections
     type: section
+enums:
+  pe_format:
+    0x107: rom_image
+    0x10b: pe32
+    0x20b: pe32_plus
 types:
   mz_placeholder:
     seq:
@@ -103,11 +108,6 @@ types:
       - id: base_of_data
         type: u4
         if: format == pe_format::pe32
-    enums:
-      pe_format:
-        0x107: rom_image
-        0x10b: pe32
-        0x20b: pe32_plus
   optional_header_windows:
     seq:
       - id: image_base
