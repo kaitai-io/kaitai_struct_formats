@@ -20,28 +20,52 @@ if not os.path.exists(tmpDir):
     os.makedirs(tmpDir, 0600)
 
 print "Compiling .ksy files...\n"
-    
-kscOutput = subprocess.check_output('./build-target .. target 2>&1', shell=True)
+
+oneLang = args.langs and len(args.langs) == 1
+kscLang = args.langs[0] if oneLang else "all"
+kscTargetDir = "target" + ("" if kscLang == "all" else "/" + kscLang)
+kscCmdLine = 'ksc -- -t {kscLang} --outdir {kscTargetDir} --verbose ../**/*.ksy 2>&1'.format(kscLang=kscLang, kscTargetDir=kscTargetDir)
+kscOutput = subprocess.check_output(kscCmdLine, shell=True)
 with open(kscOutputFn, 'w') as f: f.write(kscOutput)
 
-reNewKsy = re.compile('^reading (.*?\\.ksy)...', re.IGNORECASE)
-reNewLang = re.compile('^\\.\\.\\. compiling it for (\w+)\\.\\.\\. \\.\\.\\. => (.*)$', re.IGNORECASE)
+reNewKsy = re.compile(r'^reading (.*?\.ksy)\.\.\.', re.IGNORECASE)
+reNewLang = re.compile(r'^\.\.\. compiling it for (\w+)\.\.\. \.\.\. => (.*)$', re.IGNORECASE)
+reOneLangNewKsy = re.compile(r'^compiling (.*?) for (\w+)\.\.\.$', re.IGNORECASE)
+reOneLangSourceFn = re.compile(r'^\.\.\. => (.*)$', re.IGNORECASE)
 
 results = {}
 currKsy = None
 currLang = None
 
 for line in kscOutput.split('\n'):
-    mNewKsy = reNewKsy.match(line)
-    mNewLang = not mNewKsy and currKsy is not None and reNewLang.match(line)
-    if mNewKsy:
-        ksyPath = mNewKsy.group(1)
+    langName = ksyPath = sourceFn = None
+    if oneLang:
+        mOneLangNewKsy = reOneLangNewKsy.match(line)
+        mOneLangSourceFn = not mOneLangNewKsy and reOneLangSourceFn.match(line)
+        if mOneLangNewKsy:
+            ksyPath = mOneLangNewKsy.group(1)
+            langName = mOneLangNewKsy.group(2)
+        elif mOneLangSourceFn:
+            sourceFn = mOneLangSourceFn.group(1)
+    else:
+        mNewKsy = reNewKsy.match(line)
+        mNewLang = not mNewKsy and currKsy is not None and reNewLang.match(line)
+        if mNewKsy:
+            ksyPath = mNewKsy.group(1)
+        elif mNewLang:
+            langName = mNewLang.group(1)
+            sourceFn = mNewLang.group(2)
+
+    if ksyPath:
         results[ksyPath] = currKsy = {}
-    elif mNewLang:
-        langName = mNewLang.group(1)
-        sourceFn = mNewLang.group(2)
-        currKsy[langName] = currLang = { "sourceFn": sourceFn, "kscError": None, "kscErrorOutput": "" }
-    elif currLang:
+    if langName:
+        currKsy[langName] = currLang = { "kscError": None, "kscErrorOutput": "" }
+    if sourceFn:
+        currLang["sourceFn"] = sourceFn
+        
+    isMeta = ksyPath or langName or sourceFn
+    
+    if not isMeta and currLang:
         if not currLang["kscError"]:
             currLang["kscError"] = line
         currLang["kscErrorOutput"] += line + '\n'
@@ -88,7 +112,7 @@ if kscFail:
     fail("ksc compilation errors:\n" + 
         ''.join([" - {ksyFn} ({lang}): {kscError}\n".format(**res) for res in kscFail]))
 else:
-    success("Yay there are no ksc compilation errors!")
+    success("Yay there were no ksc compilation errors!")
     
 langData = {
     "csharp": {
