@@ -1,0 +1,207 @@
+#!/usr/bin/env python2
+
+import argparse
+import os
+import subprocess
+import re
+import json
+import itertools
+
+tmpDir = 'tmp'
+kscOutputFn = tmpDir + '/test-target-ksc-output'
+NO_COLORS = False
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--langs', nargs='+')
+parser.add_argument('--hide-success', action='store_true', default=False)
+args = parser.parse_args()
+
+if not os.path.exists(tmpDir):
+    os.makedirs(tmpDir, 0600)
+
+print "Compiling .ksy files...\n"
+
+oneLang = args.langs and len(args.langs) == 1
+kscLang = args.langs[0] if oneLang else "all"
+kscTargetDir = "target" + ("" if kscLang == "all" else "/" + kscLang)
+kscCmdLine = 'ksc -- -t {kscLang} --outdir {kscTargetDir} --verbose ../**/*.ksy 2>&1'.format(kscLang=kscLang, kscTargetDir=kscTargetDir)
+kscOutput = subprocess.check_output(kscCmdLine, shell=True)
+with open(kscOutputFn, 'w') as f: f.write(kscOutput)
+
+reNewKsy = re.compile(r'^reading (.*?\.ksy)\.\.\.', re.IGNORECASE)
+reNewLang = re.compile(r'^\.\.\. compiling it for (\w+)\.\.\. \.\.\. => (.*)$', re.IGNORECASE)
+reOneLangNewKsy = re.compile(r'^compiling (.*?) for (\w+)\.\.\.$', re.IGNORECASE)
+reOneLangSourceFn = re.compile(r'^\.\.\. => (.*)$', re.IGNORECASE)
+
+results = {}
+currKsy = None
+currLang = None
+
+for line in kscOutput.split('\n'):
+    langName = ksyPath = sourceFn = None
+    if oneLang:
+        mOneLangNewKsy = reOneLangNewKsy.match(line)
+        mOneLangSourceFn = not mOneLangNewKsy and reOneLangSourceFn.match(line)
+        if mOneLangNewKsy:
+            ksyPath = mOneLangNewKsy.group(1)
+            langName = mOneLangNewKsy.group(2)
+        elif mOneLangSourceFn:
+            sourceFn = mOneLangSourceFn.group(1)
+    else:
+        mNewKsy = reNewKsy.match(line)
+        mNewLang = not mNewKsy and currKsy is not None and reNewLang.match(line)
+        if mNewKsy:
+            ksyPath = mNewKsy.group(1)
+        elif mNewLang:
+            langName = mNewLang.group(1)
+            sourceFn = mNewLang.group(2)
+
+    if ksyPath:
+        results[ksyPath] = currKsy = {}
+    if langName:
+        currKsy[langName] = currLang = { "kscError": None, "kscErrorOutput": "" }
+    if sourceFn:
+        currLang["sourceFn"] = sourceFn
+        
+    isMeta = ksyPath or langName or sourceFn
+    
+    if not isMeta and currLang:
+        if not currLang["kscError"]:
+            currLang["kscError"] = line
+        currLang["kscErrorOutput"] += line + '\n'
+
+allResults = []
+for ksyFn in results:
+    for lang in results[ksyFn]:
+        result = results[ksyFn][lang]
+        result["ksyFn"] = ksyFn
+        result["lang"] = lang
+        allResults.append(result)
+
+kscFail = []
+kscSuccess = []
+for res in allResults:
+    res["kscSuccess"] = not res["kscError"]
+    if res["kscSuccess"]:
+        kscSuccess.append(res)
+    else:
+        kscFail.append(res)
+
+def saveResults():
+    kscOutputJson = json.dumps(results, indent=4, sort_keys=True)
+    with open(kscOutputFn + '.json', 'w') as f: f.write(kscOutputJson)
+    #print kscOutputJson
+
+saveResults()
+    
+colors = { "default": "\033[0m", "fail": "\033[91m", "success": "\033[92m", "warning": "\033[33m" }
+if NO_COLORS:
+    for c in colors:
+        colors[c] = ""
+        
+def fail(str):
+    print colors["fail"] + str + colors["default"]
+    
+def success(str):
+    print colors["success"] + str + colors["default"]
+
+def warning(str):
+    print colors["warning"] + str + colors["default"]
+
+if kscFail:
+    fail("ksc compilation errors:\n" + 
+        ''.join([" - {ksyFn} ({lang}): {kscError}\n".format(**res) for res in kscFail]))
+else:
+    success("Yay there were no ksc compilation errors!")
+    
+langData = {
+    "csharp": {
+        "compileCmd": "mcs {sourceFn} test/Main.cs ../../runtime/csharp/*.cs",
+        "errorRegex": r"Compilation failed: (\d+ error\(s\))"
+    },
+    "python": {
+        "compileCmd": "PYTHONPATH='../../runtime/python/' python {sourceFn}",
+        "errorRegex": r"\n\s+(.*?)\n\s+\^+\n+(.*?)\n",
+        "errorRegexFormat": "{1}: '{0}'"
+    },
+    "ruby": {
+        "compileCmd": "ruby -I../../runtime/ruby/lib {sourceFn}"
+    },
+    "php": {
+        "compileCmd": "php ../../runtime/php/lib/Kaitai/Struct/*.php {sourceFn}"
+    },
+    "perl": {
+        "compileCmd": "perl ../../runtime/perl/Kaitai/*.pm {sourceFn}"
+    },
+    "java": {
+        "compileCmd": "javac ../../runtime/java/src/main/java/io/kaitai/struct/*.java {sourceFn}",
+        "errorRegex": r"(\d+ errors?)"
+    },
+    "javascript": {
+        "compileCmd": "node {sourceFn}",
+        "errorRegex": r"\n\s+(.*?)\n\s+\^+\n+(.*?)\n",
+        "errorRegexFormat": "{1}: '{0}'"
+    },
+    "graphviz": {
+        "compileCmd": "dot -Tsvg {sourceFn} > /dev/null",
+    },
+    "cpp_stl": {
+        "compileCmd": "g++ -I../../runtime/cpp_stl/ ../../runtime/cpp_stl/kaitai/*.cpp test/main.cpp {sourceFn}.cpp -lz",
+    },
+}
+
+def groupby(items, keyFunc):
+    return itertools.groupby(sorted(items, key=keyFunc), keyFunc)
+
+unknownLangs = {}
+
+for (langName, langItems) in groupby(kscSuccess, lambda x: x["lang"]):
+    lang = langData.get(langName)
+    if not lang:
+        unknownLangs[langName] = True
+        continue
+        
+    if args.langs and langName not in args.langs:
+        warning("Skipping language (--lang argument): " + langName)
+        continue
+
+    langItems = sorted(langItems, key=lambda x: x["ksyFn"])
+    print "Compiling {0} sources...\n".format(langName)
+    #print json.dumps(list(langItems), indent=4)
+
+    errorRegex = re.compile(lang["errorRegex"]) if "errorRegex" in lang else None
+    errorRegexFormat = lang["errorRegexFormat"] if "errorRegexFormat" in lang else "{0}"
+    for res in langItems:
+        compileCmd = lang["compileCmd"].format(**res)
+        
+        try:
+            compileOutput = subprocess.check_output(compileCmd + " 2>&1", shell=True)
+            compileExitCode = 0
+        except subprocess.CalledProcessError as e:
+            compileOutput = e.output
+            compileExitCode = e.returncode
+            
+        res["compileOutput"] = compileOutput
+        res["compileExitCode"] = compileExitCode
+        
+        prefix = "{ksyFn} ({lang})".format(**res)
+        if compileExitCode != 0:
+            errorFn = "{tmpDir}/error_{lang}_{ksyName}.txt".format(tmpDir = tmpDir, lang = res["lang"], ksyName = res["ksyFn"].replace("/", "_"))
+            open(errorFn, "w").write(compileOutput)
+            
+            errorSummary = "";
+            if errorRegex:
+                m = errorRegex.search(compileOutput)
+                if m:
+                    errorSummary = errorRegexFormat.format(*m.groups())
+
+            fail(" - [FAIL] " + prefix + ": code=" + str(compileExitCode) + ", fn=" + errorFn + (" (" + errorSummary + ")" if errorSummary else ""))
+        elif not args.hide_success:
+            success(' - [SUCCESS] ' + prefix)    
+    print
+
+print
+saveResults()
+    
+if unknownLangs:
+    fail("The following languages are unknown and were not tested: " + ', '.join(unknownLangs))
