@@ -23,12 +23,18 @@ if not os.path.exists(tmpDir):
 
 print "Compiling .ksy files...\n"
 
+def shellExec(cmd):
+    try:
+        return (subprocess.check_output(cmd, shell=True), 0)
+    except subprocess.CalledProcessError as e:
+        return (e.output, e.returncode)
+
 oneLang = args.lang and len(args.lang) == 1
 kscLang = args.lang[0] if oneLang else "all"
 kscTargetDir = "target" + ("" if kscLang == "all" else "/" + kscLang)
 kscKsy = " ".join("../" + x for x in args.ksy) if args.ksy else "../**/*.ksy"
 kscCmdLine = 'ksc -- -t {kscLang} --outdir {kscTargetDir} --verbose {kscKsy} 2>&1'.format(kscLang=kscLang, kscTargetDir=kscTargetDir, kscKsy=kscKsy)
-kscOutput = subprocess.check_output(kscCmdLine, shell=True)
+(kscOutput, _) = shellExec(kscCmdLine)
 with open(kscOutputFn, 'w') as f: f.write(kscOutput)
 
 reNewKsy = re.compile(r'^reading (.*?\.ksy)\.\.\.', re.IGNORECASE)
@@ -197,12 +203,7 @@ for (langName, langItems) in groupby(kscSuccess, lambda x: x["lang"]):
 
         compileCmd = lang["compileCmd"].format(**res)
         
-        try:
-            compileOutput = subprocess.check_output(compileCmd + " 2>&1", shell=True)
-            compileExitCode = 0
-        except subprocess.CalledProcessError as e:
-            compileOutput = e.output
-            compileExitCode = e.returncode
+        (compileOutput, compileExitCode) = shellExec(compileCmd + " 2>&1")
             
         res["compileOutput"] = compileOutput
         res["compileExitCode"] = compileExitCode
