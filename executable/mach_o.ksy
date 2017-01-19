@@ -102,7 +102,7 @@ enums:
     0x26      : function_starts
     0x27      : dyld_environment
     0x28      : main
-    0x80000028: main
+    0x80000028: main2
     0x29      : data_in_code
     0x2A      : source_version
     0x2B      : dylib_code_sign_drs
@@ -349,11 +349,11 @@ types:
             types:
               char_chain:
                 seq:
-                  - id: char
+                  - id: chr
                     type: u1
                   - id: next
                     type: char_chain
-                    if: char != 0
+                    if: chr != 0
               cie:
                 seq:
                   - id: version
@@ -374,7 +374,7 @@ types:
                     type: u1
                   - id: augmentation
                     type: augmentation_entry
-                    if: 'aug_str.char == 122'
+                    if: 'aug_str.chr == 122'
                 -webide-representation: 'v:{version:dec} aug:{augmentation_string} code:{code_alignment_factor} data:{data_alignment_factor} returnReg:{return_address_register}'
               augmentation_entry:
                 seq:
@@ -382,7 +382,7 @@ types:
                     type: uleb128
                   - id: fde_pointer_encoding
                     type: u1
-                    if: _parent.aug_str.next.char == 82
+                    if: _parent.aug_str.next.chr == 82
           string_list:
             seq:
               - id: strings
@@ -865,11 +865,11 @@ types:
         seq:
           - id: length
             type: u4be
-          - id: data
+          - id: value
             size: length
           - id: padding
             size: 4 - (length & 3)
-        -webide-representation: "{data}"
+        -webide-representation: "{value}"
       match:
         seq:
           - id: match_op
@@ -889,45 +889,45 @@ types:
             6: greater_than
             7: less_equal
             8: greater_equal
-        -webide-representation: "{match_op} {data.data:str}"
+        -webide-representation: "{match_op} {data.value:str}"
       expr:
         seq:
           - id: op
             type: u4be
-            enum: op
+            enum: op_enum
           - id: data
             type:
               switch-on: op
               cases:
-                #'op::false'               : 'false'
-                #'op::true'                : 'true'
-                'op::ident'               : ident_expr
-                #'op::apple_anchor'        : 'anchor apple'
-                'op::anchor_hash'         : anchor_hash_expr
-                'op::info_key_value'      : data
-                'op::and'                 : and_expr
-                'op::or'                  : or_expr
-                'op::cd_hash'             : data
-                'op::not'                 : expr
-                'op::info_key_field'      : info_key_field_expr
-                'op::cert_field'          : cert_field_expr
-                'op::trusted_cert'        : cert_slot_expr
-                #'op::trusted_certs'       : 'anchor trusted'
-                'op::cert_generic'        : cert_generic_expr
-                'op::apple_generic_anchor': apple_generic_anchor_expr
-                'op::entitlement_field'   : entitlement_field_expr
+                #'op_enum::false'               : 'false'
+                #'op_enum::true'                : 'true'
+                'op_enum::ident'               : ident_expr
+                #'op_enum::apple_anchor'        : 'anchor apple'
+                'op_enum::anchor_hash'         : anchor_hash_expr
+                'op_enum::info_key_value'      : data
+                'op_enum::and_op'              : and_expr
+                'op_enum::or_op'               : or_expr
+                'op_enum::cd_hash'             : data
+                'op_enum::not_op'              : expr
+                'op_enum::info_key_field'      : info_key_field_expr
+                'op_enum::cert_field'          : cert_field_expr
+                'op_enum::trusted_cert'        : cert_slot_expr
+                #'op_enum::trusted_certs'       : 'anchor trusted'
+                'op_enum::cert_generic'        : cert_generic_expr
+                'op_enum::apple_generic_anchor': apple_generic_anchor_expr
+                'op_enum::entitlement_field'   : entitlement_field_expr
         enums:
-          op:
+          op_enum:
             0: 'false'               # unconditionally false
             1: 'true'                # unconditionally true
             2: ident                 # match canonical code [string]
             3: apple_anchor          # signed by Apple as Apple's product ("anchor apple")
             4: anchor_hash           # match anchor [cert hash]
             5: info_key_value        # *legacy* - use opInfoKeyField [key; value]
-            6: and                   # binary prefix expr AND expr [expr; expr]
-            7: or                    # binary prefix expr OR expr
+            6: and_op                # binary prefix expr AND expr [expr; expr]
+            7: or_op                 # binary prefix expr OR expr
             8: cd_hash               # match hash of CodeDirectory directly
-            9: not                   # logical inverse
+            9: not_op                # logical inverse
             10: info_key_field       # Info.plist key field [string; match suffix]
             11: cert_field           # Certificate field [cert index; field name; match suffix]
             12: trusted_cert         # require trust settings to approve one particular cert [cert index]
@@ -943,7 +943,7 @@ types:
             seq:
               - id: identifier
                 type: data
-            -webide-representation: "identifier {identifier.data:str}"
+            -webide-representation: "identifier {identifier.value:str}"
           apple_generic_anchor_expr:
             instances:
               value:
@@ -996,7 +996,7 @@ types:
                 type: data
               - id: match
                 type: match
-            -webide-representation: "{cert_slot}[{data.data:str}] {match}"
+            -webide-representation: "{cert_slot}[{data.value:str}] {match}"
           cert_generic_expr:
             seq:
               - id: cert_slot
@@ -1006,7 +1006,7 @@ types:
                 type: data
               - id: match
                 type: match
-            -webide-representation: "{cert_slot}[{data.data:hex}] {match}"
+            -webide-representation: "{cert_slot}[{data.value:hex}] {match}"
         -webide-representation: '{data}'
       requirement:
         seq:
