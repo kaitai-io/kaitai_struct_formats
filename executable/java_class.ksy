@@ -45,28 +45,28 @@ types:
     seq:
       - id: tag
         type: u1
-        enum: tag
+        enum: tag_enum
       - id: utf8_cp_info
         type: utf8_cp_info
-        if: tag == tag::utf8
+        if: tag == tag_enum::utf8
       - id: class_cp_info
         type: class_cp_info
-        if: tag == tag::class
+        if: tag == tag_enum::class_type
       - id: name_and_type_cp_info
         type: name_and_type_cp_info
-        if: tag == tag::name_and_type
+        if: tag == tag_enum::name_and_type
       - id: field_ref_cp_info
         type: field_ref_cp_info
-        if: tag == tag::field_ref
+        if: tag == tag_enum::field_ref
       - id: method_ref_cp_info
         type: method_ref_cp_info
-        if: tag == tag::method_ref
+        if: tag == tag_enum::method_ref
       - id: interface_method_ref_cp_info
         type: interface_method_ref_cp_info
-        if: tag == tag::interface_method_ref
+        if: tag == tag_enum::interface_method_ref
     enums:
-      tag:
-        7: class
+      tag_enum:
+        7: class_type
         9: field_ref
         10: method_ref
         11: interface_method_ref

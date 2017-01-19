@@ -6,7 +6,7 @@ seq:
   - id: special_header
     type: special_header
   - id: header
-    type: header
+    type: wmf_header
   - id: records
     type: record
     repeat: until
@@ -32,9 +32,9 @@ types:
         contents: [0, 0, 0, 0]
       - id: checksum
         type: u2
-  header:
+  wmf_header:
     seq:
-      - id: metafile_type
+      - id: type
         type: u2
         enum: metafile_type
       - id: header_size

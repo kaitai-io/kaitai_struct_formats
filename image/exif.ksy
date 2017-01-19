@@ -32,17 +32,17 @@ types:
     seq:
       - id: tag
         type: u2
-        enum: tag
+        enum: tag_enum
       - id: field_type
         type: u2
-        enum: field_type
+        enum: field_type_enum
       - id: length
         type: u4
       - id: ofs_or_data
         type: u4
     instances:
       type_byte_length:
-        value: 'field_type == field_type::word ? 2 : (field_type == field_type::dword ? 4 : 1)'
+        value: 'field_type == field_type_enum::word ? 2 : (field_type == field_type_enum::dword ? 4 : 1)'
       byte_length:
         value: length * type_byte_length
       is_immediate_data:
@@ -53,13 +53,13 @@ types:
         if: not is_immediate_data
         io: _root._io
     enums:
-      field_type:
+      field_type_enum:
         1: byte
         2: ascii_string
         3: word
         4: dword
         5: rational
-      tag:
+      tag_enum:
         0x0100: image_width
         0x0101: image_height
         0x0102: bits_per_sample
@@ -138,7 +138,7 @@ types:
         0x01b1: decode
         0x01b2: default_image_color
         0x01b3: t82_options
-        0x01b5: jpeg_tables
+        0x01b5: jpeg_tables2
         0x0200: jpeg_proc
         0x0201: thumbnail_offset 
         0x0202: thumbnail_length 
@@ -335,20 +335,20 @@ types:
         0xa010: samsung_raw_pointers_offset
         0xa011: samsung_raw_pointers_length
         0xa101: samsung_raw_byte_order
-        0xa102: samsung_raw_unknown?
-        0xa20b: flash_energy
-        0xa20c: spatial_frequency_response
-        0xa20d: noise
-        0xa20e: focal_plane_x_resolution
-        0xa20f: focal_plane_y_resolution
-        0xa210: focal_plane_resolution_unit
-        0xa211: image_number
-        0xa212: security_classification
-        0xa213: image_history
+        0xa102: samsung_raw_unknown
+        0xa20b: flash_energy2
+        0xa20c: spatial_frequency_response2
+        0xa20d: noise2
+        0xa20e: focal_plane_x_resolution2
+        0xa20f: focal_plane_y_resolution2
+        0xa210: focal_plane_resolution_unit2
+        0xa211: image_number2
+        0xa212: security_classification2
+        0xa213: image_history2
         0xa214: subject_location
-        0xa215: exposure_index
-        0xa216: tiff_ep_standard_id
-        0xa217: sensing_method
+        0xa215: exposure_index2
+        0xa216: tiff_ep_standard_id2
+        0xa217: sensing_method2
         0xa300: file_source
         0xa301: scene_type
         0xa302: cfa_pattern
@@ -384,8 +384,8 @@ types:
         0xbc02: transformation
         0xbc03: uncompressed
         0xbc04: image_type
-        0xbc80: image_width
-        0xbc81: image_height
+        0xbc80: image_width2
+        0xbc81: image_height2
         0xbc82: width_resolution
         0xbc83: height_resolution
         0xbcc0: image_offset
@@ -503,18 +503,18 @@ types:
         0xc7b5: default_user_crop
         0xea1c: padding
         0xea1d: offset_schema
-        0xfde8: owner_name
-        0xfde9: serial_number
+        0xfde8: owner_name2
+        0xfde9: serial_number2
         0xfdea: lens
         0xfe00: kdc_ifd
         0xfe4c: raw_file
         0xfe4d: converter
-        0xfe4e: white_balance
+        0xfe4e: white_balance2
         0xfe51: exposure
         0xfe52: shadows
         0xfe53: brightness
-        0xfe54: contrast
-        0xfe55: saturation
-        0xfe56: sharpness
+        0xfe54: contrast2
+        0xfe55: saturation2
+        0xfe56: sharpness2
         0xfe57: smoothness
         0xfe58: moire_filter
