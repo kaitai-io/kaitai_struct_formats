@@ -3,15 +3,15 @@ meta:
   endian: le
 
 seq:
-  - id: super
-    type: super
+  - id: super_block
+    type: super_block_struct
 
 instances:
   page_size:
     value: 4096
 
 types:
-  super:
+  super_block_struct:
     seq:
       - id: magic
         type: u4
