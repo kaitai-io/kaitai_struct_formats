@@ -15,7 +15,7 @@ seq:
     type: u1
   - id: protocol
     type: u1
-    enum: protocol
+    enum: protocol_enum
   - id: header_checksum
     type: u2be
   - id: src_ip_addr
@@ -27,15 +27,18 @@ seq:
     size: ihl_bytes - 20
   - id: tcp_segment_body
     type: tcp_segment
-    if: protocol == protocol::tcp
+    if: protocol == protocol_enum::tcp
   - id: icmp_body
     type: icmp_packet
-    if: protocol == protocol::icmp
+    if: protocol == protocol_enum::icmp
   - id: body
     size: total_length - ihl_bytes
-    if: protocol != protocol::tcp and protocol != protocol::icmp
+    if: protocol != protocol_enum::tcp and protocol != protocol_enum::icmp
+-includes:
+  - tcp_segment.ksy
+  - icmp_packet.ksy
 enums:
-  protocol:
+  protocol_enum:
     # http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml
     0: hopopt
     1: icmp
@@ -71,7 +74,7 @@ enums:
     31: mfe_nsp
     32: merit_inp
     33: dccp
-    34: 3pc
+    34: x_3pc
     35: idpr
     36: xtp
     37: ddp
