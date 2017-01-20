@@ -21,7 +21,7 @@ args = parser.parse_args()
 if not os.path.exists(tmpDir):
     os.makedirs(tmpDir, 0600)
 
-print "Compiling .ksy files...\n"
+print "Compiling .ksy files..."
 
 def shellExec(cmd):
     try:
@@ -29,11 +29,38 @@ def shellExec(cmd):
     except subprocess.CalledProcessError as e:
         return (e.output, e.returncode)
 
+# discover includes
+
+includes = {}
+
+def getRelFile(baseFile, relPath):
+    return baseFile.rsplit('/', 1)[0] + '/' +  relPath
+
+def discoverIncludes(ksyFn):
+    if ksyFn in includes:
+        return includes[ksyFn]
+
+    with open("../" + ksyFn) as f: ksy = yaml.safe_load(f.read())
+    ksyIncludes = [getRelFile(ksyFn, x) for x in ksy.get('-includes', [])]
+
+    allIncludes = []
+    for fn in ksyIncludes:
+        allIncludes.extend([fn] + discoverIncludes(fn))
+    includes[ksyFn] = allIncludes
+
+    return allIncludes
+
+dependentKsys = []
+for rootKsyFn in args.ksy:
+  dependentKsys.extend(discoverIncludes(rootKsyFn))
+
 oneLang = args.lang and len(args.lang) == 1
 kscLang = args.lang[0] if oneLang else "all"
 kscTargetDir = "target" + ("" if kscLang == "all" else "/" + kscLang)
-kscKsy = " ".join("../" + x for x in args.ksy) if args.ksy else "../**/*.ksy"
+kscKsy = " ".join("../" + x for x in args.ksy + dependentKsys) if args.ksy else "../**/*.ksy"
 kscCmdLine = 'ksc -- -t {kscLang} --outdir {kscTargetDir} --verbose {kscKsy} 2>&1'.format(kscLang=kscLang, kscTargetDir=kscTargetDir, kscKsy=kscKsy)
+
+print "  cmd: %s\n" % kscCmdLine
 (kscOutput, _) = shellExec(kscCmdLine)
 with open(kscOutputFn, 'w') as f: f.write(kscOutput)
 
@@ -81,6 +108,9 @@ for line in kscOutput.split('\n'):
 
 allResults = []
 for ksyFn in results:
+    if args.ksy and ksyFn not in args.ksy:
+        continue
+
     for lang in results[ksyFn]:
         result = results[ksyFn][lang]
         result["ksyFn"] = ksyFn
@@ -164,19 +194,9 @@ langData = {
 def groupby(items, keyFunc):
     return itertools.groupby(sorted(items, key=keyFunc), keyFunc)
 
-def getRelFile(baseFile, relPath):
-    return baseFile.rsplit('/', 1)[0] + '/' +  relPath
-    
 for (ksyFn, langs) in groupby(kscSuccess, lambda x: x["ksyFn"]):
-    with open("../" + ksyFn) as f: ksy = yaml.safe_load(f.read())
-    ksyIncludes = [getRelFile(ksyFn, x) for x in ksy.get('-includes', [])]
-    
-    for include in ksyIncludes:
-        if include not in results:
-            fail(ksyFn + ' include not found: ' + include)
-
     for res in langs:
-        res['ksyIncludes'] = ksyIncludes
+        res['ksyIncludes'] = includes[ksyFn]
         
 unknownLangs = {}
 
