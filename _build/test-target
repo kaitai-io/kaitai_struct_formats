@@ -21,15 +21,25 @@ args = parser.parse_args()
 if not os.path.exists(tmpDir):
     os.makedirs(tmpDir, 0600)
 
-print "Compiling .ksy files..."
-
 def shellExec(cmd):
     try:
         return (subprocess.check_output(cmd, shell=True), 0)
     except subprocess.CalledProcessError as e:
         return (e.output, e.returncode)
 
-# discover includes
+colors = { "default": "\033[0m", "fail": "\033[91m", "success": "\033[92m", "warning": "\033[33m" }
+if NO_COLORS:
+    for c in colors:
+        colors[c] = ""
+
+def fail(str):
+    print colors["fail"] + str + colors["default"]
+
+def success(str):
+    print colors["success"] + str + colors["default"]
+
+def warning(str):
+    print colors["warning"] + str + colors["default"]
 
 includes = {}
 
@@ -40,7 +50,12 @@ def discoverIncludes(ksyFn):
     if ksyFn in includes:
         return includes[ksyFn]
 
-    with open("../" + ksyFn) as f: ksy = yaml.safe_load(f.read())
+    try:
+        with open("../" + ksyFn) as f: ksy = yaml.safe_load(f.read())
+    except Exception as e:
+        fail('Error while resolving include for %s: %s' % (ksyFn, e,))
+        return
+
     ksyIncludes = [getRelFile(ksyFn, x) for x in ksy.get('-includes', [])]
 
     allIncludes = []
@@ -51,8 +66,13 @@ def discoverIncludes(ksyFn):
     return allIncludes
 
 dependentKsys = []
-for rootKsyFn in args.ksy:
-  dependentKsys.extend(discoverIncludes(rootKsyFn))
+if args.ksy:
+    print "Discovering includes..."
+
+    for rootKsyFn in args.ksy:
+        dependentKsys.extend(discoverIncludes(rootKsyFn))
+
+print "Compiling .ksy files..."
 
 oneLang = args.lang and len(args.lang) == 1
 kscLang = args.lang[0] if oneLang else "all"
@@ -106,10 +126,15 @@ for line in kscOutput.split('\n'):
             currLang["kscError"] = line
         currLang["kscErrorOutput"] += line + '\n'
 
+if not args.ksy:
+    print "Discovering includes..."
+
 allResults = []
 for ksyFn in results:
     if args.ksy and ksyFn not in args.ksy:
         continue
+
+    discoverIncludes(ksyFn)
 
     for lang in results[ksyFn]:
         result = results[ksyFn][lang]
@@ -133,20 +158,6 @@ def saveResults():
 
 saveResults()
     
-colors = { "default": "\033[0m", "fail": "\033[91m", "success": "\033[92m", "warning": "\033[33m" }
-if NO_COLORS:
-    for c in colors:
-        colors[c] = ""
-        
-def fail(str):
-    print colors["fail"] + str + colors["default"]
-    
-def success(str):
-    print colors["success"] + str + colors["default"]
-
-def warning(str):
-    print colors["warning"] + str + colors["default"]
-
 if kscFail:
     fail("ksc compilation errors:\n" + 
         '\n'.join([" - {ksyFn} ({lang}): {kscError}".format(**res) for res in kscFail]))
