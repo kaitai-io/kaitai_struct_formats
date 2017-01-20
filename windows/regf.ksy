@@ -94,10 +94,10 @@ types:
     -webide-representation: "{identifier}"
     instances:
       cell_size:
-        value: (cell_size_raw < 0 ? -1 : +1) * cell_size_raw
+        value: "(cell_size_raw < 0 ? -1 : +1) * cell_size_raw"
         -webide-parse-mode: eager
       is_allocated:
-        value: cell_size_raw < 0
+        value: "cell_size_raw < 0"
         -webide-parse-mode: eager
     types:
       named_key:

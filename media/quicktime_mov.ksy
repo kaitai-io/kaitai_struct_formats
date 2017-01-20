@@ -5,9 +5,13 @@ meta:
 # https://developer.apple.com/library/content/documentation/QuickTime/QTFF/QTFFChap1/qtff1.html#//apple_ref/doc/uid/TP40000939-CH203-BBCGDDDF
 seq:
   - id: atoms
-    type: atom
-    repeat: eos
+    type: atom_list
 types:
+  atom_list:
+    seq:
+      - id: items
+        type: atom
+        repeat: eos
   atom:
     seq:
       - id: len32
@@ -24,14 +28,14 @@ types:
           switch-on: atom_type
           cases:
             # Atom types which actually just contain other atoms inside it
-            'atom_type::dinf': quicktime_mov
-            'atom_type::mdia': quicktime_mov
-            'atom_type::minf': quicktime_mov
-            'atom_type::moof': quicktime_mov
-            'atom_type::moov': quicktime_mov
-            'atom_type::stbl': quicktime_mov
-            'atom_type::traf': quicktime_mov
-            'atom_type::trak': quicktime_mov
+            'atom_type::dinf': atom_list
+            'atom_type::mdia': atom_list
+            'atom_type::minf': atom_list
+            'atom_type::moof': atom_list
+            'atom_type::moov': atom_list
+            'atom_type::stbl': atom_list
+            'atom_type::traf': atom_list
+            'atom_type::trak': atom_list
 
             # Leaf atoms that have some distinct format inside
             'atom_type::ftyp': ftyp_body
@@ -186,25 +190,25 @@ enums:
     0x766d6864: vmhd
   # http://www.mp4ra.org/filetype.html
   brand:
-    0x33673261: 3g2a
-    0x33676536: 3ge6
-    0x33676539: 3ge9
-    0x33676639: 3gf9
-    0x33676736: 3gg6
-    0x33676739: 3gg9
-    0x33676839: 3gh9
-    0x33676d39: 3gm9
-    0x33677034: 3gp4
-    0x33677035: 3gp5
-    0x33677036: 3gp6
-    0x33677037: 3gp7
-    0x33677038: 3gp8
-    0x33677039: 3gp9
-    0x33677236: 3gr6
-    0x33677239: 3gr9
-    0x33677336: 3gs6
-    0x33677339: 3gs9
-    0x33677439: 3gt9
+    0x33673261: x_3g2a
+    0x33676536: x_3ge6
+    0x33676539: x_3ge9
+    0x33676639: x_3gf9
+    0x33676736: x_3gg6
+    0x33676739: x_3gg9
+    0x33676839: x_3gh9
+    0x33676d39: x_3gm9
+    0x33677034: x_3gp4
+    0x33677035: x_3gp5
+    0x33677036: x_3gp6
+    0x33677037: x_3gp7
+    0x33677038: x_3gp8
+    0x33677039: x_3gp9
+    0x33677236: x_3gr6
+    0x33677239: x_3gr9
+    0x33677336: x_3gs6
+    0x33677339: x_3gs9
+    0x33677439: x_3gt9
     0x41525249: arri
     0x61766331: avc1
     0x6262786d: bbxm

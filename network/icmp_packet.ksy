@@ -5,18 +5,18 @@ meta:
 seq:
   - id: icmp_type
     type: u1
-    enum: icmp_type
+    enum: icmp_type_enum
   - id: destination_unreachable
     type: destination_unreachable_msg
-    if: icmp_type == icmp_type::destination_unreachable
+    if: icmp_type == icmp_type_enum::destination_unreachable
   - id: time_exceeded
     type: time_exceeded_msg
-    if: icmp_type == icmp_type::time_exceeded
+    if: icmp_type == icmp_type_enum::time_exceeded
   - id: echo
     type: echo_msg
-    if: icmp_type == icmp_type::echo or icmp_type == icmp_type::echo_reply
+    if: icmp_type == icmp_type_enum::echo or icmp_type == icmp_type_enum::echo_reply
 enums:
-  icmp_type:
+  icmp_type_enum:
     0: echo_reply
     3: destination_unreachable
     4: source_quench

@@ -6,26 +6,82 @@ import subprocess
 import re
 import json
 import itertools
+import yaml
 
 tmpDir = 'tmp'
 kscOutputFn = tmpDir + '/test-target-ksc-output'
 NO_COLORS = False
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--langs', nargs='+')
+parser.add_argument('--lang', nargs='+')
+parser.add_argument('--ksy', nargs='+')
 parser.add_argument('--hide-success', action='store_true', default=False)
 args = parser.parse_args()
 
 if not os.path.exists(tmpDir):
     os.makedirs(tmpDir, 0600)
 
-print "Compiling .ksy files...\n"
+def shellExec(cmd):
+    try:
+        return (subprocess.check_output(cmd, shell=True), 0)
+    except subprocess.CalledProcessError as e:
+        return (e.output, e.returncode)
 
-oneLang = args.langs and len(args.langs) == 1
-kscLang = args.langs[0] if oneLang else "all"
+colors = { "default": "\033[0m", "fail": "\033[91m", "success": "\033[92m", "warning": "\033[33m" }
+if NO_COLORS:
+    for c in colors:
+        colors[c] = ""
+
+def fail(str):
+    print colors["fail"] + str + colors["default"]
+
+def success(str):
+    print colors["success"] + str + colors["default"]
+
+def warning(str):
+    print colors["warning"] + str + colors["default"]
+
+includes = {}
+
+def getRelFile(baseFile, relPath):
+    return baseFile.rsplit('/', 1)[0] + '/' +  relPath
+
+def discoverIncludes(ksyFn):
+    if ksyFn in includes:
+        return includes[ksyFn]
+
+    try:
+        with open("../" + ksyFn) as f: ksy = yaml.safe_load(f.read())
+    except Exception as e:
+        fail('Error while resolving include for %s: %s' % (ksyFn, e,))
+        return
+
+    ksyIncludes = [getRelFile(ksyFn, x) for x in ksy.get('-includes', [])]
+
+    allIncludes = []
+    for fn in ksyIncludes:
+        allIncludes.extend([fn] + discoverIncludes(fn))
+    includes[ksyFn] = allIncludes
+
+    return allIncludes
+
+dependentKsys = []
+if args.ksy:
+    print "Discovering includes..."
+
+    for rootKsyFn in args.ksy:
+        dependentKsys.extend(discoverIncludes(rootKsyFn))
+
+print "Compiling .ksy files..."
+
+oneLang = args.lang and len(args.lang) == 1
+kscLang = args.lang[0] if oneLang else "all"
 kscTargetDir = "target" + ("" if kscLang == "all" else "/" + kscLang)
-kscCmdLine = 'ksc -- -t {kscLang} --outdir {kscTargetDir} --verbose ../**/*.ksy 2>&1'.format(kscLang=kscLang, kscTargetDir=kscTargetDir)
-kscOutput = subprocess.check_output(kscCmdLine, shell=True)
+kscKsy = " ".join("../" + x for x in args.ksy + dependentKsys) if args.ksy else "../**/*.ksy"
+kscCmdLine = 'ksc -- -t {kscLang} --outdir {kscTargetDir} --verbose {kscKsy} 2>&1'.format(kscLang=kscLang, kscTargetDir=kscTargetDir, kscKsy=kscKsy)
+
+print "  cmd: %s\n" % kscCmdLine
+(kscOutput, _) = shellExec(kscCmdLine)
 with open(kscOutputFn, 'w') as f: f.write(kscOutput)
 
 reNewKsy = re.compile(r'^reading (.*?\.ksy)\.\.\.', re.IGNORECASE)
@@ -57,11 +113,11 @@ for line in kscOutput.split('\n'):
             sourceFn = mNewLang.group(2)
 
     if ksyPath:
-        results[ksyPath] = currKsy = {}
+        results[ksyPath.replace('../', '')] = currKsy = {}
     if langName:
         currKsy[langName] = currLang = { "kscError": None, "kscErrorOutput": "" }
     if sourceFn:
-        currLang["sourceFn"] = sourceFn
+        currLang["sourceFn"] = sourceFn + ('.cpp' if langName == 'cpp_stl' else '')
         
     isMeta = ksyPath or langName or sourceFn
     
@@ -70,8 +126,16 @@ for line in kscOutput.split('\n'):
             currLang["kscError"] = line
         currLang["kscErrorOutput"] += line + '\n'
 
+if not args.ksy:
+    print "Discovering includes..."
+
 allResults = []
 for ksyFn in results:
+    if args.ksy and ksyFn not in args.ksy:
+        continue
+
+    discoverIncludes(ksyFn)
+
     for lang in results[ksyFn]:
         result = results[ksyFn][lang]
         result["ksyFn"] = ksyFn
@@ -94,65 +158,57 @@ def saveResults():
 
 saveResults()
     
-colors = { "default": "\033[0m", "fail": "\033[91m", "success": "\033[92m", "warning": "\033[33m" }
-if NO_COLORS:
-    for c in colors:
-        colors[c] = ""
-        
-def fail(str):
-    print colors["fail"] + str + colors["default"]
-    
-def success(str):
-    print colors["success"] + str + colors["default"]
-
-def warning(str):
-    print colors["warning"] + str + colors["default"]
-
 if kscFail:
     fail("ksc compilation errors:\n" + 
-        ''.join([" - {ksyFn} ({lang}): {kscError}\n".format(**res) for res in kscFail]))
+        '\n'.join([" - {ksyFn} ({lang}): {kscError}".format(**res) for res in kscFail]))
 else:
     success("Yay there were no ksc compilation errors!")
+
+print
     
 langData = {
     "csharp": {
-        "compileCmd": "mcs {sourceFn} test/Main.cs ../../runtime/csharp/*.cs",
+        "compileCmd": "mcs {sourceFns} test/Main.cs ../../runtime/csharp/*.cs",
         "errorRegex": r"Compilation failed: (\d+ error\(s\))"
     },
     "python": {
-        "compileCmd": "PYTHONPATH='../../runtime/python/' python {sourceFn}",
+        "compileCmd": "PYTHONPATH='../../runtime/python/' python {sourceFns}",
         "errorRegex": r"\n\s+(.*?)\n\s+\^+\n+(.*?)\n",
         "errorRegexFormat": "{1}: '{0}'"
     },
     "ruby": {
-        "compileCmd": "ruby -I../../runtime/ruby/lib {sourceFn}"
+        "compileCmd": "ruby -I../../runtime/ruby/lib {sourceFns}"
     },
     "php": {
-        "compileCmd": "php ../../runtime/php/lib/Kaitai/Struct/*.php {sourceFn}"
+        "compileCmd": "php ../../runtime/php/lib/Kaitai/Struct/*.php {sourceFns}"
     },
     "perl": {
-        "compileCmd": "perl ../../runtime/perl/Kaitai/*.pm {sourceFn}"
+        "compileCmd": "perl ../../runtime/perl/Kaitai/*.pm {sourceFns}"
     },
     "java": {
-        "compileCmd": "javac ../../runtime/java/src/main/java/io/kaitai/struct/*.java {sourceFn}",
+        "compileCmd": "javac ../../runtime/java/src/main/java/io/kaitai/struct/*.java {sourceFns}",
         "errorRegex": r"(\d+ errors?)"
     },
     "javascript": {
-        "compileCmd": "node {sourceFn}",
+        "compileCmd": "node {sourceFns}",
         "errorRegex": r"\n\s+(.*?)\n\s+\^+\n+(.*?)\n",
         "errorRegexFormat": "{1}: '{0}'"
     },
     "graphviz": {
-        "compileCmd": "dot -Tsvg {sourceFn} > /dev/null",
+        "compileCmd": "dot -Tsvg {sourceFns} > /dev/null",
     },
     "cpp_stl": {
-        "compileCmd": "g++ -I../../runtime/cpp_stl/ ../../runtime/cpp_stl/kaitai/*.cpp test/main.cpp {sourceFn}.cpp -lz",
+        "compileCmd": "g++ -I../../runtime/cpp_stl/ ../../runtime/cpp_stl/kaitai/*.cpp test/main.cpp {sourceFns} -lz",
     },
 }
 
 def groupby(items, keyFunc):
     return itertools.groupby(sorted(items, key=keyFunc), keyFunc)
 
+for (ksyFn, langs) in groupby(kscSuccess, lambda x: x["ksyFn"]):
+    for res in langs:
+        res['ksyIncludes'] = includes[ksyFn]
+        
 unknownLangs = {}
 
 for (langName, langItems) in groupby(kscSuccess, lambda x: x["lang"]):
@@ -161,7 +217,7 @@ for (langName, langItems) in groupby(kscSuccess, lambda x: x["lang"]):
         unknownLangs[langName] = True
         continue
         
-    if args.langs and langName not in args.langs:
+    if args.lang and langName not in args.lang:
         warning("Skipping language (--lang argument): " + langName)
         continue
 
@@ -172,14 +228,13 @@ for (langName, langItems) in groupby(kscSuccess, lambda x: x["lang"]):
     errorRegex = re.compile(lang["errorRegex"]) if "errorRegex" in lang else None
     errorRegexFormat = lang["errorRegexFormat"] if "errorRegexFormat" in lang else "{0}"
     for res in langItems:
+        sourceIncludes = [results.get(ksyInc, {}).get(langName,{}).get("sourceFn") for ksyInc in res["ksyIncludes"]]
+        res["sourceIncludes"] = sourceIncludes = [x for x in sourceIncludes if x]
+        res["sourceFns"] = ' '.join(sourceIncludes + [res["sourceFn"]])
+
         compileCmd = lang["compileCmd"].format(**res)
         
-        try:
-            compileOutput = subprocess.check_output(compileCmd + " 2>&1", shell=True)
-            compileExitCode = 0
-        except subprocess.CalledProcessError as e:
-            compileOutput = e.output
-            compileExitCode = e.returncode
+        (compileOutput, compileExitCode) = shellExec(compileCmd + " 2>&1")
             
         res["compileOutput"] = compileOutput
         res["compileExitCode"] = compileExitCode
