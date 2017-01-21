@@ -42,7 +42,7 @@ types:
         type:
           switch-on: record_header.tag_type
           cases:
-            82: abc_tag_body
+            tag_type::abc_tag: abc_tag_body
   abc_tag_body:
     seq:
       - id: flags
@@ -70,3 +70,4 @@ types:
 enums:
   tag_type:
     69: file_attributes
+    82: abc_tag
