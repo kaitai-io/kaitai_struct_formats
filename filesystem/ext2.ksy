@@ -11,18 +11,18 @@ instances:
 types:
   block_group:
     seq:
-      - id: superblock
-        type: superblock
+      - id: super_block
+        type: super_block_struct
         size: 1024
       # http://www.nongnu.org/ext2-doc/ext2.html#BLOCK-GROUP-DESCRIPTOR-TABLE
       - id: block_groups
         type: bgd
         repeat: expr
-        repeat-expr: superblock.block_group_count
-  # http://www.nongnu.org/ext2-doc/ext2.html#SUPERBLOCK
+        repeat-expr: super_block.block_group_count
+  # http://www.nongnu.org/ext2-doc/ext2.html#super_block
   # http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/fs/ext2/ext2.h#n416
   # https://ext4.wiki.kernel.org/index.php/Ext4_Disk_Layout#The_Super_Block
-  superblock:
+  super_block_struct:
     seq:
       - id: inodes_count
         type: u4
@@ -58,10 +58,10 @@ types:
         contents: [0x53, 0xef]
       - id: state
         type: u2
-        enum: state
+        enum: state_enum
       - id: errors
         type: u2
-        enum: errors
+        enum: errors_enum
       - id: minor_rev_level
         type: u2
       - id: lastcheck
@@ -126,10 +126,10 @@ types:
       block_group_count:
         value: blocks_count / blocks_per_group
     enums:
-      state:
+      state_enum:
         1: valid_fs
         2: error_fs
-      errors:
+      errors_enum:
         1: act_continue
         2: act_ro
         3: act_panic
@@ -153,18 +153,18 @@ types:
         size: 2 + 12
     instances:
       block_bitmap:
-        pos: block_bitmap_block * _root.bg1.superblock.block_size
+        pos: block_bitmap_block * _root.bg1.super_block.block_size
         size: 1024
       inode_bitmap:
-        pos: inode_bitmap_block * _root.bg1.superblock.block_size
+        pos: inode_bitmap_block * _root.bg1.super_block.block_size
         size: 1024
       # http://www.nongnu.org/ext2-doc/ext2.html#INODE-TABLE
       # http://www.virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1-10.html
       inodes:
-        pos: inode_table_block * _root.bg1.superblock.block_size
+        pos: inode_table_block * _root.bg1.super_block.block_size
         type: inode
         repeat: expr
-        repeat-expr: _root.bg1.superblock.inodes_per_group
+        repeat-expr: _root.bg1.super_block.inodes_per_group
   inode:
     seq:
       - id: mode
@@ -216,13 +216,13 @@ types:
         type: u4
     instances:
       body:
-        pos: ptr * _root.bg1.superblock.block_size
-        size: _root.bg1.superblock.block_size
+        pos: ptr * _root.bg1.super_block.block_size
+        size: _root.bg1.super_block.block_size
         type: raw_block
   raw_block:
     seq:
       - id: body
-        size: _root.bg1.superblock.block_size
+        size: _root.bg1.super_block.block_size
   # http://www.nongnu.org/ext2-doc/ext2.html#LINKED-DIRECTORY-ENTRY-STRUCTURE
   dir:
     seq:
@@ -239,7 +239,7 @@ types:
         type: u1
       - id: file_type
         type: u1
-        enum: file_type
+        enum: file_type_enum
       - id: name
         size: name_len
         type: str
@@ -248,10 +248,10 @@ types:
         size: rec_len - name_len - 8
     instances:
       inode:
-        value: '_root.bg1.block_groups[(inode_ptr - 1) / _root.bg1.superblock.inodes_per_group].inodes[(inode_ptr - 1) % _root.bg1.superblock.inodes_per_group]'
+        value: '_root.bg1.block_groups[(inode_ptr - 1) / _root.bg1.super_block.inodes_per_group].inodes[(inode_ptr - 1) % _root.bg1.super_block.inodes_per_group]'
     enums:
       # http://www.nongnu.org/ext2-doc/ext2.html#IFDIR-FILE-TYPE
-      file_type:
+      file_type_enum:
         0: unknown
         1: reg_file
         2: dir

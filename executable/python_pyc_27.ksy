@@ -36,13 +36,13 @@ types:
     seq:
       - id: op_code
         type: u1
-        enum: op_code
-      - id: op_arg
+        enum: op_code_enum
+      - id: arg
         type: u2
-        if: "op_code >= op_code::store_name" # store_name == have_arguments
-    -webide-representation: "{op_code} {op_arg}"
+        if: "op_code >= op_code_enum::store_name" # store_name == have_arguments
+    -webide-representation: "{op_code} {arg}"
     enums:
-      op_code:
+      op_code_enum:
         0  : stop_code
         1  : pop_top
         2  : rot_two
@@ -192,7 +192,7 @@ types:
             type: u4
           - id: flags
             type: u4
-            enum: flags
+            enum: flags_enum
           - id: code
             type: assembly
           - id: consts
@@ -215,7 +215,7 @@ types:
             type: p_object
         -webide-representation: "{name.value}"
         enums:
-          flags:
+          flags_enum:
             0x04: has_args
             0x08: has_kwargs
             0x20: generator

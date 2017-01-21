@@ -3,7 +3,7 @@ meta:
   file-extension: pcx
   endian: le
 seq:
-  - id: header
+  - id: hdr
     type: header
     size: 128
 types:

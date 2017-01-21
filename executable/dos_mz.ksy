@@ -3,14 +3,14 @@ meta:
   endian: le
   file-extension: exe
 seq:
-  - id: mz_header
+  - id: hdr
     type: mz_header
   - id: mz_header2
-    size: mz_header.relocations_ofs - 0x1c
+    size: hdr.relocations_ofs - 0x1c
   - id: relocations
     type: relocation
     repeat: expr
-    repeat-expr: mz_header.qty_relocations
+    repeat-expr: hdr.qty_relocations
   - id: body
     size-eos: true
 types:
@@ -55,4 +55,4 @@ types:
 #    pos: relocations_ofs
 #    type: relocation
 #    repeat: expr
-#    repeat-expr: mz_header.qty_relocations
+#    repeat-expr: hdr.qty_relocations

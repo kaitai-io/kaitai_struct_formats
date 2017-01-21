@@ -5,14 +5,14 @@ seq:
   - id: header_size
     type: u4
     doc: Size of the header in bytes
-  - id: header
+  - id: hdr
     size: header_size - 4
     type: header
   - id: color_map
     size: 12
     type: color_map_entry
     repeat: expr
-    repeat-expr: header.color_map_entries
+    repeat-expr: hdr.color_map_entries
 types:
   header:
     seq:

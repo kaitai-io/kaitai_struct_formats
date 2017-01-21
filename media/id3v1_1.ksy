@@ -24,9 +24,9 @@ types:
         size: 30
       - id: genre
         type: u1
-        enum: genre
+        enum: genre_enum
     enums:
-      genre:
+      genre_enum:
         0: blues
         1: classic_rock
         2: country
