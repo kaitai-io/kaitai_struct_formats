@@ -4,7 +4,7 @@ meta:
   endian: le
   application: Executable and Linkable Format (SVR4 ABI and up), many *nix systems
 seq:
-  - id: file_header
+  - id: header
     type: file_header
 types:
   file_header:
@@ -105,50 +105,50 @@ types:
       # p_flags
       - id: flags64
         type: u4
-        if: _root.file_header.bits == bits::b64
+        if: _root.header.bits == bits::b64
       # p_offset
       - id: offset
         type:
-          switch-on: _root.file_header.bits
+          switch-on: _root.header.bits
           cases:
             'bits::b32': u4
             'bits::b64': u8
       # p_vaddr
       - id: vaddr
         type:
-          switch-on: _root.file_header.bits
+          switch-on: _root.header.bits
           cases:
             'bits::b32': u4
             'bits::b64': u8
       # p_paddr
       - id: paddr
         type:
-          switch-on: _root.file_header.bits
+          switch-on: _root.header.bits
           cases:
             'bits::b32': u4
             'bits::b64': u8
       # p_filesz
       - id: filesz
         type:
-          switch-on: _root.file_header.bits
+          switch-on: _root.header.bits
           cases:
             'bits::b32': u4
             'bits::b64': u8
       # p_memsz
       - id: memsz
         type:
-          switch-on: _root.file_header.bits
+          switch-on: _root.header.bits
           cases:
             'bits::b32': u4
             'bits::b64': u8
       # p_flags
       - id: flags32
         type: u4
-        if: _root.file_header.bits == bits::b32
+        if: _root.header.bits == bits::b32
       # p_align
       - id: align
         type:
-          switch-on: _root.file_header.bits
+          switch-on: _root.header.bits
           cases:
             'bits::b32': u4
             'bits::b64': u8
@@ -165,28 +165,28 @@ types:
       # sh_flags
       - id: flags
         type:
-          switch-on: _root.file_header.bits
+          switch-on: _root.header.bits
           cases:
             'bits::b32': u4
             'bits::b64': u8
       # sh_addr
       - id: addr
         type:
-          switch-on: _root.file_header.bits
+          switch-on: _root.header.bits
           cases:
             'bits::b32': u4
             'bits::b64': u8
       # sh_offset
       - id: offset
         type:
-          switch-on: _root.file_header.bits
+          switch-on: _root.header.bits
           cases:
             'bits::b32': u4
             'bits::b64': u8
       # sh_size
       - id: size
         type:
-          switch-on: _root.file_header.bits
+          switch-on: _root.header.bits
           cases:
             'bits::b32': u4
             'bits::b64': u8
@@ -199,14 +199,14 @@ types:
       # sh_addralign
       - id: align
         type:
-          switch-on: _root.file_header.bits
+          switch-on: _root.header.bits
           cases:
             'bits::b32': u4
             'bits::b64': u8
       # sh_entsize
       - id: entry_size
         type:
-          switch-on: _root.file_header.bits
+          switch-on: _root.header.bits
           cases:
             'bits::b32': u4
             'bits::b64': u8
@@ -220,7 +220,7 @@ types:
         pos: name_offset
         type: strz
         encoding: ASCII
-  strings:
+  strings_struct:
     seq:
       - id: entries
         type: strz
@@ -228,21 +228,21 @@ types:
         encoding: ASCII
 instances:
   program_headers:
-    pos: file_header.program_header_offset
+    pos: header.program_header_offset
     repeat: expr
-    repeat-expr: file_header.qty_program_header
-    size: file_header.program_header_entry_size
+    repeat-expr: header.qty_program_header
+    size: header.program_header_entry_size
     type: program_header
   section_headers:
-    pos: file_header.section_header_offset
+    pos: header.section_header_offset
     repeat: expr
-    repeat-expr: file_header.qty_section_header
-    size: file_header.section_header_entry_size
+    repeat-expr: header.qty_section_header
+    size: header.section_header_entry_size
     type: section_header
   strings:
-    pos: section_headers[file_header.section_names_idx].offset
-    size: section_headers[file_header.section_names_idx].size
-    type: strings
+    pos: section_headers[header.section_names_idx].offset
+    size: section_headers[header.section_names_idx].size
+    type: strings_struct
 enums:
   # EI_CLASS
   bits:
