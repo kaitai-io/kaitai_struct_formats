@@ -16,7 +16,7 @@ seq:
   - id: modification_timestamp
     type: u4
   - id: body
-    type: p_object
+    type: py_object
 types:
   assembly:
     seq:
@@ -162,7 +162,7 @@ types:
         145: extended_arg
         146: set_add
         147: map_add
-  p_object:
+  py_object:
     seq:
       - id: type
         type: u1
@@ -172,14 +172,14 @@ types:
           switch-on: type
           cases:
             "object_type::code_object": code_object
-            "object_type::string":      p_string
+            "object_type::string":      py_string
             "object_type::string_ref":  string_ref
             "object_type::interned":    interned_string
             "object_type::tuple":       tuple
             "object_type::int":         u4
-            "object_type::false":       p_false
-            "object_type::true":        p_true
-            "object_type::none":        none
+            "object_type::false":       py_false
+            "object_type::true":        py_true
+            "object_type::none":        py_none
     -webide-representation: "{type}: {value}"
     types:
       code_object:
@@ -196,30 +196,30 @@ types:
           - id: code
             type: assembly
           - id: consts
-            type: p_object
+            type: py_object
           - id: names
-            type: p_object
+            type: py_object
           - id: var_names
-            type: p_object
+            type: py_object
           - id: free_vars
-            type: p_object
+            type: py_object
           - id: cell_vars
-            type: p_object
+            type: py_object
           - id: filename
-            type: p_object
+            type: py_object
           - id: name
-            type: p_object
+            type: py_object
           - id: first_line_no
             type: u4
           - id: lnotab
-            type: p_object
+            type: py_object
         -webide-representation: "{name.value}"
         enums:
           flags_enum:
             0x04: has_args
             0x08: has_kwargs
             0x20: generator
-      p_string:
+      py_string:
         seq:
           - id: length
             type: u4
@@ -254,23 +254,23 @@ types:
           - id: count
             type: u4
           - id: items
-            type: p_object
+            type: py_object
             repeat: expr
             repeat-expr: count
         -webide-representation: "{count:dec} items"
-      none:
+      py_none:
         -webide-representation: "None"
-      p_true:
+      py_true:
         -webide-representation: "true"
-      p_false:
+      py_false:
         -webide-representation: "false"
     enums:
       object_type:
         40: tuple             # (
-        70: p_false           # F
+        70: py_false          # F
         78: none              # N
         82: string_ref        # R
-        84: p_true            # T
+        84: py_true           # T
         99: code_object       # c
         105: int              # i
         115: string           # s
