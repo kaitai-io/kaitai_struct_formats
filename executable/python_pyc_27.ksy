@@ -162,6 +162,43 @@ types:
         145: extended_arg
         146: set_add
         147: map_add
+  code_object:
+    seq:
+      - id: arg_count   # argcount
+        type: u4
+      - id: local_count # nlocals
+        type: u4
+      - id: stack_size
+        type: u4
+      - id: flags
+        type: u4
+        enum: flags_enum
+      - id: code
+        type: assembly
+      - id: consts
+        type: py_object
+      - id: names
+        type: py_object
+      - id: var_names
+        type: py_object
+      - id: free_vars
+        type: py_object
+      - id: cell_vars
+        type: py_object
+      - id: filename
+        type: py_object
+      - id: name
+        type: py_object
+      - id: first_line_no
+        type: u4
+      - id: lnotab
+        type: py_object
+    -webide-representation: "{name.value}"
+    enums:
+      flags_enum:
+        0x04: has_args
+        0x08: has_kwargs
+        0x20: generator
   py_object:
     seq:
       - id: type
@@ -177,48 +214,11 @@ types:
             "object_type::interned":    interned_string
             "object_type::tuple":       tuple
             "object_type::int":         u4
-            "object_type::false":       py_false
-            "object_type::true":        py_true
+            "object_type::py_false":    py_false
+            "object_type::py_true":     py_true
             "object_type::none":        py_none
     -webide-representation: "{type}: {value}"
     types:
-      code_object:
-        seq:
-          - id: arg_count   # argcount
-            type: u4
-          - id: local_count # nlocals
-            type: u4
-          - id: stack_size
-            type: u4
-          - id: flags
-            type: u4
-            enum: flags_enum
-          - id: code
-            type: assembly
-          - id: consts
-            type: py_object
-          - id: names
-            type: py_object
-          - id: var_names
-            type: py_object
-          - id: free_vars
-            type: py_object
-          - id: cell_vars
-            type: py_object
-          - id: filename
-            type: py_object
-          - id: name
-            type: py_object
-          - id: first_line_no
-            type: u4
-          - id: lnotab
-            type: py_object
-        -webide-representation: "{name.value}"
-        enums:
-          flags_enum:
-            0x04: has_args
-            0x08: has_kwargs
-            0x20: generator
       py_string:
         seq:
           - id: length
