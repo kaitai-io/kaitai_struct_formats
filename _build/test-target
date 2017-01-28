@@ -120,7 +120,7 @@ for line in kscOutput.split('\n'):
         currLang["sourceFn"] = sourceFn + ('.cpp' if langName == 'cpp_stl' else '')
         
     isMeta = ksyPath or langName or sourceFn
-    
+
     if not isMeta and currLang:
         if not currLang["kscError"]:
             currLang["kscError"] = line
@@ -165,7 +165,7 @@ else:
     success("Yay there were no ksc compilation errors!")
 
 print
-    
+
 langData = {
     "csharp": {
         "compileCmd": "mcs {sourceFns} test/Main.cs ../../runtime/csharp/*.cs",
@@ -227,6 +227,8 @@ for (langName, langItems) in groupby(kscSuccess, lambda x: x["lang"]):
 
     errorRegex = re.compile(lang["errorRegex"]) if "errorRegex" in lang else None
     errorRegexFormat = lang["errorRegexFormat"] if "errorRegexFormat" in lang else "{0}"
+    failCount = 0
+
     for res in langItems:
         sourceIncludes = [results.get(ksyInc, {}).get(langName,{}).get("sourceFn") for ksyInc in res["ksyIncludes"]]
         res["sourceIncludes"] = sourceIncludes = [x for x in sourceIncludes if x]
@@ -243,7 +245,7 @@ for (langName, langItems) in groupby(kscSuccess, lambda x: x["lang"]):
         if compileExitCode != 0:
             errorFn = "{tmpDir}/error_{lang}_{ksyName}.txt".format(tmpDir = tmpDir, lang = res["lang"], ksyName = res["ksyFn"].replace("/", "_"))
             open(errorFn, "w").write(compileOutput)
-            
+
             errorSummary = "";
             if errorRegex:
                 m = errorRegex.search(compileOutput)
@@ -251,8 +253,16 @@ for (langName, langItems) in groupby(kscSuccess, lambda x: x["lang"]):
                     errorSummary = errorRegexFormat.format(*m.groups())
 
             fail(" - [FAIL] " + prefix + ": code=" + str(compileExitCode) + ", fn=" + errorFn + (" (" + errorSummary + ")" if errorSummary else ""))
+            failCount = failCount + 1
         elif not args.hide_success:
             success(' - [SUCCESS] ' + prefix)    
+    print
+
+    if failCount == 0:
+        success('Yay, there were no %s compilation errors' % langName)
+    else:
+        fail('There were %d %s compilation errors' % (failCount, langName))
+
     print
 
 print

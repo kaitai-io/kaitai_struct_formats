@@ -10,14 +10,14 @@ seq:
     size: mz1.header_size - 0x40
   - id: pe_signature
     contents: ["PE", 0, 0]
-  - id: coff_header
+  - id: coff_hdr
     type: coff_header
-  - id: optional_header
+  - id: optional_hdr
     type: optional_header
-    size: coff_header.size_of_optional_header
+    size: coff_hdr.size_of_optional_header
   - id: sections
     repeat: expr
-    repeat-expr: coff_header.number_of_sections
+    repeat-expr: coff_hdr.number_of_sections
     type: section
 enums:
   pe_format:

@@ -6,7 +6,7 @@ meta:
 seq:
   - id: header
     type: file_header
-  - id: hive_bin
+  - id: hive_bins
     type: hive_bin
     size: 4096
     repeat: eos
@@ -25,10 +25,10 @@ types:
         type: u4
       - id: minor_version
         type: u4
-      - id: file_type
+      - id: type
         type: u4
         enum: file_type
-      - id: file_format
+      - id: format
         type: u4
         enum: file_format
       - id: root_key_offset
@@ -104,7 +104,7 @@ types:
         seq:
           - id: flags
             type: u2
-            enum: flags
+            enum: nk_flags
           - id: last_key_written_date_and_time
             type: filetime
           - id: unknown1 # empty value
@@ -146,7 +146,7 @@ types:
             size: unknown_string_size
             encoding: ascii
         enums:
-          flags:
+          nk_flags:
             0x0001: key_is_volatile   # Is volatile key
             0x0002: key_hive_exit     # Is mount point (of another Registry hive)
             0x0004: key_hive_entry    # Is root key (of current Registry hive)
@@ -210,7 +210,7 @@ types:
             type: u4
           - id: data_type
             type: u4
-            enum: data_type
+            enum: data_type_enum
           - id: flags
             type: u2
             enum: vk_flags
@@ -222,7 +222,7 @@ types:
             encoding: ascii
             if: "flags == vk_flags::value_comp_name"
         enums:
-          data_type:
+          data_type_enum:
             0x00000000: reg_none # Undefined type
             0x00000001: reg_sz # String / [MSDN] states that this is either in ASCII or Unicode with an end-of-string character / Although the string seems to be always stored as UTF-16 little-endian and sometimes the end-of-string character is not included. / Also see: Corruption scenarios
             0x00000002: reg_expand_sz # String that contains expandable (environment) variables like %PATH% / Either in ASCII or Unicode with an end-of-string character

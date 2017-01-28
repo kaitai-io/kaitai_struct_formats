@@ -3,7 +3,7 @@ meta:
   endian: le
   # http://www.digitalpreservation.gov/formats/digformatspecs/WindowsMetafileFormat(wmf)Specification.pdf
 seq:
-  - id: special_header
+  - id: special_hdr
     type: special_header
   - id: header
     type: wmf_header
