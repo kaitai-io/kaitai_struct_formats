@@ -62,9 +62,9 @@ for line in kscOutput.split('\n'):
         currKsy[langName] = currLang = { "kscError": None, "kscErrorOutput": "" }
     if sourceFn:
         currLang["sourceFn"] = sourceFn
-        
+
     isMeta = ksyPath or langName or sourceFn
-    
+
     if not isMeta and currLang:
         if not currLang["kscError"]:
             currLang["kscError"] = line
@@ -93,15 +93,15 @@ def saveResults():
     #print kscOutputJson
 
 saveResults()
-    
+
 colors = { "default": "\033[0m", "fail": "\033[91m", "success": "\033[92m", "warning": "\033[33m" }
 if NO_COLORS:
     for c in colors:
         colors[c] = ""
-        
+
 def fail(str):
     print colors["fail"] + str + colors["default"]
-    
+
 def success(str):
     print colors["success"] + str + colors["default"]
 
@@ -109,11 +109,11 @@ def warning(str):
     print colors["warning"] + str + colors["default"]
 
 if kscFail:
-    fail("ksc compilation errors:\n" + 
+    fail("ksc compilation errors:\n" +
         ''.join([" - {ksyFn} ({lang}): {kscError}\n".format(**res) for res in kscFail]))
 else:
     success("Yay there were no ksc compilation errors!")
-    
+
 langData = {
     "csharp": {
         "compileCmd": "mcs {sourceFn} test/Main.cs ../../runtime/csharp/*.cs",
@@ -160,7 +160,7 @@ for (langName, langItems) in groupby(kscSuccess, lambda x: x["lang"]):
     if not lang:
         unknownLangs[langName] = True
         continue
-        
+
     if args.langs and langName not in args.langs:
         warning("Skipping language (--lang argument): " + langName)
         continue
@@ -173,22 +173,22 @@ for (langName, langItems) in groupby(kscSuccess, lambda x: x["lang"]):
     errorRegexFormat = lang["errorRegexFormat"] if "errorRegexFormat" in lang else "{0}"
     for res in langItems:
         compileCmd = lang["compileCmd"].format(**res)
-        
+
         try:
             compileOutput = subprocess.check_output(compileCmd + " 2>&1", shell=True)
             compileExitCode = 0
         except subprocess.CalledProcessError as e:
             compileOutput = e.output
             compileExitCode = e.returncode
-            
+
         res["compileOutput"] = compileOutput
         res["compileExitCode"] = compileExitCode
-        
+
         prefix = "{ksyFn} ({lang})".format(**res)
         if compileExitCode != 0:
             errorFn = "{tmpDir}/error_{lang}_{ksyName}.txt".format(tmpDir = tmpDir, lang = res["lang"], ksyName = res["ksyFn"].replace("/", "_"))
             open(errorFn, "w").write(compileOutput)
-            
+
             errorSummary = "";
             if errorRegex:
                 m = errorRegex.search(compileOutput)
@@ -197,11 +197,11 @@ for (langName, langItems) in groupby(kscSuccess, lambda x: x["lang"]):
 
             fail(" - [FAIL] " + prefix + ": code=" + str(compileExitCode) + ", fn=" + errorFn + (" (" + errorSummary + ")" if errorSummary else ""))
         elif not args.hide_success:
-            success(' - [SUCCESS] ' + prefix)    
+            success(' - [SUCCESS] ' + prefix)
     print
 
 print
 saveResults()
-    
+
 if unknownLangs:
     fail("The following languages are unknown and were not tested: " + ', '.join(unknownLangs))
