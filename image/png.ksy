@@ -52,9 +52,9 @@ types:
             '"pHYs"': phys_chunk
             # sPLT
             '"tIME"': time_chunk
-            # iTXt
+            '"iTXt"': international_text_chunk
             '"tEXt"': text_chunk
-            # zTXt
+            '"zTXt"': compressed_text_chunk
       - id: crc
         size: 4
   # https://www.w3.org/TR/PNG/#11IHDR
@@ -184,6 +184,26 @@ types:
         type: u1
       - id: second
         type: u1
+  # https://www.w3.org/TR/PNG/#11iTXt
+  international_text_chunk:
+    seq:
+      - id: keyword
+        type: strz
+        encoding: UTF-8
+      - id: compression_flag
+        type: u1
+      - id: compression_method
+        type: u1
+      - id: language_tag
+        type: strz
+        encoding: ASCII
+      - id: translated_keyword
+        type: strz
+        encoding: UTF-8
+      - id: text
+        type: str
+        encoding: UTF-8
+        size-eos: true
   # https://www.w3.org/TR/PNG/#11tEXt
   text_chunk:
     seq:
@@ -194,6 +214,17 @@ types:
         type: str
         size-eos: true
         encoding: iso8859-1
+  # https://www.w3.org/TR/PNG/#11zTXt
+  compressed_text_chunk:
+    seq:
+      - id: keyword
+        type: strz
+        encoding: UTF-8
+      - id: compression_method
+        type: u1
+      - id: text_datastream
+        process: zlib
+        size-eos: true
 enums:
   color_type:
     0: greyscale
