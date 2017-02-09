@@ -40,7 +40,7 @@ types:
   track_event:
     seq:
       - id: v_time
-        type: vint
+        type: vlq_base128_be
       - id: event_header
         type: u1
       - id: meta_event_body
@@ -72,7 +72,7 @@ types:
         type: u1
         enum: meta_type
       - id: len
-        type: vint
+        type: vlq_base128_be
       - id: body
         size: len.value
     enums:
@@ -92,21 +92,6 @@ types:
         0x58: time_signature
         0x59: key_signature
         0x7f: sequencer_specific_event
-  vint:
-    seq:
-      - id: b1
-        type: u1
-      - id: b2
-        type: u1
-        if: 'b1 >= 0x80'
-      - id: b3
-        type: u1
-        if: 'b1 >= 0x80 and b2 >= 0x80'
-    instances:
-      num_bytes:
-        value: '(b1 >= 0x80) ? ((b2 >= 0x80) ? 3 : 2) : 1'
-      value:
-        value: '(b1 >= 0x80) ? ((b2 >= 0x80) ? (((b1 & 0x7f) << 14) + ((b2 & 0x7f) << 7) + b3) : ((b1 & 0x7f) << 7) + b2) : b1'
   note_off_event:
     seq:
       - id: note
@@ -153,6 +138,6 @@ types:
   sysex_event_body:
     seq:
       - id: len
-        type: vint
+        type: vlq_base128_be
       - id: data
         size: len.value
