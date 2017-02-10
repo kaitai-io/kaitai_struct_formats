@@ -5,7 +5,7 @@ seq:
   - id: segments
     type: segment
     repeat: eos
--includes: 
+-includes:
  - exif.ksy
 types:
   segment:
@@ -48,9 +48,23 @@ types:
         0xdb: dqt # define quantization table
         0xdc: dnl # define number of lines
         0xdd: dri # define restart interval
+        0xde: dhp # define hierarchical progression
         0xe0: app0
         0xe1: app1
         0xe2: app2
+        0xe3: app3
+        0xe4: app4
+        0xe5: app5
+        0xe6: app6
+        0xe7: app7
+        0xe8: app8
+        0xe9: app9
+        0xea: app10
+        0xeb: app11
+        0xec: app12
+        0xed: app13
+        0xee: app14
+        0xef: app15
         0xfe: com # comment
   segment_app0:
     seq:
