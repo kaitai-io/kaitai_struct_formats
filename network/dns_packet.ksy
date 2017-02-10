@@ -8,7 +8,7 @@ seq:
     doc: "ID to keep track of request/responces"
     type: u2
   - id: flags
-    type: flags
+    type: packet_flags
   - id: qdcount
     doc: "How many questions are there"
     type: u2
@@ -37,7 +37,7 @@ types:
       - id: type
         type: u2
         enum: type_type
-      - id: class
+      - id: query_class
         type: u2
         enum: class_type
   answer:
@@ -47,7 +47,7 @@ types:
       - id: type
         type: u2
         enum: type_type
-      - id: class
+      - id: answer_class
         type: u2
         enum: class_type
       - id: ttl
@@ -58,10 +58,10 @@ types:
         type: u2
       - id: ptrdname
         type: domain_name
-        if: "type == type_type::PTR"
+        if: "type == type_type::ptr"
       - id: address
         type: address
-        if: "type == type_type::A"
+        if: "type == type_type::a"
   domain_name:
     seq:
       - id: name
@@ -76,7 +76,7 @@ types:
         type: u1
       - id: pointer
         if: "is_pointer"
-        type: pointer
+        type: pointer_struct
       - id: name
         if: "not is_pointer"
         doc: "Otherwise its a string the length of the length value"
@@ -86,15 +86,15 @@ types:
     instances:
       is_pointer:
         value: length == 0b1100_0000
-  pointer:
+  pointer_struct:
     seq:
-      - id: pointer
+      - id: value
         doc: "Read one byte, then offset to that position, read one domain-name and return"
         type: u1
     instances:
       contents:
         io: _root._io
-        pos: pointer
+        pos: value
         type: domain_name
   address:
     seq:
@@ -102,7 +102,7 @@ types:
         type: u1
         repeat: expr
         repeat-expr: 4
-  flags:
+  packet_flags:
     seq:
       - id: flag
         type: u2
@@ -130,7 +130,7 @@ types:
         
 enums:
   class_type:
-    1: in
+    1: in_class
     2: cs
     3: ch
     4: hs

@@ -3,10 +3,10 @@ meta:
   file-extension: gif
   endian: le
 seq:
-  - id: header
+  - id: hdr
     type: header
   - id: logical_screen_descriptor
-    type: logical_screen_descriptor
+    type: logical_screen_descriptor_struct
   - id: global_color_table
     type: color_table
     # https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 18
@@ -24,7 +24,7 @@ types:
       - id: version
         size: 3
         encoding: ASCII
-  logical_screen_descriptor:
+  logical_screen_descriptor_struct:
     # https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 18
     seq:
       - id: screen_width

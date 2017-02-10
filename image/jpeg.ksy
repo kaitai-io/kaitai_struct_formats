@@ -5,6 +5,8 @@ seq:
   - id: segments
     type: segment
     repeat: eos
+-includes: 
+ - exif.ksy
 types:
   segment:
     seq:
@@ -12,25 +14,25 @@ types:
         contents: [0xff]
       - id: marker
         type: u1
-        enum: marker
+        enum: marker_enum
       - id: length
         type: u2
-        if: marker != marker::soi and marker != marker::eoi
+        if: marker != marker_enum::soi and marker != marker_enum::eoi
       - id: data
         size: length - 2
-        if: marker != marker::soi and marker != marker::eoi
+        if: marker != marker_enum::soi and marker != marker_enum::eoi
         type:
           switch-on: marker
           cases:
-            'marker::app0': segment_app0
-            'marker::app1': segment_app1
-            'marker::sof0': segment_sof0
-            'marker::sos': segment_sos
+            'marker_enum::app0': segment_app0
+            'marker_enum::app1': segment_app1
+            'marker_enum::sof0': segment_sof0
+            'marker_enum::sos': segment_sos
       - id: image_data
         size-eos: true
-        if: marker == marker::sos
+        if: marker == marker_enum::sos
     enums:
-      marker:
+      marker_enum:
         0x01: tem
         0xc0: sof0 # start of frame 0
         0xc1: sof1 # start of frame 1

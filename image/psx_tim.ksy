@@ -39,7 +39,7 @@ instances:
   bpp:
     value: flags & 0b0011
 enums:
-  bpp:
+  bpp_type:
     0: bpp_4
     1: bpp_8
     2: bpp_16

@@ -3,9 +3,9 @@ meta:
   file-extension: bmp
   endian: le
 seq:
-  - id: file_header
+  - id: file_hdr
     type: file_header
-  - id: dib_header
+  - id: dib_hdr
     type: dib_header
 types:
   file_header:
@@ -76,5 +76,5 @@ types:
         type: u4
 instances:
   image:
-    pos: file_header.bitmap_ofs
+    pos: file_hdr.bitmap_ofs
     size-eos: true

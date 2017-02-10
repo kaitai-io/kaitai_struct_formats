@@ -15,9 +15,9 @@ instances:
   index:
     pos: index_ofs
     size: index_size
-    type: index
+    type: index_struct
 types:
-  index:
+  index_struct:
     seq:
       - id: entries
         type: index_entry
