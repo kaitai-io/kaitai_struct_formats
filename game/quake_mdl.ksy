@@ -3,6 +3,7 @@ meta:
   endian: le
   application: Quake 1 (idtech2) model format (MDL version 6)
   file-extension: mdl
+  ks-version: 0.7
 seq:
   - id: header
     type: mdl_header
@@ -122,7 +123,8 @@ types:
         type: str
         size: 16
         encoding: ASCII
-        # terminator: 0x00
+        terminator: 0x00
+        pad-right: 0x00
       - id: vertices
         type: mdl_vertex
         repeat: expr
