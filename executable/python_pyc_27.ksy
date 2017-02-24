@@ -39,7 +39,7 @@ types:
         enum: op_code_enum
       - id: arg
         type: u2
-        if: "op_code >= op_code_enum::store_name" # store_name == have_arguments
+        if: "op_code.to_i >= op_code_enum::store_name.to_i" # store_name == have_arguments
     -webide-representation: "{op_code} {arg}"
     enums:
       op_code_enum:
@@ -233,7 +233,7 @@ types:
           - id: data
             type: str
             size: length
-            encoding: utf8
+            encoding: utf-8
         -webide-representation: "{data}"
       string_ref:
         seq:
@@ -247,7 +247,7 @@ types:
           - id: data
             size: length
             type: str
-            encoding: utf8
+            encoding: utf-8
         -webide-representation: "{data}"
       tuple:
         seq:
