@@ -3,6 +3,7 @@ meta:
   id: microsoft_pe
   application: Microsoft Windows
   endian: le
+  ks-version: 0.7
 seq:
   - id: mz1
     type: mz_placeholder
@@ -230,6 +231,7 @@ types:
         type: str
         encoding: UTF-8
         size: 8
+        pad-right: 0
       - id: virtual_size
         type: u4
       - id: virtual_address
