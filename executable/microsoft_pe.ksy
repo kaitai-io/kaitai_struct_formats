@@ -1,6 +1,7 @@
 # http://www.microsoft.com/whdc/system/platform/firmware/PECOFF.mspx
 meta:
   id: microsoft_pe
+  title: Microsoft PE (Portable Executable) file format
   application: Microsoft Windows
   endian: le
   ks-version: 0.7
