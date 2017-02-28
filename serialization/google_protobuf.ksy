@@ -1,6 +1,7 @@
 meta:
   id: google_protobuf
   title: Google Protocol Buffers (protobuf)
+  ks-version: 0.7
 # https://developers.google.com/protocol-buffers/docs/encoding
 doc: |
   Google Protocol Buffers (AKA protobuf) is a popular data
