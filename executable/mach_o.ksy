@@ -198,31 +198,31 @@ types:
         type: u1
       - id: b2
         type: u1
-        if: "b1 & 0x80"
+        if: "b1 & 0x80 != 0"
       - id: b3
         type: u1
-        if: "b2 & 0x80"
+        if: "b2 & 0x80 != 0"
       - id: b4
         type: u1
-        if: "b3 & 0x80"
+        if: "b3 & 0x80 != 0"
       - id: b5
         type: u1
-        if: "b4 & 0x80"
+        if: "b4 & 0x80 != 0"
       - id: b6
         type: u1
-        if: "b5 & 0x80"
+        if: "b5 & 0x80 != 0"
       - id: b7
         type: u1
-        if: "b6 & 0x80"
+        if: "b6 & 0x80 != 0"
       - id: b8
         type: u1
-        if: "b7 & 0x80"
+        if: "b7 & 0x80 != 0"
       - id: b9
         type: u1
-        if: "b8 & 0x80"
+        if: "b8 & 0x80 != 0"
       - id: b10
         type: u1
-        if: "b9 & 0x80"
+        if: "b9 & 0x80 != 0"
     instances:
       value:
         value: >
@@ -243,6 +243,7 @@ types:
       - id: segname
         type: str
         size: 16
+        pad-right: 0
         encoding: ascii
       - id: vmaddr
         type: u8
@@ -272,10 +273,12 @@ types:
           - id: sect_name
             size: 16
             type: str
+            pad-right: 0
             encoding: ascii
           - id: seg_name
             size: 16
             type: str
+            pad-right: 0
             encoding: ascii
           - id: addr
             type: u8
@@ -305,23 +308,23 @@ types:
             type:
               switch-on: sect_name
               cases:
-                "'__cstring\0\0\0\0\0\0\0'":     string_list
-                "'__objc_methname\0'":           string_list
-                "'__objc_classname'":            string_list
-                "'__objc_methtype\0'":           string_list
-                "'__nl_symbol_ptr\0'":           pointer_list
-                "'__got\0\0\0\0\0\0\0\0\0\0\0'": pointer_list
-                "'__la_symbol_ptr\0'":           pointer_list
-                "'__cfstring\0\0\0\0\0\0'":      cf_string_list
-                "'__objc_classlist'":            pointer_list
-                "'__objc_nlclslist'":            pointer_list
-                "'__objc_protolist'":            pointer_list
-                "'__objc_imageinfo'":            pointer_list
-                "'__objc_selrefs\0\0'":          pointer_list
-                "'__objc_protorefs'":            pointer_list
-                "'__objc_classrefs'":            pointer_list
-                "'__objc_superrefs'":            pointer_list
-                "'__eh_frame\0\0\0\0\0\0'":      eh_frame
+                "'__cstring'":        string_list
+                "'__objc_methname'":  string_list
+                "'__objc_classname'": string_list
+                "'__objc_methtype'":  string_list
+                "'__nl_symbol_ptr'":  pointer_list
+                "'__got'":            pointer_list
+                "'__la_symbol_ptr'":  pointer_list
+                "'__cfstring'":       cf_string_list
+                "'__objc_classlist'": pointer_list
+                "'__objc_nlclslist'": pointer_list
+                "'__objc_protolist'": pointer_list
+                "'__objc_imageinfo'": pointer_list
+                "'__objc_selrefs'":   pointer_list
+                "'__objc_protorefs'": pointer_list
+                "'__objc_classrefs'": pointer_list
+                "'__objc_superrefs'": pointer_list
+                "'__eh_frame'":       eh_frame
         types:
           # https://reviews.llvm.org/D15502#b8fe88d5
           eh_frame:
