@@ -1,5 +1,9 @@
 meta:
   id: ipv4_packet
+  ks-version: 0.7
+  imports:
+    - /network/tcp_segment
+    - /network/icmp_packet
 seq:
   - id: b1
     type: u1
