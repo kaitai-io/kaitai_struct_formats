@@ -2,6 +2,9 @@ meta:
   id: pcap
   file-extension: pcapdump
   endian: le
+  ks-version: 0.7
+  imports:
+    - /network/ethernet_frame
 seq:
   - id: hdr
     type: header

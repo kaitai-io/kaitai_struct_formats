@@ -1,5 +1,8 @@
 meta:
   id: ethernet_frame
+  ks-version: 0.7
+  imports:
+    - /network/ipv4_packet
 seq:
   - id: dst_mac
     size: 6
