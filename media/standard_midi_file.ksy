@@ -1,6 +1,8 @@
 meta:
   id: standard_midi_file
   endian: be
+  imports:
+    - /serialization/vlq_base128_be
 seq:
   - id: hdr
     type: header
