@@ -25,13 +25,26 @@ types:
         type: u2
       - id: thiszone
         type: s4
+        doc: |
+          Correction time in seconds between UTC and the local
+          timezone of the following packet header timestamps.
       - id: sigfigs
         type: u4
+        doc: |
+          In theory, the accuracy of time stamps in the capture; in
+          practice, all tools set it to 0.
       - id: snaplen
         type: u4
+        doc: |
+          The "snapshot length" for the capture (typically 65535 or
+          even more, but might be limited by the user), see: incl_len
+          vs. orig_len.
       - id: network
         type: u4
         enum: linktype
+        doc: |
+          Link-layer header type, specifying the type of headers at
+          the beginning of the packet.
   packet:
     seq:
       # https://wiki.wireshark.org/Development/LibpcapFileFormat#Record_.28Packet.29_Header
@@ -41,20 +54,18 @@ types:
         type: u4
       - id: incl_len
         type: u4
+        doc: Number of bytes of packet data actually captured and saved in the file.
       - id: orig_len
         type: u4
+        doc: Length of the packet as it appeared on the network when it was captured.
       # https://wiki.wireshark.org/Development/LibpcapFileFormat#Packet_Data
       - id: body
         size: incl_len
-        if: '_root.hdr.network != linktype::ppi and _root.hdr.network != linktype::ethernet'
-      - id: ppi_body
-        type: packet_ppi
-        size: incl_len
-        if: '_root.hdr.network == linktype::ppi'
-      - id: ethernet_body
-        type: ethernet_frame
-        size: incl_len
-        if: '_root.hdr.network == linktype::ethernet'
+        type:
+          switch-on: _root.hdr.network
+          cases:
+            'linktype::ppi': packet_ppi
+            'linktype::ethernet': ethernet_frame
   packet_ppi:
     seq:
       # https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf - section 3
