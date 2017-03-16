@@ -11,13 +11,12 @@ seq:
   - id: ether_type
     type: u2be
     enum: ether_type_enum
-  - id: ipv4_body
-    type: ipv4_packet
-    size-eos: true
-    if: ether_type == ether_type_enum::ipv4
   - id: body
     size-eos: true
-    if: ether_type != ether_type_enum::ipv4
+    type:
+      switch-on: ether_type
+      cases:
+        'ether_type_enum::ipv4': ipv4_packet
 -includes:
   - ipv4_packet.ksy
 enums:
