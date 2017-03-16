@@ -4,6 +4,7 @@ meta:
   imports:
     - /network/tcp_segment
     - /network/icmp_packet
+    - /network/udp_datagram
 seq:
   - id: b1
     type: u1
@@ -29,15 +30,14 @@ seq:
   - id: options
     type: ipv4_options
     size: ihl_bytes - 20
-  - id: tcp_segment_body
-    type: tcp_segment
-    if: protocol == protocol_enum::tcp
-  - id: icmp_body
-    type: icmp_packet
-    if: protocol == protocol_enum::icmp
   - id: body
     size: total_length - ihl_bytes
-    if: protocol != protocol_enum::tcp and protocol != protocol_enum::icmp
+    type:
+      switch-on: protocol
+      cases:
+        'protocol_enum::tcp': tcp_segment
+        'protocol_enum::icmp': icmp_packet
+        'protocol_enum::udp': udp_datagram
 -includes:
   - tcp_segment.ksy
   - icmp_packet.ksy
