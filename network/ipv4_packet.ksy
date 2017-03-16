@@ -5,6 +5,7 @@ meta:
     - /network/tcp_segment
     - /network/icmp_packet
     - /network/udp_datagram
+    - /network/ipv6_packet
 seq:
   - id: b1
     type: u1
@@ -38,6 +39,7 @@ seq:
         'protocol_enum::tcp': tcp_segment
         'protocol_enum::icmp': icmp_packet
         'protocol_enum::udp': udp_datagram
+        'protocol_enum::ipv6': ipv6_packet
 -includes:
   - tcp_segment.ksy
   - icmp_packet.ksy

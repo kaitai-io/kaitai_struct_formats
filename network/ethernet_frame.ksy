@@ -3,6 +3,7 @@ meta:
   ks-version: 0.7
   imports:
     - /network/ipv4_packet
+    - /network/ipv6_packet
 seq:
   - id: dst_mac
     size: 6
@@ -17,6 +18,7 @@ seq:
       switch-on: ether_type
       cases:
         'ether_type_enum::ipv4': ipv4_packet
+        'ether_type_enum::ipv6': ipv6_packet
 -includes:
   - ipv4_packet.ksy
 enums:
@@ -29,3 +31,4 @@ enums:
     0x0804: chaosnet
     0x0805: x_25_level_3
     0x0806: arp
+    0x86dd: ipv6
