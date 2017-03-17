@@ -2,6 +2,7 @@ meta:
   id: microsoft_network_monitor_v2
   file-extension: cap
   application: Microsoft Network Monitor, v2.x
+  ks-version: 0.7
   endian: le
   imports:
     - /network/ethernet_frame
