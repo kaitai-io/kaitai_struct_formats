@@ -88,6 +88,7 @@ types:
       A container for actually captured network data. Allow to
       timestamp individual frames and designates how much data from
       the original packet was actually written into the file.
+    # https://msdn.microsoft.com/en-us/library/windows/desktop/ee831821.aspx
     seq:
       - id: ts_delta
         type: u8
