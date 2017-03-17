@@ -1,5 +1,9 @@
 meta:
   id: standard_midi_file
+  title: Standard MIDI file
+  file-extension:
+    - mid
+    - smf
   endian: be
   imports:
     - /serialization/vlq_base128_be
