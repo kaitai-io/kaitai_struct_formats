@@ -5,6 +5,7 @@ meta:
     - nes
     - ines
   endian: le
+  license: WTFPL
 seq:
   - id: header
     type: header
