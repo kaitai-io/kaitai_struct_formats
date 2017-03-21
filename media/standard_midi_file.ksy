@@ -6,7 +6,7 @@ meta:
     - smf
   endian: be
   imports:
-    - /serialization/vlq_base128_be
+    - /common/vlq_base128_be
 seq:
   - id: hdr
     type: header
