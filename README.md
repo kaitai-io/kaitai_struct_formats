@@ -22,8 +22,10 @@ them by the general purpose and application:
 
 * `archive` — container files used by general purpose archivers
   applications to pack multiple files into one (e.g. [zip], [tar])
+* `common` — common data structures, widely reusable in many other
+  areas
 * `executable` — files that contain executable machine code, runnable
-  binaries, libraries, general purpose VM bytecode (e.g. [DOS MS],
+  binaries, libraries, general purpose VM bytecode (e.g. [DOS MZ],
   [elf], [Java class files])
 * `filesystem` — file systems, disc partitioning labels, everything
   related to file storage at kernel level (e.g. [ISO 9660], [ext2])
