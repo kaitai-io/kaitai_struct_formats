@@ -1,6 +1,8 @@
 meta:
   id: vlq_base128_le
   title: Variable length quantity, unsigned integer, base128, little-endian
+  license: CC0-1.0
+  ks-version: 0.7
 doc: |
   A variable-length unsigned integer using base128 encoding. 1-byte groups
   consists of 1-bit flag of continuation and 7-bit value, and are ordered
