@@ -1,0 +1,26 @@
+Table 6. Common UEFI Data Types
+BOOLEAN	Logical Boolean. 1-byte value containing a 0 for FALSE or a 1 for  TRUE. Other values are undefined.
+INTN	Signed value of native width. (4 bytes on supported 32-bit processor instructions, 8  bytes on supported 64-bit processor instructions)
+UINTN	Unsigned value of native width. (4 bytes on supported 32-bit processor instructions, 8 bytes on supported 64-bit processor instructions)
+CHAR16	2-byte Character. Unless otherwise specified all characters and strings are stored in the UCS-2 encoding format as defined by Unicode 2.1 and ISO/IEC 10646 standards.
+VOID	Undeclared type.
+EFI_GUID	128-bit buffer containing a unique identifier value. Unless otherwise specified, aligned on a 64-bit boundary.
+EFI_STATUS	Status code. Type UINTN.
+EFI_HANDLE	A collection of related interfaces. Type VOID *.
+EFI_EVENT	Handle to an event structure. Type VOID *.
+EFI_LBA	Logical block address. Type UINT64.
+EFI_TPL	Task priority level. Type UINTN.
+EFI_MAC_ADDRESS	-byte buffer containing a network Media Access Control address.
+EFI_IPv4_ADDRESS   4-byte buffer. An IPv4 internet protocol address. 
+EFI_IPv6_ADDRESS   16-byte buffer. An IPv6 internet protocol address.
+EFI_IP_ADDRESS	16-byte buffer aligned on a 4-byte boundary. An IPv4 or IPv6 internet protocol address. 
+<Enumerated Type> Element of a standard ANSI C enum type declaration. Type INT32.or UINT32. ANSI C does not define the size of sign of an enum so they should never be used in structures. ANSI C integer promotion rules make INT32 or UINT32 interchangeable when passed as an argument to a function.
+sizeof (VOID *) 4 bytes on supported 32-bit processor instructions. 8 bytes on supported 64-bit processor instructions.
+Bitfields	Bitfields are ordered such that bit 0 is the least significant bit.
+
+Table 7. Modifiers for Common UEFI Data Types
+IN	Datum is passed to the function.
+OUT	Datum is returned from the function.
+OPTIONAL	Passing the datum to the function is optional, and a NULL may be passed if the value is not supplied.
+CONST	Datum is read-only.
+EFIAPI	Defines the calling convention for UEFI interfaces. 
