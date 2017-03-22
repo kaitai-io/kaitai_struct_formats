@@ -1,6 +1,7 @@
 meta:
   id: google_protobuf
   title: Google Protocol Buffers (protobuf)
+  license: MIT
   ks-version: 0.7
   imports:
     - /common/vlq_base128_le
