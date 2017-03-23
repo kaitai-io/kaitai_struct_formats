@@ -1,11 +1,11 @@
 meta:
   id: specpr
+  title: "SPECtrum Processing Routines Data Format 3/4/88"
   file-extension: spec
-  endian: be
-  license: unlicense
+  license: Unlicense
   #encoding: "utf-8"
   encoding: "ascii"
-  title: "SPECtrum Processing Routines Data Format 3/4/88"
+  endian: be
 doc: >
   Specpr records are fixed format, 1536 bytes/record. Record number counting starts at 0. Binary data are in IEEE format real numbers and non-byte swapped integers (compatiible with all Sun Microsystems, and Hewlett Packard workstations (Intel and some DEC machines are byte swapped relative to Suns and HPs). Each record may contain different information according to the following scheme.
   You can get some library of spectra from ftp://ftpext.cr.usgs.gov/pub/cr/co/denver/speclab/pub/spectral.library/splib06.library/
