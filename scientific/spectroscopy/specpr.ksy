@@ -6,9 +6,16 @@ meta:
   #encoding: "utf-8"
   encoding: "ascii"
   endian: be
-doc: >
-  Specpr records are fixed format, 1536 bytes/record. Record number counting starts at 0. Binary data are in IEEE format real numbers and non-byte swapped integers (compatiible with all Sun Microsystems, and Hewlett Packard workstations (Intel and some DEC machines are byte swapped relative to Suns and HPs). Each record may contain different information according to the following scheme.
-  You can get some library of spectra from ftp://ftpext.cr.usgs.gov/pub/cr/co/denver/speclab/pub/spectral.library/splib06.library/
+doc: |
+  Specpr records are fixed format, 1536 bytes/record. Record number
+  counting starts at 0. Binary data are in IEEE format real numbers
+  and non-byte swapped integers (compatiible with all Sun
+  Microsystems, and Hewlett Packard workstations (Intel and some DEC
+  machines are byte swapped relative to Suns and HPs). Each record may
+  contain different information according to the following scheme.
+
+  You can get some library of spectra from
+  ftp://ftpext.cr.usgs.gov/pub/cr/co/denver/speclab/pub/spectral.library/splib06.library/
 seq:
   - id: records
     type: record
@@ -21,17 +28,17 @@ types:
         type: b26
       - id: isctb_type
         type: b1
-        doc: >
-           =0 ctb is civil time
-           =1 ctb is universal time
+        doc: |
+          =0 ctb is civil time
+          =1 ctb is universal time
       - id: iscta_type
         type: b1
-        doc: >
-           =0 cta is civil time
-           =1 cta is universal time
+        doc: |
+          =0 cta is civil time
+          =1 cta is universal time
       - id: coordinate_mode
         type: b1
-        doc: >
+        doc: |
           RA, Dec / Long., Lat flag
           =0 the array "ira" and "idec" corresponds to the right ascension and declination of an astronomical object.
           =1 the array "ira" and "idec" correspond to the longitude and latitude of a spot on a planetary surface.
@@ -39,18 +46,18 @@ types:
         type: b1
         doc: >
           flag to indicate whether or not the data for the error bar (1 sigma standard deviation of the mean) is in the next record set.
-          =0: no errors, =1: errors in next record set."
+          =0: no errors, =1: errors in next record set.
       # - id: type
         # type: b2
         # enum: record_type
       - id: text
         type: b1
-        doc: >
-         =0 the data in the array "data" is data
-         =1 the data in the array "data" is ascii text as is most of the header info.
+        doc: |
+          =0 the data in the array "data" is data
+          =1 the data in the array "data" is ascii text as is most of the header info.
       - id: continuation
         type: b1
-        doc: >
+        doc: |
           =0 first record of a spectrum consists of: header then 256 data channels
           =1 continuation data record consisting of:
             # bit flags followed by 1532 bytes of
@@ -62,14 +69,14 @@ types:
             # or 19860 characters of text (bit 1=1).
     instances:
       type:
-        value: text.to_i*1 + continuation.to_i*2
+        value: text.to_i * 1 + continuation.to_i * 2
         enum: record_type
   identifiers:
     seq:
       - id: ititle
         type: str
         size: 40
-        doc: "title which describes the data"
+        doc: "Title which describes the data"
       - id: usernm
         type: str
         size: 8
@@ -240,12 +247,12 @@ types:
     - id: content
       size: 1536 - 4
       type:
-          switch-on: icflag.type
-          cases:
-            'record_type::data_initial': data_initial
-            'record_type::data_continuation': data_continuation
-            'record_type::text_initial': text_initial
-            'record_type::text_continuation': text_continuation
+        switch-on: icflag.type
+        cases:
+          'record_type::data_initial': data_initial
+          'record_type::data_continuation': data_continuation
+          'record_type::text_initial': text_initial
+          'record_type::text_continuation': text_continuation
 enums:
   record_type: # if I use 0b notation it doesn't work
     0: data_initial
