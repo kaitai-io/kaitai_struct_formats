@@ -76,6 +76,7 @@ types:
       - id: ititle
         type: str
         size: 40
+        pad-right: 0x20
         doc: "Title which describes the data"
       - id: usernm
         type: str
@@ -156,6 +157,7 @@ types:
       - id: ihist
         type: str
         size: 60
+        pad-right: 0x20
         doc: "The program automatic 60 character history."
       - id: mhist
         type: str
