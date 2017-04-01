@@ -19,7 +19,7 @@ parser.add_argument('--hide-success', action='store_true', default=False)
 args = parser.parse_args()
 
 if not os.path.exists(tmpDir):
-    os.makedirs(tmpDir, 0600)
+    os.makedirs(tmpDir, 0700)
 
 def shellExec(cmd):
     try:
@@ -43,8 +43,11 @@ def warning(str):
 
 includes = {}
 
-def getRelFile(baseFile, relPath):
-    return baseFile.rsplit('/', 1)[0] + '/' +  relPath
+def getImportFn(baseFile, relPath):
+    if relPath[0] == '/':
+        return relPath[1:] + '.ksy'
+    else:
+        return baseFile.rsplit('/', 1)[0] + '/' +  relPath + '.ksy'
 
 def discoverIncludes(ksyFn):
     if ksyFn in includes:
@@ -56,7 +59,7 @@ def discoverIncludes(ksyFn):
         fail('Error while resolving include for %s: %s' % (ksyFn, e,))
         return
 
-    ksyIncludes = [getRelFile(ksyFn, x) for x in ksy.get('-includes', [])]
+    ksyIncludes = [getImportFn(ksyFn, x) for x in ksy.get('meta',{}).get('imports', [])]
 
     allIncludes = []
     for fn in ksyIncludes:
@@ -78,53 +81,40 @@ oneLang = args.lang and len(args.lang) == 1
 kscLang = args.lang[0] if oneLang else "all"
 kscTargetDir = "target" + ("" if kscLang == "all" else "/" + kscLang)
 kscKsy = " ".join("../" + x for x in args.ksy + dependentKsys) if args.ksy else "../**/*.ksy"
-kscCmdLine = 'ksc -- -t {kscLang} --outdir {kscTargetDir} --verbose {kscKsy} 2>&1'.format(kscLang=kscLang, kscTargetDir=kscTargetDir, kscKsy=kscKsy)
+kscCmdLine = 'ksc -- -t {kscLang} --outdir {kscTargetDir} --import-path ../ --ksc-json-output {kscKsy}'.format(kscLang=kscLang, kscTargetDir=kscTargetDir, kscKsy=kscKsy)
 
 print "  cmd: %s\n" % kscCmdLine
 (kscOutput, _) = shellExec(kscCmdLine)
 with open(kscOutputFn, 'w') as f: f.write(kscOutput)
+#kscOutput = open(kscOutputFn).read()
 
 reNewKsy = re.compile(r'^reading (.*?\.ksy)\.\.\.', re.IGNORECASE)
 reNewLang = re.compile(r'^\.\.\. compiling it for (\w+)\.\.\. \.\.\. => (.*)$', re.IGNORECASE)
 reOneLangNewKsy = re.compile(r'^compiling (.*?) for (\w+)\.\.\.$', re.IGNORECASE)
 reOneLangSourceFn = re.compile(r'^\.\.\. => (.*)$', re.IGNORECASE)
 
+kscOutObj = json.loads(kscOutput)
+
 results = {}
-currKsy = None
-currLang = None
+for (ksyFn, ksyData) in kscOutObj.iteritems():
+    try:
+        ksyFn = ksyFn.replace("../", "")
+        results[ksyFn] = currKsy = {}
 
-for line in kscOutput.split('\n'):
-    langName = ksyPath = sourceFn = None
-    if oneLang:
-        mOneLangNewKsy = reOneLangNewKsy.match(line)
-        mOneLangSourceFn = not mOneLangNewKsy and reOneLangSourceFn.match(line)
-        if mOneLangNewKsy:
-            ksyPath = mOneLangNewKsy.group(1)
-            langName = mOneLangNewKsy.group(2)
-        elif mOneLangSourceFn:
-            sourceFn = mOneLangSourceFn.group(1)
-    else:
-        mNewKsy = reNewKsy.match(line)
-        mNewLang = not mNewKsy and currKsy is not None and reNewLang.match(line)
-        if mNewKsy:
-            ksyPath = mNewKsy.group(1)
-        elif mNewLang:
-            langName = mNewLang.group(1)
-            sourceFn = mNewLang.group(2)
-
-    if ksyPath:
-        results[ksyPath.replace('../', '')] = currKsy = {}
-    if langName:
-        currKsy[langName] = currLang = { "kscError": None, "kscErrorOutput": "" }
-    if sourceFn:
-        currLang["sourceFn"] = sourceFn + ('.cpp' if langName == 'cpp_stl' else '')
+        if "errors" in ksyData:
+            errorMsg = ksyData["errors"][0]["message"]
+            currKsy["error"] = { "kscError": errorMsg, "kscErrorOutput": errorMsg } 
         
-    isMeta = ksyPath or langName or sourceFn
-
-    if not isMeta and currLang:
-        if not currLang["kscError"]:
-            currLang["kscError"] = line
-        currLang["kscErrorOutput"] += line + '\n'
+        if "output" in ksyData:
+            for (langName, langData) in ksyData["output"].iteritems():
+                realLangData = langData.values()[0]
+                currKsy[langName] = currLang = { "kscError": None, "kscErrorOutput": "" }
+                if "files" in realLangData:
+                    currLang["sourceFn"] = "target/" + langName + "/" + realLangData["files"][0]["fileName"]
+                if "errors" in realLangData:
+                    currLang["kscError"] = currLang["kscErrorOutput"] = realLangData["errors"][0]["message"]
+    except Exception as e:
+        print "Error parsing file " + str(ksyFn) + ": " + str(e)
 
 if not args.ksy:
     print "Discovering includes..."
