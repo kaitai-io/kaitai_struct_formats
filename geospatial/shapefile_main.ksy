@@ -2,6 +2,7 @@ meta:
   id: shapefile_main
   title: Shapefile main file
   file-extension: shp
+  license: CC0-1.0
   endian: le
 seq:
   - id: header

@@ -2,6 +2,7 @@ meta:
   id: shapefile_index
   title: Shapefile index file
   file-extension: shx
+  license: CC0-1.0
   endian: le
 seq:
   - id: header
