@@ -23,15 +23,15 @@ types:
         contents: [0x00]
         if: header.path_name_size % 2 == 1
       - id: file_data
-        size: header.file_size.least_significant_bits + header.file_size.most_significant_bits * 65536
+        size: header.file_size.value
       - id: file_data_padding
         contents: [0x00]
-        if: (header.file_size.least_significant_bits + header.file_size.most_significant_bits * 65536) % 2 == 1
+        if: header.file_size.value % 2 == 1
       - id: end_of_file_padding
         size: 1
         contents: [0x00]
         repeat: eos
-        if: path_name == 'TRAILER!!!' and (header.file_size.least_significant_bits + header.file_size.most_significant_bits * 65536) == 0
+        if: path_name == 'TRAILER!!!' and header.file_size.value == 0
   file_header:
     seq:
       - id: magic
@@ -62,3 +62,6 @@ types:
         type: u2
       - id: least_significant_bits
         type: u2
+    instances:
+      value:
+        value: least_significant_bits + (most_significant_bits << 16)
