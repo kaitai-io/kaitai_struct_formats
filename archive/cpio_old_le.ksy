@@ -4,7 +4,6 @@ meta:
   file-extension: cpio
   license: CC0-1.0
   endian: le
-  encoding: ASCII
 seq:
   - id: files
     type: file
@@ -15,7 +14,6 @@ types:
       - id: header
         type: file_header
       - id: path_name
-        type: str
         size: header.path_name_size - 1
       - id: string_terminator
         contents: [0x00]
@@ -31,7 +29,7 @@ types:
         size: 1
         contents: [0x00]
         repeat: eos
-        if: path_name == 'TRAILER!!!' and header.file_size.value == 0
+        if: path_name == [0x54, 0x52, 0x41, 0x49, 0x4c, 0x45, 0x52, 0x21, 0x21, 0x21] and header.file_size.value == 0
   file_header:
     seq:
       - id: magic
