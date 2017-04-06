@@ -26,9 +26,7 @@ types:
         contents: [0x00]
         if: header.file_size.value % 2 == 1
       - id: end_of_file_padding
-        size: 1
-        contents: [0x00]
-        repeat: eos
+        size-eos: true
         if: path_name == [0x54, 0x52, 0x41, 0x49, 0x4c, 0x45, 0x52, 0x21, 0x21, 0x21] and header.file_size.value == 0
   file_header:
     seq:
