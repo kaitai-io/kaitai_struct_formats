@@ -6,6 +6,7 @@ meta:
     - icb
     - vda
     - vst
+  license: CC0-1.0
   encoding: ASCII
   endian: le
 doc:
