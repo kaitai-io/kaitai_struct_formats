@@ -22,6 +22,7 @@ types:
       - id: magic
         contents: 'GIF'
       - id: version
+        type: str
         size: 3
         encoding: ASCII
   logical_screen_descriptor_struct:
