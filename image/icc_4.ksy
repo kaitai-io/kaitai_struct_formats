@@ -418,7 +418,7 @@ types:
     seq:
       - id: reflective_or_transparency
         type: b1
-        enum: device_attributes_relfective_or_transparency
+        enum: device_attributes_reflective_or_transparency
       - id: glossy_or_matte
         type: b1
         enum: device_attributes_glossy_or_matte
@@ -433,7 +433,7 @@ types:
       - id: vendor_specific
         type: b32
     enums:
-      device_attributes_relfective_or_transparency:
+      device_attributes_reflective_or_transparency:
         0: reflective
         1: transparency
       device_attributes_glossy_or_matte:
