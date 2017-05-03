@@ -273,6 +273,33 @@ types:
             type: attribute_info
             repeat: expr
             repeat-expr: attributes_count
+        types:
+          exception_entry:
+            doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.3'
+            seq:
+              - id: start_pc
+                type: u2
+                doc: |
+                  Start of a code region where exception handler is being
+                  active, index in code array (inclusive)
+              - id: end_pc
+                type: u2
+                doc: |
+                  End of a code region where exception handler is being
+                  active, index in code array (exclusive)
+              - id: handler_pc
+                type: u2
+                doc: Start of exception handler code, index in code array
+              - id: catch_type
+                type: u2
+                doc: |
+                  Exception class that this handler catches, index in constant
+                  pool, or 0 (catch all exceptions handler, used to implement
+                  `finally`).
+            instances:
+              catch_exception:
+                value: _root.constant_pool[catch_type - 1]
+                if: catch_type != 0
       attr_body_exceptions:
         doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.5'
         seq:
@@ -316,32 +343,6 @@ types:
                 type: u2
               - id: line_number
                 type: u2
-  exception_entry:
-    seq:
-      - id: start_pc
-        type: u2
-        doc: |
-          Start of a code region where exception handler is being
-          active, index in code array (inclusive)
-      - id: end_pc
-        type: u2
-        doc: |
-          End of a code region where exception handler is being
-          active, index in code array (exclusive)
-      - id: handler_pc
-        type: u2
-        doc: Start of exception handler code, index in code array
-      - id: catch_type
-        type: u2
-        doc: |
-          Exception class that this handler catches, index in constant
-          pool, or 0 (catch all exceptions handler, used to implement
-          `finally`).
-    instances:
-      catch_exception:
-        value: _root.constant_pool[catch_type - 1]
-        if: catch_type != 0
-    doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.3'
   method_info:
     seq:
       - id: access_flags
