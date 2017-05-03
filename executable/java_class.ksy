@@ -202,14 +202,71 @@ types:
         repeat-expr: attributes_count
     doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.5'
   attribute_info:
+    doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7'
     seq:
-      - id: attribute_name_index
+      - id: name_index
         type: u2
       - id: attribute_length
         type: u4
       - id: info
         size: attribute_length
-    doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7'
+        type:
+          switch-on: name_as_str
+          cases:
+            '"Code"': attr_body_code
+    instances:
+      name_as_str:
+        value: _root.constant_pool[name_index - 1].cp_info.as<utf8_cp_info>.value
+    types:
+      attr_body_code:
+        doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.3'
+        seq:
+          - id: max_stack
+            type: u2
+          - id: max_locals
+            type: u2
+          - id: code_length
+            type: u4
+          - id: code
+            size: code_length
+          - id: exception_table_length
+            type: u2
+          - id: exception_table
+            type: exception_entry
+            repeat: expr
+            repeat-expr: exception_table_length
+          - id: attributes_count
+            type: u2
+          - id: attributes
+            type: attribute_info
+            repeat: expr
+            repeat-expr: attributes_count
+  exception_entry:
+    seq:
+      - id: start_pc
+        type: u2
+        doc: |
+          Start of a code region where exception handler is being
+          active, index in code array (inclusive)
+      - id: end_pc
+        type: u2
+        doc: |
+          End of a code region where exception handler is being
+          active, index in code array (exclusive)
+      - id: handler_pc
+        type: u2
+        doc: Start of exception handler code, index in code array
+      - id: catch_type
+        type: u2
+        doc: |
+          Exception class that this handler catches, index in constant
+          pool, or 0 (catch all exceptions handler, used to implement
+          `finally`).
+    instances:
+      catch_exception:
+        value: _root.constant_pool[catch_type - 1]
+        if: catch_type != 0
+    doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.3'
   method_info:
     seq:
       - id: access_flags
@@ -224,4 +281,7 @@ types:
         type: attribute_info
         repeat: expr
         repeat-expr: attributes_count
+    instances:
+      name_as_str:
+        value: _root.constant_pool[name_index - 1].cp_info.as<utf8_cp_info>.value
     doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.6'
