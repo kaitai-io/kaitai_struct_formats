@@ -86,34 +86,51 @@ types:
         18: invoke_dynamic
     doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4'
   class_cp_info:
+    doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.1'
     seq:
       - id: name_index
         type: u2
     instances:
-      name:
-        value: _root.constant_pool[name_index - 1]
-    doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.1'
+      name_as_info:
+        value: _root.constant_pool[name_index - 1].cp_info.as<utf8_cp_info>
+      name_as_str:
+        value: name_as_info.value
   field_ref_cp_info:
+    doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.2'
     seq:
       - id: class_index
         type: u2
       - id: name_and_type_index
         type: u2
-    doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.2'
+    instances:
+      class_as_info:
+        value: _root.constant_pool[class_index - 1].cp_info.as<class_cp_info>
+      name_and_type_as_info:
+        value: _root.constant_pool[name_and_type_index - 1].cp_info.as<name_and_type_cp_info>
   method_ref_cp_info:
+    doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.2'
     seq:
       - id: class_index
         type: u2
       - id: name_and_type_index
         type: u2
-    doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.2'
+    instances:
+      class_as_info:
+        value: _root.constant_pool[class_index - 1].cp_info.as<class_cp_info>
+      name_and_type_as_info:
+        value: _root.constant_pool[name_and_type_index - 1].cp_info.as<name_and_type_cp_info>
   interface_method_ref_cp_info:
+    doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.2'
     seq:
       - id: class_index
         type: u2
       - id: name_and_type_index
         type: u2
-    doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.2'
+    instances:
+      class_as_info:
+        value: _root.constant_pool[class_index - 1].cp_info.as<class_cp_info>
+      name_and_type_as_info:
+        value: _root.constant_pool[name_and_type_index - 1].cp_info.as<name_and_type_cp_info>
   string_cp_info:
     seq:
       - id: string_index
@@ -145,6 +162,15 @@ types:
         type: u2
       - id: descriptor_index
         type: u2
+    instances:
+      name_as_info:
+        value: _root.constant_pool[name_index - 1].cp_info.as<utf8_cp_info>
+      name_as_str:
+        value: name_as_info.value
+      descriptor_as_info:
+        value: _root.constant_pool[descriptor_index - 1].cp_info.as<utf8_cp_info>
+      descriptor_as_str:
+        value: descriptor_as_info.value
     doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.6'
   utf8_cp_info:
     seq:
@@ -200,6 +226,9 @@ types:
         type: attribute_info
         repeat: expr
         repeat-expr: attributes_count
+    instances:
+      name_as_str:
+        value: _root.constant_pool[name_index - 1].cp_info.as<utf8_cp_info>.value
     doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.5'
   attribute_info:
     doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7'
@@ -213,7 +242,10 @@ types:
         type:
           switch-on: name_as_str
           cases:
-            '"Code"': attr_body_code
+            '"Code"': attr_body_code # 4.7.3
+            '"Exceptions"': attr_body_exceptions # 4.7.5
+            '"SourceFile"': attr_body_source_file # 4.7.10
+            '"LineNumberTable"': attr_body_line_number_table # 4.7.12
     instances:
       name_as_str:
         value: _root.constant_pool[name_index - 1].cp_info.as<utf8_cp_info>.value
@@ -241,6 +273,49 @@ types:
             type: attribute_info
             repeat: expr
             repeat-expr: attributes_count
+      attr_body_exceptions:
+        doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.5'
+        seq:
+          - id: number_of_exceptions
+            type: u2
+          - id: exceptions
+            type: exception_table_entry
+            repeat: expr
+            repeat-expr: number_of_exceptions
+        types:
+          exception_table_entry:
+            seq:
+              - id: index
+                type: u2
+            instances:
+              as_info:
+                value: _root.constant_pool[index - 1].cp_info.as<class_cp_info>
+              name_as_str:
+                value: as_info.name_as_str
+      attr_body_source_file:
+        doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.10'
+        seq:
+          - id: sourcefile_index
+            type: u2
+        instances:
+          sourcefile_as_str:
+            value: _root.constant_pool[sourcefile_index - 1].cp_info.as<utf8_cp_info>.value
+      attr_body_line_number_table:
+        doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.12'
+        seq:
+          - id: line_number_table_length
+            type: u2
+          - id: line_number_table
+            type: line_number_table_entry
+            repeat: expr
+            repeat-expr: line_number_table_length
+        types:
+          line_number_table_entry:
+            seq:
+              - id: start_pc
+                type: u2
+              - id: line_number
+                type: u2
   exception_entry:
     seq:
       - id: start_pc
