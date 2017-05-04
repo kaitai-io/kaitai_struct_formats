@@ -68,6 +68,9 @@ types:
             'tag_enum::double': double_cp_info
             'tag_enum::name_and_type': name_and_type_cp_info
             'tag_enum::utf8': utf8_cp_info
+            'tag_enum::method_handle': method_handle_cp_info
+            'tag_enum::method_type': method_type_cp_info
+            'tag_enum::invoke_dynamic': invoke_dynamic_cp_info
     enums:
       tag_enum:
         7: class_type
