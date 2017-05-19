@@ -116,8 +116,8 @@ types:
         90 : store_name           # Index in name list
         91 : delete_name          # ""
         92 : unpack_sequence      # Number of tuple items
-        93 : for_iter             
-        94 : list_append          
+        93 : for_iter
+        94 : list_append
         95 : store_attr           # Index in name list
         96 : delete_attr          # ""
         97 : store_global         # ""
