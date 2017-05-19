@@ -144,7 +144,7 @@ types:
       - id: reserved
         size: 4
       - id: wave
-        size-eos: true        
+        size-eos: true
 enums:
   block_types:
     0: terminator
