@@ -182,7 +182,7 @@ types:
     doc: >
       cvt  - Control Value Table
       This table contains a list of values that can be referenced by instructions.
-      They can be used, among other things, to control characteristics for different glyphs. 
+      They can be used, among other things, to control characteristics for different glyphs.
     seq:
       - id: fwords
         type: s2
@@ -248,7 +248,7 @@ types:
         0x01: baseline_at_y0            # Bit 0 - baseline for font at y=0
         0x02: left_sidebearing_at_x0    # Bit 1 - left sidebearing at x=0
         0x04: flag_depend_on_point_size # Bit 2 - instructions may depend on point size
-        0x08: flag_force_ppem           # Bit 3 - force ppem to integer values for all internal scaler math; 
+        0x08: flag_force_ppem           # Bit 3 - force ppem to integer values for all internal scaler math;
                                         #         may use fractional ppem sizes if this bit is clear
         0x10: flag_may_advance_width    # Bit 4 - instructions may alter advance width (the advance widths might not scale linearly)
       font_direction_hint:
@@ -309,10 +309,10 @@ types:
         doc: 'Typographic line gap. Negative LineGap values are treated as zero in Windows 3.1, System 6, and System 7.'
       - id: advance_width_max
         type: u2
-        doc: 'Maximum advance width value in ‘hmtx’ table.'
+        doc: 'Maximum advance width value in `hmtx` table.'
       - id: min_left_side_bearing
         type: s2
-        doc: 'Minimum left sidebearing value in ‘hmtx’ table.'
+        doc: 'Minimum left sidebearing value in `hmtx` table.'
       - id: min_right_side_bearing
         type: s2
         doc: 'Minimum right sidebearing value; calculated as Min(aw - lsb - (xMax - xMin)).'
@@ -622,14 +622,14 @@ types:
         8: extra_expanded
         9: ultra_expanded
       fs_type:
-        # Restricted License embedding: When only this bit is set, this font may 
-        # not be embedded, copied or modified. 
+        # Restricted License embedding: When only this bit is set, this font may
+        # not be embedded, copied or modified.
         2: restricted_license_embedding
-        # Preview & Print embedding: When this bit is set, the font may be embedded, 
-        # and temporarily loaded on the remote system. Documents containing Preview 
+        # Preview & Print embedding: When this bit is set, the font may be embedded,
+        # and temporarily loaded on the remote system. Documents containing Preview
         # & Print fonts must be opened “read-only;” no edits can be applied to the document.
         4: preview_and_print_embedding
-        # Editable embedding: When this bit is set, the font may be embedded and 
+        # Editable embedding: When this bit is set, the font may be embedded and
         # temporarily loaded on other systems. Documents containing Editable fonts
         # may be opened for reading and writing.
         8: editable_embedding
@@ -648,67 +648,67 @@ types:
       - id: x_avg_char_width
         type: s2
         doc: >
-          The Average Character Width parameter specifies the arithmetic average of the escapement (width) 
-          of all of the 26 lowercase letters a through z of the Latin alphabet and the space character. 
-          If any of the 26 lowercase letters are not present, this parameter should equal the weighted average 
+          The Average Character Width parameter specifies the arithmetic average of the escapement (width)
+          of all of the 26 lowercase letters a through z of the Latin alphabet and the space character.
+          If any of the 26 lowercase letters are not present, this parameter should equal the weighted average
           of all glyphs in the font. For non-UGL (platform 3, encoding 0) fonts, use the unweighted average.
       - id: weight_class
         type: u2
         enum: weight_class
         doc: >
-          Indicates the visual weight (degree of blackness or thickness of strokes) 
+          Indicates the visual weight (degree of blackness or thickness of strokes)
           of the characters in the font.
-      - id: width_class	
+      - id: width_class
         type: u2
         enum: width_class
         doc: >
-          Indicates a relative change from the normal aspect ratio (width to height ratio) 
+          Indicates a relative change from the normal aspect ratio (width to height ratio)
           as specified by a font designer for the glyphs in a font.
-      - id: fs_type	
+      - id: fs_type
         type: s2
         enum: fs_type
         doc: >
-          Indicates font embedding licensing rights for the font. 
+          Indicates font embedding licensing rights for the font.
           Embeddable fonts may be stored in a document.
-          When a document with embedded fonts is opened on a system that does 
-          not have the font installed (the remote system), the embedded font 
-          may be loaded for temporary (and in some cases, permanent) use on that 
-          system by an embedding-aware application. Embedding licensing rights are 
-          granted by the vendor of the font.        
-      - id: y_subscript_x_size	
+          When a document with embedded fonts is opened on a system that does
+          not have the font installed (the remote system), the embedded font
+          may be loaded for temporary (and in some cases, permanent) use on that
+          system by an embedding-aware application. Embedding licensing rights are
+          granted by the vendor of the font.
+      - id: y_subscript_x_size
         type: s2
         doc: 'The recommended horizontal size in font design units for subscripts for this font.'
-      - id: y_subscript_y_size	
+      - id: y_subscript_y_size
         type: s2
         doc: 'The recommended vertical size in font design units for subscripts for this font.'
-      - id: y_subscript_x_offset	
+      - id: y_subscript_x_offset
         type: s2
         doc: 'The recommended horizontal offset in font design untis for subscripts for this font.'
-      - id: y_subscript_y_offset	
+      - id: y_subscript_y_offset
         type: s2
         doc: 'The recommended vertical offset in font design units from the baseline for subscripts for this font.'
-      - id: y_superscript_x_size	
+      - id: y_superscript_x_size
         type: s2
         doc: 'The recommended horizontal size in font design units for superscripts for this font.'
-      - id: y_superscript_y_size	
+      - id: y_superscript_y_size
         type: s2
         doc: 'The recommended vertical size in font design units for superscripts for this font.'
-      - id: y_superscript_x_offset	
+      - id: y_superscript_x_offset
         type: s2
         doc: 'The recommended horizontal offset in font design units for superscripts for this font.'
-      - id: y_superscript_y_offset	
+      - id: y_superscript_y_offset
         type: s2
         doc: 'The recommended vertical offset in font design units from the baseline for superscripts for this font.'
       - id: y_strikeout_size
         type: s2
         doc: 'Width of the strikeout stroke in font design units.'
-      - id: y_strikeout_position	
+      - id: y_strikeout_position
         type: s2
         doc: 'The position of the strikeout stroke relative to the baseline in font design units.'
-      - id: s_family_class	
+      - id: s_family_class
         type: s2
         doc: 'This parameter is a classification of font-family design.'
-      - id: panose	
+      - id: panose
         type: panose
       - id: unicode_range
         type: unicode_range
@@ -721,30 +721,30 @@ types:
         type: u2
         enum: fs_selection
         doc: 'Contains information concerning the nature of the font patterns'
-      - id: first_char_index	
+      - id: first_char_index
         type: u2
         doc: 'The minimum Unicode index (character code) in this font, according to the cmap subtable for platform ID 3 and encoding ID 0 or 1.'
-      - id: last_char_index	
+      - id: last_char_index
         type: u2
         doc: 'The maximum Unicode index (character code) in this font, according to the cmap subtable for platform ID 3 and encoding ID 0 or 1.'
-      - id: typo_ascender	
+      - id: typo_ascender
         type: s2
         doc: 'The typographic ascender for this font.'
-      - id: typo_descender	
+      - id: typo_descender
         type: s2
         doc: 'The typographic descender for this font.'
-      - id: typo_line_gap	
+      - id: typo_line_gap
         type: s2
         doc: 'The typographic line gap for this font.'
-      - id: win_ascent	
+      - id: win_ascent
         type: u2
         doc: 'The ascender metric for Windows.'
-      - id: win_descent	
+      - id: win_descent
         type: u2
         doc: 'The descender metric for Windows.'
       - id: code_page_range
         type: code_page_range
-        doc: 'This field is used to specify the code pages encompassed by the font file in the ‘cmap’ subtable for platform 3, encoding ID 1 (Microsoft platform).'
+        doc: 'This field is used to specify the code pages encompassed by the font file in the `cmap` subtable for platform 3, encoding ID 1 (Microsoft platform).'
   prep:
     seq:
       - id: instructions
@@ -752,7 +752,7 @@ types:
   fpgm:
     seq:
       - id: instructions
-        size-eos: true        
+        size-eos: true
   kern:
     types:
       subtable:
