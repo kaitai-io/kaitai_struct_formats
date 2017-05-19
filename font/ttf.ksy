@@ -627,7 +627,7 @@ types:
         2: restricted_license_embedding
         # Preview & Print embedding: When this bit is set, the font may be embedded,
         # and temporarily loaded on the remote system. Documents containing Preview
-        # & Print fonts must be opened “read-only;” no edits can be applied to the document.
+        # & Print fonts must be opened â€œread-only;â€ no edits can be applied to the document.
         4: preview_and_print_embedding
         # Editable embedding: When this bit is set, the font may be embedded and
         # temporarily loaded on other systems. Documents containing Editable fonts
