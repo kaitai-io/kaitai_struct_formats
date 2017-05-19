@@ -1,10 +1,10 @@
-# http://www.microsoft.com/whdc/system/platform/firmware/PECOFF.mspx
 meta:
   id: microsoft_pe
   title: Microsoft PE (Portable Executable) file format
   application: Microsoft Windows
   endian: le
   ks-version: 0.7
+doc-ref: http://www.microsoft.com/whdc/system/platform/firmware/PECOFF.mspx
 seq:
   - id: mz1
     type: mz_placeholder
@@ -36,7 +36,7 @@ types:
       - id: header_size
         type: u4
   coff_header:
-    # 3.3. COFF File Header (Object and Image)
+    doc-ref: 3.3. COFF File Header (Object and Image)
     seq:
       - id: machine
         type: u2
