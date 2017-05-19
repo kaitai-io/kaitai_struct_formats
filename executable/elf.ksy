@@ -1,50 +1,57 @@
 meta:
   id: elf
-  # Note: only endianness specified here is supported. Waiting for https://github.com/kaitai-io/kaitai_struct/issues/17
-  endian: le
-  application: Executable and Linkable Format (SVR4 ABI and up), many *nix systems
+  title: Executable and Linkable Format
+  application: SVR4 ABI and up, many *nix systems
+  license: CC0-1.0
+  ks-version: 0.8
 seq:
+  # e_ident[EI_MAG0]..e[EI_MAG3]
+  - id: magic
+    size: 4
+    contents: [0x7f, "ELF"]
+    doc: File identification, must be 0x7f + "ELF".
+  # e_ident[EI_CLASS]
+  - id: bits
+    type: u1
+    enum: bits
+    doc: |
+      File class: designates target machine word size (32 or 64
+      bits). The size of many integer fields in this format will
+      depend on this setting.
+  # e_ident[EI_DATA]
+  - id: endian
+    type: u1
+    enum: endian
+    doc: Endianness used for all integers.
+  # e_ident[EI_VERSION]
+  - id: ei_version
+    type: u1
+    doc: ELF header version.
+  # e_ident[EI_OSABI]
+  - id: abi
+    type: u1
+    enum: os_abi
+    doc: |
+      Specifies which OS- and ABI-related extensions will be used
+      in this ELF file.
+  - id: abi_version
+    type: u1
+    doc: |
+      Version of ABI targeted by this ELF file. Interpretation
+      depends on `abi` attribute.
+  - id: pad
+    size: 7
   - id: header
-    type: file_header
+    type: endian_elf
 types:
-  file_header:
+  endian_elf:
+    meta:
+      endian:
+        switch-on: _root.endian
+        cases:
+          'endian::le': le
+          'endian::be': be
     seq:
-      # e_ident[EI_MAG0]..e[EI_MAG3]
-      - id: magic
-        size: 4
-        contents: [0x7f, "ELF"]
-        doc: File identification, must be 0x7f + "ELF".
-      # e_ident[EI_CLASS]
-      - id: bits
-        type: u1
-        enum: bits
-        doc: >
-          File class: designates target machine word size (32 or 64
-          bits). The size of many integer fields in this format will
-          depend on this setting.
-      # e_ident[EI_DATA]
-      - id: endian
-        type: u1
-        enum: endian
-        doc: Endianness used for all integers.
-      # e_ident[EI_VERSION]
-      - id: ei_version
-        type: u1
-        doc: ELF header version.
-      # e_ident[EI_OSABI]
-      - id: abi
-        type: u1
-        enum: os_abi
-        doc: >
-          Specifies which OS- and ABI-related extensions will be used
-          in this ELF file.
-      - id: abi_version
-        type: u1
-        doc: >
-          Version of ABI targeted by this ELF file. Interpretation
-          depends on `abi` attribute.
-      - id: pad
-        size: 7
       - id: e_type
         type: u2
         enum: obj_type
@@ -56,21 +63,21 @@ types:
       # e_entry
       - id: entry_point
         type:
-          switch-on: bits
+          switch-on: _root.bits
           cases:
             'bits::b32': u4
             'bits::b64': u8
       # e_phoff
       - id: program_header_offset
         type:
-          switch-on: bits
+          switch-on: _root.bits
           cases:
             'bits::b32': u4
             'bits::b64': u8
       # e_shoff
       - id: section_header_offset
         type:
-          switch-on: bits
+          switch-on: _root.bits
           cases:
             'bits::b32': u4
             'bits::b64': u8
@@ -95,154 +102,155 @@ types:
       # e_shstrndx
       - id: section_names_idx
         type: u2
-  # Elf(32|64)_Phdr
-  program_header:
-    seq:
-      # p_type
-      - id: type
-        type: u4
-        enum: ph_type
-      # p_flags
-      - id: flags64
-        type: u4
-        if: _root.header.bits == bits::b64
-      # p_offset
-      - id: offset
-        type:
-          switch-on: _root.header.bits
-          cases:
-            'bits::b32': u4
-            'bits::b64': u8
-      # p_vaddr
-      - id: vaddr
-        type:
-          switch-on: _root.header.bits
-          cases:
-            'bits::b32': u4
-            'bits::b64': u8
-      # p_paddr
-      - id: paddr
-        type:
-          switch-on: _root.header.bits
-          cases:
-            'bits::b32': u4
-            'bits::b64': u8
-      # p_filesz
-      - id: filesz
-        type:
-          switch-on: _root.header.bits
-          cases:
-            'bits::b32': u4
-            'bits::b64': u8
-      # p_memsz
-      - id: memsz
-        type:
-          switch-on: _root.header.bits
-          cases:
-            'bits::b32': u4
-            'bits::b64': u8
-      # p_flags
-      - id: flags32
-        type: u4
-        if: _root.header.bits == bits::b32
-      # p_align
-      - id: align
-        type:
-          switch-on: _root.header.bits
-          cases:
-            'bits::b32': u4
-            'bits::b64': u8
-  # Elf(32|64)_Shdr
-  section_header:
-    seq:
-      # sh_name
-      - id: name_offset
-        type: u4
-      # sh_type
-      - id: type
-        type: u4
-        enum: sh_type
-      # sh_flags
-      - id: flags
-        type:
-          switch-on: _root.header.bits
-          cases:
-            'bits::b32': u4
-            'bits::b64': u8
-      # sh_addr
-      - id: addr
-        type:
-          switch-on: _root.header.bits
-          cases:
-            'bits::b32': u4
-            'bits::b64': u8
-      # sh_offset
-      - id: offset
-        type:
-          switch-on: _root.header.bits
-          cases:
-            'bits::b32': u4
-            'bits::b64': u8
-      # sh_size
-      - id: size
-        type:
-          switch-on: _root.header.bits
-          cases:
-            'bits::b32': u4
-            'bits::b64': u8
-      # sh_link
-      - id: linked_section_idx
-        type: u4
-      # sh_info
-      - id: info
-        size: 4
-      # sh_addralign
-      - id: align
-        type:
-          switch-on: _root.header.bits
-          cases:
-            'bits::b32': u4
-            'bits::b64': u8
-      # sh_entsize
-      - id: entry_size
-        type:
-          switch-on: _root.header.bits
-          cases:
-            'bits::b32': u4
-            'bits::b64': u8
+    types:
+      # Elf(32|64)_Phdr
+      program_header:
+        seq:
+          # p_type
+          - id: type
+            type: u4
+            enum: ph_type
+          # p_flags
+          - id: flags64
+            type: u4
+            if: _root.bits == bits::b64
+          # p_offset
+          - id: offset
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': u4
+                'bits::b64': u8
+          # p_vaddr
+          - id: vaddr
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': u4
+                'bits::b64': u8
+          # p_paddr
+          - id: paddr
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': u4
+                'bits::b64': u8
+          # p_filesz
+          - id: filesz
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': u4
+                'bits::b64': u8
+          # p_memsz
+          - id: memsz
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': u4
+                'bits::b64': u8
+          # p_flags
+          - id: flags32
+            type: u4
+            if: _root.bits == bits::b32
+          # p_align
+          - id: align
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': u4
+                'bits::b64': u8
+      # Elf(32|64)_Shdr
+      section_header:
+        seq:
+          # sh_name
+          - id: name_offset
+            type: u4
+          # sh_type
+          - id: type
+            type: u4
+            enum: sh_type
+          # sh_flags
+          - id: flags
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': u4
+                'bits::b64': u8
+          # sh_addr
+          - id: addr
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': u4
+                'bits::b64': u8
+          # sh_offset
+          - id: offset
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': u4
+                'bits::b64': u8
+          # sh_size
+          - id: size
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': u4
+                'bits::b64': u8
+          # sh_link
+          - id: linked_section_idx
+            type: u4
+          # sh_info
+          - id: info
+            size: 4
+          # sh_addralign
+          - id: align
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': u4
+                'bits::b64': u8
+          # sh_entsize
+          - id: entry_size
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': u4
+                'bits::b64': u8
+        instances:
+          body:
+            io: _root._io
+            pos: offset
+            size: size
+          name:
+            io: _root.header.strings._io
+            pos: name_offset
+            type: strz
+            encoding: ASCII
+      strings_struct:
+        seq:
+          - id: entries
+            type: strz
+            repeat: eos
+            encoding: ASCII
     instances:
-      body:
-        io: _root._io
-        pos: offset
-        size: size
-      name:
-        io: _root.strings._io
-        pos: name_offset
-        type: strz
-        encoding: ASCII
-  strings_struct:
-    seq:
-      - id: entries
-        type: strz
-        repeat: eos
-        encoding: ASCII
-instances:
-  program_headers:
-    pos: header.program_header_offset
-    repeat: expr
-    repeat-expr: header.qty_program_header
-    size: header.program_header_entry_size
-    type: program_header
-  section_headers:
-    pos: header.section_header_offset
-    repeat: expr
-    repeat-expr: header.qty_section_header
-    size: header.section_header_entry_size
-    type: section_header
-  strings:
-    pos: section_headers[header.section_names_idx].offset
-    size: section_headers[header.section_names_idx].size
-    type: strings_struct
+      program_headers:
+        pos: program_header_offset
+        repeat: expr
+        repeat-expr: qty_program_header
+        size: program_header_entry_size
+        type: program_header
+      section_headers:
+        pos: section_header_offset
+        repeat: expr
+        repeat-expr: qty_section_header
+        size: section_header_entry_size
+        type: section_header
+      strings:
+        pos: section_headers[section_names_idx].offset
+        size: section_headers[section_names_idx].size
+        type: strings_struct
 enums:
   # EI_CLASS
   bits:
