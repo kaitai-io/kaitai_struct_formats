@@ -28,6 +28,8 @@ types:
         type: str
         size: 56
         encoding: UTF-8
+        terminator: 0
+        pad-right: 0
       - id: ofs
         type: u4
       - id: size
