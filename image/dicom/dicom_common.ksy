@@ -1,12 +1,13 @@
 meta:
-  id: dicom
+  id: dicom_common
+  title: Digital Imaging and Communications in Medicine (DICOM) file format
   file-extension: dcm
+  license: MIT
   endian: le
-seq:
-  - id: file_header
-    type: t_file_header
-  - id: dataset
-    type: t_dataset
+doc-ref: http://dicom.nema.org/medical/dicom/current/output/html/part10.html
+doc: |
+  Common types for little endian DICOM files
+seq: []
 types:
   t_file_header:
     seq:
@@ -14,17 +15,7 @@ types:
         size: 128
       - id: magic
         contents: 'DICM'
-  t_dataset:
-    seq:
-      - id: elements1
-        type: t_dataentry_state_implicit
-        if: not _io.eof
-        repeat: until
-        repeat-until: _io.eof or _.is_transfer_syntax_change_explicit
-      - id: elements2
-        type: t_dataentry_state_explicit
-        repeat: eos
-  t_dataentry_state_implicit:
+  t_dataentry_implicit:
     seq:
       - id: tag_group
         type: u2
@@ -40,7 +31,7 @@ types:
         size: header.content_length
         if: has_content
       - id: elements
-        type: t_dataentry_state_implicit
+        type: t_dataentry_implicit
         if: has_elements and not is_definite
         repeat: until
         repeat-until: _.is_closing_tag
@@ -52,28 +43,27 @@ types:
       t_elements:
         seq:
           - id: elements
-            type: t_dataentry_state_implicit
+            type: t_dataentry_implicit
             repeat: eos
     instances:
       entry_implicit:
         value: tag_group != 2 or tag_group == 0xfffe
       is_closing_tag:
-        value: tag_group == 0xfffe and tag_elem & 0xff00 == 0xe000 and tag_elem != 0xe000
+        value: (tag_group == 0xfffe) and (tag_elem & 0xff00 == 0xe000) and (tag_elem != 0xe000)
       has_elements:
         value: (tag_group == 0xfffe and tag_elem == 0xe000) or header.is_seq
       has_content:
         value: not has_elements
       is_definite:
         value: header.content_length != 0xffffffff
-      p_is_transfer_syntax_change_explicit_1:
-        # '1.2.840.10008.1.2.1\0'
-        value: content == [49, 46, 50, 46, 56, 52, 48, 46, 49, 48, 48, 48, 56, 46, 49, 46, 50, 46, 49]
-      p_is_transfer_syntax_change_explicit_2:
-        value: content == [49, 46, 50, 46, 56, 52, 48, 46, 49, 48, 48, 48, 56, 46, 49, 46, 50, 46, 49, 0]
+      p_is_transfer_syntax_change_non_implicit:
+        # '1.2.840.10008.1.2.1\0' (Explicit VR Little Endian)
+        # See http://www.dicomlibrary.com/dicom/transfer-syntax/
+        value: content != [49, 46, 50, 46, 56, 52, 48, 46, 49, 48, 48, 48, 56, 46, 49, 46, 50, 46, 49, 0]
       is_transfer_syntax_change_explicit:
-        value: tag_group == 2 and tag_elem == 16 and (p_is_transfer_syntax_change_explicit_1 or p_is_transfer_syntax_change_explicit_2)
+        value: tag_group == 2 and tag_elem == 16 and p_is_transfer_syntax_change_non_implicit
 
-  t_dataentry_state_explicit:
+  t_dataentry_explicit:
     seq:
       - id: tag_group
         type: u2
@@ -89,7 +79,7 @@ types:
         size: header.content_length
         if: has_content
       - id: elements
-        type: t_dataentry_state_explicit
+        type: t_dataentry_explicit
         if: has_elements and not is_definite
         repeat: until
         repeat-until: _.is_closing_tag
@@ -101,7 +91,7 @@ types:
       t_elements:
         seq:
           - id: elements
-            type: t_dataentry_state_explicit
+            type: t_dataentry_explicit
             repeat: eos
     instances:
       header_is_implicit:
