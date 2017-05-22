@@ -3,6 +3,7 @@
 
 meta:
   id: id3v2_3
+  license: GPL-2.0
   endian: be
   file-extension:
     - mp3
