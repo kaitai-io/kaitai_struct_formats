@@ -4,7 +4,7 @@
 
 meta:
   id: id3v2_4
-  license: GPL-2.0
+  license: CC0-1.0
   endian: be
   file-extension:
     - mp3
