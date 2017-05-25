@@ -122,7 +122,7 @@ types:
         if: not length_is_long
     instances:
       content_length:
-        value: length_is_long ? p_content_length_u4 : p_content_length_u2
+        value: 'length_is_long ? p_content_length_u4 : p_content_length_u2'
       length_is_long:
         value: not (vr == 'AE' or vr == 'AS' or vr == 'AT' or vr == 'CS' or vr == 'DA' or vr == 'DS' or vr == 'DT' or vr == 'FL' or vr == 'FD' or vr == 'IS' or vr == 'LO' or vr == 'PN' or vr == 'SH' or vr == 'SL' or vr == 'SS' or vr == 'ST' or vr == 'TM' or vr == 'UI' or vr == 'UL' or vr == 'US' or vr == 'LT')
       is_seq:
