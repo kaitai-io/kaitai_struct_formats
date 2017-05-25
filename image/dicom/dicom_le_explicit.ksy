@@ -5,7 +5,7 @@ meta:
   license: MIT
   endian: le
   imports:
-    - /image/dicom/dicom_common
+    - dicom_common
 doc-ref: http://dicom.nema.org/medical/dicom/current/output/html/part10.html
 doc: |
   This grammar parses dicom files with explicit transfer syntax.
