@@ -19,7 +19,8 @@ seq:
   # The rest of the chunks
   - id: chunks
     type: chunk
-    repeat: eos
+    repeat: until
+    repeat-until: _.type == "IEND" or _io.eof
 types:
   chunk:
     seq:
