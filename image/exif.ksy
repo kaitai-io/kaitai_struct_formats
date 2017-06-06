@@ -1,6 +1,9 @@
 # Temporary solution, see this -> https://github.com/kaitai-io/kaitai_struct/issues/17
 meta:
   id: exif
+  imports:
+    - exif_le
+    - exif_be
 seq:
   - id: endianness
     type: u2le
