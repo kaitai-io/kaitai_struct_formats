@@ -10,7 +10,13 @@
 
 <section id="format-lang" class="format">
     <div class="container">
-        <h2><%= LANGS[cur_lang][:name] %> source code to parse <%= format_name %></h2>
+        <h2>
+            <% if cur_lang == 'graphviz' %>
+            GraphViz block diagram source
+            <% else %>
+            <%= LANGS[cur_lang][:name] %> source code to parse <%= format_name %>
+            <% end %>
+        </h2>
 
         <% src_files.each { |src| %>
 
