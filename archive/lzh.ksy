@@ -3,11 +3,19 @@ meta:
   endian: le
   application: LHA (AKA LHarc) by Yoshizaki Haruyasu
   file-extension: lzh
+  license: CC0-1.0
+doc: |
+  LHA (LHarc, LZH) is a file format used by a popular freeware
+  eponymous archiver, created in 1988 by Haruyasu Yoshizaki. Over the
+  years, many ports and implementations were developed, sporting many
+  extensions to original 1988 LZH.
+
+  File format is pretty simple and essentially consists of a stream of
+  records.
 seq:
   - id: entries
     type: record
     repeat: eos
-#    repeat-expr: 10
 types:
   record:
     seq:
