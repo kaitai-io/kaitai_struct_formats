@@ -1,7 +1,9 @@
 meta:
   id: blender_blend
+  application: Blender
   endian: le
   file-extension: blend
+  license: CC0-1.0
 seq:
   - id: hdr
     type: header
