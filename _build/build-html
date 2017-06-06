@@ -9,6 +9,7 @@ require 'yaml'
 require 'fileutils'
 require 'erb'
 require 'cgi'
+require 'set'
 
 require 'commonmarker'
 
@@ -47,6 +48,13 @@ class FormatPagesGenerator
     'serialization' => {title: 'Serialization Protocols'},
     'windows' => {title: 'Windows-specific', icon: 'windows'},
   }
+
+  VALID_LICENSES = Set.new([
+    'CC0-1.0',
+    'MIT',
+    'Unlicense',
+    'WTFPL',
+  ])
 
   def initialize(ksy_dir, target_dir, html_dir)
     @ksy_dir = File.realpath(ksy_dir)
@@ -117,6 +125,14 @@ class FormatPagesGenerator
   def generate_base_page(file_id, out_dir, yaml, yaml_str, cat_id, good_langs)
     File.open("#{out_dir}/index.html", 'w') { |out|
       meta = yaml['meta']
+
+      license = meta['license']
+      if license
+        warn "#{file_id}: license #{license.inspect} does not look valid" unless VALID_LICENSES.include?(license)
+      else
+        warn "#{file_id}: no license"
+      end
+
       format_name = get_format_name(meta)
       cur_lang = 'index'
       out.write @erb_header.result(binding)
@@ -223,7 +239,7 @@ class FormatPagesGenerator
       begin
         FileUtils::cp("#{@target_dir}/#{lang}/#{tgt_file}", "#{tgt_dir}/#{File.basename(tgt_file)}")
       rescue Errno::ENOENT
-        puts "... file not found"
+        $stderr.puts "#{@target_dir}/#{lang}/#{tgt_file}: file not found"
         return false
       end
     }
