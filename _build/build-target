@@ -11,4 +11,4 @@ TARGET_DIR=$(realpath "$2")
 mkdir -p "$TARGET_DIR"
 
 cd "$KSY_DIR"
-ksc -- -t all --outdir "$TARGET_DIR" --verbose **/*.ksy
+ksc -- -t all --ksc-json-output --outdir "$TARGET_DIR" **/*.ksy >"$TARGET_DIR"/log.json
