@@ -33,6 +33,7 @@ them by the general purpose and application:
 * `image` — image formats, digital imaging (e.g. [PNG], [GIF], [BMP])
 * `network` — formats used in network communications (e.g.
   [Ethernet frame], [IPv4 packet])
+* `stdlib` — formats to be used as parts of other formats
 
 Formats that won't fit into any of these categories just reside in the
 root.
