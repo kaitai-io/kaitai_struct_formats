@@ -1,35 +1,43 @@
 meta:
   id: tsm
   title: InfluxDB TSM file
+  application: InfluxDB
   license: MIT
   file-extension: tsm
   endian: be
+doc: |
+  InfluxDB is a scalable database optimized for storage of time
+  series, real-time application metrics, operations monitoring events,
+  etc, written in Go.
 
+  Data is stored in .tsm files, which are kept pretty simple
+  conceptually. Each .tsm file contains a header and footer, which
+  stores offset to an index. Index is used to find a data block for a
+  requested time boundary.
 seq:
   - id: header
     type: header
-
+instances:
+  index:
+    type: index
+    pos: _io.size - 8
 types:
-
   header:
     seq:
       - id: magic
         contents: [0x16, 0xd1, 0x16, 0xd1]
       - id: version
         type: u1
-
   index:
     seq:
       - id: offset
         type: u8
-
     instances:
       entries:
         pos: offset
         repeat: until
         repeat-until: _io.pos == _io.size - 8
         type: index_header
-
     types:
       index_header:
           seq:
@@ -74,8 +82,3 @@ types:
                   io: _root._io
                   type: block_entry
                   pos: block_offset
-
-instances:
-  index:
-    type: index
-    pos: _io.size - 8
