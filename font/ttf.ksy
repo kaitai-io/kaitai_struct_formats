@@ -547,8 +547,8 @@ types:
           - { id: enclosed_cjk_letters_and_months, type: b1 }
           - { id: cjk_compatibility, type: b1 }
           - { id: hangul, type: b1 }
-          - { id: reserved_for_unicode_subranges, type: b1 }
-          - { id: reserved_for_unicode_subranges, type: b1 }
+          - { id: reserved_for_unicode_subranges1, type: b1 }
+          - { id: reserved_for_unicode_subranges2, type: b1 }
           - { id: cjk_unified_ideographs, type: b1 }
           - { id: private_use_area, type: b1 }
           - { id: cjk_compatibility_ideographs, type: b1 }
