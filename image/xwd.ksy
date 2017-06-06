@@ -2,6 +2,7 @@ meta:
   id: xwd
   endian: be
   title: xwd (X Window Dump) bitmap image
+  application: xwd
   license: CC0-1.0
 doc: |
   xwd is a file format written by eponymous X11 screen capture
