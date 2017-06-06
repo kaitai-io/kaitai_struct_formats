@@ -26,15 +26,24 @@ class FormatPagesGenerator
   }
 
   CATS = {
-    'archive' => {title: 'Archive files', icon: 'archive'},
-    'executable' => {title: 'Executables and byte-code', icon: 'gears'},
+    'archive' => {title: 'Archive Files', icon: 'archive'},
+    'common' => {title: 'Commonly Used Data Types', icon: 'arrows'},
+    'database' => {title: 'Databases', icon: 'database'},
+    'executable' => {title: 'Executables and Byte-code', icon: 'gears'},
     'filesystem' => {title: 'Filesystems', icon: 'hdd-o'},
-    'game' => {title: 'Game data files', icon: 'gamepad'},
-    'hardware' => {title: 'Hardware protocols', icon: 'microchip'},
-    'image' => {title: 'Image files', icon: 'file-image-o'},
-    'media' => {title: 'Multimedia files', icon: 'video-camera'},
-    'network' => {title: 'Networking protocols', icon: 'sitemap'},
-    'serialization' => {title: 'Serialization protocols'},
+    'firmware' => {title: 'Firmware', icon: 'microchip'},
+    'font' => {title: 'Fonts', icon: 'font'},
+    'game' => {title: 'Game Data Files', icon: 'gamepad'},
+    'geospatial' => {title: 'Geospatial (Maps)', icon: 'map'},
+    'hardware' => {title: 'Hardware Protocols', icon: 'microchip'},
+    'image' => {title: 'Image Files', icon: 'file-image-o'},
+    'log' => {title: 'Logs', icon: 'database'},
+    'machine_code' => {title: 'CPU / Machine Code Disassembly', icon: 'industry'},
+    'media' => {title: 'Multimedia Files', icon: 'video-camera'},
+    'network' => {title: 'Networking Protocols', icon: 'sitemap'},
+    'scientific' => {title: 'Scientific Applications', icon: 'flask'},
+    'serialization' => {title: 'Serialization Protocols'},
+    'windows' => {title: 'Windows-specific', icon: 'windows'},
   }
 
   def initialize(ksy_dir, target_dir, html_dir)
