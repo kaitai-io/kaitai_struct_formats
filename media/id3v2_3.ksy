@@ -96,7 +96,7 @@ types:
             type: b1
           - id: flag_read_only
             type: b1
-          - id: reserved
+          - id: reserved1
             type: b5
           - id: flag_compressed
             type: b1
@@ -104,7 +104,7 @@ types:
             type: b1
           - id: flag_grouping
             type: b1
-          - id: reserved
+          - id: reserved2
             type: b5
     instances:
       is_invalid:
