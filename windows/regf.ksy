@@ -1,8 +1,25 @@
-# https://github.com/libyal/libregf/blob/master/documentation/Windows%20NT%20Registry%20File%20(REGF)%20format.asciidoc
 meta:
   id: regf
-  file-extension: regf
+  title: Windows registry database
+  application: Windows NT and later
   endian: le
+doc: |
+  This spec allows to parse files used by Microsoft Windows family of
+  operating systems to store parts of its "registry". "Registry" is a
+  hierarchical database that is used to store system settings (global
+  configuration, per-user, per-application configuration, etc).
+
+  Typically, registry files are stored in:
+
+  * System-wide: several files in `%SystemRoot%\System32\Config\`
+  * User-wide:
+    * `%USERPROFILE%\Ntuser.dat`
+    * `%USERPROFILE%\Local Settings\Application Data\Microsoft\Windows\Usrclass.dat` (localized, Windows 2000, Server 2003 and Windows XP)
+    * `%USERPROFILE%\AppData\Local\Microsoft\Windows\Usrclass.dat` (non-localized, Windows Vista and later)
+
+  Note that one typically can't access files directly on a mounted
+  filesystem with a running Windows OS.
+doc-ref: 'https://github.com/libyal/libregf/blob/master/documentation/Windows%20NT%20Registry%20File%20(REGF)%20format.asciidoc'
 seq:
   - id: header
     type: file_header
@@ -59,18 +76,26 @@ types:
     seq:
       - id: signature
         contents: "hbin"
-      - id: offset # The offset of the hive bin, Value in bytes and relative from the start of the hive bin data
+      - id: offset
         type: u4
-      - id: size # Size of the hive bin
+        doc: |
+          The offset of the hive bin, Value in bytes and relative from
+          the start of the hive bin data
+      - id: size
         type: u4
-      - id: unknown1 # 0 most of the time, can contain remnant data
+        doc: Size of the hive bin
+      - id: unknown1
         type: u4
-      - id: unknown2 # 0 most of the time, can contain remnant data
+        doc: 0 most of the time, can contain remnant data
+      - id: unknown2
         type: u4
-      - id: timestamp # Only the root (first) hive bin seems to contain a valid FILETIME
+        doc: 0 most of the time, can contain remnant data
+      - id: timestamp
         type: filetime
-      - id: unknown4 # Contains number of bytes
+        doc: Only the root (first) hive bin seems to contain a valid FILETIME
+      - id: unknown4
         type: u4
+        doc: Contains number of bytes
   hive_bin_cell:
     seq:
       - id: cell_size_raw
