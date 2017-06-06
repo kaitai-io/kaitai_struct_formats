@@ -21,7 +21,6 @@ seq:
     contents: [0]
 types:
   code_with_scope:
-    doc: ""
     seq:
       - id: id
         type: s4
@@ -178,3 +177,16 @@ types:
         0x13: number_decimal
         0x7f: max_key #Special type which compares higher than all other possible BSON element values.
         -1: min_key #Special type which compares lower than all other possible BSON element values.
+  u3:
+    doc: |
+      Implements unsigned 24-bit (3 byte) integer.
+    seq:
+      - id: b1
+        type: u1
+      - id: b2
+        type: u1
+      - id: b3
+        type: u1
+    instances:
+      value:
+        value: 'b1 | (b2 << 8) | (b3 << 16)'
