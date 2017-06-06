@@ -1,7 +1,20 @@
 meta:
   id: dos_mz
+  title: DOS MZ executable
   endian: le
-  file-extension: exe
+  file-extension:
+    - exe
+    - ovl
+  license: CC0-1.0
+doc: |
+  DOS MZ file format is a traditional format for executables in MS-DOS
+  environment. Many modern formats (i.e. Windows PE) still maintain
+  compatibility stub with this format.
+
+  As opposed to .com file format (which basically sports one 64K code
+  segment of raw CPU instructions), DOS MZ .exe file format allowed
+  more flexible memory management, loading of larger programs and
+  added support for relocations.
 seq:
   - id: hdr
     type: mz_header
