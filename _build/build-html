@@ -87,13 +87,18 @@ class FormatPagesGenerator
         puts
 
         FileUtils::mkdir_p(file_dir)
-        generate_base_page(file_id, file_dir, yaml, yaml_str, cat_id)
 
+        good_langs = ['index']
         LANGS.each_key { |lang|
           next if lang == 'index'
-          copy_target_to_html(file_id, "#{file_dir}/src", lang)
-          generate_lang_page(lang, file_id, file_dir, yaml, yaml_str, cat_id)
+          good_langs << lang if copy_target_to_html(file_id, "#{file_dir}/src", lang)
         }
+
+        good_langs.each { |lang|
+          generate_lang_page(lang, file_id, file_dir, yaml, yaml_str, cat_id, good_langs)
+        }
+
+        generate_base_page(file_id, file_dir, yaml, yaml_str, cat_id, good_langs)
 
         @by_cat[cat_id] ||= []
         @by_cat[cat_id] << {
@@ -109,7 +114,7 @@ class FormatPagesGenerator
     generate_index
   end
 
-  def generate_base_page(file_id, out_dir, yaml, yaml_str, cat_id)
+  def generate_base_page(file_id, out_dir, yaml, yaml_str, cat_id, good_langs)
     File.open("#{out_dir}/index.html", 'w') { |out|
       meta = yaml['meta']
       format_name = get_format_name(meta)
@@ -121,7 +126,7 @@ class FormatPagesGenerator
     }
   end
 
-  def generate_lang_page(cur_lang, file_id, out_dir, yaml, yaml_str, cat_id)
+  def generate_lang_page(cur_lang, file_id, out_dir, yaml, yaml_str, cat_id, good_langs)
     puts "  * generating #{cur_lang} page for #{file_id}"
     File.open("#{out_dir}/#{cur_lang}.html", 'w') { |out|
       meta = yaml['meta']
@@ -219,8 +224,10 @@ class FormatPagesGenerator
         FileUtils::cp("#{@target_dir}/#{lang}/#{tgt_file}", "#{tgt_dir}/#{File.basename(tgt_file)}")
       rescue Errno::ENOENT
         puts "... file not found"
+        return false
       end
     }
+    return true
   end
 
   def source_file_gen_names(file_id, lang)
