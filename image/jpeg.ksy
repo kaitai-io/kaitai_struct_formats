@@ -1,12 +1,12 @@
 meta:
   id: jpeg
   endian: be
+  imports:
+    - exif
 seq:
   - id: segments
     type: segment
     repeat: eos
--includes:
- - exif.ksy
 types:
   segment:
     seq:
