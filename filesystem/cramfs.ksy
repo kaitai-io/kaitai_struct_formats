@@ -1,6 +1,7 @@
 meta:
   id: cramfs
   endian: le
+  license: MIT
 
 seq:
   - id: super_block
