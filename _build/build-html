@@ -10,6 +10,8 @@ require 'fileutils'
 require 'erb'
 require 'cgi'
 
+require 'commonmarker'
+
 class FormatPagesGenerator
   LANGS = {
     'index' => {name: 'Overview'},

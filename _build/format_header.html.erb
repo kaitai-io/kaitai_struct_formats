@@ -22,7 +22,7 @@
 
         <div class="row">
             <div class="col-md-8">
-                <p><%= yaml['doc'] %></p>
+                <p><%= CommonMarker.render_html(yaml['doc']) if yaml['doc'] %></p>
             </div>
             <div class="col-md-4">
                 <div class="panel panel-info">
@@ -41,6 +41,21 @@
                     <div class="panel-body">
                         <%= meta['file-extension'] %>
                     </div>
+                    <% end %>
+                    <% if meta['license'] or meta['ks-version'] %>
+                    <div class="panel-heading">
+                        <h3 class="panel-title">KS implementation details</h3>
+                    </div>
+                    <%   if meta['license'] %>
+                    <div class="panel-body">
+                        License: <a href="https://spdx.org/licenses/<%= meta['license'] %>.html"><%= meta['license'] %></a>
+                    </div>
+                    <%   end %>
+                    <%   if meta['ks-version'] %>
+                    <div class="panel-body">
+                        Minimal Kaitai Struct required: <%= meta['ks-version'] %>
+                    </div>
+                    <%   end %>
                     <% end %>
                 </div>
             </div>
