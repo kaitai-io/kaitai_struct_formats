@@ -1,6 +1,18 @@
 meta:
   id: xwd
   endian: be
+  title: xwd (X Window Dump) bitmap image
+  license: CC0-1.0
+doc: |
+  xwd is a file format written by eponymous X11 screen capture
+  application (xwd stands for "X Window Dump"). Typically, an average
+  user transforms xwd format into something more widespread by any of
+  `xwdtopnm` and `pnmto...` utilities right away.
+
+  xwd format itself provides a raw uncompressed bitmap with some
+  metainformation, like pixel format, width, height, bit depth,
+  etc. Note that technically format includes machine-dependent fields
+  and thus is probably a poor choice for true cross-platform usage.
 seq:
   - id: header_size
     type: u4
