@@ -3,6 +3,13 @@ meta:
   endian: be
   imports:
     - exif
+  file-extension:
+    - jpg
+    - jpeg
+    - jpe
+    - jif
+    - jfif
+    - jfi
 seq:
   - id: segments
     type: segment
