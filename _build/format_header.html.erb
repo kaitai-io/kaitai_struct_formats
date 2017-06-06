@@ -71,7 +71,8 @@
             </p>
 
             <ul class="nav nav-pills">
-                <% LANGS.each_pair { |lang_id, lang| %>
+                <% good_langs.each { |lang_id|
+                   lang = LANGS[lang_id] %>
                 <% if lang_id == cur_lang %>
                 <li class="active">
                 <% else %>
