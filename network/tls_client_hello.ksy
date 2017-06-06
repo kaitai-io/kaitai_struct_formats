@@ -20,12 +20,6 @@ seq:
     type: compression_methods
 
   - id: extensions
-    size: 0
-    repeat: expr
-    repeat-expr: 0
-    if: _io.eof == true
-
-  - id: extensions
     type: extensions
     if: _io.eof == false
 
