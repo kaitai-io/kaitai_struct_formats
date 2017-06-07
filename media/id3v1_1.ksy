@@ -1,27 +1,50 @@
 meta:
   id: id3v1_1
-  # http://id3.org/ID3v1
+  license: CC0-1.0
+doc: |
+  ID3v1.1 tag is a method to store simple metadata in .mp3 files. The
+  tag is appended to the end of file and spans exactly 128 bytes.
+
+  This type is supposed to be used on full .mp3 files, seeking to
+  proper position automatically. If you're interesting in parsing only
+  the tag itself, please use `id3v1_1::id3_v1_1_tag` subtype.
+doc-ref: http://id3.org/ID3v1
 instances:
   id3v1_tag:
     pos: _io.size - 128
     type: id3_v1_1_tag
 types:
   id3_v1_1_tag:
+    doc: |
+      ID3v1.1 tag itself, a fixed size 128 byte structure. Contains
+      several metadata fields as fixed-size strings.
+
+      Note that string encoding is not specified by standard, so real
+      encoding used would vary a lot from one implementation to
+      another. Most Windows-based applications tend to use "ANSI"
+      (i.e. locale-dependent encoding, usually one byte per
+      character). Some embedded applications allow selection of
+      charset.
     seq:
       - id: magic
         contents: 'TAG'
       - id: title
         size: 30
+        doc: Song title
       - id: artist
         size: 30
+        doc: Artist name
       - id: album
         size: 30
+        doc: Album title
       - id: year
         type: str
         encoding: ASCII
         size: 4
+        doc: Year of release
       - id: comment
         size: 30
+        doc: Arbitary comment
       - id: genre
         type: u1
         enum: genre_enum
