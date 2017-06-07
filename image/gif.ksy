@@ -1,7 +1,27 @@
 meta:
   id: gif
   file-extension: gif
+  title: GIF (Graphics Interchange Format) image file
   endian: le
+  license: CC0-1.0
+doc: |
+  GIF (Graphics Interchange Format) is an image file format, developed
+  in 1987. It became popular in 1990s as one of the main image formats
+  used in World Wide Web.
+
+  GIF format allows encoding of palette-based images up to 256 colors
+  (each of the colors can be chosen from a 24-bit RGB
+  colorspace). Image data stream uses LZW (Lempel–Ziv–Welch) lossless
+  compression.
+
+  Over the years, several version of the format were published and
+  several extensions to it were made, namely, a popular Netscape
+  extension that allows to store several images in one file, switching
+  between them, which produces crude form of animation.
+
+  Structurally, format consists of several mandatory headers and then
+  a stream of blocks follows. Blocks can carry additional
+  metainformation or image data.
 seq:
   - id: hdr
     type: header
@@ -9,15 +29,15 @@ seq:
     type: logical_screen_descriptor_struct
   - id: global_color_table
     type: color_table
-    # https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 18
     if: logical_screen_descriptor.has_color_table
     size: logical_screen_descriptor.color_table_size * 3
+    doc-ref: https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 18
   - id: blocks
     type: block
     repeat: eos
 types:
   header:
-    # https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 17
+    doc-ref: https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 17
     seq:
       - id: magic
         contents: 'GIF'
@@ -26,7 +46,7 @@ types:
         size: 3
         encoding: ASCII
   logical_screen_descriptor_struct:
-    # https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 18
+    doc-ref: https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 18
     seq:
       - id: screen_width
         type: u2
@@ -44,7 +64,7 @@ types:
       color_table_size:
         value: '2 << (flags & 7)'
   color_table:
-    # https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 19
+    doc-ref: https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 19
     seq:
       - id: entries
         type: color_table_entry
@@ -96,7 +116,7 @@ types:
       color_table_size:
         value: '2 << (flags & 7)'
   image_data:
-    # https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 22
+    doc-ref: https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 22
     seq:
       - id: lzw_min_code_size
         type: u1
@@ -124,7 +144,7 @@ types:
         repeat: until
         repeat-until: _.num_bytes == 0
   ext_graphic_control:
-    # https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 23
+    doc-ref: https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 23
     seq:
       - id: block_size
         contents: [4]
