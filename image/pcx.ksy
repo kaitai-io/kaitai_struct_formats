@@ -2,14 +2,15 @@ meta:
   id: pcx
   file-extension: pcx
   endian: le
+  license: CC0-1.0
 seq:
   - id: hdr
     type: header
     size: 128
 types:
   header:
+    doc-ref: http://web.archive.org/web/20100206055706/http://www.qzx.com/pc-gpe/pcx.txt - "ZSoft .PCX FILE HEADER FORMAT"
     seq:
-      # http://web.archive.org/web/20100206055706/http://www.qzx.com/pc-gpe/pcx.txt - "ZSoft .PCX FILE HEADER FORMAT"
       - id: manufacturer
         type: u1
       - id: version
