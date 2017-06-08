@@ -135,6 +135,7 @@ class FormatPagesGenerator
 
       format_name = get_format_name(meta)
       cur_lang = 'index'
+      page_title = format_name + " format spec for Kaitai Struct"
       out.write @erb_header.result(binding)
       out.write @erb_fheader.result(binding)
       out.write @erb_base.result(binding)
@@ -147,6 +148,12 @@ class FormatPagesGenerator
     File.open("#{out_dir}/#{cur_lang}.html", 'w') { |out|
       meta = yaml['meta']
       format_name = get_format_name(meta)
+      page_title = "#{format_name}: " + (if cur_lang == 'graphviz'
+        "GraphViz block diagram (.dot) source: Kaitai Struct"
+      else
+        "#{LANGS[cur_lang][:name]} parsing library"
+      end)
+
       src_files = source_file_names(file_id, cur_lang).map { |fn|
         path = "src/#{cur_lang}/#{fn}"
         begin
@@ -175,6 +182,7 @@ class FormatPagesGenerator
 
   def generate_index
     File.open("#{@html_dir}/index.html", 'w') { |out|
+      page_title = "File Format Gallery for Kaitai Struct"
       out.write @erb_header.result(binding)
       out.write @erb_index.result(binding)
       out.write @erb_footer.result(binding)
