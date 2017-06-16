@@ -33,7 +33,7 @@ types:
         type: u2
       - id: flags
         type: u2
-      - id: compression
+      - id: compression_method
         type: u2
         enum: compression
       - id: file_mod_time
@@ -67,6 +67,7 @@ types:
         type: u2
       - id: compression_method
         type: u2
+        enum: compression
       - id: last_mod_file_time
         type: u2
       - id: last_mod_file_date
@@ -101,6 +102,10 @@ types:
         type: str
         size: comment_len
         encoding: UTF-8
+    instances:
+      local_header:
+        pos: local_header_offset
+        type: pk_section
   # https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT - 4.3.16
   end_of_central_dir:
     seq:
