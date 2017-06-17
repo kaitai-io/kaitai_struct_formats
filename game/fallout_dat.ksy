@@ -6,9 +6,9 @@ meta:
 seq:
   - id: folder_count
     type: u4
-  - id: unknown
+  - id: unknown1
     type: u4
-  - id: unknown
+  - id: unknown2
     type: u4
   - id: timestamp
     type: u4
