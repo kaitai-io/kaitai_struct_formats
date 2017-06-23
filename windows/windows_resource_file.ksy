@@ -1,14 +1,44 @@
 meta:
   id: windows_resource_file
+  title: Windows resource file
   file-extension: res
-  endian: le
   license: CC0-1.0
+  endian: le
+doc: |
+  Windows resource file (.res) are binary bundles of
+  "resources". Resource has some sort of ID (numerical or string),
+  type (predefined or user-defined), and raw value. Resource files can
+  be seen standalone (as .res file), or embedded inside PE executable
+  (.exe, .dll) files.
+
+  Typical use cases include:
+
+  * providing information about the application (such as title, copyrights, etc)
+  * embedding icon(s) to be displayed in file managers into .exe
+  * adding non-code data into the binary, such as menus, dialog forms,
+    cursor images, fonts, various misc bitmaps, and locale-aware
+    strings
+
+  Windows provides special API to access "resources" from a binary.
+
+  Normally, resources files are created with `rc` compiler: it takes a
+  .rc file (so called "resource-definition script") + all the raw
+  resource binary files for input, and outputs .res file. That .res
+  file can be linked into an .exe / .dll afterwards using a linker.
+
+  Internally, resource file is just a sequence of individual resource
+  definitions. RC tool ensures that first resource (#0) is always
+  empty.
 seq:
   - id: resources
     type: resource
     repeat: eos
 types:
   resource:
+    doc: |
+      Each resource has a `type` and a `name`, which can be used to
+      identify it, and a `value`. Both `type` and `name` can be a
+      number or a string.
     doc-ref: https://msdn.microsoft.com/en-us/library/windows/desktop/ms648027.aspx
     seq:
       - id: value_size
@@ -41,12 +71,12 @@ types:
       - id: value_version
         -orig-id: Version
         type: u4
-        doc: Version for value, specified 
+        doc: Version for value, as specified by a user.
       - id: characteristics
         -orig-id: Characteristics
         type: u4
         doc: Extra 4 bytes that can be used by user for any purpose.
-      - id: value        
+      - id: value
         size: value_size
       - id: padding2
         size: (4 - _io.pos) % 4
