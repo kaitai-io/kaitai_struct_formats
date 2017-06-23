@@ -1,7 +1,9 @@
 meta:
   id: doom_wad
   endian: le
+  file-extension: wad
   application: id Tech 1
+  license: CC0-1.0
 seq:
   - id: magic
     type: str
@@ -24,6 +26,7 @@ types:
         type: str
         size: 8
         encoding: ASCII
+        pad-right: 0
     instances:
       contents:
         io: _root._io
@@ -32,12 +35,12 @@ types:
         type:
           switch-on: name
           cases:
-            '"THINGS\0\0"': things
+            '"THINGS"': things
             '"LINEDEFS"': linedefs
             '"SIDEDEFS"': sidedefs
             '"VERTEXES"': vertexes
             '"BLOCKMAP"': blockmap
-            '"SECTORS\0"': sectors
+            '"SECTORS"': sectors
   things:
     seq:
       - id: entries
