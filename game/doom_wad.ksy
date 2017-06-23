@@ -1,9 +1,9 @@
 meta:
   id: doom_wad
-  endian: le
-  file-extension: wad
   application: id Tech 1
+  file-extension: wad
   license: CC0-1.0
+  endian: le
 seq:
   - id: magic
     type: str
@@ -168,7 +168,7 @@ types:
         encoding: ASCII
       - id: light
         type: s2
-        doc: >
+        doc: |
           Light level of the sector [0..255]. Original engine uses
           COLORMAP to render lighting, so only 32 actual levels are
           available (i.e. 0..7, 8..15, etc).
@@ -177,7 +177,7 @@ types:
         enum: special_sector
       - id: tag
         type: u2
-        doc: >
+        doc: |
           Tag number. When the linedef with the same tag number is
           activated, some effect will be triggered in this sector.
     enums:
