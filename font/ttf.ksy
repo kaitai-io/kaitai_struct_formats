@@ -191,20 +191,26 @@ types:
     # https://github.com/fonttools/fonttools/blob/678876325ef26ac33e8c6d13f4fb70c3bef5da8e/Lib/fontTools/ttLib/tables/_g_l_y_f.py
     # TODO: sadly, Kaitai currently cannot parse this structure
     seq:
-      - id: number_of_contours
-        type: s2
-      - id: x_min
-        type: s2
-      - id: y_min
-        type: s2
-      - id: x_max
-        type: s2
-      - id: y_max
-        type: s2
-      - id: value
-        type: simple_glyph
-        if: number_of_contours > 0
+      - id: items
+        type: item
+        repeat: expr
+        repeat-expr: 4
     types:
+      item:
+        seq:
+          - id: number_of_contours
+            type: s2
+          - id: x_min
+            type: s2
+          - id: y_min
+            type: s2
+          - id: x_max
+            type: s2
+          - id: y_max
+            type: s2
+          - id: value
+            type: simple_glyph
+            if: number_of_contours > 0
       simple_glyph:
         seq:
           - id: end_pts_of_contours
@@ -217,6 +223,14 @@ types:
             size: instruction_length
           - id: flags
             type: flag
+            repeat: expr
+            repeat-expr: point_count
+          - id: x_coordinates
+            size: flags[_index].x_short_vector ? 1 : flags[_index].x_is_same ? 0 : 2
+            repeat: expr
+            repeat-expr: point_count
+          - id: y_coordinates
+            size: flags[_index].y_short_vector ? 1 : flags[_index].y_is_same ? 0 : 2
             repeat: expr
             repeat-expr: point_count
         instances:
@@ -242,6 +256,7 @@ types:
               - id: repeat_value
                 type: u1
                 if: repeat
+            -webide-representation: "repeat={repeat} repeatValue={repeat_value} X[same={x_is_same} short={x_short_vector}] Y[same={y_is_same} short={y_short_vector}]"
   head:
     enums:
       flags:
@@ -547,8 +562,7 @@ types:
           - { id: enclosed_cjk_letters_and_months, type: b1 }
           - { id: cjk_compatibility, type: b1 }
           - { id: hangul, type: b1 }
-          - { id: reserved_for_unicode_subranges1, type: b1 }
-          - { id: reserved_for_unicode_subranges2, type: b1 }
+          - { id: reserved_for_unicode_subranges, type: b1 }
           - { id: cjk_unified_ideographs, type: b1 }
           - { id: private_use_area, type: b1 }
           - { id: cjk_compatibility_ideographs, type: b1 }
