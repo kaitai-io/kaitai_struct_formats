@@ -5,6 +5,7 @@ meta:
   ks-version: 0.7
   imports:
     - /network/ethernet_frame
+doc-ref: http://wiki.wireshark.org/Development/LibpcapFileFormat
 seq:
   - id: hdr
     type: header
@@ -15,8 +16,8 @@ seq:
   - ethernet_frame.ksy
 types:
   header:
+    doc-ref: 'https://wiki.wireshark.org/Development/LibpcapFileFormat#Global_Header'
     seq:
-      # https://wiki.wireshark.org/Development/LibpcapFileFormat#Global_Header
       - id: magic_number
         contents: [0xd4, 0xc3, 0xb2, 0xa1]
       - id: version_major
@@ -46,8 +47,8 @@ types:
           Link-layer header type, specifying the type of headers at
           the beginning of the packet.
   packet:
+    doc-ref: 'https://wiki.wireshark.org/Development/LibpcapFileFormat#Record_.28Packet.29_Header'
     seq:
-      # https://wiki.wireshark.org/Development/LibpcapFileFormat#Record_.28Packet.29_Header
       - id: ts_sec
         type: u4
       - id: ts_usec
@@ -58,7 +59,6 @@ types:
       - id: orig_len
         type: u4
         doc: Length of the packet as it appeared on the network when it was captured.
-      # https://wiki.wireshark.org/Development/LibpcapFileFormat#Packet_Data
       - id: body
         size: incl_len
         type:
@@ -66,17 +66,18 @@ types:
           cases:
             'linktype::ppi': packet_ppi
             'linktype::ethernet': ethernet_frame
+        doc-ref: 'https://wiki.wireshark.org/Development/LibpcapFileFormat#Packet_Data'
   packet_ppi:
+    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf - section 3
     seq:
-      # https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf - section 3
       - id: header
         type: packet_ppi_header
       - id: fields
         type: packet_ppi_field
         repeat: eos
   packet_ppi_header:
+    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf - section 3.1
     seq:
-      # https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf - section 3.1
       - id: pph_version
         type: u1
       - id: pph_flags
@@ -86,8 +87,8 @@ types:
       - id: pph_dlt
         type: u4
   packet_ppi_field:
+    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf - section 3.1
     seq:
-      # https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf - section 3.1
       - id: pfh_type
         type: u2
 #        enum: pfh_type
@@ -101,8 +102,8 @@ types:
         size: pfh_datalen
 #        if: pfh_type != pfh_type::radio_802_11_common
   radio_802_11_common_body:
+    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf - section 4.1.2
     seq:
-      # https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf - section 4.1.2
       - id: tsf_timer
         type: u8
       - id: flags
