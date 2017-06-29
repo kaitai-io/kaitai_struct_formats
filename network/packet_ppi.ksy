@@ -3,6 +3,7 @@ meta:
   endian: le
   imports:
     - /network/ethernet_frame
+  license: CC0-1.0
 doc: |
   PPI is a standard for link layer packet encapsulation, proposed as
   generic extensible container to store both captured in-band data and

@@ -1,8 +1,9 @@
 meta:
   id: pcap
   file-extension: pcapdump
-  endian: le
+  license: CC0-1.0
   ks-version: 0.7
+  endian: le
   imports:
     - /network/ethernet_frame
     - /network/packet_ppi
