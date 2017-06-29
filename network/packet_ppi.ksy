@@ -57,6 +57,8 @@ types:
           switch-on: pfh_type
           cases:
             'pfh_type::radio_802_11_common': radio_802_11_common_body
+            'pfh_type::radio_802_11n_mac_ext': radio_802_11n_mac_ext_body
+            'pfh_type::radio_802_11n_mac_phy_ext': radio_802_11n_mac_phy_ext_body
   radio_802_11_common_body:
     doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 4.1.2
     seq:
@@ -78,6 +80,128 @@ types:
         type: s1
       - id: dbm_antnoise
         type: s1
+  radio_802_11n_mac_ext_body:
+    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 4.1.3
+    seq:
+      - id: flags
+        type: mac_flags
+      - id: a_mpdu_id
+        type: u4
+      - id: num_delimiters
+        type: u1
+      - id: reserved
+        size: 3
+  radio_802_11n_mac_phy_ext_body:
+    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 4.1.4
+    seq:
+      - id: flags
+        type: mac_flags
+      - id: a_mpdu_id
+        type: u4
+      - id: num_delimiters
+        type: u1
+      - id: mcs
+        type: u1
+        doc: Modulation Coding Scheme (MCS)
+      - id: num_streams
+        type: u1
+        doc: Number of spatial streams (0 = unknown)
+      - id: rssi_combined
+        type: u1
+        doc: RSSI (Received Signal Strength Indication), combined from all active antennas / channels
+      - id: rssi_ant_ctl
+        type: u1
+        doc: RSSI (Received Signal Strength Indication) for antennas 0-3, control channel
+        repeat: expr
+        repeat-expr: 4
+      - id: rssi_ant_ext
+        type: u1
+        doc: RSSI (Received Signal Strength Indication) for antennas 0-3, extension channel
+        repeat: expr
+        repeat-expr: 4
+      - id: ext_channel_freq
+        type: u2
+        doc: Extension channel frequency (MHz)
+      - id: ext_channel_flags
+        type: channel_flags
+        doc: Extension channel flags
+      - id: rf_signal_noise
+        type: signal_noise
+        repeat: expr
+        repeat-expr: 4
+        doc: Signal + noise values for antennas 0-3
+      - id: evm
+        type: u4
+        repeat: expr
+        repeat-expr: 4
+        doc: EVM (Error Vector Magnitude) for chains 0-3
+    types:
+      channel_flags:
+        seq:
+          # First byte
+          - id: spectrum_2ghz
+            type: b1
+            doc: 2 GHz spectrum
+          - id: ofdm
+            type: b1
+            doc: OFDM (Orthogonal Frequency-Division Multiplexing)
+          - id: cck
+            type: b1
+            doc: CCK (Complementary Code Keying)
+          - id: turbo
+            type: b1
+          # Unused LSB of first byte + MSB of second byte
+          - id: unused
+            type: b8
+          # Second byte
+          - id: gfsk
+            type: b1
+            doc: Gaussian Frequency Shift Keying
+          - id: dyn_cck_ofdm
+            type: b1
+            doc: Dynamic CCK-OFDM
+          - id: only_passive_scan
+            type: b1
+            doc: Only passive scan allowed
+          - id: spectrum_5ghz
+            type: b1
+            doc: 5 GHz spectrum
+      signal_noise:
+        doc: RF signal + noise pair at a single antenna
+        seq:
+          - id: signal
+            type: s1
+            doc: RF signal, dBm
+          - id: noise
+            type: s1
+            doc: RF noise, dBm
+  mac_flags:
+    seq:
+      - id: unused1
+        type: b1
+      - id: aggregate_delimiter
+        type: b1
+        doc: Aggregate delimiter CRC error after this frame
+      - id: more_aggregates
+        type: b1
+        doc: More aggregates
+      - id: aggregate
+        type: b1
+        doc: Aggregate
+      - id: dup_rx
+        type: b1
+        doc: Duplicate RX
+      - id: rx_short_guard
+        type: b1
+        doc: RX short guard interval (SGI)
+      - id: is_ht_40
+        type: b1
+        doc: true = HT40, false = HT20
+      - id: greenfield
+        type: b1
+        doc: Greenfield
+      - id: unused2
+        size: 3
 enums:
   pfh_type:
     2: radio_802_11_common
