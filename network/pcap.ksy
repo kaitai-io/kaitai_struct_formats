@@ -68,7 +68,7 @@ types:
             'linktype::ethernet': ethernet_frame
         doc-ref: 'https://wiki.wireshark.org/Development/LibpcapFileFormat#Packet_Data'
   packet_ppi:
-    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf - section 3
+    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 3
     seq:
       - id: header
         type: packet_ppi_header
@@ -76,7 +76,7 @@ types:
         type: packet_ppi_field
         repeat: eos
   packet_ppi_header:
-    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf - section 3.1
+    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 3.1
     seq:
       - id: pph_version
         type: u1
@@ -87,7 +87,7 @@ types:
       - id: pph_dlt
         type: u4
   packet_ppi_field:
-    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf - section 3.1
+    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 3.1
     seq:
       - id: pfh_type
         type: u2
@@ -102,7 +102,7 @@ types:
         size: pfh_datalen
 #        if: pfh_type != pfh_type::radio_802_11_common
   radio_802_11_common_body:
-    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf - section 4.1.2
+    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 4.1.2
     seq:
       - id: tsf_timer
         type: u8
@@ -230,7 +230,7 @@ enums:
     263: wattstopper_dlm
     264: iso_14443
   pfh_type:
-    # https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf - section 4
+    # https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 4
     2: radio_802_11_common
     3: radio_802_11n_mac_ext
     4: radio_802_11n_mac_phy_ext
