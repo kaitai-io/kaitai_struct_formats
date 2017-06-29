@@ -5,6 +5,7 @@ meta:
   ks-version: 0.7
   imports:
     - /network/ethernet_frame
+    - /network/packet_ppi
 doc-ref: http://wiki.wireshark.org/Development/LibpcapFileFormat
 seq:
   - id: hdr
@@ -67,61 +68,6 @@ types:
             'linktype::ppi': packet_ppi
             'linktype::ethernet': ethernet_frame
         doc-ref: 'https://wiki.wireshark.org/Development/LibpcapFileFormat#Packet_Data'
-  packet_ppi:
-    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 3
-    seq:
-      - id: header
-        type: packet_ppi_header
-      - id: fields
-        type: packet_ppi_field
-        repeat: eos
-  packet_ppi_header:
-    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 3.1
-    seq:
-      - id: pph_version
-        type: u1
-      - id: pph_flags
-        type: u1
-      - id: pph_len
-        type: u2
-      - id: pph_dlt
-        type: u4
-  packet_ppi_field:
-    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 3.1
-    seq:
-      - id: pfh_type
-        type: u2
-#        enum: pfh_type
-      - id: pfh_datalen
-        type: u2
-#      - id: radio_802_11_common_body
-#        #size: pfh_datalen
-#        type: radio_802_11_common_body
-#        if: pfh_type == pfh_type::radio_802_11_common
-      - id: body
-        size: pfh_datalen
-#        if: pfh_type != pfh_type::radio_802_11_common
-  radio_802_11_common_body:
-    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 4.1.2
-    seq:
-      - id: tsf_timer
-        type: u8
-      - id: flags
-        type: u2
-      - id: rate
-        type: u2
-      - id: channel_freq
-        type: u2
-      - id: channel_flags
-        type: u2
-      - id: fhss_hopset
-        type: u1
-      - id: fhss_pattern
-        type: u1
-      - id: dbm_antsignal
-        type: s1
-      - id: dbm_antnoise
-        type: s1
 enums:
   linktype:
     # http://www.tcpdump.org/linktypes.html
@@ -229,11 +175,3 @@ enums:
     262: zwave_r3
     263: wattstopper_dlm
     264: iso_14443
-  pfh_type:
-    # https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 4
-    2: radio_802_11_common
-    3: radio_802_11n_mac_ext
-    4: radio_802_11n_mac_phy_ext
-    5: spectrum_map
-    6: process_info
-    7: capture_info
