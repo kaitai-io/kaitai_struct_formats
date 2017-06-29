@@ -2,8 +2,10 @@ meta:
   id: dex
   file-extension: dex
   endian: le
-  license: CC0-1.0
-  #doc-ref: https://source.android.com/devices/tech/dalvik/dex-format
+  license: CC-BY-SA-3.0
+  # Portions of this page are reproduced from work created and shared by Google and used
+  # according to terms described in the Creative Commons 3.0 Attribution License.
+doc-ref: https://source.android.com/devices/tech/dalvik/dex-format
 seq:
   - id: header
     type: header_item
