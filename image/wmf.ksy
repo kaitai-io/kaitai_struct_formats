@@ -1,12 +1,12 @@
 meta:
   id: wmf
   endian: le
-  # http://www.digitalpreservation.gov/formats/digformatspecs/WindowsMetafileFormat(wmf)Specification.pdf
+doc-ref: http://www.digitalpreservation.gov/formats/digformatspecs/WindowsMetafileFormat(wmf)Specification.pdf
 seq:
-  - id: special_hdr
+  - id: special_header
     type: special_header
   - id: header
-    type: wmf_header
+    type: header
   - id: records
     type: record
     repeat: until
@@ -32,9 +32,9 @@ types:
         contents: [0, 0, 0, 0]
       - id: checksum
         type: u2
-  wmf_header:
+  header:
     seq:
-      - id: type
+      - id: metafile_type
         type: u2
         enum: metafile_type
       - id: header_size
@@ -63,6 +63,100 @@ types:
         enum: func
       - id: params
         size: (size - 3) * 2
+        type:
+          switch-on: function
+          cases:
+            'func::polyline': params_polyline
+            'func::polygon': params_polygon
+            'func::setbkcolor': color_ref
+            'func::setbkmode': params_setbkmode
+            'func::setpolyfillmode': params_setpolyfillmode
+            #'func::params_setrelabs': reserved
+            'func::setrop2': params_setrop2
+            'func::setwindowext': params_setwindowext
+            'func::setwindoworg': params_setwindoworg
+  # section 2.3.3.14
+  params_polyline:
+    seq:
+      - id: num_points
+        type: s2
+      - id: points
+        repeat: expr
+        repeat-expr: num_points
+        type: point_s
+  # section 2.3.3.15 = params_polyline
+  params_polygon:
+    seq:
+      - id: num_points
+        type: s2
+      - id: points
+        repeat: expr
+        repeat-expr: num_points
+        type: point_s
+  # section 2.3.5.14
+  #params_setbkcolor:
+  #  seq:
+  #    - id: color_ref
+  #      type: color_ref
+  # section 2.3.5.15
+  params_setbkmode:
+    seq:
+      - id: bk_mode
+        type: u2
+        enum: mix_mode
+        doc: Defines current graphic context background mix mode.
+  # section 2.3.5.20
+  params_setpolyfillmode:
+    seq:
+      - id: poly_fill_mode
+        type: u2
+        enum: poly_fill_mode
+        doc: Defines current polygon fill mode.
+  # section 2.3.5.22
+  params_setrop2:
+    seq:
+      - id: draw_mode
+        type: u2
+        enum: bin_raster_op
+        doc: Defines current foreground binary raster operation mixing mode.
+  # section 2.3.5.30
+  params_setwindowext:
+    seq:
+      - id: y
+        type: s2
+        doc: Vertical extent of the window in logical units.
+      - id: x
+        type: s2
+        doc: Horizontal extent of the window in logical units.
+  # section 2.3.5.31
+  params_setwindoworg:
+    seq:
+      - id: y
+        type: s2
+        doc: Y coordinate of the window origin, in logical units.
+      - id: x
+        type: s2
+        doc: X coordinate of the window origin, in logical units.
+  # section 2.2.1.7
+  color_ref:
+    seq:
+      - id: red
+        type: u1
+      - id: green
+        type: u1
+      - id: blue
+        type: u1
+      - id: reserved
+        type: u1
+  # section 2.2.1.12
+  point_s:
+    seq:
+      - id: x
+        type: s2
+        doc: X coordinate of the point, in logical units.
+      - id: y
+        type: s2
+        doc: Y coordinate of the point, in logical units.
 enums:
   func:
     0x0000: eof
@@ -135,3 +229,29 @@ enums:
     0x02fb: createfontindirect
     0x02fc: createbrushindirect
     0x06ff: createregion
+  # section 2.1.2
+  bin_raster_op:
+    0x0001: black
+    0x0002: notmergepen
+    0x0003: masknotpen
+    0x0004: notcopypen
+    0x0005: maskpennot
+    0x0006: not
+    0x0007: xorpen
+    0x0008: notmaskpen
+    0x0009: maskpen
+    0x000a: notxorpen
+    0x000b: nop
+    0x000c: mergenotpen
+    0x000d: copypen
+    0x000e: mergepennot
+    0x000f: mergepen
+    0x0010: white
+  # section 2.1.22
+  mix_mode:
+    0x0001: transparent
+    0x0002: opaque
+  # section 2.1.27
+  poly_fill_mode:
+    0x0001: alternate
+    0x0002: winding
