@@ -15,7 +15,6 @@ instances:
   dir:
     pos: (header.ofs_dir + 1) * sector_size
     type: dir_entry
-    size: 128
 types:
   cfb_header:
     seq:
@@ -117,6 +116,21 @@ types:
         pos: (ofs + 1) * _root.sector_size
         size: size
         if: object_type == obj_type::root_storage
+      child:
+        io: _root._io
+        pos: (_root.header.ofs_dir + 1) * _root.sector_size + child_id * 0x80 # sizeof<dir_entry>
+        type: dir_entry
+        if: child_id != -1
+      left_sibling:
+        io: _root._io
+        pos: (_root.header.ofs_dir + 1) * _root.sector_size + left_sibling_id * 0x80 # sizeof<dir_entry>
+        type: dir_entry
+        if: left_sibling_id != -1
+      right_sibling:
+        io: _root._io
+        pos: (_root.header.ofs_dir + 1) * _root.sector_size + right_sibling_id * 0x80 # sizeof<dir_entry>
+        type: dir_entry
+        if: right_sibling_id != -1
     enums:
       obj_type:
         0: unknown
