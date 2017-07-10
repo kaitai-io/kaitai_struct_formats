@@ -6,10 +6,10 @@
 
 <p>Or parse structure from a bytes:</p>
 
-<pre><code class="python">from kaitaistruct import KaitaiStream
+<pre><code class="python">from kaitaistruct import KaitaiStream, BytesIO
 
 raw = b"\x00\x01\x02..."
-data = <%= class_name %>(KaitaiStream(raw))</code></pre>
+data = <%= class_name %>(KaitaiStream(BytesIO(raw)))</code></pre>
 
 <p>After that, one can get various attributes from the structure by invoking getter methods like:</p>
 
