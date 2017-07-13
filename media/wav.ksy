@@ -1,10 +1,10 @@
 meta:
   id: wav
-  file-extension: wav
   title: Microsoft WAVE audio file
-  endian: le
+  file-extension: wav
   license: BSD-3-Clause-Attribution
   encoding: ASCII
+  endian: le
 doc: |
   The WAVE file format is a subset of Microsoft's RIFF specification for the
   storage of multimedia files. A RIFF file starts out with a file header
@@ -12,6 +12,7 @@ doc: |
   file with a single "WAVE" chunk which consists of two sub-chunks --
   a "fmt " chunk specifying the data format and a "data" chunk containing
   the actual sample data.
+
   This Kaitai implementation was written by John Byrd of Gigantic Software
   (jbyrd@giganticsoftware.com), and it is likely to contain bugs.
 doc-ref: http://soundfile.sapp.org/doc/WaveFormat/
@@ -26,42 +27,40 @@ seq:
   - id: chunks
     type: chunks_type
     size: file_size - 5
-  - id: unused
-    size-eos: true
-    
-instances: 
-  format_chunk:
-    value: _root.chunks.chunk[0].data 
 
-types:  
+instances:
+  format_chunk:
+    value: chunks.chunk[0].data
+
+types:
   chunks_type:
-    seq:   
+    seq:
       - id: chunk
         type: chunk_type
         repeat: eos
- 
+
   chunk_type:
-    seq: 
+    seq:
       - id: chunk_id
         type: u4be
       - id: len
-        type: u4 
+        type: u4
       - id: data
         size: len
-        type: 
-          switch-on: chunk_id 
+        type:
+          switch-on: chunk_id
           cases:
             0x666d7420: format_chunk_type
             0x62657874: bext_chunk_type
             0x63756520: cue_chunk_type
             0x64617461: data_chunk_type
-            
+
   bext_chunk_type:
     seq:
     - id: description
       size: 256
       type: str
-    - id: originator 
+    - id: originator
       size: 32
       type: str
     - id: originator_reference
@@ -91,7 +90,7 @@ types:
       type: u2
     - id: max_short_term_loudness
       type: u2
-      
+
   cue_chunk_type:
     seq:
       - id: dw_cue_points
@@ -101,7 +100,7 @@ types:
         repeat: expr
         repeat-expr: dw_cue_points
         if: dw_cue_points != 0
-        
+
   cue_point_type:
     seq:
       - id: dw_name
@@ -116,12 +115,12 @@ types:
         type: u4
       - id: dw_sample_offset
         type: u4
-        
+
   data_chunk_type:
     seq:
       - id: data
         size-eos: true
-        
+
   format_chunk_type:
     instances:
       is_extensible:
@@ -133,9 +132,9 @@ types:
       is_cb_size_meaningful:
         value: not is_basic_pcm and cb_size != 0
 
-    seq: 
+    seq:
     - id: w_format_tag
-      type: u2 
+      type: u2
       enum: w_format_tag_type
     - id: n_channels
       type: u2
@@ -156,14 +155,14 @@ types:
     - id: channel_mask_and_subformat
       type: channel_mask_and_subformat_type
       if: is_extensible
-      
+
   channel_mask_and_subformat_type:
     seq:
       - id: dw_channel_mask
         type: channel_mask_type
       - id: subformat
         type: guid_type
-        
+
   channel_mask_type:
     seq:
       - id: front_right_of_center
@@ -174,7 +173,7 @@ types:
         type: b1
       - id: back_left
         type: b1
-      
+
       - id: low_frequency
         type: b1
       - id: front_center
@@ -182,8 +181,8 @@ types:
       - id: front_right
         type: b1
       - id: front_left
-        type: b1 
-        
+        type: b1
+
       - id: top_center
         type: b1
       - id: side_right
@@ -192,7 +191,7 @@ types:
         type: b1
       - id: back_center
         type: b1
-        
+
       - id: top_back_left
         type: b1
       - id: top_front_right
@@ -204,15 +203,15 @@ types:
 
       - id: unused1
         type: b6
-        
+
       - id: top_back_right
         type: b1
       - id: top_back_center
         type: b1
-        
+
       - id: unused2
         type: b8
-        
+
   guid_type:
     seq:
       - id: data1
@@ -230,12 +229,12 @@ types:
     seq:
       - id: samples
         type: u4
-        
+
   sample_type:
     seq:
       - id: sample
         type: u2
-        
+
 enums:
   w_format_tag_type:
     0x0000: unknown
@@ -248,25 +247,12 @@ enums:
     0x0092: dolby_ac3_spdif
     0xfffe: extensible
     0xffff: development
-    
+
   chunk_type:
     0x20746d66: fmt
     0x62657874: bext
     0x63756520: cue
     0x64617461: data
-    0x756d6964: umid 
+    0x756d6964: umid
     0x6d696e66: minf
     0x7265676e: regn
-
-    
-    
-
-    
-    
-
-
-    
-        
-    
-
-
