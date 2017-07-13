@@ -133,28 +133,28 @@ types:
         value: not is_basic_pcm and cb_size != 0
 
     seq:
-    - id: w_format_tag
-      type: u2
-      enum: w_format_tag_type
-    - id: n_channels
-      type: u2
-    - id: n_samples_per_sec
-      type: u4
-    - id: n_avg_bytes_per_sec
-      type: u4
-    - id: n_block_align
-      type: u2
-    - id: w_bits_per_sample
-      type: u2
-    - id: cb_size
-      type: u2
-      if: not is_basic_pcm
-    - id: w_valid_bits_per_sample
-      type: u2
-      if: is_cb_size_meaningful
-    - id: channel_mask_and_subformat
-      type: channel_mask_and_subformat_type
-      if: is_extensible
+      - id: w_format_tag
+        type: u2
+        enum: w_format_tag_type
+      - id: n_channels
+        type: u2
+      - id: n_samples_per_sec
+        type: u4
+      - id: n_avg_bytes_per_sec
+        type: u4
+      - id: n_block_align
+        type: u2
+      - id: w_bits_per_sample
+        type: u2
+      - id: cb_size
+        type: u2
+        if: not is_basic_pcm
+      - id: w_valid_bits_per_sample
+        type: u2
+        if: is_cb_size_meaningful
+      - id: channel_mask_and_subformat
+        type: channel_mask_and_subformat_type
+        if: is_extensible
 
   channel_mask_and_subformat_type:
     seq:
