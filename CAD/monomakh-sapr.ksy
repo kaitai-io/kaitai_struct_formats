@@ -1,9 +1,8 @@
 meta:
-  id: chg
+  id: monomakh_sapr_chg
   endian: le
   file-extension: chg
-  application:  MONOMAKH-SAPR
-  title: CHG pakege files
+  application: MONOMAKH-SAPR
   ks-version: 0.7
   license: CC0-1.0
 doc: |
