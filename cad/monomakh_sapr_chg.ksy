@@ -10,7 +10,7 @@ doc: |
   (https://www.liraland.com/mono/index.php)
   MONOMAKH-SAPR is software for analysis & design of reinforced concrete 
   multi-storey buildings with arbitrary configuration in plan.
-  
+
   Written and tested by Vladimir Shulzhitskiy, 2017
 seq:
   - id: titule
@@ -26,7 +26,7 @@ types:
       - id: header
         type: str
         size: 13
-        encoding: "ascii" 
+        encoding: "ascii"
       - id: file_size
         type: u8
       - id: file
