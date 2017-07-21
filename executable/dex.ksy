@@ -250,9 +250,9 @@ types:
       - id: proto_ids_off
         type: u4
         doc: >
-          	offset from the start of the file to the prototype identifiers list, 
-          	or 0 if proto_ids_size == 0 (admittedly a strange edge case).
-          	The offset, if non-zero, should be to the start of the proto_ids section.
+          offset from the start of the file to the prototype identifiers list, 
+          or 0 if proto_ids_size == 0 (admittedly a strange edge case).
+          The offset, if non-zero, should be to the start of the proto_ids section.
       - id: field_ids_size
         type: u4
         doc: >
@@ -337,9 +337,9 @@ types:
       - id: shorty_idx
         type: u4
         doc: >
-          	index into the string_ids list for the short-form descriptor string of this prototype.
-          	The string must conform to the syntax for ShortyDescriptor, defined above, 
-          	and must correspond to the return type and parameters of this item.
+          index into the string_ids list for the short-form descriptor string of this prototype.
+          The string must conform to the syntax for ShortyDescriptor, defined above, 
+          and must correspond to the return type and parameters of this item.
       - id: return_type_idx
         type: u4
         doc: >
@@ -489,9 +489,9 @@ types:
       - id: name_idx
         type: uleb128
         doc: >
-          	element name, represented as an index into the string_ids section.
-          	
-          	The string must conform to the syntax for MemberName, defined above.
+          element name, represented as an index into the string_ids section.
+          
+          The string must conform to the syntax for MemberName, defined above.
       - id: value
         type: encoded_value
         doc: >
@@ -502,7 +502,7 @@ types:
         type: uleb128
         doc: >
           type of the annotation.
-          	
+          
           This must be a class (not array or primitive) type.
       - id: size
         type: uleb128
