@@ -2,6 +2,7 @@ meta:
   id: bmp
   file-extension: bmp
   endian: le
+  license: CC0-1.0
 seq:
   - id: file_hdr
     type: file_header
