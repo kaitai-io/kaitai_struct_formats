@@ -2,6 +2,7 @@ meta:
   id: windows_evt_log
   title: Windows Event Log (EVT)
   file-extension: evt
+  license: CC0-1.0
   endian: le
 doc-ref: https://msdn.microsoft.com/en-us/library/bb309026(v=vs.85).aspx
 doc: |
