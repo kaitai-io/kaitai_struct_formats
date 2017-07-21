@@ -2,10 +2,11 @@ meta:
   id: windows_systemtime
   endian: le
   title: Microsoft Windows SYSTEMTIME structure
-# https://msdn.microsoft.com/en-us/library/windows/desktop/ms724950.aspx
+  license: CC0-1.0
 doc: |
   Microsoft Windows SYSTEMTIME structure, stores individual components
   of date and time as individual fields, up to millisecond precision.
+doc-ref: https://msdn.microsoft.com/en-us/library/windows/desktop/ms724950.aspx
 seq:
   - id: year
     type: u2
