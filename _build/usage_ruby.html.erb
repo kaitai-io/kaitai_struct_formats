@@ -11,4 +11,4 @@ data = <%= class_name %>.new(Kaitai::Struct::Stream.new(bytes))</code></pre>
 
 <p>After that, one can get various attributes from the structure by invoking getter methods like:</p>
 
-<pre><code class="ruby"><% usage_attrs.each { |attr| %>data.<%= lcc(attr[:name]) %> # => <%= attr[:doc] %><% } %></code></pre>
+<pre><code class="ruby"><% usage_attrs.each { |attr| %>data.<%= attr[:name] %> # => <%= attr[:doc] %><% } %></code></pre>
