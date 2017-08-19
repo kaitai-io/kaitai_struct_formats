@@ -138,13 +138,6 @@ enums:
     0x800000 : has_tlv_descriptors
     0x1000000: no_heap_execution
     0x2000000: app_extension_safe
-  vm_prot:
-    0x00: none
-    0x01: read
-    0x02: write
-    0x04: execute
-    0x08: no_change
-    0x10: copy
 types:
   mach_header:
     seq:
@@ -192,6 +185,42 @@ types:
             'load_command_type::data_in_code'      : linkedit_data_command
             'load_command_type::code_signature'    : code_signature_command
     -webide-representation: '{type}: {body}'
+  vm_prot:
+    seq:
+      - id: strip_read
+        type: b1
+        doc: Special marker to support execute-only protection.
+        -orig-id: VM_PROT_STRIP_READ
+      - id: is_mask
+        doc: Indicates to use value as a mask against the actual protection bits.
+        -orig-id: VM_PROT_IS_MASK
+        type: b1
+      - id: reserved0
+        type: b1
+        doc: Reserved (unused) bit.
+      - id: copy
+        type: b1
+        doc: Used when write permission can not be obtained, to mark the entry as COW.
+        -orig-id: VM_PROT_COPY
+      - id: no_change
+        type: b1
+        doc: Used only by memory_object_lock_request to indicate no change to page locks.
+        -orig-id: VM_PROT_NO_CHANGE
+      - id: execute
+        type: b1
+        doc: Execute permission.
+        -orig-id: VM_PROT_EXECUTE
+      - id: write
+        type: b1
+        doc: Write permission.
+        -orig-id: VM_PROT_WRITE
+      - id: read
+        type: b1
+        doc: Read permission.
+        -orig-id: VM_PROT_READ
+      - id: reserved1
+        type: b24
+        doc: Reserved (unused) bits.
   uleb128:
     seq:
       - id: b1
@@ -254,11 +283,9 @@ types:
       - id: filesize
         type: u8
       - id: maxprot
-        type: u4
-        enum: vm_prot
+        type: vm_prot
       - id: initprot
-        type: u4
-        enum: vm_prot
+        type: vm_prot
       - id: nsects
         type: u4
       - id: flags
