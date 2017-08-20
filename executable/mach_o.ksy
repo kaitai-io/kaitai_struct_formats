@@ -184,6 +184,11 @@ types:
             'load_command_type::source_version'      : source_version_command
             'load_command_type::main'                : entry_point_command
             'load_command_type::load_dylib'          : dylib_command
+            'load_command_type::load_upward_dylib'   : dylib_command
+            'load_command_type::id_dylib'            : dylib_command
+            'load_command_type::load_weak_dylib'     : dylib_command
+            'load_command_type::lazy_load_dylib'     : dylib_command
+            'load_command_type::reexport_dylib'      : dylib_command
             'load_command_type::rpath'               : rpath_command
             'load_command_type::function_starts'     : linkedit_data_command
             'load_command_type::data_in_code'        : linkedit_data_command
