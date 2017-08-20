@@ -193,6 +193,7 @@ types:
             'load_command_type::function_starts'     : linkedit_data_command
             'load_command_type::data_in_code'        : linkedit_data_command
             'load_command_type::code_signature'      : code_signature_command
+            'load_command_type::encryption_info_64'  : encryption_info_command_64
     -webide-representation: '{type}: {body}'
   vm_prot:
     seq:
@@ -739,6 +740,16 @@ types:
       - id: release
         type: u1
     -webide-representation: '{major:dec}.{minor:dec}'
+  encryption_info_command_64:
+    seq:
+      - id: cryptoff
+        type: u4
+      - id: cryptsize
+        type: u4
+      - id: cryptid
+        type: u4
+      - id: pad
+        type: u4
   version_min_command:
     seq:
       - id: version
