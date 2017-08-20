@@ -171,20 +171,23 @@ types:
         type:
           switch-on: type
           cases:
-            'load_command_type::segment_64'        : segment_command_64
-            'load_command_type::dyld_info_only'    : dyld_info_command
-            'load_command_type::symtab'            : symtab_command
-            'load_command_type::dysymtab'          : dysymtab_command
-            'load_command_type::load_dylinker'     : dylinker_command
-            'load_command_type::uuid'              : uuid_command
-            'load_command_type::version_min_macosx': version_min_command
-            'load_command_type::source_version'    : source_version_command
-            'load_command_type::main'              : entry_point_command
-            'load_command_type::load_dylib'        : dylib_command
-            'load_command_type::rpath'             : rpath_command
-            'load_command_type::function_starts'   : linkedit_data_command
-            'load_command_type::data_in_code'      : linkedit_data_command
-            'load_command_type::code_signature'    : code_signature_command
+            'load_command_type::segment_64'          : segment_command_64
+            'load_command_type::dyld_info_only'      : dyld_info_command
+            'load_command_type::symtab'              : symtab_command
+            'load_command_type::dysymtab'            : dysymtab_command
+            'load_command_type::load_dylinker'       : dylinker_command
+            'load_command_type::uuid'                : uuid_command
+            'load_command_type::version_min_macosx'  : version_min_command
+            'load_command_type::version_min_iphoneos': version_min_command
+            'load_command_type::version_min_tvos'    : version_min_command
+            'load_command_type::version_min_watchos' : version_min_command
+            'load_command_type::source_version'      : source_version_command
+            'load_command_type::main'                : entry_point_command
+            'load_command_type::load_dylib'          : dylib_command
+            'load_command_type::rpath'               : rpath_command
+            'load_command_type::function_starts'     : linkedit_data_command
+            'load_command_type::data_in_code'        : linkedit_data_command
+            'load_command_type::code_signature'      : code_signature_command
     -webide-representation: '{type}: {body}'
   vm_prot:
     seq:
