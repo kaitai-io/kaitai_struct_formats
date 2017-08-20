@@ -97,7 +97,7 @@ enums:
     0x21      : encryption_info    # encrypted segment information
     0x22      : dyld_info          # compressed dyld information
     0x80000022: dyld_info_only     # compressed dyld information only
-    0x23      : load_upward_dylib
+    0x80000023: load_upward_dylib
     0x24      : version_min_macosx
     0x25      : version_min_iphoneos
     0x26      : function_starts
