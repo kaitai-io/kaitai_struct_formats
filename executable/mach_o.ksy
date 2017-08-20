@@ -44,6 +44,7 @@ enums:
     0x1000000:  abi64     # flag
     0x1000007:  x86_64    # abi64 | i386
     0x1000012:  powerpc64 # abi64 | powerpc
+    0x100000c:  arm64     # abi64 | arm
   file_type:
     # http://opensource.apple.com//source/xnu/xnu-1456.1.26/EXTERNAL_HEADERS/mach-o/loader.h
     0x1: object      # relocatable object file
