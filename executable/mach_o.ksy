@@ -196,6 +196,7 @@ types:
             'load_command_type::dylib_code_sign_drs' : linkedit_data_command
             'load_command_type::code_signature'      : code_signature_command
             'load_command_type::encryption_info_64'  : encryption_info_command_64
+            'load_command_type::twolevel_hints'      : twolevel_hints_command
     -webide-representation: '{type}: {body}'
   vm_prot:
     seq:
@@ -751,6 +752,12 @@ types:
       - id: cryptid
         type: u4
       - id: pad
+        type: u4
+  twolevel_hints_command:
+    seq:
+      - id: offset
+        type: u4
+      - id: nhints
         type: u4
   version_min_command:
     seq:
