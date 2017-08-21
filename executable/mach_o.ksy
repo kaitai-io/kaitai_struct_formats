@@ -175,6 +175,8 @@ types:
             'load_command_type::symtab'              : symtab_command
             'load_command_type::dysymtab'            : dysymtab_command
             'load_command_type::load_dylinker'       : dylinker_command
+            'load_command_type::id_dylinker'         : dylinker_command
+            'load_command_type::dyld_environment'    : dylinker_command
             'load_command_type::uuid'                : uuid_command
             'load_command_type::version_min_macosx'  : version_min_command
             'load_command_type::version_min_iphoneos': version_min_command
