@@ -204,6 +204,7 @@ types:
             'load_command_type::sub_umbrella'            : sub_command
             'load_command_type::sub_client'              : sub_command
             'load_command_type::sub_library'             : sub_command
+            'load_command_type::routines_64'             : routines_command_64
     -webide-representation: '{type}: {body}'
   vm_prot:
     seq:
@@ -779,6 +780,24 @@ types:
     seq:
         - id: name
           type: lc_str
+  routines_command_64:
+    seq:
+        - id: init_address
+          type: u8
+        - id: init_module
+          type: u8
+        - id: reserved1
+          type: u8
+        - id: reserved2
+          type: u8
+        - id: reserved3
+          type: u8
+        - id: reserved4
+          type: u8
+        - id: reserved5
+          type: u8
+        - id: reserved6
+          type: u8
   version_min_command:
     seq:
       - id: version
