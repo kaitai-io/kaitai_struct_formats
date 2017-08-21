@@ -191,6 +191,7 @@ types:
             'load_command_type::rpath'               : rpath_command
             'load_command_type::function_starts'     : linkedit_data_command
             'load_command_type::data_in_code'        : linkedit_data_command
+            'load_command_type::dylib_code_sign_drs' : linkedit_data_command
             'load_command_type::code_signature'      : code_signature_command
             'load_command_type::encryption_info_64'  : encryption_info_command_64
     -webide-representation: '{type}: {body}'
