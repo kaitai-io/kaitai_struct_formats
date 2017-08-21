@@ -171,6 +171,7 @@ types:
           switch-on: type
           cases:
             'load_command_type::segment_64'              : segment_command_64
+            'load_command_type::dyld_info'               : dyld_info_command
             'load_command_type::dyld_info_only'          : dyld_info_command
             'load_command_type::symtab'                  : symtab_command
             'load_command_type::dysymtab'                : dysymtab_command
@@ -199,6 +200,10 @@ types:
             'load_command_type::encryption_info_64'      : encryption_info_command_64
             'load_command_type::twolevel_hints'          : twolevel_hints_command
             'load_command_type::linker_option'           : linker_option_command
+            'load_command_type::sub_framework'           : sub_command
+            'load_command_type::sub_umbrella'            : sub_command
+            'load_command_type::sub_client'              : sub_command
+            'load_command_type::sub_library'             : sub_command
     -webide-representation: '{type}: {body}'
   vm_prot:
     seq:
@@ -770,6 +775,10 @@ types:
         encoding: utf-8
         repeat: expr
         repeat-expr: count
+  sub_command:
+    seq:
+        - id: name
+          type: lc_str
   version_min_command:
     seq:
       - id: version
