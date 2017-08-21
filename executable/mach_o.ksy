@@ -196,8 +196,10 @@ types:
             'load_command_type::data_in_code'            : linkedit_data_command
             'load_command_type::dylib_code_sign_drs'     : linkedit_data_command
             'load_command_type::linker_optimization_hint': linkedit_data_command
+            'load_command_type::segment_split_info'      : linkedit_data_command
             'load_command_type::code_signature'          : code_signature_command
-            'load_command_type::encryption_info_64'      : encryption_info_command_64
+            'load_command_type::encryption_info_64'      : encryption_info_command
+            'load_command_type::encryption_info'         : encryption_info_command
             'load_command_type::twolevel_hints'          : twolevel_hints_command
             'load_command_type::linker_option'           : linker_option_command
             'load_command_type::sub_framework'           : sub_command
@@ -205,6 +207,7 @@ types:
             'load_command_type::sub_client'              : sub_command
             'load_command_type::sub_library'             : sub_command
             'load_command_type::routines_64'             : routines_command_64
+            'load_command_type::routines'                : routines_command
     -webide-representation: '{type}: {body}'
   vm_prot:
     seq:
@@ -751,7 +754,7 @@ types:
       - id: release
         type: u1
     -webide-representation: '{major:dec}.{minor:dec}'
-  encryption_info_command_64:
+  encryption_info_command:
     seq:
       - id: cryptoff
         type: u4
@@ -761,6 +764,7 @@ types:
         type: u4
       - id: pad
         type: u4
+        if: _root.magic == magic_type::macho_be_x64 or _root.magic == magic_type::macho_le_x64
   twolevel_hints_command:
     seq:
       - id: offset
@@ -798,6 +802,24 @@ types:
           type: u8
         - id: reserved6
           type: u8
+  routines_command:
+    seq:
+        - id: init_address
+          type: u4
+        - id: init_module
+          type: u4
+        - id: reserved1
+          type: u4
+        - id: reserved2
+          type: u4
+        - id: reserved3
+          type: u4
+        - id: reserved4
+          type: u4
+        - id: reserved5
+          type: u4
+        - id: reserved6
+          type: u4
   version_min_command:
     seq:
       - id: version
