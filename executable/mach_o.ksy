@@ -102,8 +102,7 @@ enums:
     0x25      : version_min_iphoneos
     0x26      : function_starts
     0x27      : dyld_environment
-    0x28      : main
-    0x80000028: main2
+    0x80000028: main
     0x29      : data_in_code
     0x2A      : source_version
     0x2B      : dylib_code_sign_drs
