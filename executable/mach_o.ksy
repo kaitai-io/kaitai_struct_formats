@@ -170,33 +170,35 @@ types:
         type:
           switch-on: type
           cases:
-            'load_command_type::segment_64'          : segment_command_64
-            'load_command_type::dyld_info_only'      : dyld_info_command
-            'load_command_type::symtab'              : symtab_command
-            'load_command_type::dysymtab'            : dysymtab_command
-            'load_command_type::load_dylinker'       : dylinker_command
-            'load_command_type::id_dylinker'         : dylinker_command
-            'load_command_type::dyld_environment'    : dylinker_command
-            'load_command_type::uuid'                : uuid_command
-            'load_command_type::version_min_macosx'  : version_min_command
-            'load_command_type::version_min_iphoneos': version_min_command
-            'load_command_type::version_min_tvos'    : version_min_command
-            'load_command_type::version_min_watchos' : version_min_command
-            'load_command_type::source_version'      : source_version_command
-            'load_command_type::main'                : entry_point_command
-            'load_command_type::load_dylib'          : dylib_command
-            'load_command_type::load_upward_dylib'   : dylib_command
-            'load_command_type::id_dylib'            : dylib_command
-            'load_command_type::load_weak_dylib'     : dylib_command
-            'load_command_type::lazy_load_dylib'     : dylib_command
-            'load_command_type::reexport_dylib'      : dylib_command
-            'load_command_type::rpath'               : rpath_command
-            'load_command_type::function_starts'     : linkedit_data_command
-            'load_command_type::data_in_code'        : linkedit_data_command
-            'load_command_type::dylib_code_sign_drs' : linkedit_data_command
-            'load_command_type::code_signature'      : code_signature_command
-            'load_command_type::encryption_info_64'  : encryption_info_command_64
-            'load_command_type::twolevel_hints'      : twolevel_hints_command
+            'load_command_type::segment_64'              : segment_command_64
+            'load_command_type::dyld_info_only'          : dyld_info_command
+            'load_command_type::symtab'                  : symtab_command
+            'load_command_type::dysymtab'                : dysymtab_command
+            'load_command_type::load_dylinker'           : dylinker_command
+            'load_command_type::id_dylinker'             : dylinker_command
+            'load_command_type::dyld_environment'        : dylinker_command
+            'load_command_type::uuid'                    : uuid_command
+            'load_command_type::version_min_macosx'      : version_min_command
+            'load_command_type::version_min_iphoneos'    : version_min_command
+            'load_command_type::version_min_tvos'        : version_min_command
+            'load_command_type::version_min_watchos'     : version_min_command
+            'load_command_type::source_version'          : source_version_command
+            'load_command_type::main'                    : entry_point_command
+            'load_command_type::load_dylib'              : dylib_command
+            'load_command_type::load_upward_dylib'       : dylib_command
+            'load_command_type::id_dylib'                : dylib_command
+            'load_command_type::load_weak_dylib'         : dylib_command
+            'load_command_type::lazy_load_dylib'         : dylib_command
+            'load_command_type::reexport_dylib'          : dylib_command
+            'load_command_type::rpath'                   : rpath_command
+            'load_command_type::function_starts'         : linkedit_data_command
+            'load_command_type::data_in_code'            : linkedit_data_command
+            'load_command_type::dylib_code_sign_drs'     : linkedit_data_command
+            'load_command_type::linker_optimization_hint': linkedit_data_command
+            'load_command_type::code_signature'          : code_signature_command
+            'load_command_type::encryption_info_64'      : encryption_info_command_64
+            'load_command_type::twolevel_hints'          : twolevel_hints_command
+            'load_command_type::linker_option'           : linker_option_command
     -webide-representation: '{type}: {body}'
   vm_prot:
     seq:
@@ -759,6 +761,15 @@ types:
         type: u4
       - id: nhints
         type: u4
+  linker_option_command:
+    seq:
+      - id: count
+        type: u4
+      - id: strings
+        type: strz
+        encoding: utf-8
+        repeat: expr
+        repeat-expr: count
   version_min_command:
     seq:
       - id: version
