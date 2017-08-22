@@ -769,11 +769,11 @@ types:
     seq:
       - id: offset
         type: u4
-      - id: nhints
+      - id: num_hints
         type: u4
   linker_option_command:
     seq:
-      - id: count
+      - id: num_strings
         type: u4
       - id: strings
         type: strz
@@ -782,44 +782,24 @@ types:
         repeat-expr: count
   sub_command:
     seq:
-        - id: name
-          type: lc_str
+      - id: name
+        type: lc_str
   routines_command_64:
     seq:
         - id: init_address
           type: u8
         - id: init_module
           type: u8
-        - id: reserved1
-          type: u8
-        - id: reserved2
-          type: u8
-        - id: reserved3
-          type: u8
-        - id: reserved4
-          type: u8
-        - id: reserved5
-          type: u8
-        - id: reserved6
-          type: u8
+        - id: reserved
+          size: 48 # u8 * 6
   routines_command:
     seq:
         - id: init_address
           type: u4
         - id: init_module
           type: u4
-        - id: reserved1
-          type: u4
-        - id: reserved2
-          type: u4
-        - id: reserved3
-          type: u4
-        - id: reserved4
-          type: u4
-        - id: reserved5
-          type: u4
-        - id: reserved6
-          type: u4
+        - id: reserved
+          size: 24 # u4 * 6
   version_min_command:
     seq:
       - id: version
