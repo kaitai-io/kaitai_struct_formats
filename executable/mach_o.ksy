@@ -808,7 +808,7 @@ types:
         type: strz
         encoding: utf-8
         repeat: expr
-        repeat-expr: count
+        repeat-expr: num_strings
   sub_command:
     seq:
       - id: name
