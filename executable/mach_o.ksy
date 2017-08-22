@@ -164,6 +164,7 @@ types:
         type: u4
         enum: load_command_type
       - id: size
+        -orig-id: cmdsize
         type: u4
       - id: body
         size: size - 8
@@ -322,11 +323,13 @@ types:
       section_64:
         seq:
           - id: sect_name
+            -orig-id: sectname
             size: 16
             type: str
             pad-right: 0
             encoding: ascii
           - id: seg_name
+            -orig-id: segname
             size: 16
             type: str
             pad-right: 0
@@ -637,12 +640,16 @@ types:
   symtab_command:
     seq:
       - id: sym_off
+        -orig-id: symoff
         type: u4
       - id: n_syms
+        -orig-id: nsyms
         type: u4
       - id: str_off
+        -orig-id: stroff
         type: u4
       - id: str_size
+        -orig-id: strsize
         type: u4
     instances:
       symbols:
@@ -683,40 +690,58 @@ types:
   dysymtab_command:
     seq:
       - id: i_local_sym
+        -orig-id: ilocalsym
         type: u4
       - id: n_local_sym
+        -orig-id: nlocalsym
         type: u4
       - id: i_ext_def_sym
+        -orig-id: iextdefsym
         type: u4
       - id: n_ext_def_sym
+        -orig-id: nextdefsym
         type: u4
       - id: i_undef_sym
+        -orig-id: iundefsym
         type: u4
       - id: n_undef_sym
+        -orig-id: nundefsym
         type: u4
       - id: toc_off
+        -orig-id: tocoff
         type: u4
       - id: n_toc
+        -orig-id: ntoc
         type: u4
       - id: mod_tab_off
+        -orig-id: modtaboff
         type: u4
       - id: n_mod_tab
+        -orig-id: nmodtab
         type: u4
       - id: ext_ref_sym_off
+        -orig-id: extrefsymoff
         type: u4
       - id: n_ext_ref_syms
+        -orig-id: nextrefsyms
         type: u4
       - id: indirect_sym_off
+        -orig-id: indirectsymoff
         type: u4
       - id: n_indirect_syms
+        -orig-id: nindirectsyms
         type: u4
       - id: ext_rel_off
+        -orig-id: extreloff
         type: u4
       - id: n_ext_rel
+        -orig-id: nextrel
         type: u4
       - id: loc_rel_off
+        -orig-id: locreloff
         type: u4
       - id: n_loc_rel
+        -orig-id: nlocrel
         type: u4
     instances:
       indirect_symbols:
@@ -728,8 +753,10 @@ types:
   lc_str:
     seq:
       - id: length
+        -orig-id: offset
         type: u4
       - id: value
+        -orig-id: ptr
         type: strz
         encoding: UTF-8
     -webide-representation: '{value}'
@@ -770,10 +797,12 @@ types:
       - id: offset
         type: u4
       - id: num_hints
+        -orig-id: nhints
         type: u4
   linker_option_command:
     seq:
       - id: num_strings
+        -orig-id: count
         type: u4
       - id: strings
         type: strz
@@ -804,7 +833,7 @@ types:
     seq:
       - id: version
         type: version
-      - id: reserved
+      - id: sdk
         type: version
     -webide-representation: 'v:{version}, r:{reserved}'
   source_version_command:
@@ -815,8 +844,10 @@ types:
   entry_point_command:
     seq:
       - id: entry_off
+        -orig-id: entryoff
         type: u8
       - id: stack_size
+        -orig-id: stacksize
         type: u8
     -webide-representation: 'entry_off={entry_off}, stack_size={stack_size}'
   dylib_command:
@@ -844,8 +875,10 @@ types:
   linkedit_data_command:
     seq:
       - id: data_off
+        -orig-id: dataoff
         type: u4
       - id: data_size
+        -orig-id: datasize
         type: u4
     -webide-representation: 'offs={data_off}, size={data_size}'
   code_signature_command:
