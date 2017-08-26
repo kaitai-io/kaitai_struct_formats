@@ -1,24 +1,28 @@
 meta:
   id: nt_mdt
-  file-extension: mdt
-  endian: le
-  title: NT-MDT data file format
-  license: GPL-3.0+
+  title: NT-MDT data
   application:
     - Nova
     - Image Analysis
     - NanoEducator
     - Gwyddion
     - Callisto
+  file-extension: mdt
+  license: GPL-3.0+
+  endian: le
+doc: |
+  A native file format of NT-MDT scientific software. Usually contains
+  any of:
+
+  * [Scanning probe](https://en.wikipedia.org/wiki/Scanning_probe_microscopy) microscopy scans and spectra
+  * [Raman spectra](https://en.wikipedia.org/wiki/Raman_spectroscopy)
+  * results of their analysis
+
+  Some examples of mdt files can be downloaded at:
+
+  * http://www.ntmdt-si.ru/scan-gallery
+  * http://callistosoft.narod.ru/Resources/Mdt.zip
 doc-ref: https://svn.code.sf.net/p/gwyddion/code/trunk/gwyddion/modules/file/nt-mdt.c
-doc: >
-  A native file format of NT-MDT scientific software. Usually contains any of 
-    * [Scanning probe](https://en.wikipedia.org/wiki/Scanning_probe_microscopy) microscopy scans and spectra
-    * [Raman spectra](https://en.wikipedia.org/wiki/Raman_spectroscopy)
-    * results of their analysis
-  Some examples of mdt files can be downloaded by the links:
-    * http://www.ntmdt-si.ru/scan-gallery
-    * http://callistosoft.narod.ru/Resources/Mdt.zip
 seq:
   - id: signature
     contents: [0x01, 0xb0, 0x93, 0xff]
@@ -461,7 +465,7 @@ types:
             doc: "m_ny"
           - id: dots
             type: dots
-            
+
 
           - id: image
             type: s2
@@ -522,7 +526,7 @@ types:
               - id: input_signal_or_version
                 type: u1
                 doc: "MDTInputSignal smp_in; s_smp_in (for signal) s_8xx (for version)"
-                
+
               - id: substr_plane_order_or_pass_num
                 type: u1
                 doc: "s_spl or z_03"
@@ -537,7 +541,7 @@ types:
               - id: velocity
                 type: f4 # frame->velocity = Angstrom*gwy_get_gfloat_le(&p);
                 doc: "s_vel (Angstrom/second)"
-                
+
               - id: setpoint
                 type: f4 # frame->setpoint = Nano*gwy_get_gfloat_le(&p);
                 doc: "s_i0"
@@ -545,11 +549,11 @@ types:
               - id: bias_voltage
                 type: f4 # frame->bias_voltage = gwy_get_gfloat_le(&p);
                 doc: "s_ut"
-                
+
               - id: draw
                 type: u1
                 doc: "s_draw (bool)"
-              
+
               - id: reserved
                 type: u1
 
