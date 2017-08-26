@@ -68,7 +68,7 @@ types:
         type: u4
       - id: xml
         type: str
-        encoding: UTF-16
+        encoding: UTF-16LE
         size: xml_len
   version:
     seq:
