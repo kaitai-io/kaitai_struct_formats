@@ -37,15 +37,15 @@ types:
     instances:
       # TODO: Add an enum for mapper. https://wiki.nesdev.com/w/index.php/List_of_mappers
       mapper:
-        value: f6.lower_nibble | (f7.upper_nibble << 4)
+        value: f6.lower_mapper | (f7.upper_mapper << 4)
         doc-ref: https://wiki.nesdev.com/w/index.php/Mapper
     types:
       f6:
         seq:
-          - id: lower_nibble
+          - id: lower_mapper
             type: b4
             doc: Lower nibble of mapper number (see https://wiki.nesdev.com/w/index.php/Mapper)
-          - id: ignore_mirror
+          - id: four_screen
             type: b1
             doc: Ignore mirroring control or above mirroring bit; instead provide four-screen VRAM
           - id: trainer
@@ -54,21 +54,21 @@ types:
           - id: has_battery_ram
             type: b1
             doc: If on the cartridge contains battery-backed PRG RAM ($6000-7FFF) or other persistent memory
-          - id: mirror
+          - id: mirroring
             type: b1
             doc: if 0, horizontal arrangement. if 1, vertical arrangement
       f7:
         seq:
-          - id: upper_nibble
+          - id: upper_mapper
             type: b4
             doc: Upper nibble of mapper number (see https://wiki.nesdev.com/w/index.php/Mapper)
           - id: format
             type: b2
             doc: If equal to 2, flags 8-15 are in NES 2.0 format
-          - id: arcade_2
+          - id: playchoice
             type: b1
             doc: Determines if it made for a Nintendo PlayChoice-10 or not
-          - id: arcade_1
+          - id: vs_unisystem
             type: b1
             doc: Determines if it is made for a Nintendo VS Unisystem or not
       f9:
