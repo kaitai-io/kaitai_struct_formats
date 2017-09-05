@@ -61,7 +61,12 @@ types:
             doc: If on the cartridge contains battery-backed PRG RAM ($6000-7FFF) or other persistent memory
           - id: mirroring
             type: b1
+            enum: mirroring
             doc: if 0, horizontal arrangement. if 1, vertical arrangement
+        enums:
+          mirroring:
+            0: horizontal
+            1: vertical
       f7:
         seq:
           - id: upper_mapper
@@ -82,7 +87,12 @@ types:
           - type: b7
           - id: tv_system
             type: b1
+            enum: tv_system
             doc: if 0, NTSC. If 1, PAL.
+        enums:
+          tv_system:
+            0: ntsc
+            1: pal
       f10:
         seq:
           # TODO: enforce zero (similarly to "contents", but on bit level)
@@ -90,6 +100,7 @@ types:
           - id: bus_conflict
             type: b1
             doc: If 0, no bus conflicts. If 1, bus conflicts.
+          # TODO: 0 = true, 1 = false in this case
           - id: prg_ram
             type: b1
             doc: If 0, PRG ram is present. If 1, not present.
@@ -97,4 +108,11 @@ types:
           - type: b2
           - id: tv_system
             type: b2
+            enum: tv_system
             doc: if 0, NTSC. If 2, PAL. If 1 or 3, dual compatible.
+        enums:
+          tv_system:
+            0: ntsc
+            1: dual
+            2: pal
+            3: dual
