@@ -9,8 +9,16 @@ seq:
   - id: header
     type: header
     size: 16
-  - id: rom
-    size-eos: true
+  - id: trainer
+    size: 512
+    if: header.f6.trainer
+  - id: prg_rom
+    size: header.prg_rom_size * 16384
+  - id: chr_rom
+    size: header.chr_rom_size * 8192
+  - id: playchoice
+    type: playchoice
+    if: header.f7.playchoice
 types:
   header:
     seq:
@@ -46,10 +54,11 @@ types:
         doc-ref: https://wiki.nesdev.com/w/index.php/Mapper
     types:
       f6:
+        doc-ref: https://wiki.nesdev.com/w/index.php/INES#Flags_6
         seq:
           - id: lower_mapper
             type: b4
-            doc: Lower nibble of mapper number (see https://wiki.nesdev.com/w/index.php/Mapper)
+            doc: Lower nibble of mapper number
           - id: four_screen
             type: b1
             doc: Ignore mirroring control or above mirroring bit; instead provide four-screen VRAM
@@ -68,10 +77,11 @@ types:
             0: horizontal
             1: vertical
       f7:
+        doc-ref: https://wiki.nesdev.com/w/index.php/INES#Flags_7
         seq:
           - id: upper_mapper
             type: b4
-            doc: Upper nibble of mapper number (see https://wiki.nesdev.com/w/index.php/Mapper)
+            doc: Upper nibble of mapper number
           - id: format
             type: b2
             doc: If equal to 2, flags 8-15 are in NES 2.0 format
@@ -82,6 +92,7 @@ types:
             type: b1
             doc: Determines if it is made for a Nintendo VS Unisystem or not
       f9:
+        doc-ref: https://wiki.nesdev.com/w/index.php/INES#Flags_9
         seq:
           # TODO: enforce zero (similarly to "contents", but on bit level)
           - type: b7
@@ -94,6 +105,7 @@ types:
             0: ntsc
             1: pal
       f10:
+        doc-ref: https://wiki.nesdev.com/w/index.php/INES#Flags_10
         seq:
           # TODO: enforce zero (similarly to "contents", but on bit level)
           - type: b2
@@ -116,3 +128,17 @@ types:
             1: dual
             2: pal
             3: dual
+  playchoice:
+    doc-ref: http://wiki.nesdev.com/w/index.php/PC10_ROM-Images
+    seq:
+      - id: inst_rom
+        size: 8192
+      - id: prom
+        type: prom
+    types:
+      prom:
+        seq:
+          - id: data
+            size: 16
+          - id: counter_out
+            size: 16
