@@ -8,6 +8,7 @@ meta:
 seq:
   - id: header
     type: header
+    size: 16
   - id: rom
     size-eos: true
 types:
@@ -23,15 +24,19 @@ types:
         doc: Size of CHR ROM in 8 KB units (Value 0 means the board uses CHR RAM)
       - id: f6
         type: f6
+        size: 1
       - id: f7
         type: f7
+        size: 1
       - id: prg_ram_size
         type: u1
         doc: Size of PRG RAM in 8 KB units (Value 0 infers 8 KB for compatibility; see PRG RAM circuit on nesdev.com)
       - id: f9
         type: f9
+        size: 1
       - id: f10
         type: f10
+        size: 1
         doc: this one is unofficial
       - contents: [0, 0, 0, 0, 0]
     instances:
