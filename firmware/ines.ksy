@@ -129,9 +129,9 @@ types:
         enums:
           tv_system:
             0: ntsc
-            1: dual
+            1: dual1
             2: pal
-            3: dual
+            3: dual2
   playchoice10:
     doc-ref: http://wiki.nesdev.com/w/index.php/PC10_ROM-Images
     seq:
