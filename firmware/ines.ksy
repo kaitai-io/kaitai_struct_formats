@@ -3,7 +3,7 @@ doc-ref: https://wiki.nesdev.com/w/index.php/INES
 meta:
   id: ines
   file-extension: nes
-  endian: le
+  encoding: ASCII
   license: WTFPL
 seq:
   - id: header
@@ -19,6 +19,10 @@ seq:
   - id: playchoice10
     type: playchoice10
     if: header.f7.playchoice10
+  - id: title
+    type: str
+    size-eos: true # Usually only 128/127 bytes
+    if: not _io.eof
 types:
   header:
     seq:
