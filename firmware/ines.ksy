@@ -1,10 +1,10 @@
 # TODO: Support NES 2.0
-doc-ref: https://wiki.nesdev.com/w/index.php/INES
 meta:
   id: ines
   file-extension: nes
   encoding: ASCII
   license: WTFPL
+doc-ref: https://wiki.nesdev.com/w/index.php/INES
 seq:
   - id: header
     type: header
