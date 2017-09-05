@@ -7,8 +7,8 @@ meta:
 doc-ref: https://wiki.nesdev.com/w/index.php/INES
 seq:
   - id: header
-    type: header
     size: 16
+    type: header
   - id: trainer
     size: 512
     if: header.f6.trainer
@@ -20,8 +20,8 @@ seq:
     type: playchoice10
     if: header.f7.playchoice10
   - id: title
-    type: str
     size-eos: true # Usually only 128/127 bytes
+    type: str
     if: not _io.eof
 types:
   header:
@@ -35,22 +35,23 @@ types:
         type: u1
         doc: Size of CHR ROM in 8 KB units (Value 0 means the board uses CHR RAM)
       - id: f6
+        size: 1
         type: f6
-        size: 1
       - id: f7
-        type: f7
         size: 1
+        type: f7
       - id: len_prg_ram
         type: u1
         doc: Size of PRG RAM in 8 KB units (Value 0 infers 8 KB for compatibility; see PRG RAM circuit on nesdev.com)
       - id: f9
+        size: 1
         type: f9
-        size: 1
       - id: f10
-        type: f10
         size: 1
+        type: f10
         doc: this one is unofficial
-      - contents: [0, 0, 0, 0, 0]
+      - id: reserved
+        contents: [0, 0, 0, 0, 0]
     instances:
       # TODO: Add an enum for mapper. https://wiki.nesdev.com/w/index.php/List_of_mappers
       mapper:
@@ -99,7 +100,8 @@ types:
         doc-ref: https://wiki.nesdev.com/w/index.php/INES#Flags_9
         seq:
           # TODO: enforce zero (similarly to "contents", but on bit level)
-          - type: b7
+          - id: reserved
+            type: b7
           - id: tv_system
             type: b1
             enum: tv_system
@@ -112,7 +114,8 @@ types:
         doc-ref: https://wiki.nesdev.com/w/index.php/INES#Flags_10
         seq:
           # TODO: enforce zero (similarly to "contents", but on bit level)
-          - type: b2
+          - id: reserved1
+            type: b2
           - id: bus_conflict
             type: b1
             doc: If 0, no bus conflicts. If 1, bus conflicts.
@@ -121,7 +124,8 @@ types:
             type: b1
             doc: If 0, PRG ram is present. If 1, not present.
           # TODO: enforce zero (similarly to "contents", but on bit level)
-          - type: b2
+          - id: reserved2
+            type: b2
           - id: tv_system
             type: b2
             enum: tv_system
