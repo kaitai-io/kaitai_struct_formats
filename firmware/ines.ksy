@@ -16,9 +16,9 @@ seq:
     size: header.prg_rom_size * 16384
   - id: chr_rom
     size: header.chr_rom_size * 8192
-  - id: playchoice
-    type: playchoice
-    if: header.f7.playchoice
+  - id: playchoice10
+    type: playchoice10
+    if: header.f7.playchoice10
 types:
   header:
     seq:
@@ -85,7 +85,7 @@ types:
           - id: format
             type: b2
             doc: If equal to 2, flags 8-15 are in NES 2.0 format
-          - id: playchoice
+          - id: playchoice10
             type: b1
             doc: Determines if it made for a Nintendo PlayChoice-10 or not
           - id: vs_unisystem
@@ -128,7 +128,7 @@ types:
             1: dual
             2: pal
             3: dual
-  playchoice:
+  playchoice10:
     doc-ref: http://wiki.nesdev.com/w/index.php/PC10_ROM-Images
     seq:
       - id: inst_rom
