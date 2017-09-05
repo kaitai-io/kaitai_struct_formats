@@ -13,9 +13,9 @@ seq:
     size: 512
     if: header.f6.trainer
   - id: prg_rom
-    size: header.prg_rom_size * 16384
+    size: header.len_prg_rom * 16384
   - id: chr_rom
-    size: header.chr_rom_size * 8192
+    size: header.len_chr_rom * 8192
   - id: playchoice10
     type: playchoice10
     if: header.f7.playchoice10
@@ -28,10 +28,10 @@ types:
     seq:
       - id: magic
         contents: [NES, 0x1A]
-      - id: prg_rom_size
+      - id: len_prg_rom
         type: u1
         doc: Size of PRG ROM in 16 KB units
-      - id: chr_rom_size
+      - id: len_chr_rom
         type: u1
         doc: Size of CHR ROM in 8 KB units (Value 0 means the board uses CHR RAM)
       - id: f6
@@ -40,7 +40,7 @@ types:
       - id: f7
         type: f7
         size: 1
-      - id: prg_ram_size
+      - id: len_prg_ram
         type: u1
         doc: Size of PRG RAM in 8 KB units (Value 0 infers 8 KB for compatibility; see PRG RAM circuit on nesdev.com)
       - id: f9
