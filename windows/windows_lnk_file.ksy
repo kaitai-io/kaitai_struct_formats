@@ -20,6 +20,26 @@ seq:
   - id: info
     type: link_info
     if: header.flags.has_link_info
+  - id: name
+    -orig-id: NAME_STRING
+    type: string_data
+    if: header.flags.has_name
+  - id: rel_path
+    -orig-id: RELATIVE_PATH
+    type: string_data
+    if: header.flags.has_rel_path
+  - id: work_dir
+    -orig-id: WORKING_DIR
+    type: string_data
+    if: header.flags.has_work_dir
+  - id: arguments
+    -orig-id: COMMAND_LINE_ARGUMENTS
+    type: string_data
+    if: header.flags.has_arguments
+  - id: icon_location
+    -orig-id: ICON_LOCATION
+    type: string_data
+    if: header.flags.has_icon_location
 types:
   file_header:
     doc-ref: 'https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.1'
@@ -238,6 +258,15 @@ types:
             pos: ofs_volume_label - 4
             type: strz
             if: not is_unicode
+  string_data:
+    seq:
+      - id: chars_str
+        -orig-id: CountCharacters
+        type: u2
+      - id: str
+        size: chars_str * 2
+        type: str
+        encoding: UTF-16LE
 enums:
   window_state:
     1: normal
