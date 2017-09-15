@@ -165,7 +165,7 @@ types:
             repeat: expr
             repeat-expr: fm_ndots
         types:
-          dots_header :
+          dots_header:
             seq:
               - id: header_size
                 -orig-id: headersize
@@ -378,15 +378,15 @@ types:
         types:
           calibration:
             seq:
-              - id: tot_len
+              - id: len_tot
                 type: u4
-              - id: struct_len
+              - id: len_struct
                 type: u4
-              - id: name_len
+              - id: len_name
                 type: u4
-              - id: comment_len
+              - id: len_comment
                 type: u4
-              - id: unit_len
+              - id: len_unit
                 type: u4
               - id: si_unit
                 type: u8
@@ -404,24 +404,24 @@ types:
                 type: u8
               - id: data_type
                 type: s4
-              - id: author_len
+              - id: len_author
                 type: u4
               - id: name
                 type: str
                 encoding: utf-8
-                size: name_len
+                size: len_name
               - id: comment
                 type: str
                 encoding: utf-8
-                size: comment_len
+                size: len_comment
               - id: unit
                 type: str
                 encoding: utf-8
-                size: unit_len
+                size: len_unit
               - id: author
                 type: str
                 encoding: utf-8
-                size: author_len
+                size: len_author
       fd_scanned:
         seq:
           - id: vars
