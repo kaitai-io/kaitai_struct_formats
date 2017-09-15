@@ -30,6 +30,7 @@ class FormatPagesGenerator
 
   CATS = {
     'archive' => {title: 'Archive Files', icon: 'archive'},
+    'cad' => {title: 'CAD', icon: 'space-shuttle'},
     'common' => {title: 'Commonly Used Data Types', icon: 'arrows'},
     'database' => {title: 'Databases', icon: 'database'},
     'executable' => {title: 'Executables and Byte-code', icon: 'gears'},
