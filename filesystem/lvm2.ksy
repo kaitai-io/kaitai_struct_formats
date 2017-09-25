@@ -10,8 +10,9 @@ meta:
     - libvslvm
   license: GFDL-1.3+
 doc: |
-  === Building a test file
-  ....
+  ### Building a test file
+
+  ```
   dd if=/dev/zero of=image.img bs=512 count=$(( 4 * 1024 * 2 ))
   sudo losetup /dev/loop1 image.img
   sudo pvcreate /dev/loop1
@@ -26,6 +27,7 @@ instances:
 seq:
   - id: pv
     type: physical_volume
+    doc: Physical volume
 types:
   physical_volume:
     seq:
