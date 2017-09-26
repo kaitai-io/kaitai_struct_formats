@@ -2,6 +2,7 @@ meta:
   id: dbf
   file-extension: dbf
   application: dBASE
+  license: CC0-1.0
   endian: le
 seq:
   - id: header1
