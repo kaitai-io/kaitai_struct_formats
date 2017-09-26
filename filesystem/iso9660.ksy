@@ -2,6 +2,8 @@ meta:
   id: iso9660
   title: ISO9660 CD filesystem
   file-extension: iso
+  xref:
+    wikidata: Q815645
   license: CC0-1.0
 doc: |
   ISO9660 is standard filesystem used on read-only optical discs
