@@ -2,6 +2,7 @@ meta:
   id: microsoft_network_monitor_v2
   file-extension: cap
   application: Microsoft Network Monitor, v2.x
+  license: CC0-1.0
   ks-version: 0.7
   endian: le
   imports:
@@ -16,8 +17,8 @@ doc: |
 
   There are at least 2 different versions of the format: v1 and
   v2. Netmon v3 seems to use the same file format as v1.
+doc-ref: https://msdn.microsoft.com/en-us/library/windows/desktop/ee817717.aspx
 seq:
-  # https://msdn.microsoft.com/en-us/library/windows/desktop/ee817717.aspx
   - id: signature
     contents: GMBU
   - id: version_minor
@@ -88,7 +89,7 @@ types:
       A container for actually captured network data. Allow to
       timestamp individual frames and designates how much data from
       the original packet was actually written into the file.
-    # https://msdn.microsoft.com/en-us/library/windows/desktop/ee831821.aspx
+    doc-ref: https://msdn.microsoft.com/en-us/library/windows/desktop/ee831821.aspx
     seq:
       - id: ts_delta
         type: u8
