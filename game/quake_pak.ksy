@@ -2,8 +2,9 @@ meta:
   id: quake_pak
   file-extension: pak
   application: Quake game engine
+  license: CC0-1.0
   endian: le
-  # https://quakewiki.org/wiki/.pak#Format_specification
+doc-ref: 'https://quakewiki.org/wiki/.pak#Format_specification'
 seq:
   - id: magic
     contents: 'PACK'
