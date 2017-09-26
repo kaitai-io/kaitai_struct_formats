@@ -1,6 +1,22 @@
 meta:
   id: wmf
+  title: Windows Metafile (WMF) vector image
+  file-extension: wmf
+  xref:
+    justsolve: Windows Metafile
+    mime: image/wmf
+    pronom: x-fmt/119
+    wikidata: Q1072083
+  license: CC0-1.0
   endian: le
+doc: |
+  WMF (Windows Metafile) is a relatively early vector image format
+  introduced for Microsoft Windows in 1990.
+
+  Inside, it provides a serialized list of Windows GDI (Graphics
+  Device Interface) function calls, which, if played back, result in
+  an image being drawn on a given surface (display, off-screen buffer,
+  printer, etc).
 doc-ref: http://www.digitalpreservation.gov/formats/digformatspecs/WindowsMetafileFormat(wmf)Specification.pdf
 seq:
   - id: special_header
