@@ -1,6 +1,18 @@
 meta:
   id: iso9660
+  title: ISO9660 CD filesystem
   file-extension: iso
+  license: CC0-1.0
+doc: |
+  ISO9660 is standard filesystem used on read-only optical discs
+  (mostly CD-ROM). The standard was based on earlier High Sierra
+  Format (HSF), proposed for CD-ROMs in 1985, and, after several
+  revisions, it was accepted as ISO9960:1998.
+
+  The format emphasizes portability (thus having pretty minimal
+  features and very conservative file names standards) and sequential
+  access (which favors disc devices with relatively slow rotation
+  speed).
 types:
   vol_desc:
     seq:
@@ -27,7 +39,7 @@ types:
         size: 32
         encoding: UTF-8
   vol_desc_primary:
-    # http://wiki.osdev.org/ISO_9660#The_Primary_Volume_Descriptor
+    doc-ref: 'http://wiki.osdev.org/ISO_9660#The_Primary_Volume_Descriptor'
     seq:
       - id: unused1
         contents: [0]
@@ -166,9 +178,9 @@ types:
         pos: lba_extent.le * _root.sector_size
         size: size_extent.le
         if: file_flags & 2 == 0
-  ## http://wiki.osdev.org/ISO_9660#The_Path_Table
   ## AKA "Path Table Entry"
   path_table_le:
+    doc-ref: 'http://wiki.osdev.org/ISO_9660#The_Path_Table'
     seq:
       - id: entries
         type: path_table_entry_le
@@ -206,8 +218,8 @@ types:
         type: u1
       - id: timezone
         type: u1
-  # http://wiki.osdev.org/ISO_9660#Date.2Ftime_format
   dec_datetime:
+    doc-ref: 'http://wiki.osdev.org/ISO_9660#Date.2Ftime_format'
     seq:
       - id: year
         type: str
