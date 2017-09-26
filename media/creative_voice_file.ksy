@@ -4,6 +4,7 @@ meta:
   file-extension:
     - voc
   endian: le
+  license: CC0-1.0
 doc: |
   Creative Voice File is a container file format for digital audio
   wave data. Initial revisions were able to support only unsigned
