@@ -1,5 +1,7 @@
 meta:
   id: ipv4_packet
+  title: IPv4 network packet
+  license: CC0-1.0
   ks-version: 0.7
   imports:
     - /network/tcp_segment

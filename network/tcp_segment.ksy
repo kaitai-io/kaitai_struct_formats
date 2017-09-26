@@ -1,5 +1,7 @@
 meta:
   id: tcp_segment
+  title: TCP segment
+  license: CC0-1.0
   endian: be
 seq:
   - id: src_port

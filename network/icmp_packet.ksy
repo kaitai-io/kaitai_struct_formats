@@ -1,7 +1,10 @@
 meta:
   id: icmp_packet
+  title: ICMP network packet
+  xref:
+    rfc: 792
+  license: CC0-1.0
   endian: be
-  # https://tools.ietf.org/html/rfc792
 seq:
   - id: icmp_type
     type: u1

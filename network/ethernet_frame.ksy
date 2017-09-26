@@ -1,5 +1,6 @@
 meta:
   id: ethernet_frame
+  license: CC0-1.0
   ks-version: 0.7
   imports:
     - /network/ipv4_packet

@@ -1,5 +1,7 @@
 meta:
   id: ipv6_packet
+  title: IPv6 network packet
+  license: CC0-1.0
   ks-version: 0.7
   endian: be
   imports:
