@@ -1,5 +1,6 @@
 meta:
   id: mbr_partition_table
+  license: CC0-1.0
   endian: le
 seq:
   - id: bootstrap_code
