@@ -1,8 +1,9 @@
 meta:
   id: quicktime_mov
-  endian: be
   application: QuickTime, MP4 ISO 14496-14 media
-# https://developer.apple.com/library/content/documentation/QuickTime/QTFF/QTFFChap1/qtff1.html#//apple_ref/doc/uid/TP40000939-CH203-BBCGDDDF
+  license: CC0-1.0
+  endian: be
+doc-ref: 'https://developer.apple.com/library/content/documentation/QuickTime/QTFF/QTFFChap1/qtff1.html#//apple_ref/doc/uid/TP40000939-CH203-BBCGDDDF'
 seq:
   - id: atoms
     type: atom_list
@@ -44,8 +45,8 @@ types:
     instances:
       len:
         value: 'len32 == 0 ? (_io.size - 8) : (len32 == 1 ? len64 - 16 : len32 - 8)'
-  # https://developer.apple.com/library/content/documentation/QuickTime/QTFF/QTFFChap1/qtff1.html#//apple_ref/doc/uid/TP40000939-CH203-CJBCBIFF
   ftyp_body:
+    doc-ref: 'https://developer.apple.com/library/content/documentation/QuickTime/QTFF/QTFFChap1/qtff1.html#//apple_ref/doc/uid/TP40000939-CH203-CJBCBIFF'
     seq:
       - id: major_brand
         type: u4
@@ -56,8 +57,8 @@ types:
         type: u4
         enum: brand
         repeat: eos
-  # https://developer.apple.com/library/content/documentation/QuickTime/QTFF/QTFFChap2/qtff2.html#//apple_ref/doc/uid/TP40000939-CH204-BBCGFGJG
   mvhd_body:
+    doc-ref: 'https://developer.apple.com/library/content/documentation/QuickTime/QTFF/QTFFChap2/qtff2.html#//apple_ref/doc/uid/TP40000939-CH204-BBCGFGJG'
     seq:
       - id: version
         type: u1
@@ -70,12 +71,19 @@ types:
         type: u4
       - id: time_scale
         type: u4
-        doc: >
-          A time value that indicates the time scale for this movie—that is, the number of time units that pass per second in its time coordinate system. A time coordinate system that measures time in sixtieths of a second, for example, has a time scale of 60.
+        doc: |
+          A time value that indicates the time scale for this
+          movie—that is, the number of time units that pass per second
+          in its time coordinate system. A time coordinate system that
+          measures time in sixtieths of a second, for example, has a
+          time scale of 60.
       - id: duration
         type: u4
-        doc: >
-          A time value that indicates the duration of the movie in time scale units. Note that this property is derived from the movie’s tracks. The value of this field corresponds to the duration of the longest track in the movie.
+        doc: |
+          A time value that indicates the duration of the movie in
+          time scale units. Note that this property is derived from
+          the movie’s tracks. The value of this field corresponds to
+          the duration of the longest track in the movie.
       - id: preferred_rate
         type: fixed32
         doc: The rate at which to play this movie. A value of 1.0 indicates normal rate.
@@ -107,9 +115,12 @@ types:
         doc: The time value for current time position within the movie.
       - id: next_track_id
         type: u4
-        doc: Indicates a value to use for the track ID number of the next track added to this movie. Note that 0 is not a valid track ID value.
-  # https://developer.apple.com/library/content/documentation/QuickTime/QTFF/QTFFChap2/qtff2.html#//apple_ref/doc/uid/TP40000939-CH204-25550
+        doc: |
+          Indicates a value to use for the track ID number of the next
+          track added to this movie. Note that 0 is not a valid track
+          ID value.
   tkhd_body:
+    doc-ref: 'https://developer.apple.com/library/content/documentation/QuickTime/QTFF/QTFFChap2/qtff2.html#//apple_ref/doc/uid/TP40000939-CH204-25550'
     seq:
       - id: version
         type: u1
@@ -142,15 +153,15 @@ types:
         type: fixed32
       - id: height
         type: fixed32
-  # fixed-point 32-bit number
   fixed32:
+    doc: Fixed-point 32-bit number.
     seq:
       - id: int_part
         type: s2
       - id: frac_part
         type: u2
-  # fixed-point 16-bit number
   fixed16:
+    doc: Fixed-point 16-bit number.
     seq:
       - id: int_part
         type: s1
