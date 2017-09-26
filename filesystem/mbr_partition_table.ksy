@@ -1,7 +1,18 @@
 meta:
   id: mbr_partition_table
+  title: MBR (Master Boot Record) partition table
   license: CC0-1.0
   endian: le
+doc: |
+  MBR (Master Boot Record) partition table is a traditional way of
+  MS-DOS to partition larger hard disc drives into distinct
+  partitions.
+
+  This table is stored in the end of the boot sector (first sector) of
+  the drive, after the bootstrap code. Original DOS 2.0 specification
+  allowed only 4 partitions per disc, but DOS 3.2 introduced concept
+  of "extended partitions", which work as nested extra "boot records"
+  which are pointed to by original ("primary") partitions in MBR.
 seq:
   - id: bootstrap_code
     size: 0x1be
