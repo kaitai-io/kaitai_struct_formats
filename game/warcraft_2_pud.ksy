@@ -1,11 +1,11 @@
 meta:
-  ks-version: 0.6
   id: warcraft_2_pud
   title: Warcraft II map files
   file-extension: pud
   application: Warcraft II engine
+  license: CC0-1.0
+  ks-version: 0.6
   endian: le
-# http://cade.datamax.bg/war2x/pudspec.html
 doc: |
   Warcraft II game engine uses this format for map files. External
   maps can be edited by official Warcraft II map editor and saved in
@@ -18,6 +18,7 @@ doc: |
   features got limited support in v1.3).
 
   File consists of a sequence of typed sections.
+doc-ref: http://cade.datamax.bg/war2x/pudspec.html
 seq:
   - id: sections
     type: section
@@ -61,7 +62,7 @@ types:
         doc: unused (always set to $0a and $ff by editor, but can be anything for the game)
       - id: id_tag
         type: u4
-        doc: id tag (for consistence check in multiplayer)
+        doc: id tag (for consistency check in multiplayer)
   section_ver:
     doc: Section that specifies format version.
     seq:
