@@ -8,14 +8,14 @@ doc-ref: 'https://quakewiki.org/wiki/.pak#Format_specification'
 seq:
   - id: magic
     contents: 'PACK'
-  - id: index_ofs
+  - id: ofs_index
     type: u4
-  - id: index_size
+  - id: len_index
     type: u4
 instances:
   index:
-    pos: index_ofs
-    size: index_size
+    pos: ofs_index
+    size: len_index
     type: index_struct
 types:
   index_struct:
