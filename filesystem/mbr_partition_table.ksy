@@ -1,6 +1,8 @@
 meta:
   id: mbr_partition_table
   title: MBR (Master Boot Record) partition table
+  xref:
+    wikidata: Q624752
   license: CC0-1.0
   endian: le
 doc: |
