@@ -4,9 +4,10 @@ meta:
   file-extension:
     - mid
     - smf
-  endian: be
+  license: CC0-1.0
   imports:
     - /common/vlq_base128_be
+  endian: be
 seq:
   - id: hdr
     type: header
