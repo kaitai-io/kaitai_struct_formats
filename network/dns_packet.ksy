@@ -1,8 +1,12 @@
 meta:
   id: dns_packet
-  title: DNS (No support for Auth-Name + Add-Name for simplicity)
+  title: DNS (Domain Name Service) packet
+  xref:
+    rfc: 1035
+  license: CC0-1.0
   endian: be
-  # Basic implementation of RFC1035
+doc: |
+  (No support for Auth-Name + Add-Name for simplicity)
 seq:
   - id: transaction_id
     doc: "ID to keep track of request/responces"
