@@ -1,5 +1,6 @@
 meta:
   id: vdi
+  title: VirtualBox Disk Image
   endian: le
   encoding: utf-8
   application:
@@ -11,6 +12,13 @@ doc-ref: https://github.com/qemu/qemu/blob/master/block/vdi.c
 #  - https://github.com/qemu/qemu/blob/master/block/vdi.c
 #  - https://www.virtualbox.org/browser/vbox/trunk/src/VBox/Storage/VDI.cpp
 #  - https://forums.virtualbox.org/viewtopic.php?t=8046
+doc: |
+  A native VirtualBox file format
+  Images for testing can be downloaded from
+   * https://www.osboxes.org/virtualbox-images/
+   * https://virtualboxes.org/images/
+   * https://virtualboximages.com/
+  or you can convert images of other formats.
 seq:
   - id: header
     type: header
@@ -22,15 +30,15 @@ instances:
     value: "0xffffffff"
   blocks_map:
     -orig-id: bmap
-    pos: header.bmap_offset
-    size: header.bmap_size
+    pos: header.blocks_map_offset
+    size: header.blocks_map_size
     type: blocks_map
     doc: >
       block_index = offset_in_virtual_disk / block_size
       actual_data_offset = blocks_map[block_index]*block_size+metadata_size+offset_in_block
       
-      The bmap will take up blocks_in_image_max * sizeof(uint32_t) bytes;
-      since the bmap is read and written in a single operation, its size needs to be limited to INT_MAX; furthermore, when opening an image, the bmap size is rounded up to be aligned on BDRV_SECTOR_SIZE.
+      The blocks_map will take up blocks_in_image_max * sizeof(uint32_t) bytes;
+      since the blocks_map is read and written in a single operation, its size needs to be limited to INT_MAX; furthermore, when opening an image, the blocks_map size is rounded up to be aligned on BDRV_SECTOR_SIZE.
       Therefore this should satisfy the following: blocks_in_image_max * sizeof(uint32_t) + BDRV_SECTOR_SIZE == INT_MAX + 1 (INT_MAX + 1 is the first value not representable as an int)
       This guarantees that any value below or equal to the constant will, when multiplied by sizeof(uint32_t) and rounded up to a BDRV_SECTOR_SIZE boundary, still be below or equal to INT_MAX.
   disk:
@@ -61,12 +69,12 @@ types:
       subheader_size_is_dynamic:
         value: version.major>=1
       header_size:
-        value: (subheader_size_is_dynamic?header_size_optional:336)
+        value: (subheader_size_is_dynamic ? header_size_optional : 336)
       
-      bmap_size:
-        value: ((header_main.blocks_in_image * 4+header_main.geometry.sector_size-1) / header_main.geometry.sector_size)*header_main.geometry.sector_size
-      bmap_offset:
-        value: header_main.offset_bmap
+      blocks_map_size:
+        value: ( ( header_main.blocks_in_image * 4 + header_main.geometry.sector_size - 1 ) / header_main.geometry.sector_size ) * header_main.geometry.sector_size
+      blocks_map_offset:
+        value: header_main.blocks_map_offset
 
       blocks_offset:
         -orig-id: data_offset
@@ -98,7 +106,8 @@ types:
             type: str
             size: 256
 
-          - id: offset_bmap
+          - id: blocks_map_offset
+            -orig-id: offset_bmap
             type: u4
             if: _parent.version.major>=1
 
