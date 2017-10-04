@@ -28,18 +28,40 @@ seq:
 types:
   meta:
     seq:
-      - id: unkn0
-        size: 7
+      - id: unkn00
+        size: 3
+        doc: usually 0s
+      - id: unkn01
+        size: 2
+      - id: unkn02
+        size: 1
+      - id: unkn03
+        size: 1
+        doc: usually 0s
       - id: colors_count
         type: u2le
-      - id: unkn1
-        size: 5
+      - id: unkn10
+        size: 2
+        doc: usually 0s
+      - id: unkn11
+        size: 1
+        doc: usually 4
+      - id: unkn12
+        size: 2
+        doc: usually 0s
       - id: name_size
         type: u2
   color:
     seq:
-      - id: data
-        size: 4
+      - id: red
+        type: u1
+      - id: unkn
+        type: u1
+      - id: blue
+        type: u1
+      - id: green
+        type: u1
+
   col_table:
     params:
       - id: index

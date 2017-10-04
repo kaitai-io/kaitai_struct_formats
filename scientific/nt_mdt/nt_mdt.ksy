@@ -138,6 +138,7 @@ types:
             type: u2
             doc: "h_am, v6 and older only"
           - id: frame_data
+            -orig-id: dataframe
             size-eos: true
             type:
               switch-on: type
@@ -373,9 +374,39 @@ types:
             type: calibration
             repeat: expr
             repeat-expr: n_mesurands
-          - id: image
-            size-eos: true
+        instances:
+          image:
+            pos: data_offset
+            type: image
+            size: data_size
         types:
+          image:
+            seq:
+              - id: image
+                type: vec
+                repeat: eos
+            types:
+              vec:
+                seq:
+                  - id: items
+                    type:
+                      switch-on: _parent._parent.mesurands[_index].data_type
+                      cases:
+                        "data_type::uint8": u1
+                        "data_type::uint16": u2
+                        "data_type::uint32": u4
+                        "data_type::uint64": u8
+                        "data_type::int8": s1
+                        "data_type::int16": s2
+                        "data_type::int32": s4
+                        "data_type::int64": s8
+                        "data_type::float32": f4
+                        "data_type::float64": f8
+                        #"data_type::float48": s8
+                        #"data_type::float80": s8
+                        #"data_type::floatfix": s8
+                    repeat: expr
+                    repeat-expr: _parent._parent.n_mesurands
           calibration:
             seq:
               - id: len_tot
@@ -404,6 +435,7 @@ types:
                 type: u8
               - id: data_type
                 type: s4
+                enum: data_type
               - id: len_author
                 type: u4
               - id: name
@@ -422,6 +454,10 @@ types:
                 type: str
                 encoding: utf-8
                 size: len_author
+            instances:
+              count:
+                -orig-id: nx, ny and nz
+                value: max_index - min_index + 1
       fd_scanned:
         seq:
           - id: vars
@@ -611,20 +647,21 @@ enums:
     2: tunnel_current
     3: snom
 
-  # data_type:
-    # '-1': int8
-    # 1: uint8
-    # '-2': int16
-    # 2: uint16
-    # '-4': int32
-    # 4: uint32
-    # '-8': int64
-    # 8: uint64
-    # '-5892': float32
-    # '-9990': float48
-    # '-13320': float64
-    # '-16138': float80
-    # '-65544': floatfix
+  data_type:
+    0: unknown0
+    '-1': int8
+    1: uint8
+    '-2': int16
+    2: uint16
+    '-4': int32
+    4: uint32
+    '-8': int64
+    8: uint64
+    '-5892': float32
+    '-9990': float48
+    '-13320': float64
+    '-16138': float80
+    '-65544': floatfix
 
 
   xml_scan_location:
@@ -717,7 +754,7 @@ enums:
     4: kilo_hertz
     5: degrees
     6: percent
-    7: celsium_degree
+    7: celsius_degree # -orig-id: celsium_degree
     8: volt_high
     9: second
     10: milli_second
