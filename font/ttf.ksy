@@ -949,15 +949,19 @@ types:
         -webide-representation: "{ascii_value}"
     seq:
       - id: format_selector
+        -orig-id: format
         type: u2
-      - id: name_record_count
+      - id: num_name_records
+        -orig-id: count
         type: u2
       - id: string_storage_offset
+        -orig-id: stringOffset
         type: u2
       - id: name_records
+        -orig-id: nameRecord
         type: name_record
         repeat: expr
-        repeat-expr: name_record_count
+        repeat-expr: num_name_records
     enums:
       names:
         0: copyright
@@ -978,5 +982,5 @@ types:
         15: reserved_15
         16: preferred_family
         17: preferred_subfamily
-        18: comaptbile_full_name
+        18: compatible_full_name
         19: sample_text
