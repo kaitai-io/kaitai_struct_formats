@@ -917,33 +917,40 @@ types:
       name_record:
         seq:
           - id: platform_id
+            -orig-id: platformID
             type: u2
+            enum: platforms
           - id: encoding_id
+            -orig-id: platformSpecificID
             type: u2
           - id: language_id
+            -orig-id: languageID
             type: u2
           - id: name_id
+            -orig-id: nameID
             type: u2
             enum: names
-          - id: string_length
+          - id: len_str
+            -orig-id: length
             type: u2
-          - id: string_offset
+          - id: ofs_str
+            -orig-id: offset
             type: u2
         instances:
           ascii_value:
             type: str
-            size: string_length
+            size: len_str
             encoding: ascii
             io: _parent._io
-            pos: _parent.string_storage_offset + string_offset
+            pos: _parent.ofs_strings + ofs_str
             #if: encoding_id == 0
             -webide-parse-mode: eager
           unicode_value:
             type: str
-            size: string_length
+            size: len_str
             encoding: utf-16be
             io: _parent._io
-            pos: _parent.string_storage_offset + string_offset
+            pos: _parent.ofs_strings + ofs_str
             #if: encoding_id == 1
             -webide-parse-mode: eager
         -webide-representation: "{ascii_value}"
@@ -954,7 +961,7 @@ types:
       - id: num_name_records
         -orig-id: count
         type: u2
-      - id: string_storage_offset
+      - id: ofs_strings
         -orig-id: stringOffset
         type: u2
       - id: name_records
@@ -963,6 +970,11 @@ types:
         repeat: expr
         repeat-expr: num_name_records
     enums:
+      platforms:
+        0: unicode
+        1: macintosh
+        2: reserved_2
+        3: microsoft
       names:
         0: copyright
         1: font_family
