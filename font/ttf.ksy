@@ -905,6 +905,14 @@ types:
         type: format20
         if: format.major == 2 and format.minor == 0
   name:
+    doc: |
+      Name table is meant to include human-readable string metadata
+      that describes font: name of the font, its styles, copyright &
+      trademark notices, vendor and designer info, etc.
+
+      The table includes a list of "name records", each of which
+      corresponds to a single metadata entry.
+    doc-ref: https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6name.html
     types:
       name_record:
         seq:
@@ -916,6 +924,7 @@ types:
             type: u2
           - id: name_id
             type: u2
+            enum: names
           - id: string_length
             type: u2
           - id: string_offset
@@ -949,3 +958,25 @@ types:
         type: name_record
         repeat: expr
         repeat-expr: name_record_count
+    enums:
+      names:
+        0: copyright
+        1: font_family
+        2: font_subfamily
+        3: unique_subfamily_id
+        4: full_font_name
+        5: name_table_version
+        6: postscript_font_name
+        7: trademark
+        8: manufacturer
+        9: designer
+        10: description
+        11: url_vendor
+        12: url_designer
+        13: license
+        14: url_license
+        15: reserved_15
+        16: preferred_family
+        17: preferred_subfamily
+        18: comaptbile_full_name
+        19: sample_text
