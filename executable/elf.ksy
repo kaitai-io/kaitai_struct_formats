@@ -323,6 +323,7 @@ enums:
 #    0x7fffffff: hiproc
     0x6474e550: gnu_eh_frame
     0x6474e551: gnu_stack
+    0x6474e552: gnu_relro
   # http://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-94076.html#chapter6-73445
   sh_type:
     0: null_type
