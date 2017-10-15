@@ -38,10 +38,13 @@ types:
             type: u1
           - id: body
             type:
-              switch-on: flags & 0x1
+              switch-on: is_dir
               cases:
-                0: file
-                _: dir
+                true: dir
+                false: file
+        instances:
+          is_dir:
+            value: (flags & 0x1) != 0
       file:
         seq:
           - id: data_pos
@@ -60,7 +63,7 @@ types:
         seq:
           - id: num_entries
             type: u4
-          - id: entries
+          - id: content
             type: entry
             repeat: expr
             repeat-expr: num_entries
