@@ -3,7 +3,8 @@ meta:
   file-extension: pak
   application: Games based on Haxe Game Framework "Heaps" (e.g. Dead Cells)
   endian: le
-  license: CC0-1.0
+  license: MIT
+  encoding: UTF-8
 doc-ref: 'https://github.com/HeapsIO/heaps/blob/2bbc2b386952dfd8856c04a854bb706a52cb4b58/hxd/fmt/pak/Reader.hx'
 seq:
   - id: header
@@ -33,7 +34,6 @@ types:
           - id: name
             type: str
             size: name_len
-            encoding: UTF-8
           - id: flags
             type: u1
           - id: body
