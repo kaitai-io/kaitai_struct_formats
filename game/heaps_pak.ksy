@@ -35,16 +35,20 @@ types:
             type: str
             size: name_len
           - id: flags
-            type: u1
+            type: flags
           - id: body
             type:
-              switch-on: is_dir
+              switch-on: flags.is_dir
               cases:
-                true: dir
-                false: file
-        instances:
-          is_dir:
-            value: (flags & 0x1) != 0
+                true : dir
+                false : file
+        types:
+          flags:
+            seq:
+              - id: unused
+                type: b7
+              - id: is_dir
+                type: b1
       file:
         seq:
           - id: data_pos
