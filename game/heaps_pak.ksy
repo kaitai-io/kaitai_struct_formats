@@ -16,24 +16,24 @@ types:
         contents: 'PAK'
       - id: version
         type: u1
-      - id: header_size
+      - id: len_header
         type: u4
-      - id: data_size
+      - id: len_data
         type: u4
       - id: root_entry
         type: entry
-        size: header_size - 16
+        size: len_header - 16
       - id: magic2
         contents: 'DATA'
     types:
       entry:
         doc-ref: 'https://github.com/HeapsIO/heaps/blob/2bbc2b386952dfd8856c04a854bb706a52cb4b58/hxd/fmt/pak/Data.hx'
         seq:
-          - id: name_len
+          - id: len_name
             type: u1
           - id: name
             type: str
-            size: name_len
+            size: len_name
           - id: flags
             type: flags
           - id: body
@@ -51,9 +51,9 @@ types:
                 type: b1
       file:
         seq:
-          - id: data_pos
+          - id: ofs_data
             type: u4
-          - id: data_size
+          - id: len_data
             type: u4
           # Adler32 checksum
           - id: checksum
@@ -61,13 +61,13 @@ types:
         instances:
           data:
             io: _root._io
-            pos: _root.header.header_size + data_pos
-            size: data_size
+            pos: _root.header.len_header + ofs_data
+            size: len_data
       dir:
         seq:
           - id: num_entries
             type: u4
-          - id: content
+          - id: entries
             type: entry
             repeat: expr
             repeat-expr: num_entries
