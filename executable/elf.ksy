@@ -318,6 +318,7 @@ enums:
     6: phdr
     7: tls
 #    0x60000000: loos
+    0x65041580: pax_flags
     0x6fffffff: hios
 #    0x70000000: loproc
 #    0x7fffffff: hiproc
