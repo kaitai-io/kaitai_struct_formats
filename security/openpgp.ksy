@@ -7,6 +7,7 @@ meta:
     - pub
     - pgp
   endian: be
+  encoding: UTF-8
 doc: The OpenPGP Message Format is a format to store encryption and signature keys for emails.
 doc-ref: https://tools.ietf.org/html/rfc4880
 seq:
@@ -83,7 +84,6 @@ types:
       - id: user_id
         size-eos: true
         type: str
-        encoding: utf-8
 
   signature_packet:
     seq: 
@@ -239,7 +239,6 @@ types:
   regular_expression:
     seq:
       - id: regex
-        encoding: UTF-8
         type: strz
         
   revocation_key:
@@ -276,7 +275,6 @@ types:
     seq:
       - id: uri
         type: str
-        encoding: UTF-8
         size-eos: true
         
   primary_user_id:
@@ -288,7 +286,6 @@ types:
     seq:
       - id: uri
         type: str
-        encoding: UTF-8
         size-eos: true
     
   key_flags:
@@ -302,7 +299,6 @@ types:
     seq:
       - id: user_id
         type: str
-        encoding: UTF-8
         size-eos: true
         
   reason_for_revocation:
@@ -312,7 +308,6 @@ types:
         enum: revocation_codes
       - id: reason
         type: str
-        encoding: UTF-8
         size-eos: true
   
   features:
