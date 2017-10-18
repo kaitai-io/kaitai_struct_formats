@@ -30,7 +30,7 @@ types:
         type: b4
         if: not new_packet_format
         enum: packet_tags
-      - id: length_type
+      - id: len_type
         type: b2
         if: not new_packet_format
       - id: body
@@ -42,15 +42,15 @@ types:
             
   old_packet:
     seq:
-      - id: length
+      - id: len
         type: 
-          switch-on: _parent.length_type
+          switch-on: _parent.len_type
           cases:
             0: u1
             1: u2
             2: u4
       - id: body
-        size: length
+        size: len
         type:
           switch-on: _parent.packet_type_old
           cases:
@@ -70,10 +70,10 @@ types:
       - id: public_key_algorithm
         type: u1
         enum: public_key_algorithms
-      - id: alg_length
+      - id: len_alg
         type: u2
       - id: rsa_n
-        size: alg_length / 8
+        size: len_alg / 8
       - id: padding
         type: u2
       - id: rsa_e
@@ -99,16 +99,16 @@ types:
       - id: hash_algorithm
         type: u1
         enum: hash_algorithms
-      - id: hashed_subpacket_length
+      - id: len_hashed_subpacket
         type: u2
       - id: hashed_subpackets
         type: subpackets
-        size: hashed_subpacket_length
-      - id: unhashed_subpacket_length
+        size: len_hashed_subpacket
+      - id: len_unhashed_subpacket
         type: u2
       - id: unhashed_subpackets
         type: subpackets
-        size: unhashed_subpacket_length
+        size: len_unhashed_subpacket
       - id: left_signed_hash
         type: u2
       - id: rsa_n
@@ -126,7 +126,7 @@ types:
         type: u1
         enum: symmetric_key_algorithm
         if: string_to_key >= 254
-      - id: more
+      - id: secret_key
         size-eos: true
         
   subpackets:
@@ -137,13 +137,13 @@ types:
   
   subpacket:
     seq:
-      - id: length
-        type: subpacket_length
+      - id: len
+        type: len_subpacket
       - id: subpacket_type
         type: u1
         enum: subpacket_types
       - id: content
-        size: length.length - 1
+        size: len.len - 1
         type: 
           switch-on: subpacket_type
           cases:
@@ -170,8 +170,8 @@ types:
             subpacket_types::signature_target: signature_target
             subpacket_types::embedded_signature: embedded_signature
       
-  subpacket_length:
-    -webide-representation: '{length}'
+  len_subpacket:
+    -webide-representation: '{len}'
     seq:
       - id: first_octet
         type: u1
@@ -182,7 +182,7 @@ types:
         type: u4
         if: first_octet == 255
     instances:
-      length:
+      len:
         value: first_octet < 192 ? first_octet : ((first_octet >= 192 and first_octet < 255) ? (((first_octet - 192) << 8) + second_octet + 192) : scalar)
       
   signature_creation_time:
@@ -255,14 +255,14 @@ types:
     seq:
       - id: flags
         size: 4
-      - id: namelength
+      - id: len_name
         type: u2
-      - id: valuelength
+      - id: len_value
         type: u2 
       - id: name
-        size: namelength
+        size: len_name
       - id: value
-        size: valuelength
+        size: len_value
 
   key_server_preferences:
     seq:
@@ -501,3 +501,4 @@ enums:
     102: private_use_3
     103: private_use_4
     110: private_use_11
+   
