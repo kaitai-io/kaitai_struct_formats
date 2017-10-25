@@ -7,6 +7,8 @@ meta:
   imports:
     - /network/ethernet_frame
     - /network/packet_ppi
+    - /hardware/USB/pcap/usbmon
+    - /hardware/USB/pcap/usbpcap
 doc-ref: http://wiki.wireshark.org/Development/LibpcapFileFormat
 seq:
   - id: hdr
@@ -68,6 +70,9 @@ types:
           cases:
             'linktype::ppi': packet_ppi
             'linktype::ethernet': ethernet_frame
+            'linktype::usb_linux_mmaped': usbmon(64)
+            'linktype::usbpcap': usbpcap
+            'linktype::usb_linux': usbmon(48)
         doc-ref: 'https://wiki.wireshark.org/Development/LibpcapFileFormat#Packet_Data'
 enums:
   linktype:
