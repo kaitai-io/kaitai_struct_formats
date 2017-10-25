@@ -13,6 +13,7 @@ meta:
   imports:
     - /network/ethernet_frame
     - /network/packet_ppi
+    - /hardware/USB/pcap/usbmon
   endian: le
 doc: |
   PCAP (named after libpcap / winpcap) is a popular format for saving
@@ -80,6 +81,8 @@ types:
           cases:
             'linktype::ppi': packet_ppi
             'linktype::ethernet': ethernet_frame
+            'linktype::usb_linux_mmapped': usbmon(64)
+            'linktype::usb_linux': usbmon(48)
         doc-ref: 'https://wiki.wireshark.org/Development/LibpcapFileFormat#Packet_Data'
 enums:
   linktype:
