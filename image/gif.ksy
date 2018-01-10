@@ -34,7 +34,8 @@ seq:
     doc-ref: https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 18
   - id: blocks
     type: block
-    repeat: eos
+    repeat: until
+    repeat-until: _io.eof or _.block_type == block_type::end_of_file
 types:
   header:
     doc-ref: https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 17
