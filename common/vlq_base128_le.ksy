@@ -5,7 +5,7 @@ meta:
   ks-version: 0.7
 doc: |
   A variable-length unsigned integer using base128 encoding. 1-byte groups
-  consists of 1-bit flag of continuation and 7-bit value, and are ordered
+  consist of 1-bit flag of continuation and 7-bit value chunk, and are ordered
   "least significant group first", i.e. in "little-endian" manner.
 
   This particular encoding is specified and used in:
@@ -31,8 +31,7 @@ seq:
 types:
   group:
     doc: |
-      One byte group, clearly divided into 7-bit "value" and 1-bit "has continuation
-      in the next byte" flag.
+      One byte group, clearly divided into 7-bit "value" chunk and 1-bit "continuation" flag.
     seq:
       - id: b
         type: u1
@@ -42,7 +41,7 @@ types:
         doc: If true, then we have more bytes to read
       value:
         value: b & 0b0111_1111
-        doc: The 7-bit (base128) numeric value of this group
+        doc: The 7-bit (base128) numeric value chunk of this group
 instances:
   len:
     value: groups.size
