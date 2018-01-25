@@ -1,17 +1,21 @@
 meta:
   id: gpt_partition_table
   endian: le
-  # spec from https://en.wikipedia.org/wiki/GUID_Partition_Table
-  # For now we only allow for 512 byte sectors.
-  # For 4096 byte sectors, change 0x200 to 0x1000 in instances.primary.pos, instances.backup.pos and types.partition_header.instances.entries.pos 
+  # License: Copyright and related rights waived via CC0 [ https://creativecommons.org/publicdomain/zero/1.0/ ]
+  # Specification taken from https://en.wikipedia.org/wiki/GUID_Partition_Table
+  #
+  # The default sector_size is 512 bytes to parse 4096 byte sectors
+  # Set both instances.sector_size.value and types.partition_header.instances.sector_size.value to 0x1000
 instances:
+  sector_size:
+    value: 0x200
   primary:
     io: _root._io
-    pos: 0x200
+    pos: sector_size
     type: partition_header
   backup:
     io: _root._io
-    pos: _io.size - 0x200
+    pos: _io.size - sector_size
     type: partition_header
 types:
   partition_entry:
@@ -62,9 +66,11 @@ types:
         type: u4
       # We don't parse the trailing zeroed space
     instances:
+      sector_size:
+        value: 0x200
       entries:
         io: _root._io
-        pos: entries_start * 0x200
+        pos: entries_start * sector_size
         size: entries_size
         type: partition_entry
         repeat: expr
