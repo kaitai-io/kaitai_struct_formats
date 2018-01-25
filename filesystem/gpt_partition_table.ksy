@@ -1,21 +1,20 @@
 meta:
   id: gpt_partition_table
+  title: GPT (GUID) partition table
   endian: le
-  # License: Copyright and related rights waived via CC0 [ https://creativecommons.org/publicdomain/zero/1.0/ ]
-  # Specification taken from https://en.wikipedia.org/wiki/GUID_Partition_Table
-  #
-  # The default sector_size is 512 bytes to parse 4096 byte sectors
-  # Set both instances.sector_size.value and types.partition_header.instances.sector_size.value to 0x1000
+  license: CC0-1.0
+doc-ref: Specification taken from https://en.wikipedia.org/wiki/GUID_Partition_Table
 instances:
   sector_size:
     value: 0x200
+    # Default is 0x200 for 512 byte sectors, set to 0x1000 to parse 4096 byte sectors.
   primary:
     io: _root._io
-    pos: sector_size
+    pos: _root.sector_size
     type: partition_header
   backup:
     io: _root._io
-    pos: _io.size - sector_size
+    pos: _io.size - _root.sector_size
     type: partition_header
 types:
   partition_entry:
@@ -64,13 +63,12 @@ types:
         type: u4
       - id: crc32_array
         type: u4
-      # We don't parse the trailing zeroed space
+      # The document states "Reserved; must be zeroes for the rest of the block".
+      # It would be pointless to process a data structure that must be zeroed.
     instances:
-      sector_size:
-        value: 0x200
       entries:
         io: _root._io
-        pos: entries_start * sector_size
+        pos: entries_start * _root.sector_size
         size: entries_size
         type: partition_entry
         repeat: expr
