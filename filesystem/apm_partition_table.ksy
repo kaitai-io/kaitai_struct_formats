@@ -8,7 +8,9 @@ doc-ref: Specification taken from https://en.wikipedia.org/wiki/Apple_Partition_
 instances:
   sector_size:
     value: 0x200
-    doc: "APM only supports 0x200 (512) byte sectors."
+    doc: |
+      0x200 (512) bytes for disks, 0x1000 (4096) bytes is not supported by APM
+      0x800 (2048) bytes for CDROM
   partition_lookup:
     io: _root._io
     pos: _root.sector_size
@@ -76,5 +78,18 @@ types:
       - id: processor_type
         type: strz
         size: 0x10
-      # Skipping the remaining reserved block of 0x178 (376) bytes.
-
+      # Skipping the remaining of the sector, it should be all 0x00
+    instances:
+      partition:
+        io: _root._io
+        pos: partition_start * _root.sector_size
+        size: partition_size * _root.sector_size
+        if: 'partition_status & 1 != 0'
+      data:
+        io: _root._io
+        pos: data_start * _root.sector_size
+        size: data_size * _root.sector_size
+      boot_code:
+        io: _root._io
+        pos: boot_code_start * _root.sector_size
+        size: boot_code_size
