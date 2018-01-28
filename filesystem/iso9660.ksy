@@ -1,273 +1,250 @@
 meta:
   id: iso9660
-  title: ISO9660 CD filesystem
   file-extension: iso
-  xref:
-    wikidata: Q815645
-  license: CC0-1.0
-doc: |
-  ISO9660 is standard filesystem used on read-only optical discs
-  (mostly CD-ROM). The standard was based on earlier High Sierra
-  Format (HSF), proposed for CD-ROMs in 1985, and, after several
-  revisions, it was accepted as ISO9960:1998.
-
-  The format emphasizes portability (thus having pretty minimal
-  features and very conservative file names standards) and sequential
-  access (which favors disc devices with relatively slow rotation
-  speed).
+  endian: be
+doc-ref: http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
+instances:
+  sector_size:
+    value: 0x800
+  volume_descriptor_set:
+    io: _root._io
+    pos: _root.sector_size * 0x10
+    type: volume_descriptor
+    size: sector_size
+    repeat: until
+    repeat-until: _.descriptor_type == descriptor_type::volume_descriptor_set_terminator
 types:
-  vol_desc:
+  volume_descriptor:
     seq:
-      - id: type
+      - id: descriptor_type
         type: u1
+        enum: descriptor_type
       - id: magic
-        contents: "CD001"
+        contents: [0x43, 0x44, 0x30, 0x30, 0x31]
       - id: version
-        type: u1
-      - id: vol_desc_boot_record
-        type: vol_desc_boot_record
-        if: type == 0
-      - id: vol_desc_primary
-        type: vol_desc_primary
-        if: type == 1
-  vol_desc_boot_record:
+        contents: [0x01]
+      - id: boot_record
+        type: boot_record_volume
+        if: descriptor_type == descriptor_type::boot_record_volume_descriptor
+      - id: primary_volume
+        type: primary_volume
+        if: descriptor_type == descriptor_type::primary_volume_descriptor
+      - id: supplementary_volume
+        type: supplementary_volume
+        if: descriptor_type == descriptor_type::supplementary_volume_descriptor
+      - id: volume_partition
+        type: volume_partition
+        if: descriptor_type == descriptor_type::volume_partition_descriptor        
+  boot_record_volume:
     seq:
-      - id: boot_system_id
-        type: str
-        size: 32
-        encoding: UTF-8
-      - id: boot_id
-        type: str
-        size: 32
-        encoding: UTF-8
-  vol_desc_primary:
-    doc-ref: 'http://wiki.osdev.org/ISO_9660#The_Primary_Volume_Descriptor'
+      - id: boot_system_identifier
+        type: strz
+        size: 0x20
+        encoding: ascii
+      - id: boot_identifier
+        type: strz
+        size: 0x20
+        encoding: ascii
+  primary_volume:
     seq:
-      - id: unused1
-        contents: [0]
-      - id: system_id
+      - id: unused01
+        size: 0x1
+      - id: system_identifier
         type: str
-        size: 32
-        encoding: UTF-8
-      - id: volume_id
+        size: 0x20
+        encoding: ascii
+      - id: volume_identifier
         type: str
-        size: 32
-        encoding: UTF-8
-      - id: unused2
-        contents: [0, 0, 0, 0, 0, 0, 0, 0]
-      - id: vol_space_size
-        type: u4bi
-      - id: unused3
-        contents: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-      - id: vol_set_size
-        type: u2bi
-      - id: vol_seq_num
-        type: u2bi
+        size: 0x20
+        encoding: ascii
+      - id: unused02
+        size: 0x8
+      - id: volume_space_size
+        type: u4lebe
+      - id: unused03
+        size: 0x20
+      - id: volume_set_size
+        type: u2lebe
+      - id: volume_sequence_number
+        type: u2lebe
       - id: logical_block_size
-        type: u2bi
+        type: u2lebe
       - id: path_table_size
-        type: u4bi
-      - id: lba_path_table_le
+        type: u4lebe
+      - id: occurrence_of_type_l_path_table
         type: u4le
-      - id: lba_opt_path_table_le
+      - id: optional_occurrence_of_type_l_path_table
         type: u4le
-      - id: lba_path_table_be
-        type: u4be
-      - id: lba_opt_path_table_be
-        type: u4be
-      - id: root_dir
-        type: dir_entry
-        size: 34
-      - id: vol_set_id
+      - id: occurrence_of_type_m_path_table
+        type: u4le
+      - id: optional_occurrence_of_type_m_path_table
+        type: u4le
+      - id: directory_record_for_root_directory
+        size: 0x22
+      - id: volume_set_identifier
         type: str
-        size: 128
-        encoding: UTF-8
-      - id: publisher_id
+        size: 0x80
+        encoding: ascii
+      - id: publisher_identifier
         type: str
-        size: 128
-        encoding: UTF-8
-      - id: data_preparer_id
+        size: 0x80
+        encoding: ascii
+      - id: data_preparer_identifier
         type: str
-        size: 128
-        encoding: UTF-8
-      - id: application_id
+        size: 0x80
+        encoding: ascii
+      - id: application_identifier
         type: str
-        size: 128
-        encoding: UTF-8
-      - id: copyright_file_id
+        size: 0x80
+        encoding: ascii
+      - id: copyright_file_identifier
         type: str
-        size: 38
-        encoding: UTF-8
-      - id: abstract_file_id
+        size: 0x25
+        encoding: ascii
+      - id: abstract_file_identifier
         type: str
-        size: 36
-        encoding: UTF-8
-      - id: bibliographic_file_id
+        size: 0x25
+        encoding: ascii
+      - id: bibliographic_file_identifier
         type: str
-        size: 37
-        encoding: UTF-8
-      - id: vol_create_datetime
-        type: dec_datetime
-      - id: vol_mod_datetime
-        type: dec_datetime
-      - id: vol_expire_datetime
-        type: dec_datetime
-      - id: vol_effective_datetime
-        type: dec_datetime
-      - id: file_structure_version
-        type: u1
-      - id: unused4
-        type: u1
-      - id: application_area
-        size: 512
-    instances:
-      path_table:
-        pos: lba_path_table_le * _root.sector_size
-        size: path_table_size.le
-        type: path_table_le
-  dir_entries:
-    seq:
-      - id: entries
-        type: dir_entry
-        repeat: until
-        repeat-until: _.len == 0
-  dir_entry:
-    seq:
-      - id: len
-        type: u1
-      - id: body
-        type: dir_entry_body
-        size: len - 1
-        if: len > 0
-  dir_entry_body:
-    seq:
-      - id: len_ext_attr_rec
-        type: u1
-      - id: lba_extent
-        type: u4bi
-      - id: size_extent
-        type: u4bi
-      - id: datetime
+        size: 0x25
+        encoding: ascii
+      - id: volume_creation_date_and_time
         type: datetime
-      - id: file_flags
-        type: u1
-      - id: file_unit_size
-        type: u1
-      - id: interleave_gap_size
-        type: u1
-      - id: vol_seq_num
-        type: u2bi
-      - id: len_file_name
-        type: u1
-      - id: file_name
+      - id: volume_modification_date_and_time
+        type: datetime
+      - id: volume_expiration_date_and_time
+        type: datetime
+      - id: volume_effective_date_and_time
+        type: datetime
+      - id: file_structure_version
+        type: s1
+  supplementary_volume:
+    seq:
+      - id: unused01
+        size: 0x1
+      - id: system_identifier
         type: str
-        encoding: UTF-8
-        size: len_file_name
-      - id: padding
-        type: u1
-        if: len_file_name % 2 == 0
-      - id: rest
-        size-eos: true
-    instances:
-      extent_as_dir:
-        io: _root._io
-        pos: lba_extent.le * _root.sector_size
-        size: size_extent.le
-        type: dir_entries
-        if: file_flags & 2 != 0
-      extent_as_file:
-        io: _root._io
-        pos: lba_extent.le * _root.sector_size
-        size: size_extent.le
-        if: file_flags & 2 == 0
-  ## AKA "Path Table Entry"
-  path_table_le:
-    doc-ref: 'http://wiki.osdev.org/ISO_9660#The_Path_Table'
-    seq:
-      - id: entries
-        type: path_table_entry_le
-        repeat: eos
-  path_table_entry_le:
-    seq:
-      - id: len_dir_name
-        type: u1
-      - id: len_ext_attr_rec
-        type: u1
-      - id: lba_extent
+        size: 0x20
+        encoding: ascii
+      - id: volume_identifier
+        type: str
+        size: 0x20
+        encoding: ascii
+      - id: unused02
+        size: 0x8
+      - id: volume_space_size
+        type: u4lebe
+      - id: unused03
+        size: 0x20
+      - id: volume_set_size
+        type: u2lebe
+      - id: volume_sequence_number
+        type: u2lebe
+      - id: logical_block_size
+        type: u2lebe
+      - id: path_table_size
+        type: u4lebe
+      - id: occurrence_of_type_l_path_table
         type: u4le
-      - id: parent_dir_idx
-        type: u2le
-      - id: dir_name
+      - id: optional_occurrence_of_type_l_path_table
+        type: u4le
+      - id: occurrence_of_type_m_path_table
+        type: u4le
+      - id: optional_occurrence_of_type_m_path_table
+        type: u4le
+      - id: directory_record_for_root_directory
+        size: 0x22
+      - id: volume_set_identifier
         type: str
-        encoding: UTF-8
-        size: len_dir_name
-      - id: padding
-        type: u1
-        if: len_dir_name % 2 == 1
-  datetime:
+        size: 0x80
+        encoding: ascii
+      - id: publisher_identifier
+        type: str
+        size: 0x80
+        encoding: ascii
+      - id: data_preparer_identifier
+        type: str
+        size: 0x80
+        encoding: ascii
+      - id: application_identifier
+        type: str
+        size: 0x80
+        encoding: ascii
+      - id: copyright_file_identifier
+        type: str
+        size: 0x25
+        encoding: ascii
+      - id: abstract_file_identifier
+        type: str
+        size: 0x25
+        encoding: ascii
+      - id: bibliographic_file_identifier
+        type: str
+        size: 0x25
+        encoding: ascii
+      - id: volume_creation_date_and_time
+        type: datetime
+      - id: volume_modification_date_and_time
+        type: datetime
+      - id: volume_expiration_date_and_time
+        type: datetime
+      - id: volume_effective_date_and_time
+        type: datetime
+      - id: file_structure_version
+        type: s1
+  volume_partition:
     seq:
-      - id: year
+      - id: todo
         type: u1
-      - id: month
-        type: u1
-      - id: day
-        type: u1
-      - id: hour
-        type: u1
-      - id: minute
-        type: u1
-      - id: sec
-        type: u1
-      - id: timezone
-        type: u1
-  dec_datetime:
-    doc-ref: 'http://wiki.osdev.org/ISO_9660#Date.2Ftime_format'
-    seq:
-      - id: year
-        type: str
-        size: 4
-        encoding: ASCII
-      - id: month
-        type: str
-        size: 2
-        encoding: ASCII
-      - id: day
-        type: str
-        size: 2
-        encoding: ASCII
-      - id: hour
-        type: str
-        size: 2
-        encoding: ASCII
-      - id: minute
-        type: str
-        size: 2
-        encoding: ASCII
-      - id: sec
-        type: str
-        size: 2
-        encoding: ASCII
-      - id: sec_hundreds
-        type: str
-        size: 2
-        encoding: ASCII
-      - id: timezone
-        type: u1
-  u2bi:
+  u2lebe:
     seq:
       - id: le
         type: u2le
       - id: be
         type: u2be
-  u4bi:
+  u4lebe:
     seq:
       - id: le
         type: u4le
       - id: be
         type: u4be
-instances:
-  sector_size:
-    value: 2048
-  primary_vol_desc:
-    type: vol_desc
-    pos: 0x010 * sector_size
+  datetime:
+    seq:
+      - id: year
+        type: str
+        size: 0x4
+        encoding: ascii
+      - id: month
+        type: str
+        size: 0x2
+        encoding: ascii
+      - id: day
+        type: str
+        size: 0x2
+        encoding: ascii
+      - id: hour
+        type: str
+        size: 0x2
+        encoding: ascii
+      - id: minute
+        type: str
+        size: 0x2
+        encoding: ascii
+      - id: second
+        type: str
+        size: 0x2
+        encoding: ascii
+      - id: hundredths_second
+        type: str
+        size: 0x2
+        encoding: ascii
+      - id: timezone_offset
+        type: s1
+enums:
+  descriptor_type:
+    0x00: boot_record_volume_descriptor
+    0x01: primary_volume_descriptor
+    0x02: supplementary_volume_descriptor
+    0x03: volume_partition_descriptor
+    0xff: volume_descriptor_set_terminator
