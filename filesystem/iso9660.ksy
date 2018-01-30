@@ -60,17 +60,17 @@ types:
       - id: unused02
         size: 0x8
       - id: volume_space_size
-        type: u4lebe
+        type: u4bi
       - id: unused03
         size: 0x20
       - id: volume_set_size
-        type: u2lebe
+        type: u2bi
       - id: volume_sequence_number
-        type: u2lebe
+        type: u2bi
       - id: logical_block_size
-        type: u2lebe
+        type: u2bi
       - id: path_table_size
-        type: u4lebe
+        type: u4bi
       - id: occurrence_of_type_l_path_table
         type: u4le
       - id: optional_occurrence_of_type_l_path_table
@@ -119,9 +119,17 @@ types:
         type: datetime
       - id: file_structure_version
         type: s1
+    instances:
+      path_tables:
+        io: _root._io
+        pos: occurrence_of_type_l_path_table * logical_block_size.le
+        type: path_table
+#        size: path_table_size.le
+#        repeat: expr
+#        repeat-expr: path_table_size.le
   supplementary_volume:
     seq:
-      - id: unused01
+      - id: volume_flags
         size: 0x1
       - id: system_identifier
         type: str
@@ -131,20 +139,20 @@ types:
         type: str
         size: 0x20
         encoding: ascii
-      - id: unused02
+      - id: unused01
         size: 0x8
       - id: volume_space_size
-        type: u4lebe
-      - id: unused03
+        type: u4bi
+      - id: escape_sequences
         size: 0x20
       - id: volume_set_size
-        type: u2lebe
+        type: u2bi
       - id: volume_sequence_number
-        type: u2lebe
+        type: u2bi
       - id: logical_block_size
-        type: u2lebe
+        type: u2bi
       - id: path_table_size
-        type: u4lebe
+        type: u4bi
       - id: occurrence_of_type_l_path_table
         type: u4le
       - id: optional_occurrence_of_type_l_path_table
@@ -193,17 +201,24 @@ types:
         type: datetime
       - id: file_structure_version
         type: s1
+    instances:
+      path_tables:
+        io: _root._io
+        pos: occurrence_of_type_l_path_table * logical_block_size.le
+        type: path_table
+        repeat: expr
+        repeat-expr: path_table_size.le
   volume_partition:
     seq:
       - id: todo
         type: u1
-  u2lebe:
+  u2bi:
     seq:
       - id: le
         type: u2le
       - id: be
         type: u2be
-  u4lebe:
+  u4bi:
     seq:
       - id: le
         type: u4le
@@ -241,6 +256,22 @@ types:
         encoding: ascii
       - id: timezone_offset
         type: s1
+  path_table:
+    seq:
+      - id: len_di
+        type: u1
+      - id: ext_attr_rec_len
+        type: u1
+      - id: location_of_extent
+        type: u4le
+      - id: parent_directory_number
+        type: u2le
+      - id: directory_identifier
+        size: 8 + len_di
+      - id: padding_field
+        size: 0x1
+        # todo, if len_di is odd number...
+        # todo, 9.5 extended attribute record if ext_attr_rec_len > 0
 enums:
   descriptor_type:
     0x00: boot_record_volume_descriptor
@@ -248,3 +279,4 @@ enums:
     0x02: supplementary_volume_descriptor
     0x03: volume_partition_descriptor
     0xff: volume_descriptor_set_terminator
+
