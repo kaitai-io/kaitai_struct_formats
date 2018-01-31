@@ -6,6 +6,7 @@ doc-ref: http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.p
 instances:
   sector_size:
     value: 0x800
+    doc-ref: 6.1.2
   volume_descriptor_set:
     io: _root._io
     pos: _root.sector_size * 0x10
@@ -15,14 +16,18 @@ instances:
     repeat-until: _.descriptor_type == descriptor_type::volume_descriptor_set_terminator
 types:
   volume_descriptor:
+    doc-ref: 8.1
     seq:
       - id: descriptor_type
         type: u1
         enum: descriptor_type
+        doc-ref: 8.1.1
       - id: magic
         contents: [0x43, 0x44, 0x30, 0x30, 0x31]
+        doc-ref: 8.1.2
       - id: version
         contents: [0x01]
+        doc-ref: 8.1.3
       - id: boot_record
         type: boot_record_volume
         if: descriptor_type == descriptor_type::boot_record_volume_descriptor
@@ -36,90 +41,121 @@ types:
         type: volume_partition
         if: descriptor_type == descriptor_type::volume_partition_descriptor        
   boot_record_volume:
+    doc-ref: 8.2
     seq:
       - id: boot_system_identifier
         type: strz
         size: 0x20
         encoding: ascii
+        doc-ref: 8.2.4
       - id: boot_identifier
         type: strz
         size: 0x20
         encoding: ascii
+        doc-ref: 8.2.5
   primary_volume:
+    doc-ref: 8.4
     seq:
       - id: unused01
         size: 0x1
+        doc-ref: 8.4.4
       - id: system_identifier
         type: str
         size: 0x20
         encoding: ascii
+        doc-ref: 8.4.5
       - id: volume_identifier
         type: str
         size: 0x20
         encoding: ascii
+        doc-ref: 8.4.6
       - id: unused02
         size: 0x8
+        doc-ref: 8.4.7
       - id: volume_space_size
         type: u4bi
+        doc-ref: 8.4.8
       - id: unused03
         size: 0x20
+        doc-ref: 8.4.9
       - id: volume_set_size
         type: u2bi
+        doc-ref: 8.4.10
       - id: volume_sequence_number
         type: u2bi
+        doc-ref: 8.4.11
       - id: logical_block_size
         type: u2bi
+        doc-ref: 8.4.12
       - id: path_table_size
         type: u4bi
+        doc-ref: 8.4.13
       - id: occurrence_of_type_l_path_table
         type: u4le
+        doc-ref: 8.4.14
       - id: optional_occurrence_of_type_l_path_table
         type: u4le
+        doc-ref: 8.4.15
       - id: occurrence_of_type_m_path_table
         type: u4le
+        doc-ref: 8.4.16
       - id: optional_occurrence_of_type_m_path_table
         type: u4le
+        doc-ref: 8.4.17
       - id: directory_record_for_root_directory
         type: directory_record
         size: 0x22
+        doc-ref: 8.4.18
       - id: volume_set_identifier
         type: str
         size: 0x80
         encoding: ascii
+        doc-ref: 8.4.19
       - id: publisher_identifier
         type: str
         size: 0x80
         encoding: ascii
+        doc-ref: 8.4.20
       - id: data_preparer_identifier
         type: str
         size: 0x80
         encoding: ascii
+        doc-ref: 8.4.21
       - id: application_identifier
         type: str
         size: 0x80
         encoding: ascii
+        doc-ref: 8.4.22
       - id: copyright_file_identifier
         type: str
         size: 0x25
         encoding: ascii
+        doc-ref: 8.4.23
       - id: abstract_file_identifier
         type: str
         size: 0x25
         encoding: ascii
+        doc-ref: 8.4.24
       - id: bibliographic_file_identifier
         type: str
         size: 0x25
         encoding: ascii
+        doc-ref: 8.4.25
       - id: volume_creation_date_and_time
         type: datetime
+        doc-ref: 8.4.26
       - id: volume_modification_date_and_time
         type: datetime
+        doc-ref: 8.4.27
       - id: volume_expiration_date_and_time
         type: datetime
+        doc-ref: 8.4.28
       - id: volume_effective_date_and_time
         type: datetime
+        doc-ref: 8.4.29
       - id: file_structure_version
         type: s1
+        doc-ref: 8.4.31
 #    instances:
 #      path_tables:
 #        io: _root._io
@@ -225,6 +261,7 @@ types:
       - id: be
         type: u4be
   datetime:
+    doc-ref: 8.4.26.1
     seq:
       - id: year
         type: str
