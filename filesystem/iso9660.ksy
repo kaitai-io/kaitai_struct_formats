@@ -80,6 +80,7 @@ types:
       - id: optional_occurrence_of_type_m_path_table
         type: u4le
       - id: directory_record_for_root_directory
+        type: directory_record
         size: 0x22
       - id: volume_set_identifier
         type: str
@@ -119,14 +120,12 @@ types:
         type: datetime
       - id: file_structure_version
         type: s1
-    instances:
-      path_tables:
-        io: _root._io
-        pos: occurrence_of_type_l_path_table * logical_block_size.le
-        type: path_table
-#        size: path_table_size.le
-#        repeat: expr
-#        repeat-expr: path_table_size.le
+#    instances:
+#      path_tables:
+#        io: _root._io
+#        pos: occurrence_of_type_l_path_table * logical_block_size.le
+#        type: path_table
+#        size: path_table_size.le # seems correct
   supplementary_volume:
     seq:
       - id: volume_flags
@@ -162,6 +161,7 @@ types:
       - id: optional_occurrence_of_type_m_path_table
         type: u4le
       - id: directory_record_for_root_directory
+        type: directory_record
         size: 0x22
       - id: volume_set_identifier
         type: str
@@ -256,6 +256,69 @@ types:
         encoding: ascii
       - id: timezone_offset
         type: s1
+  directory_record:
+    doc-ref: 9.1
+    seq:
+      - id: len_dr
+        type: u1
+        doc-ref: 9.1.1
+      - id: ext_attr_rec_len
+        type: u1
+        doc-ref: 9.1.2
+      - id: location_of_extent
+        type: u4le
+        doc-ref: 9.1.3
+      - id: data_len
+        type: u4le
+        doc-ref: 9.1.4
+      # ToDo: Table 9
+      - id: rec_date_time
+        size: 0x7
+        doc-ref: 9.1.5
+      - id: file_flags_existence
+        type: b1
+        doc-ref: 9.1.6 b1
+      - id: file_flags_directory
+        type: b1
+        doc-ref: 9.1.6 b2
+      - id: file_flags_associated_file
+        type: b1
+        doc-ref: 9.1.6 b3
+      - id: file_flags_record
+        type: b1
+        doc-ref: 9.1.6 b4
+      - id: file_flags_protection
+        type: b1
+        doc-ref: 9.1.6 b5
+      - id: file_flags_reserved
+        type: b2
+        doc-ref: 9.1.6 b6+b7
+      - id: file_flags_multi_extent
+        type: b1
+        doc-ref: 9.1.6 b8
+      - id: file_unit_size
+        type: u1
+        doc-ref: 9.1.7
+      - id: interleave_gap_size
+        type: u1
+        doc-ref: 9.1.8
+      # as 7.2.3 = u2bi # but the le and be are diff!
+      - id: vol_seq_num
+        type: u2bi
+        doc-ref: 9.1.9
+      - id: len_fi
+        type: u1
+        doc-ref: 9.1.10
+      - id: file_id
+        size: len_fi
+        doc-ref: 9.1.11
+      - id: padding_field
+        size: 0x1
+        if: len_fi & 1 == 1
+        doc-ref: 9.1.12
+      # 9.1.13
+      #- id: system_use
+      #  size: len_dr - ( )
   path_table:
     seq:
       - id: len_di
