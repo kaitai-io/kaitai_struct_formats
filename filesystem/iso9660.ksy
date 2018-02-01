@@ -57,7 +57,7 @@ types:
     doc-ref: 8.4
     seq:
       - id: unused01
-        size: 0x1
+        contents: [ 0x0 ]
         doc-ref: 8.4.4
       - id: system_identifier
         type: str
@@ -70,13 +70,13 @@ types:
         encoding: ascii
         doc-ref: 8.4.6
       - id: unused02
-        size: 0x8
+        contents: [ 0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0 ]
         doc-ref: 8.4.7
       - id: volume_space_size
         type: u4bi
         doc-ref: 8.4.8
       - id: unused03
-        size: 0x20
+        contents: [ 0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0 ]
         doc-ref: 8.4.9
       - id: volume_set_size
         type: u2bi
@@ -90,16 +90,16 @@ types:
       - id: path_table_size
         type: u4bi
         doc-ref: 8.4.13
-      - id: occurrence_of_type_l_path_table
+      - id: loc_l_path_table
         type: u4le
         doc-ref: 8.4.14
-      - id: optional_occurrence_of_type_l_path_table
+      - id: loc_opt_l_path_table
         type: u4le
         doc-ref: 8.4.15
-      - id: occurrence_of_type_m_path_table
+      - id: loc_m_path_table
         type: u4le
         doc-ref: 8.4.16
-      - id: optional_occurrence_of_type_m_path_table
+      - id: loc_opt_m_path_table
         type: u4le
         doc-ref: 8.4.17
       - id: directory_record_for_root_directory
@@ -156,94 +156,135 @@ types:
       - id: file_structure_version
         type: s1
         doc-ref: 8.4.31
-#    instances:
-#      path_tables:
-#        io: _root._io
-#        pos: occurrence_of_type_l_path_table * logical_block_size.le
-#        type: path_table
-#        size: path_table_size.le # seems correct
+    instances:
+      l_path_table:
+        io: _root._io
+        pos: loc_l_path_table * logical_block_size.le
+        type: path_table
+        size: path_table_size.le # seems correct
+      opt_l_path_table:
+        io: _root._io
+        pos: loc_opt_l_path_table * logical_block_size.le
+        type: path_table
+        size: path_table_size.le # seems correct
+        if: loc_opt_l_path_table != 0
+#      m_path_table:
+        io: _root._io
+        pos: loc_m_path_table * logical_block_size.le
+        type: path_table
+        size: path_table_size.le # seems correct
   supplementary_volume:
     seq:
-      - id: volume_flags
-        size: 0x1
+      - id: volume_flags_reserved
+        type: b7
+        doc-ref: 8.5.3 b1-b7
+      - id: volume_flags_not_iso2375
+        type: b1
+        doc-ref: 8.5.3 b0
       - id: system_identifier
         type: str
         size: 0x20
         encoding: ascii
+        doc-ref: 8.5.4
       - id: volume_identifier
         type: str
         size: 0x20
         encoding: ascii
+        doc-ref: 8.5.5
       - id: unused01
         size: 0x8
+        doc-ref: none
       - id: volume_space_size
         type: u4bi
+        doc-ref: none
       - id: escape_sequences
         size: 0x20
+        doc-ref: 8.5.6
       - id: volume_set_size
         type: u2bi
+        doc-ref: none
       - id: volume_sequence_number
         type: u2bi
+        doc-ref: none
       - id: logical_block_size
         type: u2bi
+        doc-ref: none
       - id: path_table_size
         type: u4bi
+        doc-ref: 8.5.7
       - id: occurrence_of_type_l_path_table
         type: u4le
+        doc-ref: 8.5.8
       - id: optional_occurrence_of_type_l_path_table
         type: u4le
+        doc-ref: 8.5.9
       - id: occurrence_of_type_m_path_table
         type: u4le
+        doc-ref: 8.5.10
       - id: optional_occurrence_of_type_m_path_table
         type: u4le
+        doc-ref: 8.5.11
       - id: directory_record_for_root_directory
         type: directory_record
         size: 0x22
+        doc-ref: 8.5.12
       - id: volume_set_identifier
         type: str
         size: 0x80
         encoding: ascii
+        doc-ref: 8.5.13
       - id: publisher_identifier
         type: str
         size: 0x80
         encoding: ascii
+        doc-ref: 8.5.14
       - id: data_preparer_identifier
         type: str
         size: 0x80
         encoding: ascii
+        doc-ref: 8.5.15
       - id: application_identifier
         type: str
         size: 0x80
         encoding: ascii
+        doc-ref: 8.5.16
       - id: copyright_file_identifier
         type: str
         size: 0x25
         encoding: ascii
+        doc-ref: 8.5.17
       - id: abstract_file_identifier
         type: str
         size: 0x25
         encoding: ascii
+        doc-ref: 8.5.18
       - id: bibliographic_file_identifier
         type: str
         size: 0x25
         encoding: ascii
+        doc-ref: 8.5.19
       - id: volume_creation_date_and_time
         type: datetime
+        doc-ref: none
       - id: volume_modification_date_and_time
         type: datetime
+        doc-ref: none
       - id: volume_expiration_date_and_time
         type: datetime
+        doc-ref: none
       - id: volume_effective_date_and_time
         type: datetime
+        doc-ref: none
       - id: file_structure_version
         type: s1
+        doc-ref: none
     instances:
       path_tables:
         io: _root._io
         pos: occurrence_of_type_l_path_table * logical_block_size.le
         type: path_table
-        repeat: expr
-        repeat-expr: path_table_size.le
+#        repeat: expr
+#        repeat-expr: path_table_size.le
   volume_partition:
     seq:
       - id: todo
