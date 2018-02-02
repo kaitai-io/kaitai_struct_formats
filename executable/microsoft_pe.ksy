@@ -53,6 +53,19 @@ types:
         type: u2
       - id: characteristics
         type: u2
+    instances:
+      symbol_table_size:
+        value: number_of_symbols * 18
+      symbol_name_table_offset:
+        value: pointer_to_symbol_table + symbol_table_size
+      symbol_name_table_size:
+        pos: symbol_name_table_offset
+        type: u4
+      symbol_table:
+        pos: pointer_to_symbol_table
+        type: coff_symbol
+        repeat: expr
+        repeat-expr: number_of_symbols
     enums:
       machine_type:
         # 3.3.1. Machine Types
@@ -80,6 +93,63 @@ types:
         0x1a8: sh5
         0x1c2: thumb
         0x169: wcemipsv2
+  coff_symbol:
+    seq:
+      - id: name_annoying
+        type: annoyingstring
+        size: 8
+      #- id: name_zeroes
+      #  type: u4
+      #- id: name_offset
+      #  type: u4
+      - id: value
+        type: u4
+      - id: section_number
+        type: u2
+      - id: type
+        type: u2
+      - id: storage_class
+        type: u1
+      - id: number_of_aux_symbols
+        type: u1
+    instances:
+      #effective_name: 
+      #  value: name_zeroes == 0 ? name_from_offset : '"fixme"'
+      #name_from_offset:
+      #  io: _root._io
+      #  pos: name_zeroes == 0 ? _parent.symbol_name_table_offset + name_offset : 0
+      #  type: str
+      #  terminator: 0
+      #  encoding: ascii
+      section:
+        value: _root.sections[section_number-1]
+      data:
+        pos: section.pointer_to_raw_data + value
+        size: 1
+  annoyingstring:
+    -webide-representation: '{name}'
+    instances:
+      name_zeroes:
+        pos: 0
+        type: u4
+      name_offset:
+        pos: 4
+        type: u4
+      name_from_offset:
+        io: _root._io
+        pos: name_zeroes == 0 ? _parent._parent.symbol_name_table_offset + name_offset : 0
+        type: str
+        terminator: 0
+        encoding: ascii
+        eos-error: false
+      name_from_short:
+        pos: 0
+        type: str
+        terminator: 0
+        encoding: ascii
+        eos-error: false
+      name:
+        value: name_zeroes == 0 ? name_from_offset : name_from_short
   optional_header:
     seq:
       - id: std
@@ -227,6 +297,7 @@ types:
       - id: size
         type: u4
   section:
+    -webide-representation: "{name}"
     seq:
       - id: name
         type: str
