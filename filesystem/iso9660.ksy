@@ -58,43 +58,43 @@ types:
         doc-ref: ecma-119 8.2.4
         type: strz
         size: 0x20
-        encoding: ascii
+        encoding: ASCII
       - id: boot_identifier
         doc-ref: ecma-119 8.2.5
         type: strz
         size: 0x20
-        encoding: ascii
+        encoding: ASCII
   datetime:
     doc-ref: ecma-119 8.4.26.1
     seq:
       - id: year
         type: str
         size: 0x4
-        encoding: ascii
+        encoding: ASCII
       - id: month
         type: str
         size: 0x2
-        encoding: ascii
+        encoding: ASCII
       - id: day
         type: str
         size: 0x2
-        encoding: ascii
+        encoding: ASCII
       - id: hour
         type: str
         size: 0x2
-        encoding: ascii
+        encoding: ASCII
       - id: minute
         type: str
         size: 0x2
-        encoding: ascii
+        encoding: ASCII
       - id: second
         type: str
         size: 0x2
-        encoding: ascii
+        encoding: ASCII
       - id: hundredths_second
         type: str
         size: 0x2
-        encoding: ascii
+        encoding: ASCII
       - id: timezone_offset
         type: s1
   primary_volume:
@@ -107,12 +107,12 @@ types:
         doc-ref: ecma-119 8.4.5
         type: str
         size: 0x20
-        encoding: ascii
+        encoding: ASCII
       - id: volume_identifier
         doc-ref: ecma-119 8.4.6
         type: str
         size: 0x20
-        encoding: ascii
+        encoding: ASCII
       - id: unused02
         doc-ref: ecma-119 8.4.7
         contents: [ 0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0 ]
@@ -154,37 +154,37 @@ types:
         doc-ref: ecma-119 8.4.19
         type: str
         size: 0x80
-        encoding: ascii
+        encoding: ASCII
       - id: publisher_identifier
         doc-ref: ecma-119 8.4.20
         type: str
         size: 0x80
-        encoding: ascii
+        encoding: ASCII
       - id: data_preparer_identifier
         doc-ref: ecma-119 8.4.21
         type: str
         size: 0x80
-        encoding: ascii
+        encoding: ASCII
       - id: application_identifier
         doc-ref: ecma-119 8.4.22
         type: str
         size: 0x80
-        encoding: ascii
+        encoding: ASCII
       - id: copyright_file_identifier
         doc-ref: ecma-119 8.4.23
         type: str
         size: 0x25
-        encoding: ascii
+        encoding: ASCII
       - id: abstract_file_identifier
         doc-ref: ecma-119 8.4.24
         type: str
         size: 0x25
-        encoding: ascii
+        encoding: ASCII
       - id: bibliographic_file_identifier
         doc-ref: ecma-119 8.4.25
         type: str
         size: 0x25
-        encoding: ascii
+        encoding: ASCII
       - id: volume_creation_date_and_time
         doc-ref: ecma-119 8.4.26
         type: datetime
@@ -213,12 +213,12 @@ types:
         doc-ref: ecma-119 8.5.4
         type: str
         size: 0x20
-        encoding: ascii
+        encoding: ASCII
       - id: volume_identifier
         doc-ref: ecma-119 8.5.5
         type: str
         size: 0x20
-        encoding: ascii
+        encoding: ASCII
       - id: unused01
         doc-ref: ecma-119 8.5
         size: 0x8
@@ -260,37 +260,37 @@ types:
         doc-ref: ecma-119 8.5.13
         type: str
         size: 0x80
-        encoding: ascii
+        encoding: ASCII
       - id: publisher_identifier
         doc-ref: ecma-119 8.5.14
         type: str
         size: 0x80
-        encoding: ascii
+        encoding: ASCII
       - id: data_preparer_identifier
         doc-ref: ecma-119 8.5.15
         type: str
         size: 0x80
-        encoding: ascii
+        encoding: ASCII
       - id: application_identifier
         doc-ref: ecma-119 8.5.16
         type: str
         size: 0x80
-        encoding: ascii
+        encoding: ASCII
       - id: copyright_file_identifier
         doc-ref: ecma-119 8.5.17
         type: str
         size: 0x25
-        encoding: ascii
+        encoding: ASCII
       - id: abstract_file_identifier
         doc-ref: ecma-119 8.5.18
         type: str
         size: 0x25
-        encoding: ascii
+        encoding: ASCII
       - id: bibliographic_file_identifier
         doc-ref: ecma-119 8.5.19
         type: str
         size: 0x25
-        encoding: ascii
+        encoding: ASCII
       - id: volume_creation_date_and_time
         doc-ref: ecma-119 8.5
         type: datetime
