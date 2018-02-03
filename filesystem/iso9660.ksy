@@ -354,6 +354,15 @@ types:
       - id: sp
         type: susp_sp
         if: signature == susp_signature::system_use_sharing_protocol_indicator
+  directory_records:
+    doc: |
+      First item "." it points to it self
+      Second item ".." it points to the parent, or also to self if it the root
+    seq:
+      - id: directory_record
+        type: directory_record
+        repeat: until
+        repeat-until: _.len_dr == 0
   directory_record:
     doc-ref: ecma-119 9.1
     seq:
@@ -363,56 +372,71 @@ types:
       - id: ext_attr_rec_len
         doc-ref: ecma-119 9.1.2
         type: u1
+        if: len_dr > 0x0
       - id: location_of_extent
         doc-ref: ecma-119 9.1.3
         type: u4bi
+        if: len_dr > 0x0
       - id: data_len
         doc-ref: ecma-119 9.1.4
         type: u4bi
+        if: len_dr > 0x0
       - id: rec_date_time
         doc-ref: ecma-119 9.1.5
         type: recdatetime
+        if: len_dr > 0x0
       - id: file_flags_multi_extent
         doc-ref: ecma-119 9.1.6 b7
         type: b1
+        if: len_dr > 0x0
       - id: file_flags_reserved
         doc-ref: ecma-119 9.1.6 b5+b6
         type: b2
+        if: len_dr > 0x0
       - id: file_flags_protection
         doc-ref: ecma-119 9.1.6 b4
         type: b1
+        if: len_dr > 0x0
       - id: file_flags_record
         doc-ref: ecma-119 9.1.6 b3
         type: b1
+        if: len_dr > 0x0
       - id: file_flags_associated_file
         doc-ref: ecma-119 9.1.6 b2
         type: b1
+        if: len_dr > 0x0
       - id: file_flags_directory
         doc-ref: ecma-119 9.1.6 b1
         type: b1
+        if: len_dr > 0x0
       - id: file_flags_existence
         doc-ref: ecma-119 9.1.6 b0
         type: b1
+        if: len_dr > 0x0
       - id: file_unit_size
         doc-ref: ecma-119 9.1.7
         type: u1
+        if: len_dr > 0x0
       - id: interleave_gap_size
         doc-ref: ecma-119 9.1.8
         type: u1
+        if: len_dr > 0x0
       - id: vol_seq_num
         doc-ref: ecma-119 9.1.9
         type: u2bi
+        if: len_dr > 0x0
       - id: len_fi
         doc-ref: ecma-119 9.1.10
         type: u1
+        if: len_dr > 0x0
       - id: file_id_file
         doc-ref: ecma-119 9.1.11
         size: len_fi
-        if: file_flags_directory == false
+        if: ( len_dr > 0x0 ) and ( file_flags_directory == false )
       - id: file_id_dir
         doc-ref: ecma-119 9.1.11
         size: len_fi
-        if: file_flags_directory == true
+        if: ( len_dr > 0x0 ) and ( file_flags_directory == true )
       - id: padding_field
         doc-ref: ecma-119 9.1.12
         size: 0x1
@@ -423,12 +447,12 @@ types:
         type: susp_header
         if: ( len_dr > 0x22 )
     instances:
-      dirs:
+      directory_records:
         io: _root._io
         pos: _root.sector_size * location_of_extent.le
-#        size: volume_space_size.le
-        type: directory_record
-        if: file_flags_directory == true
+        size: data_len.le
+        type: directory_records
+        if: ( len_dr > 0x0 ) and ( file_flags_directory == true )
   path_table:
     seq:
       - id: len_di
