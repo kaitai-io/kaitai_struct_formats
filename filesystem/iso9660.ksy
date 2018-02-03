@@ -1,6 +1,10 @@
 meta:
   id: iso9660
+  title: ISO9660
   file-extension: iso
+  xref:
+    wikidata: Q815645
+  license: CC0-1.0
   endian: be
 doc-ref: |
   ecma-119 http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
@@ -14,12 +18,12 @@ enums:
     0x03: volume_partition_descriptor
     0xff: volume_descriptor_set_terminator
   su_signature:
-    0x4345: susp_continuation_area #
+    0x4345: susp_continuation_area # CE
     0x434c: rrip_child_link # CL
-    0x4552: susp_extensions_reference #
-    0x4553: susp_extension_selector #
+    0x4552: susp_extensions_reference # ER
+    0x4553: susp_extension_selector # ES
     0x4e4d: rrip_alternate_name # NM
-    0x5044: susp_padding_field #
+    0x5044: susp_padding_field # PD
     0x504c: rrip_parent_link # PL
     0x504e: rrip_posix_device_number # PN
     0x5058: rrip_posix_file_attributes # PX
@@ -27,8 +31,8 @@ enums:
     0x5252: rrip_extensions_in_use_indicator # RR
     0x5346: rrip_sparse_file # SF
     0x534c: rrip_symbolic_link # SL
-    0x5350: susp_indicator #
-    0x5354: susp_terminator #
+    0x5350: susp_indicator # SP
+    0x5354: susp_terminator # ST
     0x5446: rrip_time_file # TF
 types:
   u2bi:
@@ -67,9 +71,9 @@ types:
       - id: supplementary_volume
         type: supplementary_volume
         if: descriptor_type == descriptor_type::supplementary_volume_descriptor
-      - id: volume_partition
-        type: volume_partition
-        if: descriptor_type == descriptor_type::volume_partition_descriptor
+#      - id: volume_partition
+#        type: volume_partition
+#        if: descriptor_type == descriptor_type::volume_partition_descriptor
   boot_record_volume:
     doc-ref: ecma-119 8.2
     seq:
@@ -325,10 +329,10 @@ types:
       - id: file_structure_version
         doc-ref: ecma-119 8.5
         type: s1
-  volume_partition:
-    seq:
-      - id: todo
-        type: u1
+#  volume_partition:
+#    seq:
+#      - id: todo
+#        type: u1
   recdatetime:
     doc-ref: ecma-119 9.1.5
     seq:
@@ -476,22 +480,6 @@ types:
         size: data_len.le
         type: directory_records
         if: ( len_dr > 0x0 ) and ( file_flags_directory == true )
-  path_table:
-    seq:
-      - id: len_di
-        type: u1
-      - id: ext_attr_rec_len
-        type: u1
-      - id: location_of_extent
-        type: u4le
-      - id: parent_directory_number
-        type: u2le
-      - id: directory_identifier
-        size: 8 + len_di
-      - id: padding_field
-        size: 0x1
-        # todo, if len_di is odd number...
-        # todo, 9.5 extended attribute record if ext_attr_rec_len > 0
 instances:
   sector_size:
     doc-ref: ecma-119 6.1.2
