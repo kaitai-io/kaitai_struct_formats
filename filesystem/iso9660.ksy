@@ -5,6 +5,7 @@ meta:
 doc-ref: |
   ecma-119 http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
   susp http://www.ymi.com/ymi/sites/default/files/pdf/Systems%20Use%20P1281.pdf
+  rrip http://www.ymi.com/ymi/sites/default/files/pdf/Rockridge.pdf
 enums:
   descriptor_type:
     0x00: boot_record_volume_descriptor
@@ -12,13 +13,23 @@ enums:
     0x02: supplementary_volume_descriptor
     0x03: volume_partition_descriptor
     0xff: volume_descriptor_set_terminator
-  susp_signature:
-    0x4345: continuation_area
-    0x4552: extensions_reference
-    0x4553: extension_selector
-    0x5044: padding_field
-    0x5350: system_use_sharing_protocol_indicator
-    0x5354: system_use_sharing_protocol_terminator
+  su_signature:
+    0x4345: susp_continuation_area #
+    0x434c: rrip_child_link # CL
+    0x4552: susp_extensions_reference #
+    0x4553: susp_extension_selector #
+    0x4e4d: rrip_alternate_name # NM
+    0x5044: susp_padding_field #
+    0x504c: rrip_parent_link # PL
+    0x504e: rrip_posix_device_number # PN
+    0x5058: rrip_posix_file_attributes # PX
+    0x5245: rrip_relocated_directory # RE
+    0x5252: rrip_extensions_in_use_indicator # RR
+    0x5346: rrip_sparse_file # SF
+    0x534c: rrip_symbolic_link # SL
+    0x5350: susp_indicator #
+    0x5354: susp_terminator #
+    0x5446: rrip_time_file # TF
 types:
   u2bi:
     doc-ref: ecma-119 7.2.3
@@ -335,6 +346,11 @@ types:
         type: u1
       - id: offset
         type: s1
+  rrip_rr:
+    doc-ref: rrip
+    seq:
+      - id: todo
+        type: u1
   susp_sp:
     doc-ref: susp 5.3
     seq:
@@ -344,16 +360,19 @@ types:
         contents: [ 0xbe, 0xef ]
       - id: len_skp
         type: u1
-  susp_header:
+  su_header:
     seq:
       - id: signature
         type: u2be
-        enum: susp_signature
+        enum: su_signature
       - id: length
         type: u1
-      - id: sp
+      - id: rrip_rr
+        type: rrip_rr
+        if: signature == su_signature::rrip_extensions_in_use_indicator
+      - id: susp_sp
         type: susp_sp
-        if: signature == susp_signature::system_use_sharing_protocol_indicator
+        if: signature == su_signature::susp_indicator
   directory_records:
     doc: |
       First item "." it points to it self
@@ -431,21 +450,25 @@ types:
         if: len_dr > 0x0
       - id: file_id_file
         doc-ref: ecma-119 9.1.11
+        type: str
+        encoding: ASCII
         size: len_fi
         if: ( len_dr > 0x0 ) and ( file_flags_directory == false )
       - id: file_id_dir
         doc-ref: ecma-119 9.1.11
         size: len_fi
+        type: str
+        encoding: ASCII
         if: ( len_dr > 0x0 ) and ( file_flags_directory == true )
       - id: padding_field
         doc-ref: ecma-119 9.1.12
         size: 0x1
-        if: ( len_dr > 0x22 ) and ( len_dr & 1 == 1 ) # only if odd number
+        if: ( len_dr > 0x0 ) and ( len_fi % 2 == 0 ) # only if even number
       - id: system_use
         doc-ref: ecma-119 9.1.13
         size: ( len_dr - 33 ) - len_fi # recheck this logic
-        type: susp_header
-        if: ( len_dr > 0x22 )
+        type: su_header
+        if: ( len_dr > 0x0 )
     instances:
       directory_records:
         io: _root._io
