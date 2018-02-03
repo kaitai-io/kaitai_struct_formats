@@ -4,6 +4,7 @@ meta:
   endian: be
 doc-ref: |
   ecma-119 http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
+  susp http://www.ymi.com/ymi/sites/default/files/pdf/Systems%20Use%20P1281.pdf
 enums:
   descriptor_type:
     0x00: boot_record_volume_descriptor
@@ -11,6 +12,13 @@ enums:
     0x02: supplementary_volume_descriptor
     0x03: volume_partition_descriptor
     0xff: volume_descriptor_set_terminator
+  susp_signature:
+    0x4345: continuation_area
+    0x4552: extensions_reference
+    0x4553: extension_selector
+    0x5044: padding_field
+    0x5350: system_use_sharing_protocol_indicator
+    0x5354: system_use_sharing_protocol_terminator
 types:
   u2bi:
     doc-ref: ecma-119 7.2.3
@@ -327,6 +335,25 @@ types:
         type: u1
       - id: offset
         type: s1
+  susp_sp:
+    doc-ref: susp 5.3
+    seq:
+      - id: version
+        contents: [ 0x01 ]
+      - id: check_bytes
+        contents: [ 0xbe, 0xef ]
+      - id: len_skp
+        type: u1
+  susp_header:
+    seq:
+      - id: signature
+        type: u2be
+        enum: susp_signature
+      - id: length
+        type: u1
+      - id: sp
+        type: susp_sp
+        if: signature == susp_signature::system_use_sharing_protocol_indicator
   directory_record:
     doc-ref: ecma-119 9.1
     seq:
@@ -389,11 +416,19 @@ types:
       - id: padding_field
         doc-ref: ecma-119 9.1.12
         size: 0x1
-        if: ( len_dr > 0x22 ) and ( len_fi & 1 == 1 ) # only if odd number
+        if: ( len_dr > 0x22 ) and ( len_dr & 1 == 1 ) # only if odd number
       - id: system_use
         doc-ref: ecma-119 9.1.13
         size: ( len_dr - 33 ) - len_fi # recheck this logic
+        type: susp_header
         if: ( len_dr > 0x22 )
+    instances:
+      dirs:
+        io: _root._io
+        pos: _root.sector_size * location_of_extent.le
+#        size: volume_space_size.le
+        type: directory_record
+        if: file_flags_directory == true
   path_table:
     seq:
       - id: len_di
