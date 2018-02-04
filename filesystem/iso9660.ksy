@@ -6,6 +6,7 @@ meta:
     wikidata: Q815645
   license: CC0-1.0
   endian: be
+  encoding: ASCII
 doc: |
   ISO9660 is standard filesystem used on read-only optical discs
   (mostly CD-ROM). The standard was based on earlier High Sierra
@@ -90,43 +91,34 @@ types:
         doc-ref: ecma-119 8.2.4
         type: strz
         size: 0x20
-        encoding: ASCII
       - id: boot_identifier
         doc-ref: ecma-119 8.2.5
         type: strz
         size: 0x20
-        encoding: ASCII
   datetime_long:
     doc-ref: ecma-119 8.4.26.1
     seq:
       - id: year
         type: str
         size: 0x4
-        encoding: ASCII
       - id: month
         type: str
         size: 0x2
-        encoding: ASCII
       - id: day
         type: str
         size: 0x2
-        encoding: ASCII
       - id: hour
         type: str
         size: 0x2
-        encoding: ASCII
       - id: minute
         type: str
         size: 0x2
-        encoding: ASCII
       - id: second
         type: str
         size: 0x2
-        encoding: ASCII
       - id: hundredths_second
         type: str
         size: 0x2
-        encoding: ASCII
       - id: timezone_offset
         type: s1
   volume_text_32: # 0x20
@@ -134,19 +126,16 @@ types:
       - id: text
         type: str
         size: 0x20
-        encoding: ASCII
   volume_text_37: # 0x25
     seq:
       - id: text
         type: str
         size: 0x25
-        encoding: ASCII
   volume_text_128: # 0x80
     seq:
       - id: text
         type: str
         size: 0x80
-        encoding: ASCII
   primary_volume:
     doc-ref: ecma-119 8.4
     seq:
@@ -352,7 +341,6 @@ types:
         type: u1
       - id: name
         type: str
-        encoding: ASCII # Lookup POSIX:2.2.2.60
         size: length - 5
   rrip_px:
     doc-ref: rrip 4.1.1
@@ -557,14 +545,12 @@ types:
       - id: file_id_file
         doc-ref: ecma-119 9.1.11
         type: str
-        encoding: ASCII
         size: len_fi
         if: not file_flags_directory
       - id: file_id_dir
         doc-ref: ecma-119 9.1.11
         size: len_fi
         type: str
-        encoding: ASCII
         if: file_flags_directory
       - id: padding_field
         doc-ref: ecma-119 9.1.12
