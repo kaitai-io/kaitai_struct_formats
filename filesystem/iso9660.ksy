@@ -1,11 +1,20 @@
 meta:
   id: iso9660
-  title: ISO9660
+  title: ISO9660 CD filesystem
   file-extension: iso
   xref:
     wikidata: Q815645
   license: CC0-1.0
   endian: be
+doc: |
+  ISO9660 is standard filesystem used on read-only optical discs
+  (mostly CD-ROM). The standard was based on earlier High Sierra
+  Format (HSF), proposed for CD-ROMs in 1985, and, after several
+  revisions, it was accepted as ISO9960:1998.
+  The format emphasizes portability (thus having pretty minimal
+  features and very conservative file names standards) and sequential
+  access (which favors disc devices with relatively slow rotation
+  speed).
 doc-ref: |
   ecma-119 http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
   susp http://www.ymi.com/ymi/sites/default/files/pdf/Systems%20Use%20P1281.pdf
@@ -621,5 +630,4 @@ instances:
     size: sector_size
     repeat: until
     repeat-until: _.descriptor_type == descriptor_type::volume_descriptor_set_terminator
-
 
