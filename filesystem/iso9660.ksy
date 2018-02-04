@@ -129,6 +129,24 @@ types:
         encoding: ASCII
       - id: timezone_offset
         type: s1
+  volume_text_32: # 0x20
+    seq:
+      - id: text
+        type: str
+        length: 0x20
+        encoding: ASCII
+  volume_text_37: # 0x25
+    seq:
+      - id: text
+        type: str
+        length: 0x25
+        encoding: ASCII
+  volume_text_128: # 0x80
+    seq:
+      - id: text
+        type: str
+        length: 0x80
+        encoding: ASCII
   primary_volume:
     doc-ref: ecma-119 8.4
     seq:
@@ -137,14 +155,10 @@ types:
         contents: [ 0x0 ]
       - id: system_identifier
         doc-ref: ecma-119 8.4.5
-        type: str
-        size: 0x20
-        encoding: ASCII
+        type: volume_text_32
       - id: volume_identifier
         doc-ref: ecma-119 8.4.6
-        type: str
-        size: 0x20
-        encoding: ASCII
+        type: volume_text_32
       - id: unused02
         doc-ref: ecma-119 8.4.7
         contents: [ 0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0 ]
@@ -184,39 +198,25 @@ types:
         size: 0x22
       - id: volume_set_identifier
         doc-ref: ecma-119 8.4.19
-        type: str
-        size: 0x80
-        encoding: ASCII
+        type: volume_text_128
       - id: publisher_identifier
         doc-ref: ecma-119 8.4.20
-        type: str
-        size: 0x80
-        encoding: ASCII
+        type: volume_text_128
       - id: data_preparer_identifier
         doc-ref: ecma-119 8.4.21
-        type: str
-        size: 0x80
-        encoding: ASCII
+        type: volume_text_128
       - id: application_identifier
         doc-ref: ecma-119 8.4.22
-        type: str
-        size: 0x80
-        encoding: ASCII
+        type: volume_text_128
       - id: copyright_file_identifier
         doc-ref: ecma-119 8.4.23
-        type: str
-        size: 0x25
-        encoding: ASCII
+        type: volume_text_37
       - id: abstract_file_identifier
         doc-ref: ecma-119 8.4.24
-        type: str
-        size: 0x25
-        encoding: ASCII
+        type: volume_text_37
       - id: bibliographic_file_identifier
         doc-ref: ecma-119 8.4.25
-        type: str
-        size: 0x25
-        encoding: ASCII
+        type: volume_text_37
       - id: volume_creation_date_and_time
         doc-ref: ecma-119 8.4.26
         type: datetime_long
@@ -243,14 +243,10 @@ types:
         type: b1
       - id: system_identifier
         doc-ref: ecma-119 8.5.4
-        type: str
-        size: 0x20
-        encoding: ASCII
+        type: volume_text_32
       - id: volume_identifier
         doc-ref: ecma-119 8.5.5
-        type: str
-        size: 0x20
-        encoding: ASCII
+        type: volume_text_32
       - id: unused01
         doc-ref: ecma-119 8.5
         size: 0x8
@@ -290,39 +286,25 @@ types:
         size: 0x22
       - id: volume_set_identifier
         doc-ref: ecma-119 8.5.13
-        type: str
-        size: 0x80
-        encoding: ASCII
+        type: volume_text_128
       - id: publisher_identifier
         doc-ref: ecma-119 8.5.14
-        type: str
-        size: 0x80
-        encoding: ASCII
+        type: volume_text_128
       - id: data_preparer_identifier
         doc-ref: ecma-119 8.5.15
-        type: str
-        size: 0x80
-        encoding: ASCII
+        type: volume_text_128
       - id: application_identifier
         doc-ref: ecma-119 8.5.16
-        type: str
-        size: 0x80
-        encoding: ASCII
+        type: volume_text_128
       - id: copyright_file_identifier
         doc-ref: ecma-119 8.5.17
-        type: str
-        size: 0x25
-        encoding: ASCII
+        type: volume_text_37
       - id: abstract_file_identifier
         doc-ref: ecma-119 8.5.18
-        type: str
-        size: 0x25
-        encoding: ASCII
+        type: volume_text_37
       - id: bibliographic_file_identifier
         doc-ref: ecma-119 8.5.19
-        type: str
-        size: 0x25
-        encoding: ASCII
+        type: volume_text_37
       - id: volume_creation_date_and_time
         doc-ref: ecma-119 8.5
         type: datetime_long
