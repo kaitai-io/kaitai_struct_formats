@@ -475,60 +475,28 @@ types:
       - id: signature
         type: u2be
         enum: su_signature
-      - id: rras_as # AS
-        type: susp_unknown
-        if: signature == su_signature::rras_amiga_specific
-      - id: susp_ce # CE
-        type: susp_unknown
-        if: signature == su_signature::susp_continuation_area
-      - id: rrip_cl # CL
-        type: susp_unknown
-        if: signature == su_signature::rrip_child_link
-      - id: susp_er # ER
-        type: susp_unknown
-        if: signature == su_signature::susp_extensions_reference
-      - id: susp_es # ES
-        type: susp_unknown
-        if: signature == su_signature::susp_extension_selector
-      - id: rrip_nm # NM
-        type: rrip_nm
-        if: signature == su_signature::rrip_alternate_name
-      - id: susp_pd # PD
-        type: susp_unknown
-        if: signature == su_signature::susp_padding_field
-      - id: rrip_pl # PL
-        type: susp_unknown
-        if: signature == su_signature::rrip_parent_link
-      - id: rrip_pn # PN
-        type: susp_unknown
-        if: signature == su_signature::rrip_posix_device_number
-      - id: rrip_px # PX
-        type: rrip_px
-        if: signature == su_signature::rrip_posix_file_attributes
-      - id: rrip_re # RE
-        type: susp_unknown
-        if: signature == su_signature::rrip_relocated_directory
-      - id: rrip_rr # RR
-        type: susp_unknown
-        if: signature == su_signature::rrip_extensions_in_use_indicator
-      - id: rrip_sf # SF
-        type: susp_unknown
-        if: signature == su_signature::rrip_sparse_file
-      - id: rrip_sl # SL
-        type: susp_unknown
-        if: signature == su_signature::rrip_symbolic_link
-      - id: susp_sp # SP
-        type: susp_unknown
-        if: signature == su_signature::susp_indicator
-      - id: susp_st # ST
-        type: susp_unknown
-        if: signature == su_signature::susp_terminator
-      - id: rrip_tf # TF
-        type: rrip_tf
-        if: signature == su_signature::rrip_time_file
-      - id: rrzf_zf # ZF
-        type: susp_unknown
-        if: signature == su_signature::rrzf_zisofs
+      - id: su_specific
+        type:
+          switch-on: signature
+          cases:
+            'su_signature::rras_amiga_specific': susp_unknown # AS
+            'su_signature::susp_continuation_area': susp_unknown # CE
+            'su_signature::rrip_child_link': susp_unknown # CL
+            'su_signature::susp_extensions_reference': susp_unknown # ER
+            'su_signature::susp_extension_selector': susp_unknown # ES
+            'su_signature::rrip_alternate_name': rrip_nm # NM
+            'su_signature::susp_padding_field': susp_unknown # PD
+            'su_signature::rrip_parent_link': susp_unknown # PL
+            'su_signature::rrip_posix_device_number': susp_unknown # PN
+            'su_signature::rrip_posix_file_attributes': rrip_px # PX
+            'su_signature::rrip_relocated_directory': susp_unknown # RE
+            'su_signature::rrip_extensions_in_use_indicator': susp_unknown # RR
+            'su_signature::rrip_sparse_file': susp_unknown # SF
+            'su_signature::rrip_symbolic_link': susp_unknown # SL
+            'su_signature::susp_indicator': susp_unknown # SP
+            'su_signature::susp_terminator': susp_unknown # ST
+            'su_signature::rrip_time_file': rrip_tf # TF
+            'su_signature::rrzf_zisofs': susp_unknown # ZF
   su_headers:
     seq:
       - id: header
@@ -653,4 +621,5 @@ instances:
     size: sector_size
     repeat: until
     repeat-until: _.descriptor_type == descriptor_type::volume_descriptor_set_terminator
+
 
