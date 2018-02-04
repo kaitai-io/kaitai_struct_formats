@@ -484,6 +484,11 @@ types:
         size: data_len.le
         type: directory_records
         if: ( len_dr > 0x0 ) and ( file_flags_directory == true )
+      file_content:
+        io: _root._io
+        pos: _root.sector_size * location_of_extent.le
+        size: data_len.le
+        if: ( len_dr > 0x0 ) and ( file_flags_directory == false )
 instances:
   sector_size:
     doc-ref: ecma-119 6.1.2
