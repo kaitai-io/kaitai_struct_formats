@@ -75,18 +75,14 @@ types:
       - id: version
         doc-ref: ecma-119 8.1.3
         contents: [0x01]
-      - id: boot_record
-        type: boot_record_volume
-        if: descriptor_type == descriptor_type::boot_record_volume_descriptor
-      - id: primary_volume
-        type: primary_volume
-        if: descriptor_type == descriptor_type::primary_volume_descriptor
-      - id: supplementary_volume
-        type: supplementary_volume
-        if: descriptor_type == descriptor_type::supplementary_volume_descriptor
-#      - id: volume_partition
-#        type: volume_partition
-#        if: descriptor_type == descriptor_type::volume_partition_descriptor
+      - id: volume
+        type:
+          switch-on: descriptor_type
+          cases:
+            'descriptor_type::boot_record_volume_descriptor': boot_record_volume
+            'descriptor_type::primary_volume_descriptor': primary_volume
+            'descriptor_type::supplementary_volume_descriptor': supplementary_volume
+#            'descriptor_type::volume_partition_descriptor': volume_partition
   boot_record_volume:
     doc-ref: ecma-119 8.2
     seq:
