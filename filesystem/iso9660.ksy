@@ -399,49 +399,49 @@ types:
     seq:
       - id: creation
         type: datetime_short
-        if: _parent.creation == true
+        if: _parent.creation
       - id: modify
         type: datetime_short
-        if: _parent.modify == true
+        if: _parent.modify
       - id: access_short
         type: datetime_short
-        if: _parent.access == true
+        if: _parent.access
       - id: attributes
         type: datetime_short
-        if: _parent.attributes == true
+        if: _parent.attributes
       - id: backup
         type: datetime_short
-        if: _parent.backup == true
+        if: _parent.backup
       - id: expiration
         type: datetime_short
-        if: _parent.expiration == true
+        if: _parent.expiration
       - id: effective
         type: datetime_short
-        if: _parent.effective == true
+        if: _parent.effective
   rrip_tf_long:
     doc-ref: rrip 4.6.1
     seq:
       - id: creation
         type: datetime_long
-        if: _parent.creation == true
+        if: _parent.creation
       - id: modify
         type: datetime_long
-        if: _parent.modify == true
+        if: _parent.modify
       - id: access_short
         type: datetime_long
-        if: _parent.access == true
+        if: _parent.access
       - id: attributes
         type: datetime_long
-        if: _parent.attributes == true
+        if: _parent.attributes
       - id: backup
         type: datetime_long
-        if: _parent.backup == true
+        if: _parent.backup
       - id: expiration
         type: datetime_long
-        if: _parent.expiration == true
+        if: _parent.expiration
       - id: effective
         type: datetime_long
-        if: _parent.effective == true
+        if: _parent.effective
   rrip_tf:
     doc-ref: rrip 4.6.1
     seq:
@@ -467,10 +467,10 @@ types:
         type: b1
       - id: datetime_short
         type: rrip_tf_short
-        if: long_form == false
+        if: not long_form
       - id: datetime_long
         type: rrip_tf_long
-        if: long_form == true
+        if: long_form
   susp_unknown: # default for now
     seq:
       - id: length
@@ -591,13 +591,13 @@ types:
         type: str
         encoding: ASCII
         size: len_fi
-        if: ( len_dr > 0x0 ) and ( file_flags_directory == false )
+        if: ( len_dr > 0x0 ) and not file_flags_directory
       - id: file_id_dir
         doc-ref: ecma-119 9.1.11
         size: len_fi
         type: str
         encoding: ASCII
-        if: ( len_dr > 0x0 ) and ( file_flags_directory == true )
+        if: ( len_dr > 0x0 ) and file_flags_directory
       - id: padding_field
         doc-ref: ecma-119 9.1.12
         size: 0x1
@@ -613,12 +613,12 @@ types:
         pos: _root.sector_size * location_of_extent.le
         size: data_len.le
         type: directory_records
-        if: ( len_dr > 0x0 ) and ( file_flags_directory == true )
+        if: ( len_dr > 0x0 ) and file_flags_directory
       file_content:
         io: _root._io
         pos: _root.sector_size * location_of_extent.le
         size: data_len.le
-        if: ( len_dr > 0x0 ) and ( file_flags_directory == false )
+        if: ( len_dr > 0x0 ) and not file_flags_directory
 instances:
   sector_size:
     doc-ref: ecma-119 6.1.2
