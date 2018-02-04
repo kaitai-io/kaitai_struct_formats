@@ -10,6 +10,7 @@ doc-ref: |
   ecma-119 http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
   susp http://www.ymi.com/ymi/sites/default/files/pdf/Systems%20Use%20P1281.pdf
   rrip http://www.ymi.com/ymi/sites/default/files/pdf/Rockridge.pdf
+  rras http://www.estamos.de/makecd/Rock_Ridge_Amiga_Specific
 enums:
   descriptor_type:
     0x00: boot_record_volume_descriptor
@@ -18,6 +19,7 @@ enums:
     0x03: volume_partition_descriptor
     0xff: volume_descriptor_set_terminator
   su_signature:
+    0x4153: rras_amiga_specific # AS
     0x4345: susp_continuation_area # CE
     0x434c: rrip_child_link # CL
     0x4552: susp_extensions_reference # ER
