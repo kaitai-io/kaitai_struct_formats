@@ -362,8 +362,6 @@ types:
   susp_sp:
     doc-ref: susp 5.3
     seq:
-      - id: version
-        contents: [ 0x01 ]
       - id: check_bytes
         contents: [ 0xbe, 0xef ]
       - id: len_skp
@@ -375,12 +373,11 @@ types:
         enum: su_signature
       - id: length
         type: u1
-      - id: rrip_rr
-        type: rrip_rr
-        if: signature == su_signature::rrip_extensions_in_use_indicator
-      - id: susp_sp
-        type: susp_sp
-        if: signature == su_signature::susp_indicator
+  su_headers:
+    seq:
+      - id: header
+        type: su_header
+        repeat: eos
   directory_records:
     doc: |
       First item "." it points to it self
@@ -475,7 +472,7 @@ types:
       - id: system_use
         doc-ref: ecma-119 9.1.13
         size: ( len_dr - 33 ) - len_fi # recheck this logic
-        type: su_header
+        type: su_headers
         if: ( len_dr > 0x0 )
     instances:
       directory_records:
