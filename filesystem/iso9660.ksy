@@ -91,7 +91,7 @@ types:
         type: strz
         size: 0x20
         encoding: ASCII
-  datetime:
+  datetime_long:
     doc-ref: ecma-119 8.4.26.1
     seq:
       - id: year
@@ -214,16 +214,16 @@ types:
         encoding: ASCII
       - id: volume_creation_date_and_time
         doc-ref: ecma-119 8.4.26
-        type: datetime
+        type: datetime_long
       - id: volume_modification_date_and_time
         doc-ref: ecma-119 8.4.27
-        type: datetime
+        type: datetime_long
       - id: volume_expiration_date_and_time
         doc-ref: ecma-119 8.4.28
-        type: datetime
+        type: datetime_long
       - id: volume_effective_date_and_time
         doc-ref: ecma-119 8.4.29
-        type: datetime
+        type: datetime_long
       - id: file_structure_version
         doc-ref: ecma-119 8.4.31
         type: s1
@@ -320,16 +320,16 @@ types:
         encoding: ASCII
       - id: volume_creation_date_and_time
         doc-ref: ecma-119 8.5
-        type: datetime
+        type: datetime_long
       - id: volume_modification_date_and_time
         doc-ref: ecma-119 8.5
-        type: datetime
+        type: datetime_long
       - id: volume_expiration_date_and_time
         doc-ref: ecma-119 8.5
-        type: datetime
+        type: datetime_long
       - id: volume_effective_date_and_time
         doc-ref: ecma-119 8.5
-        type: datetime
+        type: datetime_long
       - id: file_structure_version
         doc-ref: ecma-119 8.5
         type: s1
@@ -337,7 +337,7 @@ types:
 #    seq:
 #      - id: todo
 #        type: u1
-  recdatetime:
+  datetime_short:
     doc-ref: ecma-119 9.1.5
     seq:
       - id: year
@@ -354,6 +354,102 @@ types:
         type: u1
       - id: offset
         type: s1
+  rrip_nm:
+    doc-ref: rrip 4.1.4
+    seq:
+      - id: length
+        type: u1
+      - id: version
+        contents: [ 0x1 ]
+      - id: flags # ToDo, made it too slow for now
+        type: u1
+      - id: name
+        type: str
+        encoding: ASCII # Lookup POSIX:2.2.2.60
+        size: length - 5
+  rrip_px:
+    doc-ref: rrip 4.1.1
+    seq:
+      - id: length
+        type: u1
+      - id: version
+        contents: [ 0x1 ]
+      - id: file_mode
+        type: u4bi
+      - id: links
+        type: u4bi
+      - id: user
+        type: u4bi
+      - id: group
+        type: u4bi
+      - id: serial
+        type: u4bi
+        if: length >= 44
+  rrip_tf:
+    doc-ref: rrip 4.6.1
+    seq:
+      - id: length
+        type: u1
+      - id: version
+        contents: [ 0x1 ]
+      - id: long_form
+        type: b1
+      - id: effective
+        type: b1
+      - id: expiration
+        type: b1
+      - id: backup
+        type: b1
+      - id: attributes
+        type: b1
+      - id: access
+        type: b1
+      - id: modify
+        type: b1
+      - id: creation
+        type: b1
+      - id: creation_short
+        type: datetime_short
+        if: ( creation == true ) and ( long_form == false )
+      - id: creation_long
+        type: datetime_long
+        if: ( creation == true ) and ( long_form == true )
+      - id: modify_short
+        type: datetime_short
+        if: ( modify == true ) and ( long_form == false )
+      - id: modify_long
+        type: datetime_long
+        if: ( modify == true ) and ( long_form == true )
+      - id: access_short
+        type: datetime_short
+        if: ( access == true ) and ( long_form == false )
+      - id: access_long
+        type: datetime_long
+        if: ( access == true ) and ( long_form == true )
+      - id: attributes_short
+        type: datetime_short
+        if: ( attributes == true ) and ( long_form == false )
+      - id: attributes_long
+        type: datetime_long
+        if: ( attributes == true ) and ( long_form == true )
+      - id: backup_short
+        type: datetime_short
+        if: ( backup == true ) and ( long_form == false )
+      - id: backup_long
+        type: datetime_long
+        if: ( backup == true ) and ( long_form == true )
+      - id: expiration_short
+        type: datetime_short
+        if: ( expiration == true ) and ( long_form == false )
+      - id: expiration_long
+        type: datetime_long
+        if: ( expiration == true ) and ( long_form == true )
+      - id: effective_short
+        type: datetime_short
+        if: ( effective == true ) and ( long_form == false )
+      - id: effective_long
+        type: datetime_long
+        if: ( effective == true ) and ( long_form == true )
   susp_unknown: # default for now
     seq:
       - id: length
@@ -383,7 +479,7 @@ types:
         type: susp_unknown
         if: signature == su_signature::susp_extension_selector
       - id: rrip_nm # NM
-        type: susp_unknown
+        type: rrip_nm
         if: signature == su_signature::rrip_alternate_name
       - id: susp_pd # PD
         type: susp_unknown
@@ -395,7 +491,7 @@ types:
         type: susp_unknown
         if: signature == su_signature::rrip_posix_device_number
       - id: rrip_px # PX
-        type: susp_unknown
+        type: rrip_px
         if: signature == su_signature::rrip_posix_file_attributes
       - id: rrip_re # RE
         type: susp_unknown
@@ -416,7 +512,7 @@ types:
         type: susp_unknown
         if: signature == su_signature::susp_terminator
       - id: rrip_tf # TF
-        type: susp_unknown
+        type: rrip_tf
         if: signature == su_signature::rrip_time_file
       - id: rrzf_zf # ZF
         type: susp_unknown
@@ -455,7 +551,7 @@ types:
         if: len_dr > 0x0
       - id: rec_date_time
         doc-ref: ecma-119 9.1.5
-        type: recdatetime
+        type: datetime_short
         if: len_dr > 0x0
       - id: file_flags_multi_extent
         doc-ref: ecma-119 9.1.6 b7
