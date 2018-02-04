@@ -11,6 +11,7 @@ doc-ref: |
   susp http://www.ymi.com/ymi/sites/default/files/pdf/Systems%20Use%20P1281.pdf
   rrip http://www.ymi.com/ymi/sites/default/files/pdf/Rockridge.pdf
   rras http://www.estamos.de/makecd/Rock_Ridge_Amiga_Specific
+  rrzf https://dev.lovelyhq.com/libburnia/web/wikis/Zisofs
 enums:
   descriptor_type:
     0x00: boot_record_volume_descriptor
@@ -36,6 +37,7 @@ enums:
     0x5350: susp_indicator # SP
     0x5354: susp_terminator # ST
     0x5446: rrip_time_file # TF
+    0x5a46: rrzf_zisofs # ZF
 types:
   u2bi:
     doc-ref: ecma-119 7.2.3
