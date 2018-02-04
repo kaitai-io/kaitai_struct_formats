@@ -354,25 +354,73 @@ types:
         type: u1
       - id: offset
         type: s1
-  rrip_rr:
-    doc-ref: rrip
+  susp_unknown: # default for now
     seq:
-      - id: todo
+      - id: length
         type: u1
-  susp_sp:
-    doc-ref: susp 5.3
-    seq:
-      - id: check_bytes
-        contents: [ 0xbe, 0xef ]
-      - id: len_skp
+      - id: version
         type: u1
+      - id: data
+        size: length - 4
   su_header:
     seq:
       - id: signature
         type: u2be
         enum: su_signature
-      - id: length
-        type: u1
+      - id: rras_as # AS
+        type: susp_unknown
+        if: signature == su_signature::rras_amiga_specific
+      - id: susp_ce # CE
+        type: susp_unknown
+        if: signature == su_signature::susp_continuation_area
+      - id: rrip_cl # CL
+        type: susp_unknown
+        if: signature == su_signature::rrip_child_link
+      - id: susp_er # ER
+        type: susp_unknown
+        if: signature == su_signature::susp_extensions_reference
+      - id: susp_es # ES
+        type: susp_unknown
+        if: signature == su_signature::susp_extension_selector
+      - id: rrip_nm # NM
+        type: susp_unknown
+        if: signature == su_signature::rrip_alternate_name
+      - id: susp_pd # PD
+        type: susp_unknown
+        if: signature == su_signature::susp_padding_field
+      - id: rrip_pl # PL
+        type: susp_unknown
+        if: signature == su_signature::rrip_parent_link
+      - id: rrip_pn # PN
+        type: susp_unknown
+        if: signature == su_signature::rrip_posix_device_number
+      - id: rrip_px # PX
+        type: susp_unknown
+        if: signature == su_signature::rrip_posix_file_attributes
+      - id: rrip_re # RE
+        type: susp_unknown
+        if: signature == su_signature::rrip_relocated_directory
+      - id: rrip_rr # RR
+        type: susp_unknown
+        if: signature == su_signature::rrip_extensions_in_use_indicator
+      - id: rrip_sf # SF
+        type: susp_unknown
+        if: signature == su_signature::rrip_sparse_file
+      - id: rrip_sl # SL
+        type: susp_unknown
+        if: signature == su_signature::rrip_symbolic_link
+      - id: susp_sp # SP
+        type: susp_unknown
+        if: signature == su_signature::susp_indicator
+      - id: susp_st # ST
+        type: susp_unknown
+        if: signature == su_signature::susp_terminator
+      - id: rrip_tf # TF
+        type: susp_unknown
+        if: signature == su_signature::rrip_time_file
+      - id: rrzf_zf # ZF
+        type: susp_unknown
+        if: signature == su_signature::rrzf_zisofs
   su_headers:
     seq:
       - id: header
@@ -473,7 +521,7 @@ types:
         doc-ref: ecma-119 9.1.13
         size: ( len_dr - 33 ) - len_fi # recheck this logic
         type: su_headers
-        if: ( len_dr > 0x0 )
+        if: ( len_dr > 0x0 ) and ( ( len_dr - 33 ) - len_fi > 1 ) # only if at least 2 bytes are available for magic
     instances:
       directory_records:
         io: _root._io
