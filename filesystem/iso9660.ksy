@@ -133,19 +133,19 @@ types:
     seq:
       - id: text
         type: str
-        length: 0x20
+        size: 0x20
         encoding: ASCII
   volume_text_37: # 0x25
     seq:
       - id: text
         type: str
-        length: 0x25
+        size: 0x25
         encoding: ASCII
   volume_text_128: # 0x80
     seq:
       - id: text
         type: str
-        length: 0x80
+        size: 0x80
         encoding: ASCII
   primary_volume:
     doc-ref: ecma-119 8.4
