@@ -385,6 +385,54 @@ types:
       - id: serial
         type: u4bi
         if: length >= 44
+  rrip_tf_short:
+    doc-ref: rrip 4.6.1
+    seq:
+      - id: creation
+        type: datetime_short
+        if: _parent.creation == true
+      - id: modify
+        type: datetime_short
+        if: _parent.modify == true
+      - id: access_short
+        type: datetime_short
+        if: _parent.access == true
+      - id: attributes
+        type: datetime_short
+        if: _parent.attributes == true
+      - id: backup
+        type: datetime_short
+        if: _parent.backup == true
+      - id: expiration
+        type: datetime_short
+        if: _parent.expiration == true
+      - id: effective
+        type: datetime_short
+        if: _parent.effective == true
+  rrip_tf_long:
+    doc-ref: rrip 4.6.1
+    seq:
+      - id: creation
+        type: datetime_long
+        if: _parent.creation == true
+      - id: modify
+        type: datetime_long
+        if: _parent.modify == true
+      - id: access_short
+        type: datetime_long
+        if: _parent.access == true
+      - id: attributes
+        type: datetime_long
+        if: _parent.attributes == true
+      - id: backup
+        type: datetime_long
+        if: _parent.backup == true
+      - id: expiration
+        type: datetime_long
+        if: _parent.expiration == true
+      - id: effective
+        type: datetime_long
+        if: _parent.effective == true
   rrip_tf:
     doc-ref: rrip 4.6.1
     seq:
@@ -408,48 +456,12 @@ types:
         type: b1
       - id: creation
         type: b1
-      - id: creation_short
-        type: datetime_short
-        if: ( creation == true ) and ( long_form == false )
-      - id: creation_long
-        type: datetime_long
-        if: ( creation == true ) and ( long_form == true )
-      - id: modify_short
-        type: datetime_short
-        if: ( modify == true ) and ( long_form == false )
-      - id: modify_long
-        type: datetime_long
-        if: ( modify == true ) and ( long_form == true )
-      - id: access_short
-        type: datetime_short
-        if: ( access == true ) and ( long_form == false )
-      - id: access_long
-        type: datetime_long
-        if: ( access == true ) and ( long_form == true )
-      - id: attributes_short
-        type: datetime_short
-        if: ( attributes == true ) and ( long_form == false )
-      - id: attributes_long
-        type: datetime_long
-        if: ( attributes == true ) and ( long_form == true )
-      - id: backup_short
-        type: datetime_short
-        if: ( backup == true ) and ( long_form == false )
-      - id: backup_long
-        type: datetime_long
-        if: ( backup == true ) and ( long_form == true )
-      - id: expiration_short
-        type: datetime_short
-        if: ( expiration == true ) and ( long_form == false )
-      - id: expiration_long
-        type: datetime_long
-        if: ( expiration == true ) and ( long_form == true )
-      - id: effective_short
-        type: datetime_short
-        if: ( effective == true ) and ( long_form == false )
-      - id: effective_long
-        type: datetime_long
-        if: ( effective == true ) and ( long_form == true )
+      - id: datetime_short
+        type: rrip_tf_short
+        if: long_form == false
+      - id: datetime_long
+        type: rrip_tf_long
+        if: long_form == true
   susp_unknown: # default for now
     seq:
       - id: length
