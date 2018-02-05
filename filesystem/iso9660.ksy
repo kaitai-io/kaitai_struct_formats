@@ -183,6 +183,9 @@ types:
         type: u4le
       - id: directory_record_for_root_directory
         doc-ref: ecma-119 8.4.18
+        doc: |
+          The root directory_record_head and directory_record_body is 34 bytes.
+          In other cases the size is variable.
         type: directory_record_head
         size: 0x22
       - id: volume_set_identifier
@@ -271,6 +274,9 @@ types:
         type: u4le
       - id: directory_record_for_root_directory
         doc-ref: ecma-119 8.5.12
+        doc: |
+          The root directory_record_head and directory_record_body is 34 bytes.
+          In other cases the size is variable.
         type: directory_record_head
         size: 0x22
       - id: volume_set_identifier
