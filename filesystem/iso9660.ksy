@@ -362,6 +362,9 @@ types:
         if: length >= 44
   rrip_tf_short:
     doc-ref: rrip 4.6.1
+    doc: |
+      The data is available in this specific order.
+      Multiple dates can be set.
     seq:
       - id: creation
         type: datetime_short
@@ -369,7 +372,7 @@ types:
       - id: modify
         type: datetime_short
         if: _parent.modify
-      - id: access_short
+      - id: access
         type: datetime_short
         if: _parent.access
       - id: attributes
@@ -386,6 +389,9 @@ types:
         if: _parent.effective
   rrip_tf_long:
     doc-ref: rrip 4.6.1
+    doc: |
+      The data is available in this specific order.
+      Multiple dates can be set.
     seq:
       - id: creation
         type: datetime_long
@@ -393,7 +399,7 @@ types:
       - id: modify
         type: datetime_long
         if: _parent.modify
-      - id: access_short
+      - id: access
         type: datetime_long
         if: _parent.access
       - id: attributes
