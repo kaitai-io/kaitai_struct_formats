@@ -485,9 +485,13 @@ types:
             'su_signature::rrip_time_file': rrip_tf # TF
             'su_signature::rrzf_zisofs': susp_unknown # ZF
   su_headers:
+    doc: |
+      We check if we have at least 2 bytes left.
+      The SUSP magic is 2 bytes.
     seq:
       - id: header
         type: su_header
+        if: _io.size - _io.pos >= 2
         repeat: eos
   directory_records:
     doc: |
@@ -503,6 +507,9 @@ types:
     seq:
       - id: len_dr
         doc-ref: ecma-119 9.1.1
+        doc: |
+          If len_dr == 0 we do not process the body
+          If len_dr >= 1 we include field len_dr in the size
         type: u1
       - id: body
         type: directory_record_body
@@ -566,13 +573,17 @@ types:
         if: file_flags_directory
       - id: padding_field
         doc-ref: ecma-119 9.1.12
+        doc: |
+          Padding field is added when len_fi contains an even number
         size: 0x1
-        if: len_fi % 2 == 0 # only if even number
+        if: len_fi % 2 == 0
       - id: system_use
         doc-ref: ecma-119 9.1.13
-        size: ( _parent.len_dr - 33 ) - len_fi # recheck this logic
+        doc: |
+          The size of the system_use is defined as:
+          ( len_dr - size of directory_record = 33 bytes ) - len_fi
         type: su_headers
-        if: ( _parent.len_dr - 33 ) - len_fi > 1 # only if at least 2 bytes are available for magic
+        size: ( _parent.len_dr - 33 ) - len_fi
     instances:
       directory_records:
         io: _root._io
