@@ -377,7 +377,7 @@ types:
       - id: version
         contents: [ 0x1 ]
       - id: padding_area
-        size: length
+        size: length - 4
   rrip_px:
     doc-ref: rrip 4.1.1
     seq:
