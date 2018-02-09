@@ -343,8 +343,16 @@ types:
         type: u1
       - id: version
         contents: [ 0x1 ]
-      - id: flags # ToDo, made it too slow for now
-        type: u1
+      - id: reserved
+        type: b5
+      - id: parent
+        doc: |
+          Grouped all 4x reserved into a single reserved
+        type: b1
+      - id: current
+        type: b1
+      - id: continue
+        type: b1
       - id: name
         type: str
         size: length - 5
