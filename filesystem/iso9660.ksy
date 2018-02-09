@@ -336,6 +336,19 @@ types:
         type: u1
       - id: offset
         type: s1
+  susp_ce:
+    doc-ref: susp 5.1
+    seq:
+      - id: length
+        type: u1
+      - id: version
+        contents: [ 0x1 ]
+      - id: ca_location
+        type: u4bi
+      - id: ca_offset
+        type: u4bi
+      - id: ca_length
+        type: u4bi
   rrip_nm:
     doc-ref: rrip 4.1.4
     seq:
@@ -475,7 +488,7 @@ types:
           switch-on: signature
           cases:
             'su_signature::rras_amiga_specific': susp_unknown # AS
-            'su_signature::susp_continuation_area': susp_unknown # CE
+            'su_signature::susp_continuation_area': susp_ce # CE
             'su_signature::rrip_child_link': susp_unknown # CL
             'su_signature::susp_extensions_reference': susp_unknown # ER
             'su_signature::susp_extension_selector': susp_unknown # ES
