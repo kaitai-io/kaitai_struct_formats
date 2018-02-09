@@ -396,6 +396,24 @@ types:
       - id: serial
         type: u4bi
         if: length >= 44
+  susp_sp:
+    doc-ref: susp 5.3
+    seq:
+      - id: length
+        type: u1
+      - id: version
+        contents: [ 0x1 ]
+      - id: check_bytes
+        contents: [ 0xbe, 0xef ]
+      - id: len_skp
+        size: length - 6
+  susp_st:
+    doc-ref: susp 5.4
+    seq:
+      - id: length
+        type: u1
+      - id: version
+        contents: [ 0x1 ]
   rrip_tf_short:
     doc-ref: rrip 4.6.1
     doc: |
@@ -510,8 +528,8 @@ types:
             'su_signature::rrip_extensions_in_use_indicator': susp_unknown # RR
             'su_signature::rrip_sparse_file': susp_unknown # SF
             'su_signature::rrip_symbolic_link': susp_unknown # SL
-            'su_signature::susp_indicator': susp_unknown # SP
-            'su_signature::susp_terminator': susp_unknown # ST
+            'su_signature::susp_indicator': susp_sp # SP
+            'su_signature::susp_terminator': susp_st # ST
             'su_signature::rrip_time_file': rrip_tf # TF
             'su_signature::rrzf_zisofs': susp_unknown # ZF
   su_headers:
