@@ -484,6 +484,26 @@ types:
       - id: table_debth
         type: u1
         enum: rrip_sf_table_debth
+  susp_sl:
+    doc-ref: susp 4.1.3.1
+    seq:
+      - id: length
+        type: u1
+      - id: version
+        contents: [ 0x1 ]
+      - id: reserved
+        type: b4
+      - id: root
+        type: b1
+      - id: parent
+        type: b1
+      - id: current
+        type: b1
+      - id: continue
+        type: b1
+      - id: content
+        type: str
+        size: length - 5
   susp_sp:
     doc-ref: susp 5.3
     seq:
@@ -615,7 +635,7 @@ types:
             'su_signature::rrip_relocated_directory': rrip_re # RE
             'su_signature::rrip_extensions_in_use_indicator': susp_unknown # RR
             'su_signature::rrip_sparse_file': rrip_sf # SF
-            'su_signature::rrip_symbolic_link': susp_unknown # SL
+            'su_signature::rrip_symbolic_link': susp_sl # SL
             'su_signature::susp_indicator': susp_sp # SP
             'su_signature::susp_terminator': susp_st # ST
             'su_signature::rrip_time_file': rrip_tf # TF
