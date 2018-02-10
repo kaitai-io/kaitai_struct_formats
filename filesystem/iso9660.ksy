@@ -48,6 +48,14 @@ enums:
     0x5354: susp_terminator # ST
     0x5446: rrip_time_file # TF
     0x5a46: rrzf_zisofs # ZF
+  rrip_sf_table_debth:
+    0x2: max_64kb
+    0x4: max_64mb
+    0x8: max_4gb
+    0x10: max_1tb
+    0x20: max_256tb
+    0x40: max_64pb
+    0x80: max_16eb
 types:
   u2bi:
     doc-ref: ecma-119 7.2.3
@@ -462,6 +470,20 @@ types:
         type: u1
       - id: version
         contents: [ 0x1 ]
+  rrip_sf:
+    doc-ref: rrip 4.1.7
+    seq:
+      - id: length
+        type: u1
+      - id: version
+        contents: [ 0x1 ]
+      - id: virtual_file_size_high
+        type: u4bi
+      - id: virtual_file_size_low
+        type: u4bi
+      - id: table_debth
+        type: u1
+        enum: rrip_sf_table_debth
   susp_sp:
     doc-ref: susp 5.3
     seq:
@@ -592,7 +614,7 @@ types:
             'su_signature::rrip_posix_file_attributes': rrip_px # PX
             'su_signature::rrip_relocated_directory': rrip_re # RE
             'su_signature::rrip_extensions_in_use_indicator': susp_unknown # RR
-            'su_signature::rrip_sparse_file': susp_unknown # SF
+            'su_signature::rrip_sparse_file': rrip_sf # SF
             'su_signature::rrip_symbolic_link': susp_unknown # SL
             'su_signature::susp_indicator': susp_sp # SP
             'su_signature::susp_terminator': susp_st # ST
