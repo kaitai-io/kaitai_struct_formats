@@ -495,10 +495,10 @@ types:
       - id: version
         contents: [ 0x1 ]
       - id: reserved
-        type: b5
-      - id: parent
         doc: |
           Grouped all 4x reserved into a single reserved
+        type: b5
+      - id: parent
         type: b1
       - id: current
         type: b1
