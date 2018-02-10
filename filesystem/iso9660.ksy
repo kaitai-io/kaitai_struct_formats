@@ -11,7 +11,7 @@ doc: |
   ISO9660 is standard filesystem used on read-only optical discs
   (mostly CD-ROM). The standard was based on earlier High Sierra
   Format (HSF), proposed for CD-ROMs in 1985, and, after several
-  revisions, it was accepted as ISO9960:1998.
+  revisions, it was accepted as ISO9660:1998.
   The format emphasizes portability (thus having pretty minimal
   features and very conservative file names standards) and sequential
   access (which favors disc devices with relatively slow rotation
@@ -87,7 +87,6 @@ types:
         type: u1
       - id: offset
         type: s1
-
   directory_records:
     doc: |
       First item "." it points to it self
