@@ -344,6 +344,91 @@ types:
         type: u1
       - id: offset
         type: s1
+  rras_as_flags:
+    doc-ref: rras 6
+    seq:
+      - id: user_bitfields
+        doc-ref: rras 6a
+        type: u1
+      - id: reserved_bitfields
+        doc-ref: rras 6b
+        type: u1
+      - id: other_read
+        doc-ref: rras 6c.7
+        type: b1
+      - id: other_write
+        doc-ref: rras 6c.6
+        type: b1
+      - id: other_exec
+        doc-ref: rras 6c.5
+        type: b1
+      - id: other_del
+        doc-ref: rras 6c.4
+        type: b1
+      - id: group_read
+        doc-ref: rras 6c.3
+        type: b1
+      - id: group_write
+        doc-ref: rras 6c.2
+        type: b1
+      - id: group_exec
+        doc-ref: rras 6c.1
+        type: b1
+      - id: group_del
+        doc-ref: rras 6c.0
+        type: b1
+      - id: reserved
+        doc-ref: rras 6d.7
+        type: b1
+      - id: exec_script
+        doc-ref: rras 6d.6
+        type: b1
+      - id: reent_exec
+        doc-ref: rras 6d.5
+        type: b1
+      - id: archived
+        doc-ref: rras 6d.4
+        type: b1
+      - id: owner_read
+        doc-ref: rras 6d.3
+        type: b1
+      - id: owner_write
+        doc-ref: rras 6d.2
+        type: b1
+      - id: owner_exec
+        doc-ref: rras 6d.1
+        type: b1
+      - id: owner_del
+        doc-ref: rras 6d.0
+        type: b1
+  rras_as:
+    doc-ref: rras
+    seq:
+      - id: length
+        type: u1
+      - id: version
+        contents: [ 0x1 ]
+      - id: reserved
+        type: b5
+      - id: flag_continue
+        type: b1
+      - id: flag_comment
+        type: b1
+      - id: flag_protection
+        type: b1
+      - id: flags
+        doc-ref: rras 6
+        type: rras_as_flags
+        if: flag_protection
+      - id: len_comment
+        doc-ref: rras 7a
+        type: u1
+        if: flag_comment or flag_continue
+      - id: comment
+        doc-ref: rras 7b
+        type: str
+        size: len_comment - 1
+        if: flag_comment or flag_continue
   susp_ce:
     doc-ref: susp 5.1
     seq:
@@ -622,7 +707,7 @@ types:
         type:
           switch-on: signature
           cases:
-            'su_signature::rras_amiga_specific': susp_unknown # AS
+            'su_signature::rras_amiga_specific': rras_as # AS
             'su_signature::susp_continuation_area': susp_ce # CE
             'su_signature::rrip_child_link': rrip_cl # CL
             'su_signature::susp_extensions_reference': susp_er # ER
