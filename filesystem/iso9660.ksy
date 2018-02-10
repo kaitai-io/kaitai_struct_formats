@@ -426,6 +426,17 @@ types:
         contents: [ 0x1 ]
       - id: lba_parent
         type: u4bi
+  rrip_pn:
+    doc-ref: rrip 4.1.2
+    seq:
+      - id: length
+        type: u1
+      - id: version
+        contents: [ 0x1 ]
+      - id: dev_t_high
+        type: u4bi
+      - id: dev_t_low
+        type: u4bi
   rrip_px:
     doc-ref: rrip 4.1.1
     seq:
@@ -577,7 +588,7 @@ types:
             'su_signature::rrip_alternate_name': rrip_nm # NM
             'su_signature::susp_padding_field': susp_pd # PD
             'su_signature::rrip_parent_link': rrip_pl # PL
-            'su_signature::rrip_posix_device_number': susp_unknown # PN
+            'su_signature::rrip_posix_device_number': rrip_pn # PN
             'su_signature::rrip_posix_file_attributes': rrip_px # PX
             'su_signature::rrip_relocated_directory': rrip_re # RE
             'su_signature::rrip_extensions_in_use_indicator': susp_unknown # RR
