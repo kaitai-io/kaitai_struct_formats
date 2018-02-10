@@ -29,39 +29,6 @@ enums:
     0x02: supplementary_volume_descriptor
     0x03: volume_partition_descriptor
     0xff: volume_descriptor_set_terminator
-  su_signature:
-    0x4153: rras_amiga_specific # AS
-    0x4345: susp_continuation_area # CE
-    0x434c: rrip_child_link # CL
-    0x4552: susp_extensions_reference # ER
-    0x4553: susp_extension_selector # ES
-    0x4e4d: rrip_alternate_name # NM
-    0x5044: susp_padding_field # PD
-    0x504c: rrip_parent_link # PL
-    0x504e: rrip_posix_device_number # PN
-    0x5058: rrip_posix_file_attributes # PX
-    0x5245: rrip_relocated_directory # RE
-    0x5252: rrip_extensions_in_use_indicator # RR
-    0x5346: rrip_sparse_file # SF
-    0x534c: rrip_symbolic_link # SL
-    0x5350: susp_indicator # SP
-    0x5354: susp_terminator # ST
-    0x5446: rrip_time_file # TF
-    0x5a46: rrzf_zisofs # ZF
-  rrip_sf_table_debth:
-    0x2: max_64kb
-    0x4: max_64mb
-    0x8: max_4gb
-    0x10: max_1tb
-    0x20: max_256tb
-    0x40: max_64pb
-    0x80: max_16eb
-  rrzf_zf_algorithm:
-    0x707a: paged_zlib # pz
-  rrzf_zf_block_size:
-    0xf: bs_32kib
-    0x10: bs_64kib
-    0x11: bs_128kib
 types:
   u2bi:
     doc-ref: ecma-119 7.2.3
@@ -563,6 +530,15 @@ types:
         contents: [ 0x1 ]
   rrip_sf:
     doc-ref: rrip 4.1.7
+    enums:
+      table_debth:
+        0x2: max_64kb
+        0x4: max_64mb
+        0x8: max_4gb
+        0x10: max_1tb
+        0x20: max_256tb
+        0x40: max_64pb
+        0x80: max_16eb
     seq:
       - id: length
         type: u1
@@ -574,7 +550,7 @@ types:
         type: u4bi
       - id: table_debth
         type: u1
-        enum: rrip_sf_table_debth
+        enum: table_debth
   susp_sl:
     doc-ref: susp 4.1.3.1
     seq:
@@ -698,6 +674,13 @@ types:
         if: long_form
   rrzf_zf:
     doc-ref: rrzf
+    enums:
+      algorithm:
+        0x707a: paged_zlib # pz
+      block_size:
+        0xf: bs_32kib
+        0x10: bs_64kib
+        0x11: bs_128kib
     seq:
       - id: length
         type: u1
@@ -705,14 +688,14 @@ types:
         contents: [ 0x1 ]
       - id: algorithm
         type: u2be
-        enum: rrzf_zf_algorithm
+        enum: algorithm
       - id: header_size
         doc: |
           value is divided by 4
         type: u1
       - id: block_size
         type: u1
-        enum: rrzf_zf_block_size
+        enum: block_size
       - id: uncompressed_size
         type: u4bi
   susp_unknown: # default for now
@@ -724,32 +707,52 @@ types:
       - id: data
         size: length - 4
   su_header:
+    enums:
+      signature:
+        0x4153: rras_amiga_specific # AS
+        0x4345: susp_continuation_area # CE
+        0x434c: rrip_child_link # CL
+        0x4552: susp_extensions_reference # ER
+        0x4553: susp_extension_selector # ES
+        0x4e4d: rrip_alternate_name # NM
+        0x5044: susp_padding_field # PD
+        0x504c: rrip_parent_link # PL
+        0x504e: rrip_posix_device_number # PN
+        0x5058: rrip_posix_file_attributes # PX
+        0x5245: rrip_relocated_directory # RE
+        0x5252: rrip_extensions_in_use_indicator # RR
+        0x5346: rrip_sparse_file # SF
+        0x534c: rrip_symbolic_link # SL
+        0x5350: susp_indicator # SP
+        0x5354: susp_terminator # ST
+        0x5446: rrip_time_file # TF
+        0x5a46: rrzf_zisofs # ZF
     seq:
       - id: signature
         type: u2be
-        enum: su_signature
+        enum: signature
       - id: su_specific
         type:
           switch-on: signature
           cases:
-            'su_signature::rras_amiga_specific': rras_as # AS
-            'su_signature::susp_continuation_area': susp_ce # CE
-            'su_signature::rrip_child_link': rrip_cl # CL
-            'su_signature::susp_extensions_reference': susp_er # ER
-            'su_signature::susp_extension_selector': susp_es # ES
-            'su_signature::rrip_alternate_name': rrip_nm # NM
-            'su_signature::susp_padding_field': susp_pd # PD
-            'su_signature::rrip_parent_link': rrip_pl # PL
-            'su_signature::rrip_posix_device_number': rrip_pn # PN
-            'su_signature::rrip_posix_file_attributes': rrip_px # PX
-            'su_signature::rrip_relocated_directory': rrip_re # RE
-            'su_signature::rrip_extensions_in_use_indicator': susp_unknown # RR
-            'su_signature::rrip_sparse_file': rrip_sf # SF
-            'su_signature::rrip_symbolic_link': susp_sl # SL
-            'su_signature::susp_indicator': susp_sp # SP
-            'su_signature::susp_terminator': susp_st # ST
-            'su_signature::rrip_time_file': rrip_tf # TF
-            'su_signature::rrzf_zisofs': rrzf_zf # ZF
+            'signature::rras_amiga_specific': rras_as # AS
+            'signature::susp_continuation_area': susp_ce # CE
+            'signature::rrip_child_link': rrip_cl # CL
+            'signature::susp_extensions_reference': susp_er # ER
+            'signature::susp_extension_selector': susp_es # ES
+            'signature::rrip_alternate_name': rrip_nm # NM
+            'signature::susp_padding_field': susp_pd # PD
+            'signature::rrip_parent_link': rrip_pl # PL
+            'signature::rrip_posix_device_number': rrip_pn # PN
+            'signature::rrip_posix_file_attributes': rrip_px # PX
+            'signature::rrip_relocated_directory': rrip_re # RE
+            'signature::rrip_extensions_in_use_indicator': susp_unknown # RR
+            'signature::rrip_sparse_file': rrip_sf # SF
+            'signature::rrip_symbolic_link': susp_sl # SL
+            'signature::susp_indicator': susp_sp # SP
+            'signature::susp_terminator': susp_st # ST
+            'signature::rrip_time_file': rrip_tf # TF
+            'signature::rrzf_zisofs': rrzf_zf # ZF
   su_headers:
     doc: |
       We check if we have at least 2 bytes left.
