@@ -23,7 +23,7 @@ doc-ref: |
   rras http://www.estamos.de/makecd/Rock_Ridge_Amiga_Specific
   rrzf https://dev.lovelyhq.com/libburnia/web/wikis/Zisofs
 enums:
-  descriptor_type:
+  volume_type:
     0x00: boot_record_volume_descriptor
     0x01: primary_volume_descriptor
     0x02: supplementary_volume_descriptor
@@ -645,10 +645,11 @@ types:
   volume_descriptor:
     doc-ref: ecma-119 8.1
     seq:
-      - id: descriptor_type
+      - id: type 
+        -orig-id: volume_descriptor_type 
         doc-ref: ecma-119 8.1.1
         type: u1
-        enum: descriptor_type
+        enum: volume_type
       - id: magic
         doc-ref: ecma-119 8.1.2
         contents: [ 0x43, 0x44, 0x30, 0x30, 0x31 ]
@@ -657,24 +658,13 @@ types:
         contents: [ 0x1 ]
       - id: volume
         type:
-          switch-on: descriptor_type
+          switch-on: type
           cases:
-            'descriptor_type::boot_record_volume_descriptor': boot_record
-            'descriptor_type::primary_volume_descriptor': primary
-            'descriptor_type::supplementary_volume_descriptor': supplementary
-            #'descriptor_type::volume_partition_descriptor': partition
+            'volume_type::boot_record_volume_descriptor': boot_record
+            'volume_type::primary_volume_descriptor': primary
+            'volume_type::supplementary_volume_descriptor': supplementary
+            #'volume_type::volume_partition_descriptor': partition
     types:
-      boot_record:
-        doc-ref: ecma-119 8.2
-        seq:
-          - id: boot_system_identifier
-            doc-ref: ecma-119 8.2.4
-            type: strz
-            size: 0x20
-          - id: boot_identifier
-            doc-ref: ecma-119 8.2.5
-            type: strz
-            size: 0x20
       text32: # 0x20
         seq:
           - id: text
@@ -690,6 +680,17 @@ types:
           - id: text
             type: str
             size: 0x80
+      boot_record:
+        doc-ref: ecma-119 8.2
+        seq:
+          - id: boot_system_identifier
+            doc-ref: ecma-119 8.2.4
+            type: strz
+            size: 0x20
+          - id: boot_identifier
+            doc-ref: ecma-119 8.2.5
+            type: strz
+            size: 0x20
       primary:
         doc-ref: ecma-119 8.4
         seq:
@@ -883,5 +884,5 @@ instances:
     type: volume_descriptor
     size: sector_size
     repeat: until
-    repeat-until: _.descriptor_type == descriptor_type::volume_descriptor_set_terminator
+    repeat-until: _.type == volume_type::volume_descriptor_set_terminator
 
