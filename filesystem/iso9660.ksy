@@ -53,10 +53,10 @@ types:
         enum: descriptor_type
       - id: magic
         doc-ref: ecma-119 8.1.2
-        contents: [0x43, 0x44, 0x30, 0x30, 0x31]
+        contents: [ 0x43, 0x44, 0x30, 0x30, 0x31 ]
       - id: version
         doc-ref: ecma-119 8.1.3
-        contents: [0x01]
+        contents: [ 0x1 ]
       - id: volume
         type:
           switch-on: descriptor_type
