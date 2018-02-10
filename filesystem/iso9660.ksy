@@ -370,6 +370,15 @@ types:
         size: len_des
       - id: ext_src
         size: len_src
+  susp_es:
+    doc-ref: susp 5.6
+    seq:
+      - id: length
+        type: u1
+      - id: version
+        contents: [ 0x1 ]
+      - id: ext_seq
+        type: u1
   rrip_nm:
     doc-ref: rrip 4.1.4
     seq:
@@ -539,7 +548,7 @@ types:
             'su_signature::susp_continuation_area': susp_ce # CE
             'su_signature::rrip_child_link': susp_unknown # CL
             'su_signature::susp_extensions_reference': susp_er # ER
-            'su_signature::susp_extension_selector': susp_unknown # ES
+            'su_signature::susp_extension_selector': susp_es # ES
             'su_signature::rrip_alternate_name': rrip_nm # NM
             'su_signature::susp_padding_field': susp_pd # PD
             'su_signature::rrip_parent_link': susp_unknown # PL
