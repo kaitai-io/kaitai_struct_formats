@@ -56,6 +56,12 @@ enums:
     0x20: max_256tb
     0x40: max_64pb
     0x80: max_16eb
+  rrzf_zf_algorithm:
+    0x707a: paged_zlib # pz
+  rrzf_zf_block_size:
+    0xf: bs_32kib
+    0x10: bs_64kib
+    0x11: bs_128kib
 types:
   u2bi:
     doc-ref: ecma-119 7.2.3
@@ -690,6 +696,25 @@ types:
       - id: datetime_long
         type: rrip_tf_long
         if: long_form
+  rrzf_zf:
+    doc-ref: rrzf
+    seq:
+      - id: length
+        type: u1
+      - id: version
+        contents: [ 0x1 ]
+      - id: algorithm
+        type: u2be
+        enum: rrzf_zf_algorithm
+      - id: header_size
+        doc: |
+          value is divided by 4
+        type: u1
+      - id: block_size
+        type: u1
+        enum: rrzf_zf_block_size
+      - id: uncompressed_size
+        type: u4bi
   susp_unknown: # default for now
     seq:
       - id: length
@@ -724,7 +749,7 @@ types:
             'su_signature::susp_indicator': susp_sp # SP
             'su_signature::susp_terminator': susp_st # ST
             'su_signature::rrip_time_file': rrip_tf # TF
-            'su_signature::rrzf_zisofs': susp_unknown # ZF
+            'su_signature::rrzf_zisofs': rrzf_zf # ZF
   su_headers:
     doc: |
       We check if we have at least 2 bytes left.
