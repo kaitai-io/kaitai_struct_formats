@@ -349,6 +349,15 @@ types:
         type: u4bi
       - id: ca_length
         type: u4bi
+  rrip_cl:
+    doc-ref: rrip 4.1.5.1
+    seq:
+      - id: length
+        type: u1
+      - id: version
+        contents: [ 0x1 ]
+      - id: lba_child
+        type: u4bi
   susp_er:
     doc-ref: susp 5.5
     seq:
@@ -546,7 +555,7 @@ types:
           cases:
             'su_signature::rras_amiga_specific': susp_unknown # AS
             'su_signature::susp_continuation_area': susp_ce # CE
-            'su_signature::rrip_child_link': susp_unknown # CL
+            'su_signature::rrip_child_link': rrip_cl # CL
             'su_signature::susp_extensions_reference': susp_er # ER
             'su_signature::susp_extension_selector': susp_es # ES
             'su_signature::rrip_alternate_name': rrip_nm # NM
