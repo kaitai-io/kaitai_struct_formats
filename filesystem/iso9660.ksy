@@ -417,6 +417,15 @@ types:
         contents: [ 0x1 ]
       - id: padding_area
         size: length - 4
+  rrip_pl:
+    doc-ref: rrip 4.1.5.2
+    seq:
+      - id: length
+        type: u1
+      - id: version
+        contents: [ 0x1 ]
+      - id: lba_parent
+        type: u4bi
   rrip_px:
     doc-ref: rrip 4.1.1
     seq:
@@ -560,7 +569,7 @@ types:
             'su_signature::susp_extension_selector': susp_es # ES
             'su_signature::rrip_alternate_name': rrip_nm # NM
             'su_signature::susp_padding_field': susp_pd # PD
-            'su_signature::rrip_parent_link': susp_unknown # PL
+            'su_signature::rrip_parent_link': rrip_pl # PL
             'su_signature::rrip_posix_device_number': susp_unknown # PN
             'su_signature::rrip_posix_file_attributes': rrip_px # PX
             'su_signature::rrip_relocated_directory': susp_unknown # RE
