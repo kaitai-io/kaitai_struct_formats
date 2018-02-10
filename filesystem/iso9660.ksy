@@ -444,6 +444,13 @@ types:
       - id: serial
         type: u4bi
         if: length >= 44
+  rrip_re:
+    doc-ref: rrip 4.1.5.3
+    seq:
+      - id: length
+        type: u1
+      - id: version
+        contents: [ 0x1 ]
   susp_sp:
     doc-ref: susp 5.3
     seq:
@@ -572,7 +579,7 @@ types:
             'su_signature::rrip_parent_link': rrip_pl # PL
             'su_signature::rrip_posix_device_number': susp_unknown # PN
             'su_signature::rrip_posix_file_attributes': rrip_px # PX
-            'su_signature::rrip_relocated_directory': susp_unknown # RE
+            'su_signature::rrip_relocated_directory': rrip_re # RE
             'su_signature::rrip_extensions_in_use_indicator': susp_unknown # RR
             'su_signature::rrip_sparse_file': susp_unknown # SF
             'su_signature::rrip_symbolic_link': susp_unknown # SL
