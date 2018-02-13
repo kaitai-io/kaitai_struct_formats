@@ -87,6 +87,37 @@ types:
         type: u1
       - id: offset
         type: s1
+  path_table_records:
+    doc-ref: ecma-119 9.4
+    seq:
+      - id: record
+        type: path_table_record
+        repeat: eos
+  path_table_record:
+    doc-ref: ecma-119 9.4
+    seq:
+      - id: len_dir_name
+        doc-ref: ecma-119 9.4.1
+        type: u1
+      - id: len_ext_rec
+        doc-ref: ecma-119 9.4.2
+        type: u1
+      - id: loc_ext
+        doc-ref: ecma-119 9.4.3
+        type: u4le
+      - id: parent_dir_num
+        doc-ref: ecma-119 9.4.4
+        type: u2le
+      - id: dir_name
+        doc-ref: ecma-119 9.4.5
+        type: str
+        size: len_dir_name
+      - id: padding_field
+        doc-ref: ecma-119 9.4.6
+        doc: |
+          Padding field is added when len_dir_name contains an odd number
+        size: 0x1
+        if: len_dir_name % 2 != 0
   directory_records:
     doc: |
       First item "." it points to it self
@@ -644,8 +675,8 @@ types:
   volume_descriptor:
     doc-ref: ecma-119 8.1
     seq:
-      - id: type 
-        -orig-id: volume_descriptor_type 
+      - id: type
+        -orig-id: volume_descriptor_type
         doc-ref: ecma-119 8.1.1
         type: u1
         enum: volume_type
@@ -731,10 +762,10 @@ types:
             type: u4le
           - id: loc_m_path_table
             doc-ref: ecma-119 8.4.16
-            type: u4le
+            type: u4be
           - id: loc_opt_m_path_table
             doc-ref: ecma-119 8.4.17
-            type: u4le
+            type: u4be
           - id: directory_record_for_root_directory
             doc-ref: ecma-119 8.4.18
             doc: |
@@ -778,6 +809,12 @@ types:
           - id: file_structure_version
             doc-ref: ecma-119 8.4.31
             type: s1
+        instances:
+          path_table:
+            io: _root._io
+            pos: _root.sector_size * loc_l_path_table
+            size: path_table_size.le
+            type: path_table_records
       supplementary:
         doc-ref: ecma-119 8.5
         seq:
