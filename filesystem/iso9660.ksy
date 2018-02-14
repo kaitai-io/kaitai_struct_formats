@@ -369,7 +369,7 @@ types:
                 doc: |
                   Padding field is added when len_dir_name contains an odd number
                 size: 0x1
-                if: len_dir_name % 2 != 0
+                if: len_dir_name % 2 == 1
             instances:
               directory_records:
                 io: _root._io
