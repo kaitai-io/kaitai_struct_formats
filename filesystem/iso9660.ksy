@@ -930,8 +930,4 @@ types:
                             type: u1
                           - id: data
                             size: length - 4
-      #partition:
-      #  seq:
-      #    - id: todo
-      #      type: u1
 
