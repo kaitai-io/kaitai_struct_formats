@@ -277,18 +277,18 @@ types:
           - id: path_table_size
             doc-ref: ecma-119 8.5.7
             type: u4bi
-          - id: occurrence_of_type_l_path_table
+          - id: loc_l_path_table
             doc-ref: ecma-119 8.5.8
             type: u4le
-          - id: optional_occurrence_of_type_l_path_table
+          - id: loc_opt_l_path_table
             doc-ref: ecma-119 8.5.9
             type: u4le
-          - id: occurrence_of_type_m_path_table
+          - id: loc_m_path_table
             doc-ref: ecma-119 8.5.10
-            type: u4le
-          - id: optional_occurrence_of_type_m_path_table
+            type: u4be
+          - id: loc_opt_m_path_table
             doc-ref: ecma-119 8.5.11
-            type: u4le
+            type: u4be
           - id: directory_record_for_root_directory
             doc-ref: ecma-119 8.5.12
             doc: |
@@ -332,6 +332,12 @@ types:
           - id: file_structure_version
             doc-ref: ecma-119 8.5
             type: s1
+        instances:
+          path_table:
+            io: _root._io
+            pos: _root.sector_size * loc_l_path_table
+            size: path_table_size.le
+            type: path_table_records
       path_table_records:
         doc-ref: ecma-119 9.4
         seq:
