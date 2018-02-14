@@ -241,7 +241,6 @@ types:
             pos: _root.sector_size * loc_l_path_table
             size: path_table_size.le
             type: path_table_records
-
       supplementary:
         doc-ref: ecma-119 8.5
         seq:
@@ -336,7 +335,7 @@ types:
       path_table_records:
         doc-ref: ecma-119 9.4
         seq:
-          - id: record
+          - id: path_table_record
             type: path_table_record
             repeat: eos
         types:
@@ -365,6 +364,12 @@ types:
                   Padding field is added when len_dir_name contains an odd number
                 size: 0x1
                 if: len_dir_name % 2 != 0
+            instances:
+              directory_records:
+                io: _root._io
+                pos: _root.sector_size * loc_ext
+                size: _root.sector_size
+                type: directory_record
       directory_records:
         doc: |
           First item "." it points to it self
