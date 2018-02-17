@@ -258,12 +258,15 @@ types:
             type: text32
           - id: unused01
             doc-ref: ecma-119 8.5
-            size: 0x8
+            contents: [ 0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0 ]
           - id: volume_space_size
             doc-ref: ecma-119 8.5
             type: u4bi
           - id: escape_sequences
             doc-ref: ecma-119 8.5.6
+            doc: |
+              This will not be all 0x0.
+              This field can trigger the Directory Records to switch from ASCII to ISO-2022 ( UTF-8 in this code )
             size: 0x20
           - id: volume_set_size
             doc-ref: ecma-119 8.5
@@ -368,7 +371,7 @@ types:
                 doc-ref: ecma-119 9.4.6
                 doc: |
                   Padding field is added when len_dir_name contains an odd number
-                size: 0x1
+                contents: [ 0x0 ]
                 if: len_dir_name % 2 == 1
             instances:
               directory_records:
@@ -459,7 +462,7 @@ types:
                 doc-ref: ecma-119 9.1.12
                 doc: |
                   Padding field is added when len_fi contains an even number
-                size: 0x1
+                contents: [ 0x0 ]
                 if: len_fi % 2 == 0
               - id: system_use
                 doc-ref: ecma-119 9.1.13
