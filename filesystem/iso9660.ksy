@@ -503,6 +503,7 @@ types:
                         type:
                           switch-on: signature
                           cases:
+                            'signature::aaip_attribute_list': susp_unknown # AL
                             'signature::rras_amiga_specific': rras_as # AS
                             'signature::susp_continuation_area': susp_ce # CE
                             'signature::rrip_child_link': rrip_cl # CL
@@ -523,6 +524,7 @@ types:
                             'signature::rrzf_zisofs': rrzf_zf # ZF
                     enums:
                       signature:
+                        0x414c: aaip_attribute_list # AL
                         0x4153: rras_amiga_specific # AS
                         0x4345: susp_continuation_area # CE
                         0x434c: rrip_child_link # CL
