@@ -9,7 +9,7 @@ jobs:
           name: Install kaitai-struct-compiler
           command: |
             sudo apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv 379CE192D401AB61
-            echo "deb https://dl.bintray.com/kaitai-io/debian jessie main" | sudo tee /etc/apt/sources.list.d/kaitai.list
+            echo "deb http://dl.bintray.com/kaitai-io/debian jessie main" | sudo tee /etc/apt/sources.list.d/kaitai.list
             sudo -i apt-get update
             sudo -i apt-get install kaitai-struct-compiler
             ksc --version
