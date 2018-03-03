@@ -11,7 +11,7 @@ jobs:
             sudo apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv 379CE192D401AB61
             echo "deb http://dl.bintray.com/kaitai-io/debian jessie main" | sudo tee /etc/apt/sources.list.d/kaitai.list
             sudo -i apt-get update
-            sudo -i apt-get install kaitai-struct-compiler
+            sudo -i apt-get install default-jre-headless kaitai-struct-compiler
             ksc --version
       - run:
           name: Install Ruby dependencies
