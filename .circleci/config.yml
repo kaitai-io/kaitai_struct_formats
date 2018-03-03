@@ -7,7 +7,7 @@ jobs:
       - checkout
       - run:
           name: Install kaitai-struct-compiler
-          commands: |
+          command: |
             sudo apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv 379CE192D401AB61
             echo "deb https://dl.bintray.com/kaitai-io/debian jessie main" | sudo tee /etc/apt/sources.list.d/kaitai.list
             sudo -i apt-get update
@@ -15,10 +15,10 @@ jobs:
             ksc --version
       - run:
           name: Install Ruby dependencies
-          commands: |
+          command: |
             cd _build
             bundle install
       - run:
           name: Build HTML
-          commands: |
+          command: |
             ./build
