@@ -15,7 +15,7 @@ jobs:
             apt-get update
             apt-get install --no-install-recommends -y \
               git ssh \
-              kaitai-struct-compiler java8-runtime-headless \
+              kaitai-struct-compiler default-jre-headless \
               ruby ruby-dev make gcc libc6-dev \
               graphviz
             ksc --version
