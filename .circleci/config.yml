@@ -9,11 +9,11 @@ jobs:
           name: Install kaitai-struct-compiler
           command: |
             apt-get update
-            apt-get install dirmngr
+            apt-get install --no-install-recommends -y dirmngr
             apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv 379CE192D401AB61
             echo "deb http://dl.bintray.com/kaitai-io/debian jessie main" | tee /etc/apt/sources.list.d/kaitai.list
             apt-get update
-            apt-get install --no-install-recommends openjdk-jre8-headless kaitai-struct-compiler
+            apt-get install --no-install-recommends -y openjdk-jre8-headless kaitai-struct-compiler
             ksc --version
       - run:
           name: Install Ruby dependencies
