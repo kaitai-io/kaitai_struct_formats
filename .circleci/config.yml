@@ -17,7 +17,8 @@ jobs:
               git ssh \
               kaitai-struct-compiler default-jre-headless \
               ruby ruby-dev make gcc libc6-dev \
-              graphviz
+              graphviz \
+              rsync
             ksc --version
       - run:
           name: Install Ruby deps
