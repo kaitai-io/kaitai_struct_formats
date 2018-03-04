@@ -30,3 +30,7 @@ jobs:
           command: |
             cd _build
             ./build
+      - run:
+          name: Deploy HTML
+          command: |
+            .circleci/publish
