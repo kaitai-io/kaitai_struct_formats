@@ -8,6 +8,7 @@ jobs:
       - run:
           name: Install kaitai-struct-compiler
           command: |
+            apt-get install dirmngr
             apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv 379CE192D401AB61
             echo "deb http://dl.bintray.com/kaitai-io/debian jessie main" | tee /etc/apt/sources.list.d/kaitai.list
             apt-get update
