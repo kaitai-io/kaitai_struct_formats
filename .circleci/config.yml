@@ -18,9 +18,13 @@ jobs:
       - run:
           name: Install Ruby dependencies
           command: |
+            ksc --version
+            apt-get install ruby
+            gem install bundler
             cd _build
             bundle install
       - run:
           name: Build HTML
           command: |
+            cd _build
             ./build
