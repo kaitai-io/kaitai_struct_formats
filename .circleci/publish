@@ -19,7 +19,7 @@
 
 GH_USER=kaitai-io
 GH_REPO_NAME=formats-kaitai-io.github.io
-OUT_DIR=_build/out
+OUT_DIR=_build/html
 
 export GIT_AUTHOR_NAME='Kaitai Bot'
 export GIT_AUTHOR_EMAIL='kaitai-bot@kaitai.io'
