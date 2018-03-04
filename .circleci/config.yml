@@ -13,7 +13,11 @@ jobs:
             apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv 379CE192D401AB61
             echo "deb http://dl.bintray.com/kaitai-io/debian jessie main" | tee /etc/apt/sources.list.d/kaitai.list
             apt-get update
-            apt-get install --no-install-recommends -y default-jre-headless kaitai-struct-compiler ruby ruby-dev make gcc libc6-dev
+            apt-get install --no-install-recommends -y \
+              git ssh \
+              kaitai-struct-compiler java8-runtime-headless \
+              ruby ruby-dev make gcc libc6-dev \
+              graphviz
             ksc --version
       - run:
           name: Install Ruby deps
