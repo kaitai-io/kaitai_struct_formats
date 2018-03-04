@@ -2,7 +2,8 @@ version: 2
 jobs:
   build:
     docker:
-      - image: ubuntu:17.10
+#      - image: ubuntu:17.10
+      - image: buildpack-deps:artful-scm
     environment:
       - LANG=en_US.UTF-8
       - LC_CTYPE=en_US.UTF-8
