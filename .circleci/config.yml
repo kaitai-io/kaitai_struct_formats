@@ -6,20 +6,18 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install kaitai-struct-compiler
+          name: Install apt deps
           command: |
             apt-get update
             apt-get install --no-install-recommends -y dirmngr
             apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv 379CE192D401AB61
             echo "deb http://dl.bintray.com/kaitai-io/debian jessie main" | tee /etc/apt/sources.list.d/kaitai.list
             apt-get update
-            apt-get install --no-install-recommends -y default-jre-headless kaitai-struct-compiler
+            apt-get install --no-install-recommends -y default-jre-headless kaitai-struct-compiler ruby
             ksc --version
       - run:
-          name: Install Ruby dependencies
+          name: Install Ruby deps
           command: |
-            ksc --version
-            apt-get install ruby
             gem install bundler
             cd _build
             bundle install
