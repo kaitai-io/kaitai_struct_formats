@@ -62,6 +62,16 @@ chmod a+x $HOME/git-ssh
 export GIT_SSH="$HOME/git-ssh"
 echo 'OK'
 
+echo -n 'Setting up github.com ssh known_hosts... '
+mkdir -p "$HOME/.ssh"
+cat >$HOME/.ssh/known_hosts <<__EOF__
+|1|36IaOOa9TjQvuTuyPPZVLs+wNnI=|FcXQrYSP/WwU/XZJgkHXqWgHHvc= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+|1|fMSJevPd24vwCx/Y5sYhkl7Dh98=|8Dx75sSuPqyGgXLYKmQK+GvGfJA= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+__EOF__
+chmod 0700 "$HOME/.ssh"
+chmod 0600 "$HOME/.ssh/known_hosts"
+echo 'OK'
+
 echo 'Cloning website repo...'
 git clone git@github.com:"$GH_USER"/"$GH_REPO_NAME".git
 
