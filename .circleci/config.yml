@@ -8,10 +8,10 @@ jobs:
       - run:
           name: Install kaitai-struct-compiler
           command: |
-            sudo apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv 379CE192D401AB61
-            echo "deb http://dl.bintray.com/kaitai-io/debian jessie main" | sudo tee /etc/apt/sources.list.d/kaitai.list
-            sudo -i apt-get update
-            sudo -i apt-get install --no-install-recommends openjdk-jre8-headless kaitai-struct-compiler
+            apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv 379CE192D401AB61
+            echo "deb http://dl.bintray.com/kaitai-io/debian jessie main" | tee /etc/apt/sources.list.d/kaitai.list
+            apt-get update
+            apt-get install --no-install-recommends openjdk-jre8-headless kaitai-struct-compiler
             ksc --version
       - run:
           name: Install Ruby dependencies
