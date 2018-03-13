@@ -22,6 +22,7 @@ class FormatPagesGenerator
     'graphviz' => {name: 'GraphViz', ext: 'dot'},
     'java' => {name: 'Java', ext: 'java'},
     'javascript' => {name: 'JavaScript', ext: 'js'},
+    'lua' => {name: 'Lua', ext: 'lua'},
     'perl' => {name: 'Perl', ext: 'pm'},
     'php' => {name: 'PHP', ext: 'php'},
     'python' => {name: 'Python', ext: 'py'},
