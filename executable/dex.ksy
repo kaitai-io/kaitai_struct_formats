@@ -6,7 +6,7 @@ meta:
   # Portions of this page are reproduced from work created and shared by Google and used
   # according to terms described in the Creative Commons 3.0 Attribution License.
   imports:
-    - ../common/vlq_base128_le
+    - /common/vlq_base128_le
 doc-ref: https://source.android.com/devices/tech/dalvik/dex-format
 seq:
   - id: header
@@ -309,13 +309,16 @@ types:
     instances:
       shorty_desc:
         value: _root.string_ids[shorty_idx].value.data
+        doc: short-form descriptor string of this prototype, as pointed to by shorty_idx
       params_types:
         io: _root._io
         pos: parameters_off
         type: type_list
         if: parameters_off != 0
+        doc: list of parameter types for this prototype
       return_type:
         value: _root.type_ids[return_type_idx].type_name
+        doc: return type of this prototype
     -webide-representation: "shorty_idx={shorty_idx} return_type_idx={return_type_idx} parameters_off={parameters_off}"
   field_id_item:
     seq:
@@ -336,10 +339,13 @@ types:
     instances:
       class_name:
         value: _root.type_ids[class_idx].type_name
+        doc: the definer of this field
       type_name:
         value: _root.type_ids[type_idx].type_name
+        doc: the type of this field
       field_name:
         value: _root.string_ids[name_idx].value.data
+        doc: the name of this field
     -webide-representation: "class_idx={class_idx} type_idx={type_idx} name_idx={name_idx}"
   method_id_item:
     seq:
