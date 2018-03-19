@@ -366,10 +366,13 @@ types:
     instances:
       class_name:
         value: _root.type_ids[class_idx].type_name
+        doc: the definer of this method
       proto_desc:
         value: _root.proto_ids[proto_idx].shorty_desc
+        doc: the short-form descriptor of the prototype of this method
       method_name:
         value: _root.string_ids[name_idx].value.data
+        doc: the name of this method
     -webide-representation: "class_idx={class_idx} proto_idx={proto_idx} name_idx={name_idx}"
   class_def_item:
     seq:
