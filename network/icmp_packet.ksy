@@ -73,3 +73,5 @@ types:
         type: u2
       - id: seq_num
         type: u2
+      - id: data
+        size-eos: true
