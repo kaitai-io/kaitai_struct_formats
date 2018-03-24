@@ -4,7 +4,7 @@ meta:
   application: SVR4 ABI and up, many *nix systems
   license: CC0-1.0
   ks-version: 0.8
-doc-ref: https://github.com/lattera/glibc/blob/master/elf/elf.h
+doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=HEAD
 seq:
   # e_ident[EI_MAG0]..e[EI_MAG3]
   - id: magic
@@ -45,6 +45,66 @@ seq:
   - id: header
     type: endian_elf
 types:
+  phdr_type_flags:
+    params:
+      - id: value
+        type: u4
+    instances:
+      read:
+        value: value & 0x01 != 0
+      write:
+        value: value & 0x02 != 0
+      execute:
+        value: value & 0x04 != 0
+      mask_proc:
+        value: value & 0xf0000000 != 0
+  section_header_flags:
+    params:
+      - id: value
+        type: u4
+    instances:
+      write:
+        value: value & 0x01 != 0
+        doc: "writable"
+      alloc:
+        value: value & 0x02 != 0
+        doc: "occupies memory during execution"
+      exec_instr:
+        value: value & 0x04 != 0
+        doc: "executable"
+      merge:
+        value: value & 0x10 != 0
+        doc: "might be merged"
+      strings:
+        value: value & 0x20 != 0
+        doc: "contains nul-terminated strings"
+      info_link:
+        value: value & 0x40 != 0
+        doc: "'sh_info' contains SHT index"
+      link_order:
+        value: value & 0x80 != 0
+        doc: "preserve order after combining"
+      os_non_conforming:
+        value: value & 0x100 != 0
+        doc: "non-standard OS specific handling required"
+      group:
+        value: value & 0x200 != 0
+        doc: "section is member of a group"
+      tls:
+        value: value & 0x400 != 0
+        doc: "section hold thread-local data"
+      ordered:
+        value: value & 0x04000000 != 0
+        doc: "special ordering requirement (Solaris)"
+      exclude:
+        value: value & 0x08000000 != 0
+        doc: "section is excluded unless referenced or allocated (Solaris)"
+      mask_os:
+        value: value & 0x0ff00000 != 0
+        doc: "OS-specific"
+      mask_proc:
+        value: value & 0xf0000000 != 0
+        doc: "Processor-specific"
   endian_elf:
     meta:
       endian:
@@ -169,7 +229,10 @@ types:
             type: dynamic_section
             size: filesz
             if: type == ph_type::dynamic
-        -webide-representation: "{type} - {flags64}{flags32} (o:{offset}, s:{filesz:dec})"
+          flags_obj:
+            type: phdr_type_flags(flags64|flags32)
+            -webide-parse-mode: eager
+        -webide-representation: "{type} - f:{flags_obj:flags} (o:{offset}, s:{filesz:dec})"
       # Elf(32|64)_Shdr
       section_header:
         seq:
@@ -239,9 +302,8 @@ types:
             type: strz
             encoding: ASCII
             -webide-parse-mode: eager
-          flags_enum:
-            value: flags
-            enum: section_header_flags
+          flags_obj:
+            type: section_header_flags(flags)
             -webide-parse-mode: eager
           dynamic:
             io: _root._io
@@ -255,7 +317,7 @@ types:
             type: strings_struct
             size: size
             if: type == sh_type::strtab
-        -webide-representation: "{name} ({type}) - {flags_enum} (o:{offset}, s:{size:dec})"
+        -webide-representation: "{name} ({type}) - f:{flags_obj:flags} (o:{offset}, s:{size:dec})"
       strings_struct:
         seq:
           - id: entries
@@ -285,7 +347,6 @@ types:
           tag_enum:
             value: tag
             enum: dynamic_array_tags
-            -webide-parse-mode: eager
         -webide-representation: "{tag_enum}: {value_or_ptr}"
     instances:
       program_headers:
@@ -424,26 +485,6 @@ enums:
 #    0x7fffffff: hiproc
 #    0x80000000: louser
 #    0xffffffff: hiuser
-  phdr_type:
-    1: read
-    2: write
-    4: execute
-    0xf0000000: mask_proc
-  section_header_flags:
-    0x01: write              # writable
-    0x02: alloc              # occupies memory during execution
-    0x04: exec_instr         # executable
-    0x10: merge              # might be merged
-    0x20: strings            # contains nul-terminated strings
-    0x40: info_link          # 'sh_info' contains SHT index
-    0x80: link_order         # preserve order after combining
-    0x100: os_non_conforming # non-standard OS specific handling required
-    0x200: group             # section is member of a group
-    0x400: tls               # section hold thread-local data
-    0x04000000: ordered      # special ordering requirement (Solaris)
-    0x08000000: exclude      # section is excluded unless referenced or allocated (Solaris)
-    #0x0ff00000: mask_os      # OS-specific
-    0xf0000000: mask_proc    # Processor-specific
   dynamic_array_tags:
     0: "null"            # Marks end of dynamic section
     1: needed            # Name of needed library
