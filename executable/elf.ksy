@@ -105,6 +105,88 @@ types:
       mask_proc:
         value: value & 0xf0000000 != 0
         doc: "Processor-specific"
+  dt_flag_1_values:
+    params:
+      - id: value
+        type: u4
+    instances:
+      now:
+        value: value & 0x00000001 != 0
+        doc: "Set RTLD_NOW for this object."
+      global:
+        value: value & 0x00000002 != 0
+        doc: "Set RTLD_GLOBAL for this object."
+      group:
+        value: value & 0x00000004 != 0
+        doc: "Set RTLD_GROUP for this object."
+      nodelete:
+        value: value & 0x00000008 != 0
+        doc: "Set RTLD_NODELETE for this object."
+      loadfltr:
+        value: value & 0x00000010 != 0
+        doc: "Trigger filtee loading at runtime."
+      initfirst:
+        value: value & 0x00000020 != 0
+        doc: "Set RTLD_INITFIRST for this object"
+      noopen:
+        value: value & 0x00000040 != 0
+        doc: "Set RTLD_NOOPEN for this object."
+      origin:
+        value: value & 0x00000080 != 0
+        doc: "$ORIGIN must be handled."
+      direct:
+        value: value & 0x00000100 != 0
+        doc: "Direct binding enabled."
+      trans:
+        value: value & 0x00000200 != 0
+      interpose:
+        value: value & 0x00000400 != 0
+        doc: "Object is used to interpose."
+      nodeflib:
+        value: value & 0x00000800 != 0
+        doc: "Ignore default lib search path."
+      nodump:
+        value: value & 0x00001000 != 0
+        doc: "Object can't be dldump'ed."
+      confalt:
+        value: value & 0x00002000 != 0
+        doc: "Configuration alternative created."
+      endfiltee:
+        value: value & 0x00004000 != 0
+        doc: "Filtee terminates filters search."
+      dispreldne:
+        value: value & 0x00008000 != 0
+        doc: "Disp reloc applied at build time."
+      disprelpnd:
+        value: value & 0x00010000 != 0
+        doc: "Disp reloc applied at run-time."
+      nodirect:
+        value: value & 0x00020000 != 0
+        doc: "Object has no-direct binding."
+      ignmuldef:
+        value: value & 0x00040000 != 0
+      noksyms:
+        value: value & 0x00080000 != 0
+      nohdr:
+        value: value & 0x00100000 != 0
+      edited:
+        value: value & 0x00200000 != 0
+        doc: "Object is modified after built."
+      noreloc:
+        value: value & 0x00400000 != 0
+      symintpose:
+        value: value & 0x00800000 != 0
+        doc: "Object has individual interposers."
+      globaudit:
+        value: value & 0x01000000 != 0
+        doc: "Global auditing required."
+      singleton:
+        value: value & 0x02000000 != 0
+        doc: "Singleton symbols are used."
+      stub:
+        value: value & 0x04000000 != 0
+      pie:
+        value: value & 0x08000000 != 0
   endian_elf:
     meta:
       endian:
@@ -346,7 +428,11 @@ types:
           tag_enum:
             value: tag
             enum: dynamic_array_tags
-        -webide-representation: "{tag_enum}: {value_or_ptr}"
+          flag_1_values:
+            type: dt_flag_1_values(value_or_ptr)
+            if: "tag_enum == dynamic_array_tags::flags_1"
+            -webide-parse-mode: eager
+        -webide-representation: "{tag_enum}: {value_or_ptr} {flag_1_values:flags}"
     instances:
       program_headers:
         pos: program_header_offset
