@@ -174,7 +174,6 @@ types:
           # p_flags
           - id: flags64
             type: u4
-            enum: phdr_type
             if: _root.bits == bits::b64
           # p_offset
           - id: offset
