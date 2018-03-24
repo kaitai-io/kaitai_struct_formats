@@ -51,11 +51,11 @@ types:
         type: u4
     instances:
       read:
-        value: value & 0x01 != 0
+        value: value & 0x04 != 0
       write:
         value: value & 0x02 != 0
       execute:
-        value: value & 0x04 != 0
+        value: value & 0x01 != 0
       mask_proc:
         value: value & 0xf0000000 != 0
   section_header_flags:
