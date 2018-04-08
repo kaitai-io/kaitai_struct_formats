@@ -160,6 +160,7 @@ types:
               cases:
                 'bits::b32': u4
                 'bits::b64': u8
+        -webide-representation: "{type}"
       # Elf(32|64)_Shdr
       section_header:
         seq:
@@ -228,6 +229,8 @@ types:
             pos: name_offset
             type: strz
             encoding: ASCII
+            -webide-parse-mode: eager
+        -webide-representation: "{name}"
       strings_struct:
         seq:
           - id: entries

@@ -5,6 +5,8 @@ meta:
   license: CC-BY-SA-3.0
   # Portions of this page are reproduced from work created and shared by Google and used
   # according to terms described in the Creative Commons 3.0 Attribution License.
+  imports:
+    - /common/vlq_base128_le
 doc-ref: https://source.android.com/devices/tech/dalvik/dex-format
 seq:
   - id: header
@@ -126,62 +128,14 @@ instances:
     type: map_list
     pos: header.map_off
 types:
-  uleb128:
-    seq:
-      - id: b1
-        type: u1
-      - id: b2
-        type: u1
-        if: "b1 & 0x80 != 0"
-      - id: b3
-        type: u1
-        if: "b2 & 0x80 != 0"
-      - id: b4
-        type: u1
-        if: "b3 & 0x80 != 0"
-      - id: b5
-        type: u1
-        if: "b4 & 0x80 != 0"
-      - id: b6
-        type: u1
-        if: "b5 & 0x80 != 0"
-      - id: b7
-        type: u1
-        if: "b6 & 0x80 != 0"
-      - id: b8
-        type: u1
-        if: "b7 & 0x80 != 0"
-      - id: b9
-        type: u1
-        if: "b8 & 0x80 != 0"
-      - id: b10
-        type: u1
-        if: "b9 & 0x80 != 0"
-    instances:
-      value:
-        value: >
-          ((b1  % 128) <<  0) + ((b1 & 0x80 == 0) ? 0 :
-          ((b2  % 128) <<  7) + ((b2 & 0x80 == 0) ? 0 :
-          ((b3  % 128) << 14) + ((b3 & 0x80 == 0) ? 0 :
-          ((b4  % 128) << 21) + ((b4 & 0x80 == 0) ? 0 :
-          ((b5  % 128) << 28) + ((b5 & 0x80 == 0) ? 0 :
-          ((b6  % 128) << 35) + ((b6 & 0x80 == 0) ? 0 :
-          ((b7  % 128) << 42) + ((b7 & 0x80 == 0) ? 0 :
-          ((b8  % 128) << 49) + ((b8 & 0x80 == 0) ? 0 :
-          ((b9  % 128) << 56) + ((b8 & 0x80 == 0) ? 0 :
-          ((b10 % 128) << 63))))))))))
-        -webide-parse-mode: eager
-    -webide-representation: "{value:dec}"   
   header_item: 
     seq:
       - id: magic
         contents: "dex\n"
       - id: version_str
-        size: 3
-        type: str
+        size: 4
+        type: strz
         encoding: ascii
-      - id: magic2
-        contents: "\0"
       - id: checksum
         type: u4
         doc: >
@@ -308,7 +262,7 @@ types:
       string_data_item:
         seq:
           - id: utf16_size
-            type: uleb128
+            type: vlq_base128_le
           - id: data
             size: utf16_size.value
             type: str
@@ -352,6 +306,19 @@ types:
           This offset, if non-zero, should be in the data section, and the data
           there should be in the format specified by "type_list" below.
           Additionally, there should be no reference to the type void in the list.
+    instances:
+      shorty_desc:
+        value: _root.string_ids[shorty_idx].value.data
+        doc: short-form descriptor string of this prototype, as pointed to by shorty_idx
+      params_types:
+        io: _root._io
+        pos: parameters_off
+        type: type_list
+        if: parameters_off != 0
+        doc: list of parameter types for this prototype
+      return_type:
+        value: _root.type_ids[return_type_idx].type_name
+        doc: return type of this prototype
     -webide-representation: "shorty_idx={shorty_idx} return_type_idx={return_type_idx} parameters_off={parameters_off}"
   field_id_item:
     seq:
@@ -369,6 +336,16 @@ types:
         doc: >
           index into the string_ids list for the name of this field.
           The string must conform to the syntax for MemberName, defined above.
+    instances:
+      class_name:
+        value: _root.type_ids[class_idx].type_name
+        doc: the definer of this field
+      type_name:
+        value: _root.type_ids[type_idx].type_name
+        doc: the type of this field
+      field_name:
+        value: _root.string_ids[name_idx].value.data
+        doc: the name of this field
     -webide-representation: "class_idx={class_idx} type_idx={type_idx} name_idx={name_idx}"
   method_id_item:
     seq:
@@ -386,6 +363,16 @@ types:
         doc: >
           index into the string_ids list for the name of this method.
           The string must conform to the syntax for MemberName, defined above.
+    instances:
+      class_name:
+        value: _root.type_ids[class_idx].type_name
+        doc: the definer of this method
+      proto_desc:
+        value: _root.proto_ids[proto_idx].shorty_desc
+        doc: the short-form descriptor of the prototype of this method
+      method_name:
+        value: _root.string_ids[name_idx].value.data
+        doc: the name of this method
     -webide-representation: "class_idx={class_idx} proto_idx={proto_idx} name_idx={name_idx}"
   class_def_item:
     seq:
@@ -487,7 +474,7 @@ types:
   annotation_element:
     seq:
       - id: name_idx
-        type: uleb128
+        type: vlq_base128_le
         doc: >
           element name, represented as an index into the string_ids section.
           
@@ -499,13 +486,13 @@ types:
   encoded_annotation:
     seq:
       - id: type_idx
-        type: uleb128
+        type: vlq_base128_le
         doc: >
           type of the annotation.
           
           This must be a class (not array or primitive) type.
       - id: size
-        type: uleb128
+        type: vlq_base128_le
         doc: >
           number of name-value mappings in this annotation
       - id: elements
@@ -568,7 +555,7 @@ types:
   encoded_array:
     seq:
       - id: size
-        type: uleb128
+        type: vlq_base128_le
       - id: values
         type: encoded_value
         repeat: expr
@@ -585,7 +572,7 @@ types:
   encoded_field:
     seq:
       - id: field_idx_diff
-        type: uleb128
+        type: vlq_base128_le
         doc: >
           index into the field_ids list for the identity of this field
           (includes the name and descriptor), represented as a difference
@@ -593,7 +580,7 @@ types:
           
           The index of the first element in a list is represented directly.
       - id: access_flags
-        type: uleb128
+        type: vlq_base128_le
         doc: >
           access flags for the field (public, final, etc.).
           
@@ -601,7 +588,7 @@ types:
   encoded_method:
     seq:
       - id: method_idx_diff
-        type: uleb128
+        type: vlq_base128_le
         doc: >
           index into the method_ids list for the identity of this method
           (includes the name and descriptor), represented as a difference
@@ -609,13 +596,13 @@ types:
           
           The index of the first element in a list is represented directly.
       - id: access_flags
-        type: uleb128
+        type: vlq_base128_le
         doc: >
           access flags for the field (public, final, etc.).
           
           See "access_flags Definitions" for details.
       - id: code_off
-        type: uleb128
+        type: vlq_base128_le
         doc: >
           offset from the start of the file to the code structure for this method,
           or 0 if this method is either abstract or native.
@@ -626,19 +613,19 @@ types:
   class_data_item:
     seq:
       - id: static_fields_size
-        type: uleb128
+        type: vlq_base128_le
         doc: >
           the number of static fields defined in this item
       - id: instance_fields_size
-        type: uleb128
+        type: vlq_base128_le
         doc: >
           the number of instance fields defined in this item
       - id: direct_methods_size
-        type: uleb128
+        type: vlq_base128_le
         doc: >
           the number of direct methods defined in this item
       - id: virtual_methods_size
-        type: uleb128
+        type: vlq_base128_le
         doc: >
           the number of virtual methods defined in this item
       - id: static_fields
@@ -728,6 +715,21 @@ types:
         type: u4
       - id: list
         type: map_item
+        repeat: expr
+        repeat-expr: size
+  type_item:
+    seq:
+      - id: type_idx
+        type: u2
+    instances:
+      value:
+        value: _root.type_ids[type_idx].type_name
+  type_list:
+    seq:
+      - id: size
+        type: u4
+      - id: list
+        type: type_item
         repeat: expr
         repeat-expr: size
 enums:

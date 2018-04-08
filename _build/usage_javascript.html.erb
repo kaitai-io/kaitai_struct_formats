@@ -1,0 +1,11 @@
+<% class_name = ucc(file_id) %>
+<p>See the usage examples in the <a href="http://doc.kaitai.io/lang_javascript.html" target="_blank">JavaScript notes</a>.</p>
+
+<p>Parse structure from an ArrayBuffer:</p>
+
+<pre><code class="javascript">var arrayBuffer = ...;
+var data = new <%= class_name %>(new KaitaiStream(arrayBuffer));</code></pre>
+
+<p>After that, one can get various attributes from the structure by accessing fields or properties like:</p>
+
+<pre><code class="javascript"><% usage_attrs.each { |attr| %>data.<%= lcc(attr[:name]) %> // => <%= attr[:doc] %><% } %></code></pre>
