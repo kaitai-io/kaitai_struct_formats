@@ -33,6 +33,7 @@ jobs:
       - run:
           name: Build HTML
           command: |
+            locale
             cd _build
             ./build
       - run:
