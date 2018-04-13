@@ -520,6 +520,7 @@ enums:
     0x65041580: pax_flags
     0x6fffffff: hios
 #    0x70000000: loproc
+    0x70000001: arm_exidx
 #    0x7fffffff: hiproc
     0x6474e550: gnu_eh_frame
     0x6474e551: gnu_stack
@@ -567,6 +568,9 @@ enums:
 #    0x70000000: loproc
     0x70000000: sparc_gotdata
     0x70000001: amd64_unwind
+    0x70000001: arm_exidx
+    0x70000002: arm_preemptmap
+    0x70000003: arm_attributes
 #    0x7fffffff: hiproc
 #    0x80000000: louser
 #    0xffffffff: hiuser
