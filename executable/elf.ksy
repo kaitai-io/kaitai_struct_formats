@@ -4,6 +4,7 @@ meta:
   application: SVR4 ABI and up, many *nix systems
   license: CC0-1.0
   ks-version: 0.8
+doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=HEAD
 seq:
   # e_ident[EI_MAG0]..e[EI_MAG3]
   - id: magic
@@ -44,6 +45,148 @@ seq:
   - id: header
     type: endian_elf
 types:
+  phdr_type_flags:
+    params:
+      - id: value
+        type: u4
+    instances:
+      read:
+        value: value & 0x04 != 0
+      write:
+        value: value & 0x02 != 0
+      execute:
+        value: value & 0x01 != 0
+      mask_proc:
+        value: value & 0xf0000000 != 0
+  section_header_flags:
+    params:
+      - id: value
+        type: u4
+    instances:
+      write:
+        value: value & 0x01 != 0
+        doc: "writable"
+      alloc:
+        value: value & 0x02 != 0
+        doc: "occupies memory during execution"
+      exec_instr:
+        value: value & 0x04 != 0
+        doc: "executable"
+      merge:
+        value: value & 0x10 != 0
+        doc: "might be merged"
+      strings:
+        value: value & 0x20 != 0
+        doc: "contains nul-terminated strings"
+      info_link:
+        value: value & 0x40 != 0
+        doc: "'sh_info' contains SHT index"
+      link_order:
+        value: value & 0x80 != 0
+        doc: "preserve order after combining"
+      os_non_conforming:
+        value: value & 0x100 != 0
+        doc: "non-standard OS specific handling required"
+      group:
+        value: value & 0x200 != 0
+        doc: "section is member of a group"
+      tls:
+        value: value & 0x400 != 0
+        doc: "section hold thread-local data"
+      ordered:
+        value: value & 0x04000000 != 0
+        doc: "special ordering requirement (Solaris)"
+      exclude:
+        value: value & 0x08000000 != 0
+        doc: "section is excluded unless referenced or allocated (Solaris)"
+      mask_os:
+        value: value & 0x0ff00000 != 0
+        doc: "OS-specific"
+      mask_proc:
+        value: value & 0xf0000000 != 0
+        doc: "Processor-specific"
+  dt_flag_1_values:
+    params:
+      - id: value
+        type: u4
+    instances:
+      now:
+        value: value & 0x00000001 != 0
+        doc: "Set RTLD_NOW for this object."
+      rtld_global:
+        value: value & 0x00000002 != 0
+        doc: "Set RTLD_GLOBAL for this object."
+      group:
+        value: value & 0x00000004 != 0
+        doc: "Set RTLD_GROUP for this object."
+      nodelete:
+        value: value & 0x00000008 != 0
+        doc: "Set RTLD_NODELETE for this object."
+      loadfltr:
+        value: value & 0x00000010 != 0
+        doc: "Trigger filtee loading at runtime."
+      initfirst:
+        value: value & 0x00000020 != 0
+        doc: "Set RTLD_INITFIRST for this object"
+      noopen:
+        value: value & 0x00000040 != 0
+        doc: "Set RTLD_NOOPEN for this object."
+      origin:
+        value: value & 0x00000080 != 0
+        doc: "$ORIGIN must be handled."
+      direct:
+        value: value & 0x00000100 != 0
+        doc: "Direct binding enabled."
+      trans:
+        value: value & 0x00000200 != 0
+      interpose:
+        value: value & 0x00000400 != 0
+        doc: "Object is used to interpose."
+      nodeflib:
+        value: value & 0x00000800 != 0
+        doc: "Ignore default lib search path."
+      nodump:
+        value: value & 0x00001000 != 0
+        doc: "Object can't be dldump'ed."
+      confalt:
+        value: value & 0x00002000 != 0
+        doc: "Configuration alternative created."
+      endfiltee:
+        value: value & 0x00004000 != 0
+        doc: "Filtee terminates filters search."
+      dispreldne:
+        value: value & 0x00008000 != 0
+        doc: "Disp reloc applied at build time."
+      disprelpnd:
+        value: value & 0x00010000 != 0
+        doc: "Disp reloc applied at run-time."
+      nodirect:
+        value: value & 0x00020000 != 0
+        doc: "Object has no-direct binding."
+      ignmuldef:
+        value: value & 0x00040000 != 0
+      noksyms:
+        value: value & 0x00080000 != 0
+      nohdr:
+        value: value & 0x00100000 != 0
+      edited:
+        value: value & 0x00200000 != 0
+        doc: "Object is modified after built."
+      noreloc:
+        value: value & 0x00400000 != 0
+      symintpose:
+        value: value & 0x00800000 != 0
+        doc: "Object has individual interposers."
+      globaudit:
+        value: value & 0x01000000 != 0
+        doc: "Global auditing required."
+      singleton:
+        value: value & 0x02000000 != 0
+        doc: "Singleton symbols are used."
+      stub:
+        value: value & 0x04000000 != 0
+      pie:
+        value: value & 0x08000000 != 0
   endian_elf:
     meta:
       endian:
@@ -160,7 +303,17 @@ types:
               cases:
                 'bits::b32': u4
                 'bits::b64': u8
-        -webide-representation: "{type}"
+        instances:
+          dynamic:
+            io: _root._io
+            pos: offset
+            type: dynamic_section
+            size: filesz
+            if: type == ph_type::dynamic
+          flags_obj:
+            type: phdr_type_flags(flags64|flags32)
+            -webide-parse-mode: eager
+        -webide-representation: "{type} - f:{flags_obj:flags} (o:{offset}, s:{filesz:dec})"
       # Elf(32|64)_Shdr
       section_header:
         seq:
@@ -230,13 +383,56 @@ types:
             type: strz
             encoding: ASCII
             -webide-parse-mode: eager
-        -webide-representation: "{name}"
+          flags_obj:
+            type: section_header_flags(flags)
+            -webide-parse-mode: eager
+          dynamic:
+            io: _root._io
+            pos: offset
+            type: dynamic_section
+            size: size
+            if: type == sh_type::dynamic
+          strtab:
+            io: _root._io
+            pos: offset
+            type: strings_struct
+            size: size
+            if: type == sh_type::strtab
+        -webide-representation: "{name} ({type}) - f:{flags_obj:flags} (o:{offset}, s:{size:dec})"
       strings_struct:
         seq:
           - id: entries
             type: strz
             repeat: eos
             encoding: ASCII
+      dynamic_section:
+        seq:
+          - id: entries
+            type: dynamic_section_entry
+            repeat: eos
+      dynamic_section_entry:
+        seq:
+          - id: tag
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': u4
+                'bits::b64': u8
+          - id: value_or_ptr
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': u4
+                'bits::b64': u8
+        instances:
+          tag_enum:
+            value: tag
+            enum: dynamic_array_tags
+          flag_1_values:
+            type: dt_flag_1_values(value_or_ptr)
+            if: "tag_enum == dynamic_array_tags::flags_1"
+            -webide-parse-mode: eager
+        -webide-representation: "{tag_enum}: {value_or_ptr} {flag_1_values:flags}"
     instances:
       program_headers:
         pos: program_header_offset
@@ -374,3 +570,99 @@ enums:
 #    0x7fffffff: hiproc
 #    0x80000000: louser
 #    0xffffffff: hiuser
+  dynamic_array_tags:
+    0: "null"            # Marks end of dynamic section
+    1: needed            # Name of needed library
+    2: pltrelsz          # Size in bytes of PLT relocs
+    3: pltgot            # Processor defined value
+    4: hash              # Address of symbol hash table
+    5: strtab            # Address of string table
+    6: symtab            # Address of symbol table
+    7: rela              # Address of Rela relocs
+    8: relasz            # Total size of Rela relocs
+    9: relaent           # Size of one Rela reloc
+    10: strsz            # Size of string table
+    11: syment           # Size of one symbol table entry
+    12: init             # Address of init function
+    13: fini             # Address of termination function
+    14: soname           # Name of shared object
+    15: rpath            # Library search path (deprecated)
+    16: symbolic         # Start symbol search here
+    17: rel              # Address of Rel relocs
+    18: relsz            # Total size of Rel relocs
+    19: relent           # Size of one Rel reloc
+    20: pltrel           # Type of reloc in PLT
+    21: debug            # For debugging; unspecified
+    22: textrel          # Reloc might modify .text
+    23: jmprel           # Address of PLT relocs
+    24: bind_now         # Process relocations of object
+    25: init_array       # Array with addresses of init fct
+    26: fini_array       # Array with addresses of fini fct
+    27: init_arraysz     # Size in bytes of DT_INIT_ARRAY
+    28: fini_arraysz     # Size in bytes of DT_FINI_ARRAY
+    29: runpath          # Library search path
+    30: flags            # Flags for the object being loaded
+    32: encoding         # Start of encoded range
+    32: preinit_array    # Array with addresses of preinit fct
+    33: preinit_arraysz  # Size in bytes of DT_PREINIT_ARRAY
+    34: maxpostags       # Number used
+    0x6000000d: loos
+    0x6000000d: sunw_auxiliary
+    0x6000000e: sunw_rtldinf
+    0x6000000e: sunw_filter
+    0x60000010: sunw_cap
+    0x60000011: sunw_symtab
+    0x60000012: sunw_symsz
+    0x60000013: sunw_encoding
+    0x60000013: sunw_sortent
+    0x60000014: sunw_symsort
+    0x60000015: sunw_symsortsz
+    0x60000016: sunw_tlssort
+    0x60000017: sunw_tlssortsz
+    0x60000018: sunw_capinfo
+    0x60000019: sunw_strpad
+    0x6000001a: sunw_capchain
+    0x6000001b: sunw_ldmach
+    0x6000001d: sunw_capchainent
+    0x6000001f: sunw_capchainsz
+    0x6ffff000: hios
+    0x6ffffd00: valrnglo
+    0x6ffffdf5: gnu_prelinked   # Prelinking timestamp
+    0x6ffffdf6: gnu_conflictsz  # Size of conflict section
+    0x6ffffdf7: gnu_liblistsz   # Size of library list
+    0x6ffffdf8: checksum        
+    0x6ffffdf9: pltpadsz        
+    0x6ffffdfa: moveent         
+    0x6ffffdfb: movesz          
+    0x6ffffdfc: feature_1       # Feature selection (DTF_*).
+    0x6ffffdfd: posflag_1       # Flags for DT_* entries, effecting the following DT_* entry.
+    0x6ffffdfe: syminsz         # Size of syminfo table (in bytes)
+    0x6ffffdff: syminent        # Entry size of syminfo
+    0x6ffffdff: valrnghi
+    0x6ffffe00: addrrnglo
+    0x6ffffef5: gnu_hash
+    0x6ffffef6: tlsdesc_plt
+    0x6ffffef7: tlsdesc_got
+    0x6ffffef8: gnu_conflict
+    0x6ffffef9: gnu_liblist
+    0x6ffffefa: config
+    0x6ffffefb: depaudit
+    0x6ffffefc: audit
+    0x6ffffefd: pltpad
+    0x6ffffefe: movetab
+    0x6ffffeff: syminfo
+    0x6ffffeff: addrrnghi
+    0x6ffffff0: versym
+    0x6ffffff9: relacount
+    0x6ffffffa: relcount
+    0x6ffffffb: flags_1
+    0x6ffffffc: verdef
+    0x6ffffffd: verdefnum
+    0x6ffffffe: verneed
+    0x6fffffff: verneednum
+    0x70000000: loproc
+    0x70000001: sparc_register
+    0x7ffffffd: auxiliary
+    0x7ffffffe: used
+    0x7fffffff: filter
+    0x7fffffff: hiproc
