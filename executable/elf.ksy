@@ -398,6 +398,18 @@ types:
             type: strings_struct
             size: size
             if: type == sh_type::strtab
+          dynsym:
+            io: _root._io
+            pos: offset
+            type: dynsym_section
+            size: size
+            if: type == sh_type::dynsym
+          dynstr:
+            io: _root._io
+            pos: offset
+            type: strings_struct
+            size: size
+            if: type == sh_type::dynstr
         -webide-representation: "{name} ({type}) - f:{flags_obj:flags} (o:{offset}, s:{size:dec})"
       strings_struct:
         seq:
@@ -433,6 +445,43 @@ types:
             if: "tag_enum == dynamic_array_tags::flags_1"
             -webide-parse-mode: eager
         -webide-representation: "{tag_enum}: {value_or_ptr} {flag_1_values:flags}"
+      dynsym_section:
+        seq:
+          - id: entries
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': dynsym_section_entry32
+                'bits::b64': dynsym_section_entry64
+            repeat: eos
+      dynsym_section_entry32:
+        seq:
+          - id: name_offset
+            type: u4
+          - id: value
+            type: u4
+          - id: size
+            type: u4
+          - id: info
+            type: u1
+          - id: other
+            type: u1
+          - id: shndx
+            type: u2
+      dynsym_section_entry64:
+        seq:
+          - id: name_offset
+            type: u4
+          - id: info
+            type: u1
+          - id: other
+            type: u1
+          - id: shndx
+            type: u2
+          - id: value
+            type: u8
+          - id: size
+            type: u8
     instances:
       program_headers:
         pos: program_header_offset
