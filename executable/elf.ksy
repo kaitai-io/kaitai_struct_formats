@@ -113,7 +113,7 @@ types:
       now:
         value: value & 0x00000001 != 0
         doc: "Set RTLD_NOW for this object."
-      global:
+      rtld_global:
         value: value & 0x00000002 != 0
         doc: "Set RTLD_GLOBAL for this object."
       group:
