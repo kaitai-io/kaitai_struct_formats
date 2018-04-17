@@ -78,6 +78,7 @@ types:
         0x1d3: am33
         0x8664: amd64
         0x1c0: arm
+        0xaa64: arm64
         0x1c4: armnt
         0xebc: ebc
         0x14c: i386
@@ -98,6 +99,8 @@ types:
         0x1a8: sh5
         0x1c2: thumb
         0x169: wcemipsv2
+        # Not mentioned in Microsoft documentation, but widely regarded
+        0x184: alpha
   coff_symbol:
     seq:
       - id: name_annoying
