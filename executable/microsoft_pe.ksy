@@ -137,7 +137,7 @@ types:
         type: u4
       name_from_offset:
         io: _root._io
-        pos: name_zeroes == 0 ? _parent._parent.symbol_name_table_offset + name_offset : 0
+        pos: 'name_zeroes == 0 ? _parent._parent.symbol_name_table_offset + name_offset : 0'
         type: str
         terminator: 0
         encoding: ascii
@@ -149,7 +149,7 @@ types:
         encoding: ascii
         eos-error: false
       name:
-        value: name_zeroes == 0 ? name_from_offset : name_from_short
+        value: 'name_zeroes == 0 ? name_from_offset : name_from_short'
   optional_header:
     seq:
       - id: std
