@@ -6,21 +6,12 @@ meta:
   ks-version: 0.7
 doc-ref: http://www.microsoft.com/whdc/system/platform/firmware/PECOFF.mspx
 seq:
-  - id: mz1
+  - id: mz
     type: mz_placeholder
-  - id: mz2
-    size: mz1.header_size - 0x40
-  - id: pe_signature
-    contents: ["PE", 0, 0]
-  - id: coff_hdr
-    type: coff_header
-  - id: optional_hdr
-    type: optional_header
-    size: coff_hdr.size_of_optional_header
-  - id: sections
-    repeat: expr
-    repeat-expr: coff_hdr.number_of_sections
-    type: section
+instances:
+  pe:
+    pos: mz.ofs_pe
+    type: pe_header
 enums:
   pe_format:
     0x107: rom_image
@@ -33,8 +24,22 @@ types:
         contents: "MZ"
       - id: data1
         size: 0x3a
-      - id: header_size
+      - id: ofs_pe
         type: u4
+        doc: In PE file, an offset to PE header
+  pe_header:
+    seq:
+      - id: pe_signature
+        contents: ["PE", 0, 0]
+      - id: coff_hdr
+        type: coff_header
+      - id: optional_hdr
+        type: optional_header
+        size: coff_hdr.size_of_optional_header
+      - id: sections
+        repeat: expr
+        repeat-expr: coff_hdr.number_of_sections
+        type: section
   coff_header:
     doc-ref: 3.3. COFF File Header (Object and Image)
     seq:
@@ -122,7 +127,7 @@ types:
       #  terminator: 0
       #  encoding: ascii
       section:
-        value: _root.sections[section_number-1]
+        value: _root.pe.sections[section_number - 1]
       data:
         pos: section.pointer_to_raw_data + value
         size: 1
