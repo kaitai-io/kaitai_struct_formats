@@ -10,6 +10,9 @@ meta:
   file-extension: mdt
   license: GPL-3.0+
   endian: le
+  imports:
+    - /common/ieee754_float/f10le
+    - ./nt_mdt_color_table
 doc: |
   A native file format of NT-MDT scientific software. Usually contains
   any of:
@@ -31,18 +34,22 @@ seq:
     doc: File size (w/o header)
   - id: reserved0
     size: 4
-  - id: last_frame
+  - id: last_frame_index
     type: u2
   - id: reserved1
     size: 18
-  - id: wrond_doc
+  - id: wrong_doc
     size: 1
     doc: "documentation specifies 32 bytes long header, but zeroth frame starts at 33th byte in reality"
   - id: frames
     size: size
     type: framez
 types:
-  uuid:
+  placeholder:
+    doc: needed only to have _io
+    seq:
+      - size-eos: true
+  uuid: # a temporary solution
     seq:
       - id: data
         type: u1
@@ -53,7 +60,7 @@ types:
       - id: frames
         type: frame
         repeat: expr
-        repeat-expr: '_root.last_frame+1'
+        repeat-expr: '_root.last_frame_index+1'
   title:
     seq:
       - id: title_len
@@ -76,6 +83,45 @@ types:
         type: u1
       - id: major
         type: u1
+  scalar:
+    params:
+      - id: type
+        type: s4
+        enum: data_type
+    seq:
+      - id: value
+        type:
+          switch-on: type
+          cases: 
+            "data_type::uint8": u1
+            "data_type::uint16": u2
+            "data_type::uint32": u4
+            "data_type::uint64": u8
+            "data_type::int8": s1
+            "data_type::int16": s2
+            "data_type::int32": s4
+            "data_type::int64": s8
+            "data_type::float32": f4
+            "data_type::float64": f8
+            #"data_type::float48": s8
+            #"data_type::float80": f10le # doesn't work because of KaitaiStruct type system limitations
+            #"data_type::floatfix": s8
+            #enums are not properly passed
+  vec2_u2:
+    doc: usually sizes of the image
+    seq:
+      - id: value
+        type: u2
+        -orig-id: fm_xres, fm_yres, xres, yres
+        repeat: expr
+        repeat-expr: 2
+    instances:
+      x:
+        -orig-id: fm_xres, xres
+        value: value[0]
+      y:
+        -orig-id: fm_yres, yres
+        value: value[1]
   frame:
     seq:
       - id: size
@@ -89,8 +135,8 @@ types:
         0: scanned
         1: spectroscopy
         3: text
-        105: old_mda
-        106: mda
+        105: old_metadata
+        106: metadata
         107: palette
         190: curves_new
         201: curves
@@ -118,10 +164,12 @@ types:
               - id: hour
                 type: u2
                 doc: "h_h"
-              - id: min
+              - id: minute
+                -orig-id: min
                 type: u2
                 doc: "h_m"
-              - id: sec
+              - id: second
+                -orig-id: sec
                 type: u2
                 doc: "h_s"
       frame_main:
@@ -143,503 +191,733 @@ types:
             type:
               switch-on: type
               cases:
-                'frame_type::scanned': fd_scanned
-                'frame_type::mda': fd_meta_data
-                'frame_type::spectroscopy': fd_spectroscopy
-                'frame_type::curves': fd_spectroscopy
-                'frame_type::curves_new': fd_curves_new
+                'frame_type::scanned': scanned
+                'frame_type::metadata': meta_data
+                'frame_type::spectroscopy': scanned
+                'frame_type::curves': scanned
+                'frame_type::curves_new': curves_new
+                'frame_type::text': text
             doc: ""
-      dots:
-        seq:
-          - id: fm_ndots
-            type: u2
-          - id: coord_header
-            -orig-id: coordheader
-            type: dots_header
-            if: fm_ndots > 0
-          - id: coordinates
-            type: dots_data
-            repeat: expr
-            repeat-expr: fm_ndots
-          - id: data
-            type: data_linez(_index)
-            repeat: expr
-            repeat-expr: fm_ndots
         types:
-          dots_header:
+          curves_new:
             seq:
-              - id: header_size
-                -orig-id: headersize
-                type: s4
-              - id: header
-                size: header_size
-                type: header_
+              - id: block_count
+                type: u4
+              - id: blocks_headers
+                type: block_descr
+                repeat: expr
+                repeat-expr: block_count
+              - id: blocks_names
+                type: str
+                encoding: UTF-8
+                size: blocks_headers[_index].name_len
+                repeat: expr
+                repeat-expr: block_count
+              - id: blocks_data
+                size: blocks_headers[_index].len
+                repeat: expr
+                repeat-expr: block_count
             types:
-              header_:
+              block_descr:
                 seq:
-                  - id: coord_size
-                    -orig-id: coordsize
-                    type: s4
-                  - id: version
-                    type: s4
-                  - id: xyunits
+                  - id: name_len
+                    type: u4
+                  - id: len
+                    type: u4
+          meta_data:
+            seq:
+              - id: head_size
+                type: u4
+              - id: header
+                type: header
+                size: head_size-4
+              - id: title
+                type: str
+                size: header.name_size
+                encoding: UTF-8
+              - id: xml
+                type: str
+                size: header.comm_size
+                encoding: UTF-8
+              - id: frame_spec
+                size: header.spec_size
+                type: frame_spec
+                if: header.spec_size != 0
+              - id: view_info
+                size: header.view_info_size
+              - id: source_info
+                size: header.source_info_size
+              - id: total_size
+                type: u4
+              - id: calibrations
+                type: calibrations
+            instances:
+              data:
+                io: _root._io
+                pos: header.data_offset
+                type: data
+                size: header.data_size
+            types:
+              header:
+                seq:
+                  - id: tot_len
+                    type: u4
+                  - id: guids
+                    type: uuid
+                    repeat: expr
+                    repeat-expr: 2
+                  - id: frame_status
+                    size: 4
+                  - id: name_size
+                    type: u4
+                  - id: comm_size
+                    type: u4
+                  - id: view_info_size
+                    type: u4
+                  - id: spec_size
+                    type: u4
+                  - id: source_info_size
+                    type: u4
+                  - id: var_size
+                    type: u4
+                  - id: data_offset
+                    type: u4
+                  - id: data_size
+                    type: u4
+              calibrations:
+                seq:
+                  - id: header_len
+                    type: u4
+                  - id: header
+                    size: header_len
+                    type: header
+                  - id: dimensions
+                    type: calibration
+                    repeat: expr
+                    repeat-expr: header.n_dimensions
+                  - id: mesurands
+                    type: calibration
+                    repeat: expr
+                    repeat-expr: header.n_mesurands
+                # instances:
+                  # sizes_product_internal:
+                    # pos: 0
+                    # size: 0
+                    # type: sizes_product
+                  # sizes_product:
+                    # value: sizes_product_internal.internal.value
+                types:
+                  header:
+                    seq:
+                      - id: array_size
+                        type: u8
+                      - id: cell_size
+                        type: u4
+                      - id: n_dimensions
+                        type: u4
+                      - id: n_mesurands
+                        type: u4
+                  calibration:
+                    seq:
+                      - id: len_tot
+                        type: u4
+                      - id: internal
+                        type: calibration_internal
+                    types:
+                      calibration_internal:
+                        seq:
+                          - id: len_header
+                            type: u4
+                          - id: header
+                            size: len_header
+                            type: header
+                          - id: name
+                            type: str
+                            encoding: utf-8
+                            size: header.len_name
+                          - id: comment
+                            type: str
+                            encoding: utf-8
+                            size: header.len_comment
+                          - id: unit
+                            type: str
+                            encoding: cp1251
+                            size: header.len_unit
+                          - id: author
+                            type: str
+                            encoding: utf-8
+                            size: header.len_author
+                        types:
+                          header:
+                            seq:
+                              - id: len_name
+                                type: u4
+                              - id: len_comment
+                                type: u4
+                              - id: len_unit
+                                type: u4
+                              - id: unit_si_code #?
+                                type: u8
+                                enum: unit_si_code
+                              - id: accuracy
+                                type: f8
+                              - id: function_id_and_dimensions
+                                type: u8
+                              - id: bias
+                                type: f8
+                              - id: scale
+                                type: f8
+                              - id: min_index_placeholder
+                                type: placeholder
+                                size: 8
+                              - id: max_index_placeholder
+                                type: placeholder
+                                size: 8
+                              - id: data_type
+                                type: s4
+                                enum: data_type
+                              - id: len_author
+                                type: u4
+                              - id: garbage
+                                size-eos: true
+                                doc: Garbage from memory!
+                            instances:
+                              min_index:
+                                pos: 0
+                                io: min_index_placeholder._io
+                                type: scalar(data_type)
+                              max_index:
+                                pos: 0
+                                io: max_index_placeholder._io
+                                type: scalar(data_type)
+                              count:
+                                -orig-id: nx, ny and nz
+                                value: max_index.value - min_index.value + 1
+                              semireal:
+                                value: scale * (count - 1)
+                            enums:
+                              unit_si_code:
+                                0x0000000000000001: none
+                                0x0000000000000101: meter
+                                0x0000000000100001: ampere2
+                                0x000000fffd010200: volt2
+                                0x0000000001000001: second
+                  # sizes_product:
+                    # params:
+                      # - id: total
+                        # type: u4
+                    # instances:
+                      # internal:
+                        # pos: 0
+                        # size: 0
+                        # type: sizes_product_internal(0, total)
+                      # mesurands:
+                        # value: _parent.mesurands
+                    # types:
+                      # sizes_product_internal:
+                        # params:
+                          # - id: idx
+                            # type: u4
+                          # - id: total
+                            # type: u4
+                        # instances:
+                          # mesurands:
+                            # value: _parent.mesurands
+                          # next:
+                            # pos: 0
+                            # size: 0
+                            # type: 'sizes_product_internal(idx+1, total)'
+                            # if: 'idx < total'
+                          # value:
+                            # value: 'idx < total ? (next.value * measurands[idx].count.to_i) : 1'
+              data:
+                doc: a vector of data
+                seq:
+                  - id: values
+                    type: cell
+                    #size: _parent.calibrations.header.cell_size
+                    #repeat: expr
+                    #repeat-expr: '_parent.calibrations.header.array_size / _parent.calibrations.header.cell_size'
+                    repeat: eos
+                types:
+                  cell:
+                    seq:
+                      - id: values
+                        type:
+                          switch-on: _parent._parent.calibrations.mesurands[_index].internal.header.data_type
+                          cases:
+                            "data_type::uint8": u1
+                            "data_type::uint16": u2
+                            "data_type::uint32": u4
+                            "data_type::uint64": u8
+                            "data_type::int8": s1
+                            "data_type::int16": s2
+                            "data_type::int32": s4
+                            "data_type::int64": s8
+                            "data_type::float32": f4
+                            "data_type::float64": f8
+                            #"data_type::float48": s8
+                            "data_type::float80": f10le
+                            #"data_type::floatfix": s8
+                        repeat: expr
+                        repeat-expr: _parent._parent.calibrations.header.n_mesurands
+          scanned:
+            seq:
+              - id: vars
+                type: vars
+                size: _parent.var_size
+              
+              # it seems these also belong to vars (of scanned image frame) (it's commented-out gwyddion code), but where?
+              - id: orig_format
+                type: u4
+                doc: "s_oem"
+                if: false
+
+              - id: tune
+                type: u4
+                enum: lift_mode
+                doc: "z_tune"
+                if: false
+
+              - id: feedback_gain
+                type: f8
+                
+                if: false
+
+              - id: dac_scale
+                type: s4
+                doc: "s_s"
+                if: false
+              - id: overscan
+                type: s4
+                doc: "s_xov (in %)"
+                if: false
+              # end of supposed vars
+              - id: data
+                type: data
+
+                #Stuff after data
+              - id: title
+                type: title
+                if: _io.size >= _io.pos + 4
+              - id: xml
+                type: xml
+                if: _io.size >= _io.pos + 4
+              - id: unkn # may be view_info_size ?
+                type: u4
+                if: _io.size >= _io.pos + 4
+              - id: frame_spec_with_size
+                type: frame_spec_with_size
+                if: _io.size >= _io.pos + 4
+              - id: unkn1
+                type: u4
+                if: _io.size >= _io.pos + 4
+              - id: additional_guids
+                type: additional_guids
+                if: _io.size >= _io.pos + 4
+            #instances:
+            #   semireal:
+            #     value: image.size.size[i]*vars.scales.scales[i].step
+            #     repeat: expr
+            #     repeat-expr: 2
+            types:
+              data:
+                seq:
+                  #Frame mode stuff
+                  - id: mode
+                    -orig-id: fm_mode
+                    type: u2
+                    #enum: spm_mode #?
+                  - id: size
+                    type: vec2_u2
+                  - id: dots
+                    type: dots
+
+                  - id: data
                     type: s2
-                    enum: unit
-          dots_data:
-            seq:
-              - id: coord_x
-                type: f4
-              - id: coord_y
-                type: f4
-              - id: forward_size
-                type: s4
-              - id: backward_size
-                type: s4
-          data_linez:
-            params:
-              - id: index
-                type: u2
-            seq:
-              - id: forward
-                type: s2
-                repeat: expr
-                repeat-expr: _parent.coordinates[index].forward_size
-              - id: backward
-                type: s2
-                repeat: expr
-                repeat-expr: _parent.coordinates[index].backward_size
-      axis_scale:
-        seq:
-          - id: offset
-            type: f4
-            doc: "x_scale->offset = gwy_get_gfloat_le(&p);# r0 (physical units)"
-          - id: step
-            type: f4
-            doc: >
-              x_scale->step = gwy_get_gfloat_le(&p);
-              r (physical units)
-              x_scale->step = fabs(x_scale->step);
-              if (!x_scale->step) {
-                g_warning("x_scale.step == 0, changing to 1");
-                x_scale->step = 1.0;
-              }
-          - id: unit
-            type: s2 # x_scale->unit = (gint16)gwy_get_guint16_le(&p);
-            enum: unit
-            doc: "U"
+                    repeat: expr
+                    repeat-expr: size.x*size.y
+                types:
+                  dots:
+                    seq:
+                      - id: count
+                        -orig-id: fm_ndots
+                        type: u2
+                      - id: header
+                        -orig-id: coordheader
+                        type: header
+                        if: count > 0
+                      - id: coordinates
+                        type: data
+                        repeat: expr
+                        repeat-expr: count
+                      - id: data
+                        type: data_line(_index)
+                        repeat: expr
+                        repeat-expr: count
+                    types:
+                      header:
+                        seq:
+                          - id: size
+                            -orig-id: headersize
+                            type: s4
+                          - id: header
+                            size: size
+                            type: internal
+                        types:
+                          internal:
+                            seq:
+                              - id: coord_size
+                                -orig-id: coordsize
+                                type: s4
+                              - id: version
+                                type: s4
+                              - id: xyunits
+                                type: s2
+                                enum: unit
+                      data:
+                        seq:
+                          - id: coords
+                            -orig-id: coord_x, coord_y
+                            type: f4
+                            repeat: expr
+                            repeat-expr: 2
+                          - id: forward_size
+                            type: s4
+                          - id: backward_size
+                            type: s4
+                        instances:
+                          x:
+                            -orig-id: coord_x
+                            value: coords[0]
+                          y:
+                            -orig-id: coord_y
+                            value: coords[1]
+                      data_line:
+                        params:
+                          - id: index
+                            type: u2
+                        seq:
+                          - id: forward
+                            type: s2
+                            repeat: expr
+                            repeat-expr: _parent.coordinates[index].forward_size
+                          - id: backward
+                            type: s2
+                            repeat: expr
+                            repeat-expr: _parent.coordinates[index].backward_size
+              vars:
+                seq:
+                  - id: scales
+                    type: scales
+                  - id: tvars
+                    type:
+                      switch-on: _parent._parent.type
+                      cases:
+                        'frame_type::scanned': image
+                        'frame_type::spectroscopy': curve
+                        'frame_type::curves': curve
+                types:
+                  image:
+                    seq:
+                    - id: adc_mode
+                      -orig-id: channel_index
+                      type: u1
+                      enum: adc_mode
+                      doc: "s_mode"
 
-      fd_curves_new:
-        seq:
-          - id: block_count
-            type: u4
-          - id: blocks_headers
-            type: block_descr
-            repeat: expr
-            repeat-expr: block_count
-          - id: blocks_names
-            type: str
-            encoding: UTF-8
-            size: blocks_headers[_index].name_len
-            repeat: expr
-            repeat-expr: block_count
-          - id: blocks_data
-            size: blocks_headers[_index].len
-            repeat: expr
-            repeat-expr: block_count
-        types:
-          block_descr:
+                    - id: mode
+                      type: u1
+                      enum: mode
+                      doc: "s_dev"
+                    - id: size
+                      type: vec2_u2
+                    - id: ndacq
+                      type: u2
+                      doc: "Step (DAC)"
+                    - id: step_length
+                      type: f4
+                      doc: in m
+
+                    - id: adt # ADC Averaging?
+                      type: u2
+                      doc: "s_adt"
+
+                    - id: adc_gain_amp_log10
+                      type: u1
+                      doc: "s_adc_a"
+
+                    - id: adc_index
+                      type: u1
+                      doc: "ADC index"
+
+                      #XXX: Some fields have different meaning in different versions
+                    - id: input_signal_or_version
+                      type: u1
+                      doc: "MDTInputSignal smp_in; s_smp_in (for signal) s_8xx (for version)"
+
+                    - id: substr_plane_order_or_pass_num
+                      type: u1
+                      doc: "s_spl or z_03"
+
+                    - id: scan_dir
+                      type: scan_dir
+                      doc: "s_xy TODO: interpretation"
+                    
+                    - id: power_of_2
+                      type: u1
+                      doc: "s_2n (bool)"
+
+                    - id: velocity
+                      type: f4
+                      doc: "s_vel (m/s)"
+
+                    - id: setpoint
+                      type: f4 # frame->setpoint = Nano*gwy_get_gfloat_le(&p);
+                      doc: "s_i0 (Ampere)"
+
+                    - id: bias_voltage
+                      type: f4 # frame->bias_voltage = gwy_get_gfloat_le(&p);
+                      doc: "s_ut (Volt)"
+
+                    - id: draw
+                      type: u1
+                      doc: "s_draw (bool)"
+
+                    - id: reserved
+                      type: u1
+
+                    - id: xoff
+                      type: s4
+                      doc: "s_x00 (in DAC quants)"
+
+                    - id: yoff
+                      type: s4
+                      doc: "s_y00 (in DAC quants)"
+
+                    - id: nl_corr
+                      type: u1
+                      doc: "s_cor (bool)"
+                    - id: unkn1
+                      type: u2
+                    - id: unkn2
+                      type: u2
+                    - id: feedback_gain
+                      doc: "s_fbg"
+                      type: f4
+                    - id: unkn3
+                      size: 4*16+4
+                    - id: generator_freq_sweep_range
+                      type: f4
+                      repeat: expr
+                      repeat-expr: 2
+                    - id: generator_freq
+                      type: f4
+                    - id: generator_amplitude
+                      type: f4
+                    - id: unkn4
+                      size: 4
+                    - id: unkn5
+                      type: f4
+                    - id: generator_phase
+                      type: f4
+                    - id: sd_gain
+                      type: f4
+                    - id: unkn6
+                      size: 2*16+10
+                    - id: unkn7
+                      type: f4
+                    - id: unkn8
+                      type: f4
+                    - id: unkn9
+                      type: f4
+                    - id: unkn10
+                      type: f4
+                    - id: unkn11
+                      size: 16
+                    - id: unkn12
+                      type: f4
+                  curve:
+                    seq:
+                      - id: mode
+                        -orig-id: sp_mode
+                        type: u2
+                      - id: filter
+                        -orig-id: sp_filter
+                        type: u2
+                      - id: u_begin
+                        type: f4
+                      - id: u_end
+                        type: f4
+                      - id: z_up
+                        type: s2
+                      - id: z_down
+                        type: s2
+                      - id: averaging
+                        -orig-id: sp_averaging
+                        type: u2
+                      - id: repeat
+                        -orig-id: sp_repeat
+                        type: u1 # bool
+                      - id: back
+                        -orig-id: sp_back
+                        type: u1 # bool
+                      - id: sp_4nx
+                        type: s2
+                      - id: osc
+                        -orig-id: sp_osc
+                        type: u1 # bool
+                      - id: n4
+                        -orig-id: sp_n4
+                        type: u1
+                      - id: sp_4x0
+                        -orig-id: sp_4x0
+                        type: f4
+                      - id: sp_4xr
+                        -orig-id: sp_4xr
+                        type: f4
+                      - id: sp_4u
+                        -orig-id: sp_4u
+                        type: s2
+                      - id: sp_4i
+                        -orig-id: sp_4i
+                        type: s2
+                      - id: nx
+                        -orig-id: sp_nx
+                        type: s2
+              dot:
+                seq:
+                  - id: x
+                    type: s2
+                  - id: y
+                    type: s2
+              scan_dir:
+                seq:
+                  - id: unkn
+                    type: b4
+                  - id: double_pass
+                    type: b1
+                  - id: bottom
+                    type: b1
+                    doc: "Bottom - 1 Top - 0"
+                  - id: left
+                    type: b1
+                    doc: "Left - 1 Right - 0"
+                  - id: horizontal
+                    type: b1
+                    doc: "Horizontal - 1 Vertical - 0"
+              frame_spec_with_size:
+                seq:
+                  - id: size
+                    type: u4
+                  - id: frame_spec
+                    type: frame_spec
+                    size: size
+                    if: size != 0
+            enums:
+              mode:
+                0: stm
+                1: afm
+                2: unknown2
+                3: unknown3
+                4: unknown4
+                5: unknown5
+              input_signal:
+                0: extension_slot
+                1: bias_v
+                2: ground
+              lift_mode:
+                0: step
+                1: fine
+                2: slope
+          text:
             seq:
-              - id: name_len
+              - id: size
                 type: u4
-              - id: len
+              - id: unkn0
                 type: u4
-      fd_spectroscopy:
+              - id: vars
+                size: _parent.var_size
+              - id: text
+                type: strz
+                encoding: cp1251
+                size: size
+              - id: title
+                type: title
+                if: _io.size >= _io.pos + 4
+              - id: xml
+                type: xml
+                if: _io.size >= _io.pos + 4
+              - id: unkn1
+                type: u4
+                if: _io.size >= _io.pos + 4
+              - id: unkn2
+                type: u4
+                if: _io.size >= _io.pos + 4
+              - id: unkn3
+                type: u4
+                if: _io.size >= _io.pos + 4
+              - id: additional_guids
+                type: additional_guids
+                if: _io.size >= _io.pos + 4
+      additional_guids:
         seq:
-          - id: vars
-            type: vars
-            size: _parent.var_size
-          - id: fm_mode
-            type: u2
-          - id: fm_xres
-            type: u2
-          - id: fm_yres
-            type: u2
-
-          - id: dots
-            type: dots
-
-          - id: data
-            type: s2
-            repeat: expr
-            repeat-expr: fm_xres*fm_yres
-
-          - id: title
-            type: title
-          - id: xml
-            type: xml
-        types:
-          vars:
-            seq:
-              - id: x_scale
-                type: axis_scale
-              - id: y_scale
-                type: axis_scale
-              - id: z_scale
-                type: axis_scale
-              - id: sp_mode
-                type: u2
-              - id: sp_filter
-                type: u2
-              - id: u_begin
-                type: f4
-              - id: u_end
-                type: f4
-              - id: z_up
-                type: s2
-              - id: z_down
-                type: s2
-              - id: sp_averaging
-                type: u2
-              - id: sp_repeat
-                type: u1 # bool
-              - id: sp_back
-                type: u1 # bool
-              - id: sp_4nx
-                type: s2
-              - id: sp_osc
-                type: u1 # bool
-              - id: sp_n4
-                type: u1
-              - id: sp_4x0
-                type: f4
-              - id: sp_4xr
-                type: f4
-              - id: sp_4u
-                type: s2
-              - id: sp_4i
-                type: s2
-              - id: sp_nx
-                type: s2
-      fd_meta_data:
-        seq:
-          - id: head_size
-            type: u4
-          - id: tot_len
+          - id: size
             type: u4
           - id: guids
-            type: uuid
-            repeat: expr
-            repeat-expr: 2
-          - id: frame_status
-            size: 4
-          - id: name_size
-            type: u4
-          - id: comm_size
-            type: u4
-          - id: view_info_size
-            type: u4
-          - id: spec_size
-            type: u4
-          - id: source_info_size
-            type: u4
-          - id: var_size
-            type: u4
-          - id: data_offset
-            type: u4
-          - id: data_size
-            type: u4
-          - id: title
-            type: str
-            size: name_size
-            encoding: UTF-8
-          - id: xml
-            type: str
-            size: comm_size
-            encoding: UTF-8
-          - id: struct_len
-            type: u4
-          - id: array_size
-            type: u8
-          - id: cell_size
-            type: u4
-          - id: n_dimensions
-            type: u4
-          - id: n_mesurands
-            type: u4
-          - id: dimensions
-            type: calibration
-            repeat: expr
-            repeat-expr: n_dimensions
-          - id: mesurands
-            type: calibration
-            repeat: expr
-            repeat-expr: n_mesurands
-        instances:
-          image:
-            pos: data_offset
-            type: image
-            size: data_size
+            size: size
+            type: guids
+            if: size != 0
         types:
-          image:
+          guids:
             seq:
-              - id: image
-                type: vec
+              - id: guids
+                type: uuid
                 repeat: eos
-            types:
-              vec:
-                seq:
-                  - id: items
-                    type:
-                      switch-on: _parent._parent.mesurands[_index].data_type
-                      cases:
-                        "data_type::uint8": u1
-                        "data_type::uint16": u2
-                        "data_type::uint32": u4
-                        "data_type::uint64": u8
-                        "data_type::int8": s1
-                        "data_type::int16": s2
-                        "data_type::int32": s4
-                        "data_type::int64": s8
-                        "data_type::float32": f4
-                        "data_type::float64": f8
-                        #"data_type::float48": s8
-                        #"data_type::float80": s8
-                        #"data_type::floatfix": s8
-                    repeat: expr
-                    repeat-expr: _parent._parent.n_mesurands
-          calibration:
-            seq:
-              - id: len_tot
-                type: u4
-              - id: len_struct
-                type: u4
-              - id: len_name
-                type: u4
-              - id: len_comment
-                type: u4
-              - id: len_unit
-                type: u4
-              - id: si_unit
-                type: u8
-              - id: accuracy
-                type: f8
-              - id: function_id_and_dimensions
-                type: u8
-              - id: bias
-                type: f8
-              - id: scale
-                type: f8
-              - id: min_index
-                type: u8
-              - id: max_index
-                type: u8
-              - id: data_type
-                type: s4
-                enum: data_type
-              - id: len_author
-                type: u4
-              - id: name
-                type: str
-                encoding: utf-8
-                size: len_name
-              - id: comment
-                type: str
-                encoding: utf-8
-                size: len_comment
-              - id: unit
-                type: str
-                encoding: utf-8
-                size: len_unit
-              - id: author
-                type: str
-                encoding: utf-8
-                size: len_author
-            instances:
-              count:
-                -orig-id: nx, ny and nz
-                value: max_index - min_index + 1
-      fd_scanned:
+      frame_spec:
         seq:
-          - id: vars
-            type: vars
-            size: _parent.var_size
-          - id: orig_format
-            type: u4
-            doc: "s_oem"
-            if: false
-
-          - id: tune
-            type: u4
-            enum: lift_mode
-            doc: "z_tune"
-            if: false
-
-          - id: feedback_gain
-            type: f8
-            doc: "s_fbg"
-            if: false
-
-          - id: dac_scale
-            type: s4
-            doc: "s_s"
-            if: false
-
-          - id: overscan
-            type: s4
-            doc: "s_xov (in %)"
-            if: false
-
-            #Frame mode stuff
-          - id: fm_mode
-            type: u2
-            doc: "m_mode"
-          - id: fm_xres
-            type: u2
-            doc: "m_nx"
-          - id: fm_yres
-            type: u2
-            doc: "m_ny"
-          - id: dots
-            type: dots
-
-
-          - id: image
-            type: s2
+          - id: unkn
+            size: 8*16 + 8
+          - id: colors_count
+            type: u4le
+          - id: color_scheme
+            type: 'nt_mdt_color_table(colors_count, 0)'
+            size-eos: true
+      scales:
+        seq:
+          - id: scales
+            -orig-id: x_scale, y_scale, z_scale
+            type: axis_scale
             repeat: expr
-            repeat-expr: fm_xres * fm_yres
-
-            #Stuff after data
-          - id: title
-            type: title
-          - id: xml
-            type: xml
+            repeat-expr: 3
+        instances:
+          x:
+            value: scales[0]
+          y:
+            value: scales[1]
+          z:
+            value: scales[2]
         types:
-          vars:
+          axis_scale:
             seq:
-              - id: x_scale
-                type: axis_scale
-              - id: y_scale
-                type: axis_scale
-              - id: z_scale
-                type: axis_scale
-
-              - id: channel_index
-                type: u1
-                enum: adc_mode
-                doc: "s_mode"
-
-              - id: mode
-                type: u1
-                enum: mode
-                doc: "s_dev"
-
-              - id: xres
-                type: u2
-                doc: "s_nx"
-              - id: yres
-                type: u2
-                doc: "s_ny"
-              - id: ndacq
-                type: u2
-                doc: "Step (DAC)"
-              - id: step_length
+              - id: offset
                 type: f4
-                doc: "s_rs in Angstrom's (Angstrom*gwy_get_gfloat_le(&p))"
+                doc: "x_scale->offset = gwy_get_gfloat_le(&p);# r0 (physical units)"
+              - id: step
+                type: f4
+                doc: >
+                  x_scale->step = gwy_get_gfloat_le(&p);
+                  r (physical units)
+                  x_scale->step = fabs(x_scale->step);
+                  if (!x_scale->step) {
+                    g_warning("x_scale.step == 0, changing to 1");
+                    x_scale->step = 1.0;
+                  }
+              - id: unit
+                type: s2 # x_scale->unit = (gint16)gwy_get_guint16_le(&p);
+                enum: unit
+                doc: "U"
 
-              - id: adt
-                type: u2
-                doc: "s_adt"
-
-              - id: adc_gain_amp_log10
-                type: u1
-                doc: "s_adc_a"
-
-              - id: adc_index
-                type: u1
-                doc: "ADC index"
-
-                #XXX: Some fields have different meaning in different versions
-              - id: input_signal_or_version
-                type: u1
-                doc: "MDTInputSignal smp_in; s_smp_in (for signal) s_8xx (for version)"
-
-              - id: substr_plane_order_or_pass_num
-                type: u1
-                doc: "s_spl or z_03"
-
-              - id: scan_dir
-                type: scan_dir
-                doc: "s_xy TODO: interpretation"
-              - id: power_of_2
-                type: u1
-                doc: "s_2n (bool)"
-
-              - id: velocity
-                type: f4 # frame->velocity = Angstrom*gwy_get_gfloat_le(&p);
-                doc: "s_vel (Angstrom/second)"
-
-              - id: setpoint
-                type: f4 # frame->setpoint = Nano*gwy_get_gfloat_le(&p);
-                doc: "s_i0"
-
-              - id: bias_voltage
-                type: f4 # frame->bias_voltage = gwy_get_gfloat_le(&p);
-                doc: "s_ut"
-
-              - id: draw
-                type: u1
-                doc: "s_draw (bool)"
-
-              - id: reserved
-                type: u1
-
-              - id: xoff
-                type: s4
-                doc: "s_x00 (in DAC quants)"
-
-              - id: yoff
-                type: s4
-                doc: "s_y00 (in DAC quants)"
-
-              - id: nl_corr
-                type: u1
-                doc: "s_cor (bool)"
-          dot:
-            seq:
-              - id: x
-                type: s2
-              - id: y
-                type: s2
-          scan_dir:
-            seq:
-              - id: unkn
-                type: b4
-              - id: double_pass
-                type: b1
-              - id: bottom
-                type: b1
-                doc: "Bottom - 1 Top - 0"
-              - id: left
-                type: b1
-                doc: "Left - 1 Right - 0"
-              - id: horizontal
-                type: b1
-                doc: "Horizontal - 1 Vertical - 0"
-        enums:
-          mode:
-            0: stm
-            1: afm
-            2: unknown2
-            3: unknown3
-            4: unknown4
-          input_signal:
-            0: extension_slot
-            1: bias_v
-            2: ground
-          lift_mode:
-            0: step
-            1: fine
-            2: slope
 enums:
   spm_technique:
     0: contact_mode
@@ -787,3 +1065,4 @@ enums:
     37: reserved_dos2
     38: reserved_dos3
     39: reserved_dos4
+    87: unknown87
