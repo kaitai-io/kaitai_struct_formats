@@ -266,6 +266,7 @@ types:
         12: efi_runtime_driver
         13: efi_rom
         14: xbox
+        16: windows_boot_application
   optional_header_data_dirs:
     seq:
       - id: export_table
