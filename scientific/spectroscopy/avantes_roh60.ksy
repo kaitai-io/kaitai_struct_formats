@@ -26,9 +26,10 @@ doc: |
   https://kr.mathworks.com/examples/matlab/community/20341-reading-spectra-from-avantes-binary-files-demonstration
 
   The RCM file contains the user-specified comment, so it may be useful
-  for automatic conversion of data.
+  for automatic conversion of data. You may wish to divide the spectra by 
+  the integration time before comparing them.
   
-  Written and tested by Filip Dominec, 2017
+  Written and tested by Filip Dominec, 2017-2018
 seq:
   - id: unknown1
     type: f4
@@ -58,7 +59,9 @@ seq:
     type: f4
     repeat: expr
     repeat-expr: ipixlast.to_i - ipixfirst.to_i - 1
-  - id: unknown4
+  - id: integration_ms
     type: f4
-    repeat: expr
-    repeat-expr: 3
+  - id: averaging
+    type: f4
+  - id: pixel_smoothing
+    type: f4
