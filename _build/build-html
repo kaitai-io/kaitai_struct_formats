@@ -77,7 +77,7 @@ class FormatPagesGenerator
       @erb_usage[lang] = erb("usage_#{lang}") if FileTest.exists?("#{fn}.html.erb")
     }
 
-    @base_url = 'http://kaitai.io/'
+    @base_url = '//kaitai.io/'
 
     @by_cat = {}
   end
