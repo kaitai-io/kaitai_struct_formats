@@ -40,6 +40,7 @@ params:
     doc: Number of bits per digit. Only values of 4 and 8 are supported.
   - id: is_le
     type: bool
+    doc: Endianness used by this BCD representation. True means little-endian, false is for big-endian.
 seq:
   - id: digits
     type:
@@ -52,6 +53,7 @@ seq:
 instances:
   as_int:
     value: 'is_le ? as_int_le : as_int_be'
+    doc: Value of this BCD number as integer. Endianness would be selected based on `is_le` parameter given.
   as_int_le:
     value: >
       digits[0] +
@@ -82,8 +84,10 @@ instances:
         )
        )
       )
+    doc: Value of this BCD number as integer (treating digit order as little-endian).
   last_idx:
     value: num_digits - 1
+    doc: Index of last digit (0-based).
   as_int_be:
     value: >
       digits[last_idx] +
@@ -114,3 +118,4 @@ instances:
         )
        )
       )
+    doc: Value of this BCD number as integer (treating digit order as big-endian).
