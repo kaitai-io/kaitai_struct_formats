@@ -2,8 +2,13 @@ meta:
   id: microsoft_pe
   title: Microsoft PE (Portable Executable) file format
   application: Microsoft Windows
-  endian: le
+  file-extension:
+    - exe
+    - dll
+    - sys
+  license: CC0-1.0
   ks-version: 0.7
+  endian: le
 doc-ref: http://www.microsoft.com/whdc/system/platform/firmware/PECOFF.mspx
 seq:
   - id: mz
