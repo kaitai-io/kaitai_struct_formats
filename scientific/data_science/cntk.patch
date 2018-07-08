@@ -1,0 +1,138 @@
+--- cntk.py	2018-07-16 19:03:19.140233200 +0300
++++ "cntk - \320\272\320\276\320\277\320\270\321\217.py"	2018-07-16 18:57:09.298163000 +0300
+@@ -8,6 +8,54 @@
+ if parse_version(ks_version) < parse_version('0.7'):
+     raise Exception("Incompatible Kaitai Struct Python API: 0.7 or later is required, but you have %s" % (ks_version))
+ 
++import hexdump
++
++"""
++oldRead=KaitaiStream.read_bytes
++def myRead(*args, **kwargs):
++	res=oldRead(*args, **kwargs)
++	print("\n".join(hexdump.dumpgen(res)))
++	return res
++
++KaitaiStream.read_bytes=myRead
++"""
++
++def ensure_fixed_contents(self, expected):
++	actual = self._io.read(len(expected))
++	print("ensure_fixed_contents:\n", "\n".join(hexdump.dumpgen(actual)))
++	if actual != expected:
++		raise Exception(
++			"unexpected fixed contents: got %r, was waiting for %r" %
++			(actual, expected)
++		)
++	return actual
++KaitaiStream.ensure_fixed_contents=ensure_fixed_contents
++
++def read_bytes_term_utf16(self, term, include_term, consume_term, eos_error):
++	r = b''
++	while True:
++		c = self._io.read(2)
++		print(self._io.tell())
++		if c == b'':
++			if eos_error:
++				raise Exception(
++					"end of stream reached, but no terminator %d found" %
++					(term,)
++				)
++			else:
++				return r
++		elif c == b"\0\0":
++			if include_term:
++				r += c
++			if not consume_term:
++				self._io.seek(-2, SEEK_CUR)
++			print("\n".join(hexdump.dumpgen(r)))
++			return r
++		else:
++			r += c
++KaitaiStream.read_bytes_term_utf16=read_bytes_term_utf16
++
++
+ class Cntk(KaitaiStruct):
+     """The list of pretrained models is here: https://github.com/Microsoft/CNTK/blob/master/PretrainedModels/download_model.py
+     Only some of them have this format. For example 
+@@ -84,9 +132,9 @@
+                     self._read()
+ 
+                 def _read(self):
+-                    self.precision = (self._io.read_bytes_term(0, False, True, True)).decode(u"UTF-16le")
+-                    self.operation_name = (self._io.read_bytes_term(0, False, True, True)).decode(u"UTF-16le")
+-                    self.node_name = (self._io.read_bytes_term(0, False, True, True)).decode(u"UTF-16le")
++                    self.precision = (self._io.read_bytes_term_utf16(0, False, True, True)).decode(u"UTF-16le")
++                    self.operation_name = (self._io.read_bytes_term_utf16(0, False, True, True)).decode(u"UTF-16le")
++                    self.node_name = (self._io.read_bytes_term_utf16(0, False, True, True)).decode(u"UTF-16le")
+                     _on = self.node_name
+                     if _on == u"CoshNode":
+                         self.node_specific = self._root.SectionContents.NodeList.Node.NodeGeneric(self._io, self, self._root)
+@@ -499,7 +547,7 @@
+                         self.cols = self._io.read_u8le()
+                         self.sample_layout = self._root.SectionContents.TensorShape(self._io, self, self._root)
+                         self.nr_axes = self._io.read_u4le()
+-                        self.dynamic_axis_node_name = (self._io.read_bytes_term(0, False, True, True)).decode(u"UTF-16le")
++                        self.dynamic_axis_node_name = (self._io.read_bytes_term_utf16(0, False, True, True)).decode(u"UTF-16le")
+                         self.learning_rate_multiplier = self._io.read_f4le()
+ 
+ 
+@@ -537,11 +585,11 @@
+                     self._read()
+ 
+                 def _read(self):
+-                    self.name = (self._io.read_bytes_term(0, False, True, True)).decode(u"UTF-16le")
++                    self.name = (self._io.read_bytes_term_utf16(0, False, True, True)).decode(u"UTF-16le")
+                     self.inputs_count = self._io.read_u8le()
+                     self.inputs = [None] * (self.inputs_count)
+                     for i in range(self.inputs_count):
+-                        self.inputs[i] = (self._io.read_bytes_term(0, False, True, True)).decode(u"UTF-16le")
++                        self.inputs[i] = (self._io.read_bytes_term_utf16(0, False, True, True)).decode(u"UTF-16le")
+ 
+ 
+ 
+@@ -557,7 +605,7 @@
+                 self.count = self._io.read_u8le()
+                 self.names = [None] * (self.count)
+                 for i in range(self.count):
+-                    self.names[i] = (self._io.read_bytes_term(0, False, True, True)).decode(u"UTF-16le")
++                    self.names[i] = (self._io.read_bytes_term_utf16(0, False, True, True)).decode(u"UTF-16le")
+ 
+ 
+ 
+@@ -570,7 +618,7 @@
+ 
+             def _read(self):
+                 self.element_size = self._io.read_u8le()
+-                self.name = (self._io.read_bytes_term(0, False, True, True)).decode(u"UTF-16le")
++                self.name = (self._io.read_bytes_term_utf16(0, False, True, True)).decode(u"UTF-16le")
+                 self.format = self._root.SectionContents.Matrix.Format(self._io, self, self._root)
+                 self.rows = self._io.read_u8le()
+                 self.cols = self._io.read_u8le()
+@@ -691,7 +739,7 @@
+ 
+         def _read(self):
+             self.end = self._io.ensure_fixed_contents(b"\x45\x00")
+-            self.marker = self._io.ensure_fixed_contents(b"\x6E\x61\x6D\x65")
++            self.marker = self._io.ensure_fixed_contents(self.name.encode("UTF-16le"))
+             self.terminator = self._io.ensure_fixed_contents(b"\x00\x00")
+ 
+ 
+@@ -705,7 +753,7 @@
+ 
+         def _read(self):
+             self.begin = self._io.ensure_fixed_contents(b"\x42\x00")
+-            self.marker = self._io.ensure_fixed_contents(b"\x6E\x61\x6D\x65")
++            self.marker = self._io.ensure_fixed_contents(self.name.encode("UTF-16le"))
+             self.terminator = self._io.ensure_fixed_contents(b"\x00\x00")
+ 
+ 
+@@ -732,7 +780,7 @@
+ 
+         def _read(self):
+             self.begin = self._io.ensure_fixed_contents(b"\x42\x00")
+-            self.name = (self._io.read_bytes_term(0, False, True, True)).decode(u"UTF-16le")
++            self.name = (self._io.read_bytes_term_utf16(0, False, True, True)).decode(u"UTF-16le")
+ 
+ 
+     class VectorBool(KaitaiStruct):
