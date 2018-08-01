@@ -57,6 +57,22 @@
                     </div>
                     <%   end %>
                     <% end %>
+                    <% if meta['xref'] %>
+                    <%   xref = meta['xref'] %>
+                    <div class="panel-heading">
+                        <h3 class="panel-title">References</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul>
+                        <% if xref['rfc'] %>
+                        <li><a href="https://tools.ietf.org/html/rfc<%= xref['rfc'] %>">RFC <%= xref['rfc'] %></a></li>
+                        <% end %>
+                        <% if xref['wikidata'] %>
+                        <li><a href="https://www.wikidata.org/wiki/<%= xref['wikidata'] %>">Wikidata <%= xref['wikidata'] %></a></li>
+                        <% end %>
+                        </ul>
+                    </div>
+                    <% end %>
                 </div>
             </div>
         </div>
