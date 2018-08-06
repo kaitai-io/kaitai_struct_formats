@@ -45,6 +45,12 @@ types:
         repeat: expr
         repeat-expr: coff_hdr.number_of_sections
         type: section
+    instances:
+      certificate_table:
+        pos: optional_hdr.data_dirs.certificate_table.virtual_address
+        if: optional_hdr.data_dirs.certificate_table.virtual_address != 0
+        size: optional_hdr.data_dirs.certificate_table.size
+        type: certificate_table
   coff_header:
     doc-ref: 3.3. COFF File Header (Object and Image)
     seq:
@@ -340,3 +346,56 @@ types:
       body:
         pos: pointer_to_raw_data
         size: size_of_raw_data
+  certificate_table:
+    seq:
+      - id: items
+        type: certificate_entry
+        repeat: eos
+  certificate_entry:
+    enums:
+      certificate_revision:
+        0x0100:
+          id: revision_1_0
+          doc: |
+            Version 1, legacy version of the Win_Certificate structure.
+            It is supported only for purposes of verifying legacy Authenticode signatures
+        0x0200:
+          id: revision_2_0
+          doc: Version 2 is the current version of the Win_Certificate structure.
+      certificate_type:
+        0x0001:
+          id: x509
+          doc: |
+            bCertificate contains an X.509 Certificate 
+            Not Supported
+        0x0002:
+          id: pkcs_signed_data
+          doc: 'bCertificate contains a PKCS#7 SignedData structure'
+        0x0003:
+          id: reserved_1
+          doc: 'Reserved'
+        0x0004:
+          id: ts_stack_signed
+          doc: |
+            Terminal Server Protocol Stack Certificate signing 
+            Not Supported
+    seq:
+      - id: length
+        -orig-id: dwLength
+        type: u4
+        doc: Specifies the length of the attribute certificate entry. 
+      - id: revision
+        -orig-id: wRevision
+        type: u2
+        enum: certificate_revision
+        doc: Contains the certificate version number.
+      - id: certificate_type
+        -orig-id: wCertificateType
+        type: u2
+        enum: certificate_type
+        doc: Specifies the type of content in bCertificate
+      - id: certificate_bytes
+        -orig-id: bCertificate
+        size: length - 8
+        doc: Contains a certificate, such as an Authenticode signature.
+    doc-ref: 'https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format#the-attribute-certificate-table-image-only'
