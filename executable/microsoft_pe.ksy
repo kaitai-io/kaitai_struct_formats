@@ -145,6 +145,7 @@ types:
       name_zeroes:
         pos: 0
         type: u4
+        if: name_zeroes == 0
       name_offset:
         pos: 4
         type: u4
@@ -155,12 +156,14 @@ types:
         terminator: 0
         encoding: ascii
         eos-error: false
+        if: name_zeroes == 0
       name_from_short:
         pos: 0
         type: str
         terminator: 0
         encoding: ascii
         eos-error: false
+        if: name_zeroes != 0
       name:
         value: 'name_zeroes == 0 ? name_from_offset : name_from_short'
   optional_header:
