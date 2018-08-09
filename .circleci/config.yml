@@ -44,6 +44,8 @@ jobs:
             locale
             cd _build
             ./build-target .. target
+      - store_artifacts:
+          path: _build/target
       - run:
           name: Build diagrams
           command: |
