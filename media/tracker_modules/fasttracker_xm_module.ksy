@@ -11,6 +11,14 @@ meta:
   license: Unlicense
   endian: le
   encoding: utf-8
+doc: |
+  XM (standing for eXtended Module) is a popular module music file
+  format, that was introduced in 1994 in FastTracker2 by Triton demo
+  group. Akin to MOD files, it bundles both digital samples
+  (instruments) and instructions on which note to play at what time
+  (patterns), which provides good audio quality with relatively small
+  file size. Audio is reproducible without relying on the sound of
+  particular hardware samplers or synths.
 doc-ref: |
   http://sid.ethz.ch/debian/milkytracker/milkytracker-0.90.85%2Bdfsg/resources/reference/xm-form.txt
   ftp://ftp.modland.com/pub/documents/format_documentation/FastTracker%202%20v2.04%20(.xm).html
