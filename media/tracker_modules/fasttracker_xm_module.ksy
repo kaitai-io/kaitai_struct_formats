@@ -1,5 +1,5 @@
 meta:
-  id: xm
+  id: fasttracker_xm_module
   title: Extended Module
   application:
     - FastTracker 2
