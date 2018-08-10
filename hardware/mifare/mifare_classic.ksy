@@ -1,9 +1,10 @@
 meta:
   id: mifare_classic
-  endian: le
+  title: Mifare Classic RFID tag dump
   file-extension: mfd
-  title: "Mifare Classic RFID tag dump"
   license: BSD-2-Clause
+  ks-version: 0.9
+  endian: le
 doc-ref: |
   https://github.com/nfc-tools/libnfc
   https://www.nxp.com/docs/en/data-sheet/MF1S70YYX_V1.pdf
