@@ -139,6 +139,15 @@ types:
               num_rows:
                 value: 'num_rows_raw + (_root.preheader.version_number.value == 0x0102 ? 1 : 0)'
   instrument:
+    doc: |
+      XM's notion of "instrument" typically constitutes of a
+      instrument metadata and one or several samples. Metadata
+      includes:
+
+      * instrument's name
+      * instruction of which sample to use for which note
+      * volume and panning envelopes and looping instructions
+      * vibrato settings
     seq:
       - id: header_size
         type: u4
@@ -174,10 +183,14 @@ types:
         seq:
           - id: len_sample_header
             type: u4
-          - id: sample_number_for_all_notes
+          - id: idx_sample_per_note
             type: u1
             repeat: expr
             repeat-expr: 96
+            doc: |
+              Index of sample that should be used for any particular
+              note. In the simplest case, where it's only one sample
+              is available, it's an array of full of zeroes.
           - id: volume_points
             type: envelope_point
             repeat: expr
