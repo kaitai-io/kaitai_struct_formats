@@ -31,11 +31,11 @@ seq:
   - id: patterns
     type: pattern
     repeat: expr
-    repeat-expr: header.number_of_patterns
+    repeat-expr: header.num_patterns
   - id: instruments
     type: instrument
     repeat: expr
-    repeat-expr: header.number_of_instruments
+    repeat-expr: header.num_instruments
 types:
   preheader:
     seq:
@@ -76,13 +76,13 @@ types:
         doc: Song length (in pattern order table)
       - id: restart_position
         type: u2
-      - id: number_of_channels
+      - id: num_channels
         type: u2
         doc: "(2,4,6,8,10,...,32)"
-      - id: number_of_patterns
+      - id: num_patterns
         type: u2
         doc: "(max 256)"
-      - id: number_of_instruments
+      - id: num_instruments
         type: u2
         doc: "(max 128)"
       - id: flags
@@ -109,7 +109,7 @@ types:
       - id: header
         type: header
       - id: packed_data
-        size: header.main.packed_pattern_data_size
+        size: header.main.len_packed_pattern
     types:
       header:
         seq:
@@ -125,19 +125,19 @@ types:
                 - id: packing_type
                   type: u1
                   doc: Packing type (always 0)
-                - id: number_of_rows_raw
+                - id: num_rows_raw
                   type:
                     switch-on: _root.preheader.version_number.value
                     cases:
                       0x0102: u1
                       _: u2
                   doc: Number of rows in pattern (1..256)
-                - id: packed_pattern_data_size
+                - id: len_packed_pattern
                   type: u2
                   doc: Packed pattern data size
             instances:
-              number_of_rows:
-                value: number_of_rows_raw + (_root.preheader.version_number.value==0x0102?1:0)
+              num_rows:
+                value: 'num_rows_raw + (_root.preheader.version_number.value == 0x0102 ? 1 : 0)'
   instrument:
     seq:
       - id: header_size
@@ -151,11 +151,11 @@ types:
       - id: samples_headers
         type: sample_header
         repeat: expr
-        repeat-expr: header.number_of_samples
+        repeat-expr: header.num_samples
       - id: samples
         type: samples_data(_index)
         repeat: expr
-        repeat-expr: header.number_of_samples
+        repeat-expr: header.num_samples
     types:
       header:
         seq:
@@ -165,30 +165,32 @@ types:
           - id: type
             type: u1
             doc: Usually zero, but this seems pretty random, don't assume it's zero
-          - id: number_of_samples
+          - id: num_samples
             type: u2
           - id: extra_header
             type: extra_header
-            if: number_of_samples > 0
+            if: num_samples > 0
       extra_header:
         seq:
-          - id: sample_header_size
+          - id: len_sample_header
             type: u4
           - id: sample_number_for_all_notes
             type: u1
             repeat: expr
             repeat-expr: 96
-          - id: points_for_volume_envelope
+          - id: volume_points
             type: envelope_point
             repeat: expr
             repeat-expr: 12
-          - id: points_for_panning_envelope
+            doc: Points for volume envelope. Only `num_volume_points` will be actually used.
+          - id: panning_points
             type: envelope_point
             repeat: expr
             repeat-expr: 12
-          - id: number_of_volume_points
+            doc: Points for panning envelope. Only `num_panning_points` will be actually used.
+          - id: num_volume_points
             type: u1
-          - id: number_of_panning_points
+          - id: num_panning_points
             type: u1
           
           - id: volume_sustain_point
