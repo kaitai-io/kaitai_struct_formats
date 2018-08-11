@@ -162,7 +162,7 @@ types:
         repeat: expr
         repeat-expr: header.num_samples
       - id: samples
-        type: samples_data(_index)
+        type: samples_data(samples_headers[_index])
         repeat: expr
         repeat-expr: header.num_samples
     types:
@@ -270,17 +270,11 @@ types:
             sample[i] = new;
             old = new;
         params:
-          - id: index
-            type: u2
+          - id: header
+            type: sample_header
         seq:
-          - id: samples_data
-            type:
-              switch-on: _parent.samples_headers[index].type.is_sample_data_16_bit
-              cases:
-                true: u2
-                false: u1
-            repeat: expr
-            repeat-expr: _parent.samples_headers[index].sample_length
+          - id: data
+            size: 'header.sample_length * (header.type.is_sample_data_16_bit ? 2 : 1)'
       sample_header:
         seq:
           - id: sample_length
