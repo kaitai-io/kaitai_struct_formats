@@ -1,6 +1,6 @@
 meta:
-  id: pgp
-  title: OpenPGP Message Format
+  id: openpgp_message
+  title: OpenPGP Message
   license: MIT
   file-extension: 
     - gpg
