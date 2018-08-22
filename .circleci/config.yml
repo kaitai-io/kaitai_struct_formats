@@ -14,7 +14,8 @@ jobs:
           command: |
             apt-get update
             apt-get install --no-install-recommends -y dirmngr
-            apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv 379CE192D401AB61
+            apt-key add <.circleci/bintray.key
+            #apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv 379CE192D401AB61
             echo "deb http://dl.bintray.com/kaitai-io/debian jessie main" | tee /etc/apt/sources.list.d/kaitai.list
             apt-get update
             apt-get install --no-install-recommends -y \
