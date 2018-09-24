@@ -964,7 +964,7 @@ types:
           switch-on: magic
           cases:
             'cs_magic::requirement'       : requirement
-            'cs_magic::requirements'      : entitlements
+            'cs_magic::requirements'      : requirements
             'cs_magic::code_directory'    : code_directory
             'cs_magic::entitlement'       : entitlement
             'cs_magic::blob_wrapper'      : blob_wrapper
@@ -1209,7 +1209,7 @@ types:
           - id: data
             size-eos: true
         -webide-representation: "{data:str}"
-      entitlements_blob_index:
+      requirements_blob_index:
         seq:
           - id: type
             type: u4be
@@ -1226,12 +1226,12 @@ types:
             2: guest       # kSecGuestRequirementType
             3: designated  # kSecDesignatedRequirementtype
             4: library     # kSecLibraryRequirementType
-      entitlements:
+      requirements:
         seq:
           - id: count
             type: u4be
           - id: items
-            type: entitlements_blob_index
+            type: requirements_blob_index
             repeat: expr
             repeat-expr: count
       blob_wrapper:
