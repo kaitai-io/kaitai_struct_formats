@@ -314,59 +314,59 @@ types:
             type: phdr_type_flags(flags64|flags32)
             -webide-parse-mode: eager
         -webide-representation: "{type} - f:{flags_obj:flags} (o:{offset}, s:{filesz:dec})"
-      # Elf(32|64)_Shdr
       section_header:
+        -orig-id: Elf(32|64)_Shdr
         seq:
-          # sh_name
-          - id: name_offset
+          - id: ofs_name
+            -orig-id: sh_name
             type: u4
-          # sh_type
           - id: type
+            -orig-id: sh_type
             type: u4
             enum: sh_type
-          # sh_flags
           - id: flags
+            -orig-id: sh_flags
             type:
               switch-on: _root.bits
               cases:
                 'bits::b32': u4
                 'bits::b64': u8
-          # sh_addr
           - id: addr
+            -orig-id: sh_addr
             type:
               switch-on: _root.bits
               cases:
                 'bits::b32': u4
                 'bits::b64': u8
-          # sh_offset
-          - id: offset
+          - id: ofs_body
+            -orig-id: sh_offset
             type:
               switch-on: _root.bits
               cases:
                 'bits::b32': u4
                 'bits::b64': u8
-          # sh_size
-          - id: size
+          - id: len_body
+            -orig-id: sh_size
             type:
               switch-on: _root.bits
               cases:
                 'bits::b32': u4
                 'bits::b64': u8
-          # sh_link
           - id: linked_section_idx
+            -orig-id: sh_link
             type: u4
-          # sh_info
           - id: info
+            -orig-id: sh_info
             size: 4
-          # sh_addralign
           - id: align
+            -orig-id: sh_addralign
             type:
               switch-on: _root.bits
               cases:
                 'bits::b32': u4
                 'bits::b64': u8
-          # sh_entsize
           - id: entry_size
+            -orig-id: sh_entsize
             type:
               switch-on: _root.bits
               cases:
@@ -375,41 +375,24 @@ types:
         instances:
           body:
             io: _root._io
-            pos: offset
-            size: size
+            pos: ofs_body
+            size: len_body
+            type:
+              switch-on: type
+              cases:
+                'sh_type::dynamic': dynamic_section
+                'sh_type::strtab': strings_struct
+                'sh_type::dynsym': dynsym_section
+                'sh_type::dynstr': strings_struct
           name:
             io: _root.header.strings._io
-            pos: name_offset
+            pos: ofs_name
             type: strz
             encoding: ASCII
             -webide-parse-mode: eager
           flags_obj:
             type: section_header_flags(flags)
             -webide-parse-mode: eager
-          dynamic:
-            io: _root._io
-            pos: offset
-            type: dynamic_section
-            size: size
-            if: type == sh_type::dynamic
-          strtab:
-            io: _root._io
-            pos: offset
-            type: strings_struct
-            size: size
-            if: type == sh_type::strtab
-          dynsym:
-            io: _root._io
-            pos: offset
-            type: dynsym_section
-            size: size
-            if: type == sh_type::dynsym
-          dynstr:
-            io: _root._io
-            pos: offset
-            type: strings_struct
-            size: size
-            if: type == sh_type::dynstr
         -webide-representation: "{name} ({type}) - f:{flags_obj:flags} (o:{offset}, s:{size:dec})"
       strings_struct:
         seq:
@@ -496,8 +479,8 @@ types:
         size: section_header_entry_size
         type: section_header
       strings:
-        pos: section_headers[section_names_idx].offset
-        size: section_headers[section_names_idx].size
+        pos: section_headers[section_names_idx].ofs_body
+        size: section_headers[section_names_idx].len_body
         type: strings_struct
 enums:
   # EI_CLASS
