@@ -5,11 +5,11 @@ meta:
 seq:
   - id: s
     size: 8
-    #type:
-    #  switch-on: 0
-    #  cases:
-    #    1: iso_rec
-    #    0: setup[SETUP_LEN] # Only for Control S-type
+    type:
+      switch-on: 0
+      cases:
+        1: iso_rec
+        0: setup[SETUP_LEN] # Only for Control S-type
   - id: interval
     type: s4
   - id: start_frame
