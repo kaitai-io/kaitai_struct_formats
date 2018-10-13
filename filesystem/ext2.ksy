@@ -1,5 +1,7 @@
 meta:
   id: ext2
+  title: ext2 filesystem
+  license: CC0-1.0
   endian: le
 instances:
   # http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/Documentation/filesystems/ext2.txt#n106
