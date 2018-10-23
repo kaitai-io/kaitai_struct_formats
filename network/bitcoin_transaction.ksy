@@ -144,7 +144,7 @@ types:
           'y' coordinate of the public key on the elliptic curve.
 enums:
   sighash_type:
-    01: sighash_all
-    02: sighash_none
-    03: sighash_single
+    1: sighash_all
+    2: sighash_none
+    3: sighash_single
     80: sighash_anyonecanpay
