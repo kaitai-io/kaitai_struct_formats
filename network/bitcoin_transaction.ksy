@@ -57,8 +57,8 @@ types:
         doc: |
           ScriptSig.
         doc-ref: |
-          'https://en.bitcoin.it/wiki/Transaction#Input'
-          'https://en.bitcoin.it/wiki/Script'
+          https://en.bitcoin.it/wiki/Transaction#Input
+          https://en.bitcoin.it/wiki/Script
       - id: end_of_vin
         contents: [0xff, 0xff, 0xff, 0xff]
         doc: |
@@ -78,8 +78,8 @@ types:
         doc: |
           ScriptPubKey.
         doc-ref: |
-          'https://en.bitcoin.it/wiki/Transaction#Output'
-          'https://en.bitcoin.it/wiki/Script'
+          https://en.bitcoin.it/wiki/Transaction#Output
+          https://en.bitcoin.it/wiki/Script
   script_signature:
     seq:
       - id: sig_stack_len
@@ -89,8 +89,8 @@ types:
         doc: |
           DER-encoded ECDSA signature.
         doc-ref: |
-          'https://en.wikipedia.org/wiki/X.690#DER_encoding'
-          'https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm'
+          https://en.wikipedia.org/wiki/X.690#DER_encoding
+          https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm
       - id: sig_type
         type: u1
         enum: sighash_type
