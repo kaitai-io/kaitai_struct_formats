@@ -12,25 +12,25 @@ seq:
     type: u4
     doc: |
       Version number.
-  - id: nb_of_vins
+  - id: num_vins
     type: u1
     doc: |
       Number of input transactions.
   - id: vins
     type: vin
     repeat: expr
-    repeat-expr: nb_of_vins
+    repeat-expr: num_vins
     doc: |
       Input transactions.
       An input refers to an output from a previous transaction.
-  - id: nb_of_vouts
+  - id: num_vouts
     type: u1
     doc: |
       Number of output transactions.
   - id: vouts
     type: vout
     repeat: expr
-    repeat-expr: nb_of_vouts
+    repeat-expr: num_vouts
     doc: |
       Output transactions.
   - id: locktime
