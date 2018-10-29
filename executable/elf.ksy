@@ -539,6 +539,7 @@ enums:
     # EM_X86_64
     0x3E: x86_64
     0xB7: aarch64
+    0xF3: riscv
     0xF7: bpf
   ph_type:
     0: null_type
