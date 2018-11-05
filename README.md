@@ -54,6 +54,7 @@ Please follow these steps:
   * It SHOULD have some general information about the format and some
     documentation (`meta/title`, `meta/file-extension`,
     `meta/application`, `doc`, `doc-ref` tags).
+  * It SHOULD match [style guide](http://doc.kaitai.io/ksy_style_guide.html).
 * Fork this repository
 * Choose a relevant folder and add your .ksy spec into it
 * Create a "pull request" at GitHub to pull your specs into this repo
