@@ -113,12 +113,12 @@ types:
       - id: disk_type
         type: u1
         enum: disk_type
-      - id: number_of_files
+      - id: num_files
         doc: |
           Number of non-deleted files. Directory can have more than
           number_of_files entries due to deleted files
         type: u1
-      - id: number_of_free_sectors
+      - id: num_free_sectors
         type: u2
       - id: tr_dos_id
         contents: [0x10]
@@ -129,7 +129,7 @@ types:
         size: 9
       - id: unused_3
         size: 1
-      - id: number_of_deleted_files
+      - id: num_deleted_files
         type: u1
       - id: label
         type: str
@@ -137,9 +137,9 @@ types:
       - id: unused_4
         size: 3
     instances:
-      number_of_tracks:
+      num_tracks:
         value: "disk_type.to_i & 0x01 != 0 ? 40 : 80"
-      number_of_sides:
+      num_sides:
         value: "disk_type.to_i & 0x08 != 0 ? 1 : 2"
 enums:
   disk_type:
