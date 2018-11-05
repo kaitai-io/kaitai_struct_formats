@@ -3,9 +3,6 @@ meta:
   file-extension: trd
   title: "TR-DOS flat-file disk image"
   license: CC0-1.0
-  # It's extended ascii (with ZX Spectrum Basic tokens, UDG, etc), but
-  # "unknown-8bit" can't be used for some reason
-  encoding: ascii
   endian: le
 doc: |
   .trd file is a raw dump of TR-DOS (ZX-Spectrum) floppy. .trd files are
@@ -39,18 +36,16 @@ types:
   file:
     seq:
       - id: name
-        type: str
         size: 8
       - id: extension
-        type: str
-        size: 1
+        type: u1
       - id: position_and_length
         type:
           switch-on: extension
           cases:
-            '"B"': position_and_length_basic
-            '"C"': position_and_length_code
-            '"#"': position_and_length_print
+            0x42: position_and_length_basic # 'B'
+            0x43: position_and_length_code  # 'C'
+            0x23: position_and_length_print # '#'
             _: position_and_length_generic
       - id: length_sectors
         type: u1
@@ -59,10 +54,14 @@ types:
       - id: starting_track
         type: u1
     instances:
+      name_first_byte:
+        pos: 0
+        type: u1
+        io: name._io
       is_deleted:
-        value: name.substring(0, 1) == "\1"
+        value: name_first_byte == 0x01
       is_terminator:
-        value: name.substring(0, 1) == "\0"
+        value: name_first_byte == 0x00
       contents:
         pos: starting_track * 256 * 16 + starting_sector * 256
         size: length_sectors * 256
@@ -125,14 +124,12 @@ types:
       - id: unused_2
         size: 2
       - id: password
-        type: str
         size: 9
       - id: unused_3
         size: 1
       - id: num_deleted_files
         type: u1
       - id: label
-        type: str
         size: 8
       - id: unused_4
         size: 3
