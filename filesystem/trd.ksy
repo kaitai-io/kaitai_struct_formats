@@ -44,30 +44,14 @@ types:
       - id: extension
         type: str
         size: 1
-
-      - id: program_and_data_length
-        type: u2
-        if: extension == "B"
-      - id: start_address
-        doc: Default memory address to load this byte array into
-        type: u2
-        if: extension == "C"
-      - id: print_extent_num
-        type: u1
-        if: extension == "#"
-      - id: print_unused
-        type: u1
-        if: extension == "#"
-      - id: length1_unused
-        size: 2
-        if: extension != "B" and extension != "C" and extension != "#"
-
-      - id: length
-        type: u2
-        doc: |
-          For "B" type, it's length of program only, use
-          program_and_data_length for full length. For other types it's length
-          in bytes
+      - id: position_and_length
+        type:
+          switch-on: extension
+          cases:
+            '"B"': position_and_length_basic
+            '"C"': position_and_length_code
+            '"#"': position_and_length_print
+            _: position_and_length_generic
       - id: length_sectors
         type: u1
       - id: starting_sector
@@ -82,6 +66,33 @@ types:
       contents:
         pos: starting_track * 256 * 16 + starting_sector * 256
         size: length_sectors * 256
+  position_and_length_basic:
+    seq:
+      - id: program_and_data_length
+        type: u2
+      - id: program_length
+        type: u2
+  position_and_length_code:
+    seq:
+      - id: start_address
+        type: u2
+        doc: Default memory address to load this byte array into
+      - id: length
+        type: u2
+  position_and_length_print:
+    seq:
+      - id: extent_no
+        type: u1
+      - id: reserved
+        type: u1
+      - id: length
+        type: u2
+  position_and_length_generic: # used for standard 'D' type and unknown types
+    seq:
+      - id: reserved
+        type: u2
+      - id: length
+        type: u2
   volume_info:
     seq:
       # This is 0x00 at the same position as first character of filename in
