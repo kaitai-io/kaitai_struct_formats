@@ -36,6 +36,9 @@ types:
   file:
     seq:
       - id: name
+        # It uses custom type due to limitation of streams: there's no way to
+        # extract first byte from byte array directly
+        type: filename
         size: 8
       - id: extension
         type: u1
@@ -54,14 +57,10 @@ types:
       - id: starting_track
         type: u1
     instances:
-      name_first_byte:
-        pos: 0
-        type: u1
-        io: name._io
       is_deleted:
-        value: name_first_byte == 0x01
+        value: name.first_byte == 0x01
       is_terminator:
-        value: name_first_byte == 0x00
+        value: name.first_byte == 0x00
       contents:
         pos: starting_track * 256 * 16 + starting_sector * 256
         size: length_sectors * 256
@@ -138,6 +137,15 @@ types:
         value: "disk_type.to_i & 0x01 != 0 ? 40 : 80"
       num_sides:
         value: "disk_type.to_i & 0x08 != 0 ? 1 : 2"
+  filename:
+    seq:
+      - id: name
+        size: 8
+    instances:
+      first_byte:
+        pos: 0
+        type: u1
+
 enums:
   disk_type:
     0x16: type_80_tracks_double_side
