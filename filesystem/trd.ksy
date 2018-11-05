@@ -20,6 +20,9 @@ doc: |
   ZX Spectrum character set, including UDGs, block drawing chars and Basic
   tokens. ASCII range is mostly standard ASCII, with few characters (^, `, DEL)
   replaced with (up arrow, pound, copyright symbol).
+
+  .trd file can be smaller than actual floppy disk, if last logical tracks are
+  empty (contain no file data) they can be omitted.
 seq:
   - id: files
     type: file
