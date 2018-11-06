@@ -2,7 +2,7 @@ meta:
   id: gettext_mo
   file-extension: mo
   encoding: UTF-8
-  title: gettext binary format
+  title: gettext binary database
   application:
     - GNU gettext
     - libintl
@@ -15,7 +15,20 @@ meta:
 #  2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 # THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-doc: It stores strings usually used for translation.
+doc: |
+  [GNU gettext](https://www.gnu.org/software/gettext/) is a popular
+  solution in free/open source software world to do i18n/l10n of
+  software, by providing translated strings that will substitute
+  strings in original language (typically, English).
+
+  gettext .mo is a binary database format which stores these string
+  translation pairs in an efficient binary format, ready to be used by
+  gettext-enabled software. .mo format is a result of compilation of
+  text-based .po files using
+  [msgfmt](https://www.gnu.org/software/gettext/manual/html_node/msgfmt-Invocation.html#msgfmt-Invocation)
+  utility. The reverse conversion (.mo -> .po) is also possible using
+  [msgunfmt](https://www.gnu.org/software/gettext/manual/html_node/msgunfmt-Invocation.html#msgunfmt-Invocation)
+  decompiler utility.
 doc-ref: https://gitlab.com/worr/libintl
 seq:
   - id: signature
