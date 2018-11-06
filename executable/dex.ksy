@@ -1,12 +1,21 @@
 meta:
   id: dex
+  title: Android Dalvik VM executable (dex)
   file-extension: dex
-  endian: le
   license: CC-BY-SA-3.0
+  endian: le
   # Portions of this page are reproduced from work created and shared by Google and used
   # according to terms described in the Creative Commons 3.0 Attribution License.
   imports:
     - /common/vlq_base128_le
+doc: |
+  Android OS applications executables are typically stored in its own
+  format, optimized for more efficient execution in Dalvik virtual
+  machine.
+
+  This format is loosely similar to Java .class file format and
+  generally holds the similar set of data: i.e. classes, methods,
+  fields, annotations, etc.
 doc-ref: https://source.android.com/devices/tech/dalvik/dex-format
 seq:
   - id: header
