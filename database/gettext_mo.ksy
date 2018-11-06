@@ -48,10 +48,10 @@ types:
       translation:
         value: _root.mo.translations[idx].str
       next_idx:
-        value: "idx + collision_step - (idx >= _root.mo.hashtable_size-collision_step ? _root.mo.hashtable_size : 0)"
+        value: "idx + collision_step - (idx >= _root.mo.num_hashtable_items - collision_step ? _root.mo.num_hashtable_items : 0)"
       next:
         pos: 0
-        type: hash_lookup_iteration(_root.mo.hashtable[next_idx].val, collision_step)
+        type: hash_lookup_iteration(_root.mo.hashtable_items[next_idx].val, collision_step)
   lookup_iteration:
     params:
       - id: current
@@ -100,16 +100,16 @@ types:
             return h
     instances:
       collision_step:
-        value: "hash % (_root.mo.hashtable_size - 2) + 1"
+        value: "hash % (_root.mo.num_hashtable_items - 2) + 1"
       idx:
-        value: "hash % _root.mo.hashtable_size"
+        value: "hash % _root.mo.num_hashtable_items"
       hash_lookup_iteration:
         pos: 0
-        type: "hash_lookup_iteration(_root.mo.hashtable[idx].val, collision_step)"
+        type: "hash_lookup_iteration(_root.mo.hashtable_items[idx].val, collision_step)"
       entry:
         pos: 0
         type: "lookup_iteration(hash_lookup_iteration, query)"
-      
+
   mo:
     meta:
       endian:
@@ -120,71 +120,71 @@ types:
     seq:
         - id: version
           type: version
-        - id: count_of_translations
+        - id: num_translations
           type: u4
-        - id: originals_ptr
+        - id: ofs_originals
           type: u4
-        - id: translations_ptr
+        - id: ofs_translations
           type: u4
-        - id: hashtable_size
+        - id: num_hashtable_items
           type: u4
-        - id: hashtable_ptr
+        - id: ofs_hashtable_items
           type: u4
     instances:
       originals:
         io: _root._io
-        pos: originals_ptr
+        pos: ofs_originals
         type: descriptor
         repeat: expr
-        repeat-expr: count_of_translations
+        repeat-expr: num_translations
       translations:
         io: _root._io
-        pos: translations_ptr
+        pos: ofs_translations
         type: descriptor
         repeat: expr
-        repeat-expr: count_of_translations
-      hashtable:
+        repeat-expr: num_translations
+      hashtable_items:
         io: _root._io
-        pos: hashtable_ptr
+        pos: ofs_hashtable_items
         type: hashtable_item
         repeat: expr
-        repeat-expr: hashtable_size
-        if: hashtable_ptr != 0
+        repeat-expr: num_hashtable_items
+        if: ofs_hashtable_items != 0
     types:
       version:
         seq:
-          - id: version_
+          - id: version_raw
             type: u4
         instances:
           major:
-            value: version_ >> 16
+            value: version_raw >> 16
           minor:
-            value: version_ & 0xffff
+            value: version_raw & 0xffff
       hashtable_item:
         seq:
-          - id: val_
+          - id: raw_val
             type: u4
         instances:
           mask:
             value: 0x80000000
           val_1:
-            value: val_ - 1
-            if: val_ != 0
-          system_dependent:
+            value: raw_val - 1
+            if: raw_val != 0
+          is_system_dependent:
             value: val_1 & mask == 1
-            if: val_ != 0
+            if: raw_val != 0
           val:
             value: val_1 & ~mask
-            if: val_ != 0
+            if: raw_val != 0
       descriptor:
         seq:
-          - id: length
+          - id: len_str
             type: u4
-          - id: ptr
+          - id: ofs_str
             type: u4
         instances:
           str:
             io: _root._io
-            pos: ptr
-            size: length
+            pos: ofs_str
+            size: len_str
             type: strz
