@@ -183,7 +183,7 @@ types:
         if: first_octet == 255
     instances:
       len:
-        value: first_octet < 192 ? first_octet : ((first_octet >= 192 and first_octet < 255) ? (((first_octet - 192) << 8) + second_octet + 192) : scalar)
+        value: 'first_octet < 192 ? first_octet : ((first_octet >= 192 and first_octet < 255) ? (((first_octet - 192) << 8) + second_octet + 192) : scalar)'
       
   signature_creation_time:
     seq:
