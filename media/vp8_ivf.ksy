@@ -1,8 +1,8 @@
 meta:
-  id: ivf
+  id: vp8_ivf
   file-extension: ivf
   endian: le
-  title: VP8 raw file format
+  title: VP8 raw file
   ks-version: 0.7
   license: CC0-1.0
 doc-ref: https://wiki.multimedia.cx/index.php/IVF
@@ -14,7 +14,7 @@ seq:
   - id: version
     type: u2
     doc: This should be 0
-  - id: headerlen
+  - id: len_header
     type: u2
     doc: Normally the header length is 32 byte
   - id: codec
@@ -32,7 +32,7 @@ seq:
   - id: timescale
     type: u4
     doc: the timescale is a divider of the seconds (VPX is integer math only) mostly 1000
-  - id: framecount
+  - id: num_frames
     type: u4
     doc: the number of frames (if not a camera stream)
   - id: unused
@@ -43,25 +43,22 @@ seq:
   - id: image_data
     type: blocks
     repeat: expr
-    repeat-expr: framecount
+    repeat-expr: num_frames
 ## payload end
 
 ## type definitions    
 types:
-  # eithder a chunk or list
   blocks:
     seq:
       - id: entries
         type: block
-        #repeat: eos
-        #size-eos: true
   block:
     seq:
-      - id: framesize
+      - id: len_frame
         doc: size of the frame data
         type: u4
       - id: timestamp
         type: u8
       - id: framedata
-        size: framesize
+        size: len_frame
         
