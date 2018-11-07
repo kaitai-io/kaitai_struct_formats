@@ -47,6 +47,7 @@ class FormatPagesGenerator
     'media' => {title: 'Multimedia Files', icon: 'video-camera'},
     'network' => {title: 'Networking Protocols', icon: 'sitemap'},
     'scientific' => {title: 'Scientific Applications', icon: 'flask'},
+    'security' => {title: 'Security', icon: 'lock'},
     'serialization' => {title: 'Serialization Protocols'},
     'windows' => {title: 'Windows-specific', icon: 'windows'},
   }
