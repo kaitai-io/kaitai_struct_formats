@@ -242,6 +242,128 @@ types:
               - id: repeat_value
                 type: u1
                 if: repeat
+  gvar:
+    doc: >
+      gvar - Glyph Variations Table
+      This table provides all of the variation data that describe how TrueType glyph outlines in a 'glyf' table change across the font’s variation space.
+    seq:
+      - id: major_version
+        type: u2
+      - id: minor_version
+        type: u2
+      - id: axis_count
+        type: u2
+      - id: shared_tuple_count
+        type: u2
+      - id: shared_tuples_offset
+        type: u4
+      - id: glyph_count
+        type: u2
+      - id: reserved_flags
+        type: b15
+      - id: long_offsets
+        type: b1
+      - id: glyph_variation_data_array_offset
+        type: u4
+      - id: glyph_variation_data_offsets
+        type:
+          switch-on: long_offsets
+          cases:
+            false: u2
+            true: u4
+        repeat: expr
+        repeat-expr: glyph_count + 1
+    instances:
+      shared_tuples:
+        pos: shared_tuples_offset
+        type: tuple_record
+        repeat: expr
+        repeat-expr: shared_tuple_count
+      glyph_variation_data:
+        #The body of glyph_variation_datum should go here
+        #See https://github.com/kaitai-io/kaitai_struct/issues/436
+        type: glyph_variation_datum(_index)
+        repeat: expr
+        repeat-expr: glyph_count
+    types:
+      f2dot14:
+        seq:
+          - id: raw_coordinate
+            type: s2
+        instances:
+          coordinate:
+            value: raw_coordinate / 16384.0
+            -webide-parse-mode: eager
+        -webide-representation: "{coordinate:dec}"
+      tuple_record:
+        seq:
+          - id: coordinates
+            type: f2dot14
+            repeat: expr
+            repeat-expr: _parent.axis_count
+      tuple_variation_header:
+        seq:
+          - id: variation_data_size
+            type: u2
+          - id: embedded_peak_tuple
+            type: b1
+          - id: intermediate_region
+            type: b1
+          - id: private_point_numbers
+            type: b1
+          - id: reserved_flag
+            type: b1
+          - id: tuple_index
+            type: b12
+          - id: peak_tuple
+            type: tuple_record
+            parent: _parent
+            if: embedded_peak_tuple
+          - id: intermediate_start_tuple
+            type: tuple_record
+            parent: _parent
+            if: intermediate_region
+          - id: intermediate_end_tuple
+            type: tuple_record
+            parent: _parent
+            if: intermediate_region
+      tuple_variation_store_header:
+        seq:
+          - id: shared_point_numbers
+            type: b1
+            if: _io.size > 0
+          - id: reserved_flags
+            type: b3
+            if: _io.size > 0
+          - id: tuple_variation_count
+            type: b12
+            if: _io.size > 0
+          - id: data_offset
+            type: u2
+            if: _io.size > 0
+          - id: tuple_variation_headers
+            type: tuple_variation_header
+            parent: _parent
+            repeat: expr
+            repeat-expr: tuple_variation_count
+            if: _io.size > 0
+        instances:
+          serialized_data:
+            pos: data_offset
+            size-eos: true
+            doc: Interpretation depends on shared_point_numbers, each private_point_numbers flag, and a kind of rle expansion.
+            doc-ref: https://docs.microsoft.com/en-us/typography/opentype/spec/otvarcommonformats#a-nameserializeddata-idserializeddataserialized-dataa
+      glyph_variation_datum:
+        params:
+          - id: index
+            type: u4
+        instances:
+          body:
+            type: tuple_variation_store_header
+            parent: _parent
+            pos: _parent.glyph_variation_data_array_offset + (_parent.glyph_variation_data_offsets[index] * (_parent.long_offsets ? 1 : 2))
+            size: (_parent.glyph_variation_data_offsets[index + 1] - _parent.glyph_variation_data_offsets[index]) * (_parent.long_offsets ? 1 : 2)
+            -webide-parse-mode: eager
   head:
     enums:
       flags:
