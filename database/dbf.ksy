@@ -8,15 +8,15 @@ seq:
   - id: header1
     type: header1
   - id: header2
-    size: header1.header_size - 12
+    size: header1.len_header - 12
     type: header2
   - id: records
-    size: header1.record_size
+    size: header1.len_record
     repeat: expr
     repeat-expr: header1.num_records
 types:
-  # http://www.dbase.com/Knowledgebase/INT/db7_file_fmt.htm - section 1.1
   header1:
+    doc-ref: http://www.dbase.com/Knowledgebase/INT/db7_file_fmt.htm - section 1.1
     seq:
       - id: version
         type: u1
@@ -28,9 +28,9 @@ types:
         type: u1
       - id: num_records
         type: u4
-      - id: header_size
+      - id: len_header
         type: u2
-      - id: record_size
+      - id: len_record
         type: u2
     instances:
       dbase_level:
