@@ -5,6 +5,12 @@ meta:
   title: VP8 raw file
   ks-version: 0.7
   license: CC0-1.0
+doc: |
+  IVF is a simple container format for raw VP8 data, which is an open
+  and royalty-free video compression format, currently developed by
+  Google.
+
+  Test .ivf files are available at https://chromium.googlesource.com/webm/vp8-test-vectors
 doc-ref: https://wiki.multimedia.cx/index.php/IVF
 seq:
 ## header start
@@ -61,4 +67,3 @@ types:
         type: u8
       - id: framedata
         size: len_frame
-        
