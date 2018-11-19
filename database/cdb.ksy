@@ -10,14 +10,25 @@ seq:
     type: pointer
     repeat: expr
     repeat-expr: 256
+    doc: |
+      Each of the 256 initial pointers states a position and a length. The
+      position is the starting byte position of the hash table. The length
+      is the number of slots in the hash table.
   - id: records
     type: record
     repeat: until
     repeat-until: _io.pos == pointers[0].pointer_position
+    doc: |
+      Records are stored sequentially, without special alignment. A record
+      states a key length, a data length, the key, and the data.
   - id: hash_tables
     type: hash_table(_index)
     repeat: expr
     repeat-expr: 256
+    doc: |
+      Each hash table slot states a hash value and a byte position. If the
+      byte position is 0, the slot is empty. Otherwise, the slot points to
+      a record whose key has that hash value.
 types:
   pointer:
     seq:
