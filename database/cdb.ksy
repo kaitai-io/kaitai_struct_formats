@@ -5,6 +5,17 @@ meta:
   encoding: ASCII
   license: CC0-1.0
 doc-ref: https://cr.yp.to/cdb/cdb.txt
+doc: |
+  A cdb is an associative array: it maps strings (``keys'') to strings
+  (``data'').
+  
+  A cdb contains 256 pointers to linearly probed open hash tables. The hash
+  tables contain pointers to (key,data) pairs. A cdb is stored in a single file
+  on disk:
+  
+    +----------------+---------+-------+-------+-----+---------+
+    | p0 p1 ... p255 | records | hash0 | hash1 | ... | hash255 |
+    +----------------+---------+-------+-------+-----+---------+
 seq:
   - id: pointers
     type: pointer
