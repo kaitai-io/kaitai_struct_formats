@@ -1,5 +1,5 @@
 meta:
-  id: anlz_file
+  id: rekordbox_anlz
   title: rekordbox track analysis file
   application: rekordbox
   file-extension:
