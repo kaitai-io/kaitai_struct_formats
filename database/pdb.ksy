@@ -49,7 +49,10 @@ doc: |
 doc-ref: https://github.com/Deep-Symmetry/crate-digger/blob/master/doc/Analysis.pdf
 
 seq:
-  - contents: [0, 0, 0, 0]
+  - type: u4
+    doc: |
+      Unknown purpose, perhaps an unoriginal signature, seems to
+      always have the value 0.
   - id: len_page
     type: u4
     doc: |
