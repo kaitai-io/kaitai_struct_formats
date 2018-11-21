@@ -51,8 +51,8 @@ types:
       is determined by the type tag.
     seq:
       - id: fourcc
-        type: u4
-        enum: section_tags
+        type: s4
+        # enum: section_tags  Can't use this until enums support default/unmatched value
         doc: |
           A tag value indicating what kind of section this is.
       - id: len_header
@@ -68,15 +68,16 @@ types:
         type:
           switch-on: fourcc
           cases:
-            'section_tags::cues': cue_tag
-            'section_tags::path': path_tag
-            'section_tags::beat_grid': beat_grid_tag
-            'section_tags::vbr': vbr_tag
-            'section_tags::wave_preview': wave_preview_tag
-            'section_tags::wave_tiny': wave_preview_tag
-            'section_tags::wave_scroll': wave_scroll_tag
-            'section_tags::wave_color_preview': wave_color_preview_tag
-            'section_tags::wave_color_scroll': wave_color_scroll_tag
+            0x50434f42: cue_tag                 #'section_tags::cues'
+            0x50505448: path_tag                #'section_tags::path'
+            0x5051545a: beat_grid_tag           #'section_tags::beat_grid'
+            0x50564252: vbr_tag                 #'section_tags::vbr'
+            0x50574156: wave_preview_tag        #'section_tags::wave_preview'
+            0x50575632: wave_preview_tag        #'section_tags::wave_tiny'
+            0x50575633: wave_scroll_tag         #'section_tags::wave_scroll'
+            0x50575634: wave_color_preview_tag  #'section_tags::wave_color_preview'
+            0x50575635: wave_color_scroll_tag   #'section_tags::wave_color_scroll'
+            _: unknown_tag
     -webide-representation: '{fourcc}'
 
 
@@ -276,8 +277,10 @@ types:
       - id: entries
         size-eos: true
 
+  unknown_tag: {}
+
 enums:
-  section_tags:
+  section_tags:  # We can't use this enum until KSC supports default/unmatched values
     0x50434f42: cues                # PCOB
     0x50434f32: cues_2              # PCO2 (seen in .EXT)
     0x50505448: path                # PPTH
