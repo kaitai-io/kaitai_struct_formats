@@ -215,7 +215,7 @@ types:
           entries for strange pages?"
       - id: heap
         size-eos: true
-        if: heap_pos < 0  # never true, but stores pos
+        if: false  # never true, but stores pos
     instances:
       is_data_page:
         value: page_flags & 0x40 == 0
