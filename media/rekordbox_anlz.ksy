@@ -234,7 +234,10 @@ types:
       A larger waveform image suitable for scrolling along as a track
       plays.
     seq:
-      - type: u4  # Always 1?
+      - id: len_entry_bytes
+        type: u4
+        doc: |
+          The size of each entry, in bytes. Seems to always be 1.
       - id: len_entries
         type: u4
         doc: |
@@ -242,7 +245,7 @@ types:
           byte.
       - type: u4  # Always 0x960000?
       - id: entries
-        size: len_entries
+        size: len_entries * len_entry_bytes
 
   wave_color_preview_tag:
     doc: |
@@ -250,7 +253,10 @@ types:
       above the touch strip for jumping to a track position on newer
       high-resolution players.
     seq:
-      - type: u4
+      - id: len_entry_bytes
+        type: u4
+        doc: |
+          The size of each entry, in bytes. Seems to always be 6.
       - id: len_entries
         type: u4
         doc: |
@@ -258,7 +264,7 @@ types:
           byte for each of six channels of information.
       - type: u4
       - id: entries
-        size: len_entries * 6
+        size: len_entries * len_entry_bytes
 
   wave_color_scroll_tag:
     doc: |
@@ -266,7 +272,10 @@ types:
       as a track plays on newer high-resolution hardware. Also
       contains a higher-resolution blue/white waveform.
     seq:
-      - type: u4  # I have seen the value 2?
+      - id: len_entry_bytes
+        type: u4
+        doc: |
+          The size of each entry, in bytes. Seems to always be 2.
       - id: len_entries
         type: u4
         doc: |
@@ -275,7 +284,7 @@ types:
           translate the payload into color columns.
       - type: u4
       - id: entries
-        size-eos: true
+        size: len_entries * len_entry_bytes
 
   unknown_tag: {}
 
