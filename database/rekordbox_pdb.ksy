@@ -339,8 +339,9 @@ types:
     doc: |
       A row that holds an album name and ID.
     seq:
-      - id: magic
-        contents: [0x80, 0x00]
+      - type: u2
+        doc: |
+          Some kind of magic word? Usually 0x80, 0x00.
       - id: index_shift
         type: u2
         doc: TODO name from @flesniak, but what does it mean?
@@ -375,8 +376,10 @@ types:
     doc: |
       A row that holds an artist name and ID.
     seq:
-      - id: magic
-        contents: [0x60, 0x00]
+      - type: u2
+        doc: |
+          Some kind of magic word? Usually 0x60, 0x00 but have seen
+          0x64, 0x00.
       - id: index_shift
         type: u2
         doc: TODO name from @flesniak, but what does it mean?
@@ -538,8 +541,9 @@ types:
       details about the music, and links to other tables like artists,
       albums, keys, etc.
     seq:
-      - id: magic
-        contents: [0x24, 0x00]
+      - type: u2
+        doc: |
+          Some kind of magic word? Usually 0x24, 0x00.
       - id: index_shift
         type: u2
         doc: TODO name from @flesniak, but what does it mean?
