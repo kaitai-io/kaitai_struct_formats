@@ -12,35 +12,43 @@ seq:
 types:
   record:
     seq:
-    - id: ut_user
+    - id: user
+      -orig-id: ut_user
       doc: User login name
       size: 256
       type: str
       encoding: ascii
-    - id: ut_id
+    - id: inittab_id
+      -orig-id: ut_id
       doc: /etc/inittab id
       size: 14
       type: str
       encoding: ascii
-    - id: ut_line
+    - id: device
+      -orig-id: ut_line
       doc: device name (console, lnxx)
       size: 64
       type: str
       encoding: ascii
-    - id: ut_pid
+    - id: pid
+      -orig-id: ut_pid
       type: u8
       doc: process id
-    - id: ut_type
+    - id: type
+      -orig-id: ut_type
       type: s2
       doc: Type of login
       enum: entry_type
-    - id: ut_time
+    - id: timestamp
+      -orig-id: ut_time
       type: s8
       doc: time entry was made
-    - id: ut_exit
+    - id: exit_status
+      -orig-id: ut_exit
       type: exit_status
       doc: the exit status of a process marked as DEAD PROCESS
-    - id: ut_host
+    - id: hostname
+      -orig-id: ut_host
       size: 256
       doc: host name
       type: str
@@ -53,10 +61,12 @@ types:
       size: 24
   exit_status:
     seq:
-    - id: e_termination
+    - id: termination_code
+      -orig-id: e_termination
       type: s2
       doc: process termination status
-    - id: e_exit
+    - id: exit_code
+      -orig-id: e_exit
       type: s2
       doc: process exit status
 enums:
