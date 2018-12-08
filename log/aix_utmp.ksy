@@ -16,17 +16,17 @@ types:
       doc: User login name
       size: 256
       type: str
-      encoding: utf-8
+      encoding: ascii
     - id: ut_id
       doc: /etc/inittab id
       size: 14
       type: str
-      encoding: utf-8
+      encoding: ascii
     - id: ut_line
       doc: device name (console, lnxx)
       size: 64
       type: str
-      encoding: utf-8
+      encoding: ascii
     - id: ut_pid
       type: u8
       doc: process id
@@ -44,7 +44,7 @@ types:
       size: 256
       doc: host name
       type: str
-      encoding: utf-8
+      encoding: ascii
     - id: dbl_word_pad
       type: s4
     - id: reserved_a
