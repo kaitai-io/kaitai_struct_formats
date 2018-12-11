@@ -376,10 +376,10 @@ types:
     doc: |
       A row that holds an artist name and ID.
     seq:
-      - type: u2
+      - id: subtype
+        type: u2
         doc: |
-          Some kind of magic word? Usually 0x60, 0x00 but have seen
-          0x64, 0x00.
+          Usually 0x60, but 0x64 means we have a long name embedded in the row.
       - id: index_shift
         type: u2
         doc: TODO name from @flesniak, but what does it mean?
@@ -390,19 +390,34 @@ types:
           and linked from other rows (such as tracks).
       - type: u1
         doc: |
-          @flesniak says: "alwayx 0x03, maybe an unindexed empty string"
+          @flesniak says: "always 0x03, maybe an unindexed empty string"
       - id: ofs_name
         type: u1
         doc: |
           The location of the variable-length name string, relative to
-          the start of this row.
+          the start of this row, unless subtype ix 0x64.
     instances:
       name:
         type: device_sql_string
+        if: subtype == 0x60
         pos: _parent.row_base + ofs_name
         doc: |
           The name of this artist.
         -webide-parse-mode: eager
+      ofs_long_name:
+        type: u2
+        if: subtype == 0x64
+        pos: _parent.row_base + 0x0a
+        doc: |
+          For Names longer than 0xff bytes, this holds the position
+          relative to the start of the row.
+      long_name:
+        type: device_sql_long_string
+        if: subtype == 0x64
+        pos: _parent.row_base + ofs_long_name
+        doc: |
+          Names longer than 0xff bytes will be found here.
+
 
   artwork_row:
     doc: |
@@ -839,6 +854,24 @@ types:
         -webide-parse-mode: eager
     -webide-representation: '{body.text}'
 
+  device_sql_long_string:
+    doc: |
+      A string longer than 255 bytes that is embedded next to a row.
+    seq:
+      - id: kind
+        type: u1
+        doc: |
+          Indicates whether the encoding is ASCII or UTF16-BE.
+      - id: body
+        type:
+          switch-on: kind
+          cases:
+            0x40: device_sql_long_ascii
+            0x90: device_sql_long_utf16be
+            _: device_sql_unknown
+        -webide-parse-mode: eager
+    -webide-representation: '{body.text}'
+
   device_sql_short_ascii:
     doc: |
       An ASCII-encoded string up to 127 bytes long.
@@ -894,6 +927,15 @@ types:
         encoding: utf-16be
         doc: |
           The content of the string.
+
+  device_sql_unknown:
+    doc: |
+      A string type we do not yet recognize, but want to avoid crashing.
+    seq:
+      - id: length
+        type: u2
+        doc: |
+          Contains the length of the string in bytes, we think?
 
 enums:
   page_type:
