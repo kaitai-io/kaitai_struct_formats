@@ -54,9 +54,12 @@ types:
       - id: int2
         type: u2be
         if: b1 == 0x82
+      - id: int1
+        type: u1
+        if: b1 == 0x81
     instances:
       result:
-        value: '(b1 & 0x80 == 0) ? b1 : int2'
+        value: '(b1 == 0x81) ? int1 : ((b1 == 0x82) ? int2 : b1)'
         -webide-parse-mode: eager
   body_sequence:
     -webide-representation: '[...]'
