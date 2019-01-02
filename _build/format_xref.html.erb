@@ -1,23 +1,21 @@
 <nav>
     <div class="container">
     <ol class="breadcrumb">
-        <li class="active">Format Gallery: Cross-References</li>
+        <li><a href="index.html">Format Gallery</a></li>
+        <li class="active">Cross-References</li>
     </ol>
     </div>
 </nav>
 
 <section id="format-index-header" class="format">
     <div class="container">
-        <h1>Format Gallery</h1>
-
-        <p>All formats in this gallery have formal specifications in <a href="http://kaitai.io">Kaitai Struct</a> language. They can be used:</p>
-
-        <ul>
-            <li>as is — as a concise text reference,</li>
-            <li>as visual block diagram (thanks to GraphViz),</li>
-            <li>to explore hex dump in detail (with a visualizer),</li>
-            <li>as a ready-made library in any of supported target programming languages (after compiling it with Kaitai Struct compiler).</li>
-        </ul>
+        <p>
+            This table provides a summary of all entries in Kaitai
+            Struct format gallery and their relevant cross-references.
+        </p>
+        <p>
+            As of now, format gallery includes <%= @all.count %> formats.
+        </p>
     </div>
 </section>
 
