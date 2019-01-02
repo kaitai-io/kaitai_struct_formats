@@ -1,6 +1,19 @@
 meta:
   id: bmp
   file-extension: bmp
+  xref:
+    forensicswiki: BMP
+    justsolve: BMP
+    loc: fdd000189
+    mime: image/bmp
+    pronom:
+      - fmt/115
+      - fmt/116
+      - fmt/117
+      - fmt/118
+      - fmt/119
+      - x-fmt/25
+    wikidata: Q192869
   endian: le
   license: CC0-1.0
   ks-version: 0.8

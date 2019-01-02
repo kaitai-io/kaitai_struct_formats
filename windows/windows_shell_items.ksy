@@ -1,9 +1,10 @@
 meta:
   id: windows_shell_items
   title: Windows Shell Items
-  endian: le
   xref:
     forensicswiki: Shell Item
+  license: CC0-1.0
+  endian: le
 doc: |
   Windows Shell Items (AKA "shellbags") is an undocumented set of
   structures used internally within Windows to identify paths in

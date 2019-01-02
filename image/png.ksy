@@ -1,6 +1,20 @@
 meta:
   id: png
+  title: PNG (Portable Network Graphics) file
   file-extension: png
+  xref:
+    forensicswiki: Portable_Network_Graphics_(PNG)
+    iso: 15948:2004
+    justsolve: PNG
+    loc: fdd000153
+    mime: image/png
+    pronom:
+      - fmt/13
+      - fmt/12
+      - fmt/11
+    rfc: 2083
+    wikidata: Q178051
+  license: CC0-1.0
   endian: be
 seq:
   # https://www.w3.org/TR/PNG/#5PNG-file-signature

@@ -2,6 +2,10 @@ meta:
   id: windows_lnk_file
   title: Windows shell link file
   file-extension: lnk
+  xref:
+    justsolve: Windows_Shortcut
+    mime: application/x-ms-shortcut
+    pronom: x-fmt/428
   license: CC0-1.0
   endian: le
   encoding: cp437

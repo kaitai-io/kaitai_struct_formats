@@ -1,12 +1,23 @@
 meta:
   id: rar
-  endian: le
   file-extension: rar
   application: RAR archiver
   title: RAR (Roshall ARchiver) archive files
-  # http://www.forensicswiki.org/wiki/RAR
-  # http://acritum.com/winrar/rar-format
+  xref:
+    forensicswiki: RAR
+    justsolve: RAR
+    loc: fdd000450
+    mime:
+      - application/vnd.rar
+      - application/x-rar-compressed
+    pronom:
+      - fmt/411
+      - fmt/613
+      - x-fmt/264
+    wikidata: Q243303
   ks-version: 0.7
+  license: CC0-1.0
+  endian: le
 doc: |
   RAR is a archive format used by popular proprietary RAR archiver,
   created by Eugene Roshal. There are two major versions of format
@@ -16,6 +27,8 @@ doc: |
   blocks. Each block has fixed header and custom body (that depends on
   block type), so it's possible to skip block even if one doesn't know
   how to process a certain block type.
+doc-ref: |
+  http://acritum.com/winrar/rar-format  
 seq:
   - id: magic
     type: magic_signature
