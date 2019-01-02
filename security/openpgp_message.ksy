@@ -6,6 +6,10 @@ meta:
     - gpg
     - pub
     - pgp
+  xref:
+    justsolve: PGP
+    rfc: 4880
+    wikidata: Q2141493
   endian: be
   encoding: UTF-8
 doc: The OpenPGP Message Format is a format to store encryption and signature keys for emails.

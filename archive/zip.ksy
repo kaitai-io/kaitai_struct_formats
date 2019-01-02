@@ -1,6 +1,17 @@
 meta:
   id: zip
+  title: ZIP archive file
   file-extension: zip
+  xref:
+    iso: 21320-1
+    justsolve: ZIP
+    loc:
+      - fdd000354
+      - fdd000355
+      - fdd000362
+      - fdd000361
+    pronom: x-fmt/263
+    wikidata: Q136218
   endian: le
   license: CC0-1.0
 doc-ref: https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT

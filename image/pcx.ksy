@@ -1,8 +1,20 @@
 meta:
   id: pcx
   file-extension: pcx
-  endian: le
+  xref:
+    justsolve: PCX
+    mime:
+      - image/vnd.zbrush.pcx
+      - image/x-pcx
+    pronom:
+      - fmt/86
+      - fmt/87
+      - fmt/88
+      - fmt/89
+      - fmt/90
+    wikidata: Q535473
   license: CC0-1.0
+  endian: le
 seq:
   - id: hdr
     type: header
