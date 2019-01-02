@@ -70,6 +70,7 @@ class FormatPagesGenerator
     @erb_base = erb('format_base')
     @erb_index = erb('format_index')
     @erb_lang = erb('format_lang')
+    @erb_xref = erb('format_xref')
     @erb_footer = erb('footer')
 
     @erb_usage = {}
@@ -80,6 +81,7 @@ class FormatPagesGenerator
 
     @base_url = '//kaitai.io/'
 
+    @all = {}
     @by_cat = {}
   end
 
@@ -111,6 +113,7 @@ class FormatPagesGenerator
 
         generate_base_page(file_id, file_dir, yaml, yaml_str, cat_id, good_langs)
 
+        @all[file_id] = yaml
         @by_cat[cat_id] ||= []
         @by_cat[cat_id] << {
           :id => file_id,
@@ -123,6 +126,7 @@ class FormatPagesGenerator
     }
 
     generate_index
+    generate_xref
   end
 
   def generate_base_page(file_id, out_dir, yaml, yaml_str, cat_id, good_langs)
@@ -188,6 +192,15 @@ class FormatPagesGenerator
       page_title = "File Format Gallery for Kaitai Struct"
       out.write @erb_header.result(binding)
       out.write @erb_index.result(binding)
+      out.write @erb_footer.result(binding)
+    }
+  end
+
+  def generate_xref
+    File.open("#{@html_dir}/xref.html", 'w') { |out|
+      page_title = "File Formats Cross-References for Kaitai Struct"
+      out.write @erb_header.result(binding)
+      out.write @erb_xref.result(binding)
       out.write @erb_footer.result(binding)
     }
   end
@@ -311,6 +324,92 @@ class FormatPagesGenerator
   def lcc(name)
     parts = name.split(/_/)
     parts[0] + parts[1..-1].map { |x| x.capitalize }.join
+  end
+
+  def xref_url(name, value)
+    case name
+    when 'iso'
+      nil
+    when 'forensicswiki'
+      "http://forensicswiki.org/wiki/#{value}"
+    when 'justsolve'
+      "http://fileformats.archiveteam.org/wiki/#{value}"
+    when 'loc'
+      "http://www.loc.gov/preservation/digital/formats/fdd/#{value}.shtml"
+    when 'mime'
+      "https://www.iana.org/assignments/media-types/#{value}"
+    when 'pronom'
+      "https://www.nationalarchives.gov.uk/pronom/#{value}"
+    when 'rfc'
+      "https://tools.ietf.org/html/rfc#{value}"
+    when 'wikidata'
+      "https://www.wikidata.org/wiki/#{value}"
+    else
+      raise "Invalid xref URL for #{name.inspect} requested"
+    end
+  end
+
+  def xref_title(name, value)
+    v = xref_value(name, value)
+    case name
+    when 'forensicswiki'
+      "#{v} in ForensicsWiki"
+    when 'iso'
+      "ISO/IEC #{v}"
+    when 'justsolve'
+      "#{v} in Just Solve the File Format Problem"
+    when 'loc'
+      "LOC #{v}"
+    when 'pronom'
+      "PRONOM #{v}"
+    when 'rfc'
+      "RFC #{v}"
+    when 'wikidata'
+      "Wikidata #{v}"
+    else
+      raise "Invalid xref name for #{name.inspect} requested"
+    end
+  end
+
+  def xref_value(name, value)
+    case name
+    when 'forensicswiki', 'justsolve'
+      value.gsub(/_/, ' ')
+    when 'iso', 'loc', 'mime', 'pronom', 'rfc', 'wikidata'
+      value
+    else
+      raise "Invalid xref value for #{name.inspect} requested"
+    end
+  end
+
+  def xref_a(name, value)
+    if value
+      if value.is_a?(Array)
+        value.map { |v| xref_a(name, v) }.join(", ")
+      else
+        url = xref_url(name, value)
+        if url
+          "<a href=\"#{url}\">#{xref_value(name, value)}</a>"
+        else
+          xref_value(name, value)
+        end
+      end
+    end
+  end
+
+  def xref_li(name, value)
+    if value
+      if value.is_a?(Array)
+        value.map { |v| xref_li(name, v) }.join("\n")
+      else
+        url = xref_url(name, value)
+        if url
+          "<li><a href=\"#{url}\">#{xref_title(name, value)}</a></li>"
+        else
+          "<li>#{xref_title(name, value)}</li>"
+        end
+      end
+    end
   end
 
   def erb(name)

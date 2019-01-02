@@ -64,12 +64,9 @@
                     </div>
                     <div class="panel-body">
                         <ul>
-                        <% if xref['rfc'] %>
-                        <li><a href="https://tools.ietf.org/html/rfc<%= xref['rfc'] %>">RFC <%= xref['rfc'] %></a></li>
-                        <% end %>
-                        <% if xref['wikidata'] %>
-                        <li><a href="https://www.wikidata.org/wiki/<%= xref['wikidata'] %>">Wikidata <%= xref['wikidata'] %></a></li>
-                        <% end %>
+                            <% ['iso', 'rfc', 'loc', 'pronom', 'wikidata', 'forensicswiki', 'justsolve'].each { |k| %>
+                            <%= xref_li(k, xref[k]) %>
+                            <% } %>
                         </ul>
                     </div>
                     <% end %>
