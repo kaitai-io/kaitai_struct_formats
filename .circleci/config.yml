@@ -35,9 +35,12 @@ jobs:
             locale
       - run:
           name: Install Ruby deps
+          # `artful-scm` image means Ruby v2.3, and just `gem install bundler`
+          # installs bundler 2.0, which does not support it, so we force install
+          # older bundler
           command: |
             echo 'gem: --no-document' >/etc/gemrc
-            gem install bundler
+            gem install bundler:1.17.3
             cd _build
             bundle install
       - run:
