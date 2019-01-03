@@ -3,28 +3,52 @@ meta:
   title: Standard MIDI file
   file-extension:
     - mid
+    - midi
     - smf
   license: CC0-1.0
+  xref:
+    justsolve: MIDI
+    loc:
+      - fdd000102
+      - fdd000119
+    mime: audio/midi
+    pronom: x-fmt/230
+    wikidata: Q10610388
   imports:
     - /common/vlq_base128_be
   endian: be
+doc: |
+  Standard MIDI file, typically knows just as "MID", is a standard way
+  to serialize series of MIDI events, which is a protocol used in many
+  music synthesizers to transfer music data: notes being played,
+  effects being applied, etc.
+
+  Internally, file consists of a header and series of tracks, every
+  track listing MIDI events with certain header designating time these
+  events are happening.
+
+  NOTE: Rarely, MIDI files employ certain stateful compression scheme
+  to avoid storing certain elements of further elements, instead
+  reusing them from events which happened earlier in the
+  stream. Kaitai Struct (as of v0.9) is currently unable to parse
+  these, but files employing this mechanism are relatively rare.
 seq:
   - id: hdr
     type: header
   - id: tracks
     type: track
     repeat: expr
-    repeat-expr: hdr.qty_tracks
+    repeat-expr: hdr.num_tracks
 types:
   header:
     seq:
       - id: magic
         contents: "MThd"
-      - id: header_length
+      - id: len_header
         type: u4
       - id: format
         type: u2
-      - id: qty_tracks
+      - id: num_tracks
         type: u2
       - id: division
         type: s2
@@ -32,18 +56,16 @@ types:
     seq:
       - id: magic
         contents: "MTrk"
-      - id: track_length
+      - id: len_events
         type: u4
       - id: events
         type: track_events
-        size: track_length
+        size: len_events
   track_events:
     seq:
       - id: event
         type: track_event
         repeat: eos
-#        repeat: expr
-#        repeat-expr: 10
   track_event:
     seq:
       - id: v_time
