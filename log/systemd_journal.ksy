@@ -2,6 +2,7 @@ meta:
   id: systemd_journal
   title: systemd journal file
   file-extension: journal
+  license: CC0-1.0
   endian: le
 doc: |
   systemd, a popular user-space system/service management suite on Linux,
