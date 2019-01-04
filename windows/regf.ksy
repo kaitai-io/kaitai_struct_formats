@@ -2,6 +2,7 @@ meta:
   id: regf
   title: Windows registry database
   application: Windows NT and later
+  license: CC0-1.0
   endian: le
 doc: |
   This spec allows to parse files used by Microsoft Windows family of
