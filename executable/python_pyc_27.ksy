@@ -7,6 +7,7 @@ meta:
   id: python_pyc_27
   application: Python
   file-extension: pyc
+  license: CC0-1.0
   endian: le
 doc: |
   Python interpreter runs .py files in 2 step process: first, it
