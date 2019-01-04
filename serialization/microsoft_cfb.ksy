@@ -1,6 +1,7 @@
 meta:
   id: microsoft_cfb
   title: Microsoft Compound File Binary (CFB), AKA OLE (Object Linking and Embedding) file format
+  license: CC0-1.0
   endian: le
 seq:
   - id: header
