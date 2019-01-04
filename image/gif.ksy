@@ -2,6 +2,13 @@ meta:
   id: gif
   file-extension: gif
   title: GIF (Graphics Interchange Format) image file
+  xref:
+    justsolve: GIF
+    loc: fdd000133
+    mime: image/gif
+    pronom:
+      - fmt/3
+      - fmt/4
   endian: le
   license: CC0-1.0
 doc: |
