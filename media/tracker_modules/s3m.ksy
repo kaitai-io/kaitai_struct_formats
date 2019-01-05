@@ -2,6 +2,8 @@ meta:
   id: s3m
   title: Scream Tracker 3 module
   file-extension: s3m
+  xref:
+    wikidata: Q1461901
   license: CC0-1.0
   endian: le
 doc: |

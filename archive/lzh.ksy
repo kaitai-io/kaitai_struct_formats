@@ -3,6 +3,10 @@ meta:
   endian: le
   application: LHA (AKA LHarc) by Yoshizaki Haruyasu
   file-extension: lzh
+  xref:
+    justsolve: LHA
+    pronom: fmt/626
+    wikidata: Q368782
   license: CC0-1.0
 doc: |
   LHA (LHarc, LZH) is a file format used by a popular freeware

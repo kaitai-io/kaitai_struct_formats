@@ -1,6 +1,9 @@
 meta:
   id: bson
   file-extension: bson
+  xref:
+    justsolve: BSON
+    wikidata: Q2661480
   endian: le
   license: CC0-1.0
 doc: >

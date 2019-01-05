@@ -4,6 +4,8 @@ meta:
   title: VMWare Virtual Disk
   file-extension:
     - vmdk
+  xref:
+    wikidata: Q2658179
   license: CC0-1.0
 doc-ref: 'https://github.com/libyal/libvmdk/blob/master/documentation/VMWare%20Virtual%20Disk%20Format%20(VMDK).asciidoc#41-file-header'
 seq:

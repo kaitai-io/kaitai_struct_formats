@@ -1,8 +1,9 @@
 meta:
   id: cramfs
-  endian: le
+  xref:
+    wikidata: Q747406
   license: MIT
-
+  endian: le
 seq:
   - id: super_block
     type: super_block_struct
@@ -139,4 +140,3 @@ types:
         repeat: eos
         type: inode
         if: _io.size > 0
-

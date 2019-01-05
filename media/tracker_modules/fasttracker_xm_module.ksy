@@ -8,6 +8,10 @@ meta:
     - libmodplug
     - Mikmod
   file-extension: xm
+  xref:
+    justsolve: Extended_Module
+    pronom: fmt/323
+    wikidata: Q376852
   license: Unlicense
   endian: le
   encoding: utf-8

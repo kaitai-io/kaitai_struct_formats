@@ -2,6 +2,9 @@ meta:
   id: doom_wad
   application: id Tech 1
   file-extension: wad
+  xref:
+    justsolve: Doom_WAD
+    wikidata: Q1936828
   license: CC0-1.0
   endian: le
 seq:
