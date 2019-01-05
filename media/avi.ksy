@@ -1,9 +1,14 @@
 meta:
   id: avi
   endian: le
-  title: Microsoft AVI file format
-  ks-version: 0.7
+  title: Microsoft AVI file
+  xref:
+    justsolve: AVI
+    loc: fdd000059
+    pronom: fmt/5
+    wikidata: Q209054
   license: CC0-1.0
+  ks-version: 0.7
 doc-ref: https://msdn.microsoft.com/en-us/library/ms779636.aspx
 seq:
   - id: magic1

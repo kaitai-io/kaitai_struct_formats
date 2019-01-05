@@ -1,11 +1,17 @@
 meta:
   id: ttf
   file-extension: ttf
-  endian: be
-  license: MIT
   title: TrueType Font File
-  #doc-ref: https://www.microsoft.com/typography/tt/ttf_spec/ttch02.doc
-  #doc: 'A TrueType font file contains data, in table format, that comprises an outline font.'
+  xref:
+    justsolve: TrueType
+    pronom: x-fmt/453
+    wikidata: Q751800
+  license: MIT
+  endian: be
+doc: |
+  A TrueType font file contains data, in table format, that comprises
+  an outline font.
+doc-ref: https://www.microsoft.com/typography/tt/ttf_spec/ttch02.doc
 seq:
   - id: offset_table
     type: offset_table
