@@ -36,7 +36,7 @@ instances:
     doc: >
       block_index = offset_in_virtual_disk / block_size
       actual_data_offset = blocks_map[block_index]*block_size+metadata_size+offset_in_block
-      
+
       The blocks_map will take up blocks_in_image_max * sizeof(uint32_t) bytes;
       since the blocks_map is read and written in a single operation, its size needs to be limited to INT_MAX; furthermore, when opening an image, the blocks_map size is rounded up to be aligned on BDRV_SECTOR_SIZE.
       Therefore this should satisfy the following: blocks_in_image_max * sizeof(uint32_t) + BDRV_SECTOR_SIZE == INT_MAX + 1 (INT_MAX + 1 is the first value not representable as an int)
@@ -61,7 +61,7 @@ types:
       - id: header_size_optional
         type: u4
         if: subheader_size_is_dynamic
-        
+
       - id: header_main
         size: header_size
         type: header_main
@@ -69,8 +69,8 @@ types:
       subheader_size_is_dynamic:
         value: version.major>=1
       header_size:
-        value: (subheader_size_is_dynamic ? header_size_optional : 336)
-      
+        value: '(subheader_size_is_dynamic ? header_size_optional : 336)'
+
       blocks_map_size:
         value: ( ( header_main.blocks_in_image * 4 + header_main.geometry.sector_size - 1 ) / header_main.geometry.sector_size ) * header_main.geometry.sector_size
       blocks_map_offset:
@@ -158,7 +158,7 @@ types:
           - id: lchc_geometry
             type: geometry
             if: _parent.version.major>=1 and _io.pos + 16 <= _io.size
-          
+
           #- id: reserved2
           #  -orig_id: unused2
           #  size: _io.size - _io.pos
