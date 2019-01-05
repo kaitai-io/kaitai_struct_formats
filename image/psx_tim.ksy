@@ -5,6 +5,9 @@ meta:
   id: psx_tim
   application: Sony PlayStation (PSX) typical image format
   file-extension: tim
+  xref:
+    justsolve: TIM_(PlayStation_graphics)
+    wikidata: Q28207389
   license: CC0-1.0
   endian: le
 seq:

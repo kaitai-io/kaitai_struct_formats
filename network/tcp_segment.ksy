@@ -1,8 +1,18 @@
 meta:
   id: tcp_segment
-  title: TCP segment
+  title: TCP (Transmission Control Protocol) segment
+  xref:
+    rfc:
+      - 793
+      - 1323
+    wikidata: Q8803
   license: CC0-1.0
   endian: be
+doc: |
+  TCP is one of the core Internet protocols on transport layer (AKA
+  OSI layer 4), providing stateful connections with error checking,
+  guarantees of delivery, order of segments and avoidance of duplicate
+  delivery.
 seq:
   - id: src_port
     type: u2

@@ -3,6 +3,9 @@ meta:
   title: Warcraft II map files
   file-extension: pud
   application: Warcraft II engine
+  xref:
+    justsolve: Warcraft_II_PUD
+    wikidata: Q28009492
   license: CC0-1.0
   ks-version: 0.6
   endian: le
