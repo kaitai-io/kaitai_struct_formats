@@ -7,7 +7,9 @@ meta:
   license: Unlicense
   endian: be
 doc: |
-  The Real-time Transport Protocol (RTP) is a widely used network protocol for transmitting audio or video. It usually works with the RTP Control Protocol (RTCP). The transmission can be based on Transmission Control Protocol (TCP) or User Datagram Protocol (UDP).
+  The Real-time Transport Protocol (RTP) is a widely used network protocol for transmitting audio or video. 
+  It usually works with the RTP Control Protocol (RTCP). 
+  The transmission can be based on Transmission Control Protocol (TCP) or User Datagram Protocol (UDP).
 seq:
   - id: version
     type: b2
