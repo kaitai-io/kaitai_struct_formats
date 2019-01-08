@@ -6,6 +6,13 @@ meta:
     - exe
     - dll
     - sys
+  xref:
+    justsolve: Portable_Executable
+    pronom:
+      - x-fmt/411
+      - fmt/899
+      - fmt/900
+    wikidata: Q1076355
   license: CC0-1.0
   ks-version: 0.7
   endian: le

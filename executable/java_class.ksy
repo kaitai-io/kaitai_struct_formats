@@ -2,6 +2,10 @@ meta:
   id: java_class
   endian: be
   file-extension: class
+  xref:
+    justsolve: Java
+    pronom: x-fmt/415
+    wikidata: Q2193155
   license: CC0-1.0
 doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.1'
 seq:
