@@ -1,15 +1,16 @@
 meta:
   id: rtp_packet
-  title: rtp protocol
+  title: RTP (Real-time Transport Protocol)
   xref:
     rfc: 3550
-    wikidata: https://en.wikipedia.org/wiki/Real-time_Transport_Protocol
+    wikidata: Q321213
   license: Unlicense
   endian: be
 doc: |
-  The Real-time Transport Protocol (RTP) is a widely used network protocol for transmitting audio or video. 
-  It usually works with the RTP Control Protocol (RTCP). 
-  The transmission can be based on Transmission Control Protocol (TCP) or User Datagram Protocol (UDP).
+  The Real-time Transport Protocol (RTP) is a widely used network
+  protocol for transmitting audio or video. It usually works with the
+  RTP Control Protocol (RTCP). The transmission can be based on
+  Transmission Control Protocol (TCP) or User Datagram Protocol (UDP).
 seq:
   - id: version
     type: b2
@@ -34,8 +35,21 @@ seq:
     type: header_extention
     if: has_extension
   - id: data
-    size-eos: true
-    doc: may contain padding data(depending on `has_padding` field)
+    size: _io.size - _io.pos - len_padding
+    doc: Payload without padding.
+  - id: padding
+    size: len_padding
+instances:
+  len_padding_if_exists:
+    pos: _io.size - 1
+    type: u1
+    if: has_padding
+    doc: |
+      If padding bit is enabled, last byte of data contains number of
+      bytes appended to the payload as padding.
+  len_padding:
+    value: 'has_padding ? len_padding_if_exists : 0'
+    doc: Always returns number of padding bytes to in the payload.
 types:
   header_extention:
     seq:
@@ -43,7 +57,7 @@ types:
         type: u2
       - id: length
         type: u2
-enums: 
+enums:
   payload_type_enum:
     0: pcmu
     1: reserved1
