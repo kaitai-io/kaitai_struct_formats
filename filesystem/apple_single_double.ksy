@@ -3,7 +3,8 @@ meta:
   title: AppleSingle / AppleDouble
   endian: be
   xref:
-    justsolve: 
+    forensicswiki: AppleDouble_header_file
+    justsolve: AppleDouble
     rfc: 1740
     wikidata: Q4781113
   license: CC0-1.0

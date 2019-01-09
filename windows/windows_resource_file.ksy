@@ -2,6 +2,9 @@ meta:
   id: windows_resource_file
   title: Windows resource file
   file-extension: res
+  xref:
+    justsolve: Windows_resource
+    wikidata: Q1417897
   license: CC0-1.0
   endian: le
 doc: |

@@ -1,6 +1,9 @@
 meta:
   id: ipv4_packet
   title: IPv4 network packet
+  xref:
+    rfc: 791
+    wikidata: Q11103
   license: CC0-1.0
   ks-version: 0.7
   imports:
