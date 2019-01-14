@@ -2,10 +2,10 @@ meta:
   id: ipv6_packet
   title: IPv6 network packet
   license: CC0-1.0
-  ks-version: 0.7
+  ks-version: 0.8
   endian: be
   imports:
-    - /network/tcp_segment
+    - /network/protocol_body
 seq:
   - id: version
     type: b4
@@ -24,30 +24,6 @@ seq:
   - id: dst_ipv6_addr
     size: 16
   - id: next_header
-    type:
-      switch-on: next_header_type
-      cases:
-        0: option_hop_by_hop
-        4: ipv4_packet
-        6: tcp_segment
-        17: udp_datagram
-        59: no_next_header
+    type: protocol_body(next_header_type)
   - id: rest
     size-eos: true
-types:
-  no_next_header: {}
-  option_hop_by_hop:
-    seq:
-      - id: next_header_type
-        type: u1
-      - id: hdr_ext_len
-        type: u1
-      - id: body
-        size: hdr_ext_len - 1
-      - id: next_header
-        type:
-          switch-on: next_header_type
-          cases:
-            0: option_hop_by_hop
-            6: tcp_segment
-            59: no_next_header
