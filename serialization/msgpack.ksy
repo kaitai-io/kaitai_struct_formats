@@ -87,7 +87,7 @@ instances:
   is_bool:
     value: b1 == 0xc2 or b1 == 0xc3
   bool_value:
-    value: b1 == 0xc2
+    value: b1 == 0xc3
     if: is_bool
     doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-bool'
   # ========================================================================
@@ -191,3 +191,4 @@ types:
         type: msgpack
       - id: value
         type: msgpack
+
