@@ -15,6 +15,7 @@ meta:
     rfc: 2083
     wikidata: Q178051
   license: CC0-1.0
+  ks-version: 0.8
   endian: be
 seq:
   # https://www.w3.org/TR/PNG/#5PNG-file-signature
@@ -72,8 +73,8 @@ types:
             '"zTXt"': compressed_text_chunk
       - id: crc
         size: 4
-  # https://www.w3.org/TR/PNG/#11IHDR
   ihdr_chunk:
+    doc-ref: https://www.w3.org/TR/PNG/#11IHDR
     seq:
       - id: width
         type: u4
@@ -90,8 +91,8 @@ types:
         type: u1
       - id: interlace_method
         type: u1
-  # https://www.w3.org/TR/PNG/#11PLTE
   plte_chunk:
+    doc-ref: https://www.w3.org/TR/PNG/#11PLTE
     seq:
       - id: entries
         type: rgb
@@ -104,8 +105,8 @@ types:
         type: u1
       - id: b
         type: u1
-  # https://www.w3.org/TR/PNG/#11cHRM
   chrm_chunk:
+    doc-ref: https://www.w3.org/TR/PNG/#11cHRM
     seq:
       - id: white_point
         type: point
@@ -126,16 +127,16 @@ types:
         value: x_int / 100000.0
       y:
         value: y_int / 100000.0
-  # https://www.w3.org/TR/PNG/#11gAMA
   gama_chunk:
+    doc-ref: https://www.w3.org/TR/PNG/#11gAMA
     seq:
       - id: gamma_int
         type: u4
     instances:
       gamma_ratio:
         value: 100000.0 / gamma_int
-  # https://www.w3.org/TR/PNG/#11sRGB
   srgb_chunk:
+    doc-ref: https://www.w3.org/TR/PNG/#11sRGB
     seq:
       - id: render_intent
         type: u1
@@ -146,8 +147,8 @@ types:
         1: relative_colorimetric
         2: saturation
         3: absolute_colorimetric
-  # https://www.w3.org/TR/PNG/#11bKGD
   bkgd_chunk:
+    doc-ref: https://www.w3.org/TR/PNG/#11bKGD
     seq:
       - id: bkgd
         type:
@@ -174,8 +175,8 @@ types:
     seq:
       - id: palette_index
         type: u1
-  # https://www.w3.org/TR/PNG/#11pHYs
   phys_chunk:
+    doc-ref: https://www.w3.org/TR/PNG/#11pHYs
     seq:
       - id: pixels_per_unit_x
         type: u4
@@ -184,8 +185,8 @@ types:
       - id: unit
         type: u1
         enum: phys_unit
-  # https://www.w3.org/TR/PNG/#11tIME
   time_chunk:
+    doc-ref: https://www.w3.org/TR/PNG/#11tIME
     seq:
       - id: year
         type: u2
@@ -199,8 +200,8 @@ types:
         type: u1
       - id: second
         type: u1
-  # https://www.w3.org/TR/PNG/#11iTXt
   international_text_chunk:
+    doc-ref: https://www.w3.org/TR/PNG/#11iTXt
     seq:
       - id: keyword
         type: strz
@@ -219,8 +220,8 @@ types:
         type: str
         encoding: UTF-8
         size-eos: true
-  # https://www.w3.org/TR/PNG/#11tEXt
   text_chunk:
+    doc-ref: https://www.w3.org/TR/PNG/#11tEXt
     seq:
       - id: keyword
         type: strz
@@ -229,8 +230,8 @@ types:
         type: str
         size-eos: true
         encoding: iso8859-1
-  # https://www.w3.org/TR/PNG/#11zTXt
   compressed_text_chunk:
+    doc-ref: https://www.w3.org/TR/PNG/#11zTXt
     seq:
       - id: keyword
         type: strz
