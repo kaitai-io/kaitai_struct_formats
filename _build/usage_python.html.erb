@@ -13,4 +13,4 @@ data = <%= class_name %>(KaitaiStream(BytesIO(raw)))</code></pre>
 
 <p>After that, one can get various attributes from the structure by invoking getter methods like:</p>
 
-<pre><code class="python"><% usage_attrs.each { |attr| %>data.<%= lcc(attr[:name]) %> # => <%= attr[:doc] %><% } %></code></pre>
+<pre><code class="python"><% usage_attrs.each { |attr| %>data.<%= attr[:name] %> # => <%= attr[:doc] %><% } %></code></pre>
