@@ -148,6 +148,9 @@ types:
         2: saturation
         3: absolute_colorimetric
   bkgd_chunk:
+    doc: |
+      Background chunk stores default background color to display this
+      image against. Contents depend on `color_type` of the image.
     doc-ref: https://www.w3.org/TR/PNG/#11bKGD
     seq:
       - id: bkgd
@@ -160,10 +163,12 @@ types:
             color_type::truecolor_alpha: bkgd_truecolor
             color_type::indexed: bkgd_indexed
   bkgd_greyscale:
+    doc: Background chunk for greyscale images.
     seq:
       - id: value
         type: u2
   bkgd_truecolor:
+    doc: Background chunk for truecolor images.
     seq:
       - id: red
         type: u2
@@ -172,20 +177,33 @@ types:
       - id: blue
         type: u2
   bkgd_indexed:
+    doc: Background chunk for images with indexed palette.
     seq:
       - id: palette_index
         type: u1
   phys_chunk:
+    doc: |
+      "Physical size" chunk stores data that allows to translate
+      logical pixels into physical units (meters, etc) and vice-versa.
     doc-ref: https://www.w3.org/TR/PNG/#11pHYs
     seq:
       - id: pixels_per_unit_x
         type: u4
+        doc: |
+          Number of pixels per physical unit (typically, 1 meter) by X
+          axis.
       - id: pixels_per_unit_y
         type: u4
+        doc: |
+          Number of pixels per physical unit (typically, 1 meter) by Y
+          axis.
       - id: unit
         type: u1
         enum: phys_unit
   time_chunk:
+    doc: |
+      Time chunk stores time stamp of last modification of this image,
+      up to 1 second precision in UTC timezone.
     doc-ref: https://www.w3.org/TR/PNG/#11tIME
     seq:
       - id: year
@@ -201,43 +219,76 @@ types:
       - id: second
         type: u1
   international_text_chunk:
+    doc: |
+      International text chunk effectively allows to store key-value string pairs in
+      PNG container. Both "key" (keyword) and "value" (text) parts are
+      given in pre-defined subset of iso8859-1 without control
+      characters.
     doc-ref: https://www.w3.org/TR/PNG/#11iTXt
     seq:
       - id: keyword
         type: strz
         encoding: UTF-8
+        doc: Indicates purpose of the following text data.
       - id: compression_flag
         type: u1
+        doc: |
+          0 = text is uncompressed, 1 = text is compressed with a
+          method specified in `compression_method`.
       - id: compression_method
         type: u1
+        enum: compression_methods
       - id: language_tag
         type: strz
         encoding: ASCII
+        doc: |
+          Human language used in `translated_keyword` and `text`
+          attributes - should be a language code conforming to ISO
+          646.IRV:1991.
       - id: translated_keyword
         type: strz
         encoding: UTF-8
+        doc: |
+          Keyword translated into language specified in
+          `language_tag`. Line breaks are not allowed.
       - id: text
         type: str
         encoding: UTF-8
         size-eos: true
+        doc: |
+          Text contents ("value" of this key-value pair), written in
+          language specified in `language_tag`. Linke breaks are
+          allowed.
   text_chunk:
+    doc: |
+      Text chunk effectively allows to store key-value string pairs in
+      PNG container. Both "key" (keyword) and "value" (text) parts are
+      given in pre-defined subset of iso8859-1 without control
+      characters.
     doc-ref: https://www.w3.org/TR/PNG/#11tEXt
     seq:
       - id: keyword
         type: strz
         encoding: iso8859-1
+        doc: Indicates purpose of the following text data.
       - id: text
         type: str
         size-eos: true
         encoding: iso8859-1
   compressed_text_chunk:
+    doc: |
+      Compressed text chunk effectively allows to store key-value
+      string pairs in PNG container, compressing "value" part (which
+      can be quite lengthy) with zlib compression.
     doc-ref: https://www.w3.org/TR/PNG/#11zTXt
     seq:
       - id: keyword
         type: strz
         encoding: UTF-8
+        doc: Indicates purpose of the following text data.
       - id: compression_method
         type: u1
+        enum: compression_methods
       - id: text_datastream
         process: zlib
         size-eos: true
@@ -251,3 +302,5 @@ enums:
   phys_unit:
     0: unknown
     1: meter
+  compression_methods:
+    0: zlib
