@@ -521,8 +521,10 @@ types:
         type: str
         size: 1
     instances:
-      degree_decimal:
+      value:
         value: (degrees.to_i + minutes.to_i/60.0 + seconds.to_i/3600.0) * (hemisphere == 'N'? 1 : -1)
+        doc: |
+          Degree decimal floating point representation        
   angle_dddmmss_sh:
     doc: |
       Typed used created to convert to degree decimal representation
@@ -540,8 +542,10 @@ types:
         type: str
         size: 1
     instances:
-      degree_decimal:
+      value:
         value: (degrees.to_i + minutes.to_i/60.0 + seconds.to_i/3600.0) * (hemisphere == 'N'? 1 : -1)
+        doc: |
+          Degree decimal floating point representation        
   angle_ddmmssh:
     doc: |
       Typed used created to convert to degree decimal representation
@@ -559,8 +563,10 @@ types:
         type: str
         size: 1
     instances:
-      degree_decimal:
+      value:
         value: (degrees.to_i + minutes.to_i/60.0 + seconds.to_i/3600.0) * (hemisphere == 'N'? 1 : -1)
+        doc: |
+          Degree decimal floating point representation        
   angle_dddmmssh:
     doc: |
       Typed used created to convert to degree decimal representation
@@ -578,8 +584,10 @@ types:
         type: str
         size: 1
     instances:
-      degree_decimal:
+      value:
         value: (degrees.to_i + minutes.to_i/60.0 + seconds.to_i/3600.0) * (hemisphere == 'N'? 1 : -1)
+        doc: |
+          Degree decimal floating point representation
   date_yymm:
     seq:
       - id: year
