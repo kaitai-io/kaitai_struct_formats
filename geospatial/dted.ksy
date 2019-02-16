@@ -7,12 +7,11 @@ meta:
     - dt2
   encoding: ASCII
   endian: be
-  ks-version: 0.8
+  ks-version: 0.7
   license: MIT
 doc: |
   PERFORMANCE SPECIFICATION DIGITAL TERRAIN ELEVATION DATA (DTED). |
-  MIL-PRF-89020B (23 May 2000)
-doc-ref: |
+  MIL-PRF-89020B (23 May 2000) |
   https://dds.cr.usgs.gov/srtm/version2_1/Documentation/MIL-PDF-89020B.pdf
 seq:
   - id: uhl
