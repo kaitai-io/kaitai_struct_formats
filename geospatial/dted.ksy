@@ -230,31 +230,19 @@ types:
       - id:  sw_corner_of_data
         type: coordinate_pair_ddmmssh
         doc: |
-          Latitude of SW corner of data, bounding rectangle— leading zero for |
-          values less than 10; H is the hemisphere of the data. |
-          Longitude of SW corner of data, bounding rectangle— leading zeroes |
-          for values less than 100; H is the hemisphere of the data (DDDMMSSH).
+          SW corner of data, bounding rectangle.
       - id:  nw_corner_of_data
         type: coordinate_pair_ddmmssh
         doc: |
-          Latitude of NW corner of data, bounding rectangle— leading zero for |
-          values less than 10; H is the hemisphere of the data. (DDMMSSH) |
-          Longitude of NW corner of data, bounding rectangle— leading zeroes |
-          for values less than 100; H is the hemisphere of the data (DDDMMSSH).
+          NW corner of data, bounding rectangle.
       - id:  ne_corner_of_data
         type: coordinate_pair_ddmmssh
         doc: |
-          Latitude of NE corner of data, bounding rectangle—leading zero for |
-          values less than 10; H is the hemisphere of the data (DDMMSSH). |
-          Longitude of NE corner of data, bounding rectangle— leading zeroes |
-          for values less than 100; H is the hemisphere of the data (DDDMMSSH).
+          NE corner of data, bounding rectangle.
       - id:  se_corner_of_data
         type: coordinate_pair_ddmmssh
         doc: |
-          Latitude of SE corner of data, bounding rectangle—leading zero for |
-          values less than 10; H is the hemisphere of the data.
-          Longitude of SE corner of data, bounding rectangle— leading zeroes |
-          for values less than 100; H is the hemisphere of the data.
+          SE corner of data, bounding rectangle.
       - id:  clockwise_orientation_angle
         type: angle_dddmmss_sh
         doc: |
@@ -286,7 +274,7 @@ types:
           For CD-ROM, this is the count of the number of longitude points in a |
           full one-degree cell. The count is based on the level of DTED and |
           the latitude zone of the cell. (See Table II and III) (0000-9999). 
-      - id:  partial_cell_indicator
+      - id:  partial_cell_indicator_text
         type: str
         size: 2
         doc: |
@@ -308,6 +296,11 @@ types:
         size: 155
         doc: |
           Reserved for free text comments. (Free text or Blank filled.)
+    instances:
+      partial_cell_indicator:
+        value: (partial_cell_indicator_text.to_i == 0)? 100.0 : partial_cell_indicator_text.to_i
+        doc: |
+          Partial Cell Indicator (% of data coverage)
   acc_header:
     doc: |
       Accuracy Description (ACC) Record. The ACC is used for magnetic tape and |
@@ -320,22 +313,22 @@ types:
         doc: |
           Recognition Sentinel.
       - id: absolute_horizontal_accuracy
-        type: ascii_int
+        type: ascii_int_maybe
         doc: |
           *Absolute Horizontal Accuracy of Product in meters (0000-9999 or Not |
           Available (NA))
       - id: absolute_vertical_accuracy
-        type: ascii_int
+        type: ascii_int_maybe
         doc: |
           *Absolute Vertical Accuracy of Product in meters (0000-9999 or Not |
           Available (NA))
       - id: relative_horizontal_accuracy_of_product_in_meters
-        type: ascii_int
+        type: ascii_int_maybe
         doc: |
           *Relative (Point-to-Point) Horizontal Accuracy of Product in meters. |
           (0000-9999 or Not Available (NA))
       - id: relative_vertical_accuracy_or_product_in_meters
-        type: ascii_int
+        type: ascii_int_maybe
         doc: |
           *Relative (Point-to-Point) Vertical Accuracy of Product in meters. |
           (0000-9999 or Not Available (NA))
@@ -384,26 +377,22 @@ types:
       to 3.13.5.1 for accuracy subregion description.
     seq:
       - id: absolute_horizontal_accuracy_or_subregion_in_meters
-        type: str
-        size: 4
+        type: ascii_int_maybe
         doc: |
           Absolute Horizontal Accuracy of Sub region in meters (0000-9999 or |
           Not Available (NA) )
       - id: absolute_vertical_accuracy_or_subregion_in_meters
-        type: str
-        size: 4
+        type: ascii_int_maybe
         doc: |
           Absolute Vertical Accuracy of Sub region in meters (0000-9999 or |
           Not Available (NA) )
       - id: relative_horizontal_accuracy_of_subregion_in_meters
-        type: str
-        size: 4
+        type: ascii_int_maybe
         doc: |
           Relative (Point-to-Point) Horizontal Accuracy of Sub region in |
           meters. (0000-9999 or Not Available (NA))
       - id: relative_vertical_accuracy_of_subregion_in_meters
-        type: str
-        size: 4
+        type: ascii_int_maybe
         doc: |
           Relative (Point-to-Point) Vertical Accuracy of Subregion in meters. |
           (0000-9999 or Not Available (NA))
@@ -487,22 +476,44 @@ types:
     instances:
       value:
         value: text.to_i
+  ascii_int_maybe:
+    seq:
+      - id: text
+        type: str
+        size: 4
+    instances:
+      has_value:
+        value: text != "NA"
+      value:
+        value: text.to_i
   coordinate_pair_ddmmss_sh:
     doc: |
       Typed used to make types consistent once parsed
     seq:
       - id: latitude
         type: angle_ddmmss_sh
+        doc: |
+          Latitude of coordinate pair, leading zero for values less than 10; |
+          H is the hemisphere of the data. (DDMMSS.SH)
       - id: longitude
         type: angle_dddmmss_sh
+        doc: |
+          Longitude of coordinate pair leading zeroes for values less than |
+          100; H is the hemisphere of the data (DDDMMSS.SH).
   coordinate_pair_ddmmssh:
     doc: |
       Typed used to make types consistent once parsed
     seq:
       - id: latitude
         type: angle_ddmmssh
+        doc: |
+          Latitude of coordinate pair, leading zero for values less than 10; |
+          H is the hemisphere of the data. (DDMMSSH)
       - id: longitude
         type: angle_dddmmssh
+        doc: |
+          Longitude of coordinate pair, leading zeroes for values less than |
+          100; H is the hemisphere of the data (DDDMMSSH).
   angle_ddmmss_sh:
     doc: |
       Typed used created to convert to degree decimal representation
@@ -515,13 +526,19 @@ types:
         size: 2
       - id: seconds
         type: str
-        size: 4
+        size: 2
+      - id: decimal_point
+        type: str
+        size: 1
+      - id: tenths_of_seconds
+        type: str
+        size: 1
       - id: hemisphere
         type: str
         size: 1
     instances:
       value:
-        value: (degrees.to_i + minutes.to_i/60.0 + seconds.to_i/3600.0) * (hemisphere == 'N'? 1 : -1)
+        value: (degrees.to_i + minutes.to_i/60.0 + seconds.to_i/3600.0 + tenths_of_seconds.to_i/36000.0) * (hemisphere == 'N'? 1 : -1)
         doc: |
           Degree decimal floating point representation        
   angle_dddmmss_sh:
@@ -536,13 +553,19 @@ types:
         size: 2
       - id: seconds
         type: str
-        size: 4
+        size: 2
+      - id: decimal_point
+        type: str
+        size: 1
+      - id: tenths_of_seconds
+        type: str
+        size: 1
       - id: hemisphere
         type: str
         size: 1
     instances:
       value:
-        value: (degrees.to_i + minutes.to_i/60.0 + seconds.to_i/3600.0) * (hemisphere == 'N'? 1 : -1)
+        value: (degrees.to_i + minutes.to_i/60.0 + seconds.to_i/3600.0 + tenths_of_seconds.to_i/36000.0) * (hemisphere == 'N'? 1 : -1)
         doc: |
           Degree decimal floating point representation        
   angle_ddmmssh:
