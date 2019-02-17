@@ -57,6 +57,9 @@ types:
         3: word
         4: dword
         5: rational
+        7: undefined
+        9: slong
+        10: srational
       tag_enum:
         0x0100: image_width
         0x0101: image_height
