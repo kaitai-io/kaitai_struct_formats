@@ -34,11 +34,11 @@ types:
       - id: recognition_sentinel
         contents: UHL
         doc: |
-          Recognition sentinel
+          Recognition sentinel ("UHL")
       - id: fixed_by_standard
         contents: "1"
         doc: |
-          Fixed by standard
+          Fixed by standard ("1")
       - id: longitude_of_origin
         type: angle_dddmmssh
         doc: |
@@ -108,7 +108,7 @@ types:
       - id: recognition_sentinel
         contents: DSI
         doc: |
-          Recognition Sentinel.
+          Recognition Sentinel ("DSI").
       - id: security_classification_code
         type: u1
         enum: security_classification_enum
@@ -158,11 +158,11 @@ types:
         doc: |
           Match/Merge Version (A-Z).
       - id: maintenance_date
-        type: date_yymm
+        type: date
         doc: |
           Match/Merge Date. Zero filled until used. (YYMM)
       - id: match_merge_date
-        type: date_yymm
+        type: date
         doc: |
           Match/Merge Date. Zero filled until used. (YYMM)
       - id: maintenance_description
@@ -193,7 +193,7 @@ types:
           First digit is Product Specification Amendment Number and second |
           digit is the Change Number.
       - id:  product_specification_date
-        type: date_yymm
+        type: date
         doc: |
           Date of Product Specification.
       - id:  vertical_datum
@@ -212,7 +212,7 @@ types:
         doc: |
           Digitizing/Collection System. (Free text).
       - id:  compilation_date
-        type: date_yymm
+        type: date
         doc: |
           Compilation Date. (Most descriptive year/month) (YYMM).
       - id:  reserved_for_future_use4
@@ -311,7 +311,7 @@ types:
       - id: recognition_sentinel
         contents: ACC
         doc: |
-          Recognition Sentinel.
+          Recognition Sentinel ("ACC").
       - id: absolute_horizontal_accuracy
         type: ascii_int_maybe
         doc: |
@@ -425,7 +425,7 @@ types:
       the user header label in South to North profile sequence.
     seq:
       - id: recognition_sentinal
-        type: u1
+        contents: [0xAA]
         doc: |
           Recognition Sentinel.
       - id: data_block_count
@@ -434,19 +434,19 @@ types:
           Sequential count of the block within the file, starting with zero |
           for the first block (Fixed Binary). (Data block count)
       - id: logitude_count
-        type: u2
+        type: fixed_binary
         doc: |
           Count of the meridian. True longitude = longitude count x data |
           interval + origin (Offset from the SW corner longitude) |
           (Fixed Binary).
       - id: latitude_count
-        type: u2
+        type: fixed_binary
         doc: |
           Count of the parallel. True latitude = latitude count x data |
           interval + origin (Offset from the SW corner latitude) |
           (Fixed Binary).
       - id: elevations
-        type: data_record_elevation
+        type: fixed_binary
         repeat: expr
         repeat-expr: _parent.uhl.number_of_latitude_points.value
         doc: |
@@ -456,10 +456,9 @@ types:
         doc: |
           Algebraic addition of contents of block. Sum is computed as an 
           integer summation of 8-bit values (Fixed Binary).
-  data_record_elevation:
+  fixed_binary:
     doc: |
-      type which repesents a single elevation value with it's unique encoding
-      mechanism.
+      Fixed Binary denotes signed magnitude, right-justified binary integers.
     seq:
       - id: is_negative
         type: b1
@@ -486,6 +485,7 @@ types:
         value: text != "NA"
       value:
         value: text.to_i
+        if: has_value
   coordinate_pair_ddmmss_sh:
     doc: |
       Typed used to make types consistent once parsed
@@ -610,14 +610,19 @@ types:
         value: (degrees.to_i + minutes.to_i/60.0 + seconds.to_i/3600.0) * (hemisphere == 'N'? 1 : -1)
         doc: |
           Degree decimal floating point representation
-  date_yymm:
+  date:
     seq:
-      - id: year
+      - id: year_text
         type: str
         size: 2
-      - id: month
+      - id: month_text
         type: str
         size: 2
+    instances:
+      year:
+        value: year_text.to_i
+      month:
+        value: month_text.to_i
 enums:
   security_classification_enum:
     83: secrete
