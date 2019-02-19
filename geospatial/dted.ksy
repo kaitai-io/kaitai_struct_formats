@@ -221,26 +221,26 @@ types:
         doc: |
           Reserved for future use. (Blank filled).
       - id:  origin_of_data
-        type: coordinate_pair_ddmmss_sh
+        type: coordinate_pair_precise
         doc: |
           Latitude of origin of data— leading zero for values less than 10; H |
           is the hemisphere of the data (DDMMSS.SH). |
           Longitude of origin of data— leading zeroes for values less than |
           100; H is the hemisphere of the data (DDDMMSS.SH).
       - id:  sw_corner_of_data
-        type: coordinate_pair_ddmmssh
+        type: coordinate_pair
         doc: |
           SW corner of data, bounding rectangle.
       - id:  nw_corner_of_data
-        type: coordinate_pair_ddmmssh
+        type: coordinate_pair
         doc: |
           NW corner of data, bounding rectangle.
       - id:  ne_corner_of_data
-        type: coordinate_pair_ddmmssh
+        type: coordinate_pair
         doc: |
           NE corner of data, bounding rectangle.
       - id:  se_corner_of_data
-        type: coordinate_pair_ddmmssh
+        type: coordinate_pair
         doc: |
           SE corner of data, bounding rectangle.
       - id:  clockwise_orientation_angle
@@ -405,7 +405,7 @@ types:
           Coordinates are input clockwise. Implied closing from last to first |
           coordinate pairs.) (03-14)
       - id: coordinate_pair
-        type: coordinate_pair_ddmmss_sh
+        type: coordinate_pair_precise
         repeat: expr
         repeat-expr: 14
         doc: |
@@ -486,9 +486,10 @@ types:
       value:
         value: text.to_i
         if: has_value
-  coordinate_pair_ddmmss_sh:
+  coordinate_pair_precise:
     doc: |
-      Typed used to make types consistent once parsed
+      Typed used group 2 angles to form a coordinate.  It is accurate to the |
+      tenth of a second.
     seq:
       - id: latitude
         type: angle_ddmmss_sh
@@ -500,9 +501,10 @@ types:
         doc: |
           Longitude of coordinate pair leading zeroes for values less than |
           100; H is the hemisphere of the data (DDDMMSS.SH).
-  coordinate_pair_ddmmssh:
+  coordinate_pair:
     doc: |
-      Typed used to make types consistent once parsed
+      Typed used group 2 angles to form a coordinate. It is accurate to the |
+      second.
     seq:
       - id: latitude
         type: angle_ddmmssh
