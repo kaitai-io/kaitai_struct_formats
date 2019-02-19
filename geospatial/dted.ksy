@@ -40,13 +40,13 @@ types:
         doc: |
           Fixed by standard ("1")
       - id: longitude_of_origin
-        type: angle_dddmmssh
+        type: angle(3,0)
         doc: |
           Longitude of origin (lower left corner of data set; full degree | 
           value; leading zero(s) for all subfields: degrees, minutes and |
           seconds). H is the Hemisphere of the data.
       - id: latitude_of_origin
-        type: angle_dddmmssh
+        type: angle(3,0)
         doc: |
           Latitude of origin (lower left corner of data set; full degree |
           value; leading zero(s) for all sub fields: (degrees, minutes and |
@@ -244,7 +244,7 @@ types:
         doc: |
           SE corner of data, bounding rectangle.
       - id:  clockwise_orientation_angle
-        type: angle_dddmmss_sh
+        type: angle(3,1)
         doc: |
           Clockwise orientation angle of data with respect to true North. |
           (Will usually be all zeros.)
@@ -492,12 +492,12 @@ types:
       tenth of a second.
     seq:
       - id: latitude
-        type: angle_ddmmss_sh
+        type: angle(2,1)
         doc: |
           Latitude of coordinate pair, leading zero for values less than 10; |
           H is the hemisphere of the data. (DDMMSS.SH)
       - id: longitude
-        type: angle_dddmmss_sh
+        type: angle(3,1)
         doc: |
           Longitude of coordinate pair leading zeroes for values less than |
           100; H is the hemisphere of the data (DDDMMSS.SH).
@@ -507,22 +507,25 @@ types:
       second.
     seq:
       - id: latitude
-        type: angle_ddmmssh
+        type: angle(2,0)
         doc: |
           Latitude of coordinate pair, leading zero for values less than 10; |
           H is the hemisphere of the data. (DDMMSSH)
       - id: longitude
-        type: angle_dddmmssh
+        type: angle(3,0)
         doc: |
           Longitude of coordinate pair, leading zeroes for values less than |
           100; H is the hemisphere of the data (DDDMMSSH).
-  angle_ddmmss_sh:
-    doc: |
-      Typed used created to convert to degree decimal representation
+  angle:
+    params:
+      - id: len_degrees
+        type: u1
+      - id: has_decimal_point
+        type: u1
     seq:
       - id: degrees
         type: str
-        size: 2
+        size: len_degrees
       - id: minutes
         type: str
         size: 2
@@ -532,84 +535,17 @@ types:
       - id: decimal_point
         type: str
         size: 1
+        if: has_decimal_point == 1
       - id: tenths_of_seconds
         type: str
         size: 1
+        if: has_decimal_point == 1
       - id: hemisphere
         type: str
         size: 1
     instances:
       value:
         value: (degrees.to_i + minutes.to_i/60.0 + seconds.to_i/3600.0 + tenths_of_seconds.to_i/36000.0) * (hemisphere == 'N'? 1 : -1)
-        doc: |
-          Degree decimal floating point representation        
-  angle_dddmmss_sh:
-    doc: |
-      Typed used created to convert to degree decimal representation
-    seq:
-      - id: degrees
-        type: str
-        size: 3
-      - id: minutes
-        type: str
-        size: 2
-      - id: seconds
-        type: str
-        size: 2
-      - id: decimal_point
-        type: str
-        size: 1
-      - id: tenths_of_seconds
-        type: str
-        size: 1
-      - id: hemisphere
-        type: str
-        size: 1
-    instances:
-      value:
-        value: (degrees.to_i + minutes.to_i/60.0 + seconds.to_i/3600.0 + tenths_of_seconds.to_i/36000.0) * (hemisphere == 'N'? 1 : -1)
-        doc: |
-          Degree decimal floating point representation        
-  angle_ddmmssh:
-    doc: |
-      Typed used created to convert to degree decimal representation
-    seq:
-      - id: degrees
-        type: str
-        size: 2
-      - id: minutes
-        type: str
-        size: 2
-      - id: seconds
-        type: str
-        size: 2
-      - id: hemisphere
-        type: str
-        size: 1
-    instances:
-      value:
-        value: (degrees.to_i + minutes.to_i/60.0 + seconds.to_i/3600.0) * (hemisphere == 'N'? 1 : -1)
-        doc: |
-          Degree decimal floating point representation        
-  angle_dddmmssh:
-    doc: |
-      Typed used created to convert to degree decimal representation
-    seq:
-      - id: degrees
-        type: str
-        size: 3
-      - id: minutes
-        type: str
-        size: 2
-      - id: seconds
-        type: str
-        size: 2
-      - id: hemisphere
-        type: str
-        size: 1
-    instances:
-      value:
-        value: (degrees.to_i + minutes.to_i/60.0 + seconds.to_i/3600.0) * (hemisphere == 'N'? 1 : -1)
         doc: |
           Degree decimal floating point representation
   date:
