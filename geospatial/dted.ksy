@@ -7,7 +7,7 @@ meta:
     - dt2
   encoding: ASCII
   endian: be
-  ks-version: 0.7
+  ks-version: 0.8
   license: MIT
 doc: |
   PERFORMANCE SPECIFICATION DIGITAL TERRAIN ELEVATION DATA (DTED). |
@@ -220,29 +220,56 @@ types:
         size: 22
         doc: |
           Reserved for future use. (Blank filled).
-      - id:  origin_of_data
-        type: coordinate_pair_precise
+      - id: latitude_of_origin
+        type: angle(2,1)
         doc: |
           Latitude of origin of data— leading zero for values less than 10; H |
-          is the hemisphere of the data (DDMMSS.SH). |
+          is the hemisphere of the data. (DDMMSS.SH)
+      - id: longitude_of_origin
+        type: angle(3,1)
+        doc: |
           Longitude of origin of data— leading zeroes for values less than |
-          100; H is the hemisphere of the data (DDDMMSS.SH).
-      - id:  sw_corner_of_data
-        type: coordinate_pair
+          100; H is the hemisphere of the data. (DDDMMSS.SH)
+      - id: latitude_of_sw_corner
+        type: angle(2,0)
         doc: |
-          SW corner of data, bounding rectangle.
-      - id:  nw_corner_of_data
-        type: coordinate_pair
+          Latitude of SW corner of data, bounding rectangle— leading zero for |
+          values less than 10; H is the hemisphere of the data. (DDMMSSH)
+      - id: longitude_of_sw_corner
+        type: angle(3,0)
         doc: |
-          NW corner of data, bounding rectangle.
-      - id:  ne_corner_of_data
-        type: coordinate_pair
+          Longitude of SW corner of data, bounding rectangle— leading zeroes |
+          for values less than 100; H is the hemisphere of the data. (DDDMMSSH)
+      - id: latitude_of_nw_corner
+        type: angle(2,0)
         doc: |
-          NE corner of data, bounding rectangle.
-      - id:  se_corner_of_data
-        type: coordinate_pair
+          Latitude of NW corner of data, bounding rectangle— leading zero for |
+          values less than 10; H is the hemisphere of the data. (DDMMSSH)
+      - id: longitude_of_nw_corner
+        type: angle(3,0)
         doc: |
-          SE corner of data, bounding rectangle.
+          Longitude of NW corner of data, bounding rectangle— leading zeroes |
+          for values less than 100; H is the hemisphere of the data. (DDDMMSSH)
+      - id: latitude_of_ne_corner
+        type: angle(2,0)
+        doc: |
+          Latitude of NE corner of data, bounding rectangle— leading zero for |
+          values less than 10; H is the hemisphere of the data. (DDMMSSH)
+      - id: longitude_of_ne_corner
+        type: angle(3,0)
+        doc: |
+          Longitude of NE corner of data, bounding rectangle— leading zeroes |
+          for values less than 100; H is the hemisphere of the data. (DDDMMSSH)
+      - id: latitude_of_se_corner
+        type: angle(2,0)
+        doc: |
+          Latitude of SE corner of data, bounding rectangle— leading zero for |
+          values less than 10; H is the hemisphere of the data. (DDMMSSH)
+      - id: longitude_of_se_corner
+        type: angle(3,0)
+        doc: |
+          Longitude of SE corner of data, bounding rectangle— leading zeroes |
+          for values less than 100; H is the hemisphere of the data. (DDDMMSSH)
       - id:  clockwise_orientation_angle
         type: angle(3,1)
         doc: |
@@ -405,7 +432,7 @@ types:
           Coordinates are input clockwise. Implied closing from last to first |
           coordinate pairs.) (03-14)
       - id: coordinate_pair
-        type: coordinate_pair_precise
+        type: coordinate_pair
         repeat: expr
         repeat-expr: 14
         doc: |
@@ -482,11 +509,11 @@ types:
         size: 4
     instances:
       has_value:
-        value: text != "NA"
+        value: text != "    " and text != "NA"
       value:
         value: text.to_i
         if: has_value
-  coordinate_pair_precise:
+  coordinate_pair:
     doc: |
       Typed used group 2 angles to form a coordinate.  It is accurate to the |
       tenth of a second.
@@ -494,28 +521,13 @@ types:
       - id: latitude
         type: angle(2,1)
         doc: |
-          Latitude of coordinate pair, leading zero for values less than 10; |
-          H is the hemisphere of the data. (DDMMSS.SH)
+          Latitude—leading zero for values less than 10; H is the hemisphere |
+          of the data. (DDMMSS.SH)
       - id: longitude
         type: angle(3,1)
         doc: |
-          Longitude of coordinate pair leading zeroes for values less than |
-          100; H is the hemisphere of the data (DDDMMSS.SH).
-  coordinate_pair:
-    doc: |
-      Typed used group 2 angles to form a coordinate. It is accurate to the |
-      second.
-    seq:
-      - id: latitude
-        type: angle(2,0)
-        doc: |
-          Latitude of coordinate pair, leading zero for values less than 10; |
-          H is the hemisphere of the data. (DDMMSSH)
-      - id: longitude
-        type: angle(3,0)
-        doc: |
-          Longitude of coordinate pair, leading zeroes for values less than |
-          100; H is the hemisphere of the data (DDDMMSSH).
+          Longitude—leading zero for values less than 100; H is the hemisphere |
+          of the data. (DDDMMSS.SH)
   angle:
     params:
       - id: len_degrees
@@ -544,8 +556,14 @@ types:
         type: str
         size: 1
     instances:
+      has_value:
+        value: minutes != "  "
+        doc: |
+          Some angles are for completly blank ascii strings so we need to |
+          check for that
       value:
-        value: (degrees.to_i + minutes.to_i/60.0 + seconds.to_i/3600.0 + tenths_of_seconds.to_i/36000.0) * (hemisphere == 'N'? 1 : -1)
+        value: (degrees.to_i + minutes.to_i/60.0 + seconds.to_i/3600.0 + (has_decimal_point==1?tenths_of_seconds.to_i/36000.0 : 0)) * (hemisphere == 'N'? 1 : -1)
+        if: has_value
         doc: |
           Degree decimal floating point representation
   date:
