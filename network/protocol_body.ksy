@@ -140,8 +140,7 @@ enums:
     81: vmtp
     82: secure_vmtp
     83: vines
-    84: ttp
-    84: iptm
+    84: ttp_or_iptm
     85: nsfnet_igp
     86: dgp
     87: tcf
