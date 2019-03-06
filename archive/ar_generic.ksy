@@ -78,7 +78,7 @@ types:
         type: str
         terminator: 0x20
         pad-right: 0x20
-        doc: The size of the member's data, in ASCII decimal, right-padded with spaces. If there is a padding byte after the member data, it is not counted in the size number.
+        doc: The size of the member's data, in ASCII decimal, right-padded with spaces. The trailing padding byte (if any) does not count toward the data size.
       - id: header_terminator
         -orig-id: ar_fmag
         contents: "`\n"

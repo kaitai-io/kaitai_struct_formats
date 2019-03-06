@@ -156,7 +156,7 @@ types:
         type: str
         terminator: 0x20
         pad-right: 0x20
-        doc: The size of the member's data, in ASCII decimal, right-padded with spaces. If there is a padding byte after the member data, it is not counted in the size number.
+        doc: The size of the member's data, in ASCII decimal, right-padded with spaces. The trailing padding byte (if any) does not count toward the data size.
       - id: header_terminator
         -orig-id: ar_fmag
         contents: "`\n"
@@ -175,7 +175,7 @@ types:
         doc: |
           The name of the archive member. Because the encoding of member names varies across systems, the name is exposed as a byte array.
           
-          Names are usually unique within an archive, but this is not required - the `ar` command even provides various options to work with archives containing multiple identically named members.nce with a `name` attribute. 
+          Names are usually unique within an archive, but this is not required - the `ar` command even provides various options to work with archives containing multiple identically named members.nce with a `name` attribute.
       size:
         value: size_dec.to_i
         doc: The size of the member's data, parsed as an integer.
