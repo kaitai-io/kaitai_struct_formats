@@ -132,7 +132,7 @@ types:
         doc: |
           The name of the archive member. Because the encoding of member names varies across systems, the name is exposed as a byte array.
           
-          Names are usually unique within an archive, but this is not required - the `ar` command even provides various options to work with archives containing multiple identically named members.nce with a `name` attribute.
+          Names are usually unique within an archive, but this is not required - the `ar` command even provides various options to work with archives containing multiple identically named members.
       size:
         value: 'name_internal.is_long_name ? size_raw - name_internal.long_name_size : size_raw'
         doc: The size of the member's data, excluding any long member name.
