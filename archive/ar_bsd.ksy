@@ -33,6 +33,31 @@ seq:
     repeat: eos
     doc: List of archive members. May be empty.
 types:
+  regular_member_name:
+    seq:
+      - id: name
+        terminator: 0x20
+        pad-right: 0x20
+        doc: The member name, right-padded with spaces.
+    doc: |
+      A regular (or "short") member name, stored directly in the name field.
+      
+      Note: Since regular names in BSD archives are terminated using spaces, file names that contain spaces cannot be stored as regular names. Such names must be stored as long names, even if they are not longer than 16 bytes.
+  long_member_name:
+    seq:
+      - id: magic
+        contents: '#1/'
+        doc: Indicates a long member name.
+      - id: name_size_dec
+        type: str
+        terminator: 0x20
+        pad-right: 0x20
+        doc: The size of the long member name in bytes, in ASCII decimal, right-padded with spaces.
+    instances:
+      name_size:
+        value: name_size_dec.to_i
+        doc: The size of the long member name in bytes, parsed as an integer.
+    doc: A long member name, stored at the start of the member's data.
   member_name:
     seq:
       - id: first_three_bytes
@@ -42,28 +67,17 @@ types:
       long_name_magic:
         value: '[0x23, 0x31, 0x2f]'
         doc: The ASCII bytes "#1/", indicating a long member name.
-      is_long_name:
+      is_long:
         value: first_three_bytes == long_name_magic
         doc: Whether this is a reference to a long name (stored at the start of the archive data) or a regular name.
-      regular_name:
+      regular:
         pos: 0
-        size-eos: true
-        terminator: 0x20
-        pad-right: 0x20
-        doc: The regular member name, right-padded with spaces.
-        if: not is_long_name
-      long_name_size_dec:
-        pos: long_name_magic.length
-        size-eos: true
-        type: str
-        terminator: 0x20
-        pad-right: 0x20
-        doc: The size of the long member name in bytes, in ASCII decimal, right-padded with spaces.
-        if: is_long_name
-      long_name_size:
-        value: long_name_size_dec.to_i
-        doc: The size of the long member name in bytes, parsed as an integer.
-        if: is_long_name
+        type: regular_member_name
+        if: not is_long
+      long:
+        pos: 0
+        type: long_member_name
+        if: is_long
   member:
     seq:
       - id: name_internal
@@ -111,10 +125,10 @@ types:
         contents: "`\n"
         doc: Marks the end of the header.
       - id: long_name
-        size: name_internal.long_name_size
+        size: name_internal.long.name_size
         terminator: 0x00
         pad-right: 0x00
-        if: name_internal.is_long_name
+        if: name_internal.is_long
         doc: The member's long name, if any, possibly right-padded with null bytes.
       - id: data
         size: size
@@ -128,13 +142,13 @@ types:
         value: size_raw_dec.to_i
         doc: The size of the member's data, including any long member name, parsed as an integer.
       name:
-        value: 'name_internal.is_long_name ? long_name : name_internal.regular_name'
+        value: 'name_internal.is_long ? long_name : name_internal.regular.name'
         doc: |
           The name of the archive member. Because the encoding of member names varies across systems, the name is exposed as a byte array.
           
           Names are usually unique within an archive, but this is not required - the `ar` command even provides various options to work with archives containing multiple identically named members.
       size:
-        value: 'name_internal.is_long_name ? size_raw - name_internal.long_name_size : size_raw'
+        value: 'name_internal.is_long ? size_raw - name_internal.long.name_size : size_raw'
         doc: The size of the member's data, excluding any long member name.
     doc: |
       An archive member's header and data.
