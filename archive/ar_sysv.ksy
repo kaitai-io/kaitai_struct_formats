@@ -101,15 +101,22 @@ types:
       second_char:
         pos: 1
         type: u1
-      parsed:
+      is_regular:
+        value: first_char != 0x2f
+      regular:
         pos: 0
-        type:
-          switch-on: 'first_char == 0x2f ? second_char >= ascii_zero and second_char <= ascii_nine ? 1 : 2 : 0'
-          cases:
-            0: regular_member_name
-            1: long_member_name
-            2: special_member_name
-        doc: The parsed version of the member name, with terminators and padding removed and long names resolved.
+        type: regular_member_name
+        if: is_regular
+      is_long:
+        value: first_char == 0x2f and second_char >= ascii_zero and second_char <= ascii_nine
+      long:
+        pos: 0
+        type: long_member_name
+        if: is_long
+      special:
+        pos: 0
+        type: special_member_name
+        if: not is_regular and not is_long
   member_data:
     seq:
       - id: data
@@ -171,7 +178,10 @@ types:
         doc: An extra newline is added as padding after members with an odd data size. This ensures that all members are 2-byte-aligned.
     instances:
       name:
-        value: name_internal.parsed
+        value: |
+          name_internal.is_regular ? name_internal.regular.name
+          : name_internal.is_long ? name_internal.long.name
+          : name_internal.special.name
         doc: |
           The name of the archive member. Because the encoding of member names varies across systems, the name is exposed as a byte array.
           
