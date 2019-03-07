@@ -33,26 +33,6 @@ seq:
     repeat: eos
     doc: List of archive members. May be empty.
 types:
-  regular_member_name:
-    seq:
-      - id: name
-        terminator: 0x20
-        pad-right: 0x20
-        doc: The member name, right-padded with spaces.
-    doc: A regular (or "short") member name, stored directly in the name field.
-  long_member_name:
-    seq:
-      - id: magic
-        contents: long_name_magic
-      - id: size_dec
-        type: str
-        terminator: 0x20
-        pad-right: 0x20
-        doc: The size of the long member name in bytes, in ASCII decimal, right-padded with spaces.
-    instances:
-      size:
-        value: size_dec.to_i
-        doc: The size of the long member name in bytes, parsed as an integer.
   member_name:
     seq:
       - id: first_three_bytes
