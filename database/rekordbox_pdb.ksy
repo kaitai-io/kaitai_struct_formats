@@ -198,14 +198,14 @@ types:
       - id: num_rows_large
         type: u2
         doc: |
-          Holds the value used for `num_rows` (see below) when that is
-          too large to fit into `num_rows_small`, and that situation
-          seems to be indicated when this value is larger than
-          `num_rows_small`, but not equal to `0x1fff`. This seems like
-          some strange mechanism to deal with the fact that lots of
-          tiny entries, such as are found in the `playlist_entries`
-          table, are too big to count with a single byte. But why not
-          just always use this value, then?
+          Holds the value used for `num_rows` (as described above)
+          when that is too large to fit into `num_rows_small`, and
+          that situation seems to be indicated when this value is
+          larger than `num_rows_small`, but not equal to `0x1fff`.
+          This seems like some strange mechanism to deal with the fact
+          that lots of tiny entries, such as are found in the
+          `playlist_entries` table, are too big to count with a single
+          byte. But why not just always use this value, then?
       - type: u2
         doc: |
           @flesniak said: "1004 for strange blocks, 0 otherwise"
@@ -511,8 +511,8 @@ types:
       - id: id
         type: u4
         doc: |
-          The unique identifier by which this playlist can be requested
-          and linked from other rows (such as tracks).
+          The unique identifier by which this playlist or folder can
+          be requested and linked from other rows.
       - id: raw_is_folder
         type: u4
         doc: |
@@ -875,8 +875,6 @@ types:
   device_sql_long_ascii:
     doc: |
       An ASCII-encoded string preceded by a two-byte length field.
-      TODO May need to skip a byte after the length!
-           Have not found any test data.
     seq:
       - id: length
         type: u2

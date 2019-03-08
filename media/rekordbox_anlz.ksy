@@ -68,15 +68,15 @@ types:
         type:
           switch-on: fourcc
           cases:
-            0x50434f42: cue_tag                 #'section_tags::cues'
-            0x50505448: path_tag                #'section_tags::path'
-            0x5051545a: beat_grid_tag           #'section_tags::beat_grid'
-            0x50564252: vbr_tag                 #'section_tags::vbr'
-            0x50574156: wave_preview_tag        #'section_tags::wave_preview'
-            0x50575632: wave_preview_tag        #'section_tags::wave_tiny'
-            0x50575633: wave_scroll_tag         #'section_tags::wave_scroll'
-            0x50575634: wave_color_preview_tag  #'section_tags::wave_color_preview'
-            0x50575635: wave_color_scroll_tag   #'section_tags::wave_color_scroll'
+            0x50434f42: cue_tag                 #'section_tags::cues' (PCOB)
+            0x50505448: path_tag                #'section_tags::path' (PPTH)
+            0x5051545a: beat_grid_tag           #'section_tags::beat_grid' (PQTZ)
+            0x50564252: vbr_tag                 #'section_tags::vbr'       (PVBR)
+            0x50574156: wave_preview_tag        #'section_tags::wave_preview' (PWAV)
+            0x50575632: wave_preview_tag        #'section_tags::wave_tiny'    (PWV2)
+            0x50575633: wave_scroll_tag         #'section_tags::wave_scroll'  (PWV3, seen in .EXT)
+            0x50575634: wave_color_preview_tag  #'section_tags::wave_color_preview' (PWV4, in .EXT)
+            0x50575635: wave_color_scroll_tag   #'section_tags::wave_color_scroll'  (PWV5, in .EXT)
             _: unknown_tag
     -webide-representation: '{fourcc}'
 
@@ -128,7 +128,7 @@ types:
         type: u4
         enum: cue_list_type
         doc: |
-          Identifies whether this tag stors ordinary or hot cues.
+          Identifies whether this tag stores ordinary or hot cues.
       - id: len_cues
         type: u4
         doc: |
@@ -280,8 +280,7 @@ types:
         type: u4
         doc: |
           The number of columns of waveform data (this matches the
-          non-color waveform length), but we do not yet know how to
-          translate the payload into color columns.
+          non-color waveform length.
       - type: u4
       - id: entries
         size: len_entries * len_entry_bytes
