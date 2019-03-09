@@ -11,14 +11,11 @@ meta:
     mime: application/x-archive
     wikidata: Q300839
   license: CC0-1.0
-  # The ar format is somewhat unusual: although it can store arbitrary data files, the ar format itself is text-based - all fields and magic numbers are pure ASCII.
-  # In particular, numerical values are stored as ASCII-encoded decimal and octal numbers, rather than packed byte values.  Because of this, the ar format has no endianness.
-  # Note: the encoding specified here is not used to interpret member names. As different systems use different encodings, they are exposed as byte arrays.
   encoding: ASCII
 doc: |
-  The Unix ar archive format, as created by the `ar` utility. It is a simple uncompressed flat archive format, but is rarely used for general-purpose archiving. Instead, it is commonly used by linkers to collect multiple object files along with a symbol table into a static library. The Debian package format (.deb) is also based on the ar format.
+  The System V variant of the Unix ar archive format (see the `ar_generic` spec for general info about the ar format). This variant is also used on Linux and Windows systems.
   
-  The ar format is not standardized and several variants have been developed, which differ mainly in how member names and the symbol table (if any) are stored. This specification describes the System V variant, including the GNU and Windows variants that derive from it.
+  System V archives support member names that contain spaces by terminating the name field using a slash instead of a space. File names longer than 16 bytes are supported by storing the name in a special archive member called "//" and only storing a byte offset in the member name field.
 doc-ref: |
   https://en.wikipedia.org/w/index.php?title=Ar_(Unix)&oldid=880452895#File_format_details
   https://docs.oracle.com/cd/E36784_01/html/E36873/ar.h-3head.html

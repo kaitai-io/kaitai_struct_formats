@@ -5,9 +5,6 @@ meta:
   file-extension:
     - a
   license: CC0-1.0
-  # The ar format is somewhat unusual: although it can store arbitrary data files, the ar format itself is text-based - all fields and magic numbers are pure ASCII.
-  # In particular, numerical values are stored as ASCII-encoded decimal and octal numbers, rather than packed byte values.  Because of this, the ar format has no endianness.
-  # Note: the encoding specified here is not used to interpret member names. As different systems use different encodings, they are exposed as byte arrays.
   encoding: ASCII
 doc: |
   The thin ar archive format, as created by the GNU binutils `ar` utility using the `T` flag. Thin archives are used by GNU binutils as a more efficient format for locally-created static libraries than the regular ar format. Thin archives only store the paths of all contained files (relative to the archive), but not the files' actual data - to read data from the archive, the original files need to be looked up and read. This makes thin archives unsuitable for general-purpose archiving (in fact, GNU `ar` does not support manually extracting thin archives), they are only meant to be used as a static library format.
