@@ -97,20 +97,16 @@ types:
         type: u1
       is_regular:
         value: first_char != 0x2f
-      regular:
-        pos: 0
-        type: regular_member_name
-        if: is_regular
       is_long:
         value: first_char == 0x2f and second_char >= ascii_zero and second_char <= ascii_nine
-      long:
+      parsed:
         pos: 0
-        type: long_member_name
-        if: is_long
-      special:
-        pos: 0
-        type: special_member_name
-        if: not is_regular and not is_long
+        type:
+          switch-on: 'is_regular ? 0 : is_long ? 1 : 2'
+          cases:
+            0: regular_member_name
+            1: long_member_name
+            2: special_member_name
   member_data:
     seq:
       - id: data
@@ -145,9 +141,9 @@ types:
     instances:
       name:
         value: |
-          name_internal.is_regular ? name_internal.regular.name
-          : name_internal.is_long ? name_internal.long.name
-          : name_internal.special.name
+          name_internal.is_regular ? name_internal.parsed.as<regular_member_name>.name
+          : name_internal.is_long ? name_internal.parsed.as<long_member_name>.name
+          : name_internal.parsed.as<special_member_name>.name
         doc: |
           The name of the archive member. Because the encoding of member names varies across systems, the name is exposed as a byte array.
           

@@ -63,14 +63,13 @@ types:
       is_long:
         value: first_three_bytes == long_name_magic
         doc: Whether this is a reference to a long name (stored at the start of the archive data) or a regular name.
-      regular:
+      parsed:
         pos: 0
-        type: regular_member_name
-        if: not is_long
-      long:
-        pos: 0
-        type: long_member_name
-        if: is_long
+        type:
+          switch-on: is_long
+          cases:
+            true: long_member_name
+            false: regular_member_name
   member:
     seq:
       - id: name_internal
@@ -91,7 +90,7 @@ types:
         contents: "`\n"
         doc: Marks the end of the header.
       - id: long_name
-        size: name_internal.long.name_size.value
+        size: name_internal.parsed.as<long_member_name>.name_size.value
         terminator: 0x00
         pad-right: 0x00
         if: name_internal.is_long
@@ -105,13 +104,13 @@ types:
         doc: An extra newline is added as padding after members with an odd data size. This ensures that all members are 2-byte-aligned.
     instances:
       name:
-        value: 'name_internal.is_long ? long_name : name_internal.regular.name'
+        value: 'name_internal.is_long ? long_name : name_internal.parsed.as<regular_member_name>.name'
         doc: |
           The name of the archive member. Because the encoding of member names varies across systems, the name is exposed as a byte array.
           
           Names are usually unique within an archive, but this is not required - the `ar` command even provides various options to work with archives containing multiple identically named members.
       size:
-        value: 'name_internal.is_long ? size_raw.value - name_internal.long.name_size.value : size_raw.value'
+        value: 'name_internal.is_long ? size_raw.value - name_internal.parsed.as<long_member_name>.name_size.value : size_raw.value'
         doc: The size of the member's data, excluding any long member name.
     doc: |
       An archive member's header and data.

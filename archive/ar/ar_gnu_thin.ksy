@@ -80,14 +80,13 @@ types:
         type: u1
       is_long:
         value: first_char == 0x2f and second_char >= ascii_zero and second_char <= ascii_nine
-      long:
+      parsed:
         pos: 0
-        type: long_member_name
-        if: is_long
-      special:
-        pos: 0
-        type: special_member_name
-        if: not is_long
+        type:
+          switch-on: is_long
+          cases:
+            true: long_member_name
+            false: special_member_name
   member_data:
     seq:
       - id: data
@@ -122,7 +121,7 @@ types:
         doc: An extra newline is added as padding after members with an odd data size. This ensures that all members are 2-byte-aligned.
     instances:
       name:
-        value: 'name_internal.is_long ? name_internal.long.name : name_internal.special.name'
+        value: 'name_internal.is_long ? name_internal.parsed.as<long_member_name>.name : name_internal.parsed.as<special_member_name>.name'
         doc: |
           The name of the archive member. Because the encoding of member names varies across systems, the name is exposed as a byte array.
           
