@@ -2,6 +2,8 @@ meta:
   id: member_metadata
   title: Unix ar archive member metadata
   license: CC0-1.0
+  imports:
+    - space_padded_number
 doc: An archive member's metadata (timestamp, user and group ID, mode).
 seq:
   - id: modified_timestamp
