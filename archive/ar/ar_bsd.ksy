@@ -10,7 +10,9 @@ meta:
     mime: application/x-archive
     wikidata: Q300839
   license: CC0-1.0
-  encoding: ASCII
+  imports:
+    - member_metadata
+    - space_padded_number
 doc: |
   The BSD variant of the Unix ar archive format (see the `ar_generic` spec for general info about the ar format). This variant is also used on Darwin-based systems (mainly Apple's macOS and iOS).
   
@@ -45,15 +47,9 @@ types:
       - id: magic
         contents: '#1/'
         doc: Indicates a long member name.
-      - id: name_size_dec
-        type: str
-        terminator: 0x20
-        pad-right: 0x20
-        doc: The size of the long member name in bytes, in ASCII decimal, right-padded with spaces.
-    instances:
-      name_size:
-        value: name_size_dec.to_i
-        doc: The size of the long member name in bytes, parsed as an integer.
+      - id: name_size
+        type: space_padded_number(13, 10)
+        doc: The size of the long member name in bytes.
     doc: A long member name, stored at the start of the member's data.
   member_name:
     seq:
@@ -82,47 +78,20 @@ types:
         size: 16
         type: member_name
         doc: Internal helper field, do not use directly, use the `name` instance instead.
-      - id: modified_timestamp_dec
-        -orig-id: ar_date
-        size: 12
-        type: str
-        terminator: 0x20
-        pad-right: 0x20
-        doc: The member's modification time, as a Unix timestamp, in ASCII decimal, right-padded with spaces.
-      - id: user_id_dec
-        -orig-id: ar_uid
-        size: 6
-        type: str
-        terminator: 0x20
-        pad-right: 0x20
-        doc: The member's user ID, in ASCII decimal, right-padded with spaces.
-      - id: group_id_dec
-        -orig-id: ar_gid
-        size: 6
-        type: str
-        terminator: 0x20
-        pad-right: 0x20
-        doc: The member's group ID, in ASCII decimal, right-padded with spaces.
-      - id: mode_oct
-        -orig-id: ar_mode
-        size: 8
-        type: str
-        terminator: 0x20
-        pad-right: 0x20
-        doc: The member's mode bits, in ASCII octal, right-padded with spaces.
-      - id: size_raw_dec
+      - id: metadata
+        type: member_metadata
+        doc: The member's metadata (timestamp, user and group ID, mode).
+      - id: size_raw
         -orig-id: ar_size
         size: 10
-        type: str
-        terminator: 0x20
-        pad-right: 0x20
-        doc: The size of the member's data, in ASCII decimal, right-padded with spaces. The long member name (if any) counts toward the data size, but the trailing padding byte (if any) does not.
+        type: space_padded_number(10, 10)
+        doc: The size of the member's data. The long member name (if any) counts toward the data size, but the trailing padding byte (if any) does not.
       - id: header_terminator
         -orig-id: ar_fmag
         contents: "`\n"
         doc: Marks the end of the header.
       - id: long_name
-        size: name_internal.long.name_size
+        size: name_internal.long.name_size.value
         terminator: 0x00
         pad-right: 0x00
         if: name_internal.is_long
@@ -132,12 +101,9 @@ types:
         doc: The member's data.
       - id: padding
         contents: "\n"
-        if: size % 2 != 0
+        if: size_raw.value % 2 != 0
         doc: An extra newline is added as padding after members with an odd data size. This ensures that all members are 2-byte-aligned.
     instances:
-      size_raw:
-        value: size_raw_dec.to_i
-        doc: The size of the member's data, including any long member name, parsed as an integer.
       name:
         value: 'name_internal.is_long ? long_name : name_internal.regular.name'
         doc: |
@@ -145,7 +111,7 @@ types:
           
           Names are usually unique within an archive, but this is not required - the `ar` command even provides various options to work with archives containing multiple identically named members.
       size:
-        value: 'name_internal.is_long ? size_raw - name_internal.long.name_size : size_raw'
+        value: 'name_internal.is_long ? size_raw.value - name_internal.long.name_size.value : size_raw.value'
         doc: The size of the member's data, excluding any long member name.
     doc: |
       An archive member's header and data.

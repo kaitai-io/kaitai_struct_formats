@@ -5,7 +5,9 @@ meta:
   file-extension:
     - a
   license: CC0-1.0
-  encoding: ASCII
+  imports:
+    - space_padded_number
+    - member_metadata
 doc: |
   The thin ar archive format, as created by the GNU binutils `ar` utility using the `T` flag. Thin archives are used by GNU binutils as a more efficient format for locally-created static libraries than the regular ar format. Thin archives only store the paths of all contained files (relative to the archive), but not the files' actual data - to read data from the archive, the original files need to be looked up and read. This makes thin archives unsuitable for general-purpose archiving (in fact, GNU `ar` does not support manually extracting thin archives), they are only meant to be used as a static library format.
   
@@ -42,18 +44,13 @@ types:
     seq:
       - id: slash
         contents: "/"
-      - id: offset_dec
-        type: str
-        terminator: 0x20
-        pad-right: 0x20
-        doc: A byte offset in ASCII decimal, right-padded using spaces. This indicates where the actual member name is stored in the long name list.
+      - id: offset
+        type: space_padded_number(15, 10)
+        doc: The byte offset in the long name list at which the actual member name is stored.
     instances:
-      offset:
-        value: offset_dec.to_i
-        doc: The offset of the file name, parsed as an integer.
       name:
         io: _root.long_name_list.data_internal._io
-        pos: offset
+        pos: offset.value
         # The terminator is actually a slash followed by a newline, but multi-character terminators are not supported by Kaitai, and it's very unlikely that a path will contain a newline.
         terminator: 0x0a
         doc: The member name (actually a relative path) stored in the long name list, terminated by a slash and a newline. For technicaly reasons, includes the terminating slash (but not the newline).
@@ -103,53 +100,25 @@ types:
         size: 16
         type: member_name
         doc: Internal helper field, do not use directly, use the `name` instance instead.
-      - id: modified_timestamp_dec
-        -orig-id: ar_date
-        size: 12
-        type: str
-        terminator: 0x20
-        pad-right: 0x20
-        doc: The member's modification time, as a Unix timestamp, in ASCII decimal, right-padded with spaces.
-      - id: user_id_dec
-        -orig-id: ar_uid
-        size: 6
-        type: str
-        terminator: 0x20
-        pad-right: 0x20
-        doc: The member's user ID, in ASCII decimal, right-padded with spaces.
-      - id: group_id_dec
-        -orig-id: ar_gid
-        size: 6
-        type: str
-        terminator: 0x20
-        pad-right: 0x20
-        doc: The member's group ID, in ASCII decimal, right-padded with spaces.
-      - id: mode_oct
-        -orig-id: ar_mode
-        size: 8
-        type: str
-        terminator: 0x20
-        pad-right: 0x20
-        doc: The member's mode bits, in ASCII octal, right-padded with spaces.
-      - id: size_dec
+      - id: metadata
+        type: member_metadata
+        doc: The member's metadata (timestamp, user and group ID, mode).
+      - id: size
         -orig-id: ar_size
-        size: 10
-        type: str
-        terminator: 0x20
-        pad-right: 0x20
-        doc: The size of the member's data, in ASCII decimal, right-padded with spaces. The trailing padding byte (if any) does not count toward the data size.
+        type: space_padded_number(10, 10)
+        doc: The size of the member's data. The trailing padding byte (if any) does not count toward the data size.
       - id: header_terminator
         -orig-id: ar_fmag
         contents: "`\n"
         doc: Marks the end of the header.
       - id: data_internal
         type: member_data
-        size: size
+        size: size.value
         if: not name_internal.is_long
         doc: Internal helper field, do not use directly, use the `data` instance instead.
       - id: padding
         contents: "\n"
-        if: not name_internal.is_long and size % 2 != 0
+        if: not name_internal.is_long and size.value % 2 != 0
         doc: An extra newline is added as padding after members with an odd data size. This ensures that all members are 2-byte-aligned.
     instances:
       name:
@@ -158,9 +127,6 @@ types:
           The name of the archive member. Because the encoding of member names varies across systems, the name is exposed as a byte array.
           
           Names are usually unique within an archive, but this is not required - the `ar` command even provides various options to work with archives containing multiple identically named members.
-      size:
-        value: size_dec.to_i
-        doc: The size of the member's data, parsed as an integer.
       data:
         value: data_internal.data
         if: not name_internal.is_long
