@@ -6,6 +6,8 @@ meta:
     - a # Unix/generic
     - lib # Windows
     - rlib # Rust
+    - deb # Debian binary package
+    - udeb # Debian binary package
   xref:
     justsolve: AR
     mime: application/x-archive
