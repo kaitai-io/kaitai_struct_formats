@@ -6,6 +6,7 @@ meta:
     - /network/tcp_segment
     - /network/icmp_packet
     - /network/udp_datagram
+    - /network/ipv4_packet
     - /network/ipv6_packet
 doc: |
   Protocol body represents particular payload on transport level (OSI

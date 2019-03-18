@@ -32,16 +32,16 @@ types:
         type: u4
       - id: os_type
         type: u1
-        enum: os
+        enum: uimage_os
       - id: architecture
         type: u1
-        enum: arch
+        enum: uimage_arch
       - id: image_type
         type: u1
-        enum: t
+        enum: uimage_type
       - id: compression_type
         type: u1
-        enum: comp
+        enum: uimage_comp
       - id: name
         size: 32
         encoding: UTF-8
