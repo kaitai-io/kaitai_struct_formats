@@ -1,5 +1,5 @@
 meta:
-  id: vox
+  id: magicavoxel_vox
   file-extension: vox
   application: MagicaVoxel
   endian: le
