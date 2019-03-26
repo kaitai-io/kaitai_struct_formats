@@ -1,9 +1,13 @@
 meta:
   id: macos_ds_store
-  endian: be
-  ks-version: 0.8
+  title: macOS '.DS_Store' format
   license: CC-BY-SA-4.0
+  ks-version: 0.8
+  endian: be
+doc: |
+  Apple macOS '.DS_Store' file format.
 doc-ref: |
+  https://en.wikipedia.org/wiki/.DS_Store
   https://metacpan.org/pod/distribution/Mac-Finder-DSStore/DSStoreFormat.pod
   https://0day.work/parsing-the-ds_store-file-format
 seq:
