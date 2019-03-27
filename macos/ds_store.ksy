@@ -103,7 +103,7 @@ types:
       - id: unknown
         type: u4
     instances:
-      block:
+      root_block:
         io: _root._io
         type: block
         pos: (_root.buddy_allocator_body.block_addresses[block_id] >> 0x05 << 0x05) + 4
@@ -120,7 +120,7 @@ types:
         repeat: expr
         repeat-expr: count
     instances:
-      block:
+      rightmost_block:
         io: _root._io
         type: block
         if: mode > 0
