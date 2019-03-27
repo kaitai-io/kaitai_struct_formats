@@ -1,5 +1,5 @@
 meta:
-  id: macos_ds_store
+  id: ds_store
   title: macOS '.DS_Store' format
   license: CC-BY-SA-4.0
   ks-version: 0.8
