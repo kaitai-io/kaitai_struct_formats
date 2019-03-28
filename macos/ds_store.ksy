@@ -11,7 +11,7 @@ doc-ref: |
   https://metacpan.org/pod/distribution/Mac-Finder-DSStore/DSStoreFormat.pod
   https://0day.work/parsing-the-ds_store-file-format
 seq:
-  - id: alignment
+  - id: alignment_header
     contents: [0x00, 0x00, 0x00, 0x01]
   - id: buddy_allocator_header
     type: buddy_allocator_header
