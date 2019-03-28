@@ -33,15 +33,15 @@ types:
       - id: copy_offset_bookkeeping_info_block
         type: u4
         doc: Needs to match 'offset_bookkeeping_info_block'
-      - id: unused_block
-        size: 16
+      - size: 16
+        doc: Unused block
   buddy_allocator_body:
     seq:
       - id: block_count
         type: u4
         doc: Number of blocks in the allocated-blocks list
-      - id: unknown_field
-        size: 4
+      - size: 4
+        doc: Unknown field
       - id: block_addresses
         type: u4
         repeat: expr
@@ -100,8 +100,8 @@ types:
       - id: num_nodes
         type: u4
         doc: Number of nodes in the tree
-      - id: unknown
-        type: u4
+      - type: u4
+        doc: Unknown field
     instances:
       root_block:
         io: _root._io
