@@ -19,18 +19,18 @@ instances:
   buddy_allocator_body:
     type: buddy_allocator_body
     size: buddy_allocator_header.size_bookkeeping_info_block
-    pos: buddy_allocator_header.offset_bookkeeping_info_block + 4
+    pos: buddy_allocator_header.ofs_bookkeeping_info_block + 4
 types:
   buddy_allocator_header:
     seq:
       - id: magic
         contents: [0x42, 0x75, 0x64, 0x31]
         doc: Magic number 'Bud1'
-      - id: offset_bookkeeping_info_block
+      - id: ofs_bookkeeping_info_block
         type: u4
       - id: size_bookkeeping_info_block
         type: u4
-      - id: copy_offset_bookkeeping_info_block
+      - id: copy_ofs_bookkeeping_info_block
         type: u4
         doc: Needs to match 'offset_bookkeeping_info_block'
       - size: 16
