@@ -18,8 +18,8 @@ seq:
 instances:
   buddy_allocator_body:
     pos: buddy_allocator_header.ofs_bookkeeping_info_block + 4
-    type: buddy_allocator_body
     size: buddy_allocator_header.len_bookkeeping_info_block
+    type: buddy_allocator_body
 types:
   buddy_allocator_header:
     seq:
