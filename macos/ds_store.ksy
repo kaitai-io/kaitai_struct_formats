@@ -17,9 +17,9 @@ seq:
     type: buddy_allocator_header
 instances:
   buddy_allocator_body:
+    pos: buddy_allocator_header.ofs_bookkeeping_info_block + 4
     type: buddy_allocator_body
     size: buddy_allocator_header.size_bookkeeping_info_block
-    pos: buddy_allocator_header.ofs_bookkeeping_info_block + 4
 types:
   buddy_allocator_header:
     seq:
@@ -62,8 +62,8 @@ types:
     instances:
       directories:
         io: _root._io
-        size: 1 << block_addresses[directory_entries[0].block_id] & 0x1f
         pos: (block_addresses[directory_entries[0].block_id] >> 0x05 << 0x05) + 4
+        size: 1 << block_addresses[directory_entries[0].block_id] & 0x1f
         type: master_block
         repeat: expr
         repeat-expr: directory_count
