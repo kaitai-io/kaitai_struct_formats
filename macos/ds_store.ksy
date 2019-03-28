@@ -18,8 +18,8 @@ seq:
 instances:
   buddy_allocator_body:
     type: buddy_allocator_body
-    pos: buddy_allocator_header.offset_bookkeeping_info_block + 4
     size: buddy_allocator_header.size_bookkeeping_info_block
+    pos: buddy_allocator_header.offset_bookkeeping_info_block + 4
 types:
   buddy_allocator_header:
     seq:
@@ -62,20 +62,20 @@ types:
     instances:
       directories:
         io: _root._io
+        size: 1 << block_addresses[directory_entries[0].block_id] & 0x1f
+        pos: (block_addresses[directory_entries[0].block_id] >> 0x05 << 0x05) + 4
         type: master_block
         repeat: expr
         repeat-expr: directory_count
-        pos: (block_addresses[directory_entries[0].block_id] >> 0x05 << 0x05) + 4
-        size: 1 << block_addresses[directory_entries[0].block_id] & 0x1f
         doc: Master blocks of the different B-trees
   directory_entry:
     seq:
       - id: name_len
         type: u1
       - id: name
+        size: name_len
         type: str
         encoding: UTF-8
-        size: name_len
       - id: block_id
         type: u4
   free_list:
@@ -105,8 +105,8 @@ types:
     instances:
       root_block:
         io: _root._io
-        type: block
         pos: (_root.buddy_allocator_body.block_addresses[block_id] >> 0x05 << 0x05) + 4
+        type: block
   block:
     seq:
       - id: mode
@@ -122,9 +122,9 @@ types:
     instances:
       rightmost_block:
         io: _root._io
+        pos: (_root.buddy_allocator_body.block_addresses[mode] >> 0x05 << 0x05) + 4
         type: block
         if: mode > 0
-        pos: (_root.buddy_allocator_body.block_addresses[mode] >> 0x05 << 0x05) + 4
         doc: Rightmost child block pointer
   record:
     seq:
@@ -134,9 +134,9 @@ types:
         type: four_char_code
         doc: Description of the entry's property
       - id: data_type
+        size: 4
         type: str
         encoding: UTF-8
-        size: 4
         doc: Data type of the value
       - id: value
         type:
@@ -163,9 +163,9 @@ types:
     instances:
       block:
         io: _root._io
+        pos: (_root.buddy_allocator_body.block_addresses[block_id] >> 0x05 << 0x05) + 4
         type: block
         if: mode > 0
-        pos: (_root.buddy_allocator_body.block_addresses[block_id] >> 0x05 << 0x05) + 4
   record_blob:
     seq:
       - id: length
@@ -177,12 +177,12 @@ types:
       - id: length
         type: u4
       - id: value
+        size: 2 * length
         type: str
         encoding: UTF-16BE
-        size: 2 * length
   four_char_code:
     seq:
       - id: value
+        size: 4
         type: str
         encoding: UTF-8
-        size: 4
