@@ -19,7 +19,7 @@ instances:
   buddy_allocator_body:
     pos: buddy_allocator_header.ofs_bookkeeping_info_block + 4
     type: buddy_allocator_body
-    size: buddy_allocator_header.size_bookkeeping_info_block
+    size: buddy_allocator_header.len_bookkeeping_info_block
 types:
   buddy_allocator_header:
     seq:
@@ -28,7 +28,7 @@ types:
         doc: Magic number 'Bud1'
       - id: ofs_bookkeeping_info_block
         type: u4
-      - id: size_bookkeeping_info_block
+      - id: len_bookkeeping_info_block
         type: u4
       - id: copy_ofs_bookkeeping_info_block
         type: u4
@@ -37,7 +37,7 @@ types:
         doc: Unused block
   buddy_allocator_body:
     seq:
-      - id: block_count
+      - id: num_blocks
         type: u4
         doc: Number of blocks in the allocated-blocks list
       - size: 4
@@ -47,13 +47,13 @@ types:
         repeat: expr
         repeat-expr: 256
         doc: Addresses of the different blocks
-      - id: directory_count
+      - id: num_directories
         type: u4
         doc: Indicates the number of directory entries
       - id: directory_entries
         type: directory_entry
         repeat: expr
-        repeat-expr: directory_count
+        repeat-expr: num_directories
         doc: Each directory is an independent B-tree
       - id: free_lists
         type: free_list
@@ -66,14 +66,14 @@ types:
         size: 1 << block_addresses[directory_entries[0].block_id] & 0x1f
         type: master_block
         repeat: expr
-        repeat-expr: directory_count
+        repeat-expr: num_directories
         doc: Master blocks of the different B-trees
   directory_entry:
     seq:
-      - id: name_len
+      - id: len_name
         type: u1
       - id: name
-        size: name_len
+        size: len_name
         type: str
         encoding: UTF-8
       - id: block_id
@@ -112,13 +112,13 @@ types:
       - id: mode
         type: u4
         doc: If mode is 0, this is a leaf node, otherwise it is an internal node
-      - id: count
+      - id: counter
         type: u4
         doc: Number of records or number of block id + record pairs
       - id: data
         type: block_data(mode)
         repeat: expr
-        repeat-expr: count
+        repeat-expr: counter
     instances:
       rightmost_block:
         io: _root._io
