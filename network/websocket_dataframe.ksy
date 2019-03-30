@@ -4,47 +4,51 @@ meta:
   xref:
     rfc: 6455
   endian: be
-  license: APACHE-2.0
+  license: CC0-1.0
 doc: |
   The WebSocket protocol establishes a two-way communication channel via TCP.
   Messages are made up of one or more dataframes, and are delineated by
   frames with the `fin` bit set.
 seq:
-  - id: fin
+  - id: finished
+    -orig-id: fin
     type: b1
-  - id: rsv1
+  - id: reserved1
+    -orig-id: rsv1
     type: b1
-  - id: rsv2
+  - id: reserved2
+    -orig-id: rsv2
     type: b1
-  - id: rsv3
+  - id: reserved3
+    -orig-id: rsv3
     type: b1
   - id: opcode
     enum: opcode
     type: b4
   - id: b1
     type: u1
-  - id: extended_len_1
+  - id: len_payload_extended_1
     type: u2
-    if: payload_len == 126
-  - id: extended_len_2
+    if: len_payload_primary == 126
+  - id: len_payload_extended_2
     type: u4
-    if: payload_len == 127
+    if: len_payload_primary == 127
   - id: mask_key
     type: u4
     if: is_masked == 1
   - id: payload
-    size: len
+    size: len_payload
     
 instances:
   is_masked:
     value: (b1 & 0b10000000) >> 7
-  payload_len:
+  len_payload_primary:
     value: (b1 & 0b01111111)
     
-  len:
+  len_payload:
     value: |
-      payload_len <= 125 ? payload_len : (
-        payload_len == 126 ? extended_len_1 : extended_len_2
+      len_payload_primary <= 125 ? len_payload_primary : (
+        len_payload_primary == 126 ? len_payload_extended_1 : len_payload_extended_2
       )
     
 enums:
