@@ -13,20 +13,16 @@ seq:
   - id: finished
     -orig-id: fin
     type: b1
-  - id: reserved1
-    -orig-id: rsv1
-    type: b1
-  - id: reserved2
-    -orig-id: rsv2
-    type: b1
-  - id: reserved3
-    -orig-id: rsv3
-    type: b1
+  - id: reserved
+    -orig-id: 'rsv1, rsv2, rsv3'
+    type: b3
   - id: opcode
     enum: opcode
     type: b4
-  - id: b1
-    type: u1
+  - id: is_masked
+    type: b1
+  - id: len_payload_primary
+    type: b7
   - id: len_payload_extended_1
     type: u2
     if: len_payload_primary == 126
@@ -35,16 +31,11 @@ seq:
     if: len_payload_primary == 127
   - id: mask_key
     type: u4
-    if: is_masked == 1
+    if: is_masked
   - id: payload
     size: len_payload
     
 instances:
-  is_masked:
-    value: (b1 & 0b10000000) >> 7
-  len_payload_primary:
-    value: (b1 & 0b01111111)
-    
   len_payload:
     value: |
       len_payload_primary <= 125 ? len_payload_primary : (
