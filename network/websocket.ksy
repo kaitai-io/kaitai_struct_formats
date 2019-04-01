@@ -42,12 +42,12 @@ types:
         if: is_masked
       - id: payload_bytes
         size: len_payload
-        if: '_root.dataframe[0].opcode != opcode::text'
+        if: '_root.dataframes[0].opcode != opcode::text'
       - id: payload_text
         size: len_payload
         type: str
         encoding: UTF-8
-        if: '_root.dataframe[0].opcode == opcode::text'
+        if: '_root.dataframes[0].opcode == opcode::text'
     
     instances:
       len_payload:
@@ -74,4 +74,3 @@ enums:
     0xD: reserved_control_d
     0xE: reserved_control_e
     0xF: reserved_control_f
-    
