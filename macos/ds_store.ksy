@@ -62,9 +62,7 @@ types:
     instances:
       directories:
         io: _root._io
-        pos: (block_addresses[directory_entries[0].block_id] >> 0x05 << 0x05) + 4
-        size: 1 << block_addresses[directory_entries[0].block_id] & 0x1f
-        type: master_block
+        type: master_block_ref(_index)
         repeat: expr
         repeat-expr: num_directories
         doc: Master blocks of the different B-trees
@@ -86,6 +84,15 @@ types:
         type: u4
         repeat: expr
         repeat-expr: counter
+  master_block_ref:
+    params:
+      - id: idx
+        type: u8
+    instances:
+      master_block:
+        pos: (_parent.block_addresses[_parent.directory_entries[idx].block_id] >> 0x05 << 0x05) + 4
+        size: 1 << _parent.block_addresses[_parent.directory_entries[idx].block_id] & 0x1f
+        type: master_block
   master_block:
     seq:
       - id: block_id
