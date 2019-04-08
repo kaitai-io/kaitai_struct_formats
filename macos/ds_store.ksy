@@ -44,7 +44,7 @@ types:
       - size: 4
         doc: Unknown field
       - id: block_addresses
-        type: u4
+        type: block_descriptor
         repeat: expr
         repeat-expr: 256
         doc: Addresses of the different blocks
@@ -67,6 +67,15 @@ types:
         repeat: expr
         repeat-expr: num_directories
         doc: Master blocks of the different B-trees
+  block_descriptor:
+    seq:
+      - id: address_raw
+        type: u4
+    instances:
+      offset:
+        value: (address_raw & ~0x1f) + 4
+      size:
+        value: 1 << address_raw & 0x1f
   directory_entry:
     seq:
       - id: len_name
@@ -90,8 +99,8 @@ types:
         type: u8
     instances:
       master_block:
-        pos: (_parent.block_addresses[_parent.directory_entries[idx].block_id] & ~0x1f) + 4
-        size: 1 << _parent.block_addresses[_parent.directory_entries[idx].block_id] & 0x1f
+        pos: _parent.block_addresses[_parent.directory_entries[idx].block_id].offset
+        size: _parent.block_addresses[_parent.directory_entries[idx].block_id].size
         type: master_block
   master_block:
     seq:
@@ -112,7 +121,7 @@ types:
     instances:
       root_block:
         io: _root._io
-        pos: (_root.buddy_allocator_body.block_addresses[block_id] & ~0x1f) + 4
+        pos: _root.buddy_allocator_body.block_addresses[block_id].offset
         type: block
   block:
     seq:
@@ -129,7 +138,7 @@ types:
     instances:
       rightmost_block:
         io: _root._io
-        pos: (_root.buddy_allocator_body.block_addresses[mode] & ~0x1f) + 4
+        pos: _root.buddy_allocator_body.block_addresses[mode].offset
         type: block
         if: mode > 0
         doc: Rightmost child block pointer
@@ -169,7 +178,7 @@ types:
     instances:
       block:
         io: _root._io
-        pos: (_root.buddy_allocator_body.block_addresses[block_id] & ~0x1f) + 4
+        pos: _root.buddy_allocator_body.block_addresses[block_id].offset
         type: block
         if: mode > 0
   record_blob:
