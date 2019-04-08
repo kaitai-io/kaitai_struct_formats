@@ -3,6 +3,7 @@ meta:
   title: macOS '.DS_Store' format
   license: CC-BY-SA-4.0
   ks-version: 0.8
+  encoding: UTF-8
   endian: be
 doc: |
   Apple macOS '.DS_Store' file format.
@@ -73,7 +74,6 @@ types:
       - id: name
         size: len_name
         type: str
-        encoding: UTF-8
       - id: block_id
         type: u4
   free_list:
@@ -143,7 +143,6 @@ types:
       - id: data_type
         size: 4
         type: str
-        encoding: UTF-8
         doc: Data type of the value
       - id: value
         type:
@@ -192,4 +191,3 @@ types:
       - id: value
         size: 4
         type: str
-        encoding: UTF-8
