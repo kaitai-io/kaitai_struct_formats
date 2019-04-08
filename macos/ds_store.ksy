@@ -90,7 +90,7 @@ types:
         type: u8
     instances:
       master_block:
-        pos: (_parent.block_addresses[_parent.directory_entries[idx].block_id] >> 0x05 << 0x05) + 4
+        pos: (_parent.block_addresses[_parent.directory_entries[idx].block_id] & ~0x1f) + 4
         size: 1 << _parent.block_addresses[_parent.directory_entries[idx].block_id] & 0x1f
         type: master_block
   master_block:
@@ -112,7 +112,7 @@ types:
     instances:
       root_block:
         io: _root._io
-        pos: (_root.buddy_allocator_body.block_addresses[block_id] >> 0x05 << 0x05) + 4
+        pos: (_root.buddy_allocator_body.block_addresses[block_id] & ~0x1f) + 4
         type: block
   block:
     seq:
@@ -129,7 +129,7 @@ types:
     instances:
       rightmost_block:
         io: _root._io
-        pos: (_root.buddy_allocator_body.block_addresses[mode] >> 0x05 << 0x05) + 4
+        pos: (_root.buddy_allocator_body.block_addresses[mode] & ~0x1f) + 4
         type: block
         if: mode > 0
         doc: Rightmost child block pointer
@@ -169,7 +169,7 @@ types:
     instances:
       block:
         io: _root._io
-        pos: (_root.buddy_allocator_body.block_addresses[block_id] >> 0x05 << 0x05) + 4
+        pos: (_root.buddy_allocator_body.block_addresses[block_id] & ~0x1f) + 4
         type: block
         if: mode > 0
   record_blob:
