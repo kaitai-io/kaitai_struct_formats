@@ -1,7 +1,7 @@
 meta:
   id: ds_store
   title: macOS '.DS_Store' format
-  license: CC-BY-SA-4.0
+  license: MIT
   ks-version: 0.8
   encoding: UTF-8
   endian: be
