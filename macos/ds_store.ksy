@@ -72,10 +72,12 @@ types:
       - id: address_raw
         type: u4
     instances:
+      mask:
+        value: 0x1f
       offset:
-        value: (address_raw & ~0x1f) + 4
+        value: (address_raw & ~mask) + 4
       size:
-        value: 1 << address_raw & 0x1f
+        value: 1 << address_raw & mask
   directory_entry:
     seq:
       - id: len_name
