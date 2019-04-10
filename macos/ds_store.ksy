@@ -46,7 +46,7 @@ types:
       - id: block_addresses
         type: block_descriptor
         repeat: expr
-        repeat-expr: 256
+        repeat-expr: num_block_addresses
         doc: Addresses of the different blocks
       - id: num_directories
         type: u4
@@ -59,8 +59,12 @@ types:
       - id: free_lists
         type: free_list
         repeat: expr
-        repeat-expr: 32
+        repeat-expr: num_free_lists
     instances:
+      num_block_addresses:
+        value: 256
+      num_free_lists:
+        value: 32
       directories:
         io: _root._io
         type: master_block_ref(_index)
