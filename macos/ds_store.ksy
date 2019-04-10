@@ -61,6 +61,26 @@ types:
         repeat: expr
         repeat-expr: num_free_lists
     types:
+      block_descriptor:
+        seq:
+          - id: address_raw
+            type: u4
+        instances:
+          mask:
+            value: 0x1f
+          offset:
+            value: (address_raw & ~mask) + 4
+          size:
+            value: 1 << address_raw & mask
+      directory_entry:
+        seq:
+          - id: len_name
+            type: u1
+          - id: name
+            size: len_name
+            type: str
+          - id: block_id
+            type: u4
       free_list:
         seq:
           - id: counter
@@ -80,26 +100,6 @@ types:
         repeat: expr
         repeat-expr: num_directories
         doc: Master blocks of the different B-trees
-  block_descriptor:
-    seq:
-      - id: address_raw
-        type: u4
-    instances:
-      mask:
-        value: 0x1f
-      offset:
-        value: (address_raw & ~mask) + 4
-      size:
-        value: 1 << address_raw & mask
-  directory_entry:
-    seq:
-      - id: len_name
-        type: u1
-      - id: name
-        size: len_name
-        type: str
-      - id: block_id
-        type: u4
   master_block_ref:
     params:
       - id: idx
