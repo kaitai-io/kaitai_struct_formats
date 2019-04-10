@@ -104,32 +104,33 @@ types:
     params:
       - id: idx
         type: u8
+    types:
+      master_block:
+        seq:
+          - id: block_id
+            type: u4
+            doc: Block number of the B-tree's root node
+          - id: num_internal_nodes
+            type: u4
+            doc: Number of internal node levels
+          - id: num_records
+            type: u4
+            doc: Number of records in the tree
+          - id: num_nodes
+            type: u4
+            doc: Number of nodes in the tree
+          - type: u4
+            doc: Unknown field
+        instances:
+          root_block:
+            io: _root._io
+            pos: _root.buddy_allocator_body.block_addresses[block_id].offset
+            type: block
     instances:
       master_block:
         pos: _parent.block_addresses[_parent.directory_entries[idx].block_id].offset
         size: _parent.block_addresses[_parent.directory_entries[idx].block_id].size
         type: master_block
-  master_block:
-    seq:
-      - id: block_id
-        type: u4
-        doc: Block number of the B-tree's root node
-      - id: num_internal_nodes
-        type: u4
-        doc: Number of internal node levels
-      - id: num_records
-        type: u4
-        doc: Number of records in the tree
-      - id: num_nodes
-        type: u4
-        doc: Number of nodes in the tree
-      - type: u4
-        doc: Unknown field
-    instances:
-      root_block:
-        io: _root._io
-        pos: _root.buddy_allocator_body.block_addresses[block_id].offset
-        type: block
   block:
     seq:
       - id: mode
