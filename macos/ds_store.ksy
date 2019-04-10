@@ -60,6 +60,15 @@ types:
         type: free_list
         repeat: expr
         repeat-expr: num_free_lists
+    types:
+      free_list:
+        seq:
+          - id: counter
+            type: u4
+          - id: offsets
+            type: u4
+            repeat: expr
+            repeat-expr: counter
     instances:
       num_block_addresses:
         value: 256
@@ -91,14 +100,6 @@ types:
         type: str
       - id: block_id
         type: u4
-  free_list:
-    seq:
-      - id: counter
-        type: u4
-      - id: offsets
-        type: u4
-        repeat: expr
-        repeat-expr: counter
   master_block_ref:
     params:
       - id: idx
