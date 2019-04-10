@@ -26,36 +26,38 @@ types:
     seq:
       - id: magic
         contents: ["Bud1"]
-        doc: Magic number 'Bud1'
+        doc: Magic number 'Bud1'.
       - id: ofs_bookkeeping_info_block
         type: u4
       - id: len_bookkeeping_info_block
         type: u4
       - id: copy_ofs_bookkeeping_info_block
         type: u4
-        doc: Needs to match 'offset_bookkeeping_info_block'
+        doc: Needs to match 'offset_bookkeeping_info_block'.
       - size: 16
-        doc: Unused block
+        doc: |
+          Unused field which might simply be the unused space at the end of the block,
+          since the minimum allocation size is 32 bytes.
   buddy_allocator_body:
     seq:
       - id: num_blocks
         type: u4
-        doc: Number of blocks in the allocated-blocks list
+        doc: Number of blocks in the allocated-blocks list.
       - size: 4
-        doc: Unknown field
+        doc: Unknown field which appears to always be 0.
       - id: block_addresses
         type: block_descriptor
         repeat: expr
         repeat-expr: num_block_addresses
-        doc: Addresses of the different blocks
+        doc: Addresses of the different blocks.
       - id: num_directories
         type: u4
-        doc: Indicates the number of directory entries
+        doc: Indicates the number of directory entries.
       - id: directory_entries
         type: directory_entry
         repeat: expr
         repeat-expr: num_directories
-        doc: Each directory is an independent B-tree
+        doc: Each directory is an independent B-tree.
       - id: free_lists
         type: free_list
         repeat: expr
@@ -99,7 +101,7 @@ types:
         type: master_block_ref(_index)
         repeat: expr
         repeat-expr: num_directories
-        doc: Master blocks of the different B-trees
+        doc: Master blocks of the different B-trees.
   master_block_ref:
     params:
       - id: idx
@@ -109,18 +111,18 @@ types:
         seq:
           - id: block_id
             type: u4
-            doc: Block number of the B-tree's root node
+            doc: Block number of the B-tree's root node.
           - id: num_internal_nodes
             type: u4
-            doc: Number of internal node levels
+            doc: Number of internal node levels.
           - id: num_records
             type: u4
-            doc: Number of records in the tree
+            doc: Number of records in the tree.
           - id: num_nodes
             type: u4
-            doc: Number of nodes in the tree
+            doc: Number of nodes in the tree.
           - type: u4
-            doc: Unknown field
+            doc: Always 0x1000, probably the B-tree node page size.
         instances:
           root_block:
             io: _root._io
@@ -135,10 +137,10 @@ types:
     seq:
       - id: mode
         type: u4
-        doc: If mode is 0, this is a leaf node, otherwise it is an internal node
+        doc: If mode is 0, this is a leaf node, otherwise it is an internal node.
       - id: counter
         type: u4
-        doc: Number of records or number of block id + record pairs
+        doc: Number of records or number of block id + record pairs.
       - id: data
         type: block_data(mode)
         repeat: expr
@@ -149,18 +151,18 @@ types:
         pos: _root.buddy_allocator_body.block_addresses[mode].offset
         type: block
         if: mode > 0
-        doc: Rightmost child block pointer
+        doc: Rightmost child block pointer.
   record:
     seq:
       - id: filename
         type: ustr
       - id: structure_type
         type: four_char_code
-        doc: Description of the entry's property
+        doc: Description of the entry's property.
       - id: data_type
         size: 4
         type: str
-        doc: Data type of the value
+        doc: Data type of the value.
       - id: value
         type:
           switch-on: data_type
