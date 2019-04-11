@@ -21,6 +21,11 @@ instances:
     pos: buddy_allocator_header.ofs_bookkeeping_info_block + 4
     size: buddy_allocator_header.len_bookkeeping_info_block
     type: buddy_allocator_body
+  block_address_mask:
+    value: 0x1f
+    doc: |
+      Bitmask used to calculate the position and the size of each block
+      of the B-tree from the block addresses.
 types:
   buddy_allocator_header:
     seq:
@@ -68,12 +73,10 @@ types:
           - id: address_raw
             type: u4
         instances:
-          mask:
-            value: 0x1f
           offset:
-            value: (address_raw & ~mask) + 4
+            value: (address_raw & ~_root.block_address_mask) + 4
           size:
-            value: 1 << address_raw & mask
+            value: 1 << address_raw & _root.block_address_mask
       directory_entry:
         seq:
           - id: len_name
