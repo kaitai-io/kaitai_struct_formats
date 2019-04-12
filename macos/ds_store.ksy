@@ -148,6 +148,67 @@ types:
         type: block_data(mode)
         repeat: expr
         repeat-expr: counter
+    types:
+      block_data:
+        params:
+          - id: mode
+            type: u4
+        seq:
+          - id: block_id
+            type: u4
+            if: mode > 0
+          - id: record
+            type: record
+        types:
+          record:
+            seq:
+              - id: filename
+                type: ustr
+              - id: structure_type
+                type: four_char_code
+                doc: Description of the entry's property.
+              - id: data_type
+                size: 4
+                type: str
+                doc: Data type of the value.
+              - id: value
+                type:
+                  switch-on: data_type
+                  cases:
+                    '"long"': u4
+                    '"shor"': u4
+                    '"bool"': u1
+                    '"blob"': record_blob
+                    '"type"': four_char_code
+                    '"ustr"': ustr
+                    '"comp"': u8
+                    '"dutc"': u8
+            types:
+              record_blob:
+                seq:
+                  - id: length
+                    type: u4
+                  - id: value
+                    size: length
+              ustr:
+                seq:
+                  - id: length
+                    type: u4
+                  - id: value
+                    size: 2 * length
+                    type: str
+                    encoding: UTF-16BE
+              four_char_code:
+                seq:
+                  - id: value
+                    size: 4
+                    type: str
+        instances:
+          block:
+            io: _root._io
+            pos: _root.buddy_allocator_body.block_addresses[block_id].offset
+            type: block
+            if: mode > 0
     instances:
       rightmost_block:
         io: _root._io
@@ -155,61 +216,3 @@ types:
         type: block
         if: mode > 0
         doc: Rightmost child block pointer.
-  record:
-    seq:
-      - id: filename
-        type: ustr
-      - id: structure_type
-        type: four_char_code
-        doc: Description of the entry's property.
-      - id: data_type
-        size: 4
-        type: str
-        doc: Data type of the value.
-      - id: value
-        type:
-          switch-on: data_type
-          cases:
-            '"long"': u4
-            '"shor"': u4
-            '"bool"': u1
-            '"blob"': record_blob
-            '"type"': four_char_code
-            '"ustr"': ustr
-            '"comp"': u8
-            '"dutc"': u8
-  block_data:
-    params:
-      - id: mode
-        type: u4
-    seq:
-      - id: block_id
-        type: u4
-        if: mode > 0
-      - id: record
-        type: record
-    instances:
-      block:
-        io: _root._io
-        pos: _root.buddy_allocator_body.block_addresses[block_id].offset
-        type: block
-        if: mode > 0
-  record_blob:
-    seq:
-      - id: length
-        type: u4
-      - id: value
-        size: length
-  ustr:
-    seq:
-      - id: length
-        type: u4
-      - id: value
-        size: 2 * length
-        type: str
-        encoding: UTF-16BE
-  four_char_code:
-    seq:
-      - id: value
-        size: 4
-        type: str
