@@ -17,11 +17,12 @@ types:
       - id: version
         doc: version number of the timestamp_entry struct
         type: u2
-      - id: size
+      - id: len_record
         doc: size of the record in bytes
         type: u2
+        -orig-id: size
       - id: payload
-        size: size - 4
+        size: len_record - 4
         type:
           switch-on: version
           cases:
