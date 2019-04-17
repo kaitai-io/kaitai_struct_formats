@@ -53,3 +53,14 @@ types:
         type: f4
       - id: z
         type: f4
+      - id: abr
+        type: u2
+        doc: |
+          In theory (per standard), it's "attribute byte count" with
+          no other details given on what "attribute" is and what
+          should be stored in this field.
+
+          In practice, software dealing with STL either expected to
+          see 0 here, or uses this 16-bit field per se to store
+          additional attributes (such as RGB color of a vertex or
+          color index).
