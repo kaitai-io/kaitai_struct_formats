@@ -34,7 +34,7 @@ seq:
     -orig-id: FLG
     type: flags
   - id: mod_time
-    -orig-time: MTIME
+    -orig-id: MTIME
     type: u4
     doc: Last modification time of a file archived in UNIX timestamp format.
   - id: extra_flags
