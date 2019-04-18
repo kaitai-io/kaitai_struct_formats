@@ -44,6 +44,7 @@ class FormatPagesGenerator
     'image' => {title: 'Image Files', icon: 'file-image-o'},
     'log' => {title: 'Logs', icon: 'database'},
     'machine_code' => {title: 'CPU / Machine Code Disassembly', icon: 'industry'},
+    'macos' => {title: 'macOS', icon: 'apple'},
     'media' => {title: 'Multimedia Files', icon: 'video-camera'},
     'network' => {title: 'Networking Protocols', icon: 'sitemap'},
     'scientific' => {title: 'Scientific Applications', icon: 'flask'},
