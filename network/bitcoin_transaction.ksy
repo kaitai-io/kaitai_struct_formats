@@ -1,7 +1,7 @@
 meta:
   id: bitcoin_transaction
   title: Bitcoin Transaction
-  license: CC-BY-SA-4.0
+  license: MIT
   endian: le
 doc-ref: |
   https://bitcoin.org/en/developer-guide#transactions
