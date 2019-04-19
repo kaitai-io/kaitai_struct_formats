@@ -101,6 +101,12 @@ types:
         type: public_key
         doc: |
           Public key (bitcoin address of the recipient).
+    enums:
+      sighash_type:
+        1: sighash_all
+        2: sighash_none
+        3: sighash_single
+        80: sighash_anyonecanpay
   der_signature:
     seq:
       - id: sequence
@@ -141,9 +147,3 @@ types:
         size: 32
         doc: |
           'y' coordinate of the public key on the elliptic curve.
-enums:
-  sighash_type:
-    1: sighash_all
-    2: sighash_none
-    3: sighash_single
-    80: sighash_anyonecanpay
