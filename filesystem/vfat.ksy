@@ -1,6 +1,7 @@
 meta:
   id: vfat
   # actually FAT12
+  license: CC0-1.0
   endian: le
 seq:
   - id: boot_sector
