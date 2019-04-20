@@ -46,12 +46,12 @@ types:
         doc: |
           ID indexing an ouput of the transaction refered by txid.
           This output will be used as an input in the present transaction.
-      - id: script_len
+      - id: len_script
         type: u1
         doc: |
           ScriptSig's length.
       - id: script_sig
-        size: script_len
+        size: len_script
         type: script_signature
         doc: |
           ScriptSig.
@@ -65,7 +65,7 @@ types:
     types:
       script_signature:
         seq:
-          - id: sig_stack_len
+          - id: len_sig_stack
             type: u1
           - id: der_sig
             type: der_signature
@@ -79,7 +79,7 @@ types:
             enum: sighash_type
             doc: |
               Type of signature.
-          - id: pubkey_stack_len
+          - id: len_pubkey_stack
             type: u1
           - id: pubkey
             type: public_key
@@ -90,27 +90,27 @@ types:
             seq:
               - id: sequence
                 contents: [0x30]
-              - id: sig_len
+              - id: len_sig
                 type: u1
               - id: sep_1
                 contents: [0x02]
-              - id: sig_r_len
+              - id: len_sig_r
                 type: u1
                 doc: |
                   'r' value's length.
               - id: sig_r
-                size: sig_r_len
+                size: len_sig_r
                 doc: |
                   'r' value of the ECDSA signature.
                 doc-ref: 'https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm'
               - id: sep_2
                 contents: [0x02]
-              - id: sig_s_len
+              - id: len_sig_s
                 type: u1
                 doc: |
                   's' value's length.
               - id: sig_s
-                size: sig_s_len
+                size: len_sig_s
                 doc: |
                   's' value of the ECDSA signature.
                 doc-ref: 'https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm'
@@ -138,12 +138,12 @@ types:
         type: u8
         doc: |
           Number of Satoshis to be transfered.
-      - id: script_len
+      - id: len_script
         type: u1
         doc: |
           ScriptPubKey's length.
       - id: script_pub_key
-        size: script_len
+        size: len_script
         doc: |
           ScriptPubKey.
         doc-ref: |
