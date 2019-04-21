@@ -3,29 +3,33 @@
 <p>Using Kaitai Struct in C++/STL usually consists of 3 steps.</p>
 
 <ol>
-    <li>We need to create an STL input stream (<code>std::istream</code>).
-        <ul>
-            <li>One can open a stream for reading from a local file:
-
+    <li>We need to create an STL input stream (<code>std::istream</code>). One can open local file for that, or use existing <code>std::string</code> or <code>char*</code> buffer.
+        <ul class="nav nav-pills" role="tablist">
+            <li role="presentation" class="active"><a href="#example-local-file" role="tab" data-toggle="tab">From local file</a></li>
+            <li role="presentation"><a href="#example-std-string" role="tab" data-toggle="tab">From std::string</a></li>
+            <li role="presentation"><a href="#example-char-ptr" role="tab" data-toggle="tab">From char*</a></li>
+        </ul>
+        <div class="tab-content" style="margin-top: 6px">
+            <div role="tabpanel" class="tab-pane active" id="example-local-file">
 <pre><code class="cpp">#include &lt;fstream&gt;
 
-std::ifstream is("path/to/local/file.<%= meta['file-extension'] || meta['id'] %>", std::ifstream::binary);</code></pre></li>
-
-            <li>Or one can prepare a stream for reading from existing <code>std::string str</code>:
-
+std::ifstream is("path/to/local/file.<%= meta['file-extension'] || meta['id'] %>", std::ifstream::binary);</code></pre>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="example-std-string">
 <pre><code class="cpp">#include &lt;sstream&gt;
 
-std::istringstream is(str);</code></pre></li>
-
-            <li>Or one can parse arbitrary <code>char*</code> buffer in memory, given that we know its size:
-
+std::istringstream is(str);</code></pre>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="example-char-ptr">
 <pre><code class="cpp">#include &lt;sstream&gt;
 
 const char buf[] = { ... };
 std::string str(buf, sizeof buf);
-std::istringstream is(str);</code></pre></li>
+std::istringstream is(str);</code></pre>
+            </div>
+        </div>
 
-    </ul></li>
+    </li>
 
     <li>We need to wrap our input stream into Kaitai stream:
 
