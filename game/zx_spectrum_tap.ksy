@@ -24,16 +24,21 @@ enums:
 types:
   block:
     seq:
-      - id: len_header
-        contents: [0x13, 0x00]
+      - id: len_block
+        type: u2
       - id: flag
         type: u1
         enum: flag_enum
       - id: header
-        type: header_block
+        type: header
+        if: len_block == 0x13 and flag == flag_enum::header
       - id: data
         size: header.len_data + 4
-  header_block:
+        if: len_block == 0x13
+      - id: headerless_data
+        size: len_block - 1
+        if: flag == flag_enum::data
+  header:
     seq:
       - id: header_type
         type: u1
@@ -43,10 +48,35 @@ types:
         pad-right: 0x20
       - id: len_data
         type: u2
-      - id: param1
-        type: u2
-      - id: param2
-        type: u2
+      - id: params
+        type:
+          switch-on: header_type
+          cases:
+            'header_type_enum::program': program_params
+            'header_type_enum::num_arry': array_params
+            'header_type_enum::char_arry': array_params
+            'header_type_enum::bytes': bytes_params
       - id: checksum
         type: u1
         doc: Bitwise XOR of all bytes including the flag byte
+  program_params:
+    seq:
+      - id: autostart_line
+        type: u2
+      - id: len_program
+        type: u2
+  array_params:
+    seq:
+      - type: u1
+        doc: Unused
+      - id: var_name
+        type: u1
+        doc: Variable name (1..26 meaning A$..Z$ +192)
+      - type: u2
+        doc: Unused (0x8000)
+  bytes_params:
+    seq:
+      - id: start_address
+        type: u2
+      - type: u2
+        doc: Unused (0x8000)
