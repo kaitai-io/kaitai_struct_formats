@@ -49,3 +49,4 @@ types:
         type: u2
       - id: checksum
         type: u1
+        doc: Bitwise XOR of all bytes including the flag byte
