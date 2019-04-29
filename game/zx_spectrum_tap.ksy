@@ -24,7 +24,7 @@ enums:
 types:
   block:
     seq:
-      - id: length
+      - id: len_header
         contents: [0x13, 0x00]
       - id: flag
         type: u1
@@ -32,7 +32,7 @@ types:
       - id: header
         type: header_block
       - id: data
-        size: header.data_length + 4
+        size: header.len_data + 4
   header_block:
     seq:
       - id: header_type
@@ -41,7 +41,7 @@ types:
       - id: filename
         size: 10
         pad-right: 0x20
-      - id: data_length
+      - id: len_data
         type: u2
       - id: param1
         type: u2
