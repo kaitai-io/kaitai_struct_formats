@@ -1,9 +1,12 @@
 meta:
-  id: tap
+  id: zx_spectrum_tap
   file-extension: tap
   endian: le
   license: CC0-1.0
   title: ZX Spectrum tape file format
+  xref:
+    justsolve: TAP_(ZX_Spectrum)
+    pronom: fmt/801
 doc-ref: https://faqwiki.zxnet.co.uk/wiki/TAP_format
 seq:
   - id: block
@@ -17,7 +20,7 @@ enums:
     0: program
     1: num_array
     2: char_array
-    3: code_file
+    3: bytes
 types:
   block:
     seq:
@@ -37,8 +40,7 @@ types:
         enum: header_type_enum
       - id: filename
         size: 10
-        type: str
-        encoding: ASCII
+        pad-right: 0x20
       - id: data_length
         type: u2
       - id: param1
