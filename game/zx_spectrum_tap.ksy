@@ -67,16 +67,16 @@ types:
         type: u2
   array_params:
     seq:
-      - type: u1
-        doc: Unused
+      - id: reserved
+        type: u1
       - id: var_name
         type: u1
         doc: Variable name (1..26 meaning A$..Z$ +192)
-      - type: u2
-        doc: Unused (0x8000)
+      - id: reserved1
+        contents: [0x00, 0x80]
   bytes_params:
     seq:
       - id: start_address
         type: u2
-      - type: u2
-        doc: Unused (0x8000)
+      - id: reserved
+        contents: [0x00, 0x80]
