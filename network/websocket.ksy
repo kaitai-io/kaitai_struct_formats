@@ -10,13 +10,16 @@ doc: |
   Messages are made up of one or more dataframes, and are delineated by
   frames with the `fin` bit set.
 seq:
-  - id: dataframes
+  - id: initial_frame
+    type: initial_frame
+  - id: trailing_frames
     type: dataframe
+    if: initial_frame.header.finished != true
     repeat: until
-    repeat-until: _.finished
+    repeat-until: _.header.finished
 
 types:
-  dataframe:
+  frame_header:
     seq:
       - id: finished
         -orig-id: fin
@@ -40,21 +43,38 @@ types:
       - id: mask_key
         type: u4
         if: is_masked
-      - id: payload_bytes
-        size: len_payload
-        if: '_root.dataframes[0].opcode != opcode::text'
-      - id: payload_text
-        size: len_payload
-        type: str
-        encoding: UTF-8
-        if: '_root.dataframes[0].opcode == opcode::text'
-    
     instances:
       len_payload:
         value: |
           len_payload_primary <= 125 ? len_payload_primary : (
             len_payload_primary == 126 ? len_payload_extended_1 : len_payload_extended_2
           )
+
+  initial_frame:
+    seq:
+      - id: header
+        type: frame_header
+      - id: payload_bytes
+        size: frame_header.len_payload
+        if: 'header.opcode != opcode::text'
+      - id: payload_text
+        size: header.len_payload
+        type: str
+        encoding: UTF-8
+        if: 'header.opcode == opcode::text'
+
+  dataframe:
+    seq:
+      - id: header
+        type: frame_header
+      - id: payload_bytes
+        size: header.len_payload
+        if: '_root.initial_frame.header.opcode != opcode::text'
+      - id: payload_text
+        size: frame_header.len_payload
+        type: str
+        encoding: UTF-8
+        if: '_root.initial_frame.header.opcode == opcode::text'
     
 enums:
   opcode:
@@ -74,3 +94,4 @@ enums:
     0xD: reserved_control_d
     0xE: reserved_control_e
     0xF: reserved_control_f
+
