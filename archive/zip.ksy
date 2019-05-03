@@ -33,6 +33,15 @@ types:
             0x0201: central_dir_entry
             0x0403: local_file
             0x0605: end_of_central_dir
+            0x0807: data_descriptor
+  data_descriptor:
+    seq:
+      - id: crc32
+        type: u4
+      - id: compressed_size
+        type: u4
+      - id: uncompressed_size
+        type: u4
   local_file:
     seq:
       - id: header
