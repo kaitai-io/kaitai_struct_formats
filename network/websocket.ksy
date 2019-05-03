@@ -55,7 +55,7 @@ types:
       - id: header
         type: frame_header
       - id: payload_bytes
-        size: frame_header.len_payload
+        size: header.len_payload
         if: 'header.opcode != opcode::text'
       - id: payload_text
         size: header.len_payload
@@ -71,7 +71,7 @@ types:
         size: header.len_payload
         if: '_root.initial_frame.header.opcode != opcode::text'
       - id: payload_text
-        size: frame_header.len_payload
+        size: header.len_payload
         type: str
         encoding: UTF-8
         if: '_root.initial_frame.header.opcode == opcode::text'
