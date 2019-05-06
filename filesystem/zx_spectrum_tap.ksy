@@ -79,4 +79,4 @@ types:
       - id: start_address
         type: u2
       - id: reserved
-        contents: [0x00, 0x80]
+        size: 2
