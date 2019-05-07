@@ -1,0 +1,5 @@
+https://github.com/pypa/setuptools_scm.git
+https://github.com/psf/requests.git
+https://github.com/dateutil/dateutil.git
+https://github.com/tomerfiliba/plumbum.git
+https://github.com/readthedocs/commonmark.py

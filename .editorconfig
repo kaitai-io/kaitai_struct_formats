@@ -1,8 +1,11 @@
 root = true
 
-[*.ksy]
-charset=utf-8
+[*.{ksy,yaml}]
+charset = utf-8
 indent_style = space
 indent_size = 2
 insert_final_newline = true
 
+[*.py]
+indent_style = tab
+indent_size = 4

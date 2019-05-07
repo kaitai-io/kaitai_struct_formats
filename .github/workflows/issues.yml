@@ -1,0 +1,62 @@
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: A job to lint the issues
+    steps:
+      - name: checkout
+        id: checkout
+        shell: bash
+        run: |
+          git clone --depth=1 https://github.com/$GITHUB_REPOSITORY .
+      - name: bootstrap_python_packaging
+        id: bootstrap_python_packaging
+        shell: bash
+        run: |
+          git clone --depth=1 https://github.com/pypa/setuptools.git
+          cd ./setuptools
+          python3 ./bootstrap.py
+          sudo python3 ./setup.py install
+          cd ..
+          git clone --depth=1 https://github.com/pypa/pip.git
+          cd ./pip
+          sudo python3 -m pip install .
+          cd ..
+          cd ./setuptools
+          sudo python3 -m pip install .
+          cd ..
+          git clone --depth=1 https://github.com/pypa/wheel.git
+          cd wheel
+          sudo pip3 install .
+          cd ..
+          sudo rm -rf ./setuptools ./pip ./wheel
+      - name: install_packages
+        id: install_packages
+        shell: bash
+        run: |
+          for repoURI in $(cat ./pythonPackagesToInstallFromGit.txt); do
+            git clone --depth=1 $repoURI PKG_DIR;
+            cd ./PKG_DIR;
+            python3 ./setup.py bdist_wheel;
+            sudo pip3 install --upgrade --pre ./dist/*.whl;
+            cd ..;
+            rm -rf ./PKG_DIR;
+          done;
+      - name: install
+        id: install
+        shell: bash
+        run: |
+          cd ./.github/KSFGHAction
+          python3 ./setup.py bdist_wheel
+          pip3 install --upgrade --pre ./dist/*
+        working-directory: "."
+      - name: lint
+        id: lint
+        shell: bash
+        run: "python3 -m KSFGHAction"
+        env:
+          INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
