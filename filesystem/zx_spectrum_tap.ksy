@@ -3,10 +3,17 @@ meta:
   file-extension: tap
   endian: le
   license: CC0-1.0
-  title: ZX Spectrum tape file format
+  title: ZX Spectrum tape file
   xref:
     justsolve: TAP_(ZX_Spectrum)
     pronom: fmt/801
+doc: |
+  TAP files are used by emulators of ZX Spectrum computer (released in
+  1982 by Sinclair Research). TAP file stores blocks of data as if
+  they are written to magnetic tape, which was used as primary media
+  for ZX Spectrum. Contents of this file can be viewed as a very
+  simple linear filesystem, storing named files with some basic
+  metainformation prepended as a header.
 doc-ref: https://faqwiki.zxnet.co.uk/wiki/TAP_format
 seq:
   - id: block
