@@ -10,7 +10,7 @@ seq:
     enum: sections
   - id: size
     type: u4
-  - id: version
+  - id: library_id_stamp
     type: u4
   - id: body
     size: size
@@ -23,6 +23,9 @@ seq:
         sections::geometry_list: list_with_header
         sections::texture_dictionary: list_with_header
         sections::texture_native: list_with_header
+instances:
+    version:
+      value: (library_id_stamp >> 16) + 0x30000
 types:
   list_with_header:
     doc: |
@@ -37,7 +40,7 @@ types:
         contents: [1, 0, 0, 0]
       - id: header_size
         type: u4
-      - id: version
+      - id: library_id_stamp
         type: u4
       - id: header
         size: header_size
@@ -52,6 +55,9 @@ types:
       - id: entries
         type: renderware_binary_stream
         repeat: eos
+    instances:
+        version:
+          value: (library_id_stamp >> 16) + 0x30000
   struct_texture_dictionary:
     seq:
       - id: num_textures
