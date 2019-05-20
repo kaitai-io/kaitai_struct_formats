@@ -5,9 +5,6 @@ meta:
   file-extension:
     - pickle
     - pkl
-    #- pkl0
-    #- pkl1
-    #- pkl2
   license: CC0-1.0
   endian: le
 doc: |
