@@ -116,11 +116,15 @@ types:
   stringnl:
     seq:
       - id: val
+        type: str
+        encoding: ASCII
         terminator: 0x0a # "\n"
     doc: Quoted string, possibly containing Python string escapes.
   stringnl_noescape:
     seq:
       - id: val
+        type: str
+        encoding: ASCII
         terminator: 0x0a # "\n"
     doc: Unquoted string, does not contain string escapes.
   stringnl_noescape_pair:
