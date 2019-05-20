@@ -143,7 +143,9 @@ types:
         type: str
         encoding: ASCII
         terminator: 0x0a # "\n"
-    doc: Double float, encoded with the ASCII characters [0-9.eE-], or 'nan'.
+    doc: |
+      Double float, encoded with the ASCII characters [0-9.e+-], '-inf', 'inf',
+      or 'nan'.
   long1:
     seq:
       - id: len
