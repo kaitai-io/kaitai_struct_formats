@@ -45,6 +45,7 @@ types:
             'opcode::binint2': u2
             'opcode::long': decimalnl_long
             'opcode::long1': long1
+            'opcode::long4': long4
             'opcode::string': stringnl
             'opcode::binstring': string4
             'opcode::short_binstring': string1
@@ -55,6 +56,7 @@ types:
             #'opcode::newfalse': no_arg
             'opcode::unicode': unicodestringnl
             'opcode::binunicode': unicodestring4
+            'opcode::float': floatnl
             'opcode::binfloat': f8
             #'opcode::empty_list': no_arg
             #'opcode::append': no_arg
