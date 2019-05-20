@@ -1,5 +1,5 @@
 meta:
-  id: pickle
+  id: python_pickle
   title: Python pickle serialiazation format (protocol 3)
   application: Python
   file-extension:
