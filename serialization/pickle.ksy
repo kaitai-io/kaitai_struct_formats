@@ -51,30 +51,30 @@ types:
             'opcode::short_binstring': string1
             'opcode::binbytes': bytes4
             'opcode::short_binbytes': bytes1
-            #'opcode::none': no_arg
-            #'opcode::newtrue': no_arg
-            #'opcode::newfalse': no_arg
+            'opcode::none': no_arg
+            'opcode::newtrue': no_arg
+            'opcode::newfalse': no_arg
             'opcode::unicode': unicodestringnl
             'opcode::binunicode': unicodestring4
             'opcode::float': floatnl
             'opcode::binfloat': f8
-            #'opcode::empty_list': no_arg
-            #'opcode::append': no_arg
-            #'opcode::appends': no_arg
-            #'opcode::list': no_arg
-            #'opcode::empty_tuple': no_arg
-            #'opcode::tuple': no_arg
-            #'opcode::tuple1': no_arg
-            #'opcode::tuple2': no_arg
-            #'opcode::tuple3': no_arg
-            #'opcode::empty_dict': no_arg
-            #'opcode::dict': no_arg
-            #'opcode::setitem': no_arg
-            #'opcode::setitem2': no_arg
-            #'opcode::pop': no_arg
-            #'opcode::dup': no_arg
-            #'opcode::mark': no_arg
-            #'opcode::pop_mark': no_arg
+            'opcode::empty_list': no_arg
+            'opcode::append': no_arg
+            'opcode::appends': no_arg
+            'opcode::list': no_arg
+            'opcode::empty_tuple': no_arg
+            'opcode::tuple': no_arg
+            'opcode::tuple1': no_arg
+            'opcode::tuple2': no_arg
+            'opcode::tuple3': no_arg
+            'opcode::empty_dict': no_arg
+            'opcode::dict': no_arg
+            'opcode::setitem': no_arg
+            'opcode::setitems': no_arg
+            'opcode::pop': no_arg
+            'opcode::dup': no_arg
+            'opcode::mark': no_arg
+            'opcode::pop_mark': no_arg
             'opcode::get': decimalnl_short
             'opcode::binget': u1
             'opcode::long_binget': u4
@@ -85,15 +85,15 @@ types:
             'opcode::ext2': u2
             'opcode::ext4': u4
             'opcode::global':  stringnl_noescape_pair
-            #'opcode::reduce': no_arg
-            #'opcode::build': no_arg
+            'opcode::reduce': no_arg
+            'opcode::build': no_arg
             'opcode::inst': stringnl_noescape_pair
-            #'opcode::obj': no_arg
-            #'opcode::newobj': no_arg
+            'opcode::obj': no_arg
+            'opcode::newobj': no_arg
             'opcode::proto': u1
-            #'opcode::stop': no_arg
+            'opcode::stop': no_arg
             'opcode::persid': stringnl_noescape
-            #'opcode::binpersid': no_arg
+            'opcode::binpersid': no_arg
         doc: |
           Optional argument for the operation. Data type and length
           are determined by the value of the opcode.
@@ -204,8 +204,8 @@ types:
         encoding: utf8
         size: len
     doc: Length prefixed string, between 0 and 2**32-1 bytes long
-  # Some opcodes have no associated argument
-  # no_arg: {}
+  no_arg:
+    doc: Some opcodes take no argument, this empty type is used for them.
 
 enums:
   opcode:
