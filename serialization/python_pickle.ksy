@@ -36,7 +36,7 @@ types:
         enum: opcode
         doc: |
           Operation code that determines which action should be
-          performed next by the Pickel Virtual Machine. Some opcodes
+          performed next by the Pickle Virtual Machine. Some opcodes
           are only available in later versions of the Pickle protocol.
       - id: arg
         type:
