@@ -21,6 +21,8 @@ doc: |
   Other builtin types, and all classes  (e.g. `set`, `datetime.datetime`) are
   serialised by encoding the name of a constructor callable.
   They are deserialised by importing that constructor, and calling it.
+  So, unpickling an arbitrary pickle, using the Python's stdlib pickle module
+  can cause arbitrary code execution.
 
   Pickle format has evolved with Python, later protocols add opcodes & types.
   Later Python releases can pickle to or unpickle from any earlier protocol.
