@@ -176,20 +176,38 @@ types:
       - id: len
         type: u1
       - id: val
-        type: str
-        encoding: latin1
         size: len
-    doc: Length prefixed string, between 0 and 255 bytes long.
+    doc: |
+      Length prefixed string, between 0 and 255 bytes long. Encoding is
+      unspecified.
+
+      The default Python 2.x string type (`str`) is a sequence of bytes.
+      These are pickled as `string1` or `string4`, when protocol == 2.
+      The bytes are written directly, no explicit encoding is performed.
+
+      Python 3.x will not pickle an object as `string1` or `string4`.
+      Instead, opcodes and types with a known encoding are used.
+      When unpickling
+
+      - `pickle.Unpickler` objects default to ASCII, which can be overriden
+      - `pickletools.dis` uses latin1, and cannot be overriden
+    doc-ref: https://github.com/python/cpython/blob/bb8071a4/Lib/pickle.py#L486-L495
   string4:
     seq:
       - id: len
         # Not a typo, the length really is a signed integer
         type: s4
       - id: val
-        type: str
-        encoding: latin1
         size: len
-    doc: Length prefixed string, between 0 and 2**31-1 bytes long
+    doc: |
+      Length prefixed string, between 0 and 2**31-1 bytes long. Encoding is
+      unspecified.
+
+      Although the len field is signed, any length < 0 will raise an exception
+      during unpickling.
+
+      See the documentation for `string1` for further detail about encodings.
+    doc-ref: https://github.com/python/cpython/blob/bb8071a4/Lib/pickle.py#L486-L495
   bytes1:
     seq:
       - id: len
