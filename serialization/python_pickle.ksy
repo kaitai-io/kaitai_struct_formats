@@ -1,6 +1,6 @@
 meta:
   id: python_pickle
-  title: Python pickle serialization format (protocol 3)
+  title: Python pickle serialization format
   application: Python
   file-extension:
     - pickle
@@ -21,6 +21,14 @@ doc: |
   Other builtin types, and all classes  (e.g. `set`, `datetime.datetime`) are
   serialised by encoding the name of a constructor callable.
   They are deserialised by importing that constructor, and calling it.
+
+  Pickle format has evolved with Python, later protocols add opcodes & types.
+  Later Python releases can pickle to or unpickle from any earlier protocol.
+
+  * Protocol 0: ASCII clean, no explicit version, fields are '\n' terminated.
+  * Protocol 1: Binary, no explicit version, first length prefixed types.
+  * Protocol 2: Python 2.3+. Explicit versioning, more length prefixed types.
+  * Protocol 3: Python 3.0+. Dedicated opcodes for `bytes` objects.
 doc-ref:  https://github.com/python/cpython/blob/3.3/Lib/pickletools.py
 seq:
   # TODO is there a way to declare PROTO is optional, but only valid at position 0?
