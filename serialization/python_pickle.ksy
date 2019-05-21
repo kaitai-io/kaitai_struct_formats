@@ -7,6 +7,9 @@ meta:
     - pkl
   license: CC0-1.0
   endian: le
+  xref:
+    justsolve: Pickle
+    wikidata: Q7190889
 doc: |
   Python Pickle format serializes Python objects to a byte stream, as a sequence
   of operations to run on the Pickle Virtual Machine.
