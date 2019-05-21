@@ -23,7 +23,7 @@ jobs:
               git ssh \
               locales \
               kaitai-struct-compiler default-jre-headless \
-              ruby ruby-dev make gcc libc6-dev \
+              ruby ruby-dev make gcc libc6-dev bundler \
               graphviz \
               rsync
             ksc --version
