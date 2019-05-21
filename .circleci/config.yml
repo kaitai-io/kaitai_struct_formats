@@ -4,7 +4,7 @@ jobs:
     docker:
 #      - image: ubuntu:17.10
 #      - image: buildpack-deps:artful-scm
-      image: circleci/buildpack-deps:stable-scm
+      - image: circleci/buildpack-deps:stable-scm
     environment:
       - LANG=en_US.UTF-8
       - LC_CTYPE=en_US.UTF-8
