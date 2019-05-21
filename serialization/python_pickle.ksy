@@ -108,6 +108,7 @@ types:
         encoding: ASCII
         terminator: 0x0a # "\n"
     doc: Integer, encoded with the ASCII characters [0-9-].
+
   decimalnl_long:
     seq:
       - id: val
@@ -115,6 +116,7 @@ types:
         encoding: ASCII
         terminator: 0x0a # "\n"
     doc: Integer, encoded with the ASCII chracters [0-9-], followed by 'L'.
+
   # TODO Can kaitai express constraint that these are quoted?
   stringnl:
     seq:
@@ -123,6 +125,7 @@ types:
         encoding: ASCII
         terminator: 0x0a # "\n"
     doc: Quoted string, possibly containing Python string escapes.
+
   stringnl_noescape:
     seq:
       - id: val
@@ -130,6 +133,7 @@ types:
         encoding: ASCII
         terminator: 0x0a # "\n"
     doc: Unquoted string, does not contain string escapes.
+
   stringnl_noescape_pair:
     seq:
       - id: val1
@@ -137,6 +141,7 @@ types:
       - id: val2
         type: stringnl_noescape
     doc: Pair of unquoted, unescaped strings.
+
   unicodestringnl:
     seq:
       - id: val
@@ -144,6 +149,7 @@ types:
         encoding: ASCII
         terminator: 0x0a # "\n"
     doc: Unquoted string, containing Python Unicode escapes.
+
   floatnl:
     seq:
       - id: val
@@ -153,6 +159,7 @@ types:
     doc: |
       Double float, encoded with the ASCII characters [0-9.e+-], '-inf', 'inf',
       or 'nan'.
+
   long1:
     seq:
       - id: len
@@ -162,6 +169,7 @@ types:
     doc: |
       Large signed integer, in the range -2**(8*255-1) to 2**(8*255-1)-1,
       encoded as two's complement.
+
   long4:
     seq:
       - id: len
@@ -171,6 +179,7 @@ types:
     doc: |
       Large signed integer, in the range -2**(8*2**32-1) to 2**(8*2**32-1)-1,
       encoded as two's complement.
+
   string1:
     seq:
       - id: len
@@ -192,6 +201,7 @@ types:
       - `pickle.Unpickler` objects default to ASCII, which can be overriden
       - `pickletools.dis` uses latin1, and cannot be overriden
     doc-ref: https://github.com/python/cpython/blob/bb8071a4/Lib/pickle.py#L486-L495
+
   string4:
     seq:
       - id: len
@@ -208,6 +218,7 @@ types:
 
       See the documentation for `string1` for further detail about encodings.
     doc-ref: https://github.com/python/cpython/blob/bb8071a4/Lib/pickle.py#L486-L495
+
   bytes1:
     seq:
       - id: len
@@ -215,6 +226,7 @@ types:
       - id: val
         size: len
     doc: Length prefixed byte string, between 0 and 255 bytes long.
+
   bytes4:
     seq:
       - id: len
