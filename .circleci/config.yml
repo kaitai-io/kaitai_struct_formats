@@ -37,7 +37,7 @@ jobs:
       - run:
           name: Install Ruby deps
           command: |
-            echo 'gem: --no-document' >/etc/gemrc
+            echo 'gem: --no-document' | sudo tee /etc/gemrc
             cd _build
             bundle install
       - run:
