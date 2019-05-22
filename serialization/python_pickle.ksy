@@ -32,7 +32,9 @@ doc: |
   * Protocol 2: Python 2.3+. Explicit versioning, more length prefixed types.
     https://www.python.org/dev/peps/pep-0307/
   * Protocol 3: Python 3.0+. Dedicated opcodes for `bytes` objects.
-doc-ref:  https://github.com/python/cpython/blob/3.3/Lib/pickletools.py
+  * Protocol 4: Python 3.4+. Opcodes for 64 bit strings, framing, `set`.
+    https://www.python.org/dev/peps/pep-3154/
+doc-ref: https://github.com/python/cpython/blob/v3.7.3/Lib/pickletools.py
 seq:
   # TODO is there a way to declare PROTO is optional, but only valid at position 0?
   - id: ops
@@ -65,11 +67,14 @@ types:
             'opcode::short_binstring': string1
             'opcode::binbytes': bytes4
             'opcode::short_binbytes': bytes1
+            'opcode::binbytes8': bytes8
             'opcode::none': no_arg
             'opcode::newtrue': no_arg
             'opcode::newfalse': no_arg
             'opcode::unicode': unicodestringnl
+            'opcode::short_binunicode': unicodestring1
             'opcode::binunicode': unicodestring4
+            'opcode::binunicode8': unicodestring8
             'opcode::float': floatnl
             'opcode::binfloat': f8
             'opcode::empty_list': no_arg
@@ -85,6 +90,9 @@ types:
             'opcode::dict': no_arg
             'opcode::setitem': no_arg
             'opcode::setitems': no_arg
+            'opcode::empty_set': no_arg
+            'opcode::additems': no_arg
+            'opcode::frozenset': no_arg
             'opcode::pop': no_arg
             'opcode::dup': no_arg
             'opcode::mark': no_arg
@@ -95,17 +103,21 @@ types:
             'opcode::put': decimalnl_short
             'opcode::binput': u1
             'opcode::long_binput': u4
+            'opcode::memoize': no_arg
             'opcode::ext1': u1
             'opcode::ext2': u2
             'opcode::ext4': u4
             'opcode::global':  stringnl_noescape_pair
+            'opcode::stack_global': no_arg
             'opcode::reduce': no_arg
             'opcode::build': no_arg
             'opcode::inst': stringnl_noescape_pair
             'opcode::obj': no_arg
             'opcode::newobj': no_arg
+            'opcode::newobj_ex': no_arg
             'opcode::proto': u1
             'opcode::stop': no_arg
+            'opcode::frame': u8
             'opcode::persid': stringnl_noescape
             'opcode::binpersid': no_arg
         doc: |
@@ -245,6 +257,31 @@ types:
       - id: val
         size: len
     doc: Length prefixed string, between 0 and 2**32-1 bytes long
+
+  bytes8:
+    seq:
+      - id: len
+        type: u8
+      - id: val
+        size: len
+    doc: |
+      Length prefixed string, between 0 and 2**64-1 bytes long.
+
+      Only a 64-bit build of Python would produce a pickle containing strings
+      large enough to need this type. Such a pickle could not be unpickled on
+      a 32-bit build of Python, because the string would be larger than
+      `sys.maxsize`.
+
+  unicodestring1:
+    seq:
+      - id: len
+        type: u4
+      - id: val
+        type: str
+        encoding: utf8
+        size: len
+    doc: Length prefixed string, between 0 and 255 bytes long
+
   unicodestring4:
     seq:
       - id: len
@@ -254,6 +291,23 @@ types:
         encoding: utf8
         size: len
     doc: Length prefixed string, between 0 and 2**32-1 bytes long
+
+  unicodestring8:
+    seq:
+      - id: len
+        type: u8
+      - id: val
+        type: str
+        encoding: utf8
+        size: len
+    doc: |
+      Length prefixed string, between 0 and 2**64-1 bytes long.
+
+      Only a 64-bit build of Python would produce a pickle containing strings
+      large enough to need this type. Such a pickle could not be unpickled on
+      a 32-bit build of Python, because the string would be larger than
+      `sys.maxsize`.
+
   no_arg:
     doc: Some opcodes take no argument, this empty type is used for them.
 
@@ -490,3 +544,45 @@ enums:
         id: "short_binbytes"
         -orig-id: SHORT_BINBYTES
         doc: push bytes; counted binary string argument < 256 bytes
+
+    # Protocol 4
+    0x8c:
+      id: "short_binunicode"
+      -orig-id: SHORT_BINUNICODE
+      doc: push short string; UTF-8 length < 256 bytes
+    0x8d:
+      id: "binunicode8"
+      -orig-id: BINUNICODE8
+      doc: push very long string
+    0x8e:
+      id: "binbytes8"
+      -orig-id: BINBYTES8
+      doc: push very long bytes string
+    0x8f:
+      id: "empty_set"
+      -orig-id: EMPTY_SET
+      doc: push empty set on the stack
+    0x90:
+      id: "additems"
+      -orig-id: ADDITEMS
+      doc: modify set by adding topmost stack items
+    0x91:
+      id: "frozenset"
+      -orig-id: FROZENSET
+      doc: build frozenset from topmost stack items
+    0x92:
+      id: "newobj_ex"
+      -orig-id: NEWOBJ_EX
+      doc: like NEWOBJ but work with keyword only arguments
+    0x93:
+      id: "stack_global"
+      -orig-id: STACK_GLOBAL
+      doc: same as GLOBAL but using names on the stacks
+    0x94:
+      id: "memoize"
+      -orig-id: MEMOIZE
+      doc: store top of the stack in memo
+    0x95:
+      id: "frame"
+      -orig-id: FRAME
+      doc: indicate the beginning of a new frame
