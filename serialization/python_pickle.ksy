@@ -30,6 +30,7 @@ doc: |
   * Protocol 0: ASCII clean, no explicit version, fields are '\n' terminated.
   * Protocol 1: Binary, no explicit version, first length prefixed types.
   * Protocol 2: Python 2.3+. Explicit versioning, more length prefixed types.
+    https://www.python.org/dev/peps/pep-0307/
   * Protocol 3: Python 3.0+. Dedicated opcodes for `bytes` objects.
 doc-ref:  https://github.com/python/cpython/blob/3.3/Lib/pickletools.py
 seq:
