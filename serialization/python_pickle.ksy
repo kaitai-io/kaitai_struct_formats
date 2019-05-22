@@ -244,7 +244,7 @@ types:
         type: u4
       - id: val
         size: len
-    doc: Length prefixed string, between 0 and 2**31-1 bytes long
+    doc: Length prefixed string, between 0 and 2**32-1 bytes long
   unicodestring4:
     seq:
       - id: len
