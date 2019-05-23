@@ -314,169 +314,169 @@ types:
 enums:
   opcode:
     0x28: # "("
-        id: "mark"
-        -orig-id: MARK
-        doc: push special markobject on stack
+      id: "mark"
+      -orig-id: MARK
+      doc: push special markobject on stack
     0x2e: # "."
-        id: "stop"
-        -orig-id: STOP
-        doc: every pickle ends with STOP
+      id: "stop"
+      -orig-id: STOP
+      doc: every pickle ends with STOP
     0x30: # "0"
-        id: "pop"
-        -orig-id: POP
-        doc: discard topmost stack item
+      id: "pop"
+      -orig-id: POP
+      doc: discard topmost stack item
     0x31: # "1"
-        id: "pop_mark"
-        -orig-id: POP_MARK
-        doc: discard stack top through topmost markobject
+      id: "pop_mark"
+      -orig-id: POP_MARK
+      doc: discard stack top through topmost markobject
     0x32: # "2"
-        id: "dup"
-        -orig-id: DUP
-        doc: duplicate top stack item
+      id: "dup"
+      -orig-id: DUP
+      doc: duplicate top stack item
     0x46: # "F"
-        id: "float"
-        -orig-id: FLOAT
-        doc: push float object; decimal string argument
+      id: "float"
+      -orig-id: FLOAT
+      doc: push float object; decimal string argument
     0x49: # "I"
-        id: "int"
-        -orig-id: INT
-        doc: push integer or bool; decimal string argument
+      id: "int"
+      -orig-id: INT
+      doc: push integer or bool; decimal string argument
     0x4a: # "J"
-        id: "binint"
-        -orig-id: BININT
-        doc: push four-byte signed int
+      id: "binint"
+      -orig-id: BININT
+      doc: push four-byte signed int
     0x4b: # "K"
-        id: "binint1"
-        -orig-id: BININT1
-        doc: push 1-byte unsigned int
+      id: "binint1"
+      -orig-id: BININT1
+      doc: push 1-byte unsigned int
     0x4c: # "L"
-        id: "long"
-        -orig-id: LONG
-        doc: push long; decimal string argument
+      id: "long"
+      -orig-id: LONG
+      doc: push long; decimal string argument
     0x4d: # "M"
-        id: "binint2"
-        -orig-id: BININT2
-        doc: push 2-byte unsigned int
+      id: "binint2"
+      -orig-id: BININT2
+      doc: push 2-byte unsigned int
     0x4e: # "N"
-        id: "none"
-        -orig-id: NONE
-        doc: push None
+      id: "none"
+      -orig-id: NONE
+      doc: push None
     0x50: # "P"
-        id: "persid"
-        -orig-id: PERSID
-        doc: push persistent object; id is taken from string arg
+      id: "persid"
+      -orig-id: PERSID
+      doc: push persistent object; id is taken from string arg
     0x51: # "Q"
-        id: "binpersid"
-        -orig-id: BINPERSID
-        doc: push persistent object; id is taken from stack
+      id: "binpersid"
+      -orig-id: BINPERSID
+      doc: push persistent object; id is taken from stack
     0x52: # "R"
-        id: "reduce"
-        -orig-id: REDUCE
-        doc: apply callable to argtuple, both on stack
+      id: "reduce"
+      -orig-id: REDUCE
+      doc: apply callable to argtuple, both on stack
     0x53: # "S"
-        id: "string"
-        -orig-id: STRING
-        doc: push string; NL-terminated string argument
+      id: "string"
+      -orig-id: STRING
+      doc: push string; NL-terminated string argument
     0x54: # "T"
-        id: "binstring"
-        -orig-id: BINSTRING
-        doc: push string; counted binary string argument
+      id: "binstring"
+      -orig-id: BINSTRING
+      doc: push string; counted binary string argument
     0x55: # "U"
-        id: "short_binstring"
-        -orig-id: SHORT_BINSTRING
-        doc: push string; counted binary string argument 256 bytes
+      id: "short_binstring"
+      -orig-id: SHORT_BINSTRING
+      doc: push string; counted binary string argument 256 bytes
     0x56: # "V"
-        id: "unicode"
-        -orig-id: UNICODE
-        doc: push Unicode string; raw-unicode-escaped argument
+      id: "unicode"
+      -orig-id: UNICODE
+      doc: push Unicode string; raw-unicode-escaped argument
     0x58: # "X"
-        id: "binunicode"
-        -orig-id: BINUNICODE
-        doc: push Unicode string; counted UTF-8 string argument
+      id: "binunicode"
+      -orig-id: BINUNICODE
+      doc: push Unicode string; counted UTF-8 string argument
     0x61: # "a"
-        id: "append"
-        -orig-id: APPEND
-        doc: append stack top to list below it
+      id: "append"
+      -orig-id: APPEND
+      doc: append stack top to list below it
     0x62: # "b"
-        id: "build"
-        -orig-id: BUILD
-        doc: call __setstate__ or __dict__.update()
+      id: "build"
+      -orig-id: BUILD
+      doc: call __setstate__ or __dict__.update()
     0x63: # "c"
-        id: "global"
-        -orig-id: GLOBAL
-        doc: push self.find_class(modname, name); 2 string args
+      id: "global"
+      -orig-id: GLOBAL
+      doc: push self.find_class(modname, name); 2 string args
     0x64: # "d"
-        id: "dict"
-        -orig-id: DICT
-        doc: build a dict from stack items
+      id: "dict"
+      -orig-id: DICT
+      doc: build a dict from stack items
     0x7d: # "}"
-        id: "empty_dict"
-        -orig-id: EMPTY_DICT
-        doc: push empty dict
+      id: "empty_dict"
+      -orig-id: EMPTY_DICT
+      doc: push empty dict
     0x65: # "e"
-        id: "appends"
-        -orig-id: APPENDS
-        doc: extend list on stack by topmost stack slice
+      id: "appends"
+      -orig-id: APPENDS
+      doc: extend list on stack by topmost stack slice
     0x67: # "g"
-        id: "get"
-        -orig-id: GET
-        doc: push item from memo on stack; index is string arg
+      id: "get"
+      -orig-id: GET
+      doc: push item from memo on stack; index is string arg
     0x68: # "h"
-        id: "binget"
-        -orig-id: BINGET
-        doc: push item from memo on stack; index is 1-byte arg
+      id: "binget"
+      -orig-id: BINGET
+      doc: push item from memo on stack; index is 1-byte arg
     0x69: # "i"
-        id: "inst"
-        -orig-id: INST
-        doc: build & push class instance
+      id: "inst"
+      -orig-id: INST
+      doc: build & push class instance
     0x6a: # "j"
-        id: "long_binget"
-        -orig-id: LONG_BINGET
-        doc: push item from memo on stack; index is 4-byte arg
+      id: "long_binget"
+      -orig-id: LONG_BINGET
+      doc: push item from memo on stack; index is 4-byte arg
     0x6c: # "l"
-        id: "list"
-        -orig-id: LIST
-        doc: build list from topmost stack items
+      id: "list"
+      -orig-id: LIST
+      doc: build list from topmost stack items
     0x5d: # "]"
-        id: "empty_list"
-        -orig-id: EMPTY_LIST
-        doc: push empty list
+      id: "empty_list"
+      -orig-id: EMPTY_LIST
+      doc: push empty list
     0x6f: # "o"
-        id: "obj"
-        -orig-id: OBJ
-        doc: build & push class instance
+      id: "obj"
+      -orig-id: OBJ
+      doc: build & push class instance
     0x70: # "p"
-        id: "put"
-        -orig-id: PUT
-        doc: store stack top in memo; index is string arg
+      id: "put"
+      -orig-id: PUT
+      doc: store stack top in memo; index is string arg
     0x71: # "q"
-        id: "binput"
-        -orig-id: BINPUT
-        doc: store stack top in memo; index is 1-byte arg
+      id: "binput"
+      -orig-id: BINPUT
+      doc: store stack top in memo; index is 1-byte arg
     0x72: # "r"
-        id: "long_binput"
-        -orig-id: LONG_BINPUT
-        doc: store stack top in memo; index is 4-byte arg
+      id: "long_binput"
+      -orig-id: LONG_BINPUT
+      doc: store stack top in memo; index is 4-byte arg
     0x73: # "s"
-        id: "setitem"
-        -orig-id: SETITEM
-        doc: add key+value pair to dict
+      id: "setitem"
+      -orig-id: SETITEM
+      doc: add key+value pair to dict
     0x74: # "t"
-        id: "tuple"
-        -orig-id: TUPLE
-        doc: build tuple from topmost stack items
+      id: "tuple"
+      -orig-id: TUPLE
+      doc: build tuple from topmost stack items
     0x29: # ")"
-        id: "empty_tuple"
-        -orig-id: EMPTY_TUPLE
-        doc: push empty tuple
+      id: "empty_tuple"
+      -orig-id: EMPTY_TUPLE
+      doc: push empty tuple
     0x75: # "u"
-        id: "setitems"
-        -orig-id: SETITEMS
-        doc: modify dict by adding topmost key+value pairs
+      id: "setitems"
+      -orig-id: SETITEMS
+      doc: modify dict by adding topmost key+value pairs
     0x47: # "G"
-        id: "binfloat"
-        -orig-id: BINFLOAT
-        doc: push float; arg is 8-byte float encoding
+      id: "binfloat"
+      -orig-id: BINFLOAT
+      doc: push float; arg is 8-byte float encoding
 
     #'I01\n':
     #    id: "true"
@@ -487,63 +487,63 @@ enums:
 
     # Protocol 2
     0x80:
-        id: "proto"
-        -orig-id: PROTO
-        doc: identify pickle protocol
+      id: "proto"
+      -orig-id: PROTO
+      doc: identify pickle protocol
     0x81:
-        id: "newobj"
-        -orig-id: NEWOBJ
-        doc: build object by applying cls.__new__ to argtuple
+      id: "newobj"
+      -orig-id: NEWOBJ
+      doc: build object by applying cls.__new__ to argtuple
     0x82:
-        id: "ext1"
-        -orig-id: EXT1
-        doc: push object from extension registry; 1-byte index
+      id: "ext1"
+      -orig-id: EXT1
+      doc: push object from extension registry; 1-byte index
     0x83:
-        id: "ext2"
-        -orig-id: EXT2
-        doc: ditto, but 2-byte index
+      id: "ext2"
+      -orig-id: EXT2
+      doc: ditto, but 2-byte index
     0x84:
-        id: "ext4"
-        -orig-id: EXT4
-        doc: ditto, but 4-byte index
+      id: "ext4"
+      -orig-id: EXT4
+      doc: ditto, but 4-byte index
     0x85:
-        id: "tuple1"
-        -orig-id: TUPLE1
-        doc: build 1-tuple from stack top
+      id: "tuple1"
+      -orig-id: TUPLE1
+      doc: build 1-tuple from stack top
     0x86:
-        id: "tuple2"
-        -orig-id: TUPLE2
-        doc: build 2-tuple from two topmost stack items
+      id: "tuple2"
+      -orig-id: TUPLE2
+      doc: build 2-tuple from two topmost stack items
     0x87:
-        id: "tuple3"
-        -orig-id: TUPLE3
-        doc: build 3-tuple from three topmost stack items
+      id: "tuple3"
+      -orig-id: TUPLE3
+      doc: build 3-tuple from three topmost stack items
     0x88:
-        id: "newtrue"
-        -orig-id: NEWTRUE
-        doc: push True
+      id: "newtrue"
+      -orig-id: NEWTRUE
+      doc: push True
     0x89:
-        id: "newfalse"
-        -orig-id: NEWFALSE
-        doc: push False
+      id: "newfalse"
+      -orig-id: NEWFALSE
+      doc: push False
     0x8a:
-        id: "long1"
-        -orig-id: LONG1
-        doc: push long from < 256 bytes
+      id: "long1"
+      -orig-id: LONG1
+      doc: push long from < 256 bytes
     0x8b:
-        id: "long4"
-        -orig-id: LONG4
-        doc: push really big long
+      id: "long4"
+      -orig-id: LONG4
+      doc: push really big long
 
     # Protocol 3 (Python 3.x)
     0x42: # "B"
-        id: "binbytes"
-        -orig-id: BINBYTES
-        doc: push bytes; counted binary string argument
+      id: "binbytes"
+      -orig-id: BINBYTES
+      doc: push bytes; counted binary string argument
     0x43: # "C"
-        id: "short_binbytes"
-        -orig-id: SHORT_BINBYTES
-        doc: push bytes; counted binary string argument < 256 bytes
+      id: "short_binbytes"
+      -orig-id: SHORT_BINBYTES
+      doc: push bytes; counted binary string argument < 256 bytes
 
     # Protocol 4
     0x8c:
