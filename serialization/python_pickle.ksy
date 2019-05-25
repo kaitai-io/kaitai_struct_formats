@@ -128,7 +128,7 @@ types:
     seq:
       - id: val
         type: str
-        encoding: ASCII
+        encoding: ascii
         terminator: 0x0a # "\n"
     doc: Integer, encoded with the ASCII characters [0-9-].
 
@@ -136,7 +136,7 @@ types:
     seq:
       - id: val
         type: str
-        encoding: ASCII
+        encoding: ascii
         terminator: 0x0a # "\n"
     doc: Integer, encoded with the ASCII chracters [0-9-], followed by 'L'.
 
@@ -145,7 +145,7 @@ types:
     seq:
       - id: val
         type: str
-        encoding: ASCII
+        encoding: ascii
         terminator: 0x0a # "\n"
     doc: Quoted string, possibly containing Python string escapes.
 
@@ -153,7 +153,7 @@ types:
     seq:
       - id: val
         type: str
-        encoding: ASCII
+        encoding: ascii
         terminator: 0x0a # "\n"
     doc: Unquoted string, does not contain string escapes.
 
@@ -169,7 +169,7 @@ types:
     seq:
       - id: val
         type: str
-        encoding: ASCII
+        encoding: ascii
         terminator: 0x0a # "\n"
     doc: Unquoted string, containing Python Unicode escapes.
 
@@ -177,7 +177,7 @@ types:
     seq:
       - id: val
         type: str
-        encoding: ASCII
+        encoding: ascii
         terminator: 0x0a # "\n"
     doc: |
       Double float, encoded with the ASCII characters [0-9.e+-], '-inf', 'inf',
