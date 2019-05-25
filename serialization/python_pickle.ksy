@@ -130,7 +130,11 @@ types:
         type: str
         encoding: ascii
         terminator: 0x0a # "\n"
-    doc: Integer, encoded with the ASCII characters [0-9-].
+    doc: |
+      Integer or boolean, encoded with the ASCII characters [0-9-].
+
+      The values '00' and '01' encode the Python values `False` and `True`.
+      Normally a value would not contain leading '0' characters.
 
   decimalnl_long:
     seq:
@@ -477,13 +481,6 @@ enums:
       id: "binfloat"
       -orig-id: BINFLOAT
       doc: push float; arg is 8-byte float encoding
-
-    #'I01\n':
-    #    id: "true"
-    #    doc: not an opcode; see INT docs in pickletools.py
-    #'I00\n':
-    #    id: "false"
-    #    doc: not an opcode; see INT docs in pickletools.py
 
     # Protocol 2
     0x80:
