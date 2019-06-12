@@ -1,5 +1,5 @@
 meta:
-  id: system_information
+  id: smbios_system_info
   endian: le
   imports:
     - strings
