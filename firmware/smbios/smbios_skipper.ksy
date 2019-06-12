@@ -1,5 +1,5 @@
 meta:
-  id: skipper
+  id: smbios_skipper
   endian: le
   imports:
     - strings

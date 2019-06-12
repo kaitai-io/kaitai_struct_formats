@@ -1,5 +1,5 @@
 meta:
-  id: portable_battery
+  id: smbios_portable_battery
   endian: le
   imports:
     - strings

@@ -1,5 +1,5 @@
 meta:
-  id: strings
+  id: smbios_strings
   endian: le
 seq:
   - id: string

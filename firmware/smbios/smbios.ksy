@@ -2,12 +2,12 @@ meta:
   id: smbios
   endian: le
   imports:
-    - bios_information
-    - system_information
-    - processor_information
-    - portable_battery
-    - skipper
-    - strings
+    - smbios_bios_info
+    - smbios_system_info
+    - smbios_processor_info
+    - smbios_portable_battery
+    - smbios_skipper
+    - smbios_strings
 seq:
   - id: tables
     type: table
@@ -23,11 +23,11 @@ types:
           switch-on: type
           cases:
             # TODO: Add rest of the tables
-            'type_enum::table0': bios_information
-            'type_enum::table1': system_information
-            'type_enum::table4': processor_information
-            'type_enum::table22': portable_battery
-            _: skipper
+            'type_enum::table0': smbios_bios_info
+            'type_enum::table1': smbios_system_info
+            'type_enum::table4': smbios_processor_info
+            'type_enum::table22': smbios_portable_battery
+            _: smbios_skipper
     enums:
       type_enum:
         0x00: table0

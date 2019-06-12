@@ -1,5 +1,5 @@
 meta:
-  id: processor_information
+  id: smbios_processor_info
   endian: le
   imports:
     - strings

@@ -1,5 +1,5 @@
 meta:
-  id: bios_information
+  id: smbios_bios_info
   endian: le
   imports:
     - strings
