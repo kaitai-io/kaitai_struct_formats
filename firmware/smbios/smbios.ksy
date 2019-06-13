@@ -8,6 +8,11 @@ meta:
     - smbios_portable_battery
     - smbios_skipper
     - smbios_strings
+  doc: |
+    SMBIOS (System Management BIOS) addresses how motherboard and system
+    vendors present management information about 340 their products in a
+    standard format by extending the BIOS interface on processor
+    architecture systems.
 seq:
   - id: tables
     type: table
