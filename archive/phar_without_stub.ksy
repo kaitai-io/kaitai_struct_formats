@@ -20,6 +20,8 @@ doc: |
   A phar's stub is terminated by the special token `__HALT_COMPILER();` (which may be followed by at most one space, the PHP tag end `?>`, and an optional line terminator). The stub termination sequence is immediately followed by the remaining parts of the phar format, as described in this spec.
   
   The phar stub usually contains code that loads the phar and runs a contained PHP file, but this is not required. A minimal valid phar stub is `<?php __HALT_COMPILER();` - such a stub makes it impossible to execute the phar directly, but still allows loading or manipulating it using the phar extension.
+  
+  Note: The phar format does not specify any encoding for text fields (stub, alias name, and all file names), so these fields may contain arbitrary binary data. The actual text encoding used in a specific phar file usually depends on the application that created the phar, and on the standard encoding of the system on which the phar was created.
 doc-ref:
   - 'https://www.php.net/manual/en/phar.fileformat.php'
   - 'https://github.com/php/php-src/tree/master/ext/phar'
