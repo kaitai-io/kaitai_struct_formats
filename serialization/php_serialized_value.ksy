@@ -134,33 +134,33 @@ types:
           * Positive and negative infinity are represented as `INF` and `-INF`, respectively
           * Not-a-number is represented as `NAN`
     doc: The contents of a floating-point value.
-  size_prefixed_quoted_string:
+  length_prefixed_quoted_string:
     seq:
-      - id: size_dec
+      - id: len_data_dec
         type: str
         terminator: 0x3a # ':'
-        doc: The size of the string's data in bytes, in ASCII decimal. The quotes are not counted in this size number.
+        doc: The length of the string's data in bytes, in ASCII decimal. The quotes are not counted in this length number.
       - id: opening_quote
         contents: '"'
       - id: data
-        size: size
+        size: len_data
         doc: The data contained in the string. The quotes are not included.
       - id: closing_quote
         contents: '"'
     instances:
-      size:
-        value: size_dec.to_i
-        doc: The size of the string's contents in bytes, parsed as an integer. The quotes are not counted in this size number.
+      len_data:
+        value: len_data_dec.to_i
+        doc: The length of the string's contents in bytes, parsed as an integer. The quotes are not counted in this size number.
     doc: |
-      A quoted string prefixed with its size.
+      A quoted string prefixed with its length.
       
-      Despite the quotes surrounding the string data, it can contain arbitrary bytes, which are never escaped in any way. This does not cause any ambiguities when parsing - the bounds of the string are determined only by the size field, not by the quotes.
+      Despite the quotes surrounding the string data, it can contain arbitrary bytes, which are never escaped in any way. This does not cause any ambiguities when parsing - the bounds of the string are determined only by the length field, not by the quotes.
   string_contents:
     seq:
       - id: colon
         contents: ':'
       - id: string
-        type: size_prefixed_quoted_string
+        type: length_prefixed_quoted_string
       - id: semicolon
         contents: ';'
     instances:
@@ -180,9 +180,9 @@ types:
         type: php_serialized_value
         doc: The value of the entry.
     doc: A mapping entry consisting of a key and a value.
-  size_prefixed_mapping:
+  count_prefixed_mapping:
     seq:
-      - id: size_dec
+      - id: num_entries_dec
         type: str
         terminator: 0x3a # ':'
         doc: The number of key-value pairs in the mapping, in ASCII decimal.
@@ -191,13 +191,13 @@ types:
       - id: entries
         type: mapping_entry
         repeat: expr
-        repeat-expr: size
+        repeat-expr: num_entries
         doc: The key-value pairs contained in the mapping.
       - id: closing_brace
         contents: '}'
     instances:
-      size:
-        value: size_dec.to_i
+      num_entries:
+        value: num_entries_dec.to_i
         doc: The number of key-value pairs in the mapping, parsed as an integer.
     doc: A mapping (a sequence of key-value pairs) prefixed with its size.
   array_contents:
@@ -205,7 +205,7 @@ types:
       - id: colon
         contents: ':'
       - id: elements
-        type: size_prefixed_mapping
+        type: count_prefixed_mapping
         doc: The array's elements. Keys must be of type `int` or `string`, values may have any type.
     doc: The contents of an array value.
   php_3_object_contents:
@@ -213,7 +213,7 @@ types:
       - id: colon
         contents: ':'
       - id: properties
-        type: size_prefixed_mapping
+        type: count_prefixed_mapping
         doc: The object's properties. Keys must be of type `string`, values may have any type.
     doc: The contents of a PHP 3 object value. Unlike its counterpart in PHP 4 and above, it does not contain a class name.
   object_contents:
@@ -221,12 +221,12 @@ types:
       - id: colon1
         contents: ':'
       - id: class_name
-        type: size_prefixed_quoted_string
+        type: length_prefixed_quoted_string
         doc: The name of the object's class.
       - id: colon2
         contents: ':'
       - id: properties
-        type: size_prefixed_mapping
+        type: count_prefixed_mapping
         doc: The object's properties. Keys ust be of type `string`, values may have any type.
     doc: The contents of an object value serialized in the default format. Unlike its PHP 3 counterpart, it contains a class name.
   custom_serialized_object_contents:
@@ -234,18 +234,18 @@ types:
       - id: colon1
         contents: ':'
       - id: class_name
-        type: size_prefixed_quoted_string
+        type: length_prefixed_quoted_string
         doc: The name of the object's class.
       - id: colon2
         contents: ':'
-      - id: size_dec
+      - id: len_data_dec
         type: str
         terminator: 0x3a # ':'
-        doc: The size of the serialized data in bytes, in ASCII decimal. The braces are not counted in this size number.
+        doc: The length of the serialized data in bytes, in ASCII decimal. The braces are not counted in this size number.
       - id: opening_brace
         contents: '{'
       - id: data
-        size: size
+        size: len_data
         doc: |
           The custom serialized data. The braces are not included.
           
@@ -253,7 +253,7 @@ types:
       - id: closing_quote
         contents: '}'
     instances:
-      size:
-        value: size_dec.to_i
-        doc: The size of the serialized data in bytes, parsed as an integer. The braces are not counted in this size number.
+      len_data:
+        value: len_data_dec.to_i
+        doc: The length of the serialized data in bytes, parsed as an integer. The braces are not counted in this length number.
     doc: The contents of an object value that implements a custom serialized format using `Serializable`.

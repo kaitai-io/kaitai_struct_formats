@@ -32,9 +32,9 @@ seq:
     type: manifest
     doc: The archive's manifest, containing general metadata about the archive and its files.
   - id: files
-    size: manifest.file_entries[_index].compressed_size
+    size: manifest.file_entries[_index].len_data_compressed
     repeat: expr
-    repeat-expr: manifest.file_count
+    repeat-expr: manifest.num_files
     doc: The contents of each file in the archive (possibly compressed, as indicated by the file's flags in the manifest). The files are stored in the same order as they appear in the manifest.
   - id: signature
     type: signature
@@ -100,34 +100,34 @@ types:
         doc: Whether this file's data is stored using bzip2 compression.
   file_entry:
     seq:
-      - id: filename_size
+      - id: len_filename
         type: u4
-        doc: The size of the file name, in bytes.
+        doc: The length of the file name, in bytes.
       - id: filename
-        size: filename_size
+        size: len_filename
         doc: The name of this file. If the name ends with a slash, this entry represents a directory, otherwise a regular file. Directory entries are supported since phar API version 1.1.1. (Explicit directory entries are only needed for empty directories. Non-empty directories are implied by the files located inside them.)
-      - id: uncompressed_size
+      - id: len_data_uncompressed
         type: u4
-        doc: The size of the file's data when uncompressed, in bytes.
+        doc: The length of the file's data when uncompressed, in bytes.
       - id: timestamp
         type: u4
         doc: The time at which the file was added or last updated, as a Unix timestamp.
-      - id: compressed_size
+      - id: len_data_compressed
         type: u4
-        doc: The size of the file's data when compressed, in bytes.
+        doc: The length of the file's data when compressed, in bytes.
       - id: crc32
         type: u4
         doc: The CRC32 checksum of the file's uncompressed data.
       - id: flags
         type: file_flags
         doc: Flags for this file.
-      - id: metadata_size
+      - id: len_metadata
         type: u4
-        doc: The size of the metadata, in bytes, or 0 if there is none.
+        doc: The length of the metadata, in bytes, or 0 if there is none.
       - id: metadata
-        size: metadata_size
+        size: len_metadata
         type: serialized_value
-        if: metadata_size != 0
+        if: len_metadata != 0
         doc: Metadata for this file, in the format used by PHP's `serialize` function. The meaning of the serialized data is not specified further, it may be used to store arbitrary custom data about the file.
   api_version:
     meta:
@@ -172,13 +172,13 @@ types:
         doc: Whether this phar contains a signature.
   manifest:
     seq:
-      - id: manifest_size
+      - id: len_manifest
         type: u4
         doc: |
-          The size of the manifest, in bytes.
+          The length of the manifest, in bytes.
           
           Note: The phar extension does not allow reading manifests larger than 100 MiB.
-      - id: file_count
+      - id: num_files
         type: u4
         doc: The number of files in this phar.
       - id: api_version
@@ -187,24 +187,24 @@ types:
       - id: flags
         type: global_flags
         doc: Global flags for this phar.
-      - id: alias_size
+      - id: len_alias
         type: u4
-        doc: The size of the alias, in bytes.
+        doc: The length of the alias, in bytes.
       - id: alias
-        size: alias_size
+        size: len_alias
         doc: The phar's alias, i. e. the name under which it is loaded into PHP.
-      - id: metadata_size
+      - id: len_metadata
         type: u4
         doc: The size of the metadata, in bytes, or 0 if there is none.
       - id: metadata
-        size: metadata_size
+        size: len_metadata
         type: serialized_value
-        if: metadata_size != 0
+        if: len_metadata != 0
         doc: Metadata for this phar, in the format used by PHP's `serialize` function. The meaning of the serialized data is not specified further, it may be used to store arbitrary custom data about the archive.
       - id: file_entries
         type: file_entry
         repeat: expr
-        repeat-expr: file_count
+        repeat-expr: num_files
         doc: Manifest entries for the files contained in this phar.
   signature:
     seq:
