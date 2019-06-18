@@ -2,7 +2,6 @@ meta:
   id: php_serialized_value
   title: Serialized PHP value
   application: PHP
-  file-extension: metadata.bin # Metadata stored as files in tar-based phar archives
   license: CC0-1.0
   ks-version: 0.9
   # No endianness, since all numbers are stored as ASCII decimal.
