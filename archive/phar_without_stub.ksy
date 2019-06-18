@@ -66,7 +66,7 @@ enums:
       id: openssl
       -orig-id: PHAR_SIG_OPENSSL
       doc: |
-        Indicates an OpenSSL signature. Available since API version 1.1.1. This type is not documented in the phar extension's documentation of the phar format.
+        Indicates an OpenSSL signature. Available since API version 1.1.1, PHP_Archive 0.12.0 (even though it claims to only support API version 1.1.0) and phar extension 1.3.0. This type is not documented in the phar extension's documentation of the phar format.
         
         Note: In older versions of the phar extension, this value was used for an undocumented and unimplemented "PGP" signature type (`PHAR_SIG_PGP`).
 types:
