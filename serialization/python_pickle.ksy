@@ -76,7 +76,7 @@ types:
             'opcode::binunicode': unicodestring4
             'opcode::binunicode8': unicodestring8
             'opcode::float': floatnl
-            'opcode::binfloat': f8
+            'opcode::binfloat': f8be
             'opcode::empty_list': no_arg
             'opcode::append': no_arg
             'opcode::appends': no_arg
