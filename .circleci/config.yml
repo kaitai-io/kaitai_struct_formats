@@ -3,7 +3,8 @@ jobs:
   build:
     docker:
 #      - image: ubuntu:17.10
-      - image: buildpack-deps:artful-scm
+#      - image: buildpack-deps:artful-scm
+      - image: circleci/buildpack-deps:stable-scm
     environment:
       - LANG=en_US.UTF-8
       - LC_CTYPE=en_US.UTF-8
@@ -12,35 +13,31 @@ jobs:
       - run:
           name: Install apt deps
           command: |
-            apt-get update
-            apt-get install --no-install-recommends -y dirmngr
-            apt-key add <.circleci/bintray.key
+            sudo apt-get update
+            sudo apt-get install --no-install-recommends -y dirmngr
+            sudo apt-key add <.circleci/bintray.key
             #apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv 379CE192D401AB61
-            echo "deb http://dl.bintray.com/kaitai-io/debian jessie main" | tee /etc/apt/sources.list.d/kaitai.list
-            apt-get update
-            apt-get install --no-install-recommends -y \
+            echo "deb http://dl.bintray.com/kaitai-io/debian jessie main" | sudo tee /etc/apt/sources.list.d/kaitai.list
+            sudo apt-get update
+            sudo apt-get install --no-install-recommends -y \
               git ssh \
               locales \
               kaitai-struct-compiler default-jre-headless \
-              ruby ruby-dev make gcc libc6-dev \
+              ruby ruby-dev make gcc libc6-dev bundler \
               graphviz \
               rsync
             ksc --version
       - run:
           name: Fix locales
           command: |
-            echo 'en_US.UTF-8 UTF-8' >/etc/locale.gen
-            echo 'LANG="en_US.UTF-8"' >/etc/default/locale
-            dpkg-reconfigure --frontend=noninteractive locales
+            echo 'en_US.UTF-8 UTF-8' | sudo tee /etc/locale.gen
+            echo 'LANG="en_US.UTF-8"' | sudo tee /etc/default/locale
+            sudo dpkg-reconfigure --frontend=noninteractive locales
             locale
       - run:
           name: Install Ruby deps
-          # `artful-scm` image means Ruby v2.3, and just `gem install bundler`
-          # installs bundler 2.0, which does not support it, so we force install
-          # older bundler
           command: |
-            echo 'gem: --no-document' >/etc/gemrc
-            gem install bundler:1.17.3
+            echo 'gem: --no-document' | sudo tee /etc/gemrc
             cd _build
             bundle install
       - run:
