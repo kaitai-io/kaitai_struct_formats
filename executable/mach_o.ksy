@@ -111,6 +111,7 @@ enums:
     0x2E      : linker_optimization_hint
     0x2F      : version_min_tvos
     0x30      : version_min_watchos
+    0x32      : build_version # LC_BUILD_VERSION
 types:
   macho_flags:
     params:
@@ -266,6 +267,7 @@ types:
             'load_command_type::sub_library'             : sub_command
             'load_command_type::routines_64'             : routines_command_64
             'load_command_type::routines'                : routines_command
+            'load_command_type::build_version'           : build_version_command
     -webide-representation: '{type}: {body}'
   vm_prot:
     seq:
@@ -1246,3 +1248,24 @@ types:
             type: blob_index
             repeat: expr
             repeat-expr: count
+  build_version_command:
+    seq:
+      - id: platform
+        type: u4
+      - id: minos
+        type: u4
+      - id: sdk
+        type: u4
+      - id: ntools
+        type: u4
+      - id: tools
+        type: build_tool_version
+        repeat: expr
+        repeat-expr: ntools
+    types:
+      build_tool_version:
+        seq:
+          - id: tool
+            type: u4
+          - id: version
+            type: u4
