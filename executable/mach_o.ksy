@@ -268,6 +268,7 @@ types:
             'load_command_type::routines_64'             : routines_command_64
             'load_command_type::routines'                : routines_command
             'load_command_type::build_version'           : build_version_command
+            'load_command_type::segment'                 : segment_command
     -webide-representation: '{type}: {body}'
   vm_prot:
     seq:
@@ -1269,3 +1270,68 @@ types:
             type: u4
           - id: version
             type: u4
+  segment_command:
+    seq:
+      - id: segname
+        type: str
+        size: 16
+        pad-right: 0
+        encoding: ascii
+      - id: vmaddr
+        type: u4
+      - id: vmsize
+        type: u4
+      - id: fileoff
+        type: u4
+      - id: filesize
+        type: u4
+      - id: maxprot
+        type: vm_prot
+      - id: initprot
+        type: vm_prot
+      - id: nsects
+        type: u4
+      - id: flags
+        type: u4
+      - id: sections
+        type: section
+        repeat: expr
+        repeat-expr: nsects
+    types:
+      section:
+        seq:
+          - id: sect_name
+            -orig-id: sectname
+            size: 16
+            type: str
+            pad-right: 0
+            encoding: ascii
+          - id: seg_name
+            -orig-id: segname
+            size: 16
+            type: str
+            pad-right: 0
+            encoding: ascii
+          - id: addr
+            type: u4
+          - id: size
+            type: u4
+          - id: offset
+            type: u4
+          - id: align
+            type: u4
+          - id: reloff
+            type: u4
+          - id: nreloc
+            type: u4
+          - id: flags
+            type: u4
+          - id: reserved1
+            type: u4
+          - id: reserved2
+            type: u4
+        instances:
+          data:
+            io: _root._io
+            pos: offset
+            size: size
