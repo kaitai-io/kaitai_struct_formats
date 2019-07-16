@@ -754,6 +754,12 @@ types:
             type: u2
           - id: value
             type: u8
+        instances:
+          name:
+            type: strz
+            pos: _parent.str_off + un
+            encoding: utf-8
+            if: un != 0
         -webide-representation: "un={un} type={type} sect={sect} desc={desc} value={value}"
       nlist:
         seq:
@@ -767,6 +773,12 @@ types:
             type: u2
           - id: value
             type: u4
+        instances:
+          name:
+            type: strz
+            pos: _parent.str_off + un
+            encoding: utf-8
+            if: un != 0
         -webide-representation: "un={un} type={type} sect={sect} desc={desc} value={value}"
   dysymtab_command:
     seq:
