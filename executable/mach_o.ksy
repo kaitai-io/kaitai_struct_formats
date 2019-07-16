@@ -727,13 +727,15 @@ types:
     types:
       str_table:
         seq:
+            # NOTE:  This may not always be a u4, I've also seen " " (0x20 0x00)
           - id: unknown
             type: u4
           - id: items
             type: strz
-            encoding: ascii
+            encoding: utf-8
             repeat: until
             repeat-until: _ == ""
+            eos-error: false
       nlist_64:
         seq:
           - id: un
