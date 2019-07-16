@@ -715,7 +715,13 @@ types:
       symbols:
         io: _root._io
         pos: sym_off
-        type: nlist_64
+        type:
+          switch-on: _root.magic
+          cases:
+            magic_type::macho_le_x64 : nlist_64
+            magic_type::macho_be_x64 : nlist_64
+            magic_type::macho_le_x86 : nlist
+            magic_type::macho_be_x86 : nlist
         repeat: expr
         repeat-expr: n_syms
       strs:
@@ -748,6 +754,19 @@ types:
             type: u2
           - id: value
             type: u8
+        -webide-representation: "un={un} type={type} sect={sect} desc={desc} value={value}"
+      nlist:
+        seq:
+          - id: un
+            type: u4
+          - id: type
+            type: u1
+          - id: sect
+            type: u1
+          - id: desc
+            type: u2
+          - id: value
+            type: u4
         -webide-representation: "un={un} type={type} sect={sect} desc={desc} value={value}"
   dysymtab_command:
     seq:
