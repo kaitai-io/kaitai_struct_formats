@@ -67,6 +67,22 @@ types:
         doc: |
           The byte values corresponding to each leaf on this level of the tree.
   tree:
+    doc: |
+      Serialized representation of a binary Huffman tree. The tree always
+      follows these rules:
+      
+      * The tree is always left-aligned, i. e. on each level of the tree,
+        all inner (non-leaf) nodes are on the left side of the tree,
+        and all leaves are on the right side.
+      * The total number of nodes on each tree level is two times the number
+        of inner nodes on the previous level (since this is a binary tree,
+        each inner node has exactly two children).
+      * There is a single implicit root node.
+      * The number of inner nodes on each tree level can be calculated from
+        the total number of nodes and the number of leaf nodes.
+      * The rightmost leaf on the last level of the tree always stands for EOF,
+        and is not stored explicitly in the file (unlike all other
+        leaf values).
     seq:
       - id: num_levels
         type: u1
@@ -89,19 +105,3 @@ types:
         repeat: expr
         repeat-expr: num_levels
         doc: The individual levels of the tree.
-    doc: |
-      Serialized representation of a binary Huffman tree. The tree always
-      follows these rules:
-      
-      * The tree is always left-aligned, i. e. on each level of the tree,
-        all inner (non-leaf) nodes are on the left side of the tree,
-        and all leaves are on the right side.
-      * The total number of nodes on each tree level is two times the number
-        of inner nodes on the previous level (since this is a binary tree,
-        each inner node has exactly two children).
-      * There is a single implicit root node.
-      * The number of inner nodes on each tree level can be calculated from
-        the total number of nodes and the number of leaf nodes.
-      * The rightmost leaf on the last level of the tree always stands for EOF,
-        and is not stored explicitly in the file (unlike all other
-        leaf values).
