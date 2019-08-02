@@ -50,26 +50,6 @@ seq:
       end on a byte boundary, it is padded with zeroes at the end (i. e. in the
       least significant bits).
 types:
-  tree_level:
-    params:
-      - id: level_number
-        type: u1
-        doc: This level's number.
-    seq:
-      - id: leaves
-        type: u1
-        repeat: expr
-        repeat-expr: num_leaves
-        doc: |
-          The byte values corresponding to each leaf on this level of the tree.
-    instances: 
-      num_leaves:
-        # See doc of tree.level_leaf_counts for an explanation of
-        # this calculation.
-        value: |
-          _parent.level_leaf_counts[level_number]
-          + (level_number == _parent.num_levels-1 ? 1: 0)
-        doc: The number of leaves on this tree level.
   tree:
     doc: |
       Serialized representation of a binary Huffman tree. The tree always
@@ -105,7 +85,29 @@ types:
           byte value, so for the purposes of parsing this format, the last
           level's leaf count is considered *minus one*.
       - id: levels
-        type: tree_level(_index)
+        type: level(_index)
         repeat: expr
         repeat-expr: num_levels
         doc: The individual levels of the tree.
+    types:
+      level:
+        params:
+          - id: level_number
+            type: u1
+            doc: This level's number.
+        seq:
+          - id: leaves
+            type: u1
+            repeat: expr
+            repeat-expr: num_leaves
+            doc: |
+              The byte values corresponding to each leaf on this level of
+              the tree.
+        instances:
+          num_leaves:
+            # See doc of tree.level_leaf_counts for an explanation of
+            # this calculation.
+            value: |
+              _parent.level_leaf_counts[level_number]
+              + (level_number == _parent.num_levels-1 ? 1: 0)
+            doc: The number of leaves on this tree level.
