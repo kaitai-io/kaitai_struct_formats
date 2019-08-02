@@ -59,13 +59,17 @@ types:
       - id: leaves
         type: u1
         repeat: expr
-        # See doc of tree.level_leaf_counts for an explanation of
-        # this calculation.
-        repeat-expr: |
-          _parent.level_leaf_counts[level_number]
-          + (level_number == _parent.num_levels-1 ? 1 : 0)
+        repeat-expr: num_leaves
         doc: |
           The byte values corresponding to each leaf on this level of the tree.
+    instances: 
+      num_leaves:
+        # See doc of tree.level_leaf_counts for an explanation of
+        # this calculation.
+        value: |
+          _parent.level_leaf_counts[level_number]
+          + (level_number == _parent.num_levels-1 ? 1: 0)
+        doc: The number of leaves on this tree level.
   tree:
     doc: |
       Serialized representation of a binary Huffman tree. The tree always
