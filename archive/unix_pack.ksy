@@ -1,12 +1,12 @@
 meta:
   id: unix_pack
-  title: Unix pack(1)-compressed data
+  title: Unix pack-compressed data
   application:
     - pack(1)
     - unpack(1)
     - pcat(1)
   # The extension is specifically lowercase.
-  # Uppercase .Z is used for compress(1)-compressed data.
+  # Uppercase .Z is used for compress-compressed data.
   file-extension: z
   xref:
     justsolve: Pack
@@ -15,14 +15,14 @@ meta:
   endian: be
 doc: |
   The Unix pack compression format, a very basic compression format based on
-  Huffman coding. The Unix `pack(1)` utility could compress files into
-  this format, and could be decompressed using the utilities `unpack(1)`
-  and `pcat(1)`.
+  Huffman coding. The Unix `pack` utility could compress files into
+  this format, and could be decompressed using the utilities `unpack`
+  and `pcat`.
   
   The pack format is long obsolete - it was superseded in the 1980s
-  by the LZW-based compression format of `compress(1)` (which is itself
+  by the LZW-based compression format of `compress` (which is itself
   almost never used anymore on modern Unix derivatives). Despite this,
-  the `gzip(1)` utility still supports decompressing (but not compressing)
+  the `gzip` utility still supports decompressing (but not compressing)
   data in the pack compression format.
 doc-ref:
   - 'https://www.vidarholen.net/contents/blog/?p=691'
