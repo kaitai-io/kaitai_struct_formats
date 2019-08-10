@@ -55,7 +55,8 @@ types:
           In practice, software dealing with STL either expected to
           see 0 here, or uses this 16-bit field per se to store
           additional attributes (such as RGB color of a vertex or
-          color index).  vec3d:
+          color index).
+  vec3d:
     seq:
       - id: x
         type: f4
