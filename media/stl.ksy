@@ -45,14 +45,6 @@ types:
         type: vec3d
         repeat: expr
         repeat-expr: 3
-  vec3d:
-    seq:
-      - id: x
-        type: f4
-      - id: y
-        type: f4
-      - id: z
-        type: f4
       - id: abr
         type: u2
         doc: |
@@ -64,3 +56,11 @@ types:
           see 0 here, or uses this 16-bit field per se to store
           additional attributes (such as RGB color of a vertex or
           color index).
+  vec3d:
+    seq:
+      - id: x
+        type: f4
+      - id: y
+        type: f4
+      - id: z
+        type: f4
