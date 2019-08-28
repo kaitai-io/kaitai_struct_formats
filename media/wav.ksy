@@ -455,7 +455,7 @@ enums:
     0x676f: ogg_vorbis_mode_1_plus
     0x6770: ogg_vorbis_mode_2_plus
     0x6771: ogg_vorbis_mode_3_plus
-    0x7000: 3com_nbx
+    0x7000: threecom_nbx
     0x706d: faad_aac
     0x7361: amr_nb
     0x7362: amr_wb
