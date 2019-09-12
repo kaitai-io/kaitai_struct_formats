@@ -1,5 +1,5 @@
 # Argon Design Ltd.
-# Copyright (c) 2019 Argon Design. All rights reserved
+# Copyright (c) 2019 Argon Design
 # MP4 container parser. Parses general as well as AV1 and VP9 specific boxes.
 meta:
   id: mp4
