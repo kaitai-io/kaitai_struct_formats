@@ -1,0 +1,9 @@
+[submodule "hardware/edid.ksy"]
+	path = hardware/edid.ksy
+	url = https://github.com/kaitai-io/edid.ksy
+[submodule "image/dicom.ksy"]
+	path = image/dicom.ksy
+	url = https://github.com/kaitai-io/dicom.ksy
+[submodule "executable/java_bytecode.ksy"]
+	path = executable/java_bytecode.ksy
+	url = https://github.com/kaitai-io/java_bytecode.ksy
