@@ -1,9 +1,12 @@
-[submodule "hardware/edid.ksy"]
-	path = hardware/edid.ksy
+[submodule "hardware/edid"]
+	path = hardware/edid
 	url = https://github.com/kaitai-io/edid.ksy
-[submodule "image/dicom.ksy"]
-	path = image/dicom.ksy
+[submodule "image/dicom"]
+	path = image/dicom
 	url = https://github.com/kaitai-io/dicom.ksy
-[submodule "executable/java_bytecode.ksy"]
-	path = executable/java_bytecode.ksy
+[submodule "executable/java_bytecode"]
+	path = executable/java_bytecode
 	url = https://github.com/kaitai-io/java_bytecode.ksy
+[submodule "windows/windows_resource_file"]
+	path = windows/windows_resource_file
+	url = https://github.com/kaitai-io/windows_resource_file.ksy
