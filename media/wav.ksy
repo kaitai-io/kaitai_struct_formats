@@ -5,6 +5,16 @@ meta:
   license: BSD-3-Clause-Attribution
   encoding: ASCII
   endian: le
+  xref:
+    justsolve: WAV
+    loc: fdd000001
+    mime:
+      - audio/vnd.wave
+      - audio/wav
+      - audio/wave
+      - audio/x-wav
+    pronom: fmt/6
+    wikidata: Q217570
 doc: |
   The WAVE file format is a subset of Microsoft's RIFF specification for the
   storage of multimedia files. A RIFF file starts out with a file header
@@ -16,29 +26,21 @@ doc: |
   This Kaitai implementation was written by John Byrd of Gigantic Software
   (jbyrd@giganticsoftware.com), and it is likely to contain bugs.
 doc-ref: http://soundfile.sapp.org/doc/WaveFormat/
-doc-ref: https://www.loc.gov/preservation/digital/formats/fdd/fdd000001.shtml
 seq:
   - id: riff_id
     contents: RIFF
   - id: file_size
     type: u4
-  - id: wave_id
-    contents: WAVE
-  - id: chunks
-    type: chunks_type
-    size: file_size - 5
-
-instances:
-  format_chunk:
-    value: chunks.chunk[0].data
-
+  - id: data
+    type: wave_chunk_type
 types:
-  chunks_type:
+  wave_chunk_type:
     seq:
+      - id: form_type
+        contents: WAVE
       - id: chunk
         type: chunk_type
         repeat: eos
-
   chunk_type:
     seq:
       - id: chunk_id
@@ -54,42 +56,68 @@ types:
             0x62657874: bext_chunk_type
             0x63756520: cue_chunk_type
             0x64617461: data_chunk_type
+            0x4c495354: list_chunk_type
+      - id: pad_byte
+        size: len % 2
+
+  list_chunk_type:
+    seq:
+      - id: form_type
+        type: u4be
+      - id: subchunk
+        type:
+          switch-on: form_type
+          cases:
+            0x494e464f: info_chunk_type
+        repeat: eos
+
+  info_chunk_type:
+    seq:
+      - id: chunk_id
+        type: u4be
+      - id: len
+        type: u4
+      - id: data
+        type: strz
+        size: len
+      - id: pad_byte
+        size: len % 2
 
   bext_chunk_type:
     seq:
-    - id: description
-      size: 256
-      type: str
-    - id: originator
-      size: 32
-      type: str
-    - id: originator_reference
-      size: 32
-      type: str
-    - id: origination_date
-      size: 10
-      type: str
-    - id: origination_time
-      size: 8
-      type: str
-    - id: time_reference_low
-      type: u4
-    - id: time_reference_high
-      type: u4
-    - id: version
-      type: u2
-    - id: umid
-      size: 64
-    - id: loudness_value
-      type: u2
-    - id: loudness_range
-      type: u2
-    - id: max_true_peak_level
-      type: u2
-    - id: max_momentary_loudness
-      type: u2
-    - id: max_short_term_loudness
-      type: u2
+      - id: description
+        size: 256
+        type: strz
+      - id: originator
+        size: 32
+        type: strz
+      - id: originator_reference
+        size: 32
+        type: strz
+      - id: origination_date
+        size: 10
+        type: str
+      - id: origination_time
+        size: 8
+        type: str
+      - id: time_reference_low
+        type: u4
+      - id: time_reference_high
+        type: u4
+      - id: version
+        type: u2
+      - id: umid
+        size: 64
+      - id: loudness_value
+        type: u2
+      - id: loudness_range
+        type: u2
+      - id: max_true_peak_level
+        type: u2
+      - id: max_momentary_loudness
+        type: u2
+      - id: max_short_term_loudness
+        type: u2
 
   cue_chunk_type:
     seq:
@@ -504,10 +532,13 @@ enums:
     0xffff: development
 
   chunk_type:
-    0x20746d66: fmt
-    0x62657874: bext
-    0x63756520: cue
-    0x64617461: data
-    0x756d6964: umid
-    0x6d696e66: minf
-    0x7265676e: regn
+    0x666d7420: fmt
+    0x74786562: bext
+    0x20657563: cue
+    0x61746164: data
+    0x64696d75: umid
+    0x666e696d: minf
+    0x6e676572: regn
+
+    0x4c495354: list
+    0x494e464f: info
