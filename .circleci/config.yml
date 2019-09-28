@@ -20,7 +20,7 @@ jobs:
             sudo apt-get install --no-install-recommends -y dirmngr
             sudo apt-key add <.circleci/bintray.key
             #apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv 379CE192D401AB61
-            echo "deb http://dl.bintray.com/kaitai-io/debian jessie main" | sudo tee /etc/apt/sources.list.d/kaitai.list
+            echo "deb http://dl.bintray.com/kaitai-io/debian_unstable jessie main" | sudo tee /etc/apt/sources.list.d/kaitai.list
             sudo apt-get update
             sudo apt-get install --no-install-recommends -y \
               git ssh \
