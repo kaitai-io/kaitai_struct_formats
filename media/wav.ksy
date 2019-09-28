@@ -29,10 +29,13 @@ doc-ref: http://soundfile.sapp.org/doc/WaveFormat/
 seq:
   - id: riff_id
     contents: RIFF
-  - id: file_size
+  - id: len
     type: u4
   - id: data
     type: wave_chunk_type
+    size: len
+  - id: pad_byte
+    size: len % 2
 types:
   wave_chunk_type:
     seq:
@@ -127,7 +130,6 @@ types:
         type: cue_point_type
         repeat: expr
         repeat-expr: dw_cue_points
-        if: dw_cue_points != 0
 
   cue_point_type:
     seq:

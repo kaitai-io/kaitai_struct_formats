@@ -15,6 +15,7 @@ doc: |
 
   The Microsoft implementation is mostly known through container formats
   like AVI, ANI and WAV, which use RIFF as their basis.
+doc-ref: https://www.johnloomis.org/cpe102/asgn/asgn1/riff.html
 seq:
   - id: riff_chunk
     type: chunk
@@ -22,18 +23,40 @@ types:
   parent_chunk_data:
     seq:
       - id: form_type
-        type: u4be
-        enum: form_type
+        type: str
+        size: 4
+        pad-right: 0x20
       - id: subchunks
-        type: chunk
+        type:
+          switch-on: form_type
+          cases:
+            '"INFO"': info_subchunk
+            _: chunk
         repeat: eos
   chunk:
+    seq:
+      - id: chunk_id
+        type: str
+        size: 4
+        pad-right: 0x20
+      - id: chunk_size
+        type: u4
+      - id: chunk_data
+        size: chunk_size
+        type:
+          switch-on: chunk_id
+          cases:
+            '"RIFF"': parent_chunk_data
+            '"LIST"': parent_chunk_data
+      - id: pad_byte
+        size: chunk_size % 2
+  info_subchunk:
     doc: |
       All registered subchunks in the INFO chunk are NULL-terminated strings,
       but the unregistered might not be. By convention, the registered
       chunk IDs are in uppercase and the unregistered IDs are in lowercase.
 
-      If the chunk ID is a child of the INFO chunk and contains a lowercase
+      If the chunk ID of an INFO subchunk contains a lowercase
       letter, this chunk is considered as unregistered and thus we can make
       no assumptions about the type of data.
     seq:
@@ -44,20 +67,12 @@ types:
       - id: chunk_data
         size: chunk_size
         type:
-          switch-on: chunk_id
+          switch-on: is_unregistered_tag
           cases:
-            0x52494646: parent_chunk_data # chunk_id::riff
-            0x4c495354: parent_chunk_data # chunk_id::list
-        if: not is_info_tag or is_unregistered_tag
-      - id: string_data
-        size: chunk_size
-        type: strz
-        if: is_info_tag and not is_unregistered_tag
+            false: strz
       - id: pad_byte
         size: chunk_size % 2
     instances:
-      is_info_tag:
-        value: _parent.as<parent_chunk_data>.form_type == form_type::info
       chunk_id_char:
         value: >-
           [
@@ -76,15 +91,3 @@ types:
             (chunk_id_char[2] >= 97 and chunk_id_char[2] <= 122) or
             (chunk_id_char[3] >= 97 and chunk_id_char[3] <= 122)
           )
-
-enums:
-  chunk_id:
-    0x52494646: riff
-    0x4c495354: list
-  form_type:
-    0x494e464f: info
-    0x57415645: wave
-    0x41564920: avi
-    0x524d4944: rmid
-    0x444c5320: dls
-    0x7366626b: sfbk
