@@ -21,8 +21,7 @@ types:
   te_header:
     seq:
       - id: signature
-        type: u2
-        #contents: "VZ"
+        contents: "VZ"
       - id: machine
         type: u2
         enum: machine_type
