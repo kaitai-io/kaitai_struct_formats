@@ -1,6 +1,6 @@
 meta:
-  id: te
-  title: TE (Terse Executable) file format. A stripped version of PE (Portable Executable) format.
+  id: uefi_te
+  title: TE (Terse Executable) file.
   application: UEFI
   file-extension:
     - efi
@@ -8,31 +8,51 @@ meta:
   ks-version: 0.7
   license: CC0-1.0
   endian: le
+doc: |
+  This type of executables could be found inside the UEFI firmware. The UEFI 
+  firmware is stored in SPI flash memory, which is a chip soldered on a 
+  system’s motherboard. UEFI firmware is very modular: it usually contains 
+  dozens, if not hundreds, of executables. To store all these separates files, 
+  the firmware is laid out in volumes using the Firmware File System (FFS), a 
+  file system specifically designed to store firmware images. The volumes 
+  contain files that are identified by GUIDs and each of these files contain 
+  one or more sections holding the data. One of these sections contains the 
+  actual executable image. Most of the executable images follow the PE format. 
+  However, some of them follow the TE format.
+
+  The Terse Executable (TE) image format was created as a mechanism to reduce
+  the overhead of the PE/COFF headers in PE32/PE32+ images, resulting in a 
+  corresponding reduction of image sizes for executables running in the PI 
+  (Platform Initialization) Architecture environment. Reducing image size 
+  provides an opportunity for use of a smaller system flash part.
+
+  So the TE format is basically a stripped version of PE.
+
 doc-ref: https://uefi.org/sites/default/files/resources/PI_Spec_1_6.pdf
 seq:
-  - id: te
+  - id: te_hdr
     size: 0x28
     type: te_header
   - id: sections
     type: section
     repeat: expr
-    repeat-expr: te.number_of_sections
+    repeat-expr: te_hdr.num_sections
 types:
   te_header:
     seq:
-      - id: signature
+      - id: magic
         contents: "VZ"
       - id: machine
         type: u2
         enum: machine_type
-      - id: number_of_sections
+      - id: num_sections
         type: u1
       - id: subsystem
         type: u1
         enum: subsystem_enum
       - id: stripped_size
         type: u2
-      - id: address_of_entry_point
+      - id: entry_point_addr
         type: u4
       - id: base_of_code
         type: u4
@@ -113,13 +133,13 @@ types:
         type: u4
       - id: pointer_to_linenumbers
         type: u4
-      - id: number_of_relocations
+      - id: num_relocations
         type: u2
-      - id: number_of_linenumbers
+      - id: num_linenumbers
         type: u2
       - id: characteristics
         type: u4
     instances:
       body:
-        pos: pointer_to_raw_data - _root.te.stripped_size + _root.te._io.size
+        pos: pointer_to_raw_data - _root.te_hdr.stripped_size + _root.te_hdr._io.size
         size: size_of_raw_data
