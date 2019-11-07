@@ -5,6 +5,8 @@ meta:
   encoding: UTF-8
   license: CC0-1.0
   endian: le
+  xref:
+    wikidata: Q2385
 doc: |
   Many of Civilization 5's maps are in civ5map format, and encodes terrain and
   sometimes resources on the map plots. Scenario data is also encoded in some
