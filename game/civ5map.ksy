@@ -137,21 +137,35 @@ types:
           which represents nonetype.
         seq:
           - id: terrain_type_id
-            size: 1
+            type: u1
           - id: resource_type_id
-            size: 1
+            type: u1
           - id: feature1_type_id
-            size: 1
+            type: u1
           - id: river
-            doc: 0 (none), non-0 may indicate a direction as well
-            size: 1
+            enum: river
+            doc: non-0 values may indicate a direction as well
+            type: u1
           - id: elevation
-            doc: 0 (none), 1 (hill), 2 (mountain)
-            size: 1
+            type: u1
+            enum: elevation
           - id: continent
-            doc: 0 (none), 1 (Americas), 2 (Asia), 3 (Africa), 4 (Europe)
-            size: 1
+            enum: continent
+            type: u1
           - id: feature2_type_id
-            size: 1
+            type: u1
           - id: unknown
-            size: 1
+            type: u1
+        enums:
+          elevation:
+            0: none
+            1: hill
+            2: mountain
+          continent:
+            0: none
+            1: americas
+            2: asia
+            3: africa
+            4: europe
+          river:
+            0: none
