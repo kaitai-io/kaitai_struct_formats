@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -25,7 +25,7 @@ jobs:
             git ssh \
             locales \
             kaitai-struct-compiler default-jre-headless \
-            ruby ruby-dev make gcc libc6-dev bundler \
+            make gcc libc6-dev \
             graphviz \
             rsync
           ksc --version
@@ -41,15 +41,21 @@ jobs:
           cd _build
           bundle install
       - name: Build targets
-        run: |
-          locale
-          cd _build
-          ./build-target .. target
+        working-directory: _build
+        run: ./build-target .. target
+      - name: Upload build targets log
+        uses: actions/upload-artifact@v1
+        with:
+          name: log.json
+          path: _build/target/log.json
       - name: Build diagrams
-        run: |
-          cd _build
-          ./build-diagrams target html
+        working-directory: _build
+        run: ./build-diagrams target html
       - name: Build HTML
-        run: |
-          cd _build
-          ./build-html .. target html
+        working-directory: _build
+        run: ./build-html .. target html
+      - name: Deploy
+        run: .circleci/publish
+        env:
+          BOT_SSH_KEY: ${{secrets.BOT_SSH_KEY}}
+        if: github.ref == 'refs/heads/master'
