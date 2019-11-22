@@ -1,0 +1,55 @@
+name: formats.kaitai.io
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.x'
+      - name: Install deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y dirmngr
+          sudo apt-key add <.circleci/bintray.key
+          #apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv 379CE192D401AB61
+          echo "deb http://dl.bintray.com/kaitai-io/debian jessie main" | sudo tee /etc/apt/sources.list.d/kaitai.list
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            git ssh \
+            locales \
+            kaitai-struct-compiler default-jre-headless \
+            ruby ruby-dev make gcc libc6-dev bundler \
+            graphviz \
+            rsync
+          ksc --version
+      - name: Fix locales
+        run: |
+          echo 'en_US.UTF-8 UTF-8' | sudo tee /etc/locale.gen
+          echo 'LANG="en_US.UTF-8"' | sudo tee /etc/default/locale
+          sudo dpkg-reconfigure --frontend=noninteractive locales
+          locale
+      - name: Install Ruby deps
+        run: |
+          echo 'gem: --no-document' | sudo tee /etc/gemrc
+          cd _build
+          bundle install
+      - name: Build targets
+        run: |
+          locale
+          cd _build
+          ./build-target .. target
+      - name: Build diagrams
+        run: |
+          cd _build
+          ./build-diagrams target html
+      - name: Build HTML
+        run: |
+          cd _build
+          ./build-html .. target html
