@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+  pull_request: {}
 
 jobs:
   build:
@@ -17,7 +18,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y dirmngr
-          sudo apt-key add <.circleci/bintray.key
+          sudo apt-key add <.github/bintray.key
           #apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv 379CE192D401AB61
           echo "deb http://dl.bintray.com/kaitai-io/debian jessie main" | sudo tee /etc/apt/sources.list.d/kaitai.list
           sudo apt-get update
@@ -55,7 +56,7 @@ jobs:
         working-directory: _build
         run: ./build-html .. target html
       - name: Deploy
-        run: .circleci/publish
+        run: .github/publish
         env:
           BOT_SSH_KEY: ${{secrets.BOT_SSH_KEY}}
         if: github.ref == 'refs/heads/master'
