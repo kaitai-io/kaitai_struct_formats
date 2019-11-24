@@ -5,6 +5,11 @@ meta:
   license: BSD-3-Clause-Attribution
   encoding: ASCII
   endian: le
+  imports:
+    - /common/riff/chunk
+    - /common/riff/chunk_generic
+    - /common/riff/parent_chunk_data
+    - /common/riff/parent_chunk_data_generic
   xref:
     justsolve: WAV
     loc: fdd000001
@@ -27,64 +32,59 @@ doc: |
   (jbyrd@giganticsoftware.com), and it is likely to contain bugs.
 doc-ref: http://soundfile.sapp.org/doc/WaveFormat/
 seq:
-  - id: riff_id
-    contents: RIFF
-  - id: len
-    type: u4
-  - id: data
-    type: wave_chunk_type
-    size: len
-  - id: pad_byte
-    size: len % 2
+  - id: chunk
+    type: chunk('RIFF')
+instances:
+  parent_chunk_data:
+    io: chunk.data_slot._io
+    pos: 0
+    type: parent_chunk_data('WAVE')
+  subchunks:
+    io: parent_chunk_data.subchunks_slot._io
+    pos: 0
+    type: chunk_type
+    repeat: eos
 types:
-  wave_chunk_type:
-    seq:
-      - id: form_type
-        contents: WAVE
-      - id: chunk
-        type: chunk_type
-        repeat: eos
   chunk_type:
     seq:
-      - id: chunk_id
-        type: u4be
-      - id: len
-        type: u4
-      - id: data
-        size: len
+      - id: chunk
+        type: chunk_generic
+    instances:
+      chunk_data:
+        io: chunk.data_slot._io
+        pos: 0
         type:
-          switch-on: chunk_id
+          switch-on: chunk.id
           cases:
-            0x666d7420: format_chunk_type
-            0x62657874: bext_chunk_type
-            0x63756520: cue_chunk_type
-            0x64617461: data_chunk_type
-            0x4c495354: list_chunk_type
-      - id: pad_byte
-        size: len % 2
+            '"fmt "': format_chunk_type
+            '"bext"': bext_chunk_type
+            '"cue "': cue_chunk_type
+            '"data"': data_chunk_type
+            '"LIST"': list_chunk_type
 
   list_chunk_type:
     seq:
-      - id: form_type
-        type: u4be
-      - id: subchunk
+      - id: parent_chunk_data
+        type: parent_chunk_data_generic
+    instances:
+      subchunks:
+        io: parent_chunk_data.subchunks_slot._io
+        pos: 0
         type:
-          switch-on: form_type
+          switch-on: parent_chunk_data.form_type
           cases:
-            0x494e464f: info_chunk_type
+            '"INFO"': info_chunk_type
         repeat: eos
 
   info_chunk_type:
     seq:
-      - id: chunk_id
-        type: u4be
-      - id: len
-        type: u4
-      - id: data
+      - id: chunk
+        type: chunk_generic
+    instances:
+      chunk_data:
+        io: chunk.data_slot._io
+        pos: 0
         type: strz
-        size: len
-      - id: pad_byte
-        size: len % 2
 
   bext_chunk_type:
     seq:
@@ -532,15 +532,3 @@ enums:
     0xf1ac: flac
     0xfffe: extensible
     0xffff: development
-
-  chunk_type:
-    0x666d7420: fmt
-    0x74786562: bext
-    0x20657563: cue
-    0x61746164: data
-    0x64696d75: umid
-    0x666e696d: minf
-    0x6e676572: regn
-
-    0x4c495354: list
-    0x494e464f: info
