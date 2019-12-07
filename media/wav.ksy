@@ -7,9 +7,7 @@ meta:
   endian: le
   imports:
     - /common/riff/chunk
-    - /common/riff/chunk_generic
     - /common/riff/parent_chunk_data
-    - /common/riff/parent_chunk_data_generic
   xref:
     justsolve: WAV
     loc: fdd000001
@@ -33,22 +31,28 @@ doc: |
 doc-ref: http://soundfile.sapp.org/doc/WaveFormat/
 seq:
   - id: chunk
-    type: chunk('RIFF')
+    type: chunk
 instances:
+  is_riff_chunk:
+    value: chunk.id == 'RIFF'
   parent_chunk_data:
     io: chunk.data_slot._io
     pos: 0
-    type: parent_chunk_data('WAVE')
+    if: is_riff_chunk
+    type: parent_chunk_data
+  is_form_type_wave:
+    value: is_riff_chunk and parent_chunk_data.form_type == 'WAVE'
   subchunks:
     io: parent_chunk_data.subchunks_slot._io
     pos: 0
+    if: is_form_type_wave
     type: chunk_type
     repeat: eos
 types:
   chunk_type:
     seq:
       - id: chunk
-        type: chunk_generic
+        type: chunk
     instances:
       chunk_data:
         io: chunk.data_slot._io
@@ -65,7 +69,7 @@ types:
   list_chunk_type:
     seq:
       - id: parent_chunk_data
-        type: parent_chunk_data_generic
+        type: parent_chunk_data
     instances:
       subchunks:
         io: parent_chunk_data.subchunks_slot._io
@@ -79,7 +83,7 @@ types:
   info_chunk_type:
     seq:
       - id: chunk
-        type: chunk_generic
+        type: chunk
     instances:
       chunk_data:
         io: chunk.data_slot._io

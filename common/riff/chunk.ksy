@@ -2,14 +2,10 @@ meta:
   id: chunk
   encoding: ASCII
   endian: le
-params:
-  - id: expected_id
-    type: str
 seq:
-  - id: id_assert
+  - id: id
     type: str
     size: 4
-    valid: expected_id
   - id: len
     type: u4
   - id: data_slot
