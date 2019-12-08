@@ -1,5 +1,6 @@
 meta:
   id: utf8_string
+  title: UTF8-encoded string
   license: CC0-1.0
 doc: |
   UTF-8 is a popular character encoding schemes that allows to represent
