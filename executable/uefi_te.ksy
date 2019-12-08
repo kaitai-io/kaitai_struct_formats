@@ -1,6 +1,6 @@
 meta:
   id: uefi_te
-  title: TE (Terse Executable) file.
+  title: TE (Terse Executable) file
   application: UEFI
   file-extension:
     - efi
