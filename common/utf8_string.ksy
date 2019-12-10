@@ -14,13 +14,13 @@ doc: |
     8-bit encodings)
   * maintaining sort order of codepoints if sorted as a byte array
 
-  WARNING: For vast majority of practical purposes of format definitions
-  in Kaitai Struct, you'd likely note want to use this and rather just
-  use `type: str` with `encoding: utf8`. That will use native string
-  implementations, which are most likely more efficient and will give you
-  native language strings, rather than an array of individual codepoints.
-  This format definition is provided mostly for educational / research
-  purposes.
+  WARNING: For the vast majority of practical purposes of format
+  definitions in Kaitai Struct, you'd likely NOT want to use this and
+  rather just use `type: str` with `encoding: utf8`. That will use
+  native string implementations, which are most likely more efficient
+  and will give you native language strings, rather than an array of
+  individual codepoints.  This format definition is provided mostly
+  for educational / research purposes.
 seq:
   - id: codepoints
     type: utf8_codepoint
