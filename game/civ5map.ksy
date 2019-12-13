@@ -158,6 +158,7 @@ types:
             seq:
               - id: river_head
                 type: b5
+                doc: Unknown, but it will be 0 if no river
               - id: river_southwest
                 type: b1
               - id: river_southeast
