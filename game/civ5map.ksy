@@ -15,11 +15,16 @@ doc: |
   Civ5maps can be accompanied by lua files which defines advanced behavior for
   world gen on top of what's already in the civ5map.
 
-  There are three versions of the format identified in this file- A, B, and
-  C. The latest version of Civ can read all of them. Version A is the base
-  version. Version B has some additional information about the map in the
-  header (string3). Version C has an additional part in the header that
-  defines which lua files Civ should use when starting a new game with the map.
+  There are three versions of the format identified in this file- Pre-B (e.g. 7
+  and A), B, and C. The latest version of Civ can read all of them. Pre-B is
+  the base version. Version B has some additional information about the map in
+  the header (string3). Version C is the only one I've seen that has a mod_data
+  length greater than 0.
+
+  Examples of official Firaxis maps with these versions...
+  Pre-B (7) - <Civ 5 Install Location>/steamassets/assets/maps/asia.civ5map
+  B - <Civ 5 Install Location>/steamassets/assets/maps/m_ancientlake.civ5map
+  C - <Civ 5 Install Location>/steamassets/assets/maps/earth_duel.civ5map
 doc-ref: https://forums.civfanatics.com/threads/civ5map-file-format.418566/
 seq:
   - id: header
@@ -43,6 +48,7 @@ types:
         
       - id: misc_settings_head
         type: b5
+        doc: 5 empty bits + 3 bits of settings = 8 bits (1 byte)
       - id: random_goodies
         type: b1
       - id: random_resources
@@ -51,6 +57,7 @@ types:
         type: b1
       - id: misc_settings_tail
         size: 3
+        doc: Empty as far as I can tell. I wonder why it's 3 bytes long?
         
       - id: terrain_list_len
         type: u4
@@ -61,7 +68,7 @@ types:
       - id: resource_list_len
         type: u4
         
-      - id: unknown
+      - id: mod_data_len
         type: u4
         
       - id: map_name_len
@@ -82,19 +89,8 @@ types:
         type: null_terminated_str
         size: resource_list_len
         
-      - id: maybe_lua_params
-        doc: |
-          I don't know what's in here. It accompanies the lua stuff, so maybe
-          it defines options that passed into the lua file or something?
-        size: 36
-        if: version == 0xC
-      - id: lua_script_len
-        type: u4
-        if: version == 0xC
-      - id: lua_script
-        type: null_terminated_str
-        size: lua_script_len
-        if: version == 0xC
+      - id: mod_data
+        size: mod_data_len
         
       - id: map_name
         type: str
@@ -145,9 +141,8 @@ types:
           - id: feature1_type_id
             type: u1
           - id: river
-            enum: river
-            doc: non-0 values may indicate a direction as well
-            type: u1
+            type: river
+            doc: if the whole byte is 0, then there's no river
           - id: elevation
             type: u1
             enum: elevation
@@ -156,8 +151,19 @@ types:
             type: u1
           - id: feature2_type_id
             type: u1
-          - id: unknown
+          - id: resource_amount
             type: u1
+        types:
+          river:
+            seq:
+              - id: river_head
+                type: b5
+              - id: river_southwest
+                type: b1
+              - id: river_southeast
+                type: b1
+              - id: river_east
+                type: b1
         enums:
           elevation:
             0: none
@@ -169,5 +175,3 @@ types:
             2: asia
             3: africa
             4: europe
-          river:
-            0: none
