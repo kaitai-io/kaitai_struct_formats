@@ -53,7 +53,7 @@ types:
         pos: offset.value
         # The terminator is actually a slash followed by a newline, but multi-character terminators are not supported by Kaitai, and it's very unlikely that a path will contain a newline.
         terminator: 0x0a
-        doc: The member name (actually a relative path) stored in the long name list, terminated by a slash and a newline. For technicaly reasons, includes the terminating slash (but not the newline).
+        doc: The member name (actually a relative path) stored in the long name list, terminated by a slash and a newline. For technical reasons, includes the terminating slash (but not the newline).
     doc: A long member name (actually a relative path), stored as a reference into the long name list.
   special_member_name:
     seq:
