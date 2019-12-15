@@ -7,9 +7,9 @@ meta:
 doc: |
   An archive member's metadata (timestamp, user and group ID, mode).
   
-  By default, modern ar implementations set the modification timestamp, user ID and group ID to 0 and the mode to 644 (octal), regardless of the file's original metadata, to make archive creation reproducible.
+  Modern ar implementations support adding archive members in a reproducible mode: the original file's metadata is ignored, the timestamp, UID and GID are set to 0, and the mode to 644 (octal). This mode is usually enabled by default and must be explicitly disabled to store the real file metadata in the archive.
   
-  Rarely, the modification timestamp, user ID, group ID and mode fields may be blank (only spaces). This is the case in particular for the '//' member (the long name list) of SysV archives.
+  Rarely, all fields in the metadata may be blank (only spaces). This is the case in particular for the '//' member (the long name list) of SysV archives.
 seq:
   - id: modified_timestamp_raw
     -orig-id: ar_date
@@ -39,4 +39,9 @@ instances:
     doc: The member's owner group ID.
   mode:
     value: mode_raw.value
-    doc: The member's mode bits.
+    doc: |
+      The member's mode bits (file type and permissions).
+      
+      In practice, archive members are always regular files (file type S_IFREG). Implementations of the ar tool generally do not add non-regular files to archives - such files will either be rejected (e. g. directories) or be treated as regular files (e. g. symlinks). Technically, the ar format does not prohibit members with non-regular file type bits, but such members have no agreed format or semantics.
+      
+      Archive members added in reproducible mode will have their mode set to 644 (octal). Note that in this case the file type bits are all zeroes, unlike in non-reproducible mode where the file type is explicitly S_IFREG. Both cases represent regular files and should be considered equivalent.

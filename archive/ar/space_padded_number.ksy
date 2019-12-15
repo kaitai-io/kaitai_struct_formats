@@ -22,4 +22,4 @@ instances:
   value:
     value: text.to_i(base)
     if: text != ""
-    doc: The number, parsed as an integer.
+    doc: The number, parsed as an integer. If the field is blank (all spaces), this instance is null. All other non-numeric contents are an error.
