@@ -86,7 +86,7 @@ types:
         -orig-id: ar_size
         size: 10
         type: space_padded_number(10, 10)
-        doc: The size of the member's data. The long member name (if any) counts toward the data size, but the trailing padding byte (if any) does not.
+        doc: Raw version of size_with_long_name.
       - id: header_terminator
         -orig-id: ar_fmag
         contents: "`\n"
@@ -102,7 +102,7 @@ types:
         doc: The member's data.
       - id: padding
         contents: "\n"
-        if: size_raw.value % 2 != 0
+        if: size_with_long_name % 2 != 0
         doc: An extra newline is added as padding after members with an odd data size. This ensures that all members are 2-byte-aligned.
     instances:
       name:
@@ -111,8 +111,11 @@ types:
           The name of the archive member. Because the encoding of member names varies across systems, the name is exposed as a byte array.
           
           Names are usually unique within an archive, but this is not required - the `ar` command even provides various options to work with archives containing multiple identically named members.
+      size_with_long_name:
+        value: size_raw.value
+        doc: The size of the member's data. The long member name (if any) counts toward this size value, but the trailing padding byte (if any) does not.
       size:
-        value: 'name_internal.is_long ? size_raw.value - name_internal.parsed.as<long_member_name>.name_size.value : size_raw.value'
+        value: 'name_internal.is_long ? size_with_long_name - name_internal.parsed.as<long_member_name>.name_size.value : size_with_long_name'
         doc: The size of the member's data, excluding any long member name.
     doc: |
       An archive member's header and data.

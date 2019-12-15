@@ -51,21 +51,25 @@ types:
       - id: metadata
         type: member_metadata
         doc: The member's metadata (timestamp, user and group ID, mode).
-      - id: size
+      - id: size_raw
         -orig-id: ar_size
         type: space_padded_number(10, 10)
-        doc: The size of the member's data, in ASCII decimal, right-padded with spaces. The trailing padding byte (if any) does not count toward the data size.
+        doc: Raw version of size.
       - id: header_terminator
         -orig-id: ar_fmag
         contents: "`\n"
         doc: Marks the end of the header.
       - id: data
-        size: size.value
+        size: size
         doc: The member's data.
       - id: padding
         contents: "\n"
-        if: size.value % 2 != 0
+        if: size % 2 != 0
         doc: An extra newline is added as padding after members with an odd data size. This ensures that all members are 2-byte-aligned.
+    instances:
+      size:
+        value: size_raw.value
+        doc: The size of the member's data. The trailing padding byte (if any) does not count toward the data size.
     doc: |
       An archive member's header and data.
       
