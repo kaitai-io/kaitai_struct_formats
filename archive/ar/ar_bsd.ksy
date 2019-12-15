@@ -117,7 +117,4 @@ types:
       size:
         value: 'name_internal.is_long ? size_with_long_name - name_internal.parsed.as<long_member_name>.name_size.value : size_with_long_name'
         doc: The size of the member's data, excluding any long member name.
-    doc: |
-      An archive member's header and data.
-      
-      By default, modern ar implementations set the modification timestamp, user ID and group ID to 0 and the mode to 644 (octal), regardless of the file's original metadata, to make archive creation reproducible.
+    doc: An archive member's header and data.

@@ -4,7 +4,12 @@ meta:
   license: CC0-1.0
   imports:
     - space_padded_number
-doc: An archive member's metadata (timestamp, user and group ID, mode).
+doc: |
+  An archive member's metadata (timestamp, user and group ID, mode).
+  
+  By default, modern ar implementations set the modification timestamp, user ID and group ID to 0 and the mode to 644 (octal), regardless of the file's original metadata, to make archive creation reproducible.
+  
+  Rarely, the modification timestamp, user ID, group ID and mode fields may be blank (only spaces). This is the case in particular for the '//' member (the long name list) of SysV archives.
 seq:
   - id: modified_timestamp_raw
     -orig-id: ar_date

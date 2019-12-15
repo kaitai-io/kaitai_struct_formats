@@ -70,9 +70,4 @@ types:
       size:
         value: size_raw.value
         doc: The size of the member's data. The trailing padding byte (if any) does not count toward the data size.
-    doc: |
-      An archive member's header and data.
-      
-      By default, modern ar implementations set the modification timestamp, user ID and group ID to 0 and the mode to 644 (octal), regardless of the file's original metadata, to make archive creation reproducible.
-      
-      Rarely, the modification timestamp, user ID, group ID and mode fields may be blank (only spaces). This is the case in particular for the '//' member (the long name list) of SysV archives.
+    doc: An archive member's header and data.
