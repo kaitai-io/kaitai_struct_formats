@@ -155,15 +155,25 @@ types:
             type: u1
         types:
           river:
+            doc: |
+              Represents rivers defined by a tile's hex. Rivers are
+              defined by corners of hexes. In-game, Civ will
+              connect corners where the bit is 1 (true) with lines.
+                 _ 
+                / \ East
+                \_/
+              SW   SE
+              Because hexes tesselate, defining only SW-SE-E corners
+              of the rivers can define rivers for all valid river spots.
             seq:
-              - id: river_head
+              - id: unknown
                 type: b5
                 doc: Unknown, but it will be 0 if no river
-              - id: river_southwest
+              - id: southwest_corner
                 type: b1
-              - id: river_southeast
+              - id: southeast_corner
                 type: b1
-              - id: river_east
+              - id: east_corner
                 type: b1
         enums:
           elevation:
