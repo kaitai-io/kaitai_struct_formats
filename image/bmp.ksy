@@ -129,12 +129,12 @@ types:
     -orig-id: BITMAPINFO
     doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapinfo
     seq:
-      - id: header_size
+      - id: len_header
         type: u4
       - id: header
         -orig-id: bmciHeader
-        size: header_size - 4
-        type: bitmap_header(header_size)
+        size: len_header - 4
+        type: bitmap_header(len_header)
       - id: color_mask
         type: color_mask(header.bitmap_info_ext.compression == compressions::alpha_bitfields)
         if: not _io.eof and is_color_mask_here
@@ -150,7 +150,7 @@ types:
     instances:
       is_color_mask_here:
         value: >-
-          header.header_size == header_type::bitmap_info_header.to_i
+          header.len_header == header_type::bitmap_info_header.to_i
             and (header.bitmap_info_ext.compression == compressions::bitfields or header.bitmap_info_ext.compression == compressions::alpha_bitfields)
       is_color_mask_given:
         value: >-
@@ -205,7 +205,7 @@ types:
       - https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapcoreheader
       - https://www.fileformat.info/format/os2bmp/egff.htm#OS2BMP-DMYID.3.1
     params:
-      - id: header_size
+      - id: len_header
         type: u4
     seq:
       - id: image_width
@@ -237,7 +237,7 @@ types:
         type: bitmap_info_extension
         if: extends_bitmap_info
       - id: color_mask
-        type: color_mask(header_size != header_type::bitmap_v2_info_header.to_i)
+        type: color_mask(len_header != header_type::bitmap_v2_info_header.to_i)
         if: is_color_mask_here
       - id: os2_2x_bitmap_ext
         type: os2_2x_bitmap_extension
@@ -250,22 +250,22 @@ types:
         if: extends_bitmap_v5
     instances:
       is_core_header:
-        value: header_size == header_type::bitmap_core_header.to_i
+        value: len_header == header_type::bitmap_core_header.to_i
       extends_bitmap_info:
-        value: header_size >= header_type::bitmap_info_header.to_i
+        value: len_header >= header_type::bitmap_info_header.to_i
       extends_os2_2x_bitmap:
-        value: header_size == header_type::os2_2x_bitmap_header.to_i
+        value: len_header == header_type::os2_2x_bitmap_header.to_i
       extends_bitmap_v4:
-        value: header_size >= header_type::bitmap_v4_header.to_i
+        value: len_header >= header_type::bitmap_v4_header.to_i
       extends_bitmap_v5:
-        value: header_size >= header_type::bitmap_v5_header.to_i
+        value: len_header >= header_type::bitmap_v5_header.to_i
       image_height:
         value: 'image_height_raw < 0 ? -image_height_raw : image_height_raw'
       bottom_up:
         value: image_height_raw > 0
       is_color_mask_here:
-        value: header_size == header_type::bitmap_v2_info_header.to_i
-          or header_size == header_type::bitmap_v3_info_header.to_i
+        value: len_header == header_type::bitmap_v2_info_header.to_i
+          or len_header == header_type::bitmap_v3_info_header.to_i
           or extends_bitmap_v4
       uses_fixed_palette:
         value: not (bits_per_pixel == 16 or bits_per_pixel == 24 or bits_per_pixel == 32)
