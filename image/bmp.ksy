@@ -91,10 +91,10 @@ doc: |
       * BITMAPV4HEADER (WIN4XBITMAPHEADER)
 
 seq:
-  - id: file_header
+  - id: file_hdr
     type: file_header
   - id: dib_info
-    size: file_header.ofs_bitmap - 14 # 14 = file_header._sizeof (TODO: replace when KSC 0.9 is released)
+    size: file_hdr.ofs_bitmap - 14 # 14 = file_hdr._sizeof (TODO: replace when KSC 0.9 is released)
     type: bitmap_info
   - id: bitmap
     type: bitmap
@@ -406,7 +406,7 @@ types:
           or _parent.bitmap_v4_ext.color_space_type == color_space::profile_embedded
       profile_data:
         io: _root._io
-        pos: 14 + ofs_profile # 14 = _root.file_header._sizeof
+        pos: 14 + ofs_profile # 14 = _root.file_hdr._sizeof
         size: len_profile
         type:
           switch-on: _parent.bitmap_v4_ext.color_space_type == color_space::profile_linked
