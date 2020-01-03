@@ -16,7 +16,7 @@ meta:
     wikidata: Q192869
   endian: le
   license: CC0-1.0
-  ks-version: 0.8
+  ks-version: 0.9
   # ks-opaque-types: true # uncomment if you provide an opaque type `bitmap` for bitmap data
 doc: |
   The **BMP file format**, also known as **bitmap image file** or **device independent
