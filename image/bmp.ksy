@@ -17,6 +17,7 @@ meta:
   endian: le
   license: CC0-1.0
   ks-version: 0.8
+  # ks-opaque-types: true # uncomment if you provide an opaque type `bitmap` for bitmap data
 doc: |
   The **BMP file format**, also known as **bitmap image file** or **device independent
   bitmap (DIB) file format** or simply a **bitmap**, is a raster graphics image file
@@ -90,17 +91,19 @@ doc: |
       * BITMAPV4HEADER (WIN4XBITMAPHEADER)
 
 seq:
-  - id: file_hdr
+  - id: file_header
     type: file_header
   - id: dib_info
-    size: file_hdr.ofs_bitmap - 14 # 14 = file_hdr._sizeof (TODO: replace when KSC 0.9 is released)
+    size: file_header.ofs_bitmap - 14 # 14 = file_header._sizeof (TODO: replace when KSC 0.9 is released)
     type: bitmap_info
-  - id: image
-    type: image
+  - id: bitmap
+    type: bitmap
     size-eos: true
 types:
-  image:
-    doc: Replace with an opaque type if you care about the pixels.
+  bitmap:
+    doc: |
+      Replace with an opaque type if you care about the pixels.
+      You can look at an example of a JavaScript implementation: https://github.com/generalmimon/bmptool/blob/master/src/Bitmap.js
   file_header:
     -orig-id: BITMAPFILEHEADER
     doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapfileheader
@@ -111,6 +114,7 @@ types:
       - id: len_file
         -orig-id: bfSize
         type: u4
+        doc: not reliable, mostly ignored by BMP decoders
       - id: reserved1
         -orig-id: bfReserved1
         type: u2
@@ -129,70 +133,121 @@ types:
         type: u4
       - id: header
         -orig-id: bmciHeader
-        type: bitmap_header(header_size)
         size: header_size - 4
+        type: bitmap_header(header_size)
       - id: color_mask
+        type: color_mask(header.bitmap_info_ext.compression == compressions::alpha_bitfields)
+        if: not _io.eof and is_color_mask_here
         doc: Valid only for BITMAPINFOHEADER, in all headers extending it the masks are contained in the header itself.
-        if:
-          not _io.eof and
-          (header.header_size == header_type::bitmap_info_header.to_i) and
-          header.bitmap_info_ext.compression == compressions::bitfields
-        type: color_mask(false)
       - id: color_table
         -orig-id: bmciColors
-        if: not _io.eof
+        size-eos: true
         type: 'color_table(
-            header.extends_bitmap_info,
+            not header.is_core_header,
             header.extends_bitmap_info ? header.bitmap_info_ext.num_colors_used : 0
           )'
-        size-eos: true
+        if: not _io.eof
+    instances:
+      is_color_mask_here:
+        value: >-
+          header.header_size == header_type::bitmap_info_header.to_i
+            and (header.bitmap_info_ext.compression == compressions::bitfields or header.bitmap_info_ext.compression == compressions::alpha_bitfields)
+      is_color_mask_given:
+        value: >-
+          header.extends_bitmap_info
+          and (header.bitmap_info_ext.compression == compressions::bitfields or header.bitmap_info_ext.compression == compressions::alpha_bitfields)
+          and (is_color_mask_here or header.is_color_mask_here)
+      color_mask_given:
+        value: >-
+          is_color_mask_here
+            ? color_mask
+            : header.color_mask
+        if: is_color_mask_given
+      color_mask_red:
+        value: >-
+          is_color_mask_given
+            ? color_mask_given.red_mask
+            : header.bits_per_pixel == 16
+              ? 0b11111_00000_00000
+              : header.bits_per_pixel == 24 or header.bits_per_pixel == 32
+                ? 0xff_00_00
+                : 0
+        #         ^ uses fixed color palette, so color mask is N/A
+      color_mask_green:
+        value: >-
+          is_color_mask_given
+            ? color_mask_given.green_mask
+            : header.bits_per_pixel == 16
+              ? 0b00000_11111_00000
+              : header.bits_per_pixel == 24 or header.bits_per_pixel == 32
+                ? 0x00_ff_00
+                : 0
+      color_mask_blue:
+        value: >-
+          is_color_mask_given
+            ? color_mask_given.blue_mask
+            : header.bits_per_pixel == 16
+              ? 0b00000_00000_11111
+              : header.bits_per_pixel == 24 or header.bits_per_pixel == 32
+                ? 0x00_00_ff
+                : 0
+      color_mask_alpha:
+        value: >-
+          is_color_mask_given and color_mask_given.has_alpha_mask
+            ? color_mask_given.alpha_mask
+            : 0
 
   bitmap_header:
-    -orig-id: BITMAPCOREHEADER
-    doc-ref: https://docs.microsoft.com/cs-cz/windows/win32/api/wingdi/ns-wingdi-bitmapcoreheader
-    -orig-id: OS21XBITMAPHEADER
-    doc-ref: https://www.fileformat.info/format/os2bmp/egff.htm#OS2BMP-DMYID.3.1
+    -orig-id:
+      - BITMAPCOREHEADER
+      - OS21XBITMAPHEADER
+    doc-ref:
+      - https://docs.microsoft.com/cs-cz/windows/win32/api/wingdi/ns-wingdi-bitmapcoreheader
+      - https://www.fileformat.info/format/os2bmp/egff.htm#OS2BMP-DMYID.3.1
     params:
       - id: header_size
         type: u4
     seq:
       - id: image_width
         -orig-id: biWidth
-        doc: Image width, px
         type:
           switch-on: is_core_header
           cases:
-            true: s2
-            false: s4
+            true: u2
+            false: u4
+        doc: Image width, px
       - id: image_height_raw
         -orig-id: biHeight
-        doc: Image height, px (positive => bottom-up image, negative => top-down image)
         type:
           switch-on: is_core_header
           cases:
             true: s2
             false: s4
+        doc: Image height, px (positive => bottom-up image, negative => top-down image)
       - id: num_planes
         -orig-id: biPlanes
-        doc: Number of planes for target device, must be 1
         type: u2
         # valid: 1
+        doc: Number of planes for target device, must be 1
       - id: bits_per_pixel
         -orig-id: biBitCount
-        doc: Number of bits per pixel that image buffer uses (1, 4, 8, 16, 24 or 32)
         type: u2
+        doc: Number of bits per pixel that image buffer uses (1, 4, 8, 16, 24 or 32)
       - id: bitmap_info_ext
-        if: extends_bitmap_info
         type: bitmap_info_extension
+        if: extends_bitmap_info
+      - id: color_mask
+        type: color_mask(header_size != header_type::bitmap_v2_info_header.to_i)
+        if: is_color_mask_here
       - id: os2_2x_bitmap_ext
-        if: extends_os2_2x_bitmap
         type: os2_2x_bitmap_extension
+        if: extends_os2_2x_bitmap
       - id: bitmap_v4_ext
-        if: extends_bitmap_v4
         type: bitmap_v4_extension
+        if: extends_bitmap_v4
       - id: bitmap_v5_ext
-        if: extends_bitmap_v5
         type: bitmap_v5_extension
+        if: extends_bitmap_v5
     instances:
       is_core_header:
         value: header_size == header_type::bitmap_core_header.to_i
@@ -207,24 +262,34 @@ types:
       image_height:
         value: 'image_height_raw < 0 ? -image_height_raw : image_height_raw'
       bottom_up:
-        value: image_height > 0
+        value: image_height_raw > 0
+      is_color_mask_here:
+        value: header_size == header_type::bitmap_v2_info_header.to_i
+          or header_size == header_type::bitmap_v3_info_header.to_i
+          or extends_bitmap_v4
+      uses_fixed_palette:
+        value: not (bits_per_pixel == 16 or bits_per_pixel == 24 or bits_per_pixel == 32)
+          and not (extends_bitmap_info and not extends_os2_2x_bitmap and (bitmap_info_ext.compression == compressions::jpeg or bitmap_info_ext.compression == compressions::png))
   bitmap_info_extension:
     -orig-id: BITMAPINFOHEADER
     doc-ref: https://docs.microsoft.com/en-us/previous-versions/dd183376(v=vs.85)
     seq:
       - id: compression
         -orig-id: biCompression
-        if: not extends_os2_2x_bitmap
         type: u4
         enum: compressions
+        if: not _parent.extends_os2_2x_bitmap
       - id: os2_compression
         -orig-id: Compression
-        if: extends_os2_2x_bitmap
         type: u4
         enum: os2_compressions
+        if: _parent.extends_os2_2x_bitmap
       - id: len_image
         -orig-id: biSizeImage
         type: u4
+        doc: |
+          If biCompression is BI_JPEG or BI_PNG, indicates the size of the JPEG or PNG image buffer.
+          This may be set to zero for BI_RGB bitmaps.
       - id: x_resolution
         -orig-id: biXPelsPerMeter
         type: u4
@@ -237,15 +302,6 @@ types:
       - id: num_colors_important
         -orig-id: biClrImportant
         type: u4
-      - id: color_mask
-        if: 'hdr_size == header_type::bitmap_v2_info_header.to_i or
-          hdr_size == header_type::bitmap_v3_info_header.to_i'
-        type: color_mask(hdr_size == header_type::bitmap_v3_info_header.to_i)
-    instances:
-      hdr_size:
-        value: _parent.header_size
-      extends_os2_2x_bitmap:
-        value: _parent.extends_os2_2x_bitmap
   os2_2x_bitmap_extension:
     -orig-id: OS22XBITMAPHEADER
     doc-ref: https://www.fileformat.info/format/os2bmp/egff.htm#OS2BMP-DMYID.3.2
@@ -255,54 +311,53 @@ types:
       - id: reserved
         type: u2
       - id: recording
+        type: u2
+        # valid: 0
         doc: |
           Specifies how the bitmap scan lines are stored.
           The only valid value for this field is 0, indicating that the bitmap is
           stored from left to right and from the bottom up.
-        type: u2
-        # valid: 0
       - id: rendering
-        doc: Specifies the halftoning algorithm used on the bitmap data.
         type: u2
         enum: os2_rendering
+        doc: Specifies the halftoning algorithm used on the bitmap data.
       - id: size1
+        type: u4
         doc: |
           rendering == os2_rendering::error_diffusion
             => error damping as a percentage in the range 0 through 100
           rendering == os2_rendering::panda or rendering == os2_rendering::super_circle
             => X dimension of the pattern used in pixels
-        type: u4
       - id: size2
+        type: u4
         doc: |
           rendering == os2_rendering::error_diffusion
             => not used
           rendering == os2_rendering::panda or rendering == os2_rendering::super_circle
             => Y dimension of the pattern used in pixels
-        type: u4
       - id: color_encoding
+        type: u4
         doc: |
           Specifies the color model used to describe the bitmap data.
           The only valid value is 0, indicating the RGB encoding scheme.
-        type: u4
       - id: identifier
-        doc: Application-specific value
         type: u4
+        doc: Application-specific value
 
   bitmap_v4_extension:
     -orig-id: BITMAPV4HEADER
     doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapv4header
     seq:
-      - id: color_mask
-        type: color_mask(true)
       - id: color_space_type
         -orig-id: bV4CSType
         type: u4
         enum: color_space
-      - id: endpoints
-        -orig-id: bV4Endpoints
+      - id: endpoint_red
         type: cie_xyz
-        repeat: expr
-        repeat-expr: 3
+      - id: endpoint_green
+        type: cie_xyz
+      - id: endpoint_blue
+        type: cie_xyz
       - id: gamma_red
         -orig-id: bV4GammaRed
         type: fixed_point_16_dot_16
@@ -312,7 +367,7 @@ types:
       - id: gamma_green
         -orig-id: bV4GammaBlue
         type: fixed_point_16_dot_16
-      
+
   cie_xyz:
     -orig-id: CIEXYZ
     doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-ciexyz
@@ -323,8 +378,10 @@ types:
         type: fixed_point_2_dot_30
       - id: z
         type: fixed_point_2_dot_30
-  
+
   bitmap_v5_extension:
+    meta:
+      encoding: windows-1252 # for the file name of linked profile (see profile_data below)
     -orig-id: BITMAPV5HEADER
     doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapv5header
     seq:
@@ -332,7 +389,7 @@ types:
         -orig-id: bV5Intent
         type: u4
         enum: intent
-      - id: offset_profile
+      - id: ofs_profile
         doc: The offset, in bytes, from the beginning of the BITMAPV5HEADER structure to the start of the profile data.
         -orig-id: bV5ProfileData
         type: u4
@@ -342,12 +399,30 @@ types:
       - id: reserved
         -orig-id: bV5Reserved
         type: u4
+    instances:
+      has_profile:
+        value: >-
+          _parent.bitmap_v4_ext.color_space_type == color_space::profile_linked
+          or _parent.bitmap_v4_ext.color_space_type == color_space::profile_embedded
+      profile_data:
+        io: _root._io
+        pos: 14 + ofs_profile # 14 = _root.file_header._sizeof
+        size: len_profile
+        type:
+          switch-on: _parent.bitmap_v4_ext.color_space_type == color_space::profile_linked
+          cases:
+            true: strz
+        if: has_profile
+        doc-ref: https://docs.microsoft.com/cs-cz/previous-versions/windows/desktop/wcs/using-structures-in-wcs-1-0 "If the profile is embedded,
+          profile data is the actual profile, and if it is linked, the profile data is the
+          null-terminated file name of the profile. This cannot be a Unicode string. It must be composed exclusively
+          of characters from the Windows character set (code page 1252)."
 
   color_table:
     params:
       - id: has_reserved_field
         type: bool
-      - id: colors_num
+      - id: num_colors
         doc: |
           If equal to 0, the pallete should contain as many colors as can fit into the pixel value
           according to the `bits_per_pixel` field (if `bits_per_pixel` = 8, then the pixel can
@@ -357,8 +432,11 @@ types:
     seq:
       - id: colors
         type: rgb_record(has_reserved_field)
-        repeat: until
-        repeat-until: _io.eof or _index == colors_num
+        repeat: expr
+        repeat-expr: 'num_colors > 0 and num_colors < num_colors_present ? num_colors : num_colors_present'
+    instances:
+      num_colors_present:
+        value: '_io.size / (has_reserved_field ? 4 : 3)'
   color_mask:
     params:
       - id: has_alpha_mask
@@ -374,8 +452,9 @@ types:
         if: has_alpha_mask
         type: u4
   rgb_record:
-    -orig-id: RGB_TRIPLE
-    -orig-id: RGB_QUAD
+    -orig-id:
+      - RGB_TRIPLE
+      - RGB_QUAD
     params:
       - id: has_reserved_field
         type: bool
@@ -434,6 +513,13 @@ enums:
       id: png
       -orig-id: BI_PNG
       doc: BMP file includes whole PNG file in image buffer
+    6:
+      id: alpha_bitfields
+      -orig-id: BI_ALPHABITFIELDS
+      doc: only Windows CE 5.0 with .NET 4.0 or later
+      doc-ref:
+        - https://en.wikipedia.org/wiki/BMP_file_format#DIB_header_(bitmap_information_header) table of compression methods
+        - http://entropymine.com/jason/bmpsuite/bmpsuite/html/bmpsuite.html q/rgba32abf.bmp
   os2_compressions:
     # https://www.fileformat.info/format/os2bmp/egff.htm#OS2BMP-DMYID.3.2
     0:
@@ -518,4 +604,3 @@ enums:
     64: os2_2x_bitmap_header
     108: bitmap_v4_header
     124: bitmap_v5_header
-
