@@ -5,7 +5,21 @@ meta:
   endian: le
 doc: |
   Linux kernel exposes the TPM 2.0 eventlog in a dedicated file,
-  /sys/kernel/security/tpm0/binary_bios_measurements.
+  `/sys/kernel/security/tpm0/binary_bios_measurements`.
+  This eventlog describes how the PCR (Platform Configuration Registers) were
+  extended. It can either consist in:
+
+  * a list of `tdTCG_PCR_EVENT` with SHA1 digests for each event which went to
+    each PCR (this is the older format, sometimes referred to as
+    "TPM 1.2 eventlog")
+  * or a header and a list of `tdTCG_PCR_EVENT2` with several digests for each
+    event (for example SHA1 and SHA256), which is called a Crypto Agile Log and
+    has been introduced with TPM 2.0.
+
+  The header of the Crypto Agile Log is a `tdTCG_EfiSpecIdEventStruct` structure
+  embedded into a `tdTCG_PCR_EVENT` (not `tdTCG_PCR_EVENT2`). Among other
+  things, this header specifies the size of the digest of every algorithm which
+  is used in the eventlog.
 doc-ref: https://trustedcomputinggroup.org/resource/tcg-efi-protocol-specification/
 seq:
   - id: first_event
