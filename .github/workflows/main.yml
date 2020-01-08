@@ -49,6 +49,9 @@ jobs:
         with:
           name: log.json
           path: _build/target/log.json
+      - name: Check build
+        working-directory: _build
+        run: ./check-errors target/log.json
       - name: Build diagrams
         working-directory: _build
         run: ./build-diagrams target html
