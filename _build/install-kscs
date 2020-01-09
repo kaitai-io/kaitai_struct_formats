@@ -1,0 +1,29 @@
+#!/bin/sh -ef
+# Downloads and installs different versions of ksc for testing purposes
+
+# Create directory for all ksc versions
+mkdir -p ksc
+cd ksc
+
+# Download normal releases
+for VER in 0.6 0.7 0.8; do
+	echo "Installing $VER"
+	rm -rf "$VER" "kaitai-struct-compiler-$VER"
+	wget "https://dl.bintray.com/kaitai-io/universal/$VER/kaitai-struct-compiler-$VER.zip"
+	unzip "kaitai-struct-compiler-$VER.zip"
+	mv "kaitai-struct-compiler-$VER" "$VER"
+done
+
+# Download latest unstable
+wget https://bintray.com/kaitai-io/universal_unstable/kaitai-struct-compiler/_latestVersion
+LATEST_VERSION=$(sed -ne '/<title>/ { s,^.*kaitai-struct-compiler/\([^ ]*\).*$,\1,; p }' <_latestVersion)
+
+echo "LATEST_VERSION=$LATEST_VERSION"
+if [ -z "$LATEST_VERSION" ]; then
+	echo "Unable to find out latest ksc version!"
+	exit 2
+fi
+
+wget -O kaitai-struct-latest.zip "https://bintray.com/kaitai-io/universal_unstable/download_file?file_path=kaitai-struct-compiler-$LATEST_VERSION.zip"
+unzip kaitai-struct-latest.zip
+mv "kaitai-struct-compiler-$LATEST_VERSION" latest
