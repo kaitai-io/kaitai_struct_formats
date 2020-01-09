@@ -6,7 +6,10 @@ mkdir -p ksc
 cd ksc
 
 # Download normal releases
-for VER in 0.6 0.7 0.8; do
+#
+# 0.6 is also possible to download, but we're intentionally skipping it
+# due to the fact that it's unable to produce JSON output
+for VER in 0.7 0.8; do
 	echo "Installing $VER"
 	rm -rf "$VER" "kaitai-struct-compiler-$VER"
 	wget "https://dl.bintray.com/kaitai-io/universal/$VER/kaitai-struct-compiler-$VER.zip"
