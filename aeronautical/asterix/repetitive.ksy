@@ -26,7 +26,7 @@ doc: |
   f_size, which is the size of the repetitive parts.
 
 params:
-  - id: item
+  - id: name
     type: str
   - id: flag
     type: b1

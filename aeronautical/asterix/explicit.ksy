@@ -6,7 +6,7 @@ meta:
 
 doc: |
   Implementantion of ASTERIX format.
-  
+
   From Eurocontrol Asterix web page at
   https://www.eurocontrol.int/asterix
 
@@ -24,7 +24,7 @@ doc: |
   just skipped, mainly used by compound. In Catalog files, the flag is always true
 
 params:
-  - id: item
+  - id: name
     type: str
   - id: flag
     type: b1

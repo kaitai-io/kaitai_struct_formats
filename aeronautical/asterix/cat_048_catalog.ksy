@@ -24,6 +24,10 @@ doc: |
   Edition date: 08/08/2019
   Reference nr: EUROCONTROL-SPEC-0149-4
 
+doc-ref: |
+  https://www.eurocontrol.int/publication/cat048-eurocontrol-specification-surveillance-data-exchange-asterix-part4
+
+
 params:
   - id: item_ref_num
     type: s2
@@ -33,33 +37,33 @@ seq:
     type:
       switch-on: item_ref_num
       cases:
-        0: fixed(true,1)
-        10: fixed(true,2)
-        20: extended(true,1,1)
-        30: extended(true,1,1)
-        40: fixed(true,4)
-        42: fixed(true,4)
-        50: fixed(true,2)
-        55: fixed(true,1)
-        60: fixed(true,2)
-        65: fixed(true,1)
-        70: fixed(true,2)
-        80: fixed(true,2)
-        90: fixed(true,2)
-        100: fixed(true,4)
-        110: fixed(true,2)
-        120: compound("FFFF"+"FFF",[1,7,0,0,0,0,0],[0,0,0,0,0,0,0])
-        130: compound("FFFF"+"FFF",[1,1,1,1,1,1,1],[0,0,0,0,0,0,0])
-        140: fixed(true,3)
-        161: fixed(true,2)
-        170: extended(true,1,1)
-        200: fixed(true,4)
-        210: fixed(true,4)
-        220: fixed(true,3)
-        240: fixed(true,6)
-        250: repetitive(true,8)
-        230: fixed(true,2)
-        260: fixed(true,7)
+        0:      fixed("I000",true,1)
+        10:      fixed("I010",true,2)
+        20:   extended("I020",true,1,1)
+        30:   extended("I030",true,1,1)
+        40:      fixed("I040",true,4)
+        42:      fixed("I042",true,4)
+        50:      fixed("I050",true,2)
+        55:      fixed("I055",true,1)
+        60:      fixed("I060",true,2)
+        65:      fixed("I065",true,1)
+        70:      fixed("I070",true,2)
+        80:      fixed("I080",true,2)
+        90:      fixed("I090",true,2)
+        100:      fixed("I100",true,4)
+        110:      fixed("I110",true,2)
+        120:   compound("I120","FFFF"+"FFF",[1,7,0,0,0,0,0],[0,0,0,0,0,0,0])
+        130:   compound("I130","FFFF"+"FFF",[1,1,1,1,1,1,1],[0,0,0,0,0,0,0])
+        140:      fixed("I140",true,3)
+        161:      fixed("I161",true,2)
+        170:   extended("I170",true,1,1)
+        200:      fixed("I200",true,4)
+        210:      fixed("I210",true,4)
+        220:      fixed("I220",true,3)
+        240:      fixed("I240",true,6)
+        250: repetitive("I250",true,8)
+        230:      fixed("I230",true,2)
+        260:      fixed("I260",true,7)
 
 
         #i048_010 #,"F","2","Data Source Identifier","N.A."),

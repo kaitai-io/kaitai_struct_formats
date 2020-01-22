@@ -22,6 +22,9 @@ doc: |
 
   Edition : 1.2
 
+doc-ref: |
+  https://www.eurocontrol.int/publication/cat001-eurocontrol-standard-document-radar-data-exchange-part-2a
+
 seq:
   - id: fspec
     type: field_spec
@@ -91,3 +94,6 @@ instances:
 
   version:
     value: '"1.20"'
+
+  items:
+    value: data.items

@@ -1,5 +1,5 @@
 meta:
-  id: ast_record
+  id: asterix_record
   endian: be
   license: GPL-3.0-only
   imports:
@@ -33,6 +33,9 @@ doc: |
   In the future it is expected to also select by SIC/SAC, which will permit having
   some sort of config file, or definition which will permit selecting category and
   version.
+
+doc-ref: |
+  https://www.eurocontrol.int/publication/eurocontrol-specification-surveillance-data-exchange-part-i
 
 params:
   - id: cat

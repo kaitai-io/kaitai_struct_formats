@@ -27,6 +27,9 @@ doc: |
 
   Edition : 1.2
 
+doc-ref: |
+  https://www.eurocontrol.int/publication/cat008-eurocontrol-specification-surveillance-data-exchange-asterix-part-3-category-008
+
 params:
   - id: item_ref_num
     type: s2
@@ -36,18 +39,18 @@ seq:
     type:
       switch-on: item_ref_num
       cases:
-        0:   fixed(true,1)
-        10:  fixed(true,2)
-        20:  extended(true,1,1)
-        34:  repetitive(true,4)
-        36:  repetitive(true,3)
-        38:  repetitive(true,4)
-        40:  fixed(true,2)
-        50:  repetitive(true,2)
-        90:  fixed(true,3)
-        100: extended(true,3,1)
-        110: extended(true,1,1)
-        120: fixed(true,2)
+        0:       fixed("I000",true,1)
+        10:       fixed("I010",true,2)
+        20:    extended("I020",true,1,1)
+        34:  repetitive("I034",true,4)
+        36:  repetitive("I036",true,3)
+        38:  repetitive("I038",true,4)
+        40:       fixed("I040",true,2)
+        50:  repetitive("I050",true,2)
+        90:       fixed("I090",true,3)
+        100:    extended("I100",true,3,1)
+        110:    extended("I110",true,1,1)
+        120:       fixed("I120",true,2)
 
 
 instances:

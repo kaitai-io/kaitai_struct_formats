@@ -28,7 +28,7 @@ doc: |
   f_sec_size: is the size of the secondaries parts.
 
 params:
-  - id: item
+  - id: name
     type: str
   - id: flag
     type: b1

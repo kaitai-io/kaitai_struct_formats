@@ -1,10 +1,10 @@
 meta:
-  id: ast_message
+  id: asterix_message
   file-extension: ast
   endian: be
   license: GPL-3.0-only
   imports:
-    - ast_data_block
+    - asterix_data_block
 
   ks-version: 0.9
 
@@ -38,7 +38,10 @@ doc: |
   concatenation of Asterix data blocks. For this reason, an Asterix file could be read with this KSY
   or directly with the Asterix Message KSY file specification.
 
+doc-ref: |
+  https://www.eurocontrol.int/publication/eurocontrol-specification-surveillance-data-exchange-part-i
+
 seq:
   - id: data_blocks
-    type: ast_data_block
+    type: asterix_data_block
     repeat: eos

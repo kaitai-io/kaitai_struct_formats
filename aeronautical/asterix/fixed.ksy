@@ -28,7 +28,7 @@ doc: |
   This field is read as a byte array.
 
 params:
-  - id: item
+  - id: name
     type: str
   - id: flag
     type: b1

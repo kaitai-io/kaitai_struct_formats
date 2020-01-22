@@ -25,6 +25,9 @@ doc: |
 
   Edition : 1.2
 
+doc-ref: |
+  https://www.eurocontrol.int/publication/cat001-eurocontrol-standard-document-radar-data-exchange-part-2a
+
 params:
   - id: item_ref_num
     type: s2

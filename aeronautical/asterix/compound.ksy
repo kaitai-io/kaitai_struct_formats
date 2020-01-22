@@ -13,7 +13,7 @@ meta:
 
 doc: |
   Implementantion of ASTERIX format.
-  
+
   From Eurocontrol Asterix web page at
   https://www.eurocontrol.int/asterix
 
@@ -42,7 +42,7 @@ doc: |
 
 
 params:
-  - id: item
+  - id: name
     type: str
   - id: f_fmt
     type: str
