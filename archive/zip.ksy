@@ -14,6 +14,17 @@ meta:
     wikidata: Q136218
   endian: le
   license: CC0-1.0
+doc: |
+  ZIP is a popular archive file format, introduced in 1989 by Phil Katz
+  and originally implemented in PKZIP utility by PKWARE.
+
+  Thanks to solid support of it in most desktop environments and
+  operating systems, and algorithms / specs availability in public
+  domain, it quickly became tool of choice for implementing file
+  containers.
+
+  For example, Java .jar files, OpenDocument, Office Open XML, EPUB files
+  are actually ZIP archives.
 doc-ref: https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT
 seq:
   - id: sections
@@ -38,16 +49,16 @@ types:
     seq:
       - id: crc32
         type: u4
-      - id: compressed_size
+      - id: len_body_compressed
         type: u4
-      - id: uncompressed_size
+      - id: len_body_uncompressed
         type: u4
   local_file:
     seq:
       - id: header
         type: local_file_header
       - id: body
-        size: header.compressed_size
+        size: header.len_body_compressed
   local_file_header:
     seq:
       - id: version
@@ -63,20 +74,20 @@ types:
         type: u2
       - id: crc32
         type: u4
-      - id: compressed_size
+      - id: len_body_compressed
         type: u4
-      - id: uncompressed_size
+      - id: len_body_uncompressed
         type: u4
-      - id: file_name_len
+      - id: len_file_name
         type: u2
-      - id: extra_len
+      - id: len_extra
         type: u2
       - id: file_name
         type: str
-        size: file_name_len
+        size: len_file_name
         encoding: UTF-8
       - id: extra
-        size: extra_len
+        size: len_extra
         type: extras
   central_dir_entry:
     doc-ref: https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT - 4.3.12
@@ -96,15 +107,15 @@ types:
         type: u2
       - id: crc32
         type: u4
-      - id: compressed_size
+      - id: len_body_compressed
         type: u4
-      - id: uncompressed_size
+      - id: len_body_uncompressed
         type: u4
-      - id: file_name_len
+      - id: len_file_name
         type: u2
-      - id: extra_len
+      - id: len_extra
         type: u2
-      - id: comment_len
+      - id: len_comment
         type: u2
       - id: disk_number_start
         type: u2
@@ -112,22 +123,22 @@ types:
         type: u2
       - id: ext_file_attr
         type: u4
-      - id: local_header_offset
+      - id: ofs_local_header
         type: s4
       - id: file_name
         type: str
-        size: file_name_len
+        size: len_file_name
         encoding: UTF-8
       - id: extra
-        size: extra_len
+        size: len_extra
         type: extras
       - id: comment
         type: str
-        size: comment_len
+        size: len_comment
         encoding: UTF-8
     instances:
       local_header:
-        pos: local_header_offset
+        pos: ofs_local_header
         type: pk_section
   # https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT - 4.3.16
   end_of_central_dir:
@@ -136,19 +147,19 @@ types:
         type: u2
       - id: disk_of_central_dir
         type: u2
-      - id: qty_central_dir_entries_on_disk
+      - id: num_central_dir_entries_on_disk
         type: u2
-      - id: qty_central_dir_entries_total
+      - id: num_central_dir_entries_total
         type: u2
-      - id: central_dir_size
+      - id: len_central_dir
         type: u4
-      - id: central_dir_offset
+      - id: ofs_central_dir
         type: u4
-      - id: comment_len
+      - id: len_comment
         type: u2
       - id: comment
         type: str
-        size: comment_len
+        size: len_comment
         encoding: UTF-8
   extras:
     seq:
@@ -160,10 +171,10 @@ types:
       - id: code
         type: u2
         enum: extra_codes
-      - id: size
+      - id: len_body
         type: u2
       - id: body
-        size: size
+        size: len_body
         type:
           switch-on: code
           cases:
@@ -184,10 +195,10 @@ types:
             seq:
               - id: tag
                 type: u2
-              - id: size
+              - id: len_body
                 type: u2
               - id: body
-                size: size
+                size: len_body
                 type:
                   switch-on: tag
                   cases:
@@ -219,17 +230,17 @@ types:
           - id: version
             type: u1
             doc: Version of this extra field, currently 1
-          - id: uid_size
+          - id: len_uid
             type: u1
             doc: Size of UID field
           - id: uid
-            size: uid_size
+            size: len_uid
             doc: UID (User ID) for a file
-          - id: gid_size
+          - id: len_gid
             type: u1
             doc: Size of GID field
           - id: gid
-            size: gid_size
+            size: len_gid
             doc: GID (Group ID) for a file
 enums:
   compression:
