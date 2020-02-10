@@ -41,8 +41,8 @@ seq:
   # TODO is there a way to declare PROTO is optional, but only valid at position 0?
   - id: ops
     type: op
-    repeat: eos
-  # TODO is there a way to declare a trailing STOP is required?
+    repeat: until
+    repeat-until: _.code == opcode::stop
 types:
   op:
     seq:
