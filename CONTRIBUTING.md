@@ -1,5 +1,8 @@
 # Kaitai Struct: formats library
 
+## Requesting a spec
+Create a new issue in the repo using the corresponding template and fill in the boilerplate.
+
 ## Contributing
 
 If you've developed a format specification using Kaitai Struct and
@@ -24,7 +27,7 @@ Please follow these steps:
     is mandatory, licensing comment is optional)
   * It SHOULD have some general information about the format and some
     documentation (`meta/title`, `meta/file-extension`,
-    `meta/application`, `doc`, `doc-ref` tags).
+    `meta/application`, `meta/xref`, `doc`, `doc-ref` tags).
   * It SHOULD match [the style guide](http://doc.kaitai.io/ksy_style_guide.html).
 * Fork this repository
 * Choose a relevant folder and add your .ksy spec into it
