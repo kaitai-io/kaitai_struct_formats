@@ -3,8 +3,8 @@ meta:
   file-extension: bin
   license: CC0-1.0
   endian: le
-doc-ref: https://masagroup.github.io/recastdetour
 doc: this spec can be used to parse recastnavigation binary files
+doc-ref: https://masagroup.github.io/recastdetour
 seq:
   - id: header
     type: navmesh_set_header
