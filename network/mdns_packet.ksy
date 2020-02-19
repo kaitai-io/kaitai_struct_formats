@@ -2,9 +2,10 @@ meta:
   id: dns_packet
   title: DNS (Domain Name Service) packet
   xref:
-    rfc: 1035
+    rfc: 6762
   license: CC0-1.0
   endian: be
+  encoding: utf-8
 doc: |
   (No support for Auth-Name + Add-Name for simplicity)
 seq:
@@ -90,7 +91,6 @@ types:
         if: "not is_pointer"
         doc: "Otherwise its a string the length of the length value"
         type: str
-        encoding: "ASCII"
         size: length
     instances:
       is_pointer:
@@ -155,7 +155,6 @@ types:
       - id: text
         type: str
         size: length
-        encoding: "ASCII"
   txt_body:
     seq:
       - id: data
