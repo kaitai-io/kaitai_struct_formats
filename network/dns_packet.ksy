@@ -60,19 +60,24 @@ types:
       - id: rdlength
         doc: "Length in octets of the following payload"
         type: u2
-      - id: ptrdname
-        type: domain_name
-        if: "type == type_type::ptr"
-      - id: address
-        type: address
-        if: "type == type_type::a"
+      - id: payload
+        size: rdlength
+        type:
+          switch-on: type
+          cases:
+            'type_type::ptr': domain_name
+            'type_type::a': address
+            'type_type::cname': domain_name
+            'type_type::srv': service
+            'type_type::txt': txt_body
+
   domain_name:
     seq:
       - id: name
         type: label
         repeat: until
         doc: "Repeat until the length is 0 or it is a pointer (bit-hack to get around lack of OR operator)"
-        repeat-until: "_.length == 0 or _.length == 0b1100_0000"
+        repeat-until: "_.length == 0 or _.is_pointer"
   label:
     seq:
       - id: length
@@ -89,7 +94,7 @@ types:
         size: length
     instances:
       is_pointer:
-        value: length == 0b1100_0000
+        value: length >= 192
   pointer_struct:
     seq:
       - id: value
@@ -98,7 +103,7 @@ types:
     instances:
       contents:
         io: _root._io
-        pos: value
+        pos: value + ((_parent.length - 192) << 8)
         type: domain_name
   address:
     seq:
@@ -131,7 +136,32 @@ types:
         value: (flag & 0b0000_0000_0001_0000) >> 4
       rcode:
         value: (flag & 0b0000_0000_0000_1111) >> 0
-        
+  
+  service:
+    seq:
+      - id: priority
+        type: u2
+      - id: weight
+        type: u2
+      - id: port
+        type: u2
+      - id: target
+        type: domain_name
+  
+  txt:
+    seq:
+      - id: length
+        type: u1
+      - id: text
+        type: str
+        size: length
+        encoding: UTF-8
+  txt_body:
+    seq:
+      - id: data
+        type: txt
+        repeat: eos
+
 enums:
   class_type:
     1: in_class
@@ -155,3 +185,4 @@ enums:
     14: minfo
     15: mx
     16: txt
+    33: srv
