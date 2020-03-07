@@ -5,7 +5,7 @@ meta:
   license: CC0-1.0
   encoding: ascii
   
-#
+# MP4 file format is based on ISO/IEC 14496-12:2015 (just like QuickTime MOV).
 # The container is a tree-like structure of boxes.
 # There are various types of boxes. Boxes of some types can contain nested boxes.
 # You can find some interesting information in those boxes:
@@ -17,10 +17,11 @@ meta:
 # trak -> mdia -> mdhd -> langCode           :: language code of the track
 #
 # trak -> mdia -> stb -> stts                :: table to get sample index for given time
-# trak -> mdia -> stb -> stsc                :: table to get chunk index for given time
+# trak -> mdia -> stb -> stsc                :: table to get chunk index for given sample index
 # trak -> mdia -> stb -> stco                :: table to get offset in file for given chunk index
 #
 # See also:
+# * https://standards.iso.org/ittf/PubliclyAvailableStandards/c068960_ISO_IEC_14496-12_2015.zip
 # * http://mp4parser.com/
 # * https://archive.codeplex.com/?p=mp4explorer
 # * https://github.com/axiomatic-systems/Bento4
@@ -51,28 +52,33 @@ types:
       - id: body
         type:
           switch-on: type
-          cases:
-            '"moov"': boxes
-            '"trak"': boxes
-            '"edts"': boxes
-            '"mdia"': boxes
-            '"stbl"': boxes
-            '"minf"': boxes
+          cases: # box types in alphabetical order
+            '"co64"': box_body_co64
             '"dinf"': boxes
+            '"dref"': box_body_dref   # Data Reference Box
+            '"edts"': boxes
+            '"elst"': box_body_elst
             '"ftyp"': box_body_ftyp
             '"hdlr"': box_body_hdlr
-            '"mvhd"': box_body_mvhd
-            '"vmhd"': box_body_vmhd
+            '"mdia"': boxes
             '"mdhd"': box_body_mdhd
-            '"tkhd"': box_body_tkhd
-            '"elst"': box_body_elst
+            '"minf"': boxes
+            '"moov"': boxes
+            '"mvhd"': box_body_mvhd
+            '"smhd"': box_body_smhd   # Sound Media Header
+            '"stbl"': boxes
+            '"stco"': box_body_stco
             '"stsc"': box_body_stsc
             '"stsd"': box_body_stsd
-            '"stco"': box_body_stco
             '"stts"': box_body_stts
-            '"co64"': box_body_co64
-            _: box_body_other
-        size: '(size == 1) ? size - 12 : size - 8'
+            '"stss"': box_body_stss   # Sync Sample Box
+            '"stsz"': box_body_stsz   # Sample Size Box
+            '"stz2"': box_body_stz2   # Compact Sample Size Box
+            '"tkhd"': box_body_tkhd
+            '"trak"': boxes
+            #'"udta"': box_body_udta   # User Data Box <-- not standardized
+            '"vmhd"': box_body_vmhd
+        size: 'size == 0 ? (_io.size - 8) : (size == 1 ? largesize - 16 : size - 8)'
 
   # -----------
   # -- FTYP  --
@@ -89,7 +95,6 @@ types:
         type: str
         size: 4
         repeat: eos
-#        size-eos: true
 
   # -----------
   # -- MVHD  --
@@ -113,25 +118,28 @@ types:
             _: u4
       - id: timescale
         doc: |
-          Timescale is an integer that specifies the time-scale for the entire presentation; this is the number of time units that pass in one second.
-          For example, a time coordinate system that measures timein sixtieths of a second has a time scale of 60.
+          Number of time units in one second; specifies in which units the time is measured.
         type: u4
       - id: duration
         doc: |
-          duration is an integer that declares length of the presentation (in the indicated timescale).
-          This property is derived from the presentation's tracks: the value of this field corresponds to the duration of the 
-          longest track in the presentation. If the duration cannot be determined then duration is set to all 1s.
+          Number of time units in the entire media.
         type:
           switch-on: version
           cases:
             1: u8
             _: u4
       - id: rate
-        doc: Rate is a fixed point 16.16 number that indicates the preferred rate to play the presentation; 1.0 (0x00010000) is normal forward playback
-        type: u4
-      - id: volume
-        doc: Volume is a fixed point 8.8 number that indicates the preferred playback volume; 1.0 (0x0100) is full volume
+        doc: |
+          Two numbers specifying playbeck speed; normal speed (1.0) is [1, 0]
         type: u2
+        repeat: expr
+        repeat-expr: 2
+      - id: volume
+        doc: |
+          Two numbers specifying playbeck volume; normal volume (1.0) is [1, 0]
+        type: u1
+        repeat: expr
+        repeat-expr: 2
       - id: reserved
         type: u2
         repeat: expr
@@ -377,32 +385,144 @@ types:
       - id: entry_count
         type: u4
       - id: entries
-        type: box_body_stsd_entry
+        type: entry
         repeat: expr
         repeat-expr: entry_count
         
-  box_body_stsd_entry:
+    types:
+      entry:
+        seq:
+          - id: size
+            type: u4
+          - id: type
+            type: str
+            size: 4
+          - id: body
+            type: entry_body
+            size: 'size - 8'
+      entry_body:
+        seq:
+          - id: reserved
+            type: u1
+            repeat: expr
+            repeat-expr: 6
+          - id: data_reference_index
+            type: u2
+
+# ----------
+# -- STSS --
+# ----------
+  box_body_stss:
     seq:
-      - id: size
+      - id: version
         type: u4
-      - id: type
-        type: str
-        size: 4
+      - id: entry_count
+        type: u4
+      - id: sample_numbers
+        type: s4
+        repeat: expr
+        repeat-expr: entry_count
+
+# ----------
+# -- STSZ --
+# ----------
+  box_body_stsz:
+    seq:
+      - id: version
+        type: u4
+      - id: sample_size
+        type: u4
+      - id: sample_count
+        type: u4
+      - id: entry_sizes
+        if: (sample_size==0)
+        repeat: expr
+        repeat-expr: sample_count
+        type: u4
+
+# ----------
+# -- STZ2 --
+# ----------
+  box_body_stz2:  # <----- NOT TESTED!
+    seq:
+      - id: version
+        type: u4
       - id: reserved
         type: u1
         repeat: expr
-        repeat-expr: 6
-      - id: data_reference_index
+        repeat-expr: 3
+      - id: field_size
+        type: u1
+      - id: sample_count
+        type: u4
+      - id: entry_sizes
+        repeat: expr
+        repeat-expr: '(field_size == 4) ? (sample_count/2) : sample_count'
+        type:
+          switch-on: field_size
+          cases:
+            4:  u1   # 4 bits
+            8:  u1   # 8 bits
+            16: u2   # 16 bits
+
+# ----------
+# -- SMHD --
+# ----------
+  box_body_smhd:
+    seq:
+      - id: version
+        type: u4
+      - id: balance
+        type: s2
+      - id: reserved
         type: u2
 
-# -------------
-# -- (other) --
-# -------------
-  box_body_other:
+# ----------
+# -- DREF --
+# ----------
+  box_body_dref:
     seq:
-      - id: blob
-        type: u1
-        repeat: eos
+      - id: version
+        type: u4
+      - id: entry_count
+        type: u4
+      - id: entries
+        type: entry
+        repeat: expr
+        repeat-expr: entry_count
+        
+    types:
+      entry:
+        seq:
+          - id: size
+            type: u4
+          - id: type
+            type: str
+            size: 4
+          - id: data_entry
+            type: entry_body
+            size: 'size - 8'
+      entry_body:
+        seq:
+          - id: flags
+            type: u1
+            repeat: expr
+            repeat-expr: 3
+          - id: name
+            type: str
+            terminator: 0
+            if: _parent.type == 'urn '
+          - id: location
+            type: str
+            doc: |
+              This field is probably incorrect sometimes (GDCL muxer seems to have a bug here)
+            terminator: 0
+            eos-error: false            
+            
+            
+        
+
+
 
 
 
