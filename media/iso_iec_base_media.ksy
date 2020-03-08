@@ -396,7 +396,7 @@ types:
       - id: sample_count
         type: u4
       - id: entry_sizes
-        if: (sample_size==0)
+        if: sample_size == 0
         repeat: expr
         repeat-expr: sample_count
         type: u4
