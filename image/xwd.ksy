@@ -15,11 +15,11 @@ doc: |
   etc. Note that technically format includes machine-dependent fields
   and thus is probably a poor choice for true cross-platform usage.
 seq:
-  - id: header_size
+  - id: len_header
     type: u4
     doc: Size of the header in bytes
   - id: hdr
-    size: header_size - 4
+    size: len_header - 4
     type: header
   - id: color_map
     size: 12
