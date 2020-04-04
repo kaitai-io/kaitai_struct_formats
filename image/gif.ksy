@@ -177,10 +177,10 @@ types:
         repeat-until: _.num_bytes == 0
   subblock:
     seq:
-      - id: num_bytes
+      - id: len_bytes
         type: u1
       - id: bytes
-        size: num_bytes
+        size: len_bytes
 enums:
   block_type:
     0x21: extension
