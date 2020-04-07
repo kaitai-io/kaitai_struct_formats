@@ -21,17 +21,20 @@ seq:
   - id: src_mac
     size: 6
     doc: Source MAC address
-  - id: ether_type_1
+  - id: ether_type_or_tpid
     type: u2be
     enum: ether_type_enum
-    doc: Either ether type or TPID if it is a IEEE 802.1Q frame
-  - id: tci
-    type: tag_control_info
-    if: ether_type_1 == ether_type_enum::ieee_802_1q_tpid
-  - id: ether_type_2
+    doc: Either ether type or TPID if it is a IEEE 802.1Q frame or IEEE 802.1AD 
+  - id: q_header
+    type: q_header
+    if: ether_type_or_tpid == ether_type_enum::ieee_802_1q_tpid
+  - id: double_q_header
+    type: double_q_header
+    if: ether_type_or_tpid == ether_type_enum::ieee_802_1ad_tpid
+  - id: ether_type_after_q_tag
     type: u2be
     enum: ether_type_enum
-    if: ether_type_1 == ether_type_enum::ieee_802_1q_tpid
+    if: ether_type_or_tpid == ether_type_enum::ieee_802_1ad_tpid or ether_type_or_tpid == ether_type_enum::ieee_802_1q_tpid
   - id: body
     size-eos: true
     type:
@@ -42,13 +45,29 @@ seq:
 instances:
   ether_type:
     value: |
-      (ether_type_1 == ether_type_enum::ieee_802_1q_tpid) ? ether_type_2 : ether_type_1
+      (ether_type_or_tpid == ether_type_enum::ieee_802_1ad_tpid or ether_type_or_tpid == ether_type_enum::ieee_802_1q_tpid) ? ether_type_after_q_tag : ether_type_or_tpid
     doc: |
-      Ether type can be specied in several places in the frame. If
-      first location bears special marker (0x8100), then it is not the
-      real ether frame yet, an additional payload (`tci`) is expected
+      Ether type can be specied in several places in the frame. 
+      If first location bears special marker (0x8100 or 0x88a8), 
+      then it is not the real ether frame yet, 
+      an additional payload ('customer tci' and/or 'service tci') is expected
       and real ether type is upcoming next.
 types:
+
+  q_header:
+    seq:
+      - id: customer_tci
+        type: tag_control_info
+        
+  double_q_header:
+    seq:
+      - id: service_tci
+        type: tag_control_info
+      - id: tpid
+        contents: [0x81, 0x00]
+      - id: customer_tci
+        type: tag_control_info
+
   tag_control_info:
     doc: |
       Tag Control Information (TCI) is an extension of IEEE 802.1Q to
@@ -82,4 +101,4 @@ enums:
     0x0806: arp
     0x8100: ieee_802_1q_tpid
     0x86dd: ipv6
-    #0x88a8: ieee_802_1ad_tpid
+    0x88a8: ieee_802_1ad_tpid
