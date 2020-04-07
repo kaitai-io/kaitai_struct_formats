@@ -150,7 +150,7 @@ types:
       - id: subblocks
         type: subblock
         repeat: until
-        repeat-until: _.num_bytes == 0
+        repeat-until: _.len_bytes == 0
   ext_graphic_control:
     doc-ref: https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 23
     seq:
@@ -174,7 +174,7 @@ types:
       - id: entries
         type: subblock
         repeat: until
-        repeat-until: _.num_bytes == 0
+        repeat-until: _.len_bytes == 0
   subblock:
     seq:
       - id: len_bytes
