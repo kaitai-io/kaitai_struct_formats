@@ -88,6 +88,8 @@ enums:
     0x0804: chaosnet
     0x0805: x_25_level_3
     0x0806: arp
+    0x08ff: ax_25
     0x8100: ieee_802_1q_tpid
     0x86dd: ipv6
     0x88a8: ieee_802_1ad_tpid
+    0x88F7: ptp
