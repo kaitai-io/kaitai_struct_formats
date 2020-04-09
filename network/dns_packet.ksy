@@ -15,21 +15,27 @@ seq:
     type: packet_flags
   - id: qdcount
     doc: "How many questions are there"
+    if: flags.opcode == 0 or flags.opcode == 1 or flags.opcode == 2
     type: u2
   - id: ancount
     doc: "Number of resource records answering the question"
+    if: flags.opcode == 0 or flags.opcode == 1 or flags.opcode == 2
     type: u2
   - id: nscount
     doc: "Number of resource records pointing toward an authority"
+    if: flags.opcode == 0 or flags.opcode == 1 or flags.opcode == 2
     type: u2
   - id: arcount
     doc: "Number of resource records holding additional information"
+    if: flags.opcode == 0 or flags.opcode == 1 or flags.opcode == 2
     type: u2
   - id: queries
+    if: flags.opcode == 0 or flags.opcode == 1 or flags.opcode == 2
     type: query
     repeat: expr
     repeat-expr: qdcount
   - id: answers
+    if: flags.opcode == 0 or flags.opcode == 1 or flags.opcode == 2
     type: answer
     repeat: expr
     repeat-expr: ancount
