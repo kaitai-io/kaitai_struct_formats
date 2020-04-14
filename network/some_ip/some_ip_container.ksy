@@ -1,0 +1,11 @@
+meta:
+  id: some_ip_container
+  ks-version: 0.9
+  endian: be
+  imports: 
+    - /network/some_ip/some_ip
+
+seq:
+  - id: some_ip_packages
+    type: some_ip
+    repeat: eos
