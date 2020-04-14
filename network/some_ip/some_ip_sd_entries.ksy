@@ -1,6 +1,8 @@
 meta:
   id: some_ip_sd_entries
-  ks-version: 0.8
+  title: AUTOSAR SOME/IP Service Discovery Entries
+  license: CC0-1.0
+  ks-version: 0.9
   endian: be
 
 doc: |

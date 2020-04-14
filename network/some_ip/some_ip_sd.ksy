@@ -1,5 +1,7 @@
 meta:
   id: some_ip_sd
+  title: AUTOSAR SOME/IP Service Discovery
+  license: CC0-1.0
   ks-version: 0.9
   endian: be
   imports: 

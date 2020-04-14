@@ -1,5 +1,7 @@
 meta:
   id: some_ip
+  title: AUTOSAR SOME/IP
+  license: CC0-1.0
   ks-version: 0.9
   endian: be
   imports: 
