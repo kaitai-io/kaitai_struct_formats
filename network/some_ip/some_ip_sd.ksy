@@ -41,7 +41,7 @@ types:
         type: b1
       - id: unicast
         type: b1
-      - id: inital_data
+      - id: initial_data
         type: b1
       - id: reserved
         type: b5
