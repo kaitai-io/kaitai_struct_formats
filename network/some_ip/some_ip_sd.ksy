@@ -18,31 +18,31 @@ doc: |
 doc-ref: https://www.autosar.org/fileadmin/user_upload/standards/foundation/19-11/AUTOSAR_PRS_SOMEIPServiceDiscoveryProtocol.pdf
 
 seq:
-- id: flags
-  type: sd_flags
-  doc: The SOME/IP-SD Header shall start with an 8 Bit field called flags.
-- id: reserved
-  size: 3
-- id: len_entries
-  type: u4
-- id: entries
-  type: some_ip_sd_entries
-  size: len_entries
-- id: len_options
-  type: u4
-- id: options
-  type: some_ip_sd_options
-  size: len_options
-  
-types:       
-  sd_flags:
-    seq:
-      - id: reboot
-        type: b1
-      - id: unicast
-        type: b1
-      - id: inital_data
-        type: b1
-      - id: reserved
-        type: b5
-    doc-ref: AUTOSAR_PRS_SOMEIPServiceDiscoveryProtocol.pdf - Figure 4.3
+  - id: flags
+    type: sd_flags
+    doc: The SOME/IP-SD Header shall start with an 8 Bit field called flags.
+  - id: reserved
+    size: 3
+  - id: len_entries
+    type: u4
+  - id: entries
+    type: some_ip_sd_entries
+    size: len_entries
+  - id: len_options
+    type: u4
+  - id: options
+    type: some_ip_sd_options
+    size: len_options
+    
+  types:       
+    sd_flags:
+      seq:
+        - id: reboot
+          type: b1
+        - id: unicast
+          type: b1
+        - id: inital_data
+          type: b1
+        - id: reserved
+          type: b5
+      doc-ref: AUTOSAR_PRS_SOMEIPServiceDiscoveryProtocol.pdf - Figure 4.3
