@@ -332,7 +332,7 @@ class FormatPagesGenerator
     when 'iso'
       nil
     when 'forensicswiki'
-      "http://forensicswiki.org/wiki/#{value}"
+      "https://forensicswiki.xyz/page/#{value}"
     when 'justsolve'
       "http://fileformats.archiveteam.org/wiki/#{value}"
     when 'loc'
