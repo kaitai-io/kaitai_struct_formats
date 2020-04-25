@@ -41,6 +41,11 @@ jobs:
           echo 'gem: --no-document' | sudo tee /etc/gemrc
           cd _build
           bundle install
+          git clone -b 2.5.2 --depth 1 https://github.com/pygments/pygments.git
+          git clone -b master --depth 1 https://github.com/nikeee/pygments-lexer-graphviz.git
+          cd pygments-lexer-graphviz/
+          python setup.py develop
+          cd ../
       - name: Build targets
         working-directory: _build
         run: ./build-target .. target
