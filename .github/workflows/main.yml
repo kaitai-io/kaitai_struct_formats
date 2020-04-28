@@ -46,8 +46,7 @@ jobs:
       - name: Install Graphviz lexer for Pygments
         run: |
           git clone -b master --depth 1 https://github.com/nikeee/pygments-lexer-graphviz.git
-          cd pygments-lexer-graphviz/
-          sudo python setup.py develop
+          sudo python3 -m pip install --editable pygments-lexer-graphviz/
       - name: Build targets
         working-directory: _build
         run: ./build-target .. target
