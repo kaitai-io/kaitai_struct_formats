@@ -41,6 +41,8 @@ jobs:
           echo 'gem: --no-document' | sudo tee /etc/gemrc
           cd _build
           bundle install
+      - name: Install setuptools
+        run: python3 -m pip install --user setuptools
       - name: Install Pygments
         run: python3 -m pip install --user pygments
       - name: Install Graphviz lexer for Pygments
