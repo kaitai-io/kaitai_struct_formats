@@ -101,7 +101,6 @@ types:
         instances:
           value:
             pos: 0
-            io: _io
             type: u4
             doc: The value provides the undissected Message ID 
             
@@ -119,7 +118,6 @@ types:
         instances:
           value:
             pos: 0
-            io: _io
             type: u4
             doc: The value provides the undissected Request ID 
 
