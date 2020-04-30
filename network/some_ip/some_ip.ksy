@@ -23,7 +23,6 @@ seq:
       switch-on: header.message_id.value
       cases:
         0xffff8100: some_ip_sd
-        _: data
 
 types:
   header:
@@ -152,8 +151,3 @@ types:
         0x08 : wrong_interface_version
         0x09 : malformed_message
         0x0a : wrong_message_type
-
-  data:
-    seq:
-      - id: body
-        size-eos: true
