@@ -6,30 +6,30 @@ meta:
   ks-version: 0.8
 doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=HEAD
 seq:
-  # e_ident[EI_MAG0]..e[EI_MAG3]
   - id: magic
+    -orig-id: e_ident[EI_MAG0]..e[EI_MAG3]
     size: 4
     contents: [0x7f, "ELF"]
     doc: File identification, must be 0x7f + "ELF".
-  # e_ident[EI_CLASS]
   - id: bits
+    -orig-id: e_ident[EI_CLASS]
     type: u1
     enum: bits
     doc: |
       File class: designates target machine word size (32 or 64
       bits). The size of many integer fields in this format will
       depend on this setting.
-  # e_ident[EI_DATA]
   - id: endian
+    -orig-id: e_ident[EI_DATA]
     type: u1
     enum: endian
     doc: Endianness used for all integers.
-  # e_ident[EI_VERSION]
   - id: ei_version
+    -orig-id: e_ident[EI_VERSION]
     type: u1
     doc: ELF header version.
-  # e_ident[EI_OSABI]
   - id: abi
+    -orig-id: e_ident[EI_OSABI]
     type: u1
     enum: os_abi
     doc: |
