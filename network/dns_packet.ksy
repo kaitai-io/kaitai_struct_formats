@@ -15,21 +15,27 @@ seq:
     type: packet_flags
   - id: qdcount
     doc: "How many questions are there"
+    if: flags.is_opcode_valid
     type: u2
   - id: ancount
     doc: "Number of resource records answering the question"
+    if: flags.is_opcode_valid
     type: u2
   - id: nscount
     doc: "Number of resource records pointing toward an authority"
+    if: flags.is_opcode_valid
     type: u2
   - id: arcount
     doc: "Number of resource records holding additional information"
+    if: flags.is_opcode_valid
     type: u2
   - id: queries
+    if: flags.is_opcode_valid
     type: query
     repeat: expr
     repeat-expr: qdcount
   - id: answers
+    if: flags.is_opcode_valid
     type: answer
     repeat: expr
     repeat-expr: ancount
@@ -131,7 +137,9 @@ types:
         value: (flag & 0b0000_0000_0001_0000) >> 4
       rcode:
         value: (flag & 0b0000_0000_0000_1111) >> 0
-        
+      is_opcode_valid:
+        value: opcode == 0 or opcode == 1 or opcode == 2
+
 enums:
   class_type:
     1: in_class

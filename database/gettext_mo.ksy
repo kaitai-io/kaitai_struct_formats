@@ -7,6 +7,7 @@ meta:
     - GNU gettext
     - libintl
   license: BSD-2-Clause
+  ks-version: 0.9
 
 #  Copyright (c) 2000, 2001 Citrus Project,
 #  All rights reserved.
