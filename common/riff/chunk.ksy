@@ -1,11 +1,9 @@
 meta:
   id: chunk
-  encoding: ASCII
   endian: le
 seq:
   - id: id
-    type: str
-    size: 4
+    type: u4
   - id: len
     type: u4
   - id: data_slot

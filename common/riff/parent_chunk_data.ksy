@@ -1,11 +1,9 @@
 meta:
   id: parent_chunk_data
-  encoding: ASCII
   endian: le
 seq:
   - id: form_type
-    type: str
-    size: 4
+    type: u4
   - id: subchunks_slot
     type: slot
     size-eos: true
