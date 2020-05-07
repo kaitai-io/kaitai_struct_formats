@@ -61,20 +61,22 @@ types:
 
   chunk_type:
     seq:
+      - id: get_chunk_ofs
+        size: 0
+        if: chunk_ofs < 0
       - id: chunk
         type: chunk
     instances:
+      chunk_ofs:
+        value: _io.pos
       chunk_id:
         value: chunk.id
         enum: fourcc
       chunk_id_readable:
-        value: >-
-          [
-            (chunk.id & 0x000000ff) >> 0,
-            (chunk.id & 0x0000ff00) >> 8,
-            (chunk.id & 0x00ff0000) >> 16,
-            (chunk.id & 0xff000000) >> 24
-          ].as<bytes>.to_s('ASCII')
+        pos: chunk_ofs
+        size: 4
+        type: str
+        encoding: ASCII
       chunk_data:
         io: chunk.data_slot._io
         pos: 0
@@ -84,20 +86,22 @@ types:
             'fourcc::list': list_chunk_data
   list_chunk_data:
     seq:
+      - id: get_parent_chunk_data_ofs
+        size: 0
+        if: parent_chunk_data_ofs < 0
       - id: parent_chunk_data
         type: parent_chunk_data
     instances:
+      parent_chunk_data_ofs:
+        value: _io.pos
       form_type:
         value: parent_chunk_data.form_type
         enum: fourcc
       form_type_readable:
-        value: >-
-          [
-            (parent_chunk_data.form_type & 0x000000ff) >> 0,
-            (parent_chunk_data.form_type & 0x0000ff00) >> 8,
-            (parent_chunk_data.form_type & 0x00ff0000) >> 16,
-            (parent_chunk_data.form_type & 0xff000000) >> 24
-          ].as<bytes>.to_s('ASCII')
+        pos: parent_chunk_data_ofs
+        size: 4
+        type: str
+        encoding: ASCII
       subchunks:
         io: parent_chunk_data.subchunks_slot._io
         pos: 0
@@ -119,9 +123,14 @@ types:
       letter, this chunk is considered as unregistered and thus we can make
       no assumptions about the type of data.
     seq:
+      - id: get_chunk_ofs
+        size: 0
+        if: chunk_ofs < 0
       - id: chunk
         type: chunk
     instances:
+      chunk_ofs:
+        value: _io.pos
       chunk_id_readable:
         value: id_chars.to_s('ASCII')
       chunk_data:
@@ -132,13 +141,8 @@ types:
           cases:
             false: strz
       id_chars:
-        value: >-
-          [
-            (chunk.id & 0x000000ff) >> 0,
-            (chunk.id & 0x0000ff00) >> 8,
-            (chunk.id & 0x00ff0000) >> 16,
-            (chunk.id & 0xff000000) >> 24
-          ].as<bytes>
+        pos: chunk_ofs
+        size: 4
       is_unregistered_tag:
         doc: |
           Check if chunk_id contains lowercase characters ([a-z], ASCII 97 = a, ASCII 122 = z).
