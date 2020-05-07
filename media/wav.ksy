@@ -6,8 +6,7 @@ meta:
   encoding: ASCII
   endian: le
   imports:
-    - /common/riff/chunk
-    - /common/riff/parent_chunk_data
+    - /common/riff
   xref:
     justsolve: WAV
     loc: fdd000001
@@ -31,17 +30,23 @@ doc: |
 doc-ref: http://soundfile.sapp.org/doc/WaveFormat/
 seq:
   - id: chunk
-    type: chunk
+    type: 'riff::chunk'
 instances:
+  chunk_id:
+    value: chunk.id
+    enum: fourcc
   is_riff_chunk:
-    value: chunk.id == 'RIFF'
+    value: 'chunk_id == fourcc::riff'
   parent_chunk_data:
     io: chunk.data_slot._io
     pos: 0
     if: is_riff_chunk
-    type: parent_chunk_data
+    type: 'riff::parent_chunk_data'
+  form_type:
+    value: parent_chunk_data.form_type
+    enum: fourcc
   is_form_type_wave:
-    value: is_riff_chunk and parent_chunk_data.form_type == 'WAVE'
+    value: 'is_riff_chunk and form_type == fourcc::wave'
   subchunks:
     io: parent_chunk_data.subchunks_slot._io
     pos: 0
@@ -52,38 +57,44 @@ types:
   chunk_type:
     seq:
       - id: chunk
-        type: chunk
+        type: 'riff::chunk'
     instances:
+      chunk_id:
+        value: chunk.id
+        enum: fourcc
       chunk_data:
         io: chunk.data_slot._io
         pos: 0
         type:
-          switch-on: chunk.id
+          switch-on: chunk_id
           cases:
-            '"fmt "': format_chunk_type
-            '"bext"': bext_chunk_type
-            '"cue "': cue_chunk_type
-            '"data"': data_chunk_type
-            '"LIST"': list_chunk_type
+            'fourcc::fmt': format_chunk_type
+            'fourcc::bext': bext_chunk_type
+            'fourcc::cue': cue_chunk_type
+            'fourcc::data': data_chunk_type
+            'fourcc::list': list_chunk_type
 
   list_chunk_type:
     seq:
       - id: parent_chunk_data
-        type: parent_chunk_data
+        type: 'riff::parent_chunk_data'
     instances:
+      form_type:
+        value: parent_chunk_data.form_type
+        enum: fourcc
       subchunks:
         io: parent_chunk_data.subchunks_slot._io
         pos: 0
         type:
-          switch-on: parent_chunk_data.form_type
+          switch-on: form_type
           cases:
-            '"INFO"': info_chunk_type
+            'fourcc::info': info_chunk_type
         repeat: eos
 
   info_chunk_type:
     seq:
       - id: chunk
-        type: chunk
+        type: 'riff::chunk'
     instances:
       chunk_data:
         io: chunk.data_slot._io
@@ -536,3 +547,17 @@ enums:
     0xf1ac: flac
     0xfffe: extensible
     0xffff: development
+
+  fourcc:
+    # little-endian
+    0x46464952: riff
+    0x45564157: wave
+    0x5453494c: list
+    0x4f464e49: info
+    0x20746d66: fmt
+    0x74786562: bext
+    0x20657563: cue
+    0x61746164: data
+    0x64696d75: umid
+    0x666e696d: minf
+    0x6e676572: regn
