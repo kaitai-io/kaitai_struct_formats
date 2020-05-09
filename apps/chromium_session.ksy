@@ -146,6 +146,13 @@ types:
       - id: padding
         type: pickle_padding(len)
 
+  extended_info_map_pair:
+    seq:
+      - id: key
+        type: cr_string
+      - id: value
+        type: cr_string
+
   command_update_tab_navigation:
     seq:
       - id: pickle_payload_size
@@ -182,10 +189,10 @@ types:
         type: u4
       - id: extended_info_map_size
         type: u4
-      # - id: extended_info_map
-      #   type: command_update_tab_navigation_extended_info_map
-      #   repeat:
-      #  should contain [string key, string value] pairs
+      - id: extended_info_map
+        type: extended_info_map_pair
+        repeat: expr
+        repeat-expr: extended_info_map_size
       - id: task_id
         type: u8
       - id: parent_task_id
@@ -194,8 +201,10 @@ types:
         type: u8
       - id: children_task_ids_size
         type: u4
-      # should contain [u8 children_task_id] items
-
+      - id: children_task_ids
+        type: u8
+        repeat: expr
+        repeat-expr: children_task_ids_size
   command_set_selected_navigation_index:
     seq:
       - id: tab_id
@@ -262,14 +271,12 @@ types:
         type: u8
       - id: close_time
         type: u8
-      # FIXME: 4 bytes are left unused
   command_window_closed:
     seq:
       - id: window_id
         type: u8
       - id: close_time
         type: u8
-      # FIXME: 4 bytes are left unused
   command_set_tab_user_agent_override:
     seq:
       - id: pickle_payload_size
@@ -330,7 +337,6 @@ types:
         type: u8
       - id: has_group
         type: u8
-      # FIXME: some data is unused
   command_set_tab_group_metadata:
     seq:
       - id: pickle_payload_size
