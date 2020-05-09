@@ -16,8 +16,6 @@ seq:
   - id: packets
     type: packet_t
     repeat: eos
--includes:
-  - rtp_packet.ksy
 types:
   header_t:
     seq:
@@ -68,5 +66,5 @@ types:
         doc: |
           timestamp of packet since the start.
       - id: body
-        size: plen
+        size: len_body
         type: rtp_packet
