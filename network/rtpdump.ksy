@@ -3,7 +3,6 @@ meta:
   title: Rtpdump (rtptools)
   file-extension: rtmpdump
   license: Unlicense
-  ks-version: 0.1
   endian: be
   imports:
     - /network/rtp_packet
@@ -29,11 +28,11 @@ types:
       - id: ip
         type: str
         encoding: ascii
-        terminator: 0x2f // '\'
+        terminator: 0x2f # '/'
       - id: port
         type: str
         encoding: ascii
-        terminator: 0x0a // '\n'
+        terminator: 0x0a # '\n'
       - id: start_sec
         type: u4
         doc: |
@@ -60,7 +59,7 @@ types:
         type: u2
         doc: |
           packet length (including this header).
-      - id: plen
+      - id: len_body
         type: u2
         doc: |
           payload length.
