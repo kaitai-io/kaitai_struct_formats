@@ -57,6 +57,19 @@ types:
             'command_type::set_tab_user_agent_override2': command_set_tab_user_agent_override2
     -webide-representation: '{command_id}'
 
+  # This is necessary due to how PickleIterator::Advance()
+  # tries to move read_index_ to an uint32_t-aligned value.
+  pickle_padding:
+    params:
+      - id: advance_size
+        type: u4
+    instances:
+      aligned_size:
+        value: ((advance_size + 3) & ~(3))
+    seq:
+      - id: padding
+        size: aligned_size - advance_size
+
   # PickleIterator::ReadString()
   cr_string:
     seq:
@@ -67,9 +80,7 @@ types:
         type: str
         encoding: UTF-8
       - id: padding
-        size: ((len + 3) & ~(3)) - len
-        # This is necessary due to how PickleIterator::Advance()
-        # tries to move read_index_ to an uint32_t-aligned value.
+        type: pickle_padding(len)
     -webide-representation: '{data}'
 
   # PickleIterator::ReadString16()
@@ -82,9 +93,7 @@ types:
         type: str
         encoding: UTF-16LE
       - id: padding
-        size: ((len*2 + 3) & ~(3)) - len*2
-        # This is necessary due to how PickleIterator::Advance()
-        # tries to move read_index_ to an uint32_t-aligned value.
+        type: pickle_padding(len*2)
     -webide-representation: '{data}'
 
   command_set_tab_window:
@@ -135,9 +144,7 @@ types:
         size: len
         type: page_state_inner
       - id: padding
-        size: ((len + 3) & ~(3)) - len
-        # This is necessary due to how PickleIterator::Advance()
-        # tries to move read_index_ to an uint32_t-aligned value.
+        type: pickle_padding(len)
 
   command_update_tab_navigation:
     seq:
@@ -420,3 +427,4 @@ enums:
     27: set_tab_group_metadata2
     28: set_tab_guid
     29: set_tab_user_agent_override2
+
