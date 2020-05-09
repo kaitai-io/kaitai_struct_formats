@@ -1,7 +1,9 @@
 meta:
-  id: rtmpdump
+  id: rtpdump
   title: Rtpdump (rtptools)
-  file-extension: rtmpdump
+  file-extension:
+   - rtp
+   - rtpdump
   license: Unlicense
   endian: be
   imports:
