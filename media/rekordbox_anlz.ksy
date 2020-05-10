@@ -52,7 +52,7 @@ types:
     seq:
       - id: fourcc
         type: s4
-        # enum: section_tags  Can't use this until enums support default/unmatched value
+        # enum: section_tags  # Can't use this line until KSC supports switching on possibly-null enums in Java.
         doc: |
           A tag value indicating what kind of section this is.
       - id: len_header
@@ -68,6 +68,7 @@ types:
         type:
           switch-on: fourcc
           cases:
+            0x50434f32: cue_extended_tag        #'section_tags::cues_2' (PCO2)
             0x50434f42: cue_tag                 #'section_tags::cues' (PCOB)
             0x50505448: path_tag                #'section_tags::path' (PPTH)
             0x5051545a: beat_grid_tag           #'section_tags::beat_grid' (PQTZ)
@@ -77,6 +78,7 @@ types:
             0x50575633: wave_scroll_tag         #'section_tags::wave_scroll'  (PWV3, seen in .EXT)
             0x50575634: wave_color_preview_tag  #'section_tags::wave_color_preview' (PWV4, in .EXT)
             0x50575635: wave_color_scroll_tag   #'section_tags::wave_color_scroll'  (PWV5, in .EXT)
+            0x50535349: song_structure_tag      #'section_tags::song_structure'  (PSSI, in .EXT)
             _: unknown_tag
     -webide-representation: '{fourcc}'
 
@@ -129,8 +131,9 @@ types:
         enum: cue_list_type
         doc: |
           Identifies whether this tag stores ordinary or hot cues.
+      - size: 2
       - id: len_cues
-        type: u4
+        type: u2
         doc: |
           The length of the cue list.
       - id: memory_count
@@ -188,6 +191,98 @@ types:
           back to the cue time if this is a loop.
       - size: 16
 
+  cue_extended_tag:
+    doc: |
+      A variation of cue_tag which was introduced with the nxs2 line,
+      and adds descriptive names. (Still comes in two forms, either
+      holding memory cues and loop points, or holding hot cues and
+      loop points.) Also includes hot cues D through H and color assignment.
+    seq:
+      - id: type
+        type: u4
+        enum: cue_list_type
+        doc: |
+          Identifies whether this tag stores ordinary or hot cues.
+      - id: len_cues
+        type: u2
+        doc: |
+          The length of the cue comment list.
+      - size: 2
+      - id: cues
+        type: cue_extended_entry
+        repeat: expr
+        repeat-expr: len_cues
+
+  cue_extended_entry:
+    doc: |
+      A cue extended list entry. Can either describe a memory cue or a
+      loop.
+    seq:
+      - contents: "PCP2"
+      - id: len_header
+        type: u4
+      - id: len_entry
+        type: u4
+      - id: hot_cue
+        type: u4
+        doc: |
+          If zero, this is an ordinary memory cue, otherwise this a
+          hot cue with the specified number.
+      - id: type
+        type: u1
+        enum: cue_entry_type
+        doc: |
+          Indicates whether this is a memory cue or a loop.
+      - size: 3  # seems to always be 1000
+      - id: time
+        type: u4
+        doc: |
+          The position, in milliseconds, at which the cue point lies
+          in the track.
+      - id: loop_time
+        type: u4
+        doc: |
+          The position, in milliseconds, at which the player loops
+          back to the cue time if this is a loop.
+      - id: color_id
+        type: u1
+        doc: |
+          References a row in the colors table if this is a memory cue or loop
+          and has been assigned a color.
+      - size: 11  # Loops seem to have some non-zero values in the last four bytes of this.
+      - id: len_comment
+        type: u4
+        if: len_entry > 43
+      - id: comment
+        type: str
+        size: len_comment
+        encoding: utf-16be
+        doc: |
+          The comment assigned to this cue by the DJ, if any, with a trailing NUL.
+        if: len_entry > 43
+      - id: color_code
+        type: u1
+        doc: |
+          A lookup value for a color table? We use this to index to the hot cue colors shown in rekordbox.
+        if: (len_entry - len_comment) > 44
+      - id: color_red
+        type: u1
+        doc: |
+          The red component of the hot cue color to be displayed.
+        if: (len_entry - len_comment) > 45
+      - id: color_green
+        type: u1
+        doc: |
+          The green component of the hot cue color to be displayed.
+        if: (len_entry - len_comment) > 46
+      - id: color_blue
+        type: u1
+        doc: |
+          The blue component of the hot cue color to be displayed.
+        if: (len_entry - len_comment) > 47
+      - size: len_entry - 48 - len_comment  # The remainder after the color
+        if: (len_entry - len_comment) > 48
+
   path_tag:
     doc: |
       Stores the file path of the audio file to which this analysis
@@ -228,6 +323,7 @@ types:
         size: len_preview
         doc: |
           The actual bytes of the waveform preview.
+        if: _parent.len_tag > _parent.len_header
 
   wave_scroll_tag:
     doc: |
@@ -285,6 +381,86 @@ types:
       - id: entries
         size: len_entries * len_entry_bytes
 
+  song_structure_tag:
+    doc: |
+      Stores the song structure, also known as phrases (intro, verse,
+      bridge, chorus, up, down, outro).
+    seq:
+      - id: len_entry_bytes
+        type: u4
+        doc: |
+          The size of each entry, in bytes. Seems to always be 24.
+      - id: len_entries
+        type: u2
+        doc: |
+          The number of phrases.
+      - id: style
+        type: u2
+        # enum: phrase_style   Can't use this line until KSC supports switching on possibly-null enums in Java.
+        doc: |
+          The phrase style. 1 is the up-down style
+          (white label text in rekordbox) where the main phrases consist
+          of up, down, and chorus. 2 is the bridge-verse style
+          (black label text in rekordbox) where the main phrases consist
+          of verse, chorus, and bridge. Style 3 is mostly identical to
+          bridge-verse style except verses 1-3 are labeled VERSE1 and verses
+          4-6 are labeled VERSE2 in rekordbox.
+      - size: 6
+      - id: end_beat
+        type: u2
+        doc: |
+          The beat number at which the last phrase ends. The track may
+          continue after the last phrase ends. If this is the case, it will
+          mostly be silence.
+      - size: 4
+      - id: entries
+        type: song_structure_entry
+        repeat: expr
+        repeat-expr: len_entries
+
+  song_structure_entry:
+    doc: |
+      A song structure entry, represents a single phrase.
+    seq:
+      - id: phrase_number
+        type: u2
+        doc: |
+          The absolute number of the phrase, starting at one.
+      - id: beat_number
+        type: u2
+        doc: |
+          The beat number at which the phrase starts.
+      - id: phrase_id
+        type:
+          switch-on: _parent.style
+          cases:
+            1: phrase_up_down       # 'phrase_style::up_down'
+            2: phrase_verse_bridge  # 'phrase_style::verse_bridge'
+            _: phrase_verse_bridge
+        doc: |
+          Identifier of the phrase label.
+      - size: _parent.len_entry_bytes - 9
+      - id: fill_in
+        type: u1
+        doc: |
+          If nonzero, fill-in is present.
+      - id: fill_in_beat_number
+        type: u2
+        doc: |
+          The beat number at which fill-in starts.
+
+  phrase_up_down:
+    seq:
+      - id: id
+        type: u2
+        enum: phrase_up_down_id
+
+  phrase_verse_bridge:
+    seq:
+      - id: id
+        type: u2
+        enum: phrase_verse_bridge_id
+
   unknown_tag: {}
 
 enums:
@@ -299,6 +475,7 @@ enums:
     0x50575633: wave_scroll         # PWV3 (seen in .EXT)
     0x50575634: wave_color_preview  # PWV4 (seen in .EXT)
     0x50575635: wave_color_scroll   # PWV5 (seen in .EXT)
+    0x50535349: song_structure      # PSSI (seen in .EXT)
 
   cue_list_type:
     0: memory_cues
@@ -311,3 +488,27 @@ enums:
   cue_entry_status:
     0: disabled
     1: enabled
+
+  phrase_style:
+    1: up_down
+    2: verse_bridge
+    3: verse_bridge_2
+
+  phrase_verse_bridge_id:
+    1: intro
+    2: verse1
+    3: verse2
+    4: verse3
+    5: verse4
+    6: verse5
+    7: verse6
+    8: bridge
+    9: chorus
+    10: outro
+
+  phrase_up_down_id:
+    1: intro
+    2: up
+    3: down
+    5: chorus
+    6: outro
