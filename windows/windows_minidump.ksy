@@ -343,3 +343,16 @@ enums:
     0x800A: ce_bucket_parameters
     0x800B: ce_process_module_map
     0x800C: ce_diagnosis_list
+    # Breakpad extensions; see Breakpad's src/google_breakpad/common/minidump_format.h
+    0x47670001: md_raw_breakpad_info
+    0x47670002: md_raw_assertion_info
+    0x47670003: md_linux_cpu_info      # /proc/cpuinfo
+    0x47670004: md_linux_proc_status   # /proc/$x/status
+    0x47670005: md_linux_lsb_release   # /etc/lsb-release
+    0x47670006: md_linux_cmd_line      # /proc/$x/cmdline
+    0x47670007: md_linux_environ       # /proc/$x/environ
+    0x47670008: md_linux_auxv          # /proc/$x/auxv
+    0x47670009: md_linux_maps          # /proc/$x/maps
+    0x4767000a: md_linux_dso_debug
+    # Crashpad extension; See Crashpad's minidump/minidump_extensions.h
+    0x43500001: md_crashpad_info_stream
