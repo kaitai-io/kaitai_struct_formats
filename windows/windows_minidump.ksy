@@ -324,3 +324,22 @@ enums:
     16: memory_info_list
     17: thread_info_list
     18: handle_operation_list
+    19: token
+    20: java_script_data
+    21: system_memory_info
+    22: process_vm_vounters
+    23: ipt_trace
+    24: thread_names
+    0x8000: ce_null
+    0x8001: ce_system_info
+    0x8002: ce_exception
+    0x8003: ce_module_list
+    0x8004: ce_process_list
+    0x8005: ce_thread_list
+    0x8006: ce_thread_context_list
+    0x8007: ce_thread_call_stack_list
+    0x8008: ce_memory_virtual_list
+    0x8009: ce_memory_physical_list
+    0x800A: ce_bucket_parameters
+    0x800B: ce_process_module_map
+    0x800C: ce_diagnosis_list
