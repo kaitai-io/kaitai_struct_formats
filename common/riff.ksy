@@ -61,7 +61,7 @@ types:
 
   chunk_type:
     seq:
-      - id: get_chunk_ofs
+      - id: save_chunk_ofs
         size: 0
         if: chunk_ofs < 0
       - id: chunk
@@ -86,7 +86,7 @@ types:
             'fourcc::list': list_chunk_data
   list_chunk_data:
     seq:
-      - id: get_parent_chunk_data_ofs
+      - id: save_parent_chunk_data_ofs
         size: 0
         if: parent_chunk_data_ofs < 0
       - id: parent_chunk_data
@@ -123,7 +123,7 @@ types:
       letter, this chunk is considered as unregistered and thus we can make
       no assumptions about the type of data.
     seq:
-      - id: get_chunk_ofs
+      - id: save_chunk_ofs
         size: 0
         if: chunk_ofs < 0
       - id: chunk
@@ -147,12 +147,10 @@ types:
         doc: |
           Check if chunk_id contains lowercase characters ([a-z], ASCII 97 = a, ASCII 122 = z).
         value: >-
-          (
-            (id_chars[0] >= 97 and id_chars[0] <= 122) or
-            (id_chars[1] >= 97 and id_chars[1] <= 122) or
-            (id_chars[2] >= 97 and id_chars[2] <= 122) or
-            (id_chars[3] >= 97 and id_chars[3] <= 122)
-          )
+          (id_chars[0] >= 97 and id_chars[0] <= 122) or
+          (id_chars[1] >= 97 and id_chars[1] <= 122) or
+          (id_chars[2] >= 97 and id_chars[2] <= 122) or
+          (id_chars[3] >= 97 and id_chars[3] <= 122)
 enums:
   fourcc:
   # little-endian
