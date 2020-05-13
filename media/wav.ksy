@@ -16,6 +16,7 @@ meta:
       - audio/wave
       - audio/x-wav
     pronom: fmt/6
+    rfc: 2361
     wikidata: Q217570
 doc: |
   The WAVE file format is a subset of Microsoft's RIFF specification for the
