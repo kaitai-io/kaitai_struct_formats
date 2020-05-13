@@ -18,16 +18,17 @@ types:
         size: len_body
       - id: pad_byte
         size: len_body % 2
-  sfbk_chunk_data:
-    seq:
-      - id: form_type
-        contents: sfbk
-      - id: info
-        type: info_chunk
-      - id: sample_data
-        type: sdta_chunk
-      - id: preset_data
-        type: pdta_chunk
+    types:
+      sfbk_chunk_data:
+        seq:
+          - id: form_type
+            contents: sfbk
+          - id: info
+            type: info_chunk
+          - id: sample_data
+            type: sdta_chunk
+          - id: preset_data
+            type: pdta_chunk
   info_chunk: {}
   sdta_chunk: {}
   pdta_chunk: {}
