@@ -168,15 +168,123 @@ types:
           - id: samples
             type: shdr_chunk
         types:
-          phdr_chunk: {}
-          pbag_chunk: {}
-          pmod_chunk: {}
-          pgen_chunk: {}
-          inst_chunk: {}
-          ibag_chunk: {}
-          imod_chunk: {}
-          igen_chunk: {}
-          shdr_chunk: {}
+          phdr_chunk:
+            seq:
+              - id: chunk_id
+                contents: phdr
+              - id: len_body
+                type: u4
+              - id: body
+                size: len_body
+                type: phdr_chunk_data
+              - id: pad_byte
+                size: len_body % 2
+            types:
+              phdr_chunk_data: {}
+          pbag_chunk:
+            seq:
+              - id: chunk_id
+                contents: pbag
+              - id: len_body
+                type: u4
+              - id: body
+                size: len_body
+                type: pbag_chunk_data
+              - id: pad_byte
+                size: len_body % 2
+            types:
+              pbag_chunk_data: {}
+          pmod_chunk:
+            seq:
+              - id: chunk_id
+                contents: pmod
+              - id: len_body
+                type: u4
+              - id: body
+                size: len_body
+                type: pmod_chunk_data
+              - id: pad_byte
+                size: len_body % 2
+            types:
+              pmod_chunk_data: {}
+          pgen_chunk:
+            seq:
+              - id: chunk_id
+                contents: pgen
+              - id: len_body
+                type: u4
+              - id: body
+                size: len_body
+                type: pgen_chunk_data
+              - id: pad_byte
+                size: len_body % 2
+            types:
+              pgen_chunk_data: {}
+          inst_chunk:
+            seq:
+              - id: chunk_id
+                contents: inst
+              - id: len_body
+                type: u4
+              - id: body
+                size: len_body
+                type: inst_chunk_data
+              - id: pad_byte
+                size: len_body % 2
+            types:
+              inst_chunk_data: {}
+          ibag_chunk:
+            seq:
+              - id: chunk_id
+                contents: ibag
+              - id: len_body
+                type: u4
+              - id: body
+                size: len_body
+                type: ibag_chunk_data
+              - id: pad_byte
+                size: len_body % 2
+            types:
+              ibag_chunk_data: {}
+          imod_chunk:
+            seq:
+              - id: chunk_id
+                contents: imod
+              - id: len_body
+                type: u4
+              - id: body
+                size: len_body
+                type: imod_chunk_data
+              - id: pad_byte
+                size: len_body % 2
+            types:
+              imod_chunk_data: {}
+          igen_chunk:
+            seq:
+              - id: chunk_id
+                contents: igen
+              - id: len_body
+                type: u4
+              - id: body
+                size: len_body
+                type: igen_chunk_data
+              - id: pad_byte
+                size: len_body % 2
+            types:
+              igen_chunk_data: {}
+          shdr_chunk:
+            seq:
+              - id: chunk_id
+                contents: shdr
+              - id: len_body
+                type: u4
+              - id: body
+                size: len_body
+                type: shdr_chunk_data
+              - id: pad_byte
+                size: len_body % 2
+            types:
+              shdr_chunk_data: {}
 enums:
   fourcc:
     0x6c696669:
