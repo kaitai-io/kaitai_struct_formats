@@ -81,7 +81,58 @@ types:
                 type: u2
               - id: minor
                 type: u2
-  sdta_chunk: {}
+  sdta_chunk:
+    seq:
+      - id: chunk_id
+        contents: LIST
+      - id: len_body
+        type: u4
+      - id: body
+        type: sdta_chunk_data
+        size: len_body
+      - id: pad_byte
+        size: len_body % 2
+    types:
+      sdta_chunk_data:
+        seq:
+          - id: form_type
+            contents: sdta
+          - id: smpl
+            type: smpl_chunk
+            if: is_smpl_present
+          - id: sm24
+            type: sm24_chunk
+            if: is_sm24_present
+        instances:
+          is_smpl_present:
+            value: not _io.eof
+          is_sm24_present:
+            value: not _io.eof
+          is_valid:
+            value: >-
+              (not is_smpl_present or (smpl.len_body % 2) == 0)
+              and (not is_sm24_present or (2 * sm24.len_body) == smpl.len_body)
+        types:
+          smpl_chunk:
+            seq:
+              - id: chunk_id
+                contents: smpl
+              - id: len_body
+                type: u4
+              - id: samples
+                size: len_body
+              - id: pad_byte
+                size: len_body % 2
+          sm24_chunk:
+            seq:
+              - id: chunk_id
+                contents: smpl
+              - id: len_body
+                type: u4
+              - id: samples
+                size: len_body
+              - id: pad_byte
+                size: len_body % 2
   pdta_chunk: {}
 enums:
   fourcc:
