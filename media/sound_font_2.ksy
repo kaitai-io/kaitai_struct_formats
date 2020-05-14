@@ -126,7 +126,7 @@ types:
           sm24_chunk:
             seq:
               - id: chunk_id
-                contents: smpl
+                contents: sm24
               - id: len_body
                 type: u4
               - id: samples
