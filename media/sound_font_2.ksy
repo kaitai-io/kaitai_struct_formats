@@ -216,7 +216,17 @@ types:
               - id: pad_byte
                 size: len_body % 2
             types:
-              pbag_chunk_data: {}
+              pbag_chunk_data:
+                seq:
+                  - id: records
+                    type: preset_bag
+                    repeat: eos
+              preset_bag:
+                seq:
+                  - id: gen_idx
+                    type: u2
+                  - id: mod_idx
+                    type: u2
           pmod_chunk:
             seq:
               - id: chunk_id
