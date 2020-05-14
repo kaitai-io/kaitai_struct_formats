@@ -133,7 +133,50 @@ types:
                 size: len_body
               - id: pad_byte
                 size: len_body % 2
-  pdta_chunk: {}
+  pdta_chunk:
+    seq:
+      - id: chunk_id
+        contents: LIST
+      - id: len_body
+        type: u4
+      - id: body
+        type: pdta_chunk_data
+        size: len_body
+      - id: pad_byte
+        size: len_body % 2
+    types:
+      pdta_chunk_data:
+        seq:
+          - id: form_type
+            contents: pdta
+          - id: presets
+            type: phdr_chunk
+          - id: preset_zones
+            type: pbag_chunk
+          - id: preset_mods
+            type: pmod_chunk
+          - id: preset_gens
+            type: pgen_chunk
+          - id: instruments
+            type: inst_chunk
+          - id: instrument_zones
+            type: ibag_chunk
+          - id: instrument_mods
+            type: imod_chunk
+          - id: instrument_gens
+            type: igen_chunk
+          - id: samples
+            type: shdr_chunk
+        types:
+          phdr_chunk: {}
+          pbag_chunk: {}
+          pmod_chunk: {}
+          pgen_chunk: {}
+          inst_chunk: {}
+          ibag_chunk: {}
+          imod_chunk: {}
+          igen_chunk: {}
+          shdr_chunk: {}
 enums:
   fourcc:
     0x6c696669:
