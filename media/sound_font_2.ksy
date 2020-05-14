@@ -180,7 +180,30 @@ types:
               - id: pad_byte
                 size: len_body % 2
             types:
-              phdr_chunk_data: {}
+              phdr_chunk_data:
+                seq:
+                  - id: records
+                    type: preset_header
+                    repeat: eos
+              preset_header:
+                seq:
+                  - id: preset_name
+                    size: 20
+                    type: strz
+                  - id: preset
+                    type: u2
+                    doc: MIDI preset number
+                  - id: bank
+                    type: u2
+                    doc: MIDI bank number
+                  - id: preset_bag_idx
+                    type: u2
+                  - id: library
+                    type: u4
+                  - id: genre
+                    type: u4
+                  - id: morphology
+                    type: u4
           pbag_chunk:
             seq:
               - id: chunk_id
