@@ -239,7 +239,25 @@ types:
               - id: pad_byte
                 size: len_body % 2
             types:
-              pmod_chunk_data: {}
+              pmod_chunk_data:
+                seq:
+                  - id: records
+                    type: preset_mod
+                    repeat: eos
+              preset_mod:
+                seq:
+                  - id: mod_src_oper
+                    type: modulator
+                  - id: mod_dest_oper
+                    type: u2
+                    enum: generator
+                  - id: mod_amount
+                    type: s2
+                  - id: mod_amt_src_oper
+                    type: modulator
+                  - id: mod_trans_oper
+                    type: u2
+                    enum: transform
           pgen_chunk:
             seq:
               - id: chunk_id
@@ -318,6 +336,124 @@ types:
                 size: len_body % 2
             types:
               shdr_chunk_data: {}
+          modulator:
+            meta:
+              bit-endian: le
+            seq:
+              - id: cntrl_src_idx
+                type: b7
+                doc: don't read this, access cntrl_src_general and cntrl_src_midi instead
+              - id: is_cntlr_cont
+                type: b1
+                doc: MIDI continuous controller flag
+              - id: direction
+                type: b1
+                enum: src_direction
+              - id: polarity
+                type: b1
+                enum: src_polarity
+              - id: type
+                type: b6
+                enum: src_type
+            instances:
+              cntrl_src_general:
+                value: cntrl_src_idx
+                enum: src_cntrl_general
+                if: not is_cntlr_cont
+              cntrl_src_midi:
+                value: cntrl_src_idx
+                if: is_cntlr_cont
+            enums:
+              src_cntrl_general:
+                0: no_controller
+                2: note_on_velocity
+                3: note_on_keynum
+                10: poly_pressure
+                13: channel_pressure
+                14: pitch_wheel
+                16: pitch_wheel_sensitivity
+                127: link
+              src_direction:
+                0: min_max
+                1: max_min
+              src_polarity:
+                0:
+                  id: unipolar
+                  doc: from 0 to 1
+                1:
+                  id: bipolar
+                  doc: from -1 to 1
+              src_type:
+                0: linear
+                1: concave
+                2: convex
+                3: switch
+        enums:
+          generator:
+            0: start_addrs_offset
+            1: end_addrs_offset
+            2: startloop_addrs_offset
+            3: endloop_addrs_offset
+            4: start_addrs_coarse_offset
+            5: mod_lfo_to_pitch
+            6: vib_lfo_to_pitch
+            7: mod_env_to_pitch
+            8: initial_filter_fc
+            9: initial_filter_q
+            10: mod_lfo_to_filter_fc
+            11: mod_env_to_filter_fc
+            12: end_addrs_coarse_offset
+            13: mod_lfo_to_volume
+            14: unused1
+            15: chorus_effects_send
+            16: reverb_effects_send
+            17: pan
+            18: unused2
+            19: unused3
+            20: unused4
+            21: delay_mod_lf_o
+            22: freq_mod_lf_o
+            23: delay_vib_lf_o
+            24: freq_vib_lf_o
+            25: delay_mod_env
+            26: attack_mod_env
+            27: hold_mod_env
+            28: decay_mod_env
+            29: sustain_mod_env
+            30: release_mod_env
+            31: keynum_to_mod_env_hold
+            32: keynum_to_mod_env_decay
+            33: delay_vol_env
+            34: attack_vol_env
+            35: hold_vol_env
+            36: decay_vol_env
+            37: sustain_vol_env
+            38: release_vol_env
+            39: keynum_to_vol_env_hold
+            40: keynum_to_vol_env_decay
+            41: instrument
+            42: reserved1
+            43: key_range
+            44: vel_range
+            45: startloop_addrs_coarse_offset
+            46: keynum
+            47: velocity
+            48: initial_attenuation
+            49: reserved2
+            50: endloop_addrs_coarse_offset
+            51: coarse_tune
+            52: fine_tune
+            53: sample_id
+            54: sample_modes
+            55: reserved3
+            56: scale_tuning
+            57: exclusive_class
+            58: overriding_root_key
+            59: unused5
+            60: end_oper
+          transform:
+            0: linear
+            1: abs_value
 enums:
   fourcc:
     0x6c696669:
