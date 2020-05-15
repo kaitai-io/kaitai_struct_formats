@@ -245,22 +245,8 @@ types:
               pmod_chunk_data:
                 seq:
                   - id: records
-                    type: preset_mod
+                    type: mod_list
                     repeat: eos
-              preset_mod:
-                seq:
-                  - id: mod_src_oper
-                    type: modulator
-                  - id: mod_dest_oper
-                    type: u2
-                    enum: generator
-                  - id: mod_amount
-                    type: s2
-                  - id: mod_amt_src_oper
-                    type: modulator
-                  - id: mod_trans_oper
-                    type: u2
-                    enum: transform
           pgen_chunk:
             seq:
               - id: chunk_id
@@ -276,16 +262,8 @@ types:
               pgen_chunk_data:
                 seq:
                   - id: records
-                    type: preset_gen
+                    type: gen_list
                     repeat: eos
-              preset_gen:
-                seq:
-                  - id: gen_oper
-                    type: u2
-                    enum: generator
-                  - id: gen_amount
-                    size: 2
-                    type: gen_amount_type
           inst_chunk:
             seq:
               - id: chunk_id
@@ -351,6 +329,28 @@ types:
                 size: len_body % 2
             types:
               shdr_chunk_data: {}
+          mod_list:
+            seq:
+              - id: mod_src_oper
+                type: modulator
+              - id: mod_dest_oper
+                type: u2
+                enum: generator
+              - id: mod_amount
+                type: s2
+              - id: mod_amt_src_oper
+                type: modulator
+              - id: mod_trans_oper
+                type: u2
+                enum: transform
+          gen_list:
+            seq:
+              - id: gen_oper
+                type: u2
+                enum: generator
+              - id: gen_amount
+                size: 2
+                type: gen_amount_type
           modulator:
             meta:
               bit-endian: le
