@@ -273,7 +273,19 @@ types:
               - id: pad_byte
                 size: len_body % 2
             types:
-              pgen_chunk_data: {}
+              pgen_chunk_data:
+                seq:
+                  - id: records
+                    type: preset_gen
+                    repeat: eos
+              preset_gen:
+                seq:
+                  - id: gen_oper
+                    type: u2
+                    enum: generator
+                  - id: gen_amount
+                    size: 2
+                    type: gen_amount_type
           inst_chunk:
             seq:
               - id: chunk_id
@@ -391,6 +403,26 @@ types:
                 1: concave
                 2: convex
                 3: switch
+          gen_amount_type:
+            doc: |
+              must be used in a substream `size: 2`
+            seq:
+              - id: as_signed # declared as most common in the spec
+                type: s2
+            instances:
+              as_range:
+                pos: 0
+                type: ranges_type
+              as_unsigned:
+                pos: 0
+                type: u2
+            types:
+              ranges_type:
+                seq:
+                  - id: low
+                    type: u1
+                  - id: high
+                    type: u1
         enums:
           generator:
             0: start_addrs_offset
