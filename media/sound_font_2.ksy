@@ -276,7 +276,18 @@ types:
               - id: pad_byte
                 size: len_body % 2
             types:
-              inst_chunk_data: {}
+              inst_chunk_data:
+                seq:
+                  - id: records
+                    type: instrument
+                    repeat: eos
+              instrument:
+                seq:
+                  - id: inst_name
+                    size: 20
+                    type: strz
+                  - id: inst_bag_idx
+                    type: u2
           ibag_chunk:
             seq:
               - id: chunk_id
@@ -289,7 +300,17 @@ types:
               - id: pad_byte
                 size: len_body % 2
             types:
-              ibag_chunk_data: {}
+              ibag_chunk_data:
+                seq:
+                  - id: records
+                    type: inst_bag
+                    repeat: eos
+              inst_bag:
+                seq:
+                  - id: inst_gen_idx
+                    type: u2
+                  - id: inst_mod_idx
+                    type: u2
           imod_chunk:
             seq:
               - id: chunk_id
@@ -302,7 +323,11 @@ types:
               - id: pad_byte
                 size: len_body % 2
             types:
-              imod_chunk_data: {}
+              imod_chunk_data:
+                seq:
+                  - id: records
+                    type: mod_list
+                    repeat: eos
           igen_chunk:
             seq:
               - id: chunk_id
@@ -315,7 +340,11 @@ types:
               - id: pad_byte
                 size: len_body % 2
             types:
-              igen_chunk_data: {}
+              igen_chunk_data:
+                seq:
+                  - id: records
+                    type: gen_list
+                    repeat: eos
           shdr_chunk:
             seq:
               - id: chunk_id
