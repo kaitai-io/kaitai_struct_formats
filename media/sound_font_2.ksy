@@ -120,6 +120,7 @@ types:
               - id: len_body
                 type: u4
               - id: samples
+                type: samples_type
                 size: len_body
               - id: pad_byte
                 size: len_body % 2
@@ -130,9 +131,11 @@ types:
               - id: len_body
                 type: u4
               - id: samples
+                type: samples_type
                 size: len_body
               - id: pad_byte
                 size: len_body % 2
+          samples_type: {}
   pdta_chunk:
     seq:
       - id: chunk_id
