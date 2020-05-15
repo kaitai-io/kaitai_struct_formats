@@ -357,7 +357,46 @@ types:
               - id: pad_byte
                 size: len_body % 2
             types:
-              shdr_chunk_data: {}
+              shdr_chunk_data:
+                seq:
+                  - id: records
+                    type: sample_header
+                    repeat: eos
+              sample_header:
+                seq:
+                  - id: sample_name
+                    type: strz
+                    size: 20
+                  - id: start
+                    type: u4
+                  - id: end
+                    type: u4
+                  - id: startloop
+                    type: u4
+                  - id: endloop
+                    type: u4
+                  - id: sample_rate
+                    type: u4
+                  - id: original_pitch
+                    type: u1
+                  - id: pitch_correction
+                    type: s1
+                  - id: sample_link
+                    type: u2
+                  - id: sample_type
+                    type: u2
+                    enum: sf_sample_type
+                enums:
+                  sf_sample_type: # called `SFSampleLink` in the spec, but that's probably a typo
+                    1: mono_sample
+                    2: right_sample
+                    4: left_sample
+                    8: linked_sample
+                    0x8001: rom_mono_sample
+                    0x8002: rom_right_sample
+                    0x8004: rom_left_sample
+                    0x8008: rom_linked_sample
+
           mod_list:
             seq:
               - id: mod_src_oper
