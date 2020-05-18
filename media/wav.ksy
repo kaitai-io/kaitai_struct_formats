@@ -27,6 +27,8 @@ seq:
   - id: chunks
     type: chunks_type
     size: file_size - 4
+  - id: pad_byte
+    size: file_size % 2
 
 instances:
   format_chunk:
@@ -54,6 +56,8 @@ types:
             0x62657874: bext_chunk_type
             0x63756520: cue_chunk_type
             0x64617461: data_chunk_type
+      - id: pad_byte
+        size: len % 2
 
   bext_chunk_type:
     seq:
