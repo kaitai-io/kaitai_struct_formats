@@ -26,7 +26,7 @@ seq:
     contents: WAVE
   - id: chunks
     type: chunks_type
-    size: file_size - 5
+    size: file_size - 4
 
 instances:
   format_chunk:
