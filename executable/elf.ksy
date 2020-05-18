@@ -602,7 +602,7 @@ enums:
 #    0x70000000: loproc
     0x70000000: sparc_gotdata
     0x70000001: amd64_unwind
-    0x70000001: arm_exidx
+#    0x70000001: arm_exidx
     0x70000002: arm_preemptmap
     0x70000003: arm_attributes
 #    0x7fffffff: hiproc
@@ -668,10 +668,10 @@ enums:
     0x6ffffdf5: gnu_prelinked   # Prelinking timestamp
     0x6ffffdf6: gnu_conflictsz  # Size of conflict section
     0x6ffffdf7: gnu_liblistsz   # Size of library list
-    0x6ffffdf8: checksum        
-    0x6ffffdf9: pltpadsz        
-    0x6ffffdfa: moveent         
-    0x6ffffdfb: movesz          
+    0x6ffffdf8: checksum
+    0x6ffffdf9: pltpadsz
+    0x6ffffdfa: moveent
+    0x6ffffdfb: movesz
     0x6ffffdfc: feature_1       # Feature selection (DTF_*).
     0x6ffffdfd: posflag_1       # Flags for DT_* entries, effecting the following DT_* entry.
     0x6ffffdfe: syminsz         # Size of syminfo table (in bytes)
