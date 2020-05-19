@@ -670,7 +670,6 @@ enums:
     0x6ffffdfd: posflag_1       # Flags for DT_* entries, effecting the following DT_* entry.
     0x6ffffdfe: syminsz         # Size of syminfo table (in bytes)
     0x6ffffdff: syminent        # Entry size of syminfo
-    0x6ffffe00: addrrnglo
     0x6ffffef5: gnu_hash
     0x6ffffef6: tlsdesc_plt
     0x6ffffef7: tlsdesc_got
