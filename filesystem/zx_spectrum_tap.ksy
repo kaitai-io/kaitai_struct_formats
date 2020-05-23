@@ -16,7 +16,7 @@ doc: |
   metainformation prepended as a header.
 doc-ref: https://faqwiki.zxnet.co.uk/wiki/TAP_format
 seq:
-  - id: block
+  - id: blocks
     type: block
     repeat: eos
 enums:
@@ -60,8 +60,8 @@ types:
           switch-on: header_type
           cases:
             'header_type_enum::program': program_params
-            'header_type_enum::num_arry': array_params
-            'header_type_enum::char_arry': array_params
+            'header_type_enum::num_array': array_params
+            'header_type_enum::char_array': array_params
             'header_type_enum::bytes': bytes_params
       - id: checksum
         type: u1
