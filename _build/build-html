@@ -17,7 +17,7 @@ Pygments.start 'pygments/'
 
 class FormatPagesGenerator
   LANGS = {
-    'index' => {name: 'Overview'},
+    'index' => {name: 'Overview', lexer: 'yaml'},
 
     'cpp_stl' => {name: 'C++/STL', lexer: 'cpp'},
     'csharp' => {name: 'C#', ext: 'cs'},
@@ -61,6 +61,10 @@ class FormatPagesGenerator
     'Unlicense',
     'WTFPL',
   ])
+
+  def code(lang, src)
+    Pygments.highlight(src, :lexer => LANGS[lang][:lexer] || lang)
+  end
 
   def initialize(ksy_dir, target_dir, html_dir)
     @ksy_dir = File.realpath(ksy_dir)
@@ -145,7 +149,6 @@ class FormatPagesGenerator
         warn "#{file_id}: no license"
       end
 
-      yaml_html = Pygments.highlight(yaml_str, :lexer => 'yaml')
       format_name = get_format_name(meta)
       cur_lang = 'index'
       page_title = format_name + " format spec for Kaitai Struct"
@@ -172,7 +175,6 @@ class FormatPagesGenerator
         begin
           puts "    * reading source file #{out_dir}/#{path}"
           src = File.read("#{out_dir}/#{path}")
-          src = Pygments.highlight(src, :lexer => LANGS[cur_lang][:lexer] || cur_lang)
         rescue Errno::ENOENT
           puts "      ... not found!"
           src = nil
