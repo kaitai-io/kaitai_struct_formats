@@ -3,9 +3,19 @@
 
 <p>Parse structure from an ArrayBuffer:</p>
 
-<pre><code class="javascript">var arrayBuffer = ...;
-var data = new <%= class_name %>(new KaitaiStream(arrayBuffer));</code></pre>
+<%= code cur_lang, <<-CODE
+var arrayBuffer = ...;
+var data = new #{ class_name }(new KaitaiStream(arrayBuffer));
+CODE
+%>
 
 <p>After that, one can get various attributes from the structure by accessing fields or properties like:</p>
 
-<pre><code class="javascript"><% usage_attrs.each { |attr| %>data.<%= lcc(attr[:name]) %> // => <%= attr[:doc] %><% } %></code></pre>
+<% src_usage_attrs = ""
+usage_attrs.each { |attr|
+    src_usage_attrs += <<-CODE
+data.#{ lcc(attr[:name]) } // => #{ attr[:doc] }
+    CODE
+}
+%>
+<%= code cur_lang, src_usage_attrs %>

@@ -34,13 +34,15 @@ doc: |
   * Protocol 3: Python 3.0+. Dedicated opcodes for `bytes` objects.
   * Protocol 4: Python 3.4+. Opcodes for 64 bit strings, framing, `set`.
     https://www.python.org/dev/peps/pep-3154/
-doc-ref: https://github.com/python/cpython/blob/v3.7.3/Lib/pickletools.py
+  * Protocol 5: Python 3.8+: Opcodes for `bytearray` and out of band data
+    https://www.python.org/dev/peps/pep-0574/
+doc-ref: https://github.com/python/cpython/blob/v3.8.1/Lib/pickletools.py
 seq:
   # TODO is there a way to declare PROTO is optional, but only valid at position 0?
   - id: ops
     type: op
-    repeat: eos
-  # TODO is there a way to declare a trailing STOP is required?
+    repeat: until
+    repeat-until: _.code == opcode::stop
 types:
   op:
     seq:
@@ -120,6 +122,9 @@ types:
             'opcode::frame': u8
             'opcode::persid': stringnl_noescape
             'opcode::binpersid': no_arg
+            'opcode::bytearray8': bytearray8
+            'opcode::next_buffer': no_arg
+            'opcode::readonly_buffer': no_arg
         doc: |
           Optional argument for the operation. Data type and length
           are determined by the value of the opcode.
@@ -275,6 +280,17 @@ types:
       large enough to need this type. Such a pickle could not be unpickled on
       a 32-bit build of Python, because the string would be larger than
       `sys.maxsize`.
+
+  bytearray8:
+    seq:
+      - id: len
+        type: u8
+      - id: val
+        size: len
+    doc: |
+      Length prefixed string, between 0 and 2**64-1 bytes long.
+
+      The contents are deserilised into a `bytearray` object.
 
   unicodestring1:
     seq:
@@ -583,3 +599,17 @@ enums:
       id: "frame"
       -orig-id: FRAME
       doc: indicate the beginning of a new frame
+
+    # Protocol 5
+    0x96:
+      id: "bytearray8"
+      -orig-id: "BYTEARRAY8"
+      doc: push bytearray
+    0x97:
+      id: "next_buffer"
+      -orig-id: "NEXT_BUFFER"
+      doc: push next out-of-band buffer
+    0x98:
+      id: "read_buffer"
+      -orig-id: "READONLY_BUFFER"
+      doc: make top of stack readonly

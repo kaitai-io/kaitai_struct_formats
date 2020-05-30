@@ -1,0 +1,69 @@
+name: formats.kaitai.io
+
+on:
+  push:
+    branches:
+      - master
+  pull_request: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.x'
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '2.x'
+      - name: Install deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y dirmngr
+          sudo apt-key add <.github/bintray.key
+          #apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv 379CE192D401AB61
+          echo "deb http://dl.bintray.com/kaitai-io/debian jessie main" | sudo tee /etc/apt/sources.list.d/kaitai.list
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            git ssh \
+            locales \
+            kaitai-struct-compiler default-jre-headless \
+            make gcc libc6-dev \
+            graphviz \
+            rsync
+          ksc --version
+      - name: Fix locales
+        run: |
+          echo 'en_US.UTF-8 UTF-8' | sudo tee /etc/locale.gen
+          echo 'LANG="en_US.UTF-8"' | sudo tee /etc/default/locale
+          sudo dpkg-reconfigure --frontend=noninteractive locales
+          locale
+      - name: Install Ruby deps
+        run: |
+          echo 'gem: --no-document' | sudo tee /etc/gemrc
+          cd _build
+          bundle install
+      - name: Install Pygments
+        run: python -m pip install --user pygments
+      - name: Install Graphviz lexer for Pygments
+        run: python -m pip install --user git+https://github.com/nikeee/pygments-lexer-graphviz.git@master
+      - name: Build targets
+        working-directory: _build
+        run: ./build-target .. target
+      - name: Upload build targets log
+        uses: actions/upload-artifact@v1
+        with:
+          name: log.json
+          path: _build/target/log.json
+      - name: Build diagrams
+        working-directory: _build
+        run: ./build-diagrams target html
+      - name: Build HTML
+        working-directory: _build
+        run: ./build-html .. target html
+      - name: Deploy
+        run: .github/publish
+        env:
+          BOT_SSH_KEY: ${{secrets.BOT_SSH_KEY}}
+        if: github.ref == 'refs/heads/master'

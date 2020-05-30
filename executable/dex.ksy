@@ -28,23 +28,23 @@ instances:
     pos: header.string_ids_off
     doc: |
       string identifiers list.
-      
-      These are identifiers for all the strings used by this file, either for 
+
+      These are identifiers for all the strings used by this file, either for
       internal naming (e.g., type descriptors) or as constant objects referred to by code.
-      
+
       This list must be sorted by string contents, using UTF-16 code point values
-      (not in a locale-sensitive manner), and it must not contain any duplicate entries.    
+      (not in a locale-sensitive manner), and it must not contain any duplicate entries.
   type_ids:
     type: type_id_item
     repeat: expr
     repeat-expr: header.type_ids_size
-    pos: header.type_ids_off    
+    pos: header.type_ids_off
     doc: |
-      type identifiers list. 
-      
-      These are identifiers for all types (classes, arrays, or primitive types) 
+      type identifiers list.
+
+      These are identifiers for all types (classes, arrays, or primitive types)
       referred to by this file, whether defined in the file or not.
-      
+
       This list must be sorted by string_id index, and it must not contain any duplicate entries.
   proto_ids:
     type: proto_id_item
@@ -53,9 +53,9 @@ instances:
     pos: header.proto_ids_off
     doc: |
       method prototype identifiers list.
-      
+
       These are identifiers for all prototypes referred to by this file.
-      
+
       This list must be sorted in return-type (by type_id index) major order,
       and then by argument list (lexicographic ordering, individual arguments
       ordered by type_id index). The list must not contain any duplicate entries.
@@ -66,13 +66,13 @@ instances:
     pos: header.field_ids_off
     doc: |
       field identifiers list.
-      
-      These are identifiers for all fields referred to by this file, whether defined in the file or not. 
-      
-      This list must be sorted, where the defining type (by type_id index) 
-      is the major order, field name (by string_id index) is the intermediate 
+
+      These are identifiers for all fields referred to by this file, whether defined in the file or not.
+
+      This list must be sorted, where the defining type (by type_id index)
+      is the major order, field name (by string_id index) is the intermediate
       order, and type (by type_id index) is the minor order.
-     
+
       The list must not contain any duplicate entries.
   method_ids:
     type: method_id_item
@@ -81,14 +81,14 @@ instances:
     pos: header.method_ids_off
     doc: |
       method identifiers list.
-      
+
       These are identifiers for all methods referred to by this file,
       whether defined in the file or not.
-      
-      This list must be sorted, where the defining type (by type_id index 
+
+      This list must be sorted, where the defining type (by type_id index
       is the major order, method name (by string_id index) is the intermediate
       order, and method prototype (by proto_id index) is the minor order.
-      
+
       The list must not contain any duplicate entries.
   class_defs:
     type: class_def_item
@@ -97,10 +97,10 @@ instances:
     pos: header.class_defs_off
     doc: |
       class definitions list.
-      
+
       The classes must be ordered such that a given class's superclass and
       implemented interfaces appear in the list earlier than the referring class.
-      
+
       Furthermore, it is invalid for a definition for the same-named class to
       appear more than once in the list.
   #call_site_ids:
@@ -110,19 +110,19 @@ instances:
   #  pos: header.???
   #  doc: |
   #    call site identifiers list.
-  #    
+  #
   #    These are identifiers for all call sites referred to by this file,
   #    whether defined in the file or not.
-  #    
+  #
   #    This list must be sorted in ascending order of call_site_off.
   link_data:
     pos: header.link_off
     size: header.link_size
     doc: |
       data used in statically linked files.
-      
+
       The format of the data in this section is left unspecified by this document.
-      
+
       This section is empty in unlinked files, and runtime implementations may
       use it as they see fit.
   data:
@@ -130,14 +130,14 @@ instances:
     size: header.data_size
     doc: |
       data area, containing all the support data for the tables listed above.
-      
+
       Different items have different alignment requirements, and padding bytes
       are inserted before each item if necessary to achieve proper alignment.
   map:
     type: map_list
     pos: header.map_off
 types:
-  header_item: 
+  header_item:
     seq:
       - id: magic
         contents: "dex\n"
@@ -148,12 +148,12 @@ types:
       - id: checksum
         type: u4
         doc: |
-          adler32 checksum of the rest of the file (everything but magic and this field); 
+          adler32 checksum of the rest of the file (everything but magic and this field);
           used to detect file corruption
       - id: signature
         size: 20
         doc: |
-          SHA-1 signature (hash) of the rest of the file (everything but magic, checksum, 
+          SHA-1 signature (hash) of the rest of the file (everything but magic, checksum,
           and this field); used to uniquely identify files
       - id: file_size
         type: u4
@@ -163,8 +163,8 @@ types:
         type: u4
         # guard: 0x70
         doc: |
-          size of the header (this entire section), in bytes. This allows for at 
-          least a limited amount of backwards/forwards compatibility without 
+          size of the header (this entire section), in bytes. This allows for at
+          least a limited amount of backwards/forwards compatibility without
           invalidating the format.
       - id: endian_tag
         type: u4
@@ -176,16 +176,16 @@ types:
       - id: link_off
         type: u4
         doc: |
-          offset from the start of the file to the link section, or 0 if link_size == 0. 
+          offset from the start of the file to the link section, or 0 if link_size == 0.
           The offset, if non-zero, should be to an offset into the link_data section.
-          The format of the data pointed at is left unspecified by this document; 
+          The format of the data pointed at is left unspecified by this document;
           this header field (and the previous) are left as hooks for use by runtime implementations.
       - id: map_off
         type: u4
         doc: |
           offset from the start of the file to the map item.
-          The offset, which must be non-zero, should be to an offset into the data 
-          section, and the data should be in the format specified by "map_list" below.    
+          The offset, which must be non-zero, should be to an offset into the data
+          section, and the data should be in the format specified by "map_list" below.
       - id: string_ids_size
         type: u4
         doc: |
@@ -194,7 +194,7 @@ types:
         type: u4
         doc: |
           offset from the start of the file to the string identifiers list,
-          or 0 if string_ids_size == 0 (admittedly a strange edge case). 
+          or 0 if string_ids_size == 0 (admittedly a strange edge case).
           The offset, if non-zero, should be to the start of the string_ids section.
       - id: type_ids_size
         type: u4
@@ -203,8 +203,8 @@ types:
       - id: type_ids_off
         type: u4
         doc: |
-          offset from the start of the file to the type identifiers list, 
-          or 0 if type_ids_size == 0 (admittedly a strange edge case). 
+          offset from the start of the file to the type identifiers list,
+          or 0 if type_ids_size == 0 (admittedly a strange edge case).
           The offset, if non-zero, should be to the start of the type_ids section.
       - id: proto_ids_size
         type: u4
@@ -213,7 +213,7 @@ types:
       - id: proto_ids_off
         type: u4
         doc: |
-          offset from the start of the file to the prototype identifiers list, 
+          offset from the start of the file to the prototype identifiers list,
           or 0 if proto_ids_size == 0 (admittedly a strange edge case).
           The offset, if non-zero, should be to the start of the proto_ids section.
       - id: field_ids_size
@@ -225,7 +225,7 @@ types:
         doc: |
           offset from the start of the file to the field identifiers list,
           or 0 if field_ids_size == 0.
-          The offset, if non-zero, should be to the start of the field_ids section.    
+          The offset, if non-zero, should be to the start of the field_ids section.
       - id: method_ids_size
         type: u4
         doc: |
@@ -233,7 +233,7 @@ types:
       - id: method_ids_off
         type: u4
         doc: |
-          offset from the start of the file to the method identifiers list, 
+          offset from the start of the file to the method identifiers list,
           or 0 if method_ids_size == 0.
           The offset, if non-zero, should be to the start of the method_ids section.
       - id: class_defs_size
@@ -243,7 +243,7 @@ types:
       - id: class_defs_off
         type: u4
         doc: |
-          offset from the start of the file to the class definitions list, 
+          offset from the start of the file to the class definitions list,
           or 0 if class_defs_size == 0 (admittedly a strange edge case).
           The offset, if non-zero, should be to the start of the class_defs section.
       - id: data_size
@@ -301,7 +301,7 @@ types:
         type: u4
         doc: |
           index into the string_ids list for the short-form descriptor string of this prototype.
-          The string must conform to the syntax for ShortyDescriptor, defined above, 
+          The string must conform to the syntax for ShortyDescriptor, defined above,
           and must correspond to the return type and parameters of this item.
       - id: return_type_idx
         type: u4
@@ -310,7 +310,7 @@ types:
       - id: parameters_off
         type: u4
         doc: |
-          offset from the start of the file to the list of parameter types for this prototype, 
+          offset from the start of the file to the list of parameter types for this prototype,
           or 0 if this prototype has no parameters.
           This offset, if non-zero, should be in the data section, and the data
           there should be in the format specified by "type_list" below.
@@ -389,78 +389,78 @@ types:
         type: u4
         doc: |
           index into the type_ids list for this class.
-          
+
           This must be a class type, and not an array or primitive type.
       - id: access_flags
         type: u4
         enum: class_access_flags
         doc: |
           access flags for the class (public, final, etc.).
-          
+
           See "access_flags Definitions" for details.
       - id: superclass_idx
         type: u4
         doc: |
-          index into the type_ids list for the superclass, 
-          or the constant value NO_INDEX if this class has no superclass 
-          (i.e., it is a root class such as Object). 
-          
+          index into the type_ids list for the superclass,
+          or the constant value NO_INDEX if this class has no superclass
+          (i.e., it is a root class such as Object).
+
           If present, this must be a class type, and not an array or primitive type.
       - id: interfaces_off
         type: u4
         doc: |
           offset from the start of the file to the list of interfaces, or 0 if there are none.
-          
-          This offset should be in the data section, and the data there should 
-          be in the format specified by "type_list" below. Each of the elements 
-          of the list must be a class type (not an array or primitive type), 
-          and there must not be any duplicates.        
+
+          This offset should be in the data section, and the data there should
+          be in the format specified by "type_list" below. Each of the elements
+          of the list must be a class type (not an array or primitive type),
+          and there must not be any duplicates.
       - id: source_file_idx
         type: u4
         doc: |
-          index into the string_ids list for the name of the file containing 
-          the original source for (at least most of) this class, or the 
+          index into the string_ids list for the name of the file containing
+          the original source for (at least most of) this class, or the
           special value NO_INDEX to represent a lack of this information.
-          
+
           The debug_info_item of any given method may override this source file,
           but the expectation is that most classes will only come from one source file.
       - id: annotations_off
         type: u4
         doc: |
-          offset from the start of the file to the annotations structure for 
+          offset from the start of the file to the annotations structure for
           this class, or 0 if there are no annotations on this class.
-          
-          This offset, if non-zero, should be in the data section, and the data 
+
+          This offset, if non-zero, should be in the data section, and the data
           there should be in the format specified by "annotations_directory_item"
-          below,with all items referring to this class as the definer.        
+          below,with all items referring to this class as the definer.
       - id: class_data_off
         type: u4
         doc: |
           offset from the start of the file to the associated class data for this
           item, or 0 if there is no class data for this class.
-          
+
           (This may be the case, for example, if this class is a marker interface.)
-          
+
           The offset, if non-zero, should be in the data section, and the data
           there should be in the format specified by "class_data_item" below,
-          with all items referring to this class as the definer.        
+          with all items referring to this class as the definer.
       - id: static_values_off
         type: u4
         doc: |
-          offset from the start of the file to the list of initial values for 
-          static fields, or 0 if there are none (and all static fields are to be 
+          offset from the start of the file to the list of initial values for
+          static fields, or 0 if there are none (and all static fields are to be
           initialized with 0 or null).
-          
-          This offset should be in the data section, and the data there should 
+
+          This offset should be in the data section, and the data there should
           be in the format specified by "encoded_array_item" below.
-          
-          The size of the array must be no larger than the number of static fields 
-          declared by this class, and the elements correspond to the static fields 
+
+          The size of the array must be no larger than the number of static fields
+          declared by this class, and the elements correspond to the static fields
           in the same order as declared in the corresponding field_list.
-          
+
           The type of each array element must match the declared type of its
           corresponding field.
-          
+
           If there are fewer elements in the array than there are static fields,
           then the leftover fields are initialized with a type-appropriate 0 or null.
     instances:
@@ -486,7 +486,7 @@ types:
         type: vlq_base128_le
         doc: |
           element name, represented as an index into the string_ids section.
-          
+
           The string must conform to the syntax for MemberName, defined above.
       - id: value
         type: encoded_value
@@ -498,7 +498,7 @@ types:
         type: vlq_base128_le
         doc: |
           type of the annotation.
-          
+
           This must be a class (not array or primitive) type.
       - id: size
         type: vlq_base128_le
@@ -510,7 +510,7 @@ types:
         repeat-expr: size.value
         doc: |
           elements of the annotation, represented directly in-line (not as offsets).
-          
+
           Elements must be sorted in increasing order by string_id index.
   encoded_value:
     seq:
@@ -575,7 +575,7 @@ types:
         type: u4
         doc: |
           offset from the start of the file to call site definition.
-          
+
           The offset should be in the data section, and the data there should
           be in the format specified by "call_site_item" below.
   encoded_field:
@@ -586,13 +586,13 @@ types:
           index into the field_ids list for the identity of this field
           (includes the name and descriptor), represented as a difference
           from the index of previous element in the list.
-          
+
           The index of the first element in a list is represented directly.
       - id: access_flags
         type: vlq_base128_le
         doc: |
           access flags for the field (public, final, etc.).
-          
+
           See "access_flags Definitions" for details.
   encoded_method:
     seq:
@@ -602,22 +602,22 @@ types:
           index into the method_ids list for the identity of this method
           (includes the name and descriptor), represented as a difference
           from the index of previous element in the list.
-          
+
           The index of the first element in a list is represented directly.
       - id: access_flags
         type: vlq_base128_le
         doc: |
           access flags for the field (public, final, etc.).
-          
+
           See "access_flags Definitions" for details.
       - id: code_off
         type: vlq_base128_le
         doc: |
           offset from the start of the file to the code structure for this method,
           or 0 if this method is either abstract or native.
-          
+
           The offset should be to a location in the data section.
-          
+
           The format of the data is specified by "code_item" below.
   class_data_item:
     seq:
@@ -643,7 +643,7 @@ types:
         repeat-expr: static_fields_size.value
         doc: |
           the defined static fields, represented as a sequence of encoded elements.
-          
+
           The fields must be sorted by field_idx in increasing order.
       - id: instance_fields
         type: encoded_field
@@ -651,8 +651,8 @@ types:
         repeat-expr: instance_fields_size.value
         doc: |
           the defined instance fields, represented as a sequence of encoded elements.
-          
-          The fields must be sorted by field_idx in increasing order.        
+
+          The fields must be sorted by field_idx in increasing order.
       - id: direct_methods
         type: encoded_method
         repeat: expr
@@ -660,7 +660,7 @@ types:
         doc: |
           the defined direct (any of static, private, or constructor) methods,
           represented as a sequence of encoded elements.
-          
+
           The methods must be sorted by method_idx in increasing order.
       - id: virtual_methods
         type: encoded_method
@@ -669,13 +669,13 @@ types:
         doc: |
           the defined virtual (none of static, private, or constructor) methods,
           represented as a sequence of encoded elements.
-          
+
           This list should not include inherited methods unless overridden by
           the class that this item represents.
-          
+
           The methods must be sorted by method_idx in increasing order.
-          
-          The method_idx of a virtual method must not be the same as any direct method.        
+
+          The method_idx of a virtual method must not be the same as any direct method.
   map_item:
     seq:
       - id: type

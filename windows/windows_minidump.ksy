@@ -324,3 +324,35 @@ enums:
     16: memory_info_list
     17: thread_info_list
     18: handle_operation_list
+    19: token
+    20: java_script_data
+    21: system_memory_info
+    22: process_vm_vounters
+    23: ipt_trace
+    24: thread_names
+    0x8000: ce_null
+    0x8001: ce_system_info
+    0x8002: ce_exception
+    0x8003: ce_module_list
+    0x8004: ce_process_list
+    0x8005: ce_thread_list
+    0x8006: ce_thread_context_list
+    0x8007: ce_thread_call_stack_list
+    0x8008: ce_memory_virtual_list
+    0x8009: ce_memory_physical_list
+    0x800A: ce_bucket_parameters
+    0x800B: ce_process_module_map
+    0x800C: ce_diagnosis_list
+    # Breakpad extensions; see Breakpad's src/google_breakpad/common/minidump_format.h
+    0x47670001: md_raw_breakpad_info
+    0x47670002: md_raw_assertion_info
+    0x47670003: md_linux_cpu_info      # /proc/cpuinfo
+    0x47670004: md_linux_proc_status   # /proc/$x/status
+    0x47670005: md_linux_lsb_release   # /etc/lsb-release
+    0x47670006: md_linux_cmd_line      # /proc/$x/cmdline
+    0x47670007: md_linux_environ       # /proc/$x/environ
+    0x47670008: md_linux_auxv          # /proc/$x/auxv
+    0x47670009: md_linux_maps          # /proc/$x/maps
+    0x4767000a: md_linux_dso_debug
+    # Crashpad extension; See Crashpad's minidump/minidump_extensions.h
+    0x43500001: md_crashpad_info_stream

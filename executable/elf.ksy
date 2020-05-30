@@ -6,30 +6,30 @@ meta:
   ks-version: 0.8
 doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=HEAD
 seq:
-  # e_ident[EI_MAG0]..e[EI_MAG3]
   - id: magic
+    -orig-id: e_ident[EI_MAG0]..e[EI_MAG3]
     size: 4
     contents: [0x7f, "ELF"]
     doc: File identification, must be 0x7f + "ELF".
-  # e_ident[EI_CLASS]
   - id: bits
+    -orig-id: e_ident[EI_CLASS]
     type: u1
     enum: bits
     doc: |
       File class: designates target machine word size (32 or 64
       bits). The size of many integer fields in this format will
       depend on this setting.
-  # e_ident[EI_DATA]
   - id: endian
+    -orig-id: e_ident[EI_DATA]
     type: u1
     enum: endian
     doc: Endianness used for all integers.
-  # e_ident[EI_VERSION]
   - id: ei_version
+    -orig-id: e_ident[EI_VERSION]
     type: u1
     doc: ELF header version.
-  # e_ident[EI_OSABI]
   - id: abi
+    -orig-id: e_ident[EI_OSABI]
     type: u1
     enum: os_abi
     doc: |
@@ -602,7 +602,7 @@ enums:
 #    0x70000000: loproc
     0x70000000: sparc_gotdata
     0x70000001: amd64_unwind
-    0x70000001: arm_exidx
+#    0x70000001: arm_exidx
     0x70000002: arm_preemptmap
     0x70000003: arm_attributes
 #    0x7fffffff: hiproc
@@ -640,18 +640,14 @@ enums:
     28: fini_arraysz     # Size in bytes of DT_FINI_ARRAY
     29: runpath          # Library search path
     30: flags            # Flags for the object being loaded
-    32: encoding         # Start of encoded range
     32: preinit_array    # Array with addresses of preinit fct
     33: preinit_arraysz  # Size in bytes of DT_PREINIT_ARRAY
     34: maxpostags       # Number used
-    0x6000000d: loos
     0x6000000d: sunw_auxiliary
-    0x6000000e: sunw_rtldinf
     0x6000000e: sunw_filter
     0x60000010: sunw_cap
     0x60000011: sunw_symtab
     0x60000012: sunw_symsz
-    0x60000013: sunw_encoding
     0x60000013: sunw_sortent
     0x60000014: sunw_symsort
     0x60000015: sunw_symsortsz
@@ -663,21 +659,17 @@ enums:
     0x6000001b: sunw_ldmach
     0x6000001d: sunw_capchainent
     0x6000001f: sunw_capchainsz
-    0x6ffff000: hios
-    0x6ffffd00: valrnglo
     0x6ffffdf5: gnu_prelinked   # Prelinking timestamp
     0x6ffffdf6: gnu_conflictsz  # Size of conflict section
     0x6ffffdf7: gnu_liblistsz   # Size of library list
-    0x6ffffdf8: checksum        
-    0x6ffffdf9: pltpadsz        
-    0x6ffffdfa: moveent         
-    0x6ffffdfb: movesz          
+    0x6ffffdf8: checksum
+    0x6ffffdf9: pltpadsz
+    0x6ffffdfa: moveent
+    0x6ffffdfb: movesz
     0x6ffffdfc: feature_1       # Feature selection (DTF_*).
     0x6ffffdfd: posflag_1       # Flags for DT_* entries, effecting the following DT_* entry.
     0x6ffffdfe: syminsz         # Size of syminfo table (in bytes)
     0x6ffffdff: syminent        # Entry size of syminfo
-    0x6ffffdff: valrnghi
-    0x6ffffe00: addrrnglo
     0x6ffffef5: gnu_hash
     0x6ffffef6: tlsdesc_plt
     0x6ffffef7: tlsdesc_got
@@ -689,7 +681,6 @@ enums:
     0x6ffffefd: pltpad
     0x6ffffefe: movetab
     0x6ffffeff: syminfo
-    0x6ffffeff: addrrnghi
     0x6ffffff0: versym
     0x6ffffff9: relacount
     0x6ffffffa: relcount
@@ -698,9 +689,7 @@ enums:
     0x6ffffffd: verdefnum
     0x6ffffffe: verneed
     0x6fffffff: verneednum
-    0x70000000: loproc
     0x70000001: sparc_register
     0x7ffffffd: auxiliary
     0x7ffffffe: used
     0x7fffffff: filter
-    0x7fffffff: hiproc

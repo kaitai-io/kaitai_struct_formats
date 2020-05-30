@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+
+require 'json'
+require 'pp'
+
+if ARGV.size != 1
+  puts "Usage: #{$PROGRAM_NAME} <path/to/log.json>"
+  exit 2
+end
+
+log = JSON.load(File.read(ARGV[0]))
+
+is_bad = false
+
+log.each_pair { |fn, build|
+  # Global errors
+  errs = build['errors']
+
+  errs.each { |err|
+    file = err['file']
+    file = fn if file == '(main)'
+
+    path = nil
+    path = '/' + err['path'].join('/') if err['path'] and not err['path'].empty?
+
+    msg = "#{file}"
+    if err['line']
+      msg << ":" << err['line'].to_s
+      msg << ":" << err['col'].to_s if err['col']
+    end
+    msg << ": " << path if path
+    msg << ": " << err['message']
+
+    $stderr.puts msg
+    is_bad = true
+  } if errs
+}
+
+exit is_bad ? 1 : 0

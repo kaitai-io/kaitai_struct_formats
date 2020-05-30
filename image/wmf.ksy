@@ -91,8 +91,8 @@ types:
             'func::setrop2': params_setrop2
             'func::setwindowext': params_setwindowext
             'func::setwindoworg': params_setwindoworg
-  # section 2.3.3.14
   params_polyline:
+    doc-ref: section 2.3.3.14
     seq:
       - id: num_points
         type: s2
@@ -100,8 +100,8 @@ types:
         repeat: expr
         repeat-expr: num_points
         type: point_s
-  # section 2.3.3.15 = params_polyline
   params_polygon:
+    doc-ref: section 2.3.3.15 = params_polyline
     seq:
       - id: num_points
         type: s2
@@ -114,29 +114,29 @@ types:
   #  seq:
   #    - id: color_ref
   #      type: color_ref
-  # section 2.3.5.15
   params_setbkmode:
+    doc-ref: section 2.3.5.15
     seq:
       - id: bk_mode
         type: u2
         enum: mix_mode
         doc: Defines current graphic context background mix mode.
-  # section 2.3.5.20
   params_setpolyfillmode:
+    doc-ref: section 2.3.5.20
     seq:
       - id: poly_fill_mode
         type: u2
         enum: poly_fill_mode
         doc: Defines current polygon fill mode.
-  # section 2.3.5.22
   params_setrop2:
+    doc-ref: section 2.3.5.22
     seq:
       - id: draw_mode
         type: u2
         enum: bin_raster_op
         doc: Defines current foreground binary raster operation mixing mode.
-  # section 2.3.5.30
   params_setwindowext:
+    doc-ref: section 2.3.5.30
     seq:
       - id: y
         type: s2
@@ -144,8 +144,8 @@ types:
       - id: x
         type: s2
         doc: Horizontal extent of the window in logical units.
-  # section 2.3.5.31
   params_setwindoworg:
+    doc-ref: section 2.3.5.31
     seq:
       - id: y
         type: s2
@@ -153,8 +153,8 @@ types:
       - id: x
         type: s2
         doc: X coordinate of the window origin, in logical units.
-  # section 2.2.1.7
   color_ref:
+    doc-ref: section 2.2.1.7
     seq:
       - id: red
         type: u1
@@ -164,8 +164,8 @@ types:
         type: u1
       - id: reserved
         type: u1
-  # section 2.2.1.12
   point_s:
+    doc-ref: section 2.2.1.12
     seq:
       - id: x
         type: s2

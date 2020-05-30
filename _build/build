@@ -1,7 +1,8 @@
-#!/bin/sh
+#!/bin/sh -ef
 
 KSY_DIR=..
 
 ./build-target "$KSY_DIR" target
+./check-errors target/log.json
 ./build-diagrams target html
 ./build-html "$KSY_DIR" target html

@@ -111,6 +111,7 @@ enums:
     0x2E      : linker_optimization_hint
     0x2F      : version_min_tvos
     0x30      : version_min_watchos
+    0x32      : build_version # LC_BUILD_VERSION
 types:
   macho_flags:
     params:
@@ -266,6 +267,8 @@ types:
             'load_command_type::sub_library'             : sub_command
             'load_command_type::routines_64'             : routines_command_64
             'load_command_type::routines'                : routines_command
+            'load_command_type::build_version'           : build_version_command
+            'load_command_type::segment'                 : segment_command
     -webide-representation: '{type}: {body}'
   vm_prot:
     seq:
@@ -712,7 +715,13 @@ types:
       symbols:
         io: _root._io
         pos: sym_off
-        type: nlist_64
+        type:
+          switch-on: _root.magic
+          cases:
+            magic_type::macho_le_x64 : nlist_64
+            magic_type::macho_be_x64 : nlist_64
+            magic_type::macho_le_x86 : nlist
+            magic_type::macho_be_x86 : nlist
         repeat: expr
         repeat-expr: n_syms
       strs:
@@ -724,13 +733,15 @@ types:
     types:
       str_table:
         seq:
+            # NOTE:  This may not always be a u4, I've also seen " " (0x20 0x00)
           - id: unknown
             type: u4
           - id: items
             type: strz
-            encoding: ascii
+            encoding: utf-8
             repeat: until
             repeat-until: _ == ""
+            eos-error: false
       nlist_64:
         seq:
           - id: un
@@ -743,6 +754,31 @@ types:
             type: u2
           - id: value
             type: u8
+        instances:
+          name:
+            type: strz
+            pos: _parent.str_off + un
+            encoding: utf-8
+            if: un != 0
+        -webide-representation: "un={un} type={type} sect={sect} desc={desc} value={value}"
+      nlist:
+        seq:
+          - id: un
+            type: u4
+          - id: type
+            type: u1
+          - id: sect
+            type: u1
+          - id: desc
+            type: u2
+          - id: value
+            type: u4
+        instances:
+          name:
+            type: strz
+            pos: _parent.str_off + un
+            encoding: utf-8
+            if: un != 0
         -webide-representation: "un={un} type={type} sect={sect} desc={desc} value={value}"
   dysymtab_command:
     seq:
@@ -1246,3 +1282,89 @@ types:
             type: blob_index
             repeat: expr
             repeat-expr: count
+  build_version_command:
+    seq:
+      - id: platform
+        type: u4
+      - id: minos
+        type: u4
+      - id: sdk
+        type: u4
+      - id: ntools
+        type: u4
+      - id: tools
+        type: build_tool_version
+        repeat: expr
+        repeat-expr: ntools
+    types:
+      build_tool_version:
+        seq:
+          - id: tool
+            type: u4
+          - id: version
+            type: u4
+  segment_command:
+    seq:
+      - id: segname
+        type: str
+        size: 16
+        pad-right: 0
+        encoding: ascii
+      - id: vmaddr
+        type: u4
+      - id: vmsize
+        type: u4
+      - id: fileoff
+        type: u4
+      - id: filesize
+        type: u4
+      - id: maxprot
+        type: vm_prot
+      - id: initprot
+        type: vm_prot
+      - id: nsects
+        type: u4
+      - id: flags
+        type: u4
+      - id: sections
+        type: section
+        repeat: expr
+        repeat-expr: nsects
+    types:
+      section:
+        seq:
+          - id: sect_name
+            -orig-id: sectname
+            size: 16
+            type: str
+            pad-right: 0
+            encoding: ascii
+          - id: seg_name
+            -orig-id: segname
+            size: 16
+            type: str
+            pad-right: 0
+            encoding: ascii
+          - id: addr
+            type: u4
+          - id: size
+            type: u4
+          - id: offset
+            type: u4
+          - id: align
+            type: u4
+          - id: reloff
+            type: u4
+          - id: nreloc
+            type: u4
+          - id: flags
+            type: u4
+          - id: reserved1
+            type: u4
+          - id: reserved2
+            type: u4
+        instances:
+          data:
+            io: _root._io
+            pos: offset
+            size: size

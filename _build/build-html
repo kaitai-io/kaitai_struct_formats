@@ -12,12 +12,14 @@ require 'cgi'
 require 'set'
 
 require 'commonmarker'
+require 'pygments'
+Pygments.start 'pygments/'
 
 class FormatPagesGenerator
   LANGS = {
-    'index' => {name: 'Overview'},
+    'index' => {name: 'Overview', lexer: 'yaml'},
 
-    'cpp_stl' => {name: 'C++/STL'},
+    'cpp_stl' => {name: 'C++/STL', lexer: 'cpp'},
     'csharp' => {name: 'C#', ext: 'cs'},
     'graphviz' => {name: 'GraphViz', ext: 'dot'},
     'java' => {name: 'Java', ext: 'java'},
@@ -60,11 +62,17 @@ class FormatPagesGenerator
     'WTFPL',
   ])
 
+  def code(lang, src)
+    Pygments.highlight(src, :lexer => LANGS[lang][:lexer] || lang)
+  end
+
   def initialize(ksy_dir, target_dir, html_dir)
     @ksy_dir = File.realpath(ksy_dir)
     @target_dir = File.realpath(target_dir)
     FileUtils::mkdir_p(html_dir)
     @html_dir = File.realpath(html_dir)
+
+    File.write("#{@html_dir}/pygments-default.css", Pygments.css('.highlight'))
 
     @erb_header = erb('header')
     @erb_fheader = erb('format_header')
@@ -80,7 +88,7 @@ class FormatPagesGenerator
       @erb_usage[lang] = erb("usage_#{lang}") if FileTest.exists?("#{fn}.html.erb")
     }
 
-    @base_url = '//kaitai.io/'
+    @base_url = 'https://kaitai.io/'
 
     @all = {}
     @by_cat = {}
@@ -167,7 +175,6 @@ class FormatPagesGenerator
         begin
           puts "    * reading source file #{out_dir}/#{path}"
           src = File.read("#{out_dir}/#{path}")
-          src = CGI::escape_html(src)
         rescue Errno::ENOENT
           puts "      ... not found!"
           src = nil
@@ -332,7 +339,7 @@ class FormatPagesGenerator
     when 'iso'
       nil
     when 'forensicswiki'
-      "http://forensicswiki.org/wiki/#{value}"
+      "https://forensicswiki.xyz/page/#{value}"
     when 'justsolve'
       "http://fileformats.archiveteam.org/wiki/#{value}"
     when 'loc'
