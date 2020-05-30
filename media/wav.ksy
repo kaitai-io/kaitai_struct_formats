@@ -5,6 +5,19 @@ meta:
   license: BSD-3-Clause-Attribution
   encoding: ASCII
   endian: le
+  imports:
+    - /common/riff
+  xref:
+    justsolve: WAV
+    loc: fdd000001
+    mime:
+      - audio/vnd.wave
+      - audio/wav
+      - audio/wave
+      - audio/x-wav
+    pronom: fmt/6
+    rfc: 2361
+    wikidata: Q217570
 doc: |
   The WAVE file format is a subset of Microsoft's RIFF specification for the
   storage of multimedia files. A RIFF file starts out with a file header
@@ -16,84 +29,114 @@ doc: |
   This Kaitai implementation was written by John Byrd of Gigantic Software
   (jbyrd@giganticsoftware.com), and it is likely to contain bugs.
 doc-ref: http://soundfile.sapp.org/doc/WaveFormat/
-doc-ref: https://www.loc.gov/preservation/digital/formats/fdd/fdd000001.shtml
 seq:
-  - id: riff_id
-    contents: RIFF
-  - id: file_size
-    type: u4
-  - id: wave_id
-    contents: WAVE
-  - id: chunks
-    type: chunks_type
-    size: file_size - 4
-  - id: pad_byte
-    size: file_size % 2
-
+  - id: chunk
+    type: 'riff::chunk'
 instances:
-  format_chunk:
-    value: chunks.chunk[0].data
-
+  chunk_id:
+    value: chunk.id
+    enum: fourcc
+  is_riff_chunk:
+    value: 'chunk_id == fourcc::riff'
+  parent_chunk_data:
+    io: chunk.data_slot._io
+    pos: 0
+    if: is_riff_chunk
+    type: 'riff::parent_chunk_data'
+  form_type:
+    value: parent_chunk_data.form_type
+    enum: fourcc
+  is_form_type_wave:
+    value: 'is_riff_chunk and form_type == fourcc::wave'
+  subchunks:
+    io: parent_chunk_data.subchunks_slot._io
+    pos: 0
+    if: is_form_type_wave
+    type: chunk_type
+    repeat: eos
 types:
-  chunks_type:
-    seq:
-      - id: chunk
-        type: chunk_type
-        repeat: eos
-
   chunk_type:
     seq:
-      - id: chunk_id
-        type: u4be
-      - id: len
-        type: u4
-      - id: data
-        size: len
+      - id: chunk
+        type: 'riff::chunk'
+    instances:
+      chunk_id:
+        value: chunk.id
+        enum: fourcc
+      chunk_data:
+        io: chunk.data_slot._io
+        pos: 0
         type:
           switch-on: chunk_id
           cases:
-            0x666d7420: format_chunk_type
-            0x62657874: bext_chunk_type
-            0x63756520: cue_chunk_type
-            0x64617461: data_chunk_type
-      - id: pad_byte
-        size: len % 2
+            'fourcc::fmt': format_chunk_type
+            'fourcc::bext': bext_chunk_type
+            'fourcc::cue': cue_chunk_type
+            'fourcc::data': data_chunk_type
+            'fourcc::list': list_chunk_type
+
+  list_chunk_type:
+    seq:
+      - id: parent_chunk_data
+        type: 'riff::parent_chunk_data'
+    instances:
+      form_type:
+        value: parent_chunk_data.form_type
+        enum: fourcc
+      subchunks:
+        io: parent_chunk_data.subchunks_slot._io
+        pos: 0
+        type:
+          switch-on: form_type
+          cases:
+            'fourcc::info': info_chunk_type
+        repeat: eos
+
+  info_chunk_type:
+    seq:
+      - id: chunk
+        type: 'riff::chunk'
+    instances:
+      chunk_data:
+        io: chunk.data_slot._io
+        pos: 0
+        type: strz
 
   bext_chunk_type:
     seq:
-    - id: description
-      size: 256
-      type: str
-    - id: originator
-      size: 32
-      type: str
-    - id: originator_reference
-      size: 32
-      type: str
-    - id: origination_date
-      size: 10
-      type: str
-    - id: origination_time
-      size: 8
-      type: str
-    - id: time_reference_low
-      type: u4
-    - id: time_reference_high
-      type: u4
-    - id: version
-      type: u2
-    - id: umid
-      size: 64
-    - id: loudness_value
-      type: u2
-    - id: loudness_range
-      type: u2
-    - id: max_true_peak_level
-      type: u2
-    - id: max_momentary_loudness
-      type: u2
-    - id: max_short_term_loudness
-      type: u2
+      - id: description
+        size: 256
+        type: strz
+      - id: originator
+        size: 32
+        type: strz
+      - id: originator_reference
+        size: 32
+        type: strz
+      - id: origination_date
+        size: 10
+        type: str
+      - id: origination_time
+        size: 8
+        type: str
+      - id: time_reference_low
+        type: u4
+      - id: time_reference_high
+        type: u4
+      - id: version
+        type: u2
+      - id: umid
+        size: 64
+      - id: loudness_value
+        type: u2
+      - id: loudness_range
+        type: u2
+      - id: max_true_peak_level
+        type: u2
+      - id: max_momentary_loudness
+        type: u2
+      - id: max_short_term_loudness
+        type: u2
 
   cue_chunk_type:
     seq:
@@ -103,7 +146,6 @@ types:
         type: cue_point_type
         repeat: expr
         repeat-expr: dw_cue_points
-        if: dw_cue_points != 0
 
   cue_point_type:
     seq:
@@ -507,11 +549,16 @@ enums:
     0xfffe: extensible
     0xffff: development
 
-  chunk_type:
+  fourcc:
+    # little-endian
+    0x46464952: riff
+    0x45564157: wave
+    0x5453494c: list
+    0x4f464e49: info
     0x20746d66: fmt
-    0x62657874: bext
-    0x63756520: cue
-    0x64617461: data
-    0x756d6964: umid
-    0x6d696e66: minf
-    0x7265676e: regn
+    0x74786562: bext
+    0x20657563: cue
+    0x61746164: data
+    0x64696d75: umid
+    0x666e696d: minf
+    0x6e676572: regn
