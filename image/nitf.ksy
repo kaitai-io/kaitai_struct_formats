@@ -13,9 +13,9 @@ meta:
   ks-version: 0.9
   encoding: UTF-8
   endian: be
-  ks-debug: true
+  license: CC-BY-SA-4.0
 doc: |
-  River Loop Security
+  Implemented by River Loop Security.
 doc-ref: https://gwg.nga.mil/ntb/baseline/docs/2500c/2500C.pdf
 seq:
   - id: header
@@ -656,13 +656,3 @@ types:
       - id: edata
         type: str
         size: el.to_i
-        
-      
-      
-      
-      
-      
-      
-      
-      
-  
