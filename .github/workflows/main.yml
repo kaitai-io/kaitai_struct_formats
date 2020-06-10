@@ -47,14 +47,17 @@ jobs:
       - name: Upload build targets log
         uses: actions/upload-artifact@v1
         with:
-          name: log.json
-          path: _build/target/log.json
+          name: ksc-logs
+          path: _build/target/*/log.json
       - name: Check build
         working-directory: _build
-        run: ./check-errors target/log.json
+        run: ./check-errors target/*/log.json
       - name: Build diagrams
         working-directory: _build
-        run: ./build-diagrams target html
+        run: |
+          for TARGET in target/*; do
+            ./build-diagrams $TARGET html
+          done
       - name: Build HTML
         working-directory: _build
         run: ./build-html .. target html
