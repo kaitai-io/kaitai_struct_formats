@@ -1,8 +1,12 @@
-#!/bin/sh -ef
+#!/bin/sh -e
 
 KSY_DIR=..
 
-./build-target "$KSY_DIR" target
-./check-errors target/log.json
+for VERSION in 0.8 latest; do
+	echo "Building all targets for ksc $VERSION..."
+	./build-target "$VERSION" "$KSY_DIR" "target/$VERSION"
+done
+
+./check-errors target/*/log.json
 ./build-diagrams target html
 ./build-html "$KSY_DIR" target html
