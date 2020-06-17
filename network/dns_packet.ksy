@@ -79,6 +79,7 @@ types:
           cases:
             "type_type::ptr": domain_name
             "type_type::a": address
+            "type_type::aaaa": address_v6
             "type_type::cname": domain_name
             "type_type::srv": service
             "type_type::txt": txt_body
@@ -121,6 +122,12 @@ types:
         type: u1
         repeat: expr
         repeat-expr: 4
+  address_v6:
+    seq:
+      - id: ip_v6
+        type: u1
+        repeat: expr
+        repeat-expr: 16
   packet_flags:
     seq:
       - id: flag
@@ -194,4 +201,5 @@ enums:
     14: minfo
     15: mx
     16: txt
+    28: aaaa
     33: srv
