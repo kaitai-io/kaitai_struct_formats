@@ -125,9 +125,7 @@ types:
   address_v6:
     seq:
       - id: ip_v6
-        type: u1
-        repeat: expr
-        repeat-expr: 16
+        size: 16
   packet_flags:
     seq:
       - id: flag
