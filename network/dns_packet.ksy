@@ -40,6 +40,11 @@ seq:
     type: answer
     repeat: expr
     repeat-expr: ancount
+  - id: authorities
+    if: flags.is_opcode_valid
+    type: answer
+    repeat: expr
+    repeat-expr: nscount
   - id: additionals
     if: flags.is_opcode_valid
     type: answer
