@@ -40,6 +40,11 @@ seq:
     type: answer
     repeat: expr
     repeat-expr: ancount
+  - id: authorities
+    if: flags.is_opcode_valid
+    type: answer
+    repeat: expr
+    repeat-expr: nscount
   - id: additionals
     if: flags.is_opcode_valid
     type: answer
@@ -79,7 +84,11 @@ types:
           cases:
             "type_type::ptr": domain_name
             "type_type::a": address
+            "type_type::aaaa": address_v6
             "type_type::cname": domain_name
+            "type_type::soa": authority_info
+            "type_type::mx": mx_info
+            "type_type::ns": domain_name
             "type_type::srv": service
             "type_type::txt": txt_body
   domain_name:
@@ -118,9 +127,11 @@ types:
   address:
     seq:
       - id: ip
-        type: u1
-        repeat: expr
-        repeat-expr: 4
+        size: 4
+  address_v6:
+    seq:
+      - id: ip_v6
+        size: 16
   packet_flags:
     seq:
       - id: flag
@@ -170,7 +181,28 @@ types:
       - id: data
         type: txt
         repeat: eos
-
+  authority_info:
+    seq:
+      - id: primary_ns
+        type: domain_name
+      - id: resoponsible_mailbox
+        type: domain_name
+      - id: serial
+        type: u4
+      - id: refresh_interval
+        type: u4
+      - id: retry_interval
+        type: u4
+      - id: expire_limit
+        type: u4
+      - id: min_ttl
+        type: u4
+  mx_info:
+    seq:
+      - id: preference
+        type: u2
+      - id: mx
+        type: domain_name
 enums:
   class_type:
     1: in_class
@@ -183,7 +215,7 @@ enums:
     3: md
     4: mf
     5: cname
-    6: soe
+    6: soa
     7: mb
     8: mg
     9: mr
@@ -194,4 +226,5 @@ enums:
     14: minfo
     15: mx
     16: txt
+    28: aaaa
     33: srv
