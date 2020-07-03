@@ -610,6 +610,6 @@ enums:
       -orig-id: "NEXT_BUFFER"
       doc: push next out-of-band buffer
     0x98:
-      id: "read_buffer"
+      id: "readonly_buffer"
       -orig-id: "READONLY_BUFFER"
       doc: make top of stack readonly
