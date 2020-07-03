@@ -158,9 +158,6 @@ types:
       - type: str
         size: 1
   clasnfo:
-    instances:
-      total_size: 
-        value: (1 + 2 + 11 + 2 + 20 + 2 + 8 + 4 + 1 + 8 + 43 + 1 + 40 + 1 + 8 + 15)
     seq:
       - id: sclas
         type: str
@@ -264,6 +261,7 @@ types:
         type: image_data_mask
         if: has_mask
       - id: image_data_field
+        if: has_mask
         size: _parent.header.linfo[idx].li.to_i - image_data_mask.total_size
   image_sub_header:
     seq:
@@ -676,7 +674,7 @@ types:
         -orig-id: desdata
         type: str
         size: >
-          total_size - (2 + 25 + 2 + des_base.declasnfo.total_size + 
+          total_size - (2 + 25 + 2 + des_base.declasnfo._sizeof + 
             (tre_ofl ? 6 + 3 : 0) + 4 + des_defined_subheader_fields_len.to_i)
   data_sub_header_tre:
     seq:
@@ -754,7 +752,7 @@ types:
         size: resshl.to_i
       - id: resdata
         type: str
-        size: total_size - (2 + 25 + 2 + reclasnfo.total_size + 4 + resshl.to_i)
+        size: total_size - (2 + 25 + 2 + reclasnfo._sizeof + 4 + resshl.to_i)
   tre:
     seq:
       - id: etag
