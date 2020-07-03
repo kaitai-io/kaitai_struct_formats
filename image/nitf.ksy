@@ -152,6 +152,7 @@ types:
     seq:
       - type: str
         size: 14
+        doc: 'UTC time of image acquisition in the format CCYYMMDDhhmmss: CC century, YY last two digits of the year, MM month, DD day, hh hour, mm minute, ss second'
   encrypt:
     seq:
       - type: str
@@ -276,7 +277,6 @@ types:
       - id: image_date_time
         -orig-id: idatim
         type: date_time
-        doc: 'UTC time of image acquisition in the format CCYYMMDDhhmmss: CC century, YY last two digits of the year, MM month, DD day, hh hour, mm minute, ss second'
       - id: target_id
         -orig-id: tgtid
         type: str
@@ -429,38 +429,38 @@ types:
         type: tre_header
   band_info:
     seq:
-      - id: n_band_representation
+      - id: representation
         -orig-id: irepband
         type: str
         size: 2
         doc: 'Indicates processing required to display the nth band of image w.r.t. the general image type recorded by IREP field'
-      - id: n_band_subcategory
+      - id: subcategory
         -orig-id: isubcat
         type: str
         size: 6
-      - id: n_band_img_filter_condition
+      - id: img_filter_condition
         -orig-id: ifc
         contents: 'N'
-      - id: n_band_img_filter_code
+      - id: img_filter_code
         -orig-id: imflt
         type: str
         size: 3
         doc: 'Reserved'
-      - id: n_band_num_luts
+      - id: num_luts
         -orig-id: nluts
         type: str
         size: 1
-      - id: n_band_num_lut_entries
+      - id: num_lut_entries
         -orig-id: nelut
         type: str
         size: 5
-        if: n_band_num_luts.to_i != 0
+        if: num_luts.to_i != 0
         doc: 'Number of entries in each of the LUTs for the nth image band'
-      - id: n_band_luts
+      - id: luts
         -orig-id: lutd
-        size: n_band_num_lut_entries.to_i
+        size: num_lut_entries.to_i
         repeat: expr
-        repeat-expr: n_band_num_luts.to_i
+        repeat-expr: num_luts.to_i
   image_comment:
     seq:
       - type: str
@@ -655,48 +655,57 @@ types:
     seq:
       - id: des_base
         type: data_sub_header_base
-      - id: desoflw
+      - id: overflowed_header_type
+        -orig-id: desoflw
         type: str
         size: 6
         if: tre_ofl
-      - id: desitem
+      - id: data_item_overflowed
+        -orig-id: desitem
         type: str
         size: 3
         if: tre_ofl
-      - id: desshl
+      - id: des_defined_subheader_fields_len
+        -orig-id: desshl
         type: str
         size: 4
       - id: desshf
         type: str
-        size: desshl.to_i
-      - id: desdata
+        size: des_defined_subheader_fields_len.to_i
+      - id: des_defined_data_field
+        -orig-id: desdata
         type: str
         size: >
           total_size - (2 + 25 + 2 + des_base.declasnfo.total_size + 
-            (tre_ofl ? 6 + 3 : 0) + 4 + desshl.to_i)
+            (tre_ofl ? 6 + 3 : 0) + 4 + des_defined_subheader_fields_len.to_i)
   data_sub_header_tre:
     seq:
       - id: des_base
         type: data_sub_header_base
-      - id: desoflw
+      - id: overflowed_header_type
+        -orig-id: desoflw
         type: str
         size: 6
         if: des_base.desid == 'TRE_OVERFLOW'
-      - id: desitem
+      - id: data_item_overflowed
+        -orig-id: desitem
         type: str
         size: 3
         if: des_base.desid == 'TRE_OVERFLOW'
-      - id: desshl
+      - id: des_defined_subheader_fields_len
+        -orig-id: desshl
         type: str
         size: 4
-      - id: desdata
+      - id: des_defined_data_field
+        -orig-id: desdata
         type: str
-        size: desshl.to_i
+        size: des_defined_subheader_fields_len.to_i
   data_sub_header_streaming:
     seq:
       - id: des_base
         type: data_sub_header_base
-      - id: desshl
+      - id: des_defined_subheader_fields_len
+        -orig-id: desshl
         type: str
         size: 4
       - id: sfh_l1
