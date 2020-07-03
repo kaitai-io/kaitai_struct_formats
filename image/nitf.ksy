@@ -13,9 +13,9 @@ meta:
   ks-version: 0.9
   encoding: UTF-8
   endian: be
-  license: CC-BY-SA-4.0
+  license: MIT
 doc: |
-  Implemented by River Loop Security.
+  Is set to version format (file_version) of 02.10 and standard_type of BF01. Implemented by River Loop Security.
 doc-ref: https://gwg.nga.mil/ntb/baseline/docs/2500c/2500C.pdf
 seq:
   - id: header
@@ -23,104 +23,127 @@ seq:
   - id: image_segments
     type: image_segment(_index)
     repeat: expr
-    repeat-expr: header.numi.to_i 
+    repeat-expr: header.num_image_segments.to_i 
   - id: graphics_segments
     type: graphics_segment(_index)
     repeat: expr
-    repeat-expr: header.nums.to_i
+    repeat-expr: header.num_graphics_segments.to_i
   - id: text_segments
     type: text_segment(_index)
     repeat: expr
-    repeat-expr: header.numt.to_i
+    repeat-expr: header.num_text_files.to_i
   - id: data_extension_segments
     type: data_extension_segment(_index)
     repeat: expr
-    repeat-expr: header.numdes.to_i
+    repeat-expr: header.num_data_extension.to_i
   - id: reserved_extension_segments
     type: reserved_extension_segment(_index)
     repeat: expr
-    repeat-expr: header.numres.to_i
+    repeat-expr: header.num_reserved_extension.to_i
 types:
   header:
     seq:
-      - id: fhdr
+      - id: file_profile_name
+        -orig-id: fhdr
         contents: 'NITF'
-      - id: fver
+      - id: file_version
+        -orig-id: fver
         contents: '02.10'
-      - id: clevel
+      - id: complexity_level
+        -orig-id: clevel
         size: 2
-      - id: stype
+      - id: standard_type
+        -orig-id: stype
         contents: 'BF01'
-      - id: ostaid
+        doc: 'Value of BF01 indicates the file is formatted using ISO/IEC IS 12087-5.'
+      - id: originating_station_id
+        -orig-id: ostaid
         type: str
         size: 10
-      - id: fdt
+      - id: file_date_time
+        -orig-id: fdt
         type: date_time
-      - id: ftitle
+      - id: file_title
+        -orig-id: ftitle
         type: str
         size: 80
-      - id: fclasnfo
+      - id: file_security
+        -orig-id: fclasnfo
         type: clasnfo
-      - id: fscop
+      - id: file_copy_number
+        -orig-id: fscop
         type: str
         size: 5
-      - id: fscpys
+      - id: file_num_of_copys
+        -orig-id: fscpys
         type: str
         size: 5
-      - id: encryp
+      - id: encryption
+        -orig-id: encryp
         type: encrypt
-      - id: fbkgc
+      - id: file_bg_color
+        -orig-id: fbkgc
         size: 3
-      - id: oname
+      - id: originator_name
+        -orig-id: oname
         type: str
         size: 24
-      - id: ophone
+      - id: originator_phone
+        -orig-id: ophone
         type: str
         size: 18
-      - id: fl
+      - id: file_length
+        -orig-id: fl
         type: str
         size: 12
-      - id: hl
+      - id: file_header_length
+        -orig-id: hl
         type: str
         size: 6
-      - id: numi
+      - id: num_image_segments
+        -orig-id: numi
         type: str
         size: 3
       - id: linfo
         type: length_image_info
         repeat: expr
-        repeat-expr: numi.to_i
-      - id: nums
+        repeat-expr: num_image_segments.to_i
+      - id: num_graphics_segments
+        -orig-id: nums
         type: str
         size: 3
       - id: lnnfo
         type: length_graphic_info
         repeat: expr
-        repeat-expr: nums.to_i
-      - id: numx
+        repeat-expr: num_graphics_segments.to_i
+      - id: reserved_numx
+        -orig-id: numx
         type: str
         size: 3
-      - id: numt
+      - id: num_text_files
+        -orig-id: numt
         type: str
         size: 3
       - id: ltnfo
         type: length_text_info
         repeat: expr
-        repeat-expr: numt.to_i
-      - id: numdes
+        repeat-expr: num_text_files.to_i
+      - id: num_data_extension
+        -orig-id: numdes
         type: str
         size: 3
       - id: ldnfo
         type: length_data_info
         repeat: expr
-        repeat-expr: numdes.to_i
-      - id: numres
+        repeat-expr: num_data_extension.to_i
+      - id: num_reserved_extension
+        -orig-id: numres
         type: str
         size: 3
       - id: lrnfo
         type: length_reserved_info
         repeat: expr
-        repeat-expr: numres.to_i
+        repeat-expr: num_reserved_extension.to_i
       - id: user_defined_header
         type: tre_header
       - id: extended_header
@@ -232,7 +255,7 @@ types:
         type: u2
     instances:
       has_mask:
-        value: image_sub_header.ic.substring(0, 1) == 'M' or image_sub_header.ic.substring(1, 2) == 'M'
+        value: image_sub_header.img_compression.substring(0, 1) == 'M' or image_sub_header.img_compression.substring(1, 2) == 'M'
     seq:
       - id: image_sub_header
         type: image_sub_header
@@ -243,148 +266,201 @@ types:
         size: _parent.header.linfo[idx].li.to_i - image_data_mask.total_size
   image_sub_header:
     seq:
-      - id: im
+      - id: file_part_type
+        -orig-id: im
         contents: 'IM'
-      - id: iid1
+      - id: image_id_1
+        -orig-id: iid1
         type: str
         size: 10
-      - id: idatim
+      - id: image_date_time
+        -orig-id: idatim
         type: date_time
-      - id: tgtid
+        doc: 'UTC time of image acquisition in the format CCYYMMDDhhmmss: CC century, YY last two digits of the year, MM month, DD day, hh hour, mm minute, ss second'
+      - id: target_id
+        -orig-id: tgtid
         type: str
         size: 17
-      - id: iid2
+      - id: image_id_2
+        -orig-id: iid2
         type: str
         size: 80
-      - id: iclasnfo
+      - id: image_security_classification
+        -orig-id: iclasnfo
         type: clasnfo
-      - id: encryp
+      - id: encryption
+        -orig-id: encryp
         type: encrypt
-      - id: isorce
+      - id: image_source
+        -orig-id: isorce
         type: str
         size: 42
-      - id: nrows
+      - id: num_sig_rows
+        -orig-id: nrows
         type: str
         size: 8
-      - id: ncols
+        doc: 'Total number of rows of significant pixels in the image; only rows indexed 0 to (NROWS - 1) of the image contain significant data.'
+      - id: num_sig_cols
+        -orig-id: ncols
         type: str
         size: 8
-      - id: pvtype
+      - id: pixel_value_type
+        -orig-id: pvtype
         type: str
         size: 3
-      - id: irep
+      - id: image_representation
+        -orig-id: irep
         type: str
         size: 8
-      - id: icat
+        doc: 'MONO, RGB, RGB/LUT, MULTI, NODISPLY, NVECTOR, POLAR, VPH, YCbCr601'
+      - id: image_category
+        -orig-id: icat
         type: str
         size: 8
-      - id: abpp
+        doc: 'VIS, SL, TI, FL, RD, EO, OP, HR, HS,CP, BP, SAR, SARIQ, IR, MAP, MS, FP, MRI, XRAY, CAT, VD, PAT, LEG, DTEM, MATR, LOCG, BARO, CURRENT, DEPTH, WIND'
+      - id: actual_bits_per_pixel_per_band
+        -orig-id: abpp
         type: str
         size: 2
-      - id: pjust
+      - id: pixel_justification
+        -orig-id: pjust
         type: str
         size: 1
-      - id: icords
+      - id: image_coordinate_rep
+        -orig-id: icords
         type: str
         size: 1
-      - id: igeolo
+      - id: image_geo_loc
+        -orig-id: igeolo
         type: str
         size: 60
-      - id: nicom
+      - id: num_img_comments
+        -orig-id: nicom
         type: str
         size: 1
-      - id: icom
+      - id: img_comments
+        -orig-id: icom
         type: image_comment
         repeat: expr
-        repeat-expr: nicom.to_i
-      - id: ic
+        repeat-expr: num_img_comments.to_i
+      - id: img_compression
+        -orig-id: ic
         type: str
         size: 2
-      - id: comrat
+      - id: compression_rate_code
+        -orig-id: comrat
         type: str
         size: 4
-      - id: nbands
+      - id: num_bands
+        -orig-id: nbands
         type: str
         size: 1
-      - id: xbands
+      - id: num_multispectral_bands
+        -orig-id: xbands
         type: str
         size: 5
-        if: nbands.to_i == 0
+        if: num_bands.to_i == 0
       - id: bands
         type: band_info
         repeat: expr
-        repeat-expr: "nbands.to_i != 0 ? nbands.to_i : xbands.to_i"
-      - id: isync
+        repeat-expr: "num_bands.to_i != 0 ? num_bands.to_i : num_multispectral_bands.to_i"
+      - id: img_sync_code
+        -orig-id: isync
         type: str
         size: 1
-      - id: imode
+        doc: 'Reserved for future use.'
+      - id: img_mode
+        -orig-id: imode
         type: str
         size: 1
-      - id: nbpr
+        doc: 'B = Band Interleaved by Block, P = Band Interleaved by Pixel, R = Band Interleaved by Row, S = Band Sequential'
+      - id: num_blocks_per_row
+        -orig-id: nbpr
         type: str
         size: 4
-      - id: nbpc
+      - id: num_blocks_per_col
+        -orig-id: nbpc
         type: str
         size: 4
-      - id: nppbh
+      - id: num_pixels_per_block_horz
+        -orig-id: nppbh
         type: str
         size: 4
-      - id: nppbv
+      - id: num_pixels_per_block_vert
+        -orig-id: nppbv
         type: str
         size: 4
-      - id: nbpp
+      - id: num_pixels_per_band
+        -orig-id: nbpp
         type: str
         size: 2
-      - id: idlvl
+      - id: img_display_level
+        -orig-id: idlvl
         type: str
         size: 3
-      - id: ialvl
+      - id: attachment_level
+        -orig-id: ialvl
         type: str
         size: 3
-      - id: iloc
+      - id: img_location
+        -orig-id: iloc
         type: str
         size: 10
-      - id: imag
+      - id: img_magnification
+        -orig-id: imag
         type: str
         size: 4
-      - id: udidl
+      - id: user_def_img_data_len
+        -orig-id: udidl
         type: str
         size: 5
-      - id: udofl
+      - id: user_def_overflow
+        -orig-id: udofl
         type: str
         size: 3
-        if: udidl.to_i != 0
-      - id: udid
+        if: user_def_img_data_len.to_i != 0
+      - id: user_def_img_data
+        -orig-id: udid
         type: u1
-        if: udidl.to_i > 2
+        if: user_def_img_data_len.to_i > 2
         repeat: expr
-        repeat-expr: udidl.to_i - 3
+        repeat-expr: user_def_img_data_len.to_i - 3
       - id: image_extended_sub_header
         type: tre_header
   band_info:
     seq:
-      - id: irepband
+      - id: n_band_representation
+        -orig-id: irepband
         type: str
         size: 2
-      - id: isubcat
+        doc: 'Indicates processing required to display the nth band of image w.r.t. the general image type recorded by IREP field'
+      - id: n_band_subcategory
+        -orig-id: isubcat
         type: str
         size: 6
-      - id: ifc
+      - id: n_band_img_filter_condition
+        -orig-id: ifc
         contents: 'N'
-      - id: imflt
+      - id: n_band_img_filter_code
+        -orig-id: imflt
         type: str
         size: 3
-      - id: nluts
+        doc: 'Reserved'
+      - id: n_band_num_luts
+        -orig-id: nluts
         type: str
         size: 1
-      - id: nelut
+      - id: n_band_num_lut_entries
+        -orig-id: nelut
         type: str
         size: 5
-        if: nluts.to_i != 0
-      - id: lutd
-        size: nelut.to_i
+        if: n_band_num_luts.to_i != 0
+        doc: 'Number of entries in each of the LUTs for the nth image band'
+      - id: n_band_luts
+        -orig-id: lutd
+        size: n_band_num_lut_entries.to_i
         repeat: expr
-        repeat-expr: nluts.to_i
+        repeat-expr: n_band_num_luts.to_i
   image_comment:
     seq:
       - type: str
@@ -395,12 +471,12 @@ types:
         value: "(tpxcdlnth % 8 == 0 ? tpxcdlnth : tpxcdlnth + (8 - tpxcdlnth % 8)) / 8"
       bmrtmr_count:
         value: >
-          _parent.image_sub_header.nbpr.to_i * _parent.image_sub_header.nbpc.to_i * 
-          (_parent.image_sub_header.imode != 'S' ? 
+          _parent.image_sub_header.num_blocks_per_row.to_i * _parent.image_sub_header.num_blocks_per_col.to_i * 
+          (_parent.image_sub_header.img_mode != 'S' ? 
             1 :  
-            (_parent.image_sub_header.nbands.to_i != 0 ?
-              _parent.image_sub_header.nbands.to_i : 
-              _parent.image_sub_header.xbands.to_i))
+            (_parent.image_sub_header.num_bands.to_i != 0 ?
+              _parent.image_sub_header.num_bands.to_i : 
+              _parent.image_sub_header.num_multispectral_bands.to_i))
       has_bmr:
         value: bmrlnth != 0
       has_tmr:
@@ -412,26 +488,33 @@ types:
       total_size:
         value: 4 + 2 + 2 + 2 + tpxcd_size + bmrbnd_size + tmrbnd_size
     seq:
-      - id: imdatoff
+      - id: blocked_img_data_offset
+        -orig-id: imdatoff
         type: u4
       - id: bmrlnth
         type: u2
+        doc: 'Block Mask Record Length'
       - id: tmrlnth
         type: u2
+        doc: 'Pad Pixel Mask Record Length'
       - id: tpxcdlnth
         type: u2
+        doc: 'Pad Output Pixel Code Length'
       - id: tpxcd
         size: tpxcd_size
+        doc: 'Pad Output Pixel Code'
       - id: bmrbnd
         type: u4
         repeat: expr
         repeat-expr: bmrtmr_count
         if: has_bmr
+        doc: 'Block n, Band m Offset'
       - id: tmrbnd
         type: u4
         repeat: expr
         repeat-expr: bmrtmr_count
         if: has_tmr
+        doc: 'Pad Pixel n, Band m'
   graphics_segment:
     params:
       - id: idx
@@ -443,60 +526,78 @@ types:
         size: _parent.header.lnnfo[idx].ls.to_i
   graphic_sub_header:
     seq:
-      - id: sy
+      - id: file_part_type_sy
+        -orig-id: sy
         contents: 'SY'
-      - id: sid
+      - id: graphic_id
+        -orig-id: sid
         type: str
         size: 10
-      - id: sname
+      - id: graphic_name
+        -orig-id: sname
         type: str
         size: 20
-      - id: sclasnfo
+      - id: graphic_classification
+        -orig-id: sclasnfo
         type: clasnfo
-      - id: encryp
+      - id: encryption
+        -orig-id: encryp
         type: encrypt
-      - id: sfmt
+      - id: graphic_type
+        -orig-id: sfmt
         contents: 'C'
-      - id: sstruct
+      - id: reserved1
+        -orig-id: sstruct
         type: str
         size: 13
-      - id: sdlvl
+        doc: 'Reserved'
+      - id: graphic_display_level
+        -orig-id: sdlvl
         type: str
         size: 3
-      - id: salvl
+      - id: graphic_attachment_level
+        -orig-id: salvl
         type: str
         size: 3
-      - id: sloc
+      - id: graphic_location
+        -orig-id: sloc
         type: str
         size: 10
-      - id: sbnd1
+      - id: first_graphic_bound_loc
+        -orig-id: sbnd1
         type: str
         size: 10
-      - id: scolor
+      - id: graphic_color
+        -orig-id: scolor
         type: str
         size: 1
-      - id: sbnd2
+      - id: second_graphic_bound_loc
+        -orig-id: sbnd2
         type: str
         size: 10
-      - id: sres2
+      - id: reserved2
+        -orig-id: sres2
         type: str
         size: 2
+        doc: 'Reserved'
       - id: graphics_extended_sub_header
         type: tre_header
   tre_header:
     seq:
-      - id: hdl
+      - id: header_data_length
+        -orig-id: hdl
         type: str
         size: 5
-      - id: ofl
+      - id: header_overflow
+        -orig-id: ofl
         type: str
         size: 3
-        if: hdl.to_i != 0
-      - id: hd
+        if: header_data_length.to_i != 0
+      - id: header_data
         type: u1
-        if: hdl.to_i > 2
+        if: header_data_length.to_i > 2
         repeat: expr
-        repeat-expr: hdl.to_i - 3
+        repeat-expr: header_data_length.to_i - 3
   text_segment:
     params:
       - id: idx
