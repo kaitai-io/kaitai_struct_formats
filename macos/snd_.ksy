@@ -1,9 +1,9 @@
 meta:
-  id: snd_
+  id: mac_os_resource_snd
   endian: be
+  license: MIT
   xref:
     wikidata: Q7564684
-    reference: "https://developer.apple.com/library/archive/documentation/mac/pdf/Sound/Sound_Manager.pdf"
 enums:
   data_type:
     0x01: square_wave_synth
@@ -33,26 +33,29 @@ enums:
     0x00: standard
     0xFF: extended
     0xFE: compressed
+doc-ref: "https://developer.apple.com/library/archive/documentation/mac/pdf/Sound/Sound_Manager.pdf"
 seq:
   - id: format
     type: u2
-  - id: number_of_data_formats
+  - id: num_data_formats
+    -orig-id: number_of_data_formats
     type: u2
     if: format==1
-  - id: data_format
+  - id: data_formats
     type: data_format
     repeat: expr
-    repeat-expr: number_of_data_formats
+    repeat-expr: num_data_formats
     if: format==1
   - id: reference_count
     type: u2
     if: format==2
-  - id: number_of_sound_commands
+  - id: num_sound_commands
+    -orig-id: number_of_sound_commands
     type: u2
-  - id: sound_command
+  - id: sound_commands
     type: sound_command
     repeat: expr
-    repeat-expr: number_of_sound_commands
+    repeat-expr: num_sound_commands
 types:
   data_format:
     seq:
@@ -62,6 +65,13 @@ types:
       - id: options
         type: u4
   sound_command:
+    seq:
+      - id: raw_cmd
+        type: u2
+      - id: param1
+        type: u2
+      - id: param2
+        type: u4
     instances:
       cmd:
         value: raw_cmd&0x7FFF
@@ -83,18 +93,11 @@ types:
             sound_header_type::standard: standard_sound_header
             sound_header_type::extended: extended_sound_header
             sound_header_type::compressed: compressed_sound_header
-    seq:
-      - id: raw_cmd
-        type: u2
-      - id: param1
-        type: u2
-      - id: param2
-        type: u4
   standard_sound_header:
     seq:
       - id: sample_ptr
         type: u4
-      - id: lenght
+      - id: length
         type: u4
       - id: sample_rate
         type: u2
@@ -110,7 +113,7 @@ types:
       - id: base_frequency
         type: u1
       - id: sample_area
-        size: lenght
+        size: length
   extended_sound_header:
     seq:
       - id: sample_ptr
@@ -143,14 +146,9 @@ types:
         type: u4
       - id: sample_size
         type: u2
-      - id: future_use_1
-        type: u2
-      - id: future_use_2
-        type: u4
-      - id: future_use_3
-        type: u4
-      - id: future_use_4
-        type: u4
+      - id: reserved
+        -orig-id: future_use_1, future_use_2, future_use_3, future_use_4
+        size: 14
       - id: sample_area
         size: num_frames * num_channels * sample_size / 8
   compressed_sound_header:
@@ -183,8 +181,9 @@ types:
         size: 4
         type: str
         encoding: ASCII
-      - id: future_use_2
-        type: u4
+      - id: reserved
+        -orig-id: future_use_2
+        size: 4
       - id: state_vars_ptr
         type: u4
       - id: left_over_samples_ptr
