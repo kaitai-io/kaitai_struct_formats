@@ -113,6 +113,10 @@ types:
         -orig-id: numChannels
         type: u4
         doc: number of channels in sample
+      - id: sample_rate
+        -orig-id: sampleRate
+        type: u2
+        doc: sample rate (Fixed Point, Integer part)
       - id: sample_rate_frac
         -orig-id: sampleRate
         type: u2
@@ -172,6 +176,10 @@ types:
         -orig-id: numChannels
         type: u4
         doc: number of channels in sample
+      - id: sample_rate
+        -orig-id: sampleRate
+        type: u2
+        doc: sample rate (Fixed Point, Integer part)
       - id: sample_rate_frac
         -orig-id: sampleRate
         type: u2
