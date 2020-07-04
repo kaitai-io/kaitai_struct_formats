@@ -628,7 +628,8 @@ types:
         type: u2
     seq:
       - id: data_sub_header
-        type: data_sub_header(_parent.header.ldnfo[idx].ldsh.to_i)
+        type: data_sub_header
+        size: _parent.header.ldnfo[idx].ldsh.to_i
       - id: data_data_field
         size: _parent.header.ldnfo[idx].ld.to_i
   data_sub_header_base:
@@ -647,9 +648,6 @@ types:
     instances:
       tre_ofl:
         value: des_base.desid == 'TRE_OVERFLOW'
-    params:
-      - id: total_size
-        type: u2
     seq:
       - id: des_base
         type: data_sub_header_base
@@ -673,9 +671,7 @@ types:
       - id: des_defined_data_field
         -orig-id: desdata
         type: str
-        size: >
-          total_size - (2 + 25 + 2 + des_base.declasnfo._sizeof + 
-            (tre_ofl ? 6 + 3 : 0) + 4 + des_defined_subheader_fields_len.to_i)
+        size-eos: true
   data_sub_header_tre:
     seq:
       - id: des_base
@@ -726,13 +722,11 @@ types:
         type: u2
     seq:
       - id: reserved_sub_header
-        type: reserved_sub_header(_parent.header.lrnfo[idx].lrsh.to_i)
+        type: reserved_sub_header
+        size: _parent.header.lrnfo[idx].lrsh.to_i
       - id: reserved_data_field
         size: _parent.header.lrnfo[idx].lr.to_i
   reserved_sub_header:
-    params:
-      - id: total_size
-        type: u2
     seq:
       - id: re
         contents: 'RE'
@@ -752,7 +746,7 @@ types:
         size: resshl.to_i
       - id: resdata
         type: str
-        size: total_size - (2 + 25 + 2 + reclasnfo._sizeof + 4 + resshl.to_i)
+        size-eos: true
   tre:
     seq:
       - id: etag
