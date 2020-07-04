@@ -15,7 +15,16 @@ meta:
   endian: be
   license: MIT
 doc: |
-  Is set to version format (file_version) of 02.10 and standard_type of BF01. Implemented by River Loop Security.
+  The NITF (National Image Transition Format) format is a file format developed by the U.S. Government for
+  storing imagery, e.g. from satellites.
+
+  According to the [foreword of the specification](https://gwg.nga.mil/ntb/baseline/docs/2500c/2500C.pdf):
+  > The National Imagery Transmission Format Standard (NITFS) is the suite of standards for formatting digital
+  > imagery and imagery-related products and exchanging them among members of the Intelligence Community (IC) as
+  > defined by the Executive Order 12333, and other United States Government departments and agencies."
+
+  This implementation is set to version format (`file_version`) of 02.10 and `standard_type` of `BF01`.
+  It was implemented by [River Loop Security](https://riverloopsecurity.com).
 doc-ref: https://gwg.nga.mil/ntb/baseline/docs/2500c/2500C.pdf
 seq:
   - id: header
