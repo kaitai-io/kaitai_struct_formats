@@ -40,15 +40,15 @@ seq:
   - id: num_data_formats
     -orig-id: number_of_data_formats
     type: u2
-    if: format==1
+    if: format == 1
   - id: data_formats
     type: data_format
     repeat: expr
     repeat-expr: num_data_formats
-    if: format==1
+    if: format == 1
   - id: reference_count
     type: u2
-    if: format==2
+    if: format == 2
   - id: num_sound_commands
     -orig-id: number_of_sound_commands
     type: u2
@@ -74,10 +74,10 @@ types:
         type: u4
     instances:
       cmd:
-        value: raw_cmd&0x7FFF
+        value: raw_cmd & 0x7FFF
         enum: cmd_type
       is_data_offset:
-        value: raw_cmd&0x8000
+        value: raw_cmd & 0x8000
       sound_header_type:
         pos: param2 + 20
         type: u1
