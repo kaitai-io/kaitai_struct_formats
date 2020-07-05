@@ -168,92 +168,118 @@ types:
         size: 1
   clasnfo:
     seq:
-      - id: sclas
+      - id: security_class
+        -orig-id: sclas
         type: str
         size: 1
-      - id: sclsy
+      - id: security_system
+        -orig-id: sclsy
         type: str
         size: 2
-      - id: scode
+      - id: codewords
+        -orig-id: scode
         type: str
         size: 11
-      - id: sctlh
+      - id: control_and_handling
+        -orig-id: sctlh
         type: str
         size: 2
-      - id: srel
+      - id: releaseability
+        -orig-id: srel
         type: str
         size: 20
-      - id: sdctp
+      - id: declass_type
+        -orig-id: sdctp
         type: str
         size: 2
-      - id: sdcdt
+      - id: declass_date
+        -orig-id: sdcdt
         type: str
         size: 8
-      - id: sdcxm
+      - id: declass_exemption
+        -orig-id: sdcxm
         type: str
         size: 4
-      - id: sdg
+      - id: downgrade
+        -orig-id: sdg
         type: str
         size: 1
-      - id: sdgdt
+      - id: downgrade_date
+        -orig-id: sdgdt
         type: str
         size: 8
-      - id: scltx
+      - id: class_text
+        -orig-id: scltx
         type: str
         size: 43
-      - id: scatp
+      - id: class_authority_type
+        -orig-id: scatp
         type: str
         size: 1
-      - id: scaut
+      - id: class_authority
+        -orig-id: scaut
         type: str
         size: 40
-      - id: scrsn
+      - id: class_reason
+        -orig-id: scrsn
         type: str
         size: 1
-      - id: ssrdt
+      - id: source_date
+        -orig-id: ssrdt
         type: str
         size: 8
-      - id: sctln
+      - id: control_number
+        -orig-id: sctln
         type: str
         size: 15
   length_image_info:
     seq:
-      - id: lish
+      - id: length_image_subheader
+        -orig-id: lish
         type: str
         size: 6
-      - id: li
+      - id: length_image_segment
+        -orig-id: li
         type: str
         size: 10
   length_graphic_info:
     seq:
-      - id: lssh
+      - id: length_graphic_subheader
+        -orig-id: lssh
         type: str
         size: 4
-      - id: ls
+      - id: length_graphic_segment
+        -orig-id: ls
         type: str
         size: 6
   length_text_info:
     seq:
-      - id: ltsh
+      - id: length_text_subheader
+        -orig-id: ltsh
         type: str
         size: 4
-      - id: lt
+      - id: length_text_segment
+        -orig-id: lt
         type: str
         size: 5
   length_data_info:
     seq:
-      - id: ldsh
+      - id: length_data_extension_subheader
+        -orig-id: ldsh
         type: str
         size: 4
-      - id: ld
+      - id: length_data_extension_segment
+        -orig-id: ld
         type: str
         size: 9
   length_reserved_info:
     seq:
-      - id: lrsh
+      - id: length_reserved_extension_subheader
+        -orig-id: lresh
         type: str
         size: 4
-      - id: lr
+      - id: length_reserved_extension_segment
+        -orig-id: lre
         type: str
         size: 7
   image_segment:
@@ -271,7 +297,7 @@ types:
         if: has_mask
       - id: image_data_field
         if: has_mask
-        size: _parent.header.linfo[idx].li.to_i - image_data_mask.total_size
+        size: _parent.header.linfo[idx].length_image_segment.to_i - image_data_mask.total_size
   image_sub_header:
     seq:
       - id: file_part_type
@@ -530,7 +556,7 @@ types:
       - id: graphic_sub_header
         type: graphic_sub_header
       - id: graphic_data_field
-        size: _parent.header.lnnfo[idx].ls.to_i
+        size: _parent.header.lnnfo[idx].length_graphic_segment.to_i
   graphic_sub_header:
     seq:
       - id: file_part_type_sy
@@ -613,22 +639,27 @@ types:
       - id: text_sub_header
         size: 1
       - id: text_data_field
-        size: _parent.header.ltnfo[idx].lt.to_i
+        size: _parent.header.ltnfo[idx].length_text_segment.to_i
   text_sub_header:
     seq:
-      - id: txtdt
+      - id: text_date_time
+        -orig-id: txtdt
         type: str
         size: 14
-      - id: txtitl
+      - id: text_title
+        -orig-id: txtitl
         type: str
         size: 80
-      - id: tclasnfo
+      - id: text_security_class
+        -orig-id: tclasnfo
         type: clasnfo
       - id: encryp
         type: encrypt
-      - id: txtfmt
+      - id: text_format
+        -orig-id: txtfmt
         type: str
         size: 3
+        doc: 'MTF (USMTF see MIL-STD-6040), STA (indicates BCS), UT1 (indicates ECS), U8S'
       - id: text_extended_sub_header
         type: tre_header
   data_extension_segment:
@@ -638,17 +669,20 @@ types:
     seq:
       - id: data_sub_header
         type: data_sub_header
-        size: _parent.header.ldnfo[idx].ldsh.to_i
+        size: _parent.header.ldnfo[idx].length_data_extension_subheader.to_i
       - id: data_data_field
-        size: _parent.header.ldnfo[idx].ld.to_i
+        size: _parent.header.ldnfo[idx].length_data_extension_segment.to_i
   data_sub_header_base:
     seq:
-      - id: de
+      - id: file_part_type_de
+        -orig-id: de
         contents: 'DE'
+        doc: 'File Part Type desigantor for Data Extension'
       - id: desid
         type: str
         size: 25
-      - id: desver
+      - id: data_definition_version
+        -orig-id: desver
         type: str
         size: 2
       - id: declasnfo
@@ -714,17 +748,22 @@ types:
       - id: sfh_l1
         type: str
         size: 7
+        doc: 'SFH Length 1: number of bytes in sfh_dr field'
       - id: sfh_delim1
         type: u4
+        doc: 'Shall contain the value 0x0A6E1D97.'
       - id: sfh_dr
         type: u1
         repeat: expr
         repeat-expr: sfh_l1.to_i
       - id: sfh_delim2
         type: u4
+        doc: 'Shall contain the value 0x0ECA14BF.'
       - id: sfh_l2
         type: str
         size: 7
+        doc: 'A repeat of sfh_l1.'
+    doc: 'Streaming file Header Data Extension Segment Subheader'
   reserved_extension_segment:
     params:
       - id: idx
@@ -732,38 +771,49 @@ types:
     seq:
       - id: reserved_sub_header
         type: reserved_sub_header
-        size: _parent.header.lrnfo[idx].lrsh.to_i
+        size: _parent.header.lrnfo[idx].length_reserved_extension_subheader.to_i
       - id: reserved_data_field
-        size: _parent.header.lrnfo[idx].lr.to_i
+        size: _parent.header.lrnfo[idx].length_reserved_extension_segment.to_i
   reserved_sub_header:
     seq:
-      - id: re
+      - id: file_part_type_re
+        -orig-id: re
         contents: 'RE'
-      - id: resid
+      - id: res_type_id
+        -orig-id: resid
         type: str
         size: 25
-      - id: resver
+      - id: res_version
+        -orig-id: resver
         type: str
         size: 2
       - id: reclasnfo
         type: clasnfo
-      - id: resshl
+      - id: res_user_defined_subheader_length
+        -orig-id: resshl
         type: str
         size: 4
-      - id: resshf
+      - id: res_user_defined_subheader_fields
+        -orig-id: resshf
         type: str
-        size: resshl.to_i
-      - id: resdata
+        size: res_user_defined_subheader_length.to_i
+      - id: res_user_defined_data
+        -orig-id: resdata
         type: str
         size-eos: true
   tre:
     seq:
-      - id: etag
+      - id: extension_type_id
+        -orig-id: etag
         type: str
         size: 6
-      - id: el
+        doc: 'RETAG or CETAG'
+      - id: edata_length
+        -orig-id: el
         type: str
         size: 5
+        doc: 'REL or CEL'
       - id: edata
         type: str
-        size: el.to_i
+        size: edata_length.to_i
+        doc: 'REDATA or CEDATA'
