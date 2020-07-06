@@ -10,7 +10,7 @@ meta:
     - ntf.r3
     - ntf.r4
     - ntf.r5
-  ks-version: 0.9
+  ks-version: 0.8
   encoding: UTF-8
   endian: be
   license: MIT
