@@ -295,7 +295,7 @@ types:
   unicodestring1:
     seq:
       - id: len
-        type: u4
+        type: u1
       - id: val
         type: str
         encoding: utf8
