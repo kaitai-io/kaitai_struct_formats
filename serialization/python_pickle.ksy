@@ -295,7 +295,7 @@ types:
   unicodestring1:
     seq:
       - id: len
-        type: u4
+        type: u1
       - id: val
         type: str
         encoding: utf8
@@ -610,6 +610,6 @@ enums:
       -orig-id: "NEXT_BUFFER"
       doc: push next out-of-band buffer
     0x98:
-      id: "read_buffer"
+      id: "readonly_buffer"
       -orig-id: "READONLY_BUFFER"
       doc: make top of stack readonly
