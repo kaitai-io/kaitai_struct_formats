@@ -50,26 +50,36 @@ types:
       - id: body
         type:
           switch-on: |
-            tag >= 0x00 and tag <= 0x1f ? "literal"
-            : tag >= 0x20 and tag <= 0xcf ? "backreference"
-            : tag >= 0xd0 and tag <= 0xd1 ? "literal"
-            : tag == 0xd2 ? "backreference"
-            : tag >= 0xd5 and tag <= 0xfd ? "table_lookup"
-            : tag == 0xfe ? "extended"
-            : tag == 0xff ? "end"
-            : "invalid"
+            tag >= 0x00 and tag <= 0x1f ? tag_kind::literal
+            : tag >= 0x20 and tag <= 0xcf ? tag_kind::backreference
+            : tag >= 0xd0 and tag <= 0xd1 ? tag_kind::literal
+            : tag == 0xd2 ? tag_kind::backreference
+            : tag >= 0xd5 and tag <= 0xfd ? tag_kind::table_lookup
+            : tag == 0xfe ? tag_kind::extended
+            : tag == 0xff ? tag_kind::end
+            : tag_kind::invalid
           cases:
-            '"literal"': literal_body(tag)
-            '"backreference"': backreference_body(tag)
-            '"table_lookup"': table_lookup_body(tag)
-            '"extended"': extended_body
-            '"end"': end_body
+            'tag_kind::literal': literal_body(tag)
+            'tag_kind::backreference': backreference_body(tag)
+            'tag_kind::table_lookup': table_lookup_body(tag)
+            'tag_kind::extended': extended_body
+            'tag_kind::end': end_body
         doc: |
           The chunk's body.
 
           Certain chunks do not have any data following the tag byte.
           In this case,
           the body is a zero-length structure.
+    enums:
+      # Internal enum, only for use in the type switch above.
+      # This is a workaround for kaitai-io/kaitai_struct#489.
+      tag_kind:
+        -1: invalid
+        0: literal
+        1: backreference
+        2: table_lookup
+        3: extended
+        4: end
     types:
       literal_body:
         params:
