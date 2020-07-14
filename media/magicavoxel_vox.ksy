@@ -5,6 +5,7 @@ meta:
   endian: le
   license: MIT
   title: MagicaVoxel File
+  ks-version: 0.9 # for doc-ref array
 doc-ref:
   - https://ephtracy.github.io/ MagicaVoxel Homepage
   - https://github.com/ephtracy/voxel-model/blob/master/MagicaVoxel-file-format-vox.txt Format Description
