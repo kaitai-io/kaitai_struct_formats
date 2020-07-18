@@ -113,6 +113,9 @@ instances:
     doc: The resource file's resource map.
 types:
   file_header:
+    doc: |
+      Resource file header,
+      containing the offsets and lengths of the resource data area and resource map.
     seq:
       - id: ofs_data_blocks
         type: u4
@@ -144,10 +147,13 @@ types:
           In practice,
           this should always be `_root._io.size - ofs_resource_map`,
           i. e. the resource map should extend to the end of the resource file.
-    doc: |
-      Resource file header,
-      containing the offsets and lengths of the resource data area and resource map.
   data_block:
+    doc: |
+      A resource data block,
+      as stored in the resource data area.
+
+      Each data block stores the data contained in a resource,
+      along with its length.
     seq:
       - id: len_data
         type: u4
@@ -157,13 +163,10 @@ types:
         size: len_data
         doc: |
           The data stored in this block.
-    doc: |
-      A resource data block,
-      as stored in the resource data area.
-
-      Each data block stores the data contained in a resource,
-      along with its length.
   resource_map:
+    doc: |
+      Resource map,
+      containing information about the resources in the file and where they are located in the data area.
     seq:
       - id: reserved_file_header_copy
         type: file_header
@@ -210,6 +213,12 @@ types:
         doc: Storage area for the names of all resources.
     types:
       file_attributes:
+        doc: |
+          A resource file's attributes,
+          as stored in the resource map.
+
+          These attributes are sometimes also referred to as resource map attributes,
+          because of where they are stored in the file.
         seq:
           - id: resources_locked
             type: b1
@@ -274,13 +283,14 @@ types:
             doc: |
               The attributes as a packed integer,
               as they are stored in the file.
-        doc: |
-          A resource file's attributes,
-          as stored in the resource map.
-
-          These attributes are sometimes also referred to as resource map attributes,
-          because of where they are stored in the file.
       type_list_and_reference_lists:
+        doc: |
+          Resource type list and storage area for resource reference lists in the resource map.
+
+          The two parts are combined into a single type here for technical reasons:
+          the start of the resource reference list area is not stored explicitly in the file,
+          instead it always starts directly after the resource type list.
+          The simplest way to implement this is by placing both types into a single `seq`.
         seq:
           - id: type_list
             type: type_list
@@ -295,6 +305,7 @@ types:
               in the same order as their corresponding resource type list entries.
         types:
           type_list:
+            doc: Resource type list in the resource map.
             seq:
               - id: num_types_m1
                 type: u2
@@ -318,6 +329,10 @@ types:
                 doc: The number of resource types in this list.
             types:
               type_list_entry:
+                doc: |
+                  A single entry in the resource type list.
+
+                  Each entry corresponds to exactly one resource reference list.
                 seq:
                   - id: type
                     size: 4
@@ -352,12 +367,13 @@ types:
                     type: reference_list(num_references)
                     doc: |
                       The resource reference list for this resource type.
-                doc: |
-                  A single entry in the resource type list.
-
-                  Each entry corresponds to exactly one resource reference list.
-            doc: Resource type list in the resource map.
           reference_list:
+            doc: |
+              A resource reference list,
+              as stored in the reference list area.
+
+              Each reference list has exactly one matching entry in the resource type list,
+              and describes all resources of a single type in the file.
             params:
               - id: num_references
                 type: u2
@@ -375,6 +391,7 @@ types:
                 doc: The resource references in this reference list.
             types:
               reference:
+                doc: A single resource reference in a resource reference list.
                 seq:
                   - id: id
                     type: s2
@@ -416,6 +433,9 @@ types:
                       The data block containing the data for the resource described by this reference.
                 types:
                   attributes:
+                    doc: |
+                      A resource's attributes,
+                      as stored in a resource reference.
                     seq:
                       - id: system_reference
                         -orig-id: resSysRef
@@ -530,24 +550,14 @@ types:
                         doc: |
                           The attributes as a packed integer,
                           as they are stored in the file.
-                    doc: |
-                      A resource's attributes,
-                      as stored in a resource reference.
-                doc: A single resource reference in a resource reference list.
-            doc: |
-              A resource reference list,
-              as stored in the reference list area.
-
-              Each reference list has exactly one matching entry in the resource type list,
-              and describes all resources of a single type in the file.
-        doc: |
-          Resource type list and storage area for resource reference lists in the resource map.
-
-          The two parts are combined into a single type here for technical reasons:
-          the start of the resource reference list area is not stored explicitly in the file,
-          instead it always starts directly after the resource type list.
-          The simplest way to implement this is by placing both types into a single `seq`.
       name:
+        doc: |
+          A resource name,
+          as stored in the resource name storage area in the resource map.
+
+          The resource names are not required to appear in any particular order.
+          There may be unused space between and around resource names,
+          but in practice they are often contiguous.
         seq:
           - id: len_value
             type: u1
@@ -581,13 +591,3 @@ types:
               For non-Western languages,
               this can lead to some resource names using MacRoman,
               and others using a different encoding.
-        doc: |
-          A resource name,
-          as stored in the resource name storage area in the resource map.
-
-          The resource names are not required to appear in any particular order.
-          There may be unused space between and around resource names,
-          but in practice they are often contiguous.
-    doc: |
-      Resource map,
-      containing information about the resources in the file and where they are located in the data area.

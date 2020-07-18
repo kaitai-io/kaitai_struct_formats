@@ -163,6 +163,9 @@ instances:
       The lookup table to be used for this compressed data.
 types:
   header_parameters:
+    doc: |
+      Decompressor-specific parameters for this compression format,
+      as stored in the compressed resource header.
     seq:
       - id: unknown
         type: u2
@@ -195,6 +198,9 @@ types:
           Only used if a custom lookup table is present.
     types:
       flags:
+        doc: |
+          Flags for the decompressor,
+          as stored in the decompressor-specific parameters.
         seq:
           - id: reserved
             type: b6
@@ -217,13 +223,9 @@ types:
             doc: |
               The flags as a packed integer,
               as they are stored in the data.
-        doc: |
-          Flags for the decompressor,
-          as stored in the decompressor-specific parameters.
-    doc: |
-      Decompressor-specific parameters for this compression format,
-      as stored in the compressed resource header.
   untagged_data:
+    doc: |
+      Compressed data in the "untagged" variant of the format.
     seq:
       - id: table_references
         type: u1
@@ -231,9 +233,9 @@ types:
         doc: |
           References into the lookup table.
           Each reference is an integer that is expanded to two bytes by looking it up in the table.
-    doc: |
-      Compressed data in the "untagged" variant of the format.
   tagged_data:
+    doc: |
+      Compressed data in the "tagged" variant of the format.
     seq:
       - id: chunks
         type: chunk
@@ -242,6 +244,14 @@ types:
           The tagged chunks that make up the compressed data.
     types:
       chunk:
+        doc: |
+          A single tagged chunk of compressed data.
+
+          Each chunk expands to 16 bytes of decompressed data.
+          In compressed form,
+          the chunks have a variable length
+          (between 9 and 17 bytes)
+          depending on the value of the tag byte.
         seq:
           - id: tag
             type: b1
@@ -277,13 +287,3 @@ types:
               If the bit is 1 (true),
               the unit is a reference into the lookup table,
               an integer which is expanded to two bytes by looking it up in the table.
-        doc: |
-          A single tagged chunk of compressed data.
-
-          Each chunk expands to 16 bytes of decompressed data.
-          In compressed form,
-          the chunks have a variable length
-          (between 9 and 17 bytes)
-          depending on the value of the tag byte.
-    doc: |
-      Compressed data in the "tagged" variant of the format.

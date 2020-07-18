@@ -46,6 +46,9 @@ seq:
       see the specs in the resource_compression subdirectory.
 types:
   header:
+    doc: |
+      Compressed resource data header,
+      as stored at the start of all compressed resources.
     seq:
       - id: common_part
         type: common_part
@@ -79,6 +82,9 @@ types:
           parsed according to the type from the common part.
     types:
       common_part:
+        doc: |
+          The common part of a compressed resource data header.
+          The format of this part is the same for all compressed resources.
         seq:
           - id: magic
             contents: [0xa8, 0x9f, 0x65, 0x72]
@@ -116,10 +122,9 @@ types:
             type: u4
             doc: |
               The byte length of the data after decompression.
-        doc: |
-          The common part of a compressed resource data header.
-          The format of this part is the same for all compressed resources.
       type_specific_part_type_8:
+        doc: |
+          The type-specific part of a compressed resource header with header type `8`.
         seq:
           - id: working_buffer_fractional_size
             type: u1
@@ -151,9 +156,9 @@ types:
               The meaning of this field is not known.
               It has the value `0` in all known compressed resources,
               so it is most likely reserved.
-        doc: |
-          The type-specific part of a compressed resource header with header type `8`.
       type_specific_part_type_9:
+        doc: |
+          The type-specific part of a compressed resource header with header type `9`.
         seq:
           - id: decompressor_id
             type: s2
@@ -175,8 +180,3 @@ types:
               This field always has the same length,
               but decompressors don't always use the entirety of the field,
               so depending on the decompressor some parts of this field may be meaningless.
-        doc: |
-          The type-specific part of a compressed resource header with header type `9`.
-    doc: |
-      Compressed resource data header,
-      as stored at the start of all compressed resources.

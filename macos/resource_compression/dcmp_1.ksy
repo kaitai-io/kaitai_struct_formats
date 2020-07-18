@@ -41,6 +41,17 @@ seq:
       The sequence of chunks that make up the compressed data.
 types:
   chunk:
+    doc: |
+      A single chunk of compressed data.
+      Each chunk in the compressed data expands to a sequence of bytes in the uncompressed data,
+      except when `tag == 0xff`,
+      which marks the end of the data and does not correspond to any bytes in the uncompressed data.
+
+      Most chunks are stateless and always expand to the same data,
+      regardless of where the chunk appears in the sequence.
+      However,
+      some chunks affect the behavior of future chunks,
+      or expand to different data depending on which chunks came before them.
     seq:
       - id: tag
         type: u1
@@ -82,6 +93,12 @@ types:
         4: end
     types:
       literal_body:
+        doc: |
+          The body of a literal data chunk.
+
+          The data that this chunk expands to is stored literally in the body (`literal`).
+          Optionally,
+          the literal data may also be stored for use by future backreference chunks (`do_store`).
         params:
           - id: tag
             type: u1
@@ -137,13 +154,12 @@ types:
               In practice,
               this value is always greater than zero,
               as there is no use in storing a zero-length literal.
-        doc: |
-          The body of a literal data chunk.
-
-          The data that this chunk expands to is stored literally in the body (`literal`).
-          Optionally,
-          the literal data may also be stored for use by future backreference chunks (`do_store`).
       backreference_body:
+        doc: |
+          The body of a backreference chunk.
+
+          This chunk expands to the data stored in a preceding literal chunk,
+          indicated by an index number (`index`).
         params:
           - id: tag
             type: u1
@@ -196,12 +212,14 @@ types:
               As the name indicates,
               a backreference can only reference stored literal chunks found *before* the backreference,
               not ones that come after it.
-        doc: |
-          The body of a backreference chunk.
-
-          This chunk expands to the data stored in a preceding literal chunk,
-          indicated by an index number (`index`).
       table_lookup_body:
+        doc: |
+          The body of a table lookup chunk.
+          This body is always empty.
+
+          This chunk always expands to two bytes (`value`),
+          determined from the tag byte using a fixed lookup table (`lookup_table`).
+          This lookup table is hardcoded in the decompressor and always the same for all compressed data.
         params:
           - id: tag
             type: u1
@@ -234,14 +252,10 @@ types:
             doc: |
               The two bytes that the tag byte expands to,
               based on the fixed lookup table.
-        doc: |
-          The body of a table lookup chunk.
-          This body is always empty.
-
-          This chunk always expands to two bytes (`value`),
-          determined from the tag byte using a fixed lookup table (`lookup_table`).
-          This lookup table is hardcoded in the decompressor and always the same for all compressed data.
       extended_body:
+        doc: |
+          The body of an extended chunk.
+          The meaning of this chunk depends on the extended tag byte stored in the chunk data.
         seq:
           - id: tag
             type: u1
@@ -257,6 +271,11 @@ types:
               The chunk's body.
         types:
           repeat_body:
+            doc: |
+              The body of a repeat chunk.
+
+              This chunk expands to the same byte repeated a number of times,
+              i. e. it implements a form of run-length encoding.
             seq:
               - id: to_repeat_raw
                 type: dcmp_variable_length_integer
@@ -287,30 +306,11 @@ types:
                   The number of times to repeat the value.
 
                   This value must be positive.
-            doc: |
-              The body of a repeat chunk.
-
-              This chunk expands to the same byte repeated a number of times,
-              i. e. it implements a form of run-length encoding.
-        doc: |
-          The body of an extended chunk.
-          The meaning of this chunk depends on the extended tag byte stored in the chunk data.
       end_body:
-        seq: []
         doc: |
           The body of an end chunk.
           This body is always empty.
 
           The last chunk in the compressed data must always be an end chunk.
           An end chunk cannot appear elsewhere in the compressed data.
-    doc: |
-      A single chunk of compressed data.
-      Each chunk in the compressed data expands to a sequence of bytes in the uncompressed data,
-      except when `tag == 0xff`,
-      which marks the end of the data and does not correspond to any bytes in the uncompressed data.
-
-      Most chunks are stateless and always expand to the same data,
-      regardless of where the chunk appears in the sequence.
-      However,
-      some chunks affect the behavior of future chunks,
-      or expand to different data depending on which chunks came before them.
+        seq: []
