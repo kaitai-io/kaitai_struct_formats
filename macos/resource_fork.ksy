@@ -11,7 +11,7 @@ meta:
   license: MIT
   ks-version: "0.9"
   imports:
-    - /common/data_with_io
+    - /common/bytes_with_io
   endian: be
 doc: |
   The data format of Macintosh resource forks,
@@ -85,7 +85,7 @@ seq:
 instances:
   data_blocks_with_io:
     pos: header.ofs_data_blocks
-    type: data_with_io
+    type: bytes_with_io
     size: header.len_data_blocks
     doc: |
       Use `data_blocks` instead,
@@ -200,7 +200,7 @@ types:
         doc: The resource map's resource type list, followed by the resource reference list area.
       names_with_io:
         pos: ofs_names
-        type: data_with_io
+        type: bytes_with_io
         size-eos: true
         doc: |
           Use `names` instead,

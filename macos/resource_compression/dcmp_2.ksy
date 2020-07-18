@@ -5,7 +5,7 @@ meta:
   license: MIT
   ks-version: "0.8"
   imports:
-    - /common/data_with_io
+    - /common/bytes_with_io
   endian: be
 doc: |
   Compressed resource data in `'dcmp' (2)` format,
@@ -35,7 +35,7 @@ params:
       The length of the decompressed data in bytes,
       from the compressed resource header.
   - id: header_parameters_with_io
-    type: data_with_io
+    type: bytes_with_io
     doc: |
       The unparsed decompressor-specific parameters,
       from the compressed resource header.

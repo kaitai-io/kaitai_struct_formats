@@ -5,7 +5,7 @@ meta:
   license: MIT
   ks-version: "0.9"
   imports:
-    - /common/data_with_io
+    - /common/bytes_with_io
   endian: be
 doc: |
   Compressed Macintosh resource data,
@@ -55,7 +55,7 @@ types:
           this part contains the header type,
           which determines the format of the data in the type-specific part of the header.
       - id: type_specific_part_raw_with_io
-        type: data_with_io
+        type: bytes_with_io
         size: common_part.len_header - common_part._sizeof
         doc: |
           Use `type_specific_part_raw` instead,
@@ -160,7 +160,7 @@ types:
             doc: |
               The ID of the `'dcmp'` resource that should be used to decompress this resource.
           - id: decompressor_specific_parameters_with_io
-            type: data_with_io
+            type: bytes_with_io
             size: 4
             doc: |
               Use `decompressor_specific_parameters` instead,

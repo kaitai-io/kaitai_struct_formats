@@ -1,5 +1,5 @@
 meta:
-  id: data_with_io
+  id: bytes_with_io
   title: Byte array with an `_io` member
   license: MIT
 doc: |
