@@ -179,7 +179,7 @@ types:
         doc: Reserved space for the resource file's file reference number.
       - id: file_attributes
         type: file_attributes
-        size: sizeof<file_attributes> # Force creation of a substream
+        size: 2
         doc: The resource file's attributes.
       - id: ofs_type_list
         type: u2
@@ -407,7 +407,7 @@ types:
                       i. e. `-1` truncated to a 16-bit unsigned integer.
                   - id: attributes
                     type: attributes
-                    size: sizeof<attributes> # Force creation of a substream
+                    size: 1
                     doc: Attributes of the resource described by this reference.
                   - id: ofs_data_block
                     type: b24 # 3-byte unsigned integer, packed together with the previous 1-byte field.
