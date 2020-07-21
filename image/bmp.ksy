@@ -64,8 +64,9 @@ doc: |
   Due to the fact that it isn't documented anywhere else, most applications don't support it.
 
   All Windows headers at once (including mentioned BITMAPV2INFOHEADER and BITMAPV3INFOHEADER):
+
   ![Bitmap headers overview](
-    https://forums.adobe.com/servlet/JiveServlet/showImage/2-3273299-47801/BMP_Headers.png
+    https://web.archive.org/web/20190527043845/https://forums.adobe.com/servlet/JiveServlet/showImage/2-3273299-47801/BMP_Headers.png
   )
 
   ## Specs
