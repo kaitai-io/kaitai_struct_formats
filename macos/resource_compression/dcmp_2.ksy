@@ -51,8 +51,11 @@ seq:
     type:
       switch-on: header_parameters.flags.tagged
       cases:
-        false: untagged_data
         true: tagged_data
+        # _ is equivalent to false here.
+        # This is a workaround for kaitai-io/kaitai_struct#208 to make the compiler understand that the switch only has two cases,
+        # so that it doesn't generate a third default case that maps to a byte array type.
+        _: untagged_data
     # The data extends to one byte before EOS if the decompressed length is odd,
     # and otherwise extends completely to EOS.
     size: |
