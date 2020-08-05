@@ -21,6 +21,36 @@ enums:
     5: lz4
     6: zstd
 types:
+  flags:
+    seq:
+      # bit count starts from the largest, byte count form the smallest
+      - id: nfs_export_table
+        type: b1
+      - id: data_deduplicated
+        type: b1
+      - id: fragments_always_generated
+        type: b1
+      - id: fragments_not_used
+        type: b1
+      - id: fragments_uncompresed
+        type: b1
+      - type: b1
+        doc: 0x0004 bit is unused.
+      - id: data_blocks_uncompresed
+        type: b1
+      - id: inodes_uncompresed
+        type: b1
+      # bits 0x0100 are below, starting from the largest
+      - type: b4
+        doc: bits 11110000 are unused
+      - id: id_table_uncompresed
+        type: b1
+      - id: compressor_options_present
+        type: b1
+      - id: xattrs_absent
+        type: b1
+      - id: xattrs_uncompressed
+        type: b1
   superblock:
     seq:
       - id: magic
@@ -48,7 +78,7 @@ types:
           The log2 of the block size. If the two fields do not agree, the
           archive is considered corrupted.
       - id: flags
-        type: u2
+        type: flags
       - id: id_count
         type: u2
         doc: The number of entries in the ID lookup table.
