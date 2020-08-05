@@ -12,6 +12,14 @@ doc-ref: https://github.com/AgentD/squashfs-tools-ng/blob/master/doc/format.txt
 seq:
   - id: superblock
     type: superblock
+enums:
+  compressor:
+    1: gzip
+    2: lzo
+    3: lzma
+    4: xz
+    5: lz4
+    6: zstd
 types:
   superblock:
     seq:
@@ -21,12 +29,19 @@ types:
         type: u4
       - id: mod_time
         type: u4
+        doc: Unix times of last modification.
       - id: block_size
         type: u4
+        doc: |
+          The size of a data block in bytes. Must be a power of two between
+          4096 (4k) and 1048576 (1 MiB).
       - id: frag_count
         type: u4
+        doc: The number of entries in the fragment table.
       - id: compressor
         type: u2
+        enum: compressor
+        doc: Compressor used for both data and meta data blocks.
       - id: block_log
         type: u2
         doc: |
@@ -36,14 +51,20 @@ types:
         type: u2
       - id: id_count
         type: u2
+        doc: The number of entries in the ID lookup table.
       - id: version_major
         contents: [ 4, 0 ]
       - id: version_minor
         contents: [ 0, 0 ]
       - id: root_inode_ref
         type: u8
+        doc: A reference to the inode of the root directory.
       - id: bytes_used
         type: u8
+        doc: |
+          The number of bytes used by the archive. Because SquashFS
+          archives must be padded to a multiple of the underlying device
+          block size, this can be less than the actual file size.
       - id: id_table_start
         type: u8
       - id: xattr_id_table_start
