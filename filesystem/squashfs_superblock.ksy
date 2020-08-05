@@ -6,6 +6,8 @@ meta:
     - snap
   endian: le
   license: CC-0
+  xref:
+    wikidata: Q389314
 doc-ref: https://github.com/AgentD/squashfs-tools-ng/blob/master/doc/format.txt
 seq:
   - id: superblock
