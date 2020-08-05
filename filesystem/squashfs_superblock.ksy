@@ -29,6 +29,9 @@ types:
         type: u2
       - id: block_log
         type: u2
+        doc: |
+          The log2 of the block size. If the two fields do not agree, the
+          archive is considered corrupted.
       - id: flags
         type: u2
       - id: id_count
@@ -53,4 +56,3 @@ types:
         type: u8
       - id: export_table_start
         type: u8
-        
