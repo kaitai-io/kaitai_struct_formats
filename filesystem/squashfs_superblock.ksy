@@ -8,6 +8,11 @@ meta:
   license: CC-0
   xref:
     wikidata: Q389314
+doc: |
+  SquashFS is a compressed filesystem in a file, that can be read-only
+  accessed from low memory devices. It is popular for booting LiveCDs and
+  packing self-contained binaries. SquashFS format is used by Ubuntu .snap
+  packages. SquashFS is natively supported by Linux Kernel.
 doc-ref: https://github.com/AgentD/squashfs-tools-ng/blob/master/doc/format.txt
 seq:
   - id: superblock
