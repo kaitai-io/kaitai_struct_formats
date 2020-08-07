@@ -29,32 +29,30 @@ types:
   flags:
     seq:
       # bit count starts from the largest, byte count form the smallest
-      - id: nfs_export_table
+      - id: nfs_export_table            # 0x0080
         type: b1
-      - id: data_deduplicated
+      - id: data_deduplicated           # 0x0040
         type: b1
-      - id: fragments_always_generated
+      - id: fragments_always_generated  # 0x0020
         type: b1
-      - id: fragments_not_used
+      - id: fragments_not_used          # 0x0010
         type: b1
-      - id: fragments_uncompresed
+      - id: fragments_uncompresed       # 0x0008
         type: b1
-      - type: b1
-        doc: 0x0004 bit is unused.
-      - id: data_blocks_uncompresed
+      - type: b1                        # 0x0004 bit is unused
+      - id: data_blocks_uncompresed     # 0x0002
         type: b1
-      - id: inodes_uncompresed
+      - id: inodes_uncompresed          # 0x0001
         type: b1
       # bits 0x0100 are below, starting from the largest
-      - type: b4
-        doc: bits 11110000 are unused
-      - id: id_table_uncompresed
+      - type: b4                        # bits 11110000 are unused
+      - id: id_table_uncompresed        # 0x0800
         type: b1
-      - id: compressor_options_present
+      - id: compressor_options_present  # 0x0400
         type: b1
-      - id: xattrs_absent
+      - id: xattrs_absent               # 0x0200
         type: b1
-      - id: xattrs_uncompressed
+      - id: xattrs_uncompressed         # 0x0100
         type: b1
   superblock:
     seq:
