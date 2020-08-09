@@ -132,21 +132,21 @@ types:
             'header::type::icon_48x48_rgb_mask': icon_rgb_mask_data(48, 48)
             'header::type::icon_128x128_rgb': icon_rgb_zero_prefixed_data(128, 128)
             'header::type::icon_128x128_rgb_mask': icon_rgb_mask_data(128, 128)
-            'header::type::icon_16x16_argb': icon_argb_data(16, 16)
-            'header::type::icon_18x18_argb': icon_argb_data(18, 18)
-            'header::type::icon_32x32_argb': icon_argb_data(32, 32)
-            'header::type::icon_18x18_at_2x_argb': icon_argb_data(36, 36)
-            'header::type::icon_16x16_png_jp2': icon_png_jp2_data
-            'header::type::icon_32x32_png_jp2': icon_png_jp2_data
-            'header::type::icon_64x64_png_jp2': icon_png_jp2_data
-            'header::type::icon_128x128_png_jp2': icon_png_jp2_data
-            'header::type::icon_256x256_png_jp2': icon_png_jp2_data
-            'header::type::icon_512x512_png_jp2': icon_png_jp2_data
-            'header::type::icon_16x16_at_2x_png_jp2': icon_png_jp2_data
-            'header::type::icon_32x32_at_2x_png_jp2': icon_png_jp2_data
-            'header::type::icon_128x128_at_2x_png_jp2': icon_png_jp2_data
-            'header::type::icon_256x256_at_2x_png_jp2': icon_png_jp2_data
-            'header::type::icon_512x512_at_2x_png_jp2': icon_png_jp2_data
+            'header::type::icon_16x16_argb': icon_argb_data(16, 16, 1)
+            'header::type::icon_18x18_argb': icon_argb_data(18, 18, 1)
+            'header::type::icon_32x32_argb': icon_argb_data(32, 32, 1)
+            'header::type::icon_18x18_at_2x_argb': icon_argb_data(18, 18, 2)
+            'header::type::icon_16x16_png_jp2': icon_png_jp2_data(16, 16, 1)
+            'header::type::icon_32x32_png_jp2': icon_png_jp2_data(32, 32, 1)
+            'header::type::icon_64x64_png_jp2': icon_png_jp2_data(64, 64, 1)
+            'header::type::icon_128x128_png_jp2': icon_png_jp2_data(128, 128, 1)
+            'header::type::icon_256x256_png_jp2': icon_png_jp2_data(256, 256, 1)
+            'header::type::icon_512x512_png_jp2': icon_png_jp2_data(512, 512, 1)
+            'header::type::icon_16x16_at_2x_png_jp2': icon_png_jp2_data(16, 16, 2)
+            'header::type::icon_32x32_at_2x_png_jp2': icon_png_jp2_data(32, 32, 2)
+            'header::type::icon_128x128_at_2x_png_jp2': icon_png_jp2_data(128, 128, 2)
+            'header::type::icon_256x256_at_2x_png_jp2': icon_png_jp2_data(256, 256, 2)
+            'header::type::icon_512x512_at_2x_png_jp2': icon_png_jp2_data(512, 512, 2)
             _: bytes_with_io # necessary to make the valid check below work if type is unknown
         valid:
           expr: _io.eof
@@ -844,12 +844,18 @@ types:
       icon_argb_data:
         doc: The data for a 32-bit ARGB bitmap icon.
         params:
-          - id: width
+          - id: point_width
             type: u4
-            doc: The width of the icon in pixels.
-          - id: height
+            doc: The width of the icon in points.
+          - id: point_height
             type: u4
-            doc: The height of the icon in pixels.
+            doc: The height of the icon in points.
+          - id: scale
+            type: u4
+            doc: |
+              The number of pixels per point (along each dimension) in the image.
+              Icons with scale 1 are intended for screens with normal pixel density,
+              and those with scale 2 are intended for HiDPI screens.
         seq:
           - id: signature
             contents: "ARGB"
@@ -873,6 +879,17 @@ types:
               this detail is mostly irrelevant -
               the compressed length of each channel is variable and not stored in the data,
               so there is no way to separate the four color channels without decompressing them.
+        instances:
+          pixel_width:
+            value: point_width * scale
+            doc: |
+              The width of the icon in pixels,
+              calculated based on the width in points and the scale.
+          pixel_height:
+            value: point_height * scale
+            doc: |
+              The height of the icon in pixels,
+              calculated based on the height in points and the scale.
       icon_png_jp2_data:
         doc: |
           The data for a PNG or JPEG 2000 icon.
@@ -883,6 +900,19 @@ types:
           practically all system icons use PNG instead of JPEG 2000,
           and the developer tools (Icon Composer and `iconutil`) always output PNG data.
           The JPEG 2000 format is almost never used anymore here.
+        params:
+          - id: point_width
+            type: u4
+            doc: The width of the icon in points.
+          - id: point_height
+            type: u4
+            doc: The height of the icon in points.
+          - id: scale
+            type: u4
+            doc: |
+              The number of pixels per point (along each dimension) in the image.
+              Icons with scale 1 are intended for screens with normal pixel density,
+              and those with scale 2 are intended for HiDPI screens.
         seq:
           - id: png_or_jp2_data
             size-eos: true
@@ -890,3 +920,14 @@ types:
               The icon data in PNG or JPEG 2000 format.
               Both formats have unique signatures/magic numbers,
               which can be used to determine which of the two formats the icon data has.
+        instances:
+          pixel_width:
+            value: point_width * scale
+            doc: |
+              The width of the icon in pixels,
+              calculated based on the width in points and the scale.
+          pixel_height:
+            value: point_height * scale
+            doc: |
+              The height of the icon in pixels,
+              calculated based on the height in points and the scale.
