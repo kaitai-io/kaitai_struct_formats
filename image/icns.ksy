@@ -147,7 +147,9 @@ types:
             'header::type::icon_128x128_at_2x_png_jp2': icon_png_jp2_data
             'header::type::icon_256x256_at_2x_png_jp2': icon_png_jp2_data
             'header::type::icon_512x512_at_2x_png_jp2': icon_png_jp2_data
-        # TODO Check that the entire data has been parsed
+            _: bytes_with_io # necessary to make the valid check below work if type is unknown
+        valid:
+          expr: _io.eof
         doc: |
           The data stored in the element,
           parsed based on the type code in the header.
