@@ -511,7 +511,7 @@ types:
               id: icon_18x18_at_2x_argb
               doc: |
                 A 36x36-pixel ARGB bitmap icon,
-                intended to be rendered at a size of 18x18 logical pixels on HiDPI screens.
+                intended to be rendered at a size of 18x18 points on HiDPI screens.
                 See icon_argb_data for the exact structure of the data.
 
                 Supported since Mac OS X 10.7.
@@ -571,7 +571,7 @@ types:
               id: icon_16x16_at_2x_png_jp2
               doc: |
                 A 32x32-pixel icon in PNG or JPEG 2000 format,
-                intended to be rendered at a size of 16x16 logical pixels on HiDPI screens.
+                intended to be rendered at a size of 16x16 points on HiDPI screens.
                 See icon_png_jp2_data for the exact structure of the data.
 
                 Supported since Mac OS X 10.7.
@@ -579,7 +579,7 @@ types:
               id: icon_32x32_at_2x_png_jp2
               doc: |
                 A 64x64-pixel icon in PNG or JPEG 2000 format,
-                intended to be rendered at a size of 32x32 logical pixels on HiDPI screens.
+                intended to be rendered at a size of 32x32 points on HiDPI screens.
                 See icon_png_jp2_data for the exact structure of the data.
 
                 Supported since Mac OS X 10.7.
@@ -588,7 +588,7 @@ types:
               id: icon_128x128_at_2x_png_jp2
               doc: |
                 A 256x256-pixel icon in PNG or JPEG 2000 format,
-                intended to be rendered at a size of 128x128 logical pixels on HiDPI screens.
+                intended to be rendered at a size of 128x128 points on HiDPI screens.
                 See icon_png_jp2_data for the exact structure of the data.
 
                 Supported since Mac OS X 10.7.
@@ -596,7 +596,7 @@ types:
               id: icon_256x256_at_2x_png_jp2
               doc: |
                 A 512x512-pixel icon in PNG or JPEG 2000 format,
-                intended to be rendered at a size of 256x256 logical pixels on HiDPI screens.
+                intended to be rendered at a size of 256x256 points on HiDPI screens.
                 See icon_png_jp2_data for the exact structure of the data.
 
                 Supported since Mac OS X 10.7.
@@ -604,7 +604,7 @@ types:
               id: icon_512x512_at_2x_png_jp2
               doc: |
                 A 1024x1024-pixel icon in PNG (since Mac OS X 10.6) or JPEG 2000 format,
-                intended to be rendered at a size of 512x512 logical pixels on HiDPI screens.
+                intended to be rendered at a size of 512x512 points on HiDPI screens.
                 Mac OS X 10.7 and older instead treat this as a non-HiDPI 1024x1024 icon,
                 but this makes almost no difference in practice,
                 because the image is 1024x1024 in both cases.
