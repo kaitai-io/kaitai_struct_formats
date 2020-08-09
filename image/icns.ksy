@@ -790,6 +790,7 @@ types:
               cases:
                 false: icns_style_packbits
                 # If true, the data is uncompressed and should be read as a raw byte array.
+            size-eos: true
             doc: |
               The icon's red, green and blue color channels,
               each a sequence of 8-bit color values (one per pixel),
