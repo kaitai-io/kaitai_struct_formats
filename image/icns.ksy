@@ -304,6 +304,10 @@ types:
               doc: |
                 A 16x12-pixel 1-bit monochrome bitmap icon with a 1-bit mask.
                 See icon_x1_and_mask_data for the exact structure of the data.
+
+                As of Mac OS X 10.4 (possibly earlier),
+                icons of this type are not displayed in the Preview application,
+                but can be viewed using icns Browser (which comes with Xcode 2.5).
             0x69636d34: # 'icm4'
               id: icon_16x12x4
               -orig-id: kMini4BitData
@@ -312,6 +316,10 @@ types:
                 in the Mac OS default 4-bit color palette.
                 Uses the 1-bit mask from the 'icm#' (icon_16x12x1_with_mask) icon in the same family.
                 See icon_x4_data for the exact structure of the data.
+
+                As of Mac OS X 10.4 (possibly earlier),
+                icons of this type are not displayed in the Preview application,
+                but can be viewed using icns Browser (which comes with Xcode 2.5).
             0x69636d38: # 'icm8'
               id: icon_16x12x8
               -orig-id: kMini8BitData
@@ -320,6 +328,10 @@ types:
                 in the Mac OS default 8-bit color palette.
                 Uses the 1-bit mask from the 'icm#' (icon_16x12x1_with_mask) icon in the same family.
                 See icon_x8_data for the exact structure of the data.
+
+                As of Mac OS X 10.4 (possibly earlier),
+                icons of this type are not displayed in the Preview application,
+                but can be viewed using icns Browser (which comes with Xcode 2.5).
             # The 16x12 size has no RGB icon ('im32') or RGB mask ('m8mk') variant.
             # endregion
 
