@@ -133,10 +133,9 @@ types:
             'header::type::icon_48x48_rgb_mask': icon_rgb_mask_data(48, 48)
             'header::type::icon_128x128_rgb': icon_rgb_zero_prefixed_data(128, 128)
             'header::type::icon_128x128_rgb_mask': icon_rgb_mask_data(128, 128)
-            'header::type::icon_16x16_argb': icon_argb_data(16, 16, 1)
-            'header::type::icon_18x18_argb': icon_argb_data(18, 18, 1)
-            'header::type::icon_32x32_argb': icon_argb_data(32, 32, 1)
-            'header::type::icon_18x18_at_2x_argb': icon_argb_data(18, 18, 2)
+            'header::type::icon_16x16_argb': icon_argb_data(16, 16)
+            'header::type::icon_18x18_argb': icon_argb_data(18, 18)
+            'header::type::icon_32x32_argb': icon_argb_data(32, 32)
             'header::type::icon_16x16_png_jp2': icon_png_jp2_data(16, 16, 1)
             'header::type::icon_32x32_png_jp2': icon_png_jp2_data(32, 32, 1)
             'header::type::icon_64x64_png_jp2': icon_png_jp2_data(64, 64, 1)
@@ -144,6 +143,7 @@ types:
             'header::type::icon_256x256_png_jp2': icon_png_jp2_data(256, 256, 1)
             'header::type::icon_512x512_png_jp2': icon_png_jp2_data(512, 512, 1)
             'header::type::icon_16x16_at_2x_png_jp2': icon_png_jp2_data(16, 16, 2)
+            'header::type::icon_18x18_at_2x_png_jp2': icon_png_jp2_data(18, 18, 2)
             'header::type::icon_32x32_at_2x_png_jp2': icon_png_jp2_data(32, 32, 2)
             'header::type::icon_128x128_at_2x_png_jp2': icon_png_jp2_data(128, 128, 2)
             'header::type::icon_256x256_at_2x_png_jp2': icon_png_jp2_data(256, 256, 2)
@@ -500,14 +500,6 @@ types:
                 See icon_argb_data for the exact structure of the data.
 
                 Supported since macOS 10.13 (possibly earlier).
-            0x69637342: # 'icsB'
-              id: icon_18x18_at_2x_argb
-              doc: |
-                A 36x36-pixel ARGB bitmap icon,
-                intended to be rendered at a size of 18x18 points on HiDPI screens.
-                See icon_argb_data for the exact structure of the data.
-
-                Supported since Mac OS X 10.7.
             # The type 'ic06' exists in <OSServices/IconStorage.h> as kIconServices48PixelDataARGB,
             # but (as of macOS 10.14) the system does not recognize it as an element type when stored in an actual icon family.
             # endregion
@@ -565,6 +557,14 @@ types:
               doc: |
                 A 32x32-pixel icon in PNG or JPEG 2000 format,
                 intended to be rendered at a size of 16x16 points on HiDPI screens.
+                See icon_png_jp2_data for the exact structure of the data.
+
+                Supported since Mac OS X 10.7.
+            0x69637342: # 'icsB'
+              id: icon_18x18_at_2x_png_jp2
+              doc: |
+                A 36x36-pixel icon in PNG or JPEG 2000 format,
+                intended to be rendered at a size of 18x18 points on HiDPI screens.
                 See icon_png_jp2_data for the exact structure of the data.
 
                 Supported since Mac OS X 10.7.
@@ -861,18 +861,12 @@ types:
       icon_argb_data:
         doc: The data for a 32-bit ARGB bitmap icon.
         params:
-          - id: point_width
+          - id: width
             type: u4
-            doc: The width of the icon in points.
-          - id: point_height
+            doc: The width of the icon in pixels.
+          - id: height
             type: u4
-            doc: The height of the icon in points.
-          - id: scale
-            type: u4
-            doc: |
-              The number of pixels per point (along each dimension) in the image.
-              Icons with scale 1 are intended for screens with normal pixel density,
-              and those with scale 2 are intended for HiDPI screens.
+            doc: The height of the icon in pixels.
         seq:
           - id: signature
             contents: "ARGB"
@@ -893,17 +887,6 @@ types:
               this detail is mostly irrelevant -
               the compressed length of each channel is variable and not stored in the data,
               so there is no way to separate the four color channels without decompressing them.
-        instances:
-          pixel_width:
-            value: point_width * scale
-            doc: |
-              The width of the icon in pixels,
-              calculated based on the width in points and the scale.
-          pixel_height:
-            value: point_height * scale
-            doc: |
-              The height of the icon in pixels,
-              calculated based on the height in points and the scale.
       icon_png_jp2_data:
         doc: |
           The data for a PNG or JPEG 2000 icon.
