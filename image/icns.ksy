@@ -807,23 +807,18 @@ types:
             doc: The height of the icon in pixels.
         seq:
           - id: data
-            type:
-              switch-on: _io.size == width * height * 3
-              cases:
-                false: icns_style_packbits
-                # If true, the data is uncompressed and should be read as a raw byte array.
-            size-eos: true
+            type: icns_style_packbits
             doc: |
               The icon's red, green and blue color channels,
               each a sequence of 8-bit color values (one per pixel),
-              optionally compressed using run-length encoding.
+              compressed using run-length encoding.
 
-              When storing the data in compressed form,
+              When storing the data,
               each color channel is compressed separately,
               and afterwards the compressed data for the three channels is concatenated and stored.
               (That is, a chunk in the compressed data cannot span multiple color channels.)
 
-              When reading the compressed data,
+              When reading the data,
               this detail is mostly irrelevant -
               the compressed length of each color channel is variable and not stored in the data,
               so there is no way to separate the three color channels without decompressing them.
@@ -888,9 +883,6 @@ types:
               The icon's alpha channel and red, green and blue color channels,
               each a sequence of 8-bit opacity/color values (one per pixel),
               compressed using run-length encoding.
-              (Unlike RGB icons,
-              the data of ARGB icons *must* be compressed -
-              the system does not read uncompressed ARGB data correctly.)
 
               When storing the data,
               each channel is compressed separately,
