@@ -637,6 +637,10 @@ types:
             doc: |
               The header data for all other elements in the icon family that contains the table of contents elements.
               This information can be used to calculate the positions of all elements without having to read the entire data.
+
+              The Icon Composer version element ('icnV') is usually not included in the table of contents.
+              This does not affect calculating the positions of other elements,
+              because the Icon Composer version is usually the last element in the icon family.
       icon_composer_version_data:
         doc: The element data for an Icon Composer version number.
         -webide-representation: '{version:dec}'
