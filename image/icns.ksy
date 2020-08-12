@@ -120,19 +120,19 @@ types:
             'header::type::icon_16x16x4': icon_x4_data(16, 16)
             'header::type::icon_16x16x8': icon_x8_data(16, 16)
             'header::type::icon_16x16_rgb': icon_rgb_data(16, 16)
-            'header::type::icon_16x16_rgb_mask': icon_rgb_mask_data(16, 16)
+            'header::type::icon_16x16x8_mask': icon_x8_mask_data(16, 16)
             'header::type::icon_32x32x1_with_mask': icon_x1_and_mask_data(32, 32)
             'header::type::icon_32x32x4': icon_x4_data(32, 32)
             'header::type::icon_32x32x8': icon_x8_data(32, 32)
             'header::type::icon_32x32_rgb': icon_rgb_data(32, 32)
-            'header::type::icon_32x32_rgb_mask': icon_rgb_mask_data(32, 32)
+            'header::type::icon_32x32x8_mask': icon_x8_mask_data(32, 32)
             'header::type::icon_48x48x1_with_mask': icon_x1_and_mask_data(48, 48)
             'header::type::icon_48x48x4': icon_x4_data(48, 48)
             'header::type::icon_48x48x8': icon_x8_data(48, 48)
             'header::type::icon_48x48_rgb': icon_rgb_data(48, 48)
-            'header::type::icon_48x48_rgb_mask': icon_rgb_mask_data(48, 48)
+            'header::type::icon_48x48x8_mask': icon_x8_mask_data(48, 48)
             'header::type::icon_128x128_rgb': icon_rgb_zero_prefixed_data(128, 128)
-            'header::type::icon_128x128_rgb_mask': icon_rgb_mask_data(128, 128)
+            'header::type::icon_128x128x8_mask': icon_x8_mask_data(128, 128)
             'header::type::icon_16x16_argb': icon_argb_data(16, 16)
             'header::type::icon_18x18_argb': icon_argb_data(18, 18)
             'header::type::icon_32x32_argb': icon_argb_data(32, 32)
@@ -314,7 +314,7 @@ types:
               doc: |
                 A 16x12-pixel 4-bit color bitmap icon,
                 in the Mac OS default 4-bit color palette.
-                Uses the 1-bit mask from the 'icm#' (icon_16x12x1_with_mask) icon in the same family.
+                Does not contain a mask and instead uses a mask from one of the other icons of the same size in the same family.
                 See icon_x4_data for the exact structure of the data.
 
                 As of Mac OS X 10.4 (possibly earlier),
@@ -326,13 +326,13 @@ types:
               doc: |
                 A 16x12-pixel 8-bit color bitmap icon,
                 in the Mac OS default 8-bit color palette.
-                Uses the 1-bit mask from the 'icm#' (icon_16x12x1_with_mask) icon in the same family.
+                Does not contain a mask and instead uses a mask from one of the other icons of the same size in the same family.
                 See icon_x8_data for the exact structure of the data.
 
                 As of Mac OS X 10.4 (possibly earlier),
                 icons of this type are not displayed in the Preview application,
                 but can be viewed using icns Browser (which comes with Xcode 2.5).
-            # The 16x12 size has no RGB icon ('im32') or RGB mask ('m8mk') variant.
+            # The 16x12 size has no RGB icon ('im32') or 8-bit mask ('m8mk') variant.
             # endregion
 
             # region 16x16 ("small")
@@ -348,7 +348,7 @@ types:
               doc: |
                 A 16x16-pixel 4-bit color bitmap icon,
                 in the Mac OS default 4-bit color palette.
-                Uses the 1-bit mask from the 'ics#' (icon_16x16x1_with_mask) icon in the same family.
+                Does not contain a mask and instead uses a mask from one of the other icons of the same size in the same family.
                 See icon_x4_data for the exact structure of the data.
             0x69637338: # 'ics8'
               id: icon_16x16x8
@@ -356,22 +356,23 @@ types:
               doc: |
                 A 16x16-pixel 8-bit color bitmap icon,
                 in the Mac OS default 8-bit color palette.
-                Uses the 1-bit mask from the 'ics#' (icon_16x16x1_with_mask) icon in the same family.
+                Does not contain a mask and instead uses a mask from one of the other icons of the same size in the same family.
                 See icon_x8_data for the exact structure of the data.
             0x69733332: # 'is32'
               id: icon_16x16_rgb
               -orig-id: kSmall32BitData
               doc: |
                 A 16x16-pixel RGB color bitmap icon.
-                The corresponding 8-bit mask is stored in a separate 's8mk' (icon_16x16_rgb_mask) element,
-                so this bitmap is not actually 32-bit as the type code suggests.
+                Does not contain an alpha channel/mask
+                (so it is technically 24-bit and not 32-bit as the type code suggests)
+                and instead uses a mask from one of the other icons of the same size in the same family.
                 See icon_rgb_data for the exact structure of the data.
             0x73386d6b: # 's8mk'
-              id: icon_16x16_rgb_mask
+              id: icon_16x16x8_mask
               -orig-id: kSmall8BitMask
               doc: |
-                A 16x16-pixel 8-bit mask for the corresponding 'is32' (icon_16x16_rgb) bitmap.
-                See icon_rgb_mask_data for the exact structure of the data.
+                A 16x16-pixel 8-bit mask for the maskless bitmap icons of the same size in the same family.
+                See icon_x8_mask_data for the exact structure of the data.
             # endregion
 
             # region 32x32 ("large")
@@ -387,30 +388,30 @@ types:
               doc: |
                 A 32x32-pixel 4-bit color bitmap icon,
                 in the Mac OS default 4-bit color palette.
-                Uses the 1-bit mask from the 'ICN#' (icon_32x32x1_with_mask) icon in the same family.
+                Does not contain a mask and instead uses a mask from one of the other icons of the same size in the same family.
                 See icon_x4_data for the exact structure of the data.
             0x69636c38: # 'icl8'
               id: icon_32x32x8
               -orig-id: kLarge8BitData
               doc: |
                 A 32x32-pixel 8-bit color bitmap icon,
-                in the Mac OS default 8-bit color palette.
-                Uses the 1-bit mask from the 'ICN#' (icon_32x32x1_with_mask) icon in the same family.
+                Does not contain a mask and instead uses a mask from one of the other icons of the same size in the same family.
                 See icon_x8_data for the exact structure of the data.
             0x696c3332: # 'il32'
               id: icon_32x32_rgb
               -orig-id: kLarge32BitData
               doc: |
                 A 32x32-pixel RGB color bitmap icon.
-                The corresponding 8-bit mask is stored in a separate 'l8mk' (icon_32x32_rgb_mask) element,
-                so this bitmap is not actually 32-bit as the type code suggests.
+                Does not contain an alpha channel/mask
+                (so it is technically 24-bit and not 32-bit as the type code suggests)
+                and instead uses a mask from one of the other icons of the same size in the same family.
                 See icon_rgb_data for the exact structure of the data.
             0x6c386d6b: # 'l8mk'
-              id: icon_32x32_rgb_mask
+              id: icon_32x32x8_mask
               -orig-id: kLarge8BitMask
               doc: |
-                A 32x32-pixel 8-bit mask for the corresponding 'il32' (icon_32x32_rgb) bitmap.
-                See icon_rgb_mask_data for the exact structure of the data.
+                A 32x32-pixel 8-bit mask for the maskless bitmap icons of the same size in the same family.
+                See icon_x8_mask_data for the exact structure of the data.
             # endregion
 
             # region 48x48 ("huge")
@@ -426,7 +427,7 @@ types:
               doc: |
                 A 48x48-pixel 4-bit color bitmap icon,
                 in the Mac OS default 4-bit color palette.
-                Uses the 1-bit mask from the 'ich#' (icon_48x48x1_with_mask) icon in the same family.
+                Does not contain a mask and instead uses a mask from one of the other icons of the same size in the same family.
                 See icon_x4_data for the exact structure of the data.
             0x69636838: # 'ich8'
               id: icon_48x48x8
@@ -434,22 +435,23 @@ types:
               doc: |
                 A 48x48-pixel 8-bit color bitmap icon,
                 in the Mac OS default 8-bit color palette.
-                Uses the 1-bit mask from the 'ich#' (icon_48x48x1_with_mask) icon in the same family.
+                Does not contain a mask and instead uses a mask from one of the other icons of the same size in the same family.
                 See icon_x8_data for the exact structure of the data.
             0x69683332: # 'ih32'
               id: icon_48x48_rgb
               -orig-id: kHuge32BitData
               doc: |
                 A 48x48-pixel RGB color bitmap icon.
-                The corresponding 8-bit mask is stored in a separate 'h8mk' (icon_48x48_rgb_mask) element,
-                so this bitmap is not actually 32-bit as the type code suggests.
+                Does not contain an alpha channel/mask
+                (so it is technically 24-bit and not 32-bit as the type code suggests)
+                and instead uses a mask from one of the other icons of the same size in the same family.
                 See icon_rgb_data for the exact structure of the data.
             0x68386d6b: # 'h8mk'
-              id: icon_48x48_rgb_mask
+              id: icon_48x48x8_mask
               -orig-id: kHuge8BitMask
               doc: |
-                A 48x48-pixel 8-bit mask for the corresponding 'ih32' (icon_48x48_rgb) bitmap.
-                See icon_rgb_mask_data for the exact structure of the data.
+                A 48x48-pixel 8-bit mask for the maskless bitmap icons of the same size in the same family.
+                See icon_x8_mask_data for the exact structure of the data.
             # endregion
 
             # region 128x128 ("thumbnail")
@@ -459,17 +461,17 @@ types:
               -orig-id: kThumbnail32BitData
               doc: |
                 A 128x128-pixel RGB color bitmap icon.
-                The corresponding 8-bit mask is stored in a separate 't8mk' (icon_128x128_rgb_mask) element,
-                so this bitmap is not actually 32-bit as the type code suggests.
+                Does not contain an alpha channel/mask
+                (so it is technically 24-bit and not 32-bit as the type code suggests)
+                and instead uses a mask from one of the other icons of the same size in the same family.
                 See icon_rgb_zero_prefixed_data for the exact structure of the data.
 
                 Supported since Mac OS X 10.0.
             0x74386d6b: # 't8mk'
-              id: icon_128x128_rgb_mask
+              id: icon_128x128x8_mask
               -orig-id: kThumbnail8BitMask
               doc: |
-                A 128x128-pixel 8-bit mask for the corresponding 'it32' (icon_128x128_rgb) bitmap.
-                See icon_rgb_mask_data for the exact structure of the data.
+                A 128x128-pixel 8-bit mask for the maskless bitmap icons of the same size in the same family.
 
                 Supported since Mac OS X 10.0.
             # endregion
@@ -760,8 +762,9 @@ types:
       icon_x4_data:
         doc: |
           The data for a 4-bit color bitmap icon.
-          These icons do not contain a mask,
-          but use the mask from the 1-bit monochrome icon of the same size from the same family.
+          These icons do not contain a mask and instead use the mask from one of the other elements in the same family
+          (the 8-bit mask element if possible,
+          otherwise the 1-bit mask from the 1-bit icon).
         params:
           - id: width
             type: u4
@@ -781,8 +784,9 @@ types:
       icon_x8_data:
         doc: |
           The data for an 8-bit color bitmap icon.
-          These icons do not contain a mask,
-          but use the mask from the 1-bit monochrome icon of the same size from the same family.
+          These icons do not contain a mask and instead use the mask from one of the other elements in the same family
+          (the 8-bit mask element if possible,
+          otherwise the 1-bit mask from the 1-bit icon).
         params:
           - id: width
             type: u4
@@ -800,8 +804,9 @@ types:
       icon_rgb_data:
         doc: |
           The data for a 24-bit RGB bitmap icon.
-          These icons do not contain a mask -
-          the mask is stored as a separate element in the same icon family.
+          These icons do not contain a mask and instead use the mask from one of the other elements in the same family
+          (the 8-bit mask element if possible,
+          otherwise the 1-bit mask from the 1-bit icon).
         params:
           - id: width
             type: u4
@@ -844,10 +849,10 @@ types:
           - id: icon
             type: icon_rgb_data(width, height)
             doc: The actual icon data in the usual RGB format.
-      icon_rgb_mask_data:
+      icon_x8_mask_data:
         doc: |
           The data for an 8-bit mask,
-          to be used together with the 24-bit RGB icon of the same size in the same icon family.
+          to be used together with one of the maskless bitmap icons of the same size in the same family.
         params:
           - id: width
             type: u4
