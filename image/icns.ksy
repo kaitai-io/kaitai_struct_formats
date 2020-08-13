@@ -937,3 +937,23 @@ types:
             doc: |
               The height of the icon in pixels,
               calculated based on the height in points and the scale.
+          png_signature:
+            value: '[0x89, 0x50, 0x4e, 0x47, 0xd, 0xa, 0x1a, 0xa]'
+            doc: The PNG format's signature.
+          png_signature_check:
+            pos: 0
+            size: png_signature.length
+            doc: Internal helper instance used to check if the data starts with the PNG signature.
+          is_png:
+            value: png_signature_check == png_signature
+            doc: Whether the data appears to be in PNG format (based on its signature).
+          jp2_signature:
+            value: '[0x0, 0x0, 0x0, 0xc, 0x6a, 0x50, 0x20, 0x20, 0xd, 0xa, 0x87, 0xa]'
+            doc: The JPEG 2000 format's signature.
+          jp2_signature_check:
+            pos: 0
+            size: jp2_signature.length
+            doc: Internal helper instance used to check if the data starts with the JPEG 2000 signature.
+          is_jp2:
+            value: jp2_signature_check == jp2_signature
+            doc: Whether the data appears to be in JPEG 2000 format (based on its signature).
