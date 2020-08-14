@@ -44,8 +44,6 @@ types:
       - id: cmd
         type: b15
         enum: cmd_type
-      - id: raw_cmd
-        type: u2
       - id: param1
         type: u2
       - id: param2
