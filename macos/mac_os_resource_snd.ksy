@@ -39,6 +39,11 @@ types:
         type: u4
   sound_command:
     seq:
+      - id: is_data_offset
+        type: b1
+      - id: cmd
+        type: b15
+        enum: cmd_type
       - id: raw_cmd
         type: u2
       - id: param1
@@ -46,20 +51,15 @@ types:
       - id: param2
         type: u4
     instances:
-      cmd:
-        value: raw_cmd & 0x7FFF
-        enum: cmd_type
-      is_data_offset:
-        value: raw_cmd & 0x8000
       sound_header_type:
         pos: param2 + 20
         type: u1
         enum: sound_header_type
-        if: is_data_offset > 0 and cmd == cmd_type::buffer_cmd
+        if: is_data_offset and cmd == cmd_type::buffer_cmd
       sound_header:
         pos: param2
         size-eos: true
-        if: is_data_offset > 0 and cmd == cmd_type::buffer_cmd
+        if: is_data_offset and cmd == cmd_type::buffer_cmd
         type:
           switch-on: sound_header_type
           cases:
