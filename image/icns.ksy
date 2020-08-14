@@ -686,10 +686,11 @@ types:
           A run-length encoding compression scheme similar to (but not the same as) PackBits.
           Used in the RGB and ARGB bitmap icon types.
         seq:
-          - id: chunks
-            type: chunk
-            repeat: eos
-            doc: The chunks that make up the compressed data.
+          - id: compressed_data_with_io
+            type: bytes_with_io
+            doc: |
+              Use `compressed_data` instead,
+              unless you need access to this field's `_io`.
         types:
           chunk:
             doc: |
@@ -733,6 +734,15 @@ types:
                 doc: |
                   If this is a repeat chunk,
                   the number of times the stored byte should be repeated in the output.
+        instances:
+          compressed_data:
+            value: compressed_data_with_io.data
+            doc: The raw compressed data.
+          chunks:
+            pos: 0
+            type: chunk
+            repeat: eos
+            doc: The compressed data parsed into chunks.
       icon_x1_and_mask_data:
         doc: The data for a 1-bit monochrome bitmap icon with a 1-bit mask.
         params:
