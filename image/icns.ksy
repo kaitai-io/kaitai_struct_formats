@@ -825,7 +825,7 @@ types:
             type: u4
             doc: The height of the icon in pixels.
         seq:
-          - id: data
+          - id: compressed_data
             type: icns_style_packbits
             doc: |
               The icon's red, green and blue color channels,
