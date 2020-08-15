@@ -75,12 +75,8 @@ types:
         doc: number of samples in array
       - id: sample_rate
         -orig-id: sampleRate
-        type: u2
-        doc: sample rate (Fixed Point, Integer part)
-      - id: sample_rate_frac
-        -orig-id: sampleRate
-        type: u2
-        doc: sample rate (Fixed Point, Fraction part)
+        type: unsigned_fixed_point
+        doc: sample rate
       - id: loop_start
         -orig-id: loopStart
         type: u4
@@ -113,12 +109,8 @@ types:
         doc: number of channels in sample
       - id: sample_rate
         -orig-id: sampleRate
-        type: u2
-        doc: sample rate (Fixed Point, Integer part)
-      - id: sample_rate_frac
-        -orig-id: sampleRate
-        type: u2
-        doc: sample rate (Fixed Point, Fraction part)
+        type: unsigned_fixed_point
+        doc: sample rate
       - id: loop_start
         -orig-id: loopStart
         type: u4
@@ -176,12 +168,8 @@ types:
         doc: number of channels in sample
       - id: sample_rate
         -orig-id: sampleRate
-        type: u2
-        doc: sample rate (Fixed Point, Integer part)
-      - id: sample_rate_frac
-        -orig-id: sampleRate
-        type: u2
-        doc: sample rate (Fixed Point, Fraction part)
+        type: unsigned_fixed_point
+        doc: sample rate
       - id: loop_start
         -orig-id: loopStart
         type: u4
@@ -244,6 +232,18 @@ types:
         -orig-id: sampleArea
         size-eos: true
         doc: compressed sound data
+  unsigned_fixed_point:
+    seq:
+      - id: integer_part
+        type: u2
+        doc: Integer Part of a fixed point value
+      - id: fraction_part
+        type: u2
+        doc: Fraction Part of a fixed point value
+    instances:
+      value:
+        value: integer_part + fraction_part/65535.0
+
 enums:
   data_type:
     0x01: square_wave_synth
