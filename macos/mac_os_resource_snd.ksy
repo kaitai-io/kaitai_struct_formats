@@ -7,6 +7,9 @@ meta:
   xref:
     wikidata: Q7564684
 doc-ref: "https://developer.apple.com/library/archive/documentation/mac/pdf/Sound/Sound_Manager.pdf"
+doc: Sound resources were introduced in Classic MacOS with the Sound Manager program.
+  They can contain sound commands to generate sounds with given frequencies as well as sampled sound data.
+  They are mostly found in resource forks, but can occasionally appear standalone or embedded in other files.
 seq:
   - id: format
     type: u2
@@ -76,7 +79,7 @@ types:
       - id: sample_rate
         -orig-id: sampleRate
         type: unsigned_fixed_point
-        doc: sample rate
+        doc: The rate at which the sample was originally recorded.
       - id: loop_start
         -orig-id: loopStart
         type: u4
@@ -110,7 +113,7 @@ types:
       - id: sample_rate
         -orig-id: sampleRate
         type: unsigned_fixed_point
-        doc: sample rate
+        doc: The rate at which the sample was originally recorded.
       - id: loop_start
         -orig-id: loopStart
         type: u4
@@ -169,7 +172,7 @@ types:
       - id: sample_rate
         -orig-id: sampleRate
         type: unsigned_fixed_point
-        doc: sample rate
+        doc: The rate at which the sample was originally recorded.
       - id: loop_start
         -orig-id: loopStart
         type: u4
