@@ -73,7 +73,7 @@ types:
       - id: sample_ptr
         -orig-id: samplePtr
         type: u4
-        doc: pointer to samples (or NIL if samples follow data structure)
+        doc: pointer to samples (or 0 if samples follow data structure)
       - id: length
         type: u4
         doc: number of samples in array
