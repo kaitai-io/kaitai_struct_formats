@@ -224,10 +224,10 @@ types:
         -orig-id: packetSize
         type: u2
         doc: number of bits per packet
-      - id: snth_id
+      - id: synthesizer_id
         -orig-id: snthID
         type: u2
-        doc: unused
+        doc: resource ID of Sound Manager Synthesizer (snth)
       - id: sample_size
         -orig-id: sampleSize
         type: u2
