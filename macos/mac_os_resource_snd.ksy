@@ -6,6 +6,7 @@ meta:
   license: MIT
   xref:
     wikidata: Q7564684
+    mac-os-resource-type: 'snd '
 doc-ref: "https://developer.apple.com/library/archive/documentation/mac/pdf/Sound/Sound_Manager.pdf"
 doc: |
   Sound resources were introduced in Classic MacOS with the Sound Manager program.
@@ -106,7 +107,7 @@ types:
       - id: sample_ptr
         -orig-id: samplePtr
         type: u4
-        doc: pointer to samples (or NIL if samples follow data structure)
+        doc: pointer to samples (or 0 if samples follow data structure)
       - id: num_channels
         -orig-id: numChannels
         type: u4
@@ -165,7 +166,7 @@ types:
       - id: sample_ptr
         -orig-id: samplePtr
         type: u4
-        doc: pointer to samples (or NIL if samples follow data structure)
+        doc: pointer to samples (or 0 if samples follow data structure)
       - id: num_channels
         -orig-id: numChannels
         type: u4
