@@ -7,7 +7,8 @@ meta:
   xref:
     wikidata: Q7564684
 doc-ref: "https://developer.apple.com/library/archive/documentation/mac/pdf/Sound/Sound_Manager.pdf"
-doc: Sound resources were introduced in Classic MacOS with the Sound Manager program.
+doc: |
+  Sound resources were introduced in Classic MacOS with the Sound Manager program.
   They can contain sound commands to generate sounds with given frequencies as well as sampled sound data.
   They are mostly found in resource forks, but can occasionally appear standalone or embedded in other files.
 seq:
@@ -91,7 +92,7 @@ types:
       - id: encode
         type: u1
         enum: sound_header_type
-        doc: sample’s encoding option
+        doc: sample's encoding option
       - id: base_frequency
         type: u1
         doc: base frequency of sample
@@ -125,7 +126,7 @@ types:
       - id: encode
         type: u1
         enum: sound_header_type
-        doc: sample’s encoding option
+        doc: sample's encoding option
       - id: base_frequency
         type: u1
         doc: base frequency of sample
@@ -184,7 +185,7 @@ types:
       - id: encode
         type: u1
         enum: sound_header_type
-        doc: sample’s encoding option
+        doc: sample's encoding option
       - id: base_frequency
         type: u1
         doc: base frequency of sample
@@ -253,9 +254,9 @@ enums:
     0x03: wave_table_synth
     0x05: sampled_synth
   cmd_type:
-    00: null_cmd
-    03: quiet_cmd
-    04: flush_cmd
+    0: null_cmd
+    3: quiet_cmd
+    4: flush_cmd
     10: wait_cmd
     11: pause_cmd
     12: resume_cmd
