@@ -623,347 +623,347 @@ types:
                 type: u4
                 enum: type
                 doc: The type code as an integer-based enum.
-      icon_family_data:
-        doc: The element data for an icon family.
-        seq:
-          - id: elements
-            type: icon_family_element
-            repeat: eos
-            doc: The elements contained in the icon family.
-      table_of_contents_data:
-        doc: The element data for a table of contents.
-        seq:
-          - id: element_headers
-            type: header
-            repeat: eos
-            doc: |
-              The header data for all other elements in the icon family that contains the table of contents elements.
-              This information can be used to calculate the positions of all elements without having to read the entire data.
-
-              The Icon Composer version element ('icnV') is usually not included in the table of contents.
-              This does not affect calculating the positions of other elements,
-              because the Icon Composer version is usually the last element in the icon family.
-      icon_composer_version_data:
-        doc: The element data for an Icon Composer version number.
-        -webide-representation: '{version:dec}'
-        seq:
-          - id: version
-            type: f4
-            doc: |
-              The version of Icon Composer that created this ICNS file.
-              Some versions of Icon Composer set this to -1 instead of an actual version number.
-      info_dictionary_data:
-        doc: The element data for an info dictionary.
-        seq:
-          # TODO Parse this field once there is a spec for the bplist format?
-          - id: archived_data
-            size-eos: true
-            doc: |
-              The info dictionary as a `NSDictionary`,
-              serialized using `NSKeyedArchiver` into a binary property list (bplist).
-
-              As of macOS 10.14,
-              the only known keys in the info dictionary are `"name"` and `"variantName"`,
-              which are human-readable string identifiers that describe the icon family.
-              These keys usually have the following values,
-              based on the icon family's type code:
-
-              | Type code        | `"name"`     | `"variantName"` |
-              |------------------|--------------|-----------------|
-              | default/`'icns'` | `"icon"`     | not present     |
-              | `'sbtp'`         | `"template"` | not present     |
-              | `'slct'`         | `"selected"` | not present     |
-              | `0xfdd92fa8`     | `"dark"`     | `"dark"`        |
-
-              Note: sometimes the main `'icns'` icon family has a different name than the default `"icon"`.
-              This happens if `iconutil` is passed an iconset directory that contains no files for the main icon family (named `icon_<resolution>.png`),
-              but does contain files for another icon family (e. g. `template_<resolution>.png` for the `'sbtp'` family).
-              In this case,
-              `iconutil` makes the other icon family (e. g. `'sbtp'`) the main icon family and changes its type code to `'icns'`,
-              but still writes the original name (e. g. `"template"`) into the `'info'` dictionary.
-      icns_style_packbits:
+  icon_family_data:
+    doc: The element data for an icon family.
+    seq:
+      - id: elements
+        type: icon_family_element
+        repeat: eos
+        doc: The elements contained in the icon family.
+  table_of_contents_data:
+    doc: The element data for a table of contents.
+    seq:
+      - id: element_headers
+        type: icon_family_element::header
+        repeat: eos
         doc: |
-          A run-length encoding compression scheme similar to (but not the same as) PackBits.
-          Used in the RGB and ARGB bitmap icon types.
+          The header data for all other elements in the icon family that contains the table of contents elements.
+          This information can be used to calculate the positions of all elements without having to read the entire data.
+
+          The Icon Composer version element ('icnV') is usually not included in the table of contents.
+          This does not affect calculating the positions of other elements,
+          because the Icon Composer version is usually the last element in the icon family.
+  icon_composer_version_data:
+    doc: The element data for an Icon Composer version number.
+    -webide-representation: '{version:dec}'
+    seq:
+      - id: version
+        type: f4
+        doc: |
+          The version of Icon Composer that created this ICNS file.
+          Some versions of Icon Composer set this to -1 instead of an actual version number.
+  info_dictionary_data:
+    doc: The element data for an info dictionary.
+    seq:
+      # TODO Parse this field once there is a spec for the bplist format?
+      - id: archived_data
+        size-eos: true
+        doc: |
+          The info dictionary as a `NSDictionary`,
+          serialized using `NSKeyedArchiver` into a binary property list (bplist).
+
+          As of macOS 10.14,
+          the only known keys in the info dictionary are `"name"` and `"variantName"`,
+          which are human-readable string identifiers that describe the icon family.
+          These keys usually have the following values,
+          based on the icon family's type code:
+
+          | Type code        | `"name"`     | `"variantName"` |
+          |------------------|--------------|-----------------|
+          | default/`'icns'` | `"icon"`     | not present     |
+          | `'sbtp'`         | `"template"` | not present     |
+          | `'slct'`         | `"selected"` | not present     |
+          | `0xfdd92fa8`     | `"dark"`     | `"dark"`        |
+
+          Note: sometimes the main `'icns'` icon family has a different name than the default `"icon"`.
+          This happens if `iconutil` is passed an iconset directory that contains no files for the main icon family (named `icon_<resolution>.png`),
+          but does contain files for another icon family (e. g. `template_<resolution>.png` for the `'sbtp'` family).
+          In this case,
+          `iconutil` makes the other icon family (e. g. `'sbtp'`) the main icon family and changes its type code to `'icns'`,
+          but still writes the original name (e. g. `"template"`) into the `'info'` dictionary.
+  icns_style_packbits:
+    doc: |
+      A run-length encoding compression scheme similar to (but not the same as) PackBits.
+      Used in the RGB and ARGB bitmap icon types.
+    seq:
+      - id: compressed_data_with_io
+        type: bytes_with_io
+        doc: |
+          Use `compressed_data` instead,
+          unless you need access to this field's `_io`.
+    types:
+      chunk:
+        doc: |
+          A single chunk of compressed data.
+          Each chunk stores either a sequence of literal bytes,
+          or a single byte that is repeated a certain number of times.
         seq:
-          - id: compressed_data_with_io
-            type: bytes_with_io
+          - id: tag
+            type: u1
             doc: |
-              Use `compressed_data` instead,
-              unless you need access to this field's `_io`.
-        types:
-          chunk:
+              The chunk's tag byte,
+              indicating whether the chunk is a literal or repeat chunk,
+              as well as how many literal bytes follow or how often the byte should be repeated.
+          - id: literal_data
+            size: tag + 1
+            if: not is_repeat
             doc: |
-              A single chunk of compressed data.
-              Each chunk stores either a sequence of literal bytes,
-              or a single byte that is repeated a certain number of times.
-            seq:
-              - id: tag
-                type: u1
-                doc: |
-                  The chunk's tag byte,
-                  indicating whether the chunk is a literal or repeat chunk,
-                  as well as how many literal bytes follow or how often the byte should be repeated.
-              - id: literal_data
-                size: tag + 1
-                if: not is_repeat
-                doc: |
-                  If this is a literal chunk,
-                  the literal byte sequence stored in the chunk.
-              - id: repeated_byte
-                type: u1
-                if: is_repeat
-                doc: |
-                  If this is a repeat chunk,
-                  the byte to be repeated in the output.
-            instances:
-              is_repeat:
-                value: tag >= 128
-                doc: |
-                  If true, this is a repeat chunk.
-                  If false, this is a literal chunk.
-              len_literal_data:
-                value: tag + 1
-                if: not is_repeat
-                doc: |
-                  If this is a literal chunk,
-                  the number of literal bytes stored in the chunk.
-              repeat_count:
-                value: tag - 125
-                if: is_repeat
-                doc: |
-                  If this is a repeat chunk,
-                  the number of times the stored byte should be repeated in the output.
+              If this is a literal chunk,
+              the literal byte sequence stored in the chunk.
+          - id: repeated_byte
+            type: u1
+            if: is_repeat
+            doc: |
+              If this is a repeat chunk,
+              the byte to be repeated in the output.
         instances:
-          compressed_data:
-            value: compressed_data_with_io.data
-            doc: The raw compressed data.
-          chunks:
-            pos: 0
-            type: chunk
-            repeat: eos
-            doc: The compressed data parsed into chunks.
-      icon_x1_and_mask_data:
-        doc: The data for a 1-bit monochrome bitmap icon with a 1-bit mask.
-        params:
-          - id: width
-            type: u4
-            doc: The width of the icon in pixels.
-          - id: height
-            type: u4
-            doc: The height of the icon in pixels.
-        seq:
-          - id: icon
-            size: width * height / 8
+          is_repeat:
+            value: tag >= 128
             doc: |
-              The icon bitmap data,
-              as a packed sequence of 1-bit pixels,
-              in MSB-first bit order
-              (i. e. pixels that come earlier in the file go into the higher bits).
-              0 is white and 1 is black.
-          - id: mask
-            size: width * height / 8
+              If true, this is a repeat chunk.
+              If false, this is a literal chunk.
+          len_literal_data:
+            value: tag + 1
+            if: not is_repeat
             doc: |
-              The icon mask data,
-              as a packed sequence of 1-bit pixels,
-              in MSB-first bit order
-              (i. e. pixels that come earlier in the file go into the higher bits).
-              0 is transparent and 1 is solid.
-      icon_x4_data:
+              If this is a literal chunk,
+              the number of literal bytes stored in the chunk.
+          repeat_count:
+            value: tag - 125
+            if: is_repeat
+            doc: |
+              If this is a repeat chunk,
+              the number of times the stored byte should be repeated in the output.
+    instances:
+      compressed_data:
+        value: compressed_data_with_io.data
+        doc: The raw compressed data.
+      chunks:
+        pos: 0
+        type: chunk
+        repeat: eos
+        doc: The compressed data parsed into chunks.
+  icon_x1_and_mask_data:
+    doc: The data for a 1-bit monochrome bitmap icon with a 1-bit mask.
+    params:
+      - id: width
+        type: u4
+        doc: The width of the icon in pixels.
+      - id: height
+        type: u4
+        doc: The height of the icon in pixels.
+    seq:
+      - id: icon
+        size: width * height / 8
         doc: |
-          The data for a 4-bit color bitmap icon.
-          These icons do not contain a mask and instead use the mask from one of the other elements in the same family
-          (the 8-bit mask element if possible,
-          otherwise the 1-bit mask from the 1-bit icon).
-        params:
-          - id: width
-            type: u4
-            doc: The width of the icon in pixels.
-          - id: height
-            type: u4
-            doc: The height of the icon in pixels.
-        seq:
-          - id: icon
-            size: width * height / 2
-            doc: |
-              The icon bitmap data,
-              as a packed sequence of 4-bit pixels,
-              in MSB-first bit order
-              (i. e. pixels that come earlier in the file go into the higher bits).
-              Color values come from the Mac OS default 4-bit color palette.
-      icon_x8_data:
+          The icon bitmap data,
+          as a packed sequence of 1-bit pixels,
+          in MSB-first bit order
+          (i. e. pixels that come earlier in the file go into the higher bits).
+          0 is white and 1 is black.
+      - id: mask
+        size: width * height / 8
         doc: |
-          The data for an 8-bit color bitmap icon.
-          These icons do not contain a mask and instead use the mask from one of the other elements in the same family
-          (the 8-bit mask element if possible,
-          otherwise the 1-bit mask from the 1-bit icon).
-        params:
-          - id: width
-            type: u4
-            doc: The width of the icon in pixels.
-          - id: height
-            type: u4
-            doc: The height of the icon in pixels.
-        seq:
-          - id: icon
-            size: width * height
-            doc: |
-              The icon bitmap data,
-              as a packed sequence of 8-bit pixels.
-              Color values come from the Mac OS default 8-bit color palette.
-      icon_rgb_data:
+          The icon mask data,
+          as a packed sequence of 1-bit pixels,
+          in MSB-first bit order
+          (i. e. pixels that come earlier in the file go into the higher bits).
+          0 is transparent and 1 is solid.
+  icon_x4_data:
+    doc: |
+      The data for a 4-bit color bitmap icon.
+      These icons do not contain a mask and instead use the mask from one of the other elements in the same family
+      (the 8-bit mask element if possible,
+      otherwise the 1-bit mask from the 1-bit icon).
+    params:
+      - id: width
+        type: u4
+        doc: The width of the icon in pixels.
+      - id: height
+        type: u4
+        doc: The height of the icon in pixels.
+    seq:
+      - id: icon
+        size: width * height / 2
         doc: |
-          The data for a 24-bit RGB bitmap icon.
-          These icons do not contain a mask and instead use the mask from one of the other elements in the same family
-          (the 8-bit mask element if possible,
-          otherwise the 1-bit mask from the 1-bit icon).
-        params:
-          - id: width
-            type: u4
-            doc: The width of the icon in pixels.
-          - id: height
-            type: u4
-            doc: The height of the icon in pixels.
-        seq:
-          - id: compressed_data
-            type: icns_style_packbits
-            doc: |
-              The icon's red, green and blue color channels,
-              each a sequence of 8-bit color values (one per pixel),
-              compressed using run-length encoding.
+          The icon bitmap data,
+          as a packed sequence of 4-bit pixels,
+          in MSB-first bit order
+          (i. e. pixels that come earlier in the file go into the higher bits).
+          Color values come from the Mac OS default 4-bit color palette.
+  icon_x8_data:
+    doc: |
+      The data for an 8-bit color bitmap icon.
+      These icons do not contain a mask and instead use the mask from one of the other elements in the same family
+      (the 8-bit mask element if possible,
+      otherwise the 1-bit mask from the 1-bit icon).
+    params:
+      - id: width
+        type: u4
+        doc: The width of the icon in pixels.
+      - id: height
+        type: u4
+        doc: The height of the icon in pixels.
+    seq:
+      - id: icon
+        size: width * height
+        doc: |
+          The icon bitmap data,
+          as a packed sequence of 8-bit pixels.
+          Color values come from the Mac OS default 8-bit color palette.
+  icon_rgb_data:
+    doc: |
+      The data for a 24-bit RGB bitmap icon.
+      These icons do not contain a mask and instead use the mask from one of the other elements in the same family
+      (the 8-bit mask element if possible,
+      otherwise the 1-bit mask from the 1-bit icon).
+    params:
+      - id: width
+        type: u4
+        doc: The width of the icon in pixels.
+      - id: height
+        type: u4
+        doc: The height of the icon in pixels.
+    seq:
+      - id: compressed_data
+        type: icns_style_packbits
+        doc: |
+          The icon's red, green and blue color channels,
+          each a sequence of 8-bit color values (one per pixel),
+          compressed using run-length encoding.
 
-              When storing the data,
-              each color channel is compressed separately,
-              and afterwards the compressed data for the three channels is concatenated and stored.
-              (That is, a chunk in the compressed data cannot span multiple color channels.)
+          When storing the data,
+          each color channel is compressed separately,
+          and afterwards the compressed data for the three channels is concatenated and stored.
+          (That is, a chunk in the compressed data cannot span multiple color channels.)
 
-              When reading the data,
-              this detail is mostly irrelevant -
-              the compressed length of each color channel is variable and not stored in the data,
-              so there is no way to separate the three color channels without decompressing them.
-      icon_rgb_zero_prefixed_data:
+          When reading the data,
+          this detail is mostly irrelevant -
+          the compressed length of each color channel is variable and not stored in the data,
+          so there is no way to separate the three color channels without decompressing them.
+  icon_rgb_zero_prefixed_data:
+    doc: |
+      A variant of icon_rgb_data that has four extra zero bytes preceding the compressed RGB data.
+      This variant is only used by the 'it32' (icon_128x128_rgb) icon type.
+    params:
+      - id: width
+        type: u4
+        doc: The width of the icon in pixels.
+      - id: height
+        type: u4
+        doc: The height of the icon in pixels.
+    seq:
+      - id: zero_prefix
+        contents: [0, 0, 0, 0]
+        doc: A prefix with no known meaning or purpose.
+      - id: icon
+        type: icon_rgb_data(width, height)
+        doc: The actual icon data in the usual RGB format.
+  icon_x8_mask_data:
+    doc: |
+      The data for an 8-bit mask,
+      to be used together with one of the maskless bitmap icons of the same size in the same family.
+    params:
+      - id: width
+        type: u4
+        doc: The width of the icon in pixels.
+      - id: height
+        type: u4
+        doc: The height of the icon in pixels.
+    seq:
+      - id: mask
+        size: width * height
         doc: |
-          A variant of icon_rgb_data that has four extra zero bytes preceding the compressed RGB data.
-          This variant is only used by the 'it32' (icon_128x128_rgb) icon type.
-        params:
-          - id: width
-            type: u4
-            doc: The width of the icon in pixels.
-          - id: height
-            type: u4
-            doc: The height of the icon in pixels.
-        seq:
-          - id: zero_prefix
-            contents: [0, 0, 0, 0]
-            doc: A prefix with no known meaning or purpose.
-          - id: icon
-            type: icon_rgb_data(width, height)
-            doc: The actual icon data in the usual RGB format.
-      icon_x8_mask_data:
+          The mask data,
+          as a packed sequence of 8-bit opacity values (one per pixel).
+          0 is fully transparent and 255 is fully opaque.
+  icon_argb_data:
+    doc: The data for a 32-bit ARGB bitmap icon.
+    params:
+      - id: width
+        type: u4
+        doc: The width of the icon in pixels.
+      - id: height
+        type: u4
+        doc: The height of the icon in pixels.
+    seq:
+      - id: signature
+        contents: "ARGB"
+        doc: Signature indicating that this is an ARGB bitmap.
+      - id: compressed_data
+        type: icns_style_packbits
         doc: |
-          The data for an 8-bit mask,
-          to be used together with one of the maskless bitmap icons of the same size in the same family.
-        params:
-          - id: width
-            type: u4
-            doc: The width of the icon in pixels.
-          - id: height
-            type: u4
-            doc: The height of the icon in pixels.
-        seq:
-          - id: mask
-            size: width * height
-            doc: |
-              The mask data,
-              as a packed sequence of 8-bit opacity values (one per pixel).
-              0 is fully transparent and 255 is fully opaque.
-      icon_argb_data:
-        doc: The data for a 32-bit ARGB bitmap icon.
-        params:
-          - id: width
-            type: u4
-            doc: The width of the icon in pixels.
-          - id: height
-            type: u4
-            doc: The height of the icon in pixels.
-        seq:
-          - id: signature
-            contents: "ARGB"
-            doc: Signature indicating that this is an ARGB bitmap.
-          - id: compressed_data
-            type: icns_style_packbits
-            doc: |
-              The icon's alpha channel and red, green and blue color channels,
-              each a sequence of 8-bit opacity/color values (one per pixel),
-              compressed using run-length encoding.
+          The icon's alpha channel and red, green and blue color channels,
+          each a sequence of 8-bit opacity/color values (one per pixel),
+          compressed using run-length encoding.
 
-              When storing the data,
-              each channel is compressed separately,
-              and afterwards the compressed data for the four channels is concatenated and stored.
-              (That is, a chunk in the compressed data cannot span multiple channels.)
+          When storing the data,
+          each channel is compressed separately,
+          and afterwards the compressed data for the four channels is concatenated and stored.
+          (That is, a chunk in the compressed data cannot span multiple channels.)
 
-              When reading the data,
-              this detail is mostly irrelevant -
-              the compressed length of each channel is variable and not stored in the data,
-              so there is no way to separate the four color channels without decompressing them.
-      icon_png_jp2_data:
+          When reading the data,
+          this detail is mostly irrelevant -
+          the compressed length of each channel is variable and not stored in the data,
+          so there is no way to separate the four color channels without decompressing them.
+  icon_png_jp2_data:
+    doc: |
+      The data for a PNG or JPEG 2000 icon.
+      Mac OS X 10.5 only supports the JPEG 2000 format here;
+      Mac OS X 10.6 and later support both PNG and JPEG 2000.
+
+      As of Mac OS X 10.7,
+      practically all system icons use PNG instead of JPEG 2000,
+      and the developer tools (Icon Composer and `iconutil`) always output PNG data.
+      The JPEG 2000 format is almost never used anymore here.
+    params:
+      - id: point_width
+        type: u4
+        doc: The width of the icon in points.
+      - id: point_height
+        type: u4
+        doc: The height of the icon in points.
+      - id: scale
+        type: u4
         doc: |
-          The data for a PNG or JPEG 2000 icon.
-          Mac OS X 10.5 only supports the JPEG 2000 format here;
-          Mac OS X 10.6 and later support both PNG and JPEG 2000.
-
-          As of Mac OS X 10.7,
-          practically all system icons use PNG instead of JPEG 2000,
-          and the developer tools (Icon Composer and `iconutil`) always output PNG data.
-          The JPEG 2000 format is almost never used anymore here.
-        params:
-          - id: point_width
-            type: u4
-            doc: The width of the icon in points.
-          - id: point_height
-            type: u4
-            doc: The height of the icon in points.
-          - id: scale
-            type: u4
-            doc: |
-              The number of pixels per point (along each dimension) in the image.
-              Icons with scale 1 are intended for screens with normal pixel density,
-              and those with scale 2 are intended for HiDPI screens.
-        seq:
-          - id: png_or_jp2_data
-            size-eos: true
-            doc: |
-              The icon data in PNG or JPEG 2000 format.
-              Both formats have unique signatures/magic numbers,
-              which can be used to determine which of the two formats the icon data has.
-        instances:
-          pixel_width:
-            value: point_width * scale
-            doc: |
-              The width of the icon in pixels,
-              calculated based on the width in points and the scale.
-          pixel_height:
-            value: point_height * scale
-            doc: |
-              The height of the icon in pixels,
-              calculated based on the height in points and the scale.
-          png_signature:
-            value: '[0x89, 0x50, 0x4e, 0x47, 0xd, 0xa, 0x1a, 0xa]'
-            doc: The PNG format's signature.
-          png_signature_check:
-            pos: 0
-            size: png_signature.length
-            doc: Internal helper instance used to check if the data starts with the PNG signature.
-          is_png:
-            value: png_signature_check == png_signature
-            doc: Whether the data appears to be in PNG format (based on its signature).
-          jp2_signature:
-            value: '[0x0, 0x0, 0x0, 0xc, 0x6a, 0x50, 0x20, 0x20, 0xd, 0xa, 0x87, 0xa]'
-            doc: The JPEG 2000 format's signature.
-          jp2_signature_check:
-            pos: 0
-            size: jp2_signature.length
-            doc: Internal helper instance used to check if the data starts with the JPEG 2000 signature.
-          is_jp2:
-            value: jp2_signature_check == jp2_signature
-            doc: Whether the data appears to be in JPEG 2000 format (based on its signature).
+          The number of pixels per point (along each dimension) in the image.
+          Icons with scale 1 are intended for screens with normal pixel density,
+          and those with scale 2 are intended for HiDPI screens.
+    seq:
+      - id: png_or_jp2_data
+        size-eos: true
+        doc: |
+          The icon data in PNG or JPEG 2000 format.
+          Both formats have unique signatures/magic numbers,
+          which can be used to determine which of the two formats the icon data has.
+    instances:
+      pixel_width:
+        value: point_width * scale
+        doc: |
+          The width of the icon in pixels,
+          calculated based on the width in points and the scale.
+      pixel_height:
+        value: point_height * scale
+        doc: |
+          The height of the icon in pixels,
+          calculated based on the height in points and the scale.
+      png_signature:
+        value: '[0x89, 0x50, 0x4e, 0x47, 0xd, 0xa, 0x1a, 0xa]'
+        doc: The PNG format's signature.
+      png_signature_check:
+        pos: 0
+        size: png_signature.length
+        doc: Internal helper instance used to check if the data starts with the PNG signature.
+      is_png:
+        value: png_signature_check == png_signature
+        doc: Whether the data appears to be in PNG format (based on its signature).
+      jp2_signature:
+        value: '[0x0, 0x0, 0x0, 0xc, 0x6a, 0x50, 0x20, 0x20, 0xd, 0xa, 0x87, 0xa]'
+        doc: The JPEG 2000 format's signature.
+      jp2_signature_check:
+        pos: 0
+        size: jp2_signature.length
+        doc: Internal helper instance used to check if the data starts with the JPEG 2000 signature.
+      is_jp2:
+        value: jp2_signature_check == jp2_signature
+        doc: Whether the data appears to be in JPEG 2000 format (based on its signature).
