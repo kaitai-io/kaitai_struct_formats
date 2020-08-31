@@ -401,17 +401,21 @@ enums:
 
     # region Regular scale
     0x69637034: # 'icp4'
-      id: icon_16x16_png_jp2
+      id: icon_16x16_png_jp2_rgb
       doc: |
-        A 16x16-pixel icon in PNG or JPEG 2000 format.
-        See icon_png_jp2_data for the exact structure of the data.
+        A 16x16-pixel icon in PNG, JPEG 2000 or RGB format.
+        When in RGB format,
+        it does not contain a mask and instead uses a mask from one of the other icons of the same size in the same family.
+        See icon_png_jp2_rgb_data for the exact structure of the data.
 
         Supported since Mac OS X 10.7.
     0x69637035: # 'icp5'
-      id: icon_32x32_png_jp2
+      id: icon_32x32_png_jp2_rgb
       doc: |
-        A 32x32-pixel icon in PNG or JPEG 2000 format.
-        See icon_png_jp2_data for the exact structure of the data.
+        A 32x32-pixel icon in PNG, JPEG 2000 or RGB format.
+        When in RGB format,
+        it does not contain a mask and instead uses a mask from one of the other icons of the same size in the same family.
+        See icon_png_jp2_rgb_data for the exact structure of the data.
 
         Supported since Mac OS X 10.7.
     0x69637036: # 'icp6'
@@ -567,8 +571,8 @@ types:
             'element_type::icon_16x16_argb': icon_argb_data(16, 16)
             'element_type::icon_18x18_argb': icon_argb_data(18, 18)
             'element_type::icon_32x32_argb': icon_argb_data(32, 32)
-            'element_type::icon_16x16_png_jp2': icon_png_jp2_data(16, 16, 1)
-            'element_type::icon_32x32_png_jp2': icon_png_jp2_data(32, 32, 1)
+            'element_type::icon_16x16_png_jp2_rgb': icon_png_jp2_rgb_data(16, 16)
+            'element_type::icon_32x32_png_jp2_rgb': icon_png_jp2_rgb_data(32, 32)
             'element_type::icon_64x64_png_jp2': icon_png_jp2_data(64, 64, 1)
             'element_type::icon_128x128_png_jp2': icon_png_jp2_data(128, 128, 1)
             'element_type::icon_256x256_png_jp2': icon_png_jp2_data(256, 256, 1)
@@ -906,6 +910,32 @@ types:
           this detail is mostly irrelevant -
           the compressed length of each channel is variable and not stored in the data,
           so there is no way to separate the four color channels without decompressing them.
+  png_jp2_format_check:
+    doc: |
+      Internal helper type used to check if some data appears to be in PNG or JPEG 2000 format,
+      or neither of the two.
+    seq: []
+    instances:
+      png_signature:
+        value: '[0x89, 0x50, 0x4e, 0x47, 0xd, 0xa, 0x1a, 0xa]'
+        doc: The PNG format's signature.
+      png_signature_check:
+        pos: 0
+        size: png_signature.length
+        doc: Internal helper instance used to check if the data starts with the PNG signature.
+      is_png:
+        value: png_signature_check == png_signature
+        doc: Whether the data appears to be in PNG format (based on its signature).
+      jp2_signature:
+        value: '[0x0, 0x0, 0x0, 0xc, 0x6a, 0x50, 0x20, 0x20, 0xd, 0xa, 0x87, 0xa]'
+        doc: The JPEG 2000 format's signature.
+      jp2_signature_check:
+        pos: 0
+        size: jp2_signature.length
+        doc: Internal helper instance used to check if the data starts with the JPEG 2000 signature.
+      is_jp2:
+        value: jp2_signature_check == jp2_signature
+        doc: Whether the data appears to be in JPEG 2000 format (based on its signature).
   icon_png_jp2_data:
     doc: |
       The data for a PNG or JPEG 2000 icon.
@@ -947,23 +977,64 @@ types:
         doc: |
           The height of the icon in pixels,
           calculated based on the height in points and the scale.
-      png_signature:
-        value: '[0x89, 0x50, 0x4e, 0x47, 0xd, 0xa, 0x1a, 0xa]'
-        doc: The PNG format's signature.
-      png_signature_check:
+      format_check:
         pos: 0
-        size: png_signature.length
-        doc: Internal helper instance used to check if the data starts with the PNG signature.
+        type: png_jp2_format_check
+        doc: |
+          Internal helper instance, do not use.
+          Use the is_png and is_jp2 instances instead.
       is_png:
-        value: png_signature_check == png_signature
+        value: format_check.is_png
         doc: Whether the data appears to be in PNG format (based on its signature).
-      jp2_signature:
-        value: '[0x0, 0x0, 0x0, 0xc, 0x6a, 0x50, 0x20, 0x20, 0xd, 0xa, 0x87, 0xa]'
-        doc: The JPEG 2000 format's signature.
-      jp2_signature_check:
-        pos: 0
-        size: jp2_signature.length
-        doc: Internal helper instance used to check if the data starts with the JPEG 2000 signature.
       is_jp2:
-        value: jp2_signature_check == jp2_signature
+        value: format_check.is_jp2
         doc: Whether the data appears to be in JPEG 2000 format (based on its signature).
+  icon_png_jp2_rgb_data:
+    doc: |
+      The data for an icon in PNG, JPEG 2000, or 24-bit RGB format.
+
+      This format is only used by the 'icp4' (icon_16x16_png_jp2_rgb) and 'icp5' (icon_32x32_png_jp2_rgb) icon types.
+      It is identical to the format used by all other PNG/JPEG 2000 icon types (icon_png_jp2_data),
+      except that if the data is neither in PNG nor in JPEG 2000 format,
+      it is treated as a 24-bit RGB bitmap instead (icon_rgb_data).
+
+      The latter case is only rarely used in practice -
+      RGB bitmaps already have their own dedicated icon types,
+      'is32' (icon_16x16_rgb) and 'il32' (icon_32x32_rgb),
+      so there is normally no need to repurpose PNG/JPEG 2000 icon types to also store RGB bitmaps.
+      However, the icons in some of Apple's own apps (such as the Lion versions of the iWork '09 apps) use this feature.
+    params:
+      - id: width
+        type: u4
+        doc: The width of the icon in pixels.
+      - id: height
+        type: u4
+        doc: The height of the icon in pixels.
+    seq:
+      - id: format_check
+        type: png_jp2_format_check
+        doc: |
+          Internal helper field, do not use.
+          Use the is_png, is_jp2, and is_rgb instances instead.
+    instances:
+      is_png:
+        value: format_check.is_png
+        doc: Whether the data appears to be in PNG format (based on its signature).
+      is_jp2:
+        value: format_check.is_jp2
+        doc: Whether the data appears to be in JPEG 2000 format (based on its signature).
+      is_rgb:
+        value: not is_png and not is_jp2
+        doc: |
+          Whether the data appears to be in RGB bitmap format.
+          This is assumed to be the case if the data has neither a PNG nor a JPEG 2000 signature.
+      png_or_jp2_data:
+        pos: 0
+        size-eos: true
+        if: is_png or is_jp2
+        doc: The icon data in PNG or JPEG 2000 format.
+      rgb_data:
+        pos: 0
+        type: icon_rgb_data(width, height)
+        if: is_rgb
+        doc: The icon data in RGB bitmap format.
