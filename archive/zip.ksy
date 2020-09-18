@@ -12,8 +12,10 @@ meta:
       - fdd000361
     pronom: x-fmt/263
     wikidata: Q136218
-  endian: le
   license: CC0-1.0
+  ks-version: 0.9
+  endian: le
+  bit-endian: le
 doc: |
   ZIP is a popular archive file format, introduced in 1989 by Phil Katz
   and originally implemented in PKZIP utility by PKWARE.
@@ -25,7 +27,9 @@ doc: |
 
   For example, Java .jar files, OpenDocument, Office Open XML, EPUB files
   are actually ZIP archives.
-doc-ref: https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT
+doc-ref:
+  - https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT
+  - https://users.cs.jmu.edu/buchhofp/forensics/formats/pkzip.html
 seq:
   - id: sections
     type: pk_section
@@ -64,7 +68,8 @@ types:
       - id: version
         type: u2
       - id: flags
-        type: u2
+        type: gp_flags
+        size: 2
       - id: compression_method
         type: u2
         enum: compression
@@ -89,6 +94,59 @@ types:
       - id: extra
         size: len_extra
         type: extras
+    types:
+      gp_flags:
+        -orig-id: general purpose bit flag
+        doc-ref:
+          - https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT - 4.4.4
+          - https://users.cs.jmu.edu/buchhofp/forensics/formats/pkzip.html Local file headers
+        seq:
+          - id: file_encrypted
+            type: b1
+          - id: comp_options_raw
+            type: b2
+            doc: internal; access derived value instances instead
+          - id: has_data_descriptor
+            type: b1
+          - id: reserved_1
+            type: b1
+          - id: comp_patched_data
+            type: b1
+          - id: strong_encrypt
+            type: b1
+          - id: reserved_2
+            type: b4
+          - id: lang_encoding
+            type: b1
+          - id: reserved_3
+            type: b1
+          - id: mask_header_values
+            type: b1
+          - id: reserved_4
+            type: b2
+        instances:
+          deflated_mode:
+            value: comp_options_raw
+            enum: deflate_mode
+            if: |
+              _parent.compression_method == compression::deflated
+              or _parent.compression_method == compression::enhanced_deflated
+          imploded_dict_byte_size:
+            value: '((comp_options_raw & 0b01) != 0 ? 8 : 4) * 1024'
+            if: '_parent.compression_method == compression::imploded'
+            doc: 8KiB or 4KiB in bytes
+          imploded_num_sf_trees:
+            value: '(comp_options_raw & 0b10) != 0 ? 3 : 2'
+            if: '_parent.compression_method == compression::imploded'
+          lzma_has_eos_marker:
+            value: '(comp_options_raw & 0b01) != 0'
+            if: '_parent.compression_method == compression::lzma'
+        enums:
+          deflate_mode:
+            0: normal
+            1: maximum
+            2: fast
+            3: super_fast
   central_dir_entry:
     doc-ref: https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT - 4.3.12
     seq:
