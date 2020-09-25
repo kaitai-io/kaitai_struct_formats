@@ -355,6 +355,11 @@ types:
       body:
         pos: pointer_to_raw_data
         size: size_of_raw_data
+      resource_table:
+        pos: pointer_to_raw_data
+        if: virtual_address == _root.pe.optional_hdr.data_dirs.resource_table.virtual_address
+        size: size_of_raw_data
+        type: resource_directory_table(0, pointer_to_raw_data, virtual_address)
   certificate_table:
     seq:
       - id: items
@@ -408,3 +413,144 @@ types:
         size: length - 8
         doc: Contains a certificate, such as an Authenticode signature.
     doc-ref: 'https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format#the-attribute-certificate-table-image-only'
+
+  resource_directory_table:
+    params:
+      - id: depth
+        type: u4
+      - id: rsrc_section_file_offset
+        type: u4
+      - id: rsrc_section_virtual_address
+        type: u4
+    seq:
+      - id: characteristics
+        type: u4
+      - id: time_date_stamp
+        type: u4
+      - id: major_version
+        type: u2
+      - id: minor_version
+        type: u2
+      - id: number_of_named_entries
+        type: u2
+      - id: number_of_id_entries
+        type: u2
+      - id: named_entries
+        type: resource_directory_entry(depth)
+        repeat: expr
+        repeat-expr: number_of_named_entries
+      - id: id_entries
+        type: resource_directory_entry(depth)
+        repeat: expr
+        repeat-expr: number_of_id_entries
+
+  resource_directory_entry:
+    params:
+      - id: depth
+        type: u4
+    seq:
+      - id: resource_type
+        type: u4
+        enum: enum_resource_type
+        if: depth == 0
+      - id: name_offset
+        type: u4
+        if: depth != 0
+      - id: data_entry_offset
+        type: u4
+    instances:
+      child:
+        pos: (data_entry_offset & ~0x80000000) + _parent.rsrc_section_file_offset
+        type: resource_directory_table(depth + 1, _parent.rsrc_section_file_offset, _parent.rsrc_section_virtual_address)
+        if: (data_entry_offset & 0x80000000) >> 31 == 1
+        parent: _parent
+        io: _root._io
+      resource_data_entry:
+        pos: data_entry_offset + _parent.rsrc_section_file_offset
+        type: resource_data_entry
+        if: (data_entry_offset & 0x80000000) >> 31 == 0
+        parent: _parent
+        io: _root._io
+      resource_directory_string:
+        pos: (name_offset & ~0x80000000) + _parent.rsrc_section_file_offset
+        type: resource_directory_string
+        if: (name_offset & 0x80000000) >> 31 == 1
+        parent: _parent
+        io: _root._io
+    enums:
+      enum_resource_type:
+          1: rt_cursor
+          2: rt_bitmap
+          3: rt_icon
+          4: rt_menu
+          5: rt_dialog
+          6: rt_string
+          7: rt_fontdir
+          8: rt_font
+          9: rt_accelerator
+          10: rt_rcdata
+          11: rt_messagetable
+          12: rt_group_cursor
+          14: rt_group_icon
+          16: rt_version
+          17: rt_dlginclude
+          19: rt_plugplay
+          20: rt_vxd
+          21: rt_anicursor
+          22: rt_aniicon
+          23: rt_html
+          24: rt_manifest
+
+  resource_type:
+    seq:
+      - id: name_offset
+        type: u4
+        enum: enum_resource_type
+    enums:
+      enum_resource_type:
+          1: rt_cursor
+          2: rt_bitmap
+          3: rt_icon
+          4: rt_menu
+          5: rt_dialog
+          6: rt_string
+          7: rt_fontdir
+          8: rt_font
+          9: rt_accelerator
+          10: rt_rcdata
+          11: rt_messagetable
+          12: rt_group_cursor
+          14: rt_group_icon
+          16: rt_version
+          17: rt_dlginclude
+          19: rt_plugplay
+          20: rt_vxd
+          21: rt_anicursor
+          22: rt_aniicon
+          23: rt_html
+          24: rt_manifest
+
+  resource_data_entry:
+    seq:
+      - id: data_rva
+        type: u4
+      - id: size
+        type: u4
+      - id: codepage
+        type: u4
+      - id: reserved
+        type: u4
+    instances:
+      body:
+        io: _root._io
+        pos: (data_rva - _parent.rsrc_section_virtual_address) + _parent.rsrc_section_file_offset
+        size: size
+
+  resource_directory_string:
+    seq:
+      - id: length
+        type: u2
+      - id: string
+        type: str
+        encoding: UTF-16LE
+        size: length * 2
