@@ -418,31 +418,36 @@ types:
     params:
       - id: depth
         type: u4
-      - id: rsrc_section_file_offset
+      - id: section_file_offset
         type: u4
-      - id: rsrc_section_virtual_address
+      - id: section_virtual_address
         type: u4
     seq:
+      # This field is reserved for future use. It is currently set to zero.
       - id: characteristics
         type: u4
       - id: time_date_stamp
         type: u4
+        -orig-id: 'TimeDateStamp'
       - id: major_version
         type: u2
       - id: minor_version
         type: u2
-      - id: number_of_named_entries
+      - id: num_named_entries
         type: u2
-      - id: number_of_id_entries
+        -orig-id: NumberOfNamedEntries
+      - id: num_id_entries
         type: u2
+        -orig-id: NumberOfIdEntries
       - id: named_entries
         type: resource_directory_entry(depth)
         repeat: expr
-        repeat-expr: number_of_named_entries
+        repeat-expr: num_named_entries
       - id: id_entries
         type: resource_directory_entry(depth)
         repeat: expr
-        repeat-expr: number_of_id_entries
+        repeat-expr: num_id_entries
+    doc-ref: 'https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#resource-directory-table'
 
   resource_directory_entry:
     params:
@@ -453,89 +458,64 @@ types:
         type: u4
         enum: enum_resource_type
         if: depth == 0
-      - id: name_offset
+      - id: ofs_name
         type: u4
         if: depth != 0
-      - id: data_entry_offset
+      - id: ofs_data_entry
         type: u4
     instances:
       child:
-        pos: (data_entry_offset & ~0x80000000) + _parent.rsrc_section_file_offset
-        type: resource_directory_table(depth + 1, _parent.rsrc_section_file_offset, _parent.rsrc_section_virtual_address)
-        if: (data_entry_offset & 0x80000000) >> 31 == 1
+        pos: (ofs_data_entry & ~0x80000000) + _parent.section_file_offset
+        type: resource_directory_table(depth + 1, _parent.section_file_offset, _parent.section_virtual_address)
+        if: (ofs_data_entry & 0x80000000) >> 31 == 1
         parent: _parent
         io: _root._io
       resource_data_entry:
-        pos: data_entry_offset + _parent.rsrc_section_file_offset
+        pos: ofs_data_entry + _parent.section_file_offset
         type: resource_data_entry
-        if: (data_entry_offset & 0x80000000) >> 31 == 0
+        if: (ofs_data_entry & 0x80000000) >> 31 == 0
         parent: _parent
         io: _root._io
       resource_directory_string:
-        pos: (name_offset & ~0x80000000) + _parent.rsrc_section_file_offset
+        pos: (ofs_name & ~0x80000000) + _parent.section_file_offset
         type: resource_directory_string
-        if: (name_offset & 0x80000000) >> 31 == 1
+        if: (ofs_name & 0x80000000) >> 31 == 1
         parent: _parent
         io: _root._io
     enums:
       enum_resource_type:
-          1: rt_cursor
-          2: rt_bitmap
-          3: rt_icon
-          4: rt_menu
-          5: rt_dialog
-          6: rt_string
-          7: rt_fontdir
-          8: rt_font
-          9: rt_accelerator
-          10: rt_rcdata
-          11: rt_messagetable
-          12: rt_group_cursor
-          14: rt_group_icon
-          16: rt_version
-          17: rt_dlginclude
-          19: rt_plugplay
-          20: rt_vxd
-          21: rt_anicursor
-          22: rt_aniicon
-          23: rt_html
-          24: rt_manifest
-
-  resource_type:
-    seq:
-      - id: name_offset
-        type: u4
-        enum: enum_resource_type
-    enums:
-      enum_resource_type:
-          1: rt_cursor
-          2: rt_bitmap
-          3: rt_icon
-          4: rt_menu
-          5: rt_dialog
-          6: rt_string
-          7: rt_fontdir
-          8: rt_font
-          9: rt_accelerator
-          10: rt_rcdata
-          11: rt_messagetable
-          12: rt_group_cursor
-          14: rt_group_icon
-          16: rt_version
-          17: rt_dlginclude
-          19: rt_plugplay
-          20: rt_vxd
-          21: rt_anicursor
-          22: rt_aniicon
-          23: rt_html
-          24: rt_manifest
+          1: cursor
+          2: bitmap
+          3: icon
+          4: menu
+          5: dialog
+          6: string
+          7: fontdir
+          8: font
+          9: accelerator
+          10: rcdata
+          11: messagetable
+          12: group_cursor
+          14: group_icon
+          16: version
+          17: dlginclude
+          19: plugplay
+          20: vxd
+          21: anicursor
+          22: aniicon
+          23: html
+          24: manifest
+    doc-ref: 'https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#resource-directory-entries'
 
   resource_data_entry:
     seq:
+      # This field is the relative virtual address and not an offset.
       - id: data_rva
         type: u4
-      - id: size
+        -orig-id: OffsetToData
+      - id: len_resource_data_entry
         type: u4
+        -orig-id: Size
       - id: codepage
         type: u4
       - id: reserved
@@ -543,14 +523,19 @@ types:
     instances:
       body:
         io: _root._io
-        pos: (data_rva - _parent.rsrc_section_virtual_address) + _parent.rsrc_section_file_offset
-        size: size
+        pos: (data_rva - _parent.section_virtual_address) + _parent.section_file_offset
+        size: len_resource_data_entry
+    doc-ref: 'https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#resource-data-entry'
 
   resource_directory_string:
     seq:
-      - id: length
+      # Number of characters not the number of bytes.
+      - id: len_name
         type: u2
-      - id: string
+        -orig-id: Length
+      - id: name
         type: str
         encoding: UTF-16LE
-        size: length * 2
+        size: len_name * 2
+        -orig-id: NameString
+    doc-ref: 'https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#resource-directory-string'
