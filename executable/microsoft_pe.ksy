@@ -429,10 +429,8 @@ types:
       - id: time_date_stamp
         type: u4
         -orig-id: 'TimeDateStamp'
-      - id: major_version
-        type: u2
-      - id: minor_version
-        type: u2
+      - id: version
+        type: resource_directory_table_version
       - id: num_named_entries
         type: u2
         -orig-id: NumberOfNamedEntries
@@ -448,6 +446,13 @@ types:
         repeat: expr
         repeat-expr: num_id_entries
     doc-ref: 'https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#resource-directory-table'
+
+  resource_directory_table_version:
+    seq:
+      - id: major
+        type: u2
+      - id: minor
+        type: u2
 
   resource_directory_entry:
     params:
