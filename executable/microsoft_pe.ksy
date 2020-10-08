@@ -357,9 +357,9 @@ types:
         size: size_of_raw_data
       resource_table:
         pos: pointer_to_raw_data
-        if: virtual_address == _root.pe.optional_hdr.data_dirs.resource_table.virtual_address
         size: size_of_raw_data
         type: resource_directory_table(0, pointer_to_raw_data, virtual_address)
+        if: virtual_address == _root.pe.optional_hdr.data_dirs.resource_table.virtual_address
   certificate_table:
     seq:
       - id: items
@@ -415,6 +415,7 @@ types:
     doc-ref: 'https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format#the-attribute-certificate-table-image-only'
 
   resource_directory_table:
+    doc-ref: 'https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#resource-directory-table'
     params:
       - id: depth
         type: u4
@@ -423,20 +424,21 @@ types:
       - id: section_virtual_address
         type: u4
     seq:
-      # This field is reserved for future use. It is currently set to zero.
-      - id: characteristics
+      - id: reserved
+        -orig-id: characteristics
         type: u4
-      - id: time_date_stamp
+        doc: Reserved for future use, should be set to zero
+      - id: timestamp
         type: u4
-        -orig-id: 'TimeDateStamp'
+        -orig-id: TimeDateStamp
       - id: version
         type: version_u2
       - id: num_named_entries
-        type: u2
         -orig-id: NumberOfNamedEntries
-      - id: num_id_entries
         type: u2
+      - id: num_id_entries
         -orig-id: NumberOfIdEntries
+        type: u2
       - id: named_entries
         type: resource_directory_entry(depth)
         repeat: expr
@@ -445,9 +447,9 @@ types:
         type: resource_directory_entry(depth)
         repeat: expr
         repeat-expr: num_id_entries
-    doc-ref: 'https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#resource-directory-table'
 
   resource_directory_entry:
+    doc-ref: 'https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#resource-directory-entries'
     params:
       - id: depth
         type: u4
@@ -463,23 +465,23 @@ types:
         type: u4
     instances:
       child:
+        io: _root._io
         pos: (ofs_data_entry & ~0x80000000) + _parent.section_file_offset
         type: resource_directory_table(depth + 1, _parent.section_file_offset, _parent.section_virtual_address)
         if: (ofs_data_entry & 0x80000000) >> 31 == 1
         parent: _parent
-        io: _root._io
       resource_data_entry:
+        io: _root._io
         pos: ofs_data_entry + _parent.section_file_offset
         type: resource_data_entry
         if: (ofs_data_entry & 0x80000000) >> 31 == 0
         parent: _parent
-        io: _root._io
       resource_directory_string:
+        io: _root._io
         pos: (ofs_name & ~0x80000000) + _parent.section_file_offset
         type: resource_directory_string
         if: (ofs_name & 0x80000000) >> 31 == 1
         parent: _parent
-        io: _root._io
     enums:
       enum_resource_type:
           1: cursor
@@ -503,17 +505,17 @@ types:
           22: aniicon
           23: html
           24: manifest
-    doc-ref: 'https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#resource-directory-entries'
 
   resource_data_entry:
+    doc-ref: 'https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#resource-data-entry'
     seq:
-      # This field is the relative virtual address and not an offset.
       - id: data_rva
-        type: u4
         -orig-id: OffsetToData
-      - id: len_resource_data_entry
         type: u4
+        doc: Relative virtual address of the resource data entry
+      - id: len_resource_data_entry
         -orig-id: Size
+        type: u4
       - id: codepage
         type: u4
       - id: reserved
@@ -523,20 +525,19 @@ types:
         io: _root._io
         pos: (data_rva - _parent.section_virtual_address) + _parent.section_file_offset
         size: len_resource_data_entry
-    doc-ref: 'https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#resource-data-entry'
 
   resource_directory_string:
+    doc-ref: 'https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#resource-directory-string'
     seq:
-      # Number of characters not the number of bytes.
       - id: len_name
-        type: u2
         -orig-id: Length
+        type: u2
+        doc: Number of UTF-16LE encoded characters
       - id: name
+        -orig-id: NameString
+        size: len_name * 2
         type: str
         encoding: UTF-16LE
-        size: len_name * 2
-        -orig-id: NameString
-    doc-ref: 'https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#resource-directory-string'
 
   version_u2:
     seq:
