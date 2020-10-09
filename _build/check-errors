@@ -3,37 +3,51 @@
 require 'json'
 require 'pp'
 
-if ARGV.size != 1
-  puts "Usage: #{$PROGRAM_NAME} <path/to/log.json>"
+if ARGV.size == 0
+  puts "Usage: #{$PROGRAM_NAME} <path/to/log.json>.."
   exit 2
 end
 
-log = JSON.load(File.read(ARGV[0]))
+def check_log_file(fn)
+  $stdout.puts "Checking #{fn}..."
 
-is_bad = false
+  log = JSON.load(File.read(fn))
 
-log.each_pair { |fn, build|
-  # Global errors
-  errs = build['errors']
+  num_errs = 0
 
-  errs.each { |err|
-    file = err['file']
-    file = fn if file == '(main)'
+  log.each_pair { |fn, build|
+    # Global errors
+    errs = build['errors']
 
-    path = nil
-    path = '/' + err['path'].join('/') if err['path'] and not err['path'].empty?
+    errs.each { |err|
+      file = err['file']
+      file = fn if file == '(main)'
 
-    msg = "#{file}"
-    if err['line']
-      msg << ":" << err['line'].to_s
-      msg << ":" << err['col'].to_s if err['col']
-    end
-    msg << ": " << path if path
-    msg << ": " << err['message']
+      path = nil
+      path = '/' + err['path'].join('/') if err['path'] and not err['path'].empty?
 
-    $stderr.puts msg
-    is_bad = true
-  } if errs
+      msg = "#{file}"
+      if err['line']
+        msg << ":" << err['line'].to_s
+        msg << ":" << err['col'].to_s if err['col']
+      end
+      msg << ": " << path if path
+      msg << ": " << err['message']
+
+      $stderr.puts msg
+      num_errs += 1
+    } if errs
+  }
+
+  $stdout.puts "#{fn}: #{log.size} files checked, #{num_errs} errors"
+
+  return num_errs
+end
+
+num_errs = 0
+ARGV.each { |fn|
+  num_errs += check_log_file(fn)
 }
 
-exit is_bad ? 1 : 0
+# If encountered any errors, set exit status to 1
+exit (num_errs == 0) ? 0 : 1

@@ -1,13 +1,14 @@
 #!/bin/sh
 
-if [ "$#" -ne 2 ]; then
-	echo "Usage: $0 <ksy-dir> <target-dir>"
+if [ "$#" -ne 3 ]; then
+	echo "Usage: $0 <ksc-ver> <ksy-dir> <target-dir>"
 	exit 1
 fi
 
-KSY_DIR=$(realpath "$1")
-TARGET_DIR=$(realpath "$2")
+mkdir -p "$3"
 
-mkdir -p "$TARGET_DIR"
+KSC_VERSION="$1"
+KSY_DIR=$(realpath "$2")
+TARGET_DIR=$(realpath "$3")
 
 find "$KSY_DIR" -name "*.ksy" | xargs ksc -- -I "$KSY_DIR" -t all --ksc-json-output --outdir "$TARGET_DIR" >"$TARGET_DIR"/log.json
