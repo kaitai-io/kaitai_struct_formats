@@ -66,9 +66,9 @@ types:
         type:
           switch-on: sound_header_type
           cases:
-            sound_header_type::standard: standard_sound_header
-            sound_header_type::extended: extended_sound_header
-            sound_header_type::compressed: compressed_sound_header
+            'sound_header_type::standard': standard_sound_header
+            'sound_header_type::extended': extended_sound_header
+            'sound_header_type::compressed': compressed_sound_header
   standard_sound_header:
     seq:
       - id: sample_ptr
@@ -208,7 +208,6 @@ types:
       - id: reserved
         -orig-id: futureUse2
         size: 4
-        doc: reserved
       - id: state_vars_ptr
         -orig-id: stateVars
         type: u4
@@ -241,10 +240,8 @@ types:
     seq:
       - id: integer_part
         type: u2
-        doc: Integer Part of a fixed point value
       - id: fraction_part
         type: u2
-        doc: Fraction Part of a fixed point value
     instances:
       value:
         value: integer_part + fraction_part/65535.0
