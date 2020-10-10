@@ -141,15 +141,15 @@ types:
         -orig-id: markerChunk
         type: u4
         doc: reserved
-      - id: instrument_chunks
+      - id: instrument_chunk_ptr
         -orig-id: instrumentChunks
         type: u4
         doc: pointer to instrument info
-      - id: aes_recording
+      - id: aes_recording_ptr
         -orig-id: AESRecording
         type: u4
         doc: pointer to audio info
-      - id: sample_size
+      - id: bits_per_sample
         -orig-id: sampleSize
         type: u2
         doc: number of bits per sample
@@ -159,7 +159,7 @@ types:
         doc: reserved
       - id: sample_area
         -orig-id: sampleArea
-        size: num_frames * num_channels * sample_size / 8
+        size: num_frames * num_channels * bits_per_sample / 8
         doc: sampled-sound data
   compressed_sound_header:
     seq:
@@ -228,7 +228,7 @@ types:
         -orig-id: snthID
         type: u2
         doc: resource ID of Sound Manager Synthesizer (snth)
-      - id: sample_size
+      - id: bits_per_sample
         -orig-id: sampleSize
         type: u2
         doc: number of bits per sample
