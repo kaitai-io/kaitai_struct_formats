@@ -75,7 +75,8 @@ types:
         -orig-id: samplePtr
         type: u4
         doc: pointer to samples (or 0 if samples follow data structure)
-      - id: length
+      - id: num_samples
+        -orig-id: length
         type: u4
         doc: number of samples in array
       - id: sample_rate
@@ -100,7 +101,7 @@ types:
         -orig-id: baseFrequency
       - id: sample_area
         -orig-id: sampleArea
-        size: length
+        size: num_samples
         doc: sampled-sound data
   extended_sound_header:
     seq:
@@ -232,7 +233,7 @@ types:
           This field is unused. You should set it to 0.
           Inside Macintosh (Volume VI, 1991) specifies it as:
           Indicates the resource ID number of the 'snth' resource that was used to compress the packets contained in the compressed sound header.
-        doc-ref: "https://vintageapple.org/inside_o/pdf/Inside_Macintosh_Volume_VI_1991.pdf" Page 22-49, absolute page number 1169 in the PDF
+        doc-ref: "https://vintageapple.org/inside_o/pdf/Inside_Macintosh_Volume_VI_1991.pdf Page 22-49, absolute page number 1169 in the PDF"
       - id: bits_per_sample
         -orig-id: sampleSize
         type: u2
@@ -241,6 +242,10 @@ types:
         -orig-id: sampleArea
         size-eos: true
         doc: compressed sound data
+    instances:
+      compression_type:
+        value: compression_id
+        enum: compression_type_enum
   unsigned_fixed_point:
     seq:
       - id: integer_part
@@ -280,3 +285,9 @@ enums:
     0x00: standard
     0xFF: extended
     0xFE: compressed
+  compression_type_enum:
+    -2: variable_compression
+    -1: fixed_compression
+    0: not_compressed
+    3: three_to_one
+    4: six_to_one
