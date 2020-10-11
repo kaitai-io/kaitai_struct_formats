@@ -218,7 +218,7 @@ types:
         doc: pointer to LeftOverBlock
       - id: compression_id
         -orig-id: compressionID
-        type: u2
+        type: s2
         doc: ID of compression algorithm
       - id: packet_size
         -orig-id: packetSize
@@ -227,7 +227,12 @@ types:
       - id: synthesizer_id
         -orig-id: snthID
         type: u2
-        doc: resource ID of Sound Manager Synthesizer (snth)
+        doc: |
+          Latest Sound Manager documentation specifies this field as:
+          This field is unused. You should set it to 0.
+          Inside Macintosh (Volume VI, 1991) specifies it as:
+          Indicates the resource ID number of the 'snth' resource that was used to compress the packets contained in the compressed sound header.
+        doc-ref: "https://vintageapple.org/inside_o/pdf/Inside_Macintosh_Volume_VI_1991.pdf" Page 22-49, absolute page number 1169 in the PDF
       - id: bits_per_sample
         -orig-id: sampleSize
         type: u2
