@@ -95,9 +95,10 @@ types:
         type: u1
         enum: sound_header_type
         doc: sample's encoding option
-      - id: base_frequency
+      - id: midi_note
         type: u1
-        doc: base frequency of sample
+        doc: base frequency of sample, expressed as MIDI note values, 60 is middleC
+        doc-ref:
         -orig-id: baseFrequency
       - id: sample_area
         -orig-id: sampleArea
@@ -129,9 +130,10 @@ types:
         type: u1
         enum: sound_header_type
         doc: sample's encoding option
-      - id: base_frequency
+      - id: midi_note
         type: u1
-        doc: base frequency of sample
+        doc: base frequency of sample, expressed as MIDI note values, 60 is middleC
+        doc-ref:
         -orig-id: baseFrequency
       - id: num_frames
         type: u4
@@ -188,9 +190,10 @@ types:
         type: u1
         enum: sound_header_type
         doc: sample's encoding option
-      - id: base_frequency
+      - id: midi_note
         type: u1
-        doc: base frequency of sample
+        doc: base frequency of sample, expressed as MIDI note values, 60 is middleC
+        doc-ref:
         -orig-id: baseFrequency
       - id: num_frames
         type: u4
