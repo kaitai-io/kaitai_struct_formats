@@ -98,7 +98,6 @@ types:
       - id: midi_note
         type: u1
         doc: base frequency of sample, expressed as MIDI note values, 60 is middleC
-        doc-ref:
         -orig-id: baseFrequency
       - id: sample_area
         -orig-id: sampleArea
@@ -133,7 +132,6 @@ types:
       - id: midi_note
         type: u1
         doc: base frequency of sample, expressed as MIDI note values, 60 is middleC
-        doc-ref:
         -orig-id: baseFrequency
       - id: num_frames
         type: u4
@@ -193,7 +191,6 @@ types:
       - id: midi_note
         type: u1
         doc: base frequency of sample, expressed as MIDI note values, 60 is middleC
-        doc-ref:
         -orig-id: baseFrequency
       - id: num_frames
         type: u4
