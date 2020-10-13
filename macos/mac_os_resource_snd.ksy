@@ -79,32 +79,12 @@ types:
       - id: param2
         type: u4
     instances:
-      sound_header_type:
-        pos: param2 + 20
-        type: u1
-        enum: sound_header_type
-        if: is_data_offset and cmd == cmd_type::buffer_cmd
       sound_header:
         pos: param2
+        type: sound_header
         size-eos: true
         if: is_data_offset and cmd == cmd_type::buffer_cmd
-        type:
-          switch-on: sound_header_type
-          cases:
-            'sound_header_type::standard': standard_sound_header
-            'sound_header_type::extended': extended_sound_header
-            'sound_header_type::compressed': compressed_sound_header
-  standard_sound_header:
-    instances:
-      base_freqeuncy:
-        value: _root.midi_note_to_frequency[midi_note]
-        #TODO: If https://github.com/kaitai-io/kaitai_struct/issues/216 is implemented:
-        #TODO: value: (2 ** ((midi_note - 69) / 12)) * 440
-        doc: |
-          base frequency of sample in hz
-          Calculated with the formula (2 ** ((midi_note - 69) / 12)) * 440
-        doc-ref: https://en.wikipedia.org/wiki/MIDI_tuning_standard
-        if: midi_note >= 0 and midi_note < 128
+  sound_header:
     seq:
       - id: sample_ptr
         -orig-id: samplePtr
@@ -113,7 +93,13 @@ types:
       - id: num_samples
         -orig-id: length
         type: u4
-        doc: number of samples in array
+        doc: number of samples
+        if: sound_header_type == sound_header_type::standard
+      - id: num_channels
+        -orig-id: numChannels
+        type: u4
+        doc: number of channels in sample
+        if: sound_header_type != sound_header_type::standard
       - id: sample_rate
         -orig-id: sampleRate
         type: unsigned_fixed_point
@@ -134,132 +120,58 @@ types:
         type: u1
         doc: base frequency of sample, expressed as MIDI note values, 60 is middle C
         -orig-id: baseFrequency
-      - id: sample_area
-        -orig-id: sampleArea
-        size: num_samples
-        doc: sampled-sound data
-  extended_sound_header:
-    seq:
-      - id: sample_ptr
-        -orig-id: samplePtr
-        type: u4
-        doc: pointer to samples (or 0 if samples follow data structure)
-      - id: num_channels
-        -orig-id: numChannels
-        type: u4
-        doc: number of channels in sample
-      - id: sample_rate
-        -orig-id: sampleRate
-        type: unsigned_fixed_point
-        doc: The rate at which the sample was originally recorded.
-      - id: loop_start
-        -orig-id: loopStart
-        type: u4
-        doc: loop point beginning
-      - id: loop_end
-        -orig-id: loopEnd
-        type: u4
-        doc: loop point ending
-      - id: encode
-        type: u1
-        enum: sound_header_type
-        doc: sample's encoding option
-      - id: midi_note
-        type: u1
-        doc: base frequency of sample, expressed as MIDI note values, 60 is middleC
-        -orig-id: baseFrequency
       - id: num_frames
         type: u4
+        if: sound_header_type != sound_header_type::standard
       - id: aiff_sample_rate
         size: 10
         doc: rate of original sample (Extended80)
+        if: sound_header_type != sound_header_type::standard
       - id: marker_chunk
         -orig-id: markerChunk
         type: u4
         doc: reserved
+        if: sound_header_type != sound_header_type::standard
       - id: instrument_chunk_ptr
         -orig-id: instrumentChunks
         type: u4
         doc: pointer to instrument info
+        if: sound_header_type == sound_header_type::extended
       - id: aes_recording_ptr
         -orig-id: AESRecording
         type: u4
         doc: pointer to audio info
-      - id: bits_per_sample
-        -orig-id: sampleSize
-        type: u2
-        doc: number of bits per sample
-      - id: reserved
-        -orig-id: futureUse1, futureUse2, futureUse3, futureUse4
-        size: 14
-        doc: reserved
-      - id: sample_area
-        -orig-id: sampleArea
-        size: num_frames * num_channels * bits_per_sample / 8
-        doc: sampled-sound data
-  compressed_sound_header:
-    seq:
-      - id: sample_ptr
-        -orig-id: samplePtr
-        type: u4
-        doc: pointer to samples (or 0 if samples follow data structure)
-      - id: num_channels
-        -orig-id: numChannels
-        type: u4
-        doc: number of channels in sample
-      - id: sample_rate
-        -orig-id: sampleRate
-        type: unsigned_fixed_point
-        doc: The rate at which the sample was originally recorded.
-      - id: loop_start
-        -orig-id: loopStart
-        type: u4
-        doc: loop point beginning
-      - id: loop_end
-        -orig-id: loopEnd
-        type: u4
-        doc: loop point ending
-      - id: encode
-        type: u1
-        enum: sound_header_type
-        doc: sample's encoding option
-      - id: midi_note
-        type: u1
-        doc: base frequency of sample, expressed as MIDI note values, 60 is middleC
-        -orig-id: baseFrequency
-      - id: num_frames
-        type: u4
-      - id: aiff_sample_rate
-        size: 10
-        doc: rate of original sample (Extended80)
-      - id: marker_chunk
-        -orig-id: markerChunk
-        type: u4
-        doc: reserved
+        if: sound_header_type == sound_header_type::extended
       - id: format
         size: 4
         type: str
         encoding: ASCII
         doc: data format type
+        if: sound_header_type == sound_header_type::compressed
       - id: reserved
         -orig-id: futureUse2
         size: 4
+        if: sound_header_type == sound_header_type::compressed
       - id: state_vars_ptr
         -orig-id: stateVars
         type: u4
         doc: pointer to StateBlock
+        if: sound_header_type == sound_header_type::compressed
       - id: left_over_samples_ptr
         -orig-id: leftOverSamples
         type: u4
         doc: pointer to LeftOverBlock
+        if: sound_header_type == sound_header_type::compressed
       - id: compression_id
         -orig-id: compressionID
         type: s2
         doc: ID of compression algorithm
+        if: sound_header_type == sound_header_type::compressed
       - id: packet_size
         -orig-id: packetSize
         type: u2
         doc: number of bits per packet
+        if: sound_header_type == sound_header_type::compressed
       - id: synthesizer_id
         -orig-id: snthID
         type: u2
@@ -269,15 +181,36 @@ types:
           Inside Macintosh (Volume VI, 1991) specifies it as:
           Indicates the resource ID number of the 'snth' resource that was used to compress the packets contained in the compressed sound header.
         doc-ref: "https://vintageapple.org/inside_o/pdf/Inside_Macintosh_Volume_VI_1991.pdf Page 22-49, absolute page number 1169 in the PDF"
+        if: sound_header_type == sound_header_type::compressed
       - id: bits_per_sample
         -orig-id: sampleSize
         type: u2
         doc: number of bits per sample
+        if: sound_header_type != sound_header_type::standard
+      - id: reserved2
+        -orig-id: futureUse1, futureUse2, futureUse3, futureUse4
+        size: 14
+        doc: reserved
+        if: sound_header_type == sound_header_type::extended
       - id: sample_area
         -orig-id: sampleArea
         size-eos: true
-        doc: compressed sound data
+        doc: sampled-sound data
+
     instances:
+      base_freqeuncy:
+        value: _root.midi_note_to_frequency[midi_note]
+        #TODO: If https://github.com/kaitai-io/kaitai_struct/issues/216 is implemented:
+        #TODO: value: (2 ** ((midi_note - 69) / 12)) * 440
+        doc: |
+          base frequency of sample in hz
+          Calculated with the formula (2 ** ((midi_note - 69) / 12)) * 440
+        doc-ref: https://en.wikipedia.org/wiki/MIDI_tuning_standard
+        if: midi_note >= 0 and midi_note < 128
+      sound_header_type:
+        pos: 20
+        type: u1
+        enum: sound_header_type
       compression_type:
         value: compression_id
         enum: compression_type_enum
