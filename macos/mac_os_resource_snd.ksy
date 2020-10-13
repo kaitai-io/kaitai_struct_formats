@@ -67,6 +67,36 @@ types:
         enum: data_type
       - id: options
         type: u4
+        doc: contains initialisation options for the SndNewChannel function
+    instances:
+      wave_init_channel_mask:
+        value: 0x07
+        doc: wave table only, Sound Manager 2.0 and earlier
+      wave_init:
+        value: options & wave_init_channel_mask
+        enum: wave_init_option
+        if: id == data_type::wave_table_synth
+      init_pan_mask:
+        -orig-id: initPanMask
+        value: 0x0003
+        doc: mask for right/left pan values
+      pan_init:
+        value: options & init_pan_mask
+        enum: init_option
+      init_stereo_mask:
+        -orig-id: initStereoMask
+        value: 0x00C0
+        doc: mask for mono/stereo values
+      stereo_init:
+        value: options & init_stereo_mask
+        enum: init_option
+      init_comp_mask:
+        -orig-id: initCompMask
+        value: 0xFF00
+        doc: mask for compression IDs
+      comp_init:
+        value: options & init_comp_mask
+        enum: init_option
   sound_command:
     seq:
       - id: is_data_offset
@@ -228,6 +258,57 @@ enums:
     0x01: square_wave_synth
     0x03: wave_table_synth
     0x05: sampled_synth
+  wave_init_option:
+    0x04:
+      id: channel0
+      -orig-id: waveInitChannel0
+      doc: Play sounds through the first wave-table channel
+    0x05:
+      id: channel1
+      -orig-id: waveInitChannel1
+      doc: Play sounds through the second wave-table channel
+    0x06:
+      id: channel2
+      -orig-id: waveInitChannel2
+      doc: Play sounds through the third wave-table channel
+    0x07:
+      id: channel3
+      -orig-id: waveInitChannel3
+      doc: Play sounds through the fourth wave-table channel
+  init_option:
+    0x0002:
+      id: chan_left
+      -orig-id: initChanLeft
+      doc: left stereo channel
+    0x0003:
+      id: chan_right
+      -orig-id: initChanRight
+      doc: right stereo channel
+    0x0004:
+      id: no_interp
+      -orig-id: initNoInterp
+      doc: no linear interpolation
+    0x0008:
+      id: no_drop
+      -orig-id: initNoDrop
+      doc: no drop-sample conversion
+    0x0080:
+      id: mono
+      -orig-id: initMono
+      doc: monophonic channel
+    0x00C0:
+      id: stereo
+      -orig-id: initStereo
+      doc: stereo channel
+    0x0300:
+      id: mace3
+      -orig-id: initMACE3
+      doc: MACE 3:1
+    0x0400:
+      id: mace6
+      -orig-id: initMACE6
+      doc: MACE 6:1
+
   cmd_type:
     0: null_cmd
     3: quiet_cmd
