@@ -129,7 +129,7 @@ types:
         -orig-id: numChannels
         type: u4
         doc: number of channels in sample
-        if: sound_header_type != sound_header_type::standard
+        if: sound_header_type == sound_header_type::extended or sound_header_type == sound_header_type::compressed
       - id: sample_rate
         -orig-id: sampleRate
         type: unsigned_fixed_point
@@ -152,16 +152,16 @@ types:
         -orig-id: baseFrequency
       - id: num_frames
         type: u4
-        if: sound_header_type != sound_header_type::standard
+        if: sound_header_type == sound_header_type::extended or sound_header_type == sound_header_type::compressed
       - id: aiff_sample_rate
         size: 10
         doc: rate of original sample (Extended80)
-        if: sound_header_type != sound_header_type::standard
+        if: sound_header_type == sound_header_type::extended or sound_header_type == sound_header_type::compressed
       - id: marker_chunk
         -orig-id: markerChunk
         type: u4
         doc: reserved
-        if: sound_header_type != sound_header_type::standard
+        if: sound_header_type == sound_header_type::extended or sound_header_type == sound_header_type::compressed
       - id: instrument_chunk_ptr
         -orig-id: instrumentChunks
         type: u4
@@ -216,7 +216,7 @@ types:
         -orig-id: sampleSize
         type: u2
         doc: number of bits per sample
-        if: sound_header_type != sound_header_type::standard
+        if: sound_header_type == sound_header_type::extended or sound_header_type == sound_header_type::compressed
       - id: reserved2
         -orig-id: futureUse1, futureUse2, futureUse3, futureUse4
         size: 14
