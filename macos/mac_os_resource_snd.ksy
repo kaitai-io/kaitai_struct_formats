@@ -256,5 +256,7 @@ enums:
     -2: variable_compression
     -1: fixed_compression
     0: not_compressed
+    1: two_to_one
+    2: eight_to_three
     3: three_to_one
     4: six_to_one
