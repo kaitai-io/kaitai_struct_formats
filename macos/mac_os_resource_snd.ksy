@@ -150,83 +150,13 @@ types:
         type: u1
         doc: base frequency of sample, expressed as MIDI note values, 60 is middle C
         -orig-id: baseFrequency
-      - id: num_frames
-        type: u4
+      - id: extended_or_compressed
+        type: extended_or_compressed
         if: sound_header_type == sound_header_type::extended or sound_header_type == sound_header_type::compressed
-      - id: aiff_sample_rate
-        size: 10
-        doc: rate of original sample (Extended80)
-        if: sound_header_type == sound_header_type::extended or sound_header_type == sound_header_type::compressed
-      - id: marker_chunk
-        -orig-id: markerChunk
-        type: u4
-        doc: reserved
-        if: sound_header_type == sound_header_type::extended or sound_header_type == sound_header_type::compressed
-      - id: instrument_chunk_ptr
-        -orig-id: instrumentChunks
-        type: u4
-        doc: pointer to instrument info
-        if: sound_header_type == sound_header_type::extended
-      - id: aes_recording_ptr
-        -orig-id: AESRecording
-        type: u4
-        doc: pointer to audio info
-        if: sound_header_type == sound_header_type::extended
-      - id: format
-        size: 4
-        type: str
-        encoding: ASCII
-        doc: data format type
-        if: sound_header_type == sound_header_type::compressed
-      - id: reserved
-        -orig-id: futureUse2
-        size: 4
-        if: sound_header_type == sound_header_type::compressed
-      - id: state_vars_ptr
-        -orig-id: stateVars
-        type: u4
-        doc: pointer to StateBlock
-        if: sound_header_type == sound_header_type::compressed
-      - id: left_over_samples_ptr
-        -orig-id: leftOverSamples
-        type: u4
-        doc: pointer to LeftOverBlock
-        if: sound_header_type == sound_header_type::compressed
-      - id: compression_id
-        -orig-id: compressionID
-        type: s2
-        doc: ID of compression algorithm
-        if: sound_header_type == sound_header_type::compressed
-      - id: packet_size
-        -orig-id: packetSize
-        type: u2
-        doc: number of bits per packet
-        if: sound_header_type == sound_header_type::compressed
-      - id: synthesizer_id
-        -orig-id: snthID
-        type: u2
-        doc: |
-          Latest Sound Manager documentation specifies this field as:
-          This field is unused. You should set it to 0.
-          Inside Macintosh (Volume VI, 1991) specifies it as:
-          Indicates the resource ID number of the 'snth' resource that was used to compress the packets contained in the compressed sound header.
-        doc-ref: "https://vintageapple.org/inside_o/pdf/Inside_Macintosh_Volume_VI_1991.pdf Page 22-49, absolute page number 1169 in the PDF"
-        if: sound_header_type == sound_header_type::compressed
-      - id: bits_per_sample
-        -orig-id: sampleSize
-        type: u2
-        doc: number of bits per sample
-        if: sound_header_type == sound_header_type::extended or sound_header_type == sound_header_type::compressed
-      - id: reserved2
-        -orig-id: futureUse1, futureUse2, futureUse3, futureUse4
-        size: 14
-        doc: reserved
-        if: sound_header_type == sound_header_type::extended
       - id: sample_area
         -orig-id: sampleArea
         size-eos: true
         doc: sampled-sound data
-
     instances:
       base_freqeuncy:
         value: _root.midi_note_to_frequency[midi_note]
@@ -241,6 +171,78 @@ types:
         pos: 20
         type: u1
         enum: sound_header_type
+  extended_or_compressed:
+    seq:
+      - id: num_frames
+        type: u4
+      - id: aiff_sample_rate
+        size: 10
+        doc: rate of original sample (Extended80)
+      - id: marker_chunk
+        -orig-id: markerChunk
+        type: u4
+        doc: reserved
+      - id: extended
+        type: extended
+        if: _parent.sound_header_type == sound_header_type::extended
+      - id: compressed
+        type: compressed
+        if: _parent.sound_header_type == sound_header_type::compressed
+      - id: bits_per_sample
+        -orig-id: sampleSize
+        type: u2
+        doc: number of bits per sample
+      - id: reserved
+        -orig-id: futureUse1, futureUse2, futureUse3, futureUse4
+        size: 14
+        doc: reserved
+        if: _parent.sound_header_type == sound_header_type::extended
+  extended:
+    seq:
+      - id: instrument_chunk_ptr
+        -orig-id: instrumentChunks
+        type: u4
+        doc: pointer to instrument info
+      - id: aes_recording_ptr
+        -orig-id: AESRecording
+        type: u4
+        doc: pointer to audio info
+  compressed:
+    seq:
+      - id: format
+        size: 4
+        type: str
+        encoding: ASCII
+        doc: data format type
+      - id: reserved
+        -orig-id: futureUse2
+        size: 4
+      - id: state_vars_ptr
+        -orig-id: stateVars
+        type: u4
+        doc: pointer to StateBlock
+      - id: left_over_samples_ptr
+        -orig-id: leftOverSamples
+        type: u4
+        doc: pointer to LeftOverBlock
+      - id: compression_id
+        -orig-id: compressionID
+        type: s2
+        doc: ID of compression algorithm
+      - id: packet_size
+        -orig-id: packetSize
+        type: u2
+        doc: number of bits per packet
+      - id: synthesizer_id
+        -orig-id: snthID
+        type: u2
+        doc: |
+          Latest Sound Manager documentation specifies this field as:
+          This field is unused. You should set it to 0.
+          Inside Macintosh (Volume VI, 1991) specifies it as:
+          Indicates the resource ID number of the 'snth' resource that was used to compress the packets contained in the compressed sound header.
+        doc-ref: "https://vintageapple.org/inside_o/pdf/Inside_Macintosh_Volume_VI_1991.pdf Page 22-49, absolute page number 1169 in the PDF"
+    instances:
       compression_type:
         value: compression_id
         enum: compression_type_enum
