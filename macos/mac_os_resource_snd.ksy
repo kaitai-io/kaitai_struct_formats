@@ -166,7 +166,7 @@ types:
         #TODO: If https://github.com/kaitai-io/kaitai_struct/issues/216 is implemented:
         #TODO: value: (2 ** ((midi_note - 69) / 12)) * 440
         doc: |
-          base frequency of sample in hz
+          base frequency of sample in Hz
           Calculated with the formula (2 ** ((midi_note - 69) / 12)) * 440
         doc-ref: https://en.wikipedia.org/wiki/MIDI_tuning_standard
         if: midi_note >= 0 and midi_note < 128
