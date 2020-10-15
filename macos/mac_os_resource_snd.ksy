@@ -155,7 +155,10 @@ types:
         if: sound_header_type == sound_header_type::extended or sound_header_type == sound_header_type::compressed
       - id: sample_area
         -orig-id: sampleArea
-        size-eos: true
+        size: |
+          sound_header_type == sound_header_type::standard ? num_samples :
+          sound_header_type == sound_header_type::extended ? extended_or_compressed.num_frames * num_channels * extended_or_compressed.bits_per_sample / 8 :
+          _io.size - _io.pos
         doc: sampled-sound data
     instances:
       base_freqeuncy:
