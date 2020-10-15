@@ -56,7 +56,7 @@ instances:
         8372.02, 8869.84, 9397.27, 9956.06, 10548.08, 11175.30, 11839.82, 12543.85
       ]
     doc: |
-      Lookup table to convert a MIDI note into a frequency in hz
+      Lookup table to convert a MIDI note into a frequency in Hz
       The lookup table represents the formula (2 ** ((midi_note - 69) / 12)) * 440
     doc-ref: https://en.wikipedia.org/wiki/MIDI_tuning_standard
 types:
