@@ -315,25 +315,122 @@ enums:
       doc: MACE 6:1
 
   cmd_type:
-    0: null_cmd
-    3: quiet_cmd
-    4: flush_cmd
-    10: wait_cmd
-    11: pause_cmd
-    12: resume_cmd
-    13: call_back_cmd
-    14: sync_cmd
-    15: empty_cmd
-    40: freq_duration_cmd
-    41: rest_cmd
-    42: freq_cmd
-    43: amp_cmd
-    44: timbre_cmd
-    60: wave_table_cmd
-    61: phase_cmd
-    80: sound_cmd
-    81: buffer_cmd
-    82: rate_cmd
+    0:
+      id: null_cmd
+      -orig-id: nullCmd
+      doc: do nothing
+    3:
+      id: quiet_cmd
+      -orig-id: quietCmd
+      doc: stop a sound that is playing
+    4:
+      id: flush_cmd
+      -orig-id: flushCmd
+      doc: flush a sound channel
+    5:
+      id: re_init_cmd
+      -orig-id: reInitCmd
+      doc: reinitialize a sound channel
+    10:
+      id: wait_cmd
+      -orig-id: waitCmd
+      doc: suspend processing in a channel
+    11:
+      id: pause_cmd
+      -orig-id: pauseCmd
+      doc: pause processing in a channel
+    12:
+      id: resume_cmd
+      -orig-id: resumeCmd
+      doc: resume processing in a channel
+    13:
+      id: call_back_cmd
+      -orig-id: callBackCmd
+      doc: execute a callback procedure
+    14:
+      id: sync_cmd
+      -orig-id: syncCmd
+      doc: synchronize channels
+    15:
+      id: empty_cmd
+      -orig-id: emptyCmd
+      doc: |
+        If no other commands are pending in the sound channel after a
+        resumeCmd command, the Sound Manager sends an emptyCmd command.
+        The emptyCmd command is sent only by the Sound Manager and
+        should not be issued by your application.
+    24:
+      id: available_cmd
+      -orig-id: availableCmd
+      doc: see if initialization options are supported
+    25:
+      id: version_cmd
+      -orig-id: versionCmd
+      doc: determine version
+    26:
+      id: total_load_cmd
+      -orig-id: totalLoadCmd
+      doc: report total CPU load
+    27:
+      id: load_cmd
+      -orig-id: loadCmd
+      doc: report CPU load for a new channel
+    40:
+      id: freq_duration_cmd
+      -orig-id: freqDurationCmd
+      doc: play a note for a duration
+    41:
+      id: rest_cmd
+      -orig-id: restCmd
+      doc: rest a channel for a duration
+    42:
+      id: freq_cmd
+      -orig-id: freqCmd
+      doc: change the pitch of a sound
+    43:
+      id: amp_cmd
+      -orig-id: ampCmd
+      doc: change the amplitude of a sound
+    44:
+      id: timbre_cmd
+      -orig-id: timbreCmd
+      doc: change the timbre of a sound
+    45:
+      id: get_amp_cmd
+      -orig-id: getAmpCmd
+      doc: get the amplitude of a sound
+    46:
+      id: volume_cmd
+      -orig-id: volumeCmd
+      doc: set volume
+    47:
+      id: get_volume_cmd
+      -orig-id: getVolumeCmd
+      doc: get volume
+    60:
+      id: wave_table_cmd
+      -orig-id: waveTableCmd
+      doc: install a wave table as a voice
+    61:
+      id: phase_cmd
+      -orig-id: phaseCmd
+      doc: Not documented
+    80:
+      id: sound_cmd
+      -orig-id: soundCmd
+      doc: install a sampled sound as a voice
+    81:
+      id: buffer_cmd
+      -orig-id: bufferCmd
+      doc: play a sampled sound
+    82:
+      id: rate_cmd
+      -orig-id: rateCmd
+      doc: set the pitch of a sampled sound
+    85:
+      id: get_rate_cmd
+      -orig-id: getRateCmd
+      doc: get the pitch of a sampled sound
   sound_header_type:
     0x00: standard
     0xFF: extended
