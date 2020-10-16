@@ -19,12 +19,15 @@ class FormatPagesGenerator
   LANGS = {
     'index' => {name: 'Overview', lexer: 'yaml'},
 
-    'cpp_stl' => {name: 'C++/STL', lexer: 'cpp'},
+    'cpp_stl_11' => {name: 'C++11/STL', lexer: 'cpp'},
+    'cpp_stl_98' => {name: 'C++98/STL', lexer: 'cpp'},
     'csharp' => {name: 'C#', ext: 'cs'},
+    'go' => {name: 'Go', ext: 'go'},
     'graphviz' => {name: 'GraphViz', ext: 'dot'},
     'java' => {name: 'Java', ext: 'java'},
     'javascript' => {name: 'JavaScript', ext: 'js'},
     'lua' => {name: 'Lua', ext: 'lua'},
+    'nim' => {name: 'Nim', ext: 'nim'},
     'perl' => {name: 'Perl', ext: 'pm'},
     'php' => {name: 'PHP', ext: 'php'},
     'python' => {name: 'Python', ext: 'py'},
@@ -84,8 +87,9 @@ class FormatPagesGenerator
 
     @erb_usage = {}
     LANGS.each_key { |lang|
-      fn = "usage_#{lang}"
-      @erb_usage[lang] = erb("usage_#{lang}") if FileTest.exists?("#{fn}.html.erb")
+      lang_prim = (lang == 'cpp_stl_11' || lang == 'cpp_stl_98') ? 'cpp_stl' : lang
+      fn = "usage_#{lang_prim}"
+      @erb_usage[lang] = erb(fn) if FileTest.exists?("#{fn}.html.erb")
     }
 
     @base_url = '//kaitai.io/'
@@ -279,21 +283,22 @@ class FormatPagesGenerator
   end
 
   def source_file_gen_names(file_id, lang)
+    src_files = source_file_names(file_id, lang)
     case lang
-    when 'java'
-      ["src/#{ucc(file_id)}.java"]
+    when 'go', 'java'
+      src_files.map { |file| "src/#{file}" }
     else
-      source_file_names(file_id, lang)
+      src_files
     end
   end
 
   def source_file_names(file_id, lang)
     case lang
-    when 'cpp_stl'
+    when 'cpp_stl_98', 'cpp_stl_11'
       ["#{file_id}.h", "#{file_id}.cpp"]
     when 'csharp', 'java', 'javascript', 'perl', 'php'
       ["#{ucc(file_id)}.#{LANGS[lang][:ext]}"]
-    when 'graphviz', 'ruby', 'python'
+    when 'go', 'graphviz', 'lua', 'nim', 'ruby', 'python'
       ["#{file_id}.#{LANGS[lang][:ext]}"]
     else
       []
