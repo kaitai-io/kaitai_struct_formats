@@ -112,7 +112,6 @@ types:
       sound_header:
         pos: param2
         type: sound_header
-        size-eos: true
         if: is_data_offset and cmd == cmd_type::buffer_cmd
   sound_header:
     seq:
@@ -160,6 +159,7 @@ types:
           sound_header_type == sound_header_type::extended ? extended_or_compressed.num_frames * num_channels * extended_or_compressed.bits_per_sample / 8 :
           _io.size - _io.pos
         doc: sampled-sound data
+        if: sample_ptr == 0
     instances:
       base_freqeuncy:
         value: _root.midi_note_to_frequency[midi_note]
