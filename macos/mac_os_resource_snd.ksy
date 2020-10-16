@@ -115,6 +115,8 @@ types:
         if: is_data_offset and cmd == cmd_type::buffer_cmd
   sound_header:
     seq:
+      - size: 0
+        if: start_ofs < 0 # invoking the `start_ofs` value instance to save the current `_io.pos`
       - id: sample_ptr
         -orig-id: samplePtr
         type: u4
@@ -161,6 +163,8 @@ types:
         doc: sampled-sound data
         if: sample_ptr == 0
     instances:
+      start_ofs:
+        value: _io.pos
       base_freqeuncy:
         value: _root.midi_note_to_frequency[midi_note]
         #TODO: If https://github.com/kaitai-io/kaitai_struct/issues/216 is implemented:
@@ -171,7 +175,7 @@ types:
         doc-ref: https://en.wikipedia.org/wiki/MIDI_tuning_standard
         if: midi_note >= 0 and midi_note < 128
       sound_header_type:
-        pos: 20
+        pos: start_ofs + 20
         type: u1
         enum: sound_header_type
   extended_or_compressed:
