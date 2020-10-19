@@ -459,28 +459,37 @@ types:
         enum: enum_resource_type
         if: depth == 0
       - id: ofs_name
-        type: u4
+        type: b31le
         if: depth != 0
+      - id: is_name
+        type: b1be
+        if: depth != 0
+        doc: Whether ofs_name is an id or points to a directory-string
       - id: ofs_data_entry
-        type: u4
+        type: b31le
+      - id: has_child
+        type: b1be
+        doc: |
+          Whether ofs_data_entry points to a child (directory entry) or a
+          leaf (data entry).
     instances:
       child:
         io: _root._io
-        pos: (ofs_data_entry & ~0x80000000) + _parent.section_file_offset
+        pos: ofs_data_entry + _parent.section_file_offset
         type: resource_directory_table(depth + 1, _parent.section_file_offset, _parent.section_virtual_address)
-        if: (ofs_data_entry & 0x80000000) >> 31 == 1
+        if: has_child
         parent: _parent
       resource_data_entry:
         io: _root._io
         pos: ofs_data_entry + _parent.section_file_offset
         type: resource_data_entry
-        if: (ofs_data_entry & 0x80000000) >> 31 == 0
+        if: not has_child
         parent: _parent
       resource_directory_string:
         io: _root._io
-        pos: (ofs_name & ~0x80000000) + _parent.section_file_offset
+        pos: ofs_name + _parent.section_file_offset
         type: resource_directory_string
-        if: (ofs_name & 0x80000000) >> 31 == 1
+        if: is_name
         parent: _parent
     enums:
       enum_resource_type:
