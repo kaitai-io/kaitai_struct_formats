@@ -16,6 +16,7 @@ meta:
   license: CC0-1.0
   ks-version: 0.7
   endian: le
+  bit-endian: le
 doc-ref: http://www.microsoft.com/whdc/system/platform/firmware/PECOFF.mspx
 seq:
   - id: mz
@@ -459,16 +460,16 @@ types:
         enum: enum_resource_type
         if: depth == 0
       - id: ofs_name
-        type: b31le
+        type: b31
         if: depth != 0
       - id: is_name
-        type: b1be
+        type: b1
         if: depth != 0
         doc: Whether ofs_name is an id or points to a directory-string
       - id: ofs_data_entry
-        type: b31le
+        type: b31
       - id: has_child
-        type: b1be
+        type: b1
         doc: |
           Whether ofs_data_entry points to a child (directory entry) or a
           leaf (data entry).
