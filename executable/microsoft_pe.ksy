@@ -468,25 +468,25 @@ types:
         doc: Whether ofs_name is an id or points to a directory-string
       - id: ofs_data_entry
         type: b31
-      - id: has_child
+      - id: is_subdirectory
         type: b1
         doc: |
           Whether ofs_data_entry points to a child (directory entry) or a
           leaf (data entry).
     instances:
-      child:
+      subdirectory:
         io: _root._io
         pos: ofs_data_entry + _parent.section_file_offset
         type: resource_directory_table(depth + 1, _parent.section_file_offset, _parent.section_virtual_address)
-        if: has_child
+        if: is_subdirectory
         parent: _parent
-      resource_data_entry:
+      data_entry:
         io: _root._io
         pos: ofs_data_entry + _parent.section_file_offset
         type: resource_data_entry
-        if: not has_child
+        if: not is_subdirectory
         parent: _parent
-      resource_directory_string:
+      name:
         io: _root._io
         pos: ofs_name + _parent.section_file_offset
         type: resource_directory_string
