@@ -14,7 +14,7 @@ meta:
       - fmt/900
     wikidata: Q1076355
   license: CC0-1.0
-  ks-version: 0.7
+  ks-version: 0.9
   endian: le
   bit-endian: le
 doc-ref: http://www.microsoft.com/whdc/system/platform/firmware/PECOFF.mspx
