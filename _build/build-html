@@ -108,6 +108,9 @@ class FormatPagesGenerator
         file_dir = "#{@html_dir}/#{file_id}"
         cat_id = File::dirname(ksy).gsub(/\/.*$/, '')
 
+        file_tags = Set.new(yaml['meta']['tags']) || Set.new
+        file_tags << cat_id
+
         puts
         puts "## #{file_id}"
         puts
@@ -127,10 +130,14 @@ class FormatPagesGenerator
         generate_base_page(file_id, file_dir, yaml, yaml_str, cat_id, good_langs)
 
         @all[file_id] = yaml
-        @by_cat[cat_id] ||= []
-        @by_cat[cat_id] << {
+        by_cat_record = {
           :id => file_id,
           :ksy => ksy,
+        }
+
+        file_tags.each { |tag|
+          @by_cat[tag] ||= []
+          @by_cat[tag] << by_cat_record
         }
       rescue Psych::SyntaxError => e
         $stderr.puts "## on file #{ksy.inspect}"
