@@ -5,6 +5,8 @@ meta:
     justsolve: FAT12
   license: CC0-1.0
   ks-version: 0.9
+  imports:
+    - /common/dos_datetime
   endian: le
   bit-endian: le
 doc-ref: https://download.microsoft.com/download/0/8/4/084c452b-b772-4fe5-89bb-a0cbf082286a/fatgen103.doc
@@ -287,10 +289,9 @@ types:
         type: attr_flags
       - id: reserved
         size: 10
-      - id: time
-        type: u2
-      - id: date
-        type: u2
+      - id: last_write_time
+        size: 4
+        type: dos_datetime
       - id: start_clus
         type: u2
       - id: file_size

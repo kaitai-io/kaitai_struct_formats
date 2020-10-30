@@ -14,6 +14,8 @@ meta:
     wikidata: Q136218
   license: CC0-1.0
   ks-version: 0.9
+  imports:
+    - /common/dos_datetime
   endian: le
   bit-endian: le
 doc: |
@@ -74,9 +76,8 @@ types:
         type: u2
         enum: compression
       - id: file_mod_time
-        type: u2
-      - id: file_mod_date
-        type: u2
+        size: 4
+        type: dos_datetime
       - id: crc32
         type: u4
       - id: len_body_compressed
@@ -159,10 +160,9 @@ types:
       - id: compression_method
         type: u2
         enum: compression
-      - id: last_mod_file_time
-        type: u2
-      - id: last_mod_file_date
-        type: u2
+      - id: file_mod_time
+        size: 4
+        type: dos_datetime
       - id: crc32
         type: u4
       - id: len_body_compressed
@@ -273,15 +273,31 @@ types:
         doc-ref: 'https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt#L817'
         seq:
           - id: flags
-            type: u1
+            size: 1
+            type: info_flags
           - id: mod_time
             type: u4
+            if: flags.has_mod_time
+            doc: Unix timestamp
           - id: access_time
             type: u4
-            if: not _io.eof
+            if: flags.has_access_time
+            doc: Unix timestamp
           - id: create_time
             type: u4
-            if: not _io.eof
+            if: flags.has_create_time
+            doc: Unix timestamp
+        types:
+          info_flags:
+            seq:
+              - id: has_mod_time
+                type: b1
+              - id: has_access_time
+                type: b1
+              - id: has_create_time
+                type: b1
+              - id: reserved
+                type: b5
       infozip_unix_var_size:
         doc-ref: 'https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt#L1339'
         seq:
