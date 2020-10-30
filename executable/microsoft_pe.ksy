@@ -14,8 +14,9 @@ meta:
       - fmt/900
     wikidata: Q1076355
   license: CC0-1.0
-  ks-version: 0.7
+  ks-version: 0.9
   endian: le
+  bit-endian: le
 doc-ref: http://www.microsoft.com/whdc/system/platform/firmware/PECOFF.mspx
 seq:
   - id: mz
@@ -355,6 +356,11 @@ types:
       body:
         pos: pointer_to_raw_data
         size: size_of_raw_data
+      resource_table:
+        pos: pointer_to_raw_data
+        size: size_of_raw_data
+        type: resource_directory_table(0, pointer_to_raw_data, virtual_address)
+        if: virtual_address == _root.pe.optional_hdr.data_dirs.resource_table.virtual_address
   certificate_table:
     seq:
       - id: items
@@ -408,3 +414,144 @@ types:
         size: length - 8
         doc: Contains a certificate, such as an Authenticode signature.
     doc-ref: 'https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format#the-attribute-certificate-table-image-only'
+
+  resource_directory_table:
+    doc-ref: 'https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#resource-directory-table'
+    params:
+      - id: depth
+        type: u4
+      - id: section_file_offset
+        type: u4
+      - id: section_virtual_address
+        type: u4
+    seq:
+      - id: reserved
+        -orig-id: characteristics
+        type: u4
+        doc: Reserved for future use, should be set to zero
+      - id: timestamp
+        type: u4
+        -orig-id: TimeDateStamp
+      - id: version
+        type: version_u2
+      - id: num_named_entries
+        -orig-id: NumberOfNamedEntries
+        type: u2
+      - id: num_id_entries
+        -orig-id: NumberOfIdEntries
+        type: u2
+      - id: named_entries
+        type: resource_directory_entry(depth)
+        repeat: expr
+        repeat-expr: num_named_entries
+      - id: id_entries
+        type: resource_directory_entry(depth)
+        repeat: expr
+        repeat-expr: num_id_entries
+
+  resource_directory_entry:
+    doc-ref: 'https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#resource-directory-entries'
+    params:
+      - id: depth
+        type: u4
+    seq:
+      - id: resource_type
+        type: u4
+        enum: enum_resource_type
+        if: depth == 0
+      - id: ofs_name
+        type: b31
+        if: depth != 0
+      - id: is_name
+        type: b1
+        if: depth != 0
+        doc: Whether ofs_name is an id or points to a directory-string
+      - id: ofs_data_entry
+        type: b31
+      - id: is_subdirectory
+        type: b1
+        doc: |
+          Whether ofs_data_entry points to a child (directory entry) or a
+          leaf (data entry).
+    instances:
+      subdirectory:
+        io: _root._io
+        pos: ofs_data_entry + _parent.section_file_offset
+        type: resource_directory_table(depth + 1, _parent.section_file_offset, _parent.section_virtual_address)
+        if: is_subdirectory
+        parent: _parent
+      data_entry:
+        io: _root._io
+        pos: ofs_data_entry + _parent.section_file_offset
+        type: resource_data_entry
+        if: not is_subdirectory
+        parent: _parent
+      name:
+        io: _root._io
+        pos: ofs_name + _parent.section_file_offset
+        type: resource_directory_string
+        if: is_name
+        parent: _parent
+    enums:
+      enum_resource_type:
+          1: cursor
+          2: bitmap
+          3: icon
+          4: menu
+          5: dialog
+          6: string
+          7: fontdir
+          8: font
+          9: accelerator
+          10: rcdata
+          11: messagetable
+          12: group_cursor
+          14: group_icon
+          16: version
+          17: dlginclude
+          19: plugplay
+          20: vxd
+          21: anicursor
+          22: aniicon
+          23: html
+          24: manifest
+
+  resource_data_entry:
+    doc-ref: 'https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#resource-data-entry'
+    seq:
+      - id: data_rva
+        -orig-id: OffsetToData
+        type: u4
+        doc: Relative virtual address of the resource data entry
+      - id: len_resource_data_entry
+        -orig-id: Size
+        type: u4
+      - id: codepage
+        type: u4
+      - id: reserved
+        type: u4
+    instances:
+      body:
+        io: _root._io
+        pos: (data_rva - _parent.section_virtual_address) + _parent.section_file_offset
+        size: len_resource_data_entry
+
+  resource_directory_string:
+    doc-ref: 'https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#resource-directory-string'
+    seq:
+      - id: len_name
+        -orig-id: Length
+        type: u2
+        doc: Number of UTF-16LE encoded characters
+      - id: name
+        -orig-id: NameString
+        size: len_name * 2
+        type: str
+        encoding: UTF-16LE
+
+  version_u2:
+    seq:
+      - id: major
+        type: u2
+      - id: minor
+        type: u2
