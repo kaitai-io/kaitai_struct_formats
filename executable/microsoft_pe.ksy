@@ -16,7 +16,7 @@ meta:
   license: CC0-1.0
   ks-version: 0.7
   endian: le
-doc-ref: http://www.microsoft.com/whdc/system/platform/firmware/PECOFF.mspx
+doc-ref: https://docs.microsoft.com/en-us/windows/win32/debug/pe-format
 seq:
   - id: mz
     type: mz_placeholder
@@ -139,7 +139,7 @@ types:
       - id: number_of_aux_symbols
         type: u1
     instances:
-      #effective_name: 
+      #effective_name:
       #  value: name_zeroes == 0 ? name_from_offset : '"fixme"'
       #name_from_offset:
       #  io: _root._io
@@ -375,7 +375,7 @@ types:
         0x0001:
           id: x509
           doc: |
-            bCertificate contains an X.509 Certificate 
+            bCertificate contains an X.509 Certificate
             Not Supported
         0x0002:
           id: pkcs_signed_data
@@ -386,13 +386,13 @@ types:
         0x0004:
           id: ts_stack_signed
           doc: |
-            Terminal Server Protocol Stack Certificate signing 
+            Terminal Server Protocol Stack Certificate signing
             Not Supported
     seq:
       - id: length
         -orig-id: dwLength
         type: u4
-        doc: Specifies the length of the attribute certificate entry. 
+        doc: Specifies the length of the attribute certificate entry.
       - id: revision
         -orig-id: wRevision
         type: u2
