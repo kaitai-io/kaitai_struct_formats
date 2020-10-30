@@ -241,7 +241,7 @@ types:
             'extra_codes::infozip_unix_var_size': infozip_unix_var_size
     types:
       ntfs:
-        doc-ref: 'https://github.com/LuaDist/zip/blob/master/proginfo/extrafld.txt#L191'
+        doc-ref: 'https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt#L191'
         seq:
           - id: reserved
             type: u4
@@ -270,7 +270,7 @@ types:
               - id: creation_time
                 type: u8
       extended_timestamp:
-        doc-ref: 'https://github.com/LuaDist/zip/blob/master/proginfo/extrafld.txt#L817'
+        doc-ref: 'https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt#L817'
         seq:
           - id: flags
             type: u1
@@ -283,7 +283,7 @@ types:
             type: u4
             if: not _io.eof
       infozip_unix_var_size:
-        doc-ref: 'https://github.com/LuaDist/zip/blob/master/proginfo/extrafld.txt#L1339'
+        doc-ref: 'https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt#L1339'
         seq:
           - id: version
             type: u1
@@ -318,7 +318,7 @@ enums:
     19: ibm_lz77_z
     98: ppmd
   extra_codes:
-    # https://github.com/LuaDist/zip/blob/master/proginfo/extrafld.txt
+    # https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt
     0x0001: zip64
     0x0007: av_info
 #    0x0008: reserved for extended language encoding data (PFS) (see APPENDIX D)
