@@ -1,8 +1,13 @@
 meta:
   id: vfat
   # actually FAT12
+  xref:
+    justsolve: FAT12
   license: CC0-1.0
+  ks-version: 0.9
   endian: le
+  bit-endian: le
+doc-ref: https://download.microsoft.com/download/0/8/4/084c452b-b772-4fe5-89bb-a0cbf082286a/fatgen103.doc
 seq:
   - id: boot_sector
     type: boot_sector
@@ -277,8 +282,9 @@ types:
     seq:
       - id: file_name
         size: 11
-      - id: attribute
-        type: u1
+      - id: attrs
+        size: 1
+        type: attr_flags
       - id: reserved
         size: 10
       - id: time
@@ -289,3 +295,27 @@ types:
         type: u2
       - id: file_size
         type: u4
+    types:
+      attr_flags:
+        seq:
+          - id: read_only
+            type: b1
+          - id: hidden
+            type: b1
+          - id: system
+            type: b1
+          - id: volume_id
+            type: b1
+          - id: is_directory
+            type: b1
+          - id: archive
+            type: b1
+          - id: reserved
+            type: b2
+        instances:
+          long_name:
+            value: |
+              read_only
+              and hidden
+              and system
+              and volume_id
