@@ -63,7 +63,14 @@ jobs:
         working-directory: _build
         run: ./build-html .. target html
       - name: Deploy
-        run: .github/publish
         env:
           BOT_SSH_KEY: ${{secrets.BOT_SSH_KEY}}
+        run: |
+          .github/push_artifacts/git_config_kaitai_bot
+          .github/push_artifacts/publish \
+            -o kaitai-io \
+            -r formats-kaitai-io.github.io \
+            -m "Build results of $GITHUB_REF $GITHUB_REPOSITORY@$GITHUB_SHA" \
+            -- --exclude=.git --exclude=.travis.yml --exclude=CNAME _build/html/
+        # NB: trailing slash in '_build/html/' is *very* important for rsync!
         if: github.ref == 'refs/heads/master'
