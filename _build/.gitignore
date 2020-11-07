@@ -1,4 +1,6 @@
 tmp/
 target/
 html/
+pygments/
+pygments-lexer-graphviz/
 a.out
