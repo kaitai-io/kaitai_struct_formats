@@ -1,8 +1,19 @@
 meta:
-  id: quicktime_mov
+  id: iso_iec_base_media
+  file-extension:
+    # the list of extensions is according to https://en.wikipedia.org/wiki/ISO/IEC_base_media_file_format
+    - mp4
+    - 3gp
+    - 3g2
+    - mj2
+    - dvb
+    - dcf
+    - m21
+    - f4v
   application: QuickTime, MP4 ISO 14496-14 media
   license: CC0-1.0
   endian: be
+  encoding: ascii
 doc-ref: 'https://developer.apple.com/library/content/documentation/QuickTime/QTFF/QTFFChap1/qtff1.html#//apple_ref/doc/uid/TP40000939-CH203-BBCGDDDF'
 seq:
   - id: atoms
@@ -42,6 +53,20 @@ types:
             'atom_type::ftyp': ftyp_body
             'atom_type::tkhd': tkhd_body
             'atom_type::mvhd': mvhd_body
+            'atom_type::co64': co64_body
+            'atom_type::dref': dref_body   # Data Reference Box
+            'atom_type::elst': elst_body
+            'atom_type::hdlr': hdlr_body
+            'atom_type::mdhd': mdhd_body
+            'atom_type::smhd': smhd_body   # Sound Media Header
+            'atom_type::stco': stco_body
+            'atom_type::stsc': stsc_body
+            'atom_type::stsd': stsd_body
+            'atom_type::stts': stts_body
+            'atom_type::stss': stss_body   # Sync Sample Box
+            'atom_type::stsz': stsz_body   # Sample Size Box
+            'atom_type::stz2': stz2_body   # Compact Sample Size Box
+            'atom_type::vmhd': vmhd_body
     instances:
       len:
         value: 'len32 == 0 ? (_io.size - 8) : (len32 == 1 ? len64 - 16 : len32 - 8)'
@@ -153,6 +178,261 @@ types:
         type: fixed32
       - id: height
         type: fixed32
+  co64_body:
+    seq:
+      - id: version
+        type: u1
+      - id: flags
+        size: 3
+      - id: entry_count
+        type: u4
+      - id: chunk_offsets
+        type: u8
+        repeat: expr
+        repeat-expr: entry_count
+  dref_body: 
+    seq:
+      - id: version
+        type: u1
+      - id: flags
+        size: 3
+      - id: entry_count
+        type: u4
+      - id: entries
+        type: entry
+        repeat: expr
+        repeat-expr: entry_count
+    types:
+      entry:
+        seq:
+          - id: size
+            type: u4
+          - id: type
+            type: str
+            size: 4
+          - id: data_entry
+            type: entry_body
+            size: 'size - 8'
+      entry_body:
+        seq:
+          - id: flags
+            size: 3
+          - id: name
+            type: str
+            terminator: 0
+            if: _parent.type == 'urn '
+          - id: location
+            type: str
+            doc: |
+              This field is probably incorrect sometimes (GDCL muxer seems to have a bug here)
+            terminator: 0
+            eos-error: false
+  elst_body:
+    seq:
+      - id: version
+        type: u4
+      - id: entry_count
+        type: u4
+      - id: entries
+        type: entry
+        repeat: expr
+        repeat-expr: entry_count
+    types:
+      entry:
+        seq:
+          - id: segment_duration
+            type:
+              switch-on: _parent.version
+              cases:
+                1: s8
+                _: s4
+          - id: media_time
+            type:
+              switch-on: _parent.version
+              cases:
+                1: s8
+                _: s4
+          - id: media_rate_integer
+            type: u2
+          - id: media_rate_fraction
+            type: u2
+  hdlr_body:
+    seq:
+      - id: predefined
+        type: u4
+      - id: reserved0
+        type: u4
+      - id: reserved1
+        type: u4
+      - id: reserved2
+        type: u4
+  mdhd_body:
+    seq:
+      - id: version
+        type: u4
+      - id: creation_time
+        type:
+          switch-on: version
+          cases:
+            1: u8
+            _: u4
+      - id: modification_time
+        type:
+          switch-on: version
+          cases:
+            1: u8
+            _: u4
+      - id: timescale
+        type: u4
+      - id: duration
+        type:
+          switch-on: version
+          cases:
+            1: u8
+            _: u4
+      - id: lang_code #TODO: decode (or describe how to decode)
+        type: u2
+      - id: predefined
+        type: u2
+  smhd_body:
+    seq:
+      - id: version
+        type: u4
+      - id: balance
+        type: s2
+      - id: reserved
+        type: u2
+  stco_body:
+    seq:
+      - id: version
+        type: u4
+      - id: entry_count
+        type: u4
+      - id: chunk_offsets
+        type: u4
+        repeat: expr
+        repeat-expr: entry_count
+  stsc_body:
+    seq:
+      - id: version
+        type: u4
+      - id: entry_count
+        type: u4
+      - id: entries
+        type: entry
+        repeat: expr
+        repeat-expr: entry_count
+    types:
+      entry:
+        seq:
+          - id: first_chunk
+            type: u4
+          - id: samples_per_chunk
+            type: u4
+          - id: sample_description_index
+            type: u4
+  stsd_body:
+    seq:
+      - id: version
+        type: u4
+      - id: entry_count
+        type: u4
+      - id: entries
+        type: entry
+        repeat: expr
+        repeat-expr: entry_count
+    types:
+      entry:
+        seq:
+          - id: size
+            type: u4
+          - id: type
+            type: str
+            size: 4
+          - id: body
+            type: entry_body
+            size: 'size - 8'
+      entry_body:
+        seq:
+          - id: reserved
+            type: u1
+            repeat: expr
+            repeat-expr: 6
+          - id: data_reference_index
+            type: u2
+  stts_body:
+    seq:
+      - id: version
+        type: u4
+      - id: entry_count
+        type: u4
+      - id: entries
+        type: entry
+        repeat: expr
+        repeat-expr: entry_count
+    types:
+      entry:
+        seq:
+          - id: sample_count
+            type: u4
+          - id: sample_delta
+            type: u4
+  stss_body:
+    seq:
+      - id: version
+        type: u4
+      - id: entry_count
+        type: u4
+      - id: sample_numbers
+        type: s4
+        repeat: expr
+        repeat-expr: entry_count
+  stsz_body:
+    seq:
+      - id: version
+        type: u4
+      - id: sample_size
+        type: u4
+      - id: sample_count
+        type: u4
+      - id: entry_sizes
+        if: sample_size == 0
+        repeat: expr
+        repeat-expr: sample_count
+        type: u4
+  stz2_body:  # <----- NOT TESTED!
+    seq:
+      - id: version
+        type: u4
+      - id: reserved
+        type: u1
+        repeat: expr
+        repeat-expr: 3
+      - id: field_size
+        type: u1
+      - id: sample_count
+        type: u4
+      - id: entry_sizes
+        repeat: expr
+        repeat-expr: '(field_size == 4) ? (sample_count/2) : sample_count'
+        type:
+          switch-on: field_size
+          cases:
+            4:  u1   # 4 bits
+            8:  u1   # 8 bits
+            16: u2   # 16 bits
+  vmhd_body:
+    seq:
+      - id: unknown
+        type: u4
+      - id: graphics_mode
+        type: u2
+      - id: reserved0
+        type: u2
+      - id: reserved1
+        type: u2
+      - id: reserved2
+        type: u2
   fixed32:
     doc: Fixed-point 32-bit number.
     seq:
@@ -191,6 +471,7 @@ enums:
     0x7374636f: stco
     0x73747363: stsc
     0x73747364: stsd
+    0x73747373: stss
     0x7374737a: stsz
     0x73747473: stts
     0x746b6864: tkhd
