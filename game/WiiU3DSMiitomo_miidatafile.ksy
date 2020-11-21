@@ -1,6 +1,7 @@
 meta:
-  id: gen2_wiiu_3ds_miitomo
+  id: WiiU3DSMiitomo_miidatafile
   endian: le
+  bit-endian: le
 seq:
   - id: unknown_1
     type: u1
@@ -39,8 +40,18 @@ seq:
     repeat-expr: 6
   - id: padding
     type: u2
-  - id: data_1
-    type: u2
+  - id: gender
+    type: b1
+  - id: birth_month
+    type: b4
+  - id: birth_day
+    type: b5
+  - id: favorite_color
+    type: b4
+  - id: favorite
+    type: b1
+  - id: unknown_4
+    type: b1
   - id: mii_name
     type: str
     size: 20
@@ -67,22 +78,96 @@ seq:
     type: b1
   - id: hair_color
     type: b3
-  - id: eye
-    type: u4le
-  - id: eyebrow
-    type: u4le
-  - id: nose
-    type: u2le
-  - id: mouth
-    type: u2le
-  - id: mouth2
-    type: u2le
-  - id: beard
-    type: u2le
-  - id: glasses
-    type: u2le
-  - id: mole
-    type: u2le
+  - id: eye_type
+    type: b6
+  - id: eye_color
+    type: b3
+  - id: eye_size
+    type: b3
+  - id: unknown_6
+    type: b1
+  - id: eye_stretch
+    type: b3
+  - id: eye_rotation
+    type: b5
+  - id: eye_horizontal
+    type: b4
+  - id: eye_vertical
+    type: b5
+  - id: unknown_7
+    type: b2
+  - id: eyebrow_type
+    type: b5
+  - id: eyebrow_color
+    type: b3
+  - id: eyebrow_size
+    type: b4
+  - id: eyebrow_stretch
+    type: b3
+  - id: unknown_8
+    type: b1
+  - id: eyebrow_rotation
+    type: b4
+  - id: unknown_9
+    type: b1
+  - id: eyebrow_horizontal
+    type: b4
+  - id: eyebrow_vertical
+    type: b5
+  - id: unknown_10
+    type: b2
+  - id: nose_type
+    type: b5
+  - id: nose_size
+    type: b4
+  - id: nose_vertical
+    type: b5
+  - id: unknown_11
+    type: b2
+  - id: mouth_type
+    type: b6
+  - id: mouth_color
+    type: b3
+  - id: mouth_size
+    type: b4
+  - id: mouth_stretch
+    type: b3
+  - id: mouth_vertical
+    type: b5
+  - id: facial_hair_mustache
+    type: b3
+  - id: unknown_12
+    type: b8
+  - id: facial_hair_beard
+    type: b3
+  - id: facial_hair_color
+    type: b3
+  - id: facial_hair_size
+    type: b4
+  - id: facial_hair_vertical
+    type: b5
+  - id: unknown_13
+    type: b1
+  - id: glasses_type
+    type: b4
+  - id: glasses_color
+    type: b3
+  - id: glasses_size
+    type: b4
+  - id: glasses_vertical
+    type: b4
+  - id: unknown_14
+    type: b1
+  - id: mole_enable
+    type: b1
+  - id: mole_size
+    type: b4
+  - id: mole_horizontal
+    type: b5
+  - id: mole_vertical
+    type: b5
+  - id: unknown_15
+    type: b1
   - id: creator_name
     type: str
     size: 20
@@ -91,84 +176,3 @@ seq:
     type: u2le
   - id: checksum
     type: u2le
-instances:
-  favorite:
-    value: data_1 >> 14 & 1
-  favorite_color:
-    value: data_1 >> 10 & 15
-  birth_day:
-    value: data_1 >> 5 & 31
-  birth_month:
-    value: data_1 >> 1 & 15
-  gender:
-    value: data_1 & 1
-  eye_vertical:
-    value: eye >> 25 & 31
-  eye_horizontal:
-    value: eye >> 21 & 15
-  eye_rotation:
-    value: eye >> 16 & 31
-  eye_stretch:
-    value: eye >> 13 & 7
-  eye_size:
-    value: eye >> 9 & 7
-  eye_color:
-    value: eye >> 6 & 7
-  eye_type:
-    value: eye & 63
-  eyebrow_vertical:
-    value: eyebrow >> 25 & 31
-  eyebrow_horizontal:
-    value: eyebrow >> 21 & 15
-  eyebrow_rotation:
-    value: eyebrow >> 16 & 15
-  eyebrow_stretch:
-    value: eyebrow >> 12 & 7
-  eyebrow_size:
-    value: eyebrow >> 8 & 15
-  eyebrow_color:
-    value: eyebrow >> 5 & 7
-  eyebrow_type:
-    value: eyebrow & 31
-  nose_vertical:
-    value: nose >> 9 & 31
-  nose_size:
-    value: nose >> 5 & 15
-  nose_type:
-    value: nose & 31
-  mouth_stretch:
-    value: mouth >> 13 & 7
-  mouth_size:
-    value: mouth >> 9 & 15
-  mouth_color:
-    value: mouth >> 6 & 7
-  mouth_type:
-    value: mouth & 63
-  mouth_vertical:
-    value: mouth2 & 31
-  facial_hair_mustache:
-    value: mouth2 >> 5 & 7
-  facial_hair_vertical:
-    value: beard >> 10 & 31
-  facial_hair_size:
-    value: beard >> 6 & 15
-  facial_hair_color:
-    value: beard >> 3 & 7
-  facial_hair_beard:
-    value: beard & 7
-  glasses_vertical:
-    value: glasses >> 11 & 15
-  glasses_size:
-    value: glasses >> 7 & 15
-  glasses_color:
-    value: glasses >> 4 & 7
-  glasses_type:
-    value: glasses & 15
-  mole_vertical:
-    value: mole >> 10 & 31
-  mole_horizontal:
-    value: mole >> 5 & 31
-  mole_size:
-    value: mole >> 1 & 15
-  mole_enable:
-    value: mole >> 15
