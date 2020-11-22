@@ -7,6 +7,8 @@ meta:
     justsolve: AppleDouble
     rfc: 1740
     wikidata: Q4781113
+  tags:
+    - macos
   license: CC0-1.0
 doc: |
   AppleSingle and AppleDouble files are used by certain Mac

@@ -8,6 +8,8 @@ meta:
     justsolve: MS-DOS_EXE
     pronom: x-fmt/409
     wikidata: Q1882110
+  tags:
+    - dos
   license: CC0-1.0
   endian: le
 doc: |

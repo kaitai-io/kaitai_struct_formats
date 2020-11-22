@@ -3,6 +3,8 @@ meta:
   title: MS-DOS datetime
   xref:
     justsolve: MS-DOS_date/time
+  tags:
+    - dos
   ks-version: 0.9
   bit-endian: le
 doc: |

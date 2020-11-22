@@ -3,6 +3,8 @@ meta:
   # actually FAT12
   xref:
     justsolve: FAT12
+  tags:
+    - dos
   license: CC0-1.0
   ks-version: 0.9
   imports:

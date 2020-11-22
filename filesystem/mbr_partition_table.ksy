@@ -3,6 +3,8 @@ meta:
   title: MBR (Master Boot Record) partition table
   xref:
     wikidata: Q624752
+  tags:
+    - dos
   license: CC0-1.0
   endian: le
 doc: |
