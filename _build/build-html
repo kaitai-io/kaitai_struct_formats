@@ -39,6 +39,7 @@ class FormatPagesGenerator
     'cad' => {title: 'CAD', icon: 'space-shuttle'},
     'common' => {title: 'Commonly Used Data Types', icon: 'arrows'},
     'database' => {title: 'Databases', icon: 'database'},
+    'dos' => {title: 'DOS-specific', icon: 'terminal'},
     'executable' => {title: 'Executables and Byte-code', icon: 'gears'},
     'filesystem' => {title: 'Filesystems', icon: 'hdd-o'},
     'firmware' => {title: 'Firmware', icon: 'microchip'},
