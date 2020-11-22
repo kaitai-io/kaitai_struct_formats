@@ -7,6 +7,8 @@ meta:
     mime: image/wmf
     pronom: x-fmt/119
     wikidata: Q1072083
+  tags:
+    - windows
   license: CC0-1.0
   endian: le
 doc: |

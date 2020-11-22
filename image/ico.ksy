@@ -2,6 +2,8 @@ meta:
   id: ico
   title: Microsoft Windows icon file
   file-extension: ico
+  tags:
+    - windows
   endian: le
   license: CC0-1.0
 doc: |

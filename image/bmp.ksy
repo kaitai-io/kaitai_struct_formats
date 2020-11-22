@@ -14,6 +14,8 @@ meta:
       - fmt/119
       - x-fmt/25
     wikidata: Q192869
+  tags:
+    - windows
   endian: le
   license: CC0-1.0
   ks-version: 0.9
