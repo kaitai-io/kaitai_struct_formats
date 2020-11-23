@@ -2,12 +2,12 @@ meta:
   id: dbf
   file-extension: dbf
   application: dBASE
-  license: CC0-1.0
   xref:
     justsolve: DBF
     loc: fdd000325
     pronom: x-fmt/9
     wikidata: Q16545707
+  license: CC0-1.0
   endian: le
 doc: |
   .dbf is a relational database format introduced in DOS database
