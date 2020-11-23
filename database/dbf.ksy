@@ -9,6 +9,13 @@ meta:
     pronom: x-fmt/9
     wikidata: Q16545707
   endian: le
+doc: |
+  .dbf is a relational database format introduced in DOS database
+  management system dBASE in 1982.
+
+  One .dbf file corresponds to one table and contains a series of headers,
+  specification of fields, and a number of fixed-size records.
+doc-ref: http://www.dbase.com/Knowledgebase/INT/db7_file_fmt.htm
 seq:
   - id: header1
     type: header1
