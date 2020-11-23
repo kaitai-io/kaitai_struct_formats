@@ -36,6 +36,7 @@ class FormatPagesGenerator
 
   CATS = {
     'archive' => {title: 'Archive Files', icon: 'archive'},
+    'android' => {title: 'Android-specific', icon: 'android'},
     'cad' => {title: 'CAD', icon: 'space-shuttle'},
     'common' => {title: 'Commonly Used Data Types', icon: 'arrows'},
     'database' => {title: 'Databases', icon: 'database'},
@@ -48,6 +49,7 @@ class FormatPagesGenerator
     'geospatial' => {title: 'Geospatial (Maps)', icon: 'map'},
     'hardware' => {title: 'Hardware Protocols', icon: 'microchip'},
     'image' => {title: 'Image Files', icon: 'file-image-o'},
+    'linux' => {title: 'GNU/Linux-specific', icon: 'linux'},
     'log' => {title: 'Logs', icon: 'database'},
     'machine_code' => {title: 'CPU / Machine Code Disassembly', icon: 'industry'},
     'macos' => {title: 'macOS-specific', icon: 'apple'},
