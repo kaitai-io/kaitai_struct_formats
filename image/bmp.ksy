@@ -142,21 +142,19 @@ types:
         type: bitmap_header(len_header)
       - id: color_mask
         type: color_mask(header.bitmap_info_ext.compression == compressions::alpha_bitfields)
-        if: not _io.eof and is_color_mask_here
+        if: is_color_mask_here
         doc: Valid only for BITMAPINFOHEADER, in all headers extending it the masks are contained in the header itself.
       - id: color_table
         -orig-id: bmciColors
         size-eos: true
-        type: 'color_table(
-            not header.is_core_header,
-            header.extends_bitmap_info ? header.bitmap_info_ext.num_colors_used : 0
-          )'
+        type: 'color_table(not header.is_core_header, header.extends_bitmap_info ? header.bitmap_info_ext.num_colors_used : 0)'
         if: not _io.eof
     instances:
       is_color_mask_here:
         value: >-
-          header.len_header == header_type::bitmap_info_header.to_i
-            and (header.bitmap_info_ext.compression == compressions::bitfields or header.bitmap_info_ext.compression == compressions::alpha_bitfields)
+          not _io.eof
+          and header.len_header == header_type::bitmap_info_header.to_i
+          and (header.bitmap_info_ext.compression == compressions::bitfields or header.bitmap_info_ext.compression == compressions::alpha_bitfields)
       is_color_mask_given:
         value: >-
           header.extends_bitmap_info
