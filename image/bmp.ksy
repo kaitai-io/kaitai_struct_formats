@@ -480,7 +480,7 @@ types:
         type: u4
     instances:
       value:
-        value: raw.as<f4> / (1 << 30)
+        value: (raw + 0.0) / (1 << 30)
     -webide-representation: "{value}"
   fixed_point_16_dot_16:
     seq:
@@ -488,7 +488,7 @@ types:
         type: u4
     instances:
       value:
-        value: raw.as<f4> / (1 << 16)
+        value: (raw + 0.0) / (1 << 16)
     -webide-representation: "{value}"
 enums:
   compressions:
