@@ -18,6 +18,8 @@ meta:
     pronom: fmt/6
     rfc: 2361
     wikidata: Q217570
+  tags:
+    - windows
 doc: |
   The WAVE file format is a subset of Microsoft's RIFF specification for the
   storage of multimedia files. A RIFF file starts out with a file header

@@ -2,6 +2,12 @@ meta:
   id: dex
   title: Android Dalvik VM executable (dex)
   file-extension: dex
+  xref:
+    pronom: fmt/694
+    wikidata: Q29000585
+  tags:
+    - android
+    - executable
   license: CC-BY-SA-3.0
   endian: le
   # Portions of this page are reproduced from work created and shared by Google and used

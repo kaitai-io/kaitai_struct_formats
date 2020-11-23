@@ -1,6 +1,9 @@
 meta:
   id: luks
   title: Linux Unified Key Setup
+  tags:
+    - filesystem
+    - linux
   license: CC0-1.0
   endian: be
   encoding: ASCII

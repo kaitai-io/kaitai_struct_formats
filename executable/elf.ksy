@@ -2,6 +2,11 @@ meta:
   id: elf
   title: Executable and Linkable Format
   application: SVR4 ABI and up, many *nix systems
+  xref:
+    wikidata: Q1343830
+  tags:
+    - executable
+    - linux
   license: CC0-1.0
   ks-version: 0.8
 doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=HEAD

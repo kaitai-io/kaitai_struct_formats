@@ -8,6 +8,7 @@ meta:
     rfc: 1740
     wikidata: Q4781113
   tags:
+    - filesystem
     - macos
   license: CC0-1.0
 doc: |

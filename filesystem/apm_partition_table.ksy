@@ -1,6 +1,9 @@
 meta:
   id: apm_partition_table
   title: APM (Apple Partition Map) partition table
+  tags:
+    - filesystem
+    - macos
   license: CC0-1.0
   endian: be
   encoding: ascii

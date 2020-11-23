@@ -1,6 +1,11 @@
 meta:
   id: ext2
   title: ext2 filesystem
+  tags:
+    - filesystem
+    - linux
+  xref:
+    wikidata: Q283527
   license: CC0-1.0
   endian: le
 instances:

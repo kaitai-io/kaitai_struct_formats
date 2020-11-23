@@ -2,6 +2,9 @@ meta:
   id: systemd_journal
   title: systemd journal file
   file-extension: journal
+  tags:
+    - linux
+    - log
   license: CC0-1.0
   endian: le
 doc: |

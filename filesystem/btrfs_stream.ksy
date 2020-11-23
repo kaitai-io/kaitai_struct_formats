@@ -1,6 +1,9 @@
 meta:
   id: btrfs_stream
   application: Btrfs
+  tags:
+    - filesystem
+    - linux
   endian: le
   license: CC0-1.0
 doc: |

@@ -1,6 +1,9 @@
 meta:
   id: android_img
   title: Android Boot Image
+  tags:
+    - archive
+    - android
   license: CC0-1.0
   file-extension: img
   endian: le

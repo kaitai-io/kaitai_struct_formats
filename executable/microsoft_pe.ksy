@@ -13,6 +13,9 @@ meta:
       - fmt/899
       - fmt/900
     wikidata: Q1076355
+  tags:
+    - executable
+    - windows
   license: CC0-1.0
   ks-version: 0.7
   endian: le

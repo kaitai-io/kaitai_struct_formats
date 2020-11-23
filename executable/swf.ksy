@@ -7,6 +7,9 @@ meta:
     loc: fmt/507
     mime: application/x-shockwave-flash
     wikidata: Q594447
+  tags:
+    - executable
+    - media
   license: CC0-1.0
   endian: le
 #  imports:

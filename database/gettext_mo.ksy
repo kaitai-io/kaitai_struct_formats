@@ -6,6 +6,9 @@ meta:
   application:
     - GNU gettext
     - libintl
+  tags:
+    - database
+    - linux
   license: BSD-2-Clause
   ks-version: 0.9
 

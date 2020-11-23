@@ -2,6 +2,9 @@ meta:
   id: android_opengl_shaders_cache
   title: com.android.opengl.shaders_cache file
   application: Android
+  tags:
+    - android
+    - media
   license: Apache-2.0
   endian: le
 

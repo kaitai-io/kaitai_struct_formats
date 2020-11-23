@@ -1,13 +1,16 @@
 meta:
-  title: Logical Volume Manager version 2
   id: lvm2
-  endian: le
-  encoding: ascii
+  title: Logical Volume Manager version 2
   application:
     - linux
     - grub2
     - lvm tools
     - libvslvm
+  tags:
+    - filesystem
+    - linux
+  endian: le
+  encoding: ascii
   license: GFDL-1.3+
 doc: |
   ### Building a test file

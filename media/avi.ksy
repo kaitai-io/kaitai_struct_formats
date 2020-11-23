@@ -7,6 +7,8 @@ meta:
     loc: fdd000059
     pronom: fmt/5
     wikidata: Q209054
+  tags:
+    - windows
   license: CC0-1.0
   ks-version: 0.7
 doc-ref: https://msdn.microsoft.com/en-us/library/ms779636.aspx

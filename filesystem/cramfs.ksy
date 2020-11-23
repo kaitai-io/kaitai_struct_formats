@@ -2,6 +2,9 @@ meta:
   id: cramfs
   xref:
     wikidata: Q747406
+  tags:
+    - filesystem
+    - linux
   license: MIT
   endian: le
 seq:

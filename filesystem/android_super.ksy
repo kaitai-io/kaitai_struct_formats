@@ -3,6 +3,9 @@ meta:
   title: Android Dynamic Partitions metadata
   application: Android
   file-extension: img
+  tags:
+    - android
+    - filesystem
   license: CC0-1.0
   ks-version: 0.9
   bit-endian: le

@@ -5,6 +5,9 @@ meta:
   file-extension:
     - efi
     - te
+  tags:
+    - executable
+    - firmware
   ks-version: 0.7
   license: CC0-1.0
   endian: le

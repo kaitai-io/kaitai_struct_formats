@@ -1,6 +1,9 @@
 meta:
   id: glibc_utmp
   title: utmp log file, Linux/glibc version
+  tags:
+    - linux
+    - log
   license: CC0-1.0
   endian: le
 seq:
