@@ -35,7 +35,7 @@ types:
   physical_volume:
     seq:
       - id: empty_sector
-        size: _root.sector_size 
+        size: _root.sector_size
       - id: label
         type: label
     types:
@@ -66,7 +66,7 @@ types:
                     doc: "The offset, in bytes, relative from the start of the physical volume label header where data is stored"
                   - id: type_indicator
                     contents: "LVM2 001"
-              
+
           volume_header:
             seq:
               - id: id
