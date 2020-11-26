@@ -2,11 +2,6 @@ meta:
   id: wav
   title: Microsoft WAVE audio file
   file-extension: wav
-  license: BSD-3-Clause-Attribution
-  encoding: ASCII
-  endian: le
-  imports:
-    - /common/riff
   xref:
     justsolve: WAV
     loc: fdd000001
@@ -20,6 +15,11 @@ meta:
     wikidata: Q217570
   tags:
     - windows
+  license: BSD-3-Clause-Attribution
+  imports:
+    - /common/riff
+  encoding: ASCII
+  endian: le
 doc: |
   The WAVE file format is a subset of Microsoft's RIFF specification for the
   storage of multimedia files. A RIFF file starts out with a file header
