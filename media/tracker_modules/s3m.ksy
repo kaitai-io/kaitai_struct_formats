@@ -3,6 +3,8 @@ meta:
   title: Scream Tracker 3 module
   file-extension: s3m
   xref:
+    justsolve: Scream_Tracker_3_module
+    pronom: fmt/718
     wikidata: Q1461901
   license: CC0-1.0
   endian: le
