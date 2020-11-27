@@ -4,7 +4,10 @@ meta:
   file-extension: swf
   xref:
     justsolve: SWF
-    loc: fmt/507
+    pronom: fmt/507
+    loc:
+      - fdd000130
+      - fdd000248
     mime: application/x-shockwave-flash
     wikidata: Q594447
   tags:
