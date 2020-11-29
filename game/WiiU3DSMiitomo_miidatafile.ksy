@@ -1,5 +1,5 @@
 meta:
-  id: WiiU3DSMiitomo_miidatafile
+  id: wiiu3dsmiitomo_miidatafile
   endian: le
   bit-endian: le
 seq:
