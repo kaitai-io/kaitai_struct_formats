@@ -90,7 +90,7 @@ types:
   field:
     seq:
       - id: name
-        type: str
+        type: strz
         encoding: ASCII
         size: 11
       - id: datatype
