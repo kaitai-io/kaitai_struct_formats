@@ -21,4 +21,4 @@ seq:
   - id: checksum
     type: u2
   - id: body
-    size: length - 8
+    size-eos: true
