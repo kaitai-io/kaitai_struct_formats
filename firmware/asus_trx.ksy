@@ -111,7 +111,7 @@ types:
         type: partition(_index)
         doc: "Offsets of partitions from start of header"
         repeat: until
-        repeat-until: _index >=4 or not _.present
+        repeat-until: _index >= 4 or not _.is_present
 
     types:
       partition:
@@ -119,22 +119,22 @@ types:
           - id: idx
             type: u1
         seq:
-          - id: offset
+          - id: ofs_body
             type: u4
         instances:
-          present:
-            value: offset != 0
+          is_present:
+            value: ofs_body != 0
           is_last:
-            value: "(idx == _parent.partitions.size - 1) or (not _parent.partitions[idx+1].present)"
-            if: present
-          size:
-            value: "(is_last?(_root._io.size-offset):_parent.partitions[idx+1].offset)"
-            if: present
-          partition:
+            value: "(idx == _parent.partitions.size - 1) or (not _parent.partitions[idx + 1].is_present)"
+            if: is_present
+          len_body:
+            value: "is_last ? (_root._io.size - ofs_body) : _parent.partitions[idx + 1].ofs_body"
+            if: is_present
+          body:
             io: _root._io
-            pos: offset
-            size: size
-            if: present
+            pos: ofs_body
+            size: len_body
+            if: is_present
       flags:
         seq:
           - id: flags
