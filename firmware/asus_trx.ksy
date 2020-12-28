@@ -1,24 +1,43 @@
 meta:
   id: asus_trx
-  license: GPL-2.0
-  title: Image headers used in ASUS devices official firmware
+  title: ASUS routers .trx official firmware packaging
+  file-extension: trx
   xref:
     wikidata: Q152864
-  endian: le
+  license: GPL-2.0
+  ks-version: 0.9
   bit-endian: le
   encoding: utf-8
+  endian: le
 
 -license: |
   Copyright (C) 2004  Manuel Novoa III  <mjn3@codepoet.org>
 
-  This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
 
-  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+  This program is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  General Public License for more details.
 
-  You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+  USA
 
 doc: |
-  Header and a footer for stock firmwares used on some ASUS routers. trx files not necessarily contain these headers.
+  .trx file format is widely used for distribution of stock firmware
+  updates for ASUS routers.
+
+  Fundamentally, it includes a footer which acts as a safeguard
+  against installing a firmware package on a wrong hardware model or
+  version, and a header which list numerous partitions packaged inside
+  a single .trx file.
+
+  trx files not necessarily contain all these headers.
 
 doc-ref: https://github.com/openwrt/openwrt/blob/master/tools/firmware-utils/src/trx.c
 
