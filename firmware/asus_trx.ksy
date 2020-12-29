@@ -2,8 +2,6 @@ meta:
   id: asus_trx
   title: ASUS routers .trx official firmware packaging
   file-extension: trx
-  xref:
-    wikidata: Q152864
   license: GPL-2.0
   ks-version: 0.9
   bit-endian: le
