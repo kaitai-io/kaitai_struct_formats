@@ -37,7 +37,7 @@ doc: |
 
   trx files not necessarily contain all these headers.
 
-doc-ref: https://github.com/openwrt/openwrt/blob/master/tools/firmware-utils/src/trx.c
+doc-ref: https://github.com/openwrt/openwrt/blob/3f5619f/tools/firmware-utils/src/trx.c
 
 instances:
   header:
@@ -91,10 +91,8 @@ types:
 
   header:
     seq:
-      - id: signature
-        -orig-id: magic
-        contents: ["HDR0"]
-
+      - id: magic
+        contents: "HDR0"
       - id: len
         type: u4
         doc: Length of file including header
