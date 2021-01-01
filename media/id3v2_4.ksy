@@ -1,13 +1,13 @@
-# ID3v2.4.0 Specifications
-# http://id3.org/id3v2.4.0-structure
-# http://id3.org/id3v2.4.0-frames
-
 meta:
   id: id3v2_4
+  title: ID3v2.4 tag for .mp3 files
+  file-extension: mp3
   license: CC0-1.0
   endian: be
-  file-extension:
-    - mp3
+
+doc-ref:
+  - http://id3.org/id3v2.4.0-structure
+  - http://id3.org/id3v2.4.0-frames
 
 seq:
   - id: tag
@@ -22,7 +22,7 @@ types:
       - id: header_ex
         type: header_ex
         if: header.flags.flag_headerex
-      - id: frames  
+      - id: frames
         type: frame
         repeat: until
         repeat-until: _io.pos + _.size.value > header.size.value or _.is_invalid
