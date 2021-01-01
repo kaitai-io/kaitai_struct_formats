@@ -5,6 +5,7 @@ meta:
     justsolve: MS-DOS_date/time
   tags:
     - dos
+  license: CC0-1.0
   ks-version: 0.9
   bit-endian: le
 doc: |
