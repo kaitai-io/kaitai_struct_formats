@@ -86,9 +86,13 @@ types:
         type: u2
         doc: The number of entries in the ID lookup table.
       - id: version_major
-        contents: [ 4, 0 ]
+        type: u2
+        valid:
+          eq: 4
       - id: version_minor
-        contents: [ 0, 0 ]
+        type: u2
+        valid:
+          eq: 0
       - id: root_inode_ref
         type: u8
         doc: A reference to the inode of the root directory.
