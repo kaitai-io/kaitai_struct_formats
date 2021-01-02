@@ -5,7 +5,7 @@ meta:
     - squashfs
     - snap
   endian: le
-  license: CC-0
+  license: CC0-1.0
   xref:
     wikidata: Q389314
 doc: |
