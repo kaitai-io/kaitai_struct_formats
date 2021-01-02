@@ -1,9 +1,15 @@
 meta:
   id: xiaomi_depthmap
   endian: le
+  title: Xiaomi depth images
+  license: MIT
+doc: |
+  Parser for Depthmaps embedded in photos taken with last models of Xiaomi phones.
+  Still WIP.
+  See https://github.com/VincenzoLaSpesa/XiaomiDepthMapExtractor for more info.
 seq:
-  - id: fixed_header
-    type: magic_constant
+  - id: magic
+    contents: "PMPD"
   - id: image_info
     type: info
   - id: padding
@@ -18,21 +24,23 @@ seq:
     size-eos: true
     
 types:
-  magic_constant:
-    seq:
-      - id: magic
-        contents: "PMPD"
-      - id: magic2
-        contents: [0x02, 0x00, 0x64, 0x00, 0x01, 0x00, 0x00]
   info:
     seq:
       - id: unknown1
-        type: u4
+        type: u2
       - id: unknown2
+        type: u2
+      - id: unknown3
+        type: u2
+      - id: unknown4
+        type: u1
+      - id: unknown5
+        type: u4
+      - id: unknown6
         type: u4
       - id: padding1
         size: 5
-      - id: unknown3
+      - id: unknown7
         type: u4
       - id: padding2
         type: u4
