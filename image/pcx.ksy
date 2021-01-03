@@ -37,10 +37,10 @@ seq:
     size: 128
 instances:
   palette_256:
-    doc-ref: http://web.archive.org/web/20100206055706/http://www.qzx.com/pc-gpe/pcx.txt - "VGA 256 Color Palette Information"
     pos: _io.size - 769
     type: t_palette_256
     if: hdr.version == versions::v3_0 and hdr.bits_per_pixel == 8 and hdr.num_planes == 1
+    doc-ref: http://web.archive.org/web/20100206055706/http://www.qzx.com/pc-gpe/pcx.txt - "VGA 256 Color Palette Information"
 types:
   header:
     doc-ref: http://web.archive.org/web/20100206055706/http://www.qzx.com/pc-gpe/pcx.txt - "ZSoft .PCX FILE HEADER FORMAT"

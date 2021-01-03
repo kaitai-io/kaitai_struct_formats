@@ -28,7 +28,7 @@ types:
       - id: manufacturer
         type: manufacturer
         if: has_manufacturer
-      
+
       - id: data_filler
         -orig-id: abtData
         size: _io.size - _io.pos - 16 # sizeof(trailer)
@@ -126,7 +126,7 @@ types:
         value: 4
       ac_count_of_chunks:
         value: ac_bits*2 #6
-    
+
     types:
       access_conditions:
         seq:
@@ -196,7 +196,7 @@ types:
                 doc: "c3 c2 c1"
               inv_shift_val:
                 value: (bits[0].n << 2) | (bits[1].n << 1) | bits[2].n
-              
+
             types:
               ac_bit:
                 params:
@@ -209,7 +209,7 @@ types:
                     value: (chunk >> i) & 1
                   b:
                     value: n == 1
-                    
+
           trailer_ac:
             params:
               - id: ac
@@ -235,7 +235,7 @@ types:
                 value: ac.val <= 0b110
               write_key_a_required:
                 value: ac.val == 0
-              
+
 
               write_key_b_required:
                 value: (not read_key_a_required or read_key_b_required) and not ac.bits[0].b

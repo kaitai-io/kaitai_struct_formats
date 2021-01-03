@@ -1,8 +1,8 @@
 meta:
   id: uimage
-  endian: be
-  license: CC0-1.0
   title: U-Boot Image wrapper
+  license: CC0-1.0
+  endian: be
 doc: |
   The new uImage format allows more flexibility in handling images of various
   types (kernel, ramdisk, etc.), it also enhances integrity protection of images
@@ -48,177 +48,177 @@ types:
         type: strz
 enums:
   uimage_os:
-    0:  
-      id: invalid   
+    0:
+      id: invalid
       doc: Invalid OS
-    1:  
-      id: openbsd   
+    1:
+      id: openbsd
       doc: OpenBSD
-    2:  
-      id: netbsd    
+    2:
+      id: netbsd
       doc: NetBSD
-    3:  
-      id: freebsd   
+    3:
+      id: freebsd
       doc: FreeBSD
-    4:  
-      id: bsd4_4    
+    4:
+      id: bsd4_4
       doc: 4.4BSD
-    5:  
-      id: linux     
+    5:
+      id: linux
       doc: Linux
-    6:  
-      id: svr4      
+    6:
+      id: svr4
       doc: SVR4
-    7:  
-      id: esix      
+    7:
+      id: esix
       doc: Esix
-    8:  
-      id: solaris   
+    8:
+      id: solaris
       doc: Solaris
-    9:  
-      id: irix      
+    9:
+      id: irix
       doc: Irix
-    10: 
-      id: sco       
+    10:
+      id: sco
       doc: SCO
-    11: 
-      id: dell      
+    11:
+      id: dell
       doc: Dell
-    12: 
-      id: ncr       
+    12:
+      id: ncr
       doc: NCR
-    13: 
-      id: lynxos    
+    13:
+      id: lynxos
       doc: LynxOS
-    14: 
-      id: vxworks   
+    14:
+      id: vxworks
       doc: VxWorks
-    15: 
-      id: psos      
+    15:
+      id: psos
       doc: pSOS
-    16: 
-      id: qnx       
+    16:
+      id: qnx
       doc: QNX
-    17: 
-      id: u_boot    
+    17:
+      id: u_boot
       doc: Firmware
-    18: 
-      id: rtems     
+    18:
+      id: rtems
       doc: RTEMS
-    19: 
-      id: artos     
+    19:
+      id: artos
       doc: ARTOS
-    20: 
-      id: unity     
+    20:
+      id: unity
       doc: Unity OS
-    21: 
-      id: integrity 
+    21:
+      id: integrity
       doc: INTEGRITY
   uimage_arch:
-    0:  
-      id: invalid    
+    0:
+      id: invalid
       doc: Invalid CPU
-    1:  
-      id: alpha      
+    1:
+      id: alpha
       doc: Alpha
-    2:  
-      id: arm        
+    2:
+      id: arm
       doc: ARM
-    3:  
-      id: i386       
+    3:
+      id: i386
       doc: Intel x86
-    4:  
-      id: ia64       
+    4:
+      id: ia64
       doc: IA64
-    5:  
-      id: mips       
+    5:
+      id: mips
       doc: MIPS
-    6:  
-      id: mips64     
+    6:
+      id: mips64
       doc: MIPS 64 Bit
-    7:  
-      id: ppc        
+    7:
+      id: ppc
       doc: PowerPC
-    8:  
-      id: s390       
+    8:
+      id: s390
       doc: IBM S390
-    9:  
-      id: sh         
+    9:
+      id: sh
       doc: SuperH
-    10: 
-      id: sparc      
+    10:
+      id: sparc
       doc: Sparc
-    11: 
-      id: sparc64    
+    11:
+      id: sparc64
       doc: Sparc 64 Bit
-    12: 
-      id: m68k       
+    12:
+      id: m68k
       doc: M68K
-    13: 
-      id: nios       
+    13:
+      id: nios
       doc: Nios-32
-    14: 
-      id: microblaze 
+    14:
+      id: microblaze
       doc: MicroBlaze
-    15: 
-      id: nios2      
+    15:
+      id: nios2
       doc: Nios-II
-    16: 
-      id: blackfin   
+    16:
+      id: blackfin
       doc: Blackfin
-    17: 
-      id: avr32      
+    17:
+      id: avr32
       doc: AVR32
-    18: 
-      id: st200      
+    18:
+      id: st200
       doc: STMicroelectronics ST200
   uimage_comp:
-    0: 
+    0:
       id: none
       doc: No Compression Used
-    1: 
-      id: gzip 
+    1:
+      id: gzip
       doc: gzip Compression Used
-    2: 
+    2:
       id: bzip2
       doc: bzip2 Compression Used
-    3: 
-      id: lzma 
+    3:
+      id: lzma
       doc: lzma Compression Used
-    4: 
-      id: lzo  
+    4:
+      id: lzo
       doc: lzo Compression Used
   uimage_type:
-    0:  
-      id: invalid    
+    0:
+      id: invalid
       doc: Invalid Image
-    1:  
-      id: standalone 
+    1:
+      id: standalone
       doc: Standalone Program
-    2:  
-      id: kernel     
+    2:
+      id: kernel
       doc: OS Kernel Image
-    3:  
-      id: ramdisk    
+    3:
+      id: ramdisk
       doc: RAMDisk Image
-    4:  
-      id: multi      
+    4:
+      id: multi
       doc: Multi-File Image
-    5:  
-      id: firmware   
+    5:
+      id: firmware
       doc: Firmware Image
-    6:  
-      id: script     
+    6:
+      id: script
       doc: Script file
-    7:  
-      id: filesystem 
+    7:
+      id: filesystem
       doc: Filesystem Image (any type)
-    8:  
-      id: flatdt     
+    8:
+      id: flatdt
       doc: Binary Flat Device Tree Blob
-    9:  
-      id: kwbimage   
+    9:
+      id: kwbimage
       doc: Kirkwood Boot Image
-    10: 
-      id: imximage   
+    10:
+      id: imximage
       doc: Freescale IMXBoot Image

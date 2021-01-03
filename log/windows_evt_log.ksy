@@ -8,7 +8,6 @@ meta:
   license: CC0-1.0
   ks-version: 0.9
   endian: le
-doc-ref: https://msdn.microsoft.com/en-us/library/bb309026(v=vs.85).aspx
 doc: |
   EVT files are Windows Event Log files written by older Windows
   operating systems (2000, XP, 2003). They are used as binary log
@@ -31,6 +30,7 @@ doc: |
   records. There are several usage scenarios (non-wrapping vs wrapping
   log files) which result in slightly different organization of
   records.
+doc-ref: https://msdn.microsoft.com/en-us/library/bb309026(v=vs.85).aspx
 seq:
   - id: header
     type: header

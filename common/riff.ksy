@@ -1,12 +1,12 @@
 meta:
   id: riff
   title: Resource Interchange File Format (RIFF)
-  license: CC0-1.0
-  endian: le
   xref:
     justsolve: RIFF
     loc: fdd000025
     wikidata: Q1196805
+  license: CC0-1.0
+  endian: le
 doc: |
   The Resource Interchange File Format (RIFF) is a generic file container format
   for storing data in tagged chunks. It is primarily used to store multimedia
@@ -27,14 +27,14 @@ instances:
   parent_chunk_data:
     io: chunk.data_slot._io
     pos: 0
-    if: is_riff_chunk
     type: parent_chunk_data
+    if: is_riff_chunk
   subchunks:
     io: parent_chunk_data.subchunks_slot._io
     pos: 0
-    if: is_riff_chunk
     type: chunk_type
     repeat: eos
+    if: is_riff_chunk
 types:
   chunk:
     seq:
@@ -144,13 +144,13 @@ types:
         pos: chunk_ofs
         size: 4
       is_unregistered_tag:
-        doc: |
-          Check if chunk_id contains lowercase characters ([a-z], ASCII 97 = a, ASCII 122 = z).
         value: >-
           (id_chars[0] >= 97 and id_chars[0] <= 122) or
           (id_chars[1] >= 97 and id_chars[1] <= 122) or
           (id_chars[2] >= 97 and id_chars[2] <= 122) or
           (id_chars[3] >= 97 and id_chars[3] <= 122)
+        doc: |
+          Check if chunk_id contains lowercase characters ([a-z], ASCII 97 = a, ASCII 122 = z).
 enums:
   fourcc:
   # little-endian

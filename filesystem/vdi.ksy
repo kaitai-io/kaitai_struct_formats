@@ -1,13 +1,13 @@
 meta:
   id: vdi
   title: VirtualBox Disk Image
-  endian: le
-  encoding: utf-8
   application:
     - VirtualBox
     - QEMU
     - VMWare Workstation
   license: GPL3.0+
+  encoding: utf-8
+  endian: le
 doc-ref: https://github.com/qemu/qemu/blob/master/block/vdi.c
 #  - https://github.com/qemu/qemu/blob/master/block/vdi.c
 #  - https://www.virtualbox.org/browser/vbox/trunk/src/VBox/Storage/VDI.cpp
@@ -182,7 +182,7 @@ types:
                 type: b15
               - id: zero_expand
                 type: b1
-              - id: reserved1 
+              - id: reserved1
                 type: b6
               - id: diff
                 type: b1

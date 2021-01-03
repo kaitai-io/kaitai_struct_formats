@@ -20,8 +20,8 @@ types:
         type: u4
     instances:
       ifd0:
-        type: ifd
         pos: ifd0_ofs
+        type: ifd
     types:
       ifd:
         seq:
@@ -58,10 +58,10 @@ types:
           is_immediate_data:
             value: 'byte_length <= 4'
           data:
+            io: _root._io
             pos: ofs_or_data
             size: byte_length
             if: not is_immediate_data
-            io: _root._io
         enums:
           field_type_enum:
             1: byte

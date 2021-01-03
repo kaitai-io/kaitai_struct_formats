@@ -85,14 +85,14 @@ types:
         size: (4 - _io.pos) % 4
     instances:
       type_as_predef:
+        value: type.as_numeric
+        enum: predef_types
+        if: not type.is_string and type.as_numeric <= 0xff
         doc: |
           Numeric type IDs in range of [0..0xff] are reserved for
           system usage in Windows, and there are some predefined,
           well-known values in that range. This instance allows to get
           it as enum value, if applicable.
-        value: type.as_numeric
-        enum: predef_types
-        if: not type.is_string and type.as_numeric <= 0xff
     enums:
       predef_types:
         # https://msdn.microsoft.com/en-us/library/windows/desktop/ms648009.aspx
@@ -151,7 +151,7 @@ types:
         value: first != 0xffff
       as_string:
         pos: save_pos1
-        type: str
         size: save_pos2 - save_pos1 - 2
+        type: str
         encoding: UTF-16LE
         if: is_string

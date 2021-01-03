@@ -1,9 +1,9 @@
 meta:
   id: andes_firmware
-  endian: le
   title: Andes Firmware Image layout as seen in MT76 Wifi Chipsets
-  license: CC0-1.0
   application: Firmware Image wifi chipset
+  license: CC0-1.0
+  endian: le
 doc: Firmware image found with MediaTek MT76xx wifi chipsets.
 seq:
   - id: image_header

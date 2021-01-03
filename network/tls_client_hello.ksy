@@ -1,7 +1,7 @@
 meta:
   id: tls_client_hello
-  endian: be
   license: MIT
+  endian: be
 
 seq:
   - id: version

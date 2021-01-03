@@ -1,16 +1,16 @@
 meta:
   id: packet_ppi
-  endian: le
+  license: CC0-1.0
   imports:
     - /network/ethernet_frame
-  license: CC0-1.0
+  endian: le
 doc: |
   PPI is a standard for link layer packet encapsulation, proposed as
   generic extensible container to store both captured in-band data and
   out-of-band data. Originally it was developed to provide 802.11n
   radio information, but can be used for other purposes as well.
 
-  Sample capture: https://wiki.wireshark.org/SampleCaptures?action=AttachFile&do=get&target=Http.cap  
+  Sample capture: https://wiki.wireshark.org/SampleCaptures?action=AttachFile&do=get&target=Http.cap
 doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 3
 seq:
   - id: header

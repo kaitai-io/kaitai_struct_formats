@@ -16,9 +16,9 @@ meta:
     wikidata: Q192869
   tags:
     - windows
-  endian: le
   license: CC0-1.0
   ks-version: 0.9
+  endian: le
   # ks-opaque-types: true # uncomment if you provide an opaque type `bitmap` for bitmap data
 doc: |
   The **BMP file format**, also known as **bitmap image file** or **device independent
@@ -393,8 +393,8 @@ types:
         type: u4
         enum: intent
       - id: ofs_profile
-        doc: The offset, in bytes, from the beginning of the BITMAPV5HEADER structure to the start of the profile data.
         -orig-id: bV5ProfileData
+        doc: The offset, in bytes, from the beginning of the BITMAPV5HEADER structure to the start of the profile data.
         type: u4
       - id: len_profile
         -orig-id: bV5ProfileSize
@@ -452,8 +452,8 @@ types:
       - id: blue_mask
         type: u4
       - id: alpha_mask
-        if: has_alpha_mask
         type: u4
+        if: has_alpha_mask
   rgb_record:
     -orig-id:
       - RGB_TRIPLE
@@ -469,8 +469,8 @@ types:
       - id: red
         type: u1
       - id: reserved
-        if: has_reserved_field
         type: u1
+        if: has_reserved_field
     -webide-representation: "rgb({red:dec}, {green:dec}, {blue:dec})"
 # Common types
   fixed_point_2_dot_30:
@@ -583,20 +583,20 @@ enums:
     # https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapv5header#members
     8:
       id: abs_colorimetric
-      doc: Maintains the white point. Matches the colors to their nearest color in the destination gamut.
       -orig-id: LCS_GM_ABS_COLORIMETRIC
+      doc: Maintains the white point. Matches the colors to their nearest color in the destination gamut.
     1:
       id: business
-      doc: Maintains saturation. Used for business charts and other situations in which undithered colors are required.
       -orig-id: LCS_GM_BUSINESS
+      doc: Maintains saturation. Used for business charts and other situations in which undithered colors are required.
     2:
       id: graphics
-      doc: Maintains colorimetric match. Used for graphic designs and named colors.
       -orig-id: LCS_GM_GRAPHICS
+      doc: Maintains colorimetric match. Used for graphic designs and named colors.
     4:
       id: images
-      doc: Maintains contrast. Used for photographs and natural images.
       -orig-id: LCS_GM_IMAGES
+      doc: Maintains contrast. Used for photographs and natural images.
 
   header_type:
     # https://forums.adobe.com/servlet/JiveServlet/showImage/2-3273299-47801/BMP_Headers.png

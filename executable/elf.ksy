@@ -312,8 +312,8 @@ types:
           dynamic:
             io: _root._io
             pos: offset
-            type: dynamic_section
             size: filesz
+            type: dynamic_section
             if: type == ph_type::dynamic
           flags_obj:
             type: phdr_type_flags(flags64|flags32)
@@ -473,16 +473,16 @@ types:
     instances:
       program_headers:
         pos: program_header_offset
-        repeat: expr
-        repeat-expr: qty_program_header
         size: program_header_entry_size
         type: program_header
+        repeat: expr
+        repeat-expr: qty_program_header
       section_headers:
         pos: section_header_offset
-        repeat: expr
-        repeat-expr: qty_section_header
         size: section_header_entry_size
         type: section_header
+        repeat: expr
+        repeat-expr: qty_section_header
       strings:
         pos: section_headers[section_names_idx].ofs_body
         size: section_headers[section_names_idx].len_body

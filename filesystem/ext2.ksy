@@ -1,18 +1,18 @@
 meta:
   id: ext2
   title: ext2 filesystem
+  xref:
+    wikidata: Q283527
   tags:
     - filesystem
     - linux
-  xref:
-    wikidata: Q283527
   license: CC0-1.0
   endian: le
 instances:
   # http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/Documentation/filesystems/ext2.txt#n106
   bg1:
-    type: block_group
     pos: 1024
+    type: block_group
   root_dir:
     value: bg1.block_groups[0].inodes[1].as_dir
 types:

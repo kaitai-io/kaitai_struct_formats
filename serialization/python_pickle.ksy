@@ -5,11 +5,11 @@ meta:
   file-extension:
     - pickle
     - pkl
-  license: CC0-1.0
-  endian: le
   xref:
     justsolve: Pickle
     wikidata: Q7190889
+  license: CC0-1.0
+  endian: le
 doc: |
   Python Pickle format serializes Python objects to a byte stream, as a sequence
   of operations to run on the Pickle Virtual Machine.
@@ -130,94 +130,89 @@ types:
           are determined by the value of the opcode.
 
   decimalnl_short:
-    seq:
-      - id: val
-        type: str
-        encoding: ascii
-        terminator: 0x0a # "\n"
     doc: |
       Integer or boolean, encoded with the ASCII characters [0-9-].
 
       The values '00' and '01' encode the Python values `False` and `True`.
       Normally a value would not contain leading '0' characters.
-
-  decimalnl_long:
     seq:
       - id: val
         type: str
         encoding: ascii
         terminator: 0x0a # "\n"
+
+  decimalnl_long:
     doc: Integer, encoded with the ASCII chracters [0-9-], followed by 'L'.
+    seq:
+      - id: val
+        type: str
+        encoding: ascii
+        terminator: 0x0a # "\n"
 
   # TODO Can kaitai express constraint that these are quoted?
   stringnl:
+    doc: Quoted string, possibly containing Python string escapes.
     seq:
       - id: val
         type: str
         encoding: ascii
         terminator: 0x0a # "\n"
-    doc: Quoted string, possibly containing Python string escapes.
 
   stringnl_noescape:
+    doc: Unquoted string, does not contain string escapes.
     seq:
       - id: val
         type: str
         encoding: ascii
         terminator: 0x0a # "\n"
-    doc: Unquoted string, does not contain string escapes.
 
   stringnl_noescape_pair:
+    doc: Pair of unquoted, unescaped strings.
     seq:
       - id: val1
         type: stringnl_noescape
       - id: val2
         type: stringnl_noescape
-    doc: Pair of unquoted, unescaped strings.
 
   unicodestringnl:
+    doc: Unquoted string, containing Python Unicode escapes.
     seq:
       - id: val
         type: str
         encoding: ascii
         terminator: 0x0a # "\n"
-    doc: Unquoted string, containing Python Unicode escapes.
 
   floatnl:
-    seq:
-      - id: val
-        type: str
-        encoding: ascii
-        terminator: 0x0a # "\n"
     doc: |
       Double float, encoded with the ASCII characters [0-9.e+-], '-inf', 'inf',
       or 'nan'.
+    seq:
+      - id: val
+        type: str
+        encoding: ascii
+        terminator: 0x0a # "\n"
 
   long1:
+    doc: |
+      Large signed integer, in the range -2**(8*255-1) to 2**(8*255-1)-1,
+      encoded as two's complement.
     seq:
       - id: len
         type: u1
       - id: val
         size: len
-    doc: |
-      Large signed integer, in the range -2**(8*255-1) to 2**(8*255-1)-1,
-      encoded as two's complement.
 
   long4:
+    doc: |
+      Large signed integer, in the range -2**(8*2**32-1) to 2**(8*2**32-1)-1,
+      encoded as two's complement.
     seq:
       - id: len
         type: u4
       - id: val
         size: len
-    doc: |
-      Large signed integer, in the range -2**(8*2**32-1) to 2**(8*2**32-1)-1,
-      encoded as two's complement.
 
   string1:
-    seq:
-      - id: len
-        type: u1
-      - id: val
-        size: len
     doc: |
       Length prefixed string, between 0 and 255 bytes long. Encoding is
       unspecified.
@@ -233,14 +228,13 @@ types:
       - `pickle.Unpickler` objects default to ASCII, which can be overriden
       - `pickletools.dis` uses latin1, and cannot be overriden
     doc-ref: https://github.com/python/cpython/blob/bb8071a4/Lib/pickle.py#L486-L495
-
-  string4:
     seq:
       - id: len
-        # Not a typo, the length really is a signed integer
-        type: s4
+        type: u1
       - id: val
         size: len
+
+  string4:
     doc: |
       Length prefixed string, between 0 and 2**31-1 bytes long. Encoding is
       unspecified.
@@ -250,29 +244,30 @@ types:
 
       See the documentation for `string1` for further detail about encodings.
     doc-ref: https://github.com/python/cpython/blob/bb8071a4/Lib/pickle.py#L486-L495
+    seq:
+      - id: len
+        # Not a typo, the length really is a signed integer
+        type: s4
+      - id: val
+        size: len
 
   bytes1:
+    doc: Length prefixed byte string, between 0 and 255 bytes long.
     seq:
       - id: len
         type: u1
       - id: val
         size: len
-    doc: Length prefixed byte string, between 0 and 255 bytes long.
 
   bytes4:
+    doc: Length prefixed string, between 0 and 2**32-1 bytes long
     seq:
       - id: len
         type: u4
       - id: val
         size: len
-    doc: Length prefixed string, between 0 and 2**32-1 bytes long
 
   bytes8:
-    seq:
-      - id: len
-        type: u8
-      - id: val
-        size: len
     doc: |
       Length prefixed string, between 0 and 2**64-1 bytes long.
 
@@ -280,19 +275,25 @@ types:
       large enough to need this type. Such a pickle could not be unpickled on
       a 32-bit build of Python, because the string would be larger than
       `sys.maxsize`.
-
-  bytearray8:
     seq:
       - id: len
         type: u8
       - id: val
         size: len
+
+  bytearray8:
     doc: |
       Length prefixed string, between 0 and 2**64-1 bytes long.
 
       The contents are deserilised into a `bytearray` object.
+    seq:
+      - id: len
+        type: u8
+      - id: val
+        size: len
 
   unicodestring1:
+    doc: Length prefixed string, between 0 and 255 bytes long
     seq:
       - id: len
         type: u1
@@ -300,9 +301,9 @@ types:
         type: str
         encoding: utf8
         size: len
-    doc: Length prefixed string, between 0 and 255 bytes long
 
   unicodestring4:
+    doc: Length prefixed string, between 0 and 2**32-1 bytes long
     seq:
       - id: len
         type: u4
@@ -310,16 +311,8 @@ types:
         type: str
         encoding: utf8
         size: len
-    doc: Length prefixed string, between 0 and 2**32-1 bytes long
 
   unicodestring8:
-    seq:
-      - id: len
-        type: u8
-      - id: val
-        type: str
-        encoding: utf8
-        size: len
     doc: |
       Length prefixed string, between 0 and 2**64-1 bytes long.
 
@@ -327,6 +320,13 @@ types:
       large enough to need this type. Such a pickle could not be unpickled on
       a 32-bit build of Python, because the string would be larger than
       `sys.maxsize`.
+    seq:
+      - id: len
+        type: u8
+      - id: val
+        type: str
+        encoding: utf8
+        size: len
 
   no_arg:
     doc: Some opcodes take no argument, this empty type is used for them.

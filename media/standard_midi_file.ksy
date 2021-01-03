@@ -5,7 +5,6 @@ meta:
     - mid
     - midi
     - smf
-  license: CC0-1.0
   xref:
     justsolve: MIDI
     loc:
@@ -14,6 +13,7 @@ meta:
     mime: audio/midi
     pronom: x-fmt/230
     wikidata: Q10610388
+  license: CC0-1.0
   imports:
     - /common/vlq_base128_be
   endian: be

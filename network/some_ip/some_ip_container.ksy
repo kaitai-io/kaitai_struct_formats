@@ -4,7 +4,7 @@ meta:
   license: CC0-1.0
   ks-version: 0.9
   endian: be
-  imports: 
+  imports:
     - /network/some_ip/some_ip
 
 seq:

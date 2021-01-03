@@ -5,9 +5,9 @@ meta:
   xref:
     justsolve: PCF
     wikidata: Q3398726
+  ks-version: 0.9
   imports:
     - /common/bytes_with_io
-  ks-version: 0.9
   encoding: UTF-8
   endian: le
 doc: |
@@ -41,6 +41,7 @@ types:
       Table offers a offset + length pointer to a particular
       table. "Type" of table references certain enum. Applications can
       ignore enum values which they don't support.
+    -webide-representation: "{type}"
     seq:
       - id: type
         type: u4
@@ -69,13 +70,13 @@ types:
             'types::swidths': swidths
             'types::glyph_names': glyph_names
             # TODO: bdf_accelerators
-    -webide-representation: "{type}"
     types:
       properties:
         doc: |
           Array of properties (key-value pairs), used to convey different X11
           settings of a font. Key is always an X font atom.
         doc-ref: 'https://fontforge.org/docs/techref/pcf-format.html#properties-table'
+        -webide-representation: "{num_props:dec} properties"
         seq:
           - id: format
             type: format
@@ -96,7 +97,6 @@ types:
             doc: |
               Strings buffer. Never used directly, but instead is
               addressed by offsets from the properties.
-        -webide-representation: "{num_props:dec} properties"
         types:
           prop:
             doc: |
@@ -107,6 +107,7 @@ types:
               Simple offset-based mechanism is employed to keep this
               type's sequence fixed-sized and thus have simple access
               to property key/value by index.
+            -webide-representation: "{name} => {str_value}/{int_value}"
             seq:
               - id: ofs_name
                 type: u4
@@ -125,15 +126,15 @@ types:
                   value in the strings buffer.
             instances:
               name:
-                pos: ofs_name
                 io: _parent.strings._io
+                pos: ofs_name
                 type: strz
                 doc: |
                   Name of the property addressed in the strings buffer.
                 -webide-parse-mode: eager
               str_value:
-                pos: value_or_ofs_value
                 io: _parent.strings._io
+                pos: value_or_ofs_value
                 type: strz
                 if: is_string != 0
                 doc: |
@@ -148,14 +149,13 @@ types:
                 -webide-parse-mode: eager
 
               # As of Kaitai Struct 0.9, `value` fails with:
-              #  
+              #
               #     "can't combine output types: StrFromBytesType(BytesTerminatedType(0,false,true,true,None),UTF-8) vs IntMultiType(false,Width4,Some(LittleEndian))"
               #
               # ... so currently it's commented out.
 
               #value:
               #  value: '(is_string != 0) ? str_value : int_value'
-            -webide-representation: "{name} => {str_value}/{int_value}"
       bitmaps:
         doc: |
           Table containing uncompressed glyph bitmaps.
@@ -207,6 +207,7 @@ types:
         doc: |
           Table containing scalable widths of characters.
         doc-ref: 'https://fontforge.org/docs/techref/pcf-format.html#the-scalable-widths-table'
+        -webide-representation: '{num_glyphs:dec} glyphs'
         seq:
           - id: format
             type: format
@@ -219,11 +220,11 @@ types:
             doc: |
               The scalable width of a character is the width of the corresponding
               PostScript character in em-units (1/1000ths of an em).
-        -webide-representation: '{num_glyphs:dec} glyphs'
       glyph_names:
         doc: |
           Table containing character names for every glyph.
         doc-ref: 'https://fontforge.org/docs/techref/pcf-format.html#the-glyph-names-table'
+        -webide-representation: '{num_glyphs:dec} glyphs'
         seq:
           - id: format
             type: format
@@ -243,19 +244,18 @@ types:
             type: bytes_with_io
             doc: |
               Strings buffer which contains all glyph names.
-        -webide-representation: '{num_glyphs:dec} glyphs'
         types:
           string_ref:
+            -webide-representation: '{value}'
             seq:
               - id: ofs_string
                 type: u4
             instances:
               value:
-                pos: ofs_string
                 io: _parent.strings._io
+                pos: ofs_string
                 type: strz
                 -webide-parse-mode: eager
-            -webide-representation: '{value}'
   format:
     doc: |
       Table format specifier, always 4 bytes. Original implementation treats

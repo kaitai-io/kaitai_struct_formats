@@ -98,6 +98,7 @@ types:
         type: u4
         doc: Contains number of bytes
   hive_bin_cell:
+    -webide-representation: "{identifier}"
     seq:
       - id: cell_size_raw
         type: s4
@@ -117,7 +118,6 @@ types:
             "'ri'": sub_key_list_ri
             "'vk'": sub_key_list_vk
             "'sk'": sub_key_list_sk
-    -webide-representation: "{identifier}"
     instances:
       cell_size:
         value: "(cell_size_raw < 0 ? -1 : +1) * cell_size_raw"

@@ -1,13 +1,13 @@
 meta:
   id: microsoft_network_monitor_v2
-  file-extension: cap
   application: Microsoft Network Monitor, v2.x
+  file-extension: cap
   license: CC0-1.0
   ks-version: 0.7
-  endian: le
   imports:
     - /network/ethernet_frame
     - /windows/windows_systemtime
+  endian: le
 doc: |
   Microsoft Network Monitor (AKA Netmon) is a proprietary Microsoft's
   network packet sniffing and analysis tool. It can save captured
@@ -60,10 +60,10 @@ seq:
     type: u4
 instances:
   frame_table:
-    doc: Index that is used to access individual captured frames
-    type: frame_index
     pos: frame_table_ofs
     size: frame_table_len
+    type: frame_index
+    doc: Index that is used to access individual captured frames
 types:
   frame_index:
     seq:
@@ -80,10 +80,10 @@ types:
         type: u4
     instances:
       body:
-        doc: Frame body itself
+        io: _root._io
         pos: ofs
         type: frame
-        io: _root._io
+        doc: Frame body itself
   frame:
     doc: |
       A container for actually captured network data. Allow to

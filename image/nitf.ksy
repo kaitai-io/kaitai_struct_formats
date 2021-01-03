@@ -10,10 +10,10 @@ meta:
     - ntf.r3
     - ntf.r4
     - ntf.r5
+  license: MIT
   ks-version: 0.8
   encoding: UTF-8
   endian: be
-  license: MIT
 doc: |
   The NITF (National Image Transition Format) format is a file format developed by the U.S. Government for
   storing imagery, e.g. from satellites.
@@ -32,7 +32,7 @@ seq:
   - id: image_segments
     type: image_segment(_index)
     repeat: expr
-    repeat-expr: header.num_image_segments.to_i 
+    repeat-expr: header.num_image_segments.to_i
   - id: graphics_segments
     type: graphics_segment(_index)
     repeat: expr
@@ -286,9 +286,6 @@ types:
     params:
       - id: idx
         type: u2
-    instances:
-      has_mask:
-        value: image_sub_header.img_compression.substring(0, 1) == 'M' or image_sub_header.img_compression.substring(1, 2) == 'M'
     seq:
       - id: image_sub_header
         type: image_sub_header
@@ -298,6 +295,9 @@ types:
       - id: image_data_field
         if: has_mask
         size: _parent.header.linfo[idx].length_image_segment.to_i - image_data_mask.total_size
+    instances:
+      has_mask:
+        value: image_sub_header.img_compression.substring(0, 1) == 'M' or image_sub_header.img_compression.substring(1, 2) == 'M'
   image_sub_header:
     seq:
       - id: file_part_type
@@ -504,17 +504,17 @@ types:
         value: "(tpxcdlnth % 8 == 0 ? tpxcdlnth : tpxcdlnth + (8 - tpxcdlnth % 8)) / 8"
       bmrtmr_count:
         value: >
-          _parent.image_sub_header.num_blocks_per_row.to_i * _parent.image_sub_header.num_blocks_per_col.to_i * 
-          (_parent.image_sub_header.img_mode != 'S' ? 
-            1 :  
+          _parent.image_sub_header.num_blocks_per_row.to_i * _parent.image_sub_header.num_blocks_per_col.to_i *
+          (_parent.image_sub_header.img_mode != 'S' ?
+            1 :
             (_parent.image_sub_header.num_bands.to_i != 0 ?
-              _parent.image_sub_header.num_bands.to_i : 
+              _parent.image_sub_header.num_bands.to_i :
               _parent.image_sub_header.num_multispectral_bands.to_i))
       has_bmr:
         value: bmrlnth != 0
       has_tmr:
         value: tmrlnth != 0
-      bmrbnd_size: 
+      bmrbnd_size:
         value: "has_bmr ? bmrtmr_count * 4 : 0"
       tmrbnd_size:
         value: "has_tmr ? bmrtmr_count * 4 : 0"
@@ -738,6 +738,7 @@ types:
         type: str
         size: des_defined_subheader_fields_len.to_i
   data_sub_header_streaming:
+    doc: 'Streaming file Header Data Extension Segment Subheader'
     seq:
       - id: des_base
         type: data_sub_header_base
@@ -763,7 +764,6 @@ types:
         type: str
         size: 7
         doc: 'A repeat of sfh_l1.'
-    doc: 'Streaming file Header Data Extension Segment Subheader'
   reserved_extension_segment:
     params:
       - id: idx

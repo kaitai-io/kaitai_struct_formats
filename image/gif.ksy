@@ -1,7 +1,7 @@
 meta:
   id: gif
-  file-extension: gif
   title: GIF (Graphics Interchange Format) image file
+  file-extension: gif
   xref:
     justsolve: GIF
     loc: fdd000133
@@ -9,8 +9,8 @@ meta:
     pronom:
       - fmt/3
       - fmt/4
-  endian: le
   license: CC0-1.0
+  endian: le
 doc: |
   GIF (Graphics Interchange Format) is an image file format, developed
   in 1987. It became popular in 1990s as one of the main image formats

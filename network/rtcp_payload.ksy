@@ -134,8 +134,8 @@ types:
         size-eos: true
     instances:
       fmt:
-        enum: rtpfb_subtype
         value: _parent.subtype
+        enum: rtpfb_subtype
 
   rtpfb_transport_feedback_packet:
     seq:
@@ -191,8 +191,8 @@ types:
         size-eos: true
     instances:
       fmt:
-        enum: psfb_subtype
         value: _parent.subtype
+        enum: psfb_subtype
 
   psfb_afb_packet:
     seq:
@@ -263,4 +263,3 @@ enums:
     4: tmmbn
     5: rrr
     15: transport_feedback
-

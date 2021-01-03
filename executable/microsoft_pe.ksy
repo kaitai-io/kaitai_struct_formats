@@ -58,9 +58,9 @@ types:
     instances:
       certificate_table:
         pos: optional_hdr.data_dirs.certificate_table.virtual_address
-        if: optional_hdr.data_dirs.certificate_table.virtual_address != 0
         size: optional_hdr.data_dirs.certificate_table.size
         type: certificate_table
+        if: optional_hdr.data_dirs.certificate_table.virtual_address != 0
   coff_header:
     doc-ref: 3.3. COFF File Header (Object and Image)
     seq:
@@ -169,15 +169,15 @@ types:
         pos: 'name_zeroes == 0 ? _parent._parent.symbol_name_table_offset + name_offset : 0'
         type: str
         terminator: 0
-        encoding: ascii
         eos-error: false
+        encoding: ascii
         if: name_zeroes == 0
       name_from_short:
         pos: 0
         type: str
         terminator: 0
-        encoding: ascii
         eos-error: false
+        encoding: ascii
         if: name_zeroes != 0
       name:
         value: 'name_zeroes == 0 ? name_from_offset : name_from_short'
@@ -364,6 +364,7 @@ types:
         type: certificate_entry
         repeat: eos
   certificate_entry:
+    doc-ref: 'https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format#the-attribute-certificate-table-image-only'
     enums:
       certificate_revision:
         0x0100:
@@ -410,4 +411,3 @@ types:
         -orig-id: bCertificate
         size: length - 8
         doc: Contains a certificate, such as an Authenticode signature.
-    doc-ref: 'https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format#the-attribute-certificate-table-image-only'

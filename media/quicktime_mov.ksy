@@ -176,7 +176,7 @@ enums:
     0x656c7374: elst
     0x66726565: free
     0x66747970: ftyp
-    0x68646c72: hdlr    
+    0x68646c72: hdlr
     0x696f6473: iods
     0x6d646174: mdat
     0x6d646864: mdhd

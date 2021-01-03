@@ -1,8 +1,8 @@
 meta:
   id: gpt_partition_table
   title: GPT (GUID) partition table
-  endian: le
   license: CC0-1.0
+  endian: le
 doc-ref: Specification taken from https://en.wikipedia.org/wiki/GUID_Partition_Table
 instances:
   sector_size:
@@ -73,4 +73,3 @@ types:
         type: partition_entry
         repeat: expr
         repeat-expr: entries_count
-

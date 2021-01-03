@@ -3,8 +3,8 @@ meta:
   title: GENMIDI.OP2 OPL2 sound bank
   file-extension: op2
   license: CC0-1.0
-  endian: le
   encoding: ASCII
+  endian: le
 doc: |
   GENMIDI.OP2 is a sound bank file used by players based on DMX sound
   library to play MIDI files with General MIDI instruments using OPL2
@@ -14,7 +14,7 @@ doc: |
   Major users of DMX sound library include:
 
   * Original Doom game engine (and games based on it: Heretic, Hexen, Strife, Chex Quest)
-  * Raptor: Call of the Shadows 
+  * Raptor: Call of the Shadows
 doc-ref: http://www.fit.vutbr.cz/~arnost/muslib/op2_form.zip http://doom.wikia.com/wiki/GENMIDI
 seq:
   - id: magic

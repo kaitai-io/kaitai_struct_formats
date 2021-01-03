@@ -1,8 +1,8 @@
 meta:
   id: rar
-  file-extension: rar
-  application: RAR archiver
   title: RAR (Roshall ARchiver) archive files
+  application: RAR archiver
+  file-extension: rar
   xref:
     forensicswiki: RAR
     justsolve: RAR
@@ -15,10 +15,10 @@ meta:
       - fmt/613
       - x-fmt/264
     wikidata: Q243303
+  license: CC0-1.0
   ks-version: 0.7
   imports:
     - /common/dos_datetime
-  license: CC0-1.0
   endian: le
 doc: |
   RAR is a archive format used by popular proprietary RAR archiver,

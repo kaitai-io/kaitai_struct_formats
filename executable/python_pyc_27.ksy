@@ -43,6 +43,7 @@ types:
         type: op_arg
         repeat: eos
   op_arg:
+    -webide-representation: "{op_code} {arg}"
     seq:
       - id: op_code
         type: u1
@@ -50,7 +51,6 @@ types:
       - id: arg
         type: u2
         if: "op_code.to_i >= op_code_enum::store_name.to_i" # store_name == have_arguments
-    -webide-representation: "{op_code} {arg}"
     enums:
       op_code_enum:
         0  : stop_code
@@ -173,6 +173,7 @@ types:
         146: set_add
         147: map_add
   code_object:
+    -webide-representation: "{name.value}"
     seq:
       - id: arg_count   # argcount
         type: u4
@@ -203,13 +204,13 @@ types:
         type: u4
       - id: lnotab
         type: py_object
-    -webide-representation: "{name.value}"
     enums:
       flags_enum:
         0x04: has_args
         0x08: has_kwargs
         0x20: generator
   py_object:
+    -webide-representation: "{type}: {value}"
     seq:
       - id: type
         type: u1
@@ -227,16 +228,16 @@ types:
             "object_type::py_false":    py_false
             "object_type::py_true":     py_true
             "object_type::none":        py_none
-    -webide-representation: "{type}: {value}"
     types:
       py_string:
+        -webide-representation: "{data}"
         seq:
           - id: length
             type: u4
           - id: data
             size: length
-        -webide-representation: "{data}"
       interned_string:
+        -webide-representation: "{data}"
         seq:
           - id: length
             type: u4
@@ -244,13 +245,13 @@ types:
             type: str
             size: length
             encoding: utf-8
-        -webide-representation: "{data}"
       string_ref:
+        -webide-representation: "#{interned_list_index:dec}"
         seq:
           - id: interned_list_index
             type: u4
-        -webide-representation: "#{interned_list_index:dec}"
       unicode_string:
+        -webide-representation: "{data}"
         seq:
           - id: length
             type: u4
@@ -258,8 +259,8 @@ types:
             size: length
             type: str
             encoding: utf-8
-        -webide-representation: "{data}"
       tuple:
+        -webide-representation: "{count:dec} items"
         seq:
           - id: count
             type: u4
@@ -267,7 +268,6 @@ types:
             type: py_object
             repeat: expr
             repeat-expr: count
-        -webide-representation: "{count:dec} items"
       py_none:
         -webide-representation: "None"
       py_true:

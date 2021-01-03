@@ -1,10 +1,10 @@
 meta:
   id: saints_row_2_vpp_pc
-  endian: le
-  encoding: UTF-8
-  license: MIT
   title: Saints Rows 2 game packages
   file-extension: vpp_pc
+  license: MIT
+  encoding: UTF-8
+  endian: le
 seq:
   - id: magic
     contents: [0xce, 0x0a, 0x89, 0x51, 0x04]
@@ -74,16 +74,16 @@ types:
             type: s4
         instances:
           filename:
-            pos: name_ofs
             io: _root.filenames._io
+            pos: name_ofs
             type: strz
           ext:
-            pos: ext_ofs
             io: _root.extensions._io
+            pos: ext_ofs
             type: strz
           body:
-            pos: _root.data_start + ofs_body
             io: _root._io
+            pos: _root.data_start + ofs_body
             size: len_body
   strings:
     seq:

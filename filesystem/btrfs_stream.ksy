@@ -4,8 +4,8 @@ meta:
   tags:
     - filesystem
     - linux
-  endian: le
   license: CC0-1.0
+  endian: le
 doc: |
   Btrfs is a copy on write file system based on B-trees focusing on fault tolerance, repair and easy
   administration. Btrfs is intended to address the lack of pooling, snapshots, checksums, and

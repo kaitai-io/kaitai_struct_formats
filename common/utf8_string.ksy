@@ -1,8 +1,8 @@
 meta:
   id: utf8_string
   title: UTF-8-encoded string
-  license: CC0-1.0
   file-extension: txt
+  license: CC0-1.0
 doc: |
   UTF-8 is a popular character encoding scheme that allows to
   represent strings as sequence of code points defined in Unicode

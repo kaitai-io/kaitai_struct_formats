@@ -1,7 +1,6 @@
 meta:
   id: apple_single_double
   title: AppleSingle / AppleDouble
-  endian: be
   xref:
     forensicswiki: AppleDouble_header_file
     justsolve: AppleDouble
@@ -11,6 +10,7 @@ meta:
     - filesystem
     - macos
   license: CC0-1.0
+  endian: be
 doc: |
   AppleSingle and AppleDouble files are used by certain Mac
   applications (e.g. Finder) to store Mac-specific file attributes on

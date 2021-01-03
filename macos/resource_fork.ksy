@@ -85,8 +85,8 @@ seq:
 instances:
   data_blocks_with_io:
     pos: header.ofs_data_blocks
-    type: bytes_with_io
     size: header.len_data_blocks
+    type: bytes_with_io
     doc: |
       Use `data_blocks` instead,
       unless you need access to this instance's `_io`.
@@ -108,8 +108,8 @@ instances:
       or when resources are added or grown so that more space is needed in the data area.
   resource_map:
     pos: header.ofs_resource_map
-    type: resource_map
     size: header.len_resource_map
+    type: resource_map
     doc: The resource file's resource map.
 types:
   file_header:
@@ -198,13 +198,13 @@ types:
     instances:
       type_list_and_reference_lists:
         pos: ofs_type_list
-        type: type_list_and_reference_lists
         size: ofs_names - ofs_type_list
+        type: type_list_and_reference_lists
         doc: The resource map's resource type list, followed by the resource reference list area.
       names_with_io:
         pos: ofs_names
-        type: bytes_with_io
         size-eos: true
+        type: bytes_with_io
         doc: |
           Use `names` instead,
           unless you need access to this instance's `_io`.

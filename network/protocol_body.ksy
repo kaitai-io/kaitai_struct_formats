@@ -26,10 +26,6 @@ params:
   - id: protocol_num
     type: u1
     doc: Protocol number as an integer.
-instances:
-  protocol:
-    value: protocol_num
-    enum: protocol_enum
 seq:
   - id: body
     type:
@@ -42,6 +38,10 @@ seq:
         'protocol_enum::ipv4': ipv4_packet
         'protocol_enum::ipv6': ipv6_packet
         'protocol_enum::ipv6_nonxt': no_next_header
+instances:
+  protocol:
+    value: protocol_num
+    enum: protocol_enum
 types:
   no_next_header:
     doc: Dummy type for IPv6 "no next header" type, which signifies end of headers chain.

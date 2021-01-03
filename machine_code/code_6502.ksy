@@ -1,7 +1,7 @@
 meta:
   id: code_6502
-  endian: le
   license: CC0-1.0
+  endian: le
 doc: |
   This spec can be used to disassemble raw stream of 6502 CPU machine
   code into individual operations. Each operation includes an opcode

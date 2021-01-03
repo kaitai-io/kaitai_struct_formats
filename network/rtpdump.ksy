@@ -2,12 +2,12 @@ meta:
   id: rtpdump
   title: Rtpdump (rtptools)
   file-extension:
-   - rtp
-   - rtpdump
+    - rtp
+    - rtpdump
   license: Unlicense
-  endian: be
   imports:
     - /network/rtp_packet
+  endian: be
 doc: |
   rtpdump is a format used by rtptools to record and replay
   rtp data from network capture.

@@ -4,8 +4,8 @@ meta:
   file-extension: ico
   tags:
     - windows
-  endian: le
   license: CC0-1.0
+  endian: le
 doc: |
   Microsoft Windows uses specific file format to store applications
   icons - ICO. This is a container that contains one or more image

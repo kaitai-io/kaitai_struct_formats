@@ -1,7 +1,7 @@
 meta:
   id: ruby_marshal
-  endian: le
   license: CC0-1.0
+  endian: le
 doc: |
   Ruby's Marshal module allows serialization and deserialization of
   many standard and arbitrary Ruby objects in a compact binary

@@ -2,16 +2,16 @@ meta:
   id: mac_os_resource_snd
   title: Classic MacOS Sound Resource
   application: Sound Manager
-  endian: be
-  license: MIT
   xref:
-    wikidata: Q7564684
     mac-os-resource-type: 'snd '
-doc-ref: "https://developer.apple.com/library/archive/documentation/mac/pdf/Sound/Sound_Manager.pdf"
+    wikidata: Q7564684
+  license: MIT
+  endian: be
 doc: |
   Sound resources were introduced in Classic MacOS with the Sound Manager program.
   They can contain sound commands to generate sounds with given frequencies as well as sampled sound data.
   They are mostly found in resource forks, but can occasionally appear standalone or embedded in other files.
+doc-ref: "https://developer.apple.com/library/archive/documentation/mac/pdf/Sound/Sound_Manager.pdf"
 seq:
   - id: format
     type: u2
@@ -169,11 +169,11 @@ types:
         value: _root.midi_note_to_frequency[midi_note]
         #TODO: If https://github.com/kaitai-io/kaitai_struct/issues/216 is implemented:
         #TODO: value: (2 ** ((midi_note - 69) / 12)) * 440
+        if: midi_note >= 0 and midi_note < 128
         doc: |
           base frequency of sample in Hz
           Calculated with the formula (2 ** ((midi_note - 69) / 12)) * 440
         doc-ref: https://en.wikipedia.org/wiki/MIDI_tuning_standard
-        if: midi_note >= 0 and midi_note < 128
       sound_header_type:
         pos: start_ofs + 20
         type: u1

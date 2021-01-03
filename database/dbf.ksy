@@ -1,7 +1,7 @@
 meta:
   id: dbf
-  file-extension: dbf
   application: dBASE
+  file-extension: dbf
   xref:
     justsolve: DBF
     loc: fdd000325

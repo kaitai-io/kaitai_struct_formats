@@ -223,7 +223,7 @@ types:
       - id: z
         type: f4
       - id: radius
-        type: f4        
+        type: f4
 enums:
   sections:
     0x0001: struct

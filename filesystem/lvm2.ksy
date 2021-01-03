@@ -9,9 +9,9 @@ meta:
   tags:
     - filesystem
     - linux
-  endian: le
-  encoding: ascii
   license: GFDL-1.3+
+  encoding: ascii
+  endian: le
 doc: |
   ### Building a test file
 
@@ -24,13 +24,13 @@ doc: |
   sudo losetup -d /dev/loop1
   ```
 doc-ref: https://github.com/libyal/libvslvm/blob/master/documentation/Logical%20Volume%20Manager%20(LVM)%20format.asciidoc
-instances:
-  sector_size:
-    value: 512 # TODO: how about 4k sectors?
 seq:
   - id: pv
     type: physical_volume
     doc: Physical volume
+instances:
+  sector_size:
+    value: 512 # TODO: how about 4k sectors?
 types:
   physical_volume:
     seq:

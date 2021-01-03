@@ -2,8 +2,8 @@
 meta:
   id: ines
   file-extension: nes
-  encoding: ASCII
   license: WTFPL
+  encoding: ASCII
 doc-ref: https://wiki.nesdev.com/w/index.php/INES
 seq:
   - id: header

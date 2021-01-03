@@ -1,8 +1,8 @@
 meta:
   id: fallout2_dat
-  endian: le
   application: Fallout2
   license: CC0-1.0
+  endian: le
 types:
   pstr:
     seq:

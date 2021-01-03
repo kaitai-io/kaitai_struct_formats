@@ -1,12 +1,12 @@
 meta:
   id: hccapx
   title: Hashcat capture file
-  license: Unlicense
   application:
     - Hashcat
     - aircrack-ng
-  endian: le
   file-extension: hccapx
+  license: Unlicense
+  endian: le
 doc: |
   Native format of Hashcat password "recovery" utility
 doc-ref: https://hashcat.net/wiki/doku.php?id=hccapx

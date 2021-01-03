@@ -1,12 +1,12 @@
 meta:
   id: zx_spectrum_tap
-  file-extension: tap
-  endian: le
-  license: CC0-1.0
   title: ZX Spectrum tape file
+  file-extension: tap
   xref:
     justsolve: TAP_(ZX_Spectrum)
     pronom: fmt/801
+  license: CC0-1.0
+  endian: le
 doc: |
   TAP files are used by emulators of ZX Spectrum computer (released in
   1982 by Sinclair Research). TAP file stores blocks of data as if
