@@ -11,7 +11,9 @@ doc: |
   radio information, but can be used for other purposes as well.
 
   Sample capture: https://wiki.wireshark.org/SampleCaptures?action=AttachFile&do=get&target=Http.cap
-doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 3
+doc-ref: >-
+  https://web.archive.org/web/20090206112419/https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf
+  PPI header format spec, section 3
 seq:
   - id: header
     type: packet_ppi_header
@@ -27,7 +29,9 @@ seq:
         'linktype::ethernet': ethernet_frame
 types:
   packet_ppi_header:
-    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 3.1
+    doc-ref: >-
+      https://web.archive.org/web/20090206112419/https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf
+      PPI header format spec, section 3.1
     seq:
       - id: pph_version
         type: u1
@@ -44,7 +48,9 @@ types:
         type: packet_ppi_field
         repeat: eos
   packet_ppi_field:
-    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 3.1
+    doc-ref: >-
+      https://web.archive.org/web/20090206112419/https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf
+      PPI header format spec, section 3.1
     seq:
       - id: pfh_type
         type: u2
@@ -60,7 +66,9 @@ types:
             'pfh_type::radio_802_11n_mac_ext': radio_802_11n_mac_ext_body
             'pfh_type::radio_802_11n_mac_phy_ext': radio_802_11n_mac_phy_ext_body
   radio_802_11_common_body:
-    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 4.1.2
+    doc-ref: >-
+      https://web.archive.org/web/20090206112419/https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf
+      PPI header format spec, section 4.1.2
     seq:
       - id: tsf_timer
         type: u8
@@ -81,7 +89,9 @@ types:
       - id: dbm_antnoise
         type: s1
   radio_802_11n_mac_ext_body:
-    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 4.1.3
+    doc-ref: >-
+      https://web.archive.org/web/20090206112419/https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf
+      PPI header format spec, section 4.1.3
     seq:
       - id: flags
         type: mac_flags
@@ -92,7 +102,9 @@ types:
       - id: reserved
         size: 3
   radio_802_11n_mac_phy_ext_body:
-    doc-ref: https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf PPI header format spec, section 4.1.4
+    doc-ref: >-
+      https://web.archive.org/web/20090206112419/https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf
+      PPI header format spec, section 4.1.4
     seq:
       - id: flags
         type: mac_flags
