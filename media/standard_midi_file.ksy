@@ -8,8 +8,8 @@ meta:
   xref:
     justsolve: MIDI
     loc:
-      - fdd000102
-      - fdd000119
+      - fdd000102 # MIDI Sequence Data
+      - fdd000119 # Standard MIDI File
     mime: audio/midi
     pronom: x-fmt/230
     wikidata: Q10610388

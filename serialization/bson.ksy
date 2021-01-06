@@ -3,6 +3,7 @@ meta:
   file-extension: bson
   xref:
     justsolve: BSON
+    mime: application/bson
     wikidata: Q2661480
   license: CC0-1.0
   endian: le

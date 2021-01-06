@@ -3,9 +3,11 @@ meta:
   title: Windows shell link file
   file-extension: lnk
   xref:
+    forensicswiki: LNK
     justsolve: Windows_Shortcut
     mime: application/x-ms-shortcut
     pronom: x-fmt/428
+    wikidata: Q29000599
   license: CC0-1.0
   imports:
     - windows_shell_items

@@ -1,6 +1,9 @@
 meta:
   id: avantes_roh60
+  title: Avantes USB spectrometer ROH file 6.0
   file-extension: roh
+  xref:
+    wikidata: Q29960673
   license: CC0-1.0
   endian: le
 doc: |

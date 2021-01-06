@@ -5,6 +5,7 @@ meta:
   xref:
     justsolve: TAP_(ZX_Spectrum)
     pronom: fmt/801
+    wikidata: Q34748140
   license: CC0-1.0
   endian: le
 doc: |

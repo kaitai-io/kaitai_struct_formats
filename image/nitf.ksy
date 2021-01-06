@@ -10,6 +10,9 @@ meta:
     - ntf.r3
     - ntf.r4
     - ntf.r5
+  xref:
+    pronom: fmt/366 # NITF 2.1
+    wikidata: Q1961044
   license: MIT
   ks-version: 0.8
   encoding: UTF-8
@@ -297,7 +300,7 @@ types:
         size: _parent.header.linfo[idx].length_image_segment.to_i - image_data_mask.total_size
     instances:
       has_mask:
-        value: image_sub_header.img_compression.substring(0, 1) == 'M' or image_sub_header.img_compression.substring(1, 2) == 'M'
+        value: image_sub_header.img_compression.substring(0, 2) == 'MM'
   image_sub_header:
     seq:
       - id: file_part_type

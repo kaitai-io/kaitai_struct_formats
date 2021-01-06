@@ -11,9 +11,9 @@ meta:
       - application/vnd.rar
       - application/x-rar-compressed
     pronom:
-      - fmt/411
-      - fmt/613
-      - x-fmt/264
+      - x-fmt/264 # RAR 2.0
+      - fmt/411 # RAR 2.9
+      - fmt/613 # RAR 5.0
     wikidata: Q243303
   license: CC0-1.0
   ks-version: 0.7

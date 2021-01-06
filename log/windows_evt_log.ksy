@@ -2,6 +2,9 @@ meta:
   id: windows_evt_log
   title: Windows Event Log (EVT)
   file-extension: evt
+  xref:
+    forensicswiki: Windows_Event_Log_(EVT)
+    justsolve: Windows_Event_Log
   tags:
     - windows
     - log

@@ -7,19 +7,22 @@ meta:
     loc: fdd000189
     mime: image/bmp
     pronom:
-      - fmt/115
-      - fmt/116
-      - fmt/117
-      - fmt/118
-      - fmt/119
-      - x-fmt/25
+      - fmt/114 # Windows Bitmap 1.0
+      - fmt/115 # Windows Bitmap 2.0
+      - fmt/116 # Windows Bitmap 3.0
+      - fmt/117 # Windows Bitmap 3.0 NT
+      - fmt/118 # Windows Bitmap 4.0
+      - fmt/119 # Windows Bitmap 5.0
+      - x-fmt/25 # OS/2 Bitmap 1.0
+      - x-fmt/270 # OS/2 Bitmap 2.0
     wikidata: Q192869
   tags:
     - windows
   license: CC0-1.0
   ks-version: 0.9
   endian: le
-  # ks-opaque-types: true # uncomment if you provide an opaque type `bitmap` for bitmap data
+  # ks-opaque-types: true # uncomment this line and comment `/types/bitmap`,
+                          # if you provide an opaque type `bitmap` for bitmap data
 doc: |
   The **BMP file format**, also known as **bitmap image file** or **device independent
   bitmap (DIB) file format** or simply a **bitmap**, is a raster graphics image file

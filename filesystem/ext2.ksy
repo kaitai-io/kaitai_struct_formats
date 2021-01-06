@@ -2,6 +2,8 @@ meta:
   id: ext2
   title: ext2 filesystem
   xref:
+    forensicswiki: Extended_File_System_(Ext)
+    justsolve: Ext2
     wikidata: Q283527
   tags:
     - filesystem

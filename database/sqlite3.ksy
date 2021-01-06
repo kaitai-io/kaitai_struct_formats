@@ -1,6 +1,17 @@
 meta:
   id: sqlite3
   title: SQLite3 database file
+  file-extension:
+    - sqlite
+    - db
+    - db3
+    - sqlite3
+  xref:
+    forensicswiki: SQLite_database_format
+    justsolve: SQLite
+    loc: fdd000461
+    pronom: fmt/729
+    wikidata: Q28600453
   license: CC0-1.0
   imports:
     - /common/vlq_base128_be

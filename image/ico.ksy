@@ -2,6 +2,13 @@ meta:
   id: ico
   title: Microsoft Windows icon file
   file-extension: ico
+  xref:
+    justsolve: ICO
+    mime:
+      - image/x-icon
+      - image/vnd.microsoft.icon
+    pronom: x-fmt/418
+    wikidata: Q729366
   tags:
     - windows
   license: CC0-1.0

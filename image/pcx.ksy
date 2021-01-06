@@ -7,11 +7,12 @@ meta:
       - image/vnd.zbrush.pcx
       - image/x-pcx
     pronom:
-      - fmt/86
-      - fmt/87
-      - fmt/88
-      - fmt/89
-      - fmt/90
+      # see `/enums/versions` key
+      - fmt/86 # PCX 0
+      - fmt/87 # PCX 2
+      - fmt/88 # PCX 3
+      - fmt/89 # PCX 4
+      - fmt/90 # PCX 5
     wikidata: Q535473
   license: CC0-1.0
   endian: le

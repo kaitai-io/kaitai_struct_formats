@@ -2,6 +2,8 @@ meta:
   id: vp8_ivf
   title: VP8 raw file
   file-extension: ivf
+  xref:
+    wikidata: Q61774549
   license: CC0-1.0
   ks-version: 0.7
   endian: le

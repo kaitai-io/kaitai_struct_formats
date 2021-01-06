@@ -3,6 +3,7 @@ meta:
   title: WebSocket
   xref:
     rfc: 6455
+    wikidata: Q859938
   license: CC0-1.0
   endian: be
 doc: |

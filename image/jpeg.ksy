@@ -10,8 +10,14 @@ meta:
     - jfi
   xref:
     ecma: TR/98
+    forensicswiki: JPEG
     justsolve: JFIF
+    loc: fdd000017
     mime: image/jpeg
+    pronom:
+      - fmt/42 # JFIF 1.00
+      - fmt/43 # JFIF 1.01
+      - fmt/44 # JFIF 1.02
     wikidata: Q26329975
   imports:
     - exif

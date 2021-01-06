@@ -1,5 +1,7 @@
 meta:
   id: code_6502
+  xref:
+    wikidata: Q19368646
   license: CC0-1.0
   endian: le
 doc: |

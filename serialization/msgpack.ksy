@@ -1,6 +1,8 @@
 meta:
   id: msgpack
   title: MessagePack (msgpack) serialization format
+  xref:
+    wikidata: Q6821738
   license: CC0-1.0
   endian: be
 doc: |

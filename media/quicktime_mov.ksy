@@ -1,6 +1,11 @@
 meta:
   id: quicktime_mov
   application: QuickTime, MP4 ISO 14496-14 media
+  xref:
+    justsolve: QuickTime
+    loc: fdd000052
+    pronom: x-fmt/384
+    wikidata: Q942350
   license: CC0-1.0
   endian: be
 doc-ref: 'https://developer.apple.com/library/content/documentation/QuickTime/QTFF/QTFFChap1/qtff1.html#//apple_ref/doc/uid/TP40000939-CH203-BBCGDDDF'

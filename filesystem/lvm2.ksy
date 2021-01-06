@@ -6,6 +6,9 @@ meta:
     - grub2
     - lvm tools
     - libvslvm
+  xref:
+    forensicswiki: Linux_Logical_Volume_Manager_(LVM)
+    wikidata: Q6667482 # software, not format
   tags:
     - filesystem
     - linux

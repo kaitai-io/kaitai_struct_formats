@@ -1,6 +1,9 @@
 meta:
   id: google_protobuf
   title: Google Protocol Buffers (protobuf)
+  xref:
+    justsolve: Protobuf
+    wikidata: Q1645574
   license: MIT
   ks-version: 0.7
   imports:

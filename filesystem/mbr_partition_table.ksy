@@ -2,6 +2,7 @@ meta:
   id: mbr_partition_table
   title: MBR (Master Boot Record) partition table
   xref:
+    forensicswiki: Master_boot_record
     wikidata: Q624752
   tags:
     - dos

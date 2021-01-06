@@ -1,6 +1,13 @@
 meta:
   id: icc_4
   title: ICC profile, version 4
+  file-extension:
+    - icc
+    - icm
+  xref:
+    justsolve: ICC_profile
+    mime: application/vnd.iccprofile
+    wikidata: Q29206892
   license: CC0-1.0
   encoding: ASCII
   endian: be
@@ -31,7 +38,7 @@ types:
       - id: creation_date_time
         type: date_time_number
       - id: file_signature
-        contents: [0x61, 0x63, 0x73, 0x70]
+        contents: 'acsp'
       - id: primary_platform
         type: u4
         enum: primary_platforms

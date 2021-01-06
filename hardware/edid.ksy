@@ -3,6 +3,7 @@ meta:
   title: EDID (VESA Enhanced Extended Display Identification Data)
   xref:
     repo: https://github.com/kaitai-io/edid.ksy.git
+    wikidata: Q1376385
   license: CC0-1.0
   endian: le
 seq:

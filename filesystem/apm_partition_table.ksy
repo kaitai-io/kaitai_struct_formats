@@ -1,6 +1,9 @@
 meta:
   id: apm_partition_table
   title: APM (Apple Partition Map) partition table
+  xref:
+    forensicswiki: APM
+    wikidata: Q375944
   tags:
     - filesystem
     - macos

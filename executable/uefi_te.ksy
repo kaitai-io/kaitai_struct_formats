@@ -5,6 +5,8 @@ meta:
   file-extension:
     - efi
     - te
+  xref:
+    wikidata: Q83443959
   tags:
     - executable
     - firmware

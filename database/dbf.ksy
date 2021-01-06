@@ -5,7 +5,15 @@ meta:
   xref:
     justsolve: DBF
     loc: fdd000325
-    pronom: x-fmt/9
+    mime:
+      - application/dbf
+      - application/dbase
+    pronom:
+      - x-fmt/8 # dBASE Database II
+      - x-fmt/9 # dBASE Database III
+      - x-fmt/271 # dBASE Database III+
+      - x-fmt/10 # dBASE Database IV
+      - x-fmt/272 # dBASE Database V
     wikidata: Q16545707
   license: CC0-1.0
   endian: le

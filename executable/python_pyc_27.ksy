@@ -7,6 +7,10 @@ meta:
   id: python_pyc_27
   application: Python
   file-extension: pyc
+  xref:
+    pronom: fmt/939
+    mime: application/x-python-code
+    wikidata: Q28009469
   license: CC0-1.0
   endian: le
 doc: |

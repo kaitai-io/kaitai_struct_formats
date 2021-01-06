@@ -1,5 +1,8 @@
 meta:
   id: tls_client_hello
+  xref:
+    rfc: 5246 # TLS 1.2
+    wikidata: Q206494 # TLS
   license: MIT
   endian: be
 

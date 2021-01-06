@@ -9,9 +9,9 @@ meta:
     loc: fdd000153
     mime: image/png
     pronom:
-      - fmt/13
-      - fmt/12
-      - fmt/11
+      - fmt/11 # PNG 1.0
+      - fmt/12 # PNG 1.1
+      - fmt/13 # PNG 1.2
     rfc: 2083
     wikidata: Q178051
   license: CC0-1.0

@@ -2,6 +2,11 @@ meta:
   id: id3v2_4
   title: ID3v2.4 tag for .mp3 files
   file-extension: mp3
+  xref:
+    forensicswiki: ID3
+    justsolve: ID3
+    loc: fdd000108 # ID3v2
+    wikidata: Q1054220
   license: CC0-1.0
   endian: be
 

@@ -8,10 +8,7 @@ meta:
     - sys
   xref:
     justsolve: Portable_Executable
-    pronom:
-      - x-fmt/411
-      - fmt/899
-      - fmt/900
+    pronom: x-fmt/411
     wikidata: Q1076355
   tags:
     - executable

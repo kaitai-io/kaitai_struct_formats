@@ -1,8 +1,11 @@
 meta:
   id: creative_voice_file
   title: Creative Voice File
-  file-extension:
-    - voc
+  file-extension: voc
+  xref:
+    justsolve: Creative_Voice_File
+    mime: audio/x-voc
+    wikidata: Q27967410
   license: CC0-1.0
   endian: le
 doc: |
@@ -21,7 +24,7 @@ doc-ref: 'https://wiki.multimedia.cx/index.php?title=Creative_Voice'
 seq:
   - id: magic
     contents:
-      - Creative Voice File
+      - 'Creative Voice File'
       - 0x1a
   - id: header_size
     type: u2

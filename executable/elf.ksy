@@ -3,6 +3,18 @@ meta:
   title: Executable and Linkable Format
   application: SVR4 ABI and up, many *nix systems
   xref:
+    justsolve: Executable_and_Linkable_Format
+    mime:
+      - application/x-elf
+      - application/x-coredump
+      - application/x-executable
+      - application/x-object
+      - application/x-sharedlib
+    pronom:
+      - fmt/688 # 32bit Little Endian
+      - fmt/689 # 32bit Big Endian
+      - fmt/690 # 64bit Little Endian
+      - fmt/691 # 64bit Big Endian
     wikidata: Q1343830
   tags:
     - executable

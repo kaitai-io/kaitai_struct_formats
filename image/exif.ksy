@@ -1,5 +1,15 @@
 meta:
   id: exif
+  xref:
+    forensicswiki: Exif
+    justsolve: Exif
+    loc: fdd000146
+    pronom:
+      - x-fmt/398 # Exif 2.0
+      - x-fmt/390 # Exif 2.1
+      - x-fmt/391 # Exif 2.2
+      - fmt/645 # Exif 2.21 ("2.2.1" in PRONOM is misspelled)
+    wikidata: Q26383099
 seq:
   - id: endianness
     type: u2le

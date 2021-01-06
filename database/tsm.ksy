@@ -3,6 +3,8 @@ meta:
   title: InfluxDB TSM file
   application: InfluxDB
   file-extension: tsm
+  xref:
+    wikidata: Q29168491
   license: MIT
   endian: be
 doc: |

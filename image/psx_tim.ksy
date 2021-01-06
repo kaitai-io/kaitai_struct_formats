@@ -19,7 +19,7 @@ seq:
   - id: clut
     type: bitmap
     if: has_clut
-    doc: CLUT (Color LookUp Table), one or several palettes for indexed color image, represented as a 
+    doc: CLUT (Color LookUp Table), one or several palettes for indexed color image, represented as a
   - id: img
     type: bitmap
 types:

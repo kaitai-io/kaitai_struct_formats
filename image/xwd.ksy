@@ -2,6 +2,8 @@ meta:
   id: xwd
   title: xwd (X Window Dump) bitmap image
   application: xwd
+  xref:
+    pronom: fmt/401
   license: CC0-1.0
   endian: be
 doc: |

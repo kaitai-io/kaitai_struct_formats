@@ -1,6 +1,8 @@
 meta:
   id: btrfs_stream
   application: Btrfs
+  xref:
+    wikidata: Q283820
   tags:
     - filesystem
     - linux

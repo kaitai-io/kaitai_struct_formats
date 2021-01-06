@@ -2,6 +2,10 @@ meta:
   id: shapefile_index
   title: Shapefile index file
   file-extension: shx
+  xref:
+    loc: fdd000280 # ESRI Shapefile
+    pronom: fmt/277
+    wikidata: Q27487109
   license: CC0-1.0
   endian: le
 seq:

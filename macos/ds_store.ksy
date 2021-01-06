@@ -1,6 +1,11 @@
 meta:
   id: ds_store
   title: macOS '.DS_Store' format
+  file-extension: DS_Store
+  xref:
+    justsolve: Desktop_Services_Store
+    pronom: fmt/394
+    wikidata: Q307271
   license: MIT
   ks-version: 0.8
   encoding: UTF-8

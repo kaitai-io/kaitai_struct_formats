@@ -1,6 +1,7 @@
 meta:
   id: cramfs
   xref:
+    justsolve: Cramfs
     wikidata: Q747406
   tags:
     - filesystem

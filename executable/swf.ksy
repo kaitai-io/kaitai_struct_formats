@@ -5,9 +5,11 @@ meta:
   xref:
     justsolve: SWF
     pronom: fmt/507
+      # - fmt/{505..507} # Adobe Flash {8..10}
+      # - fmt/{757..776} # Adobe Flash {11..30}
     loc:
-      - fdd000130
-      - fdd000248
+      - fdd000130 # SWF 7
+      - fdd000248 # SWF 8
     mime: application/x-shockwave-flash
     wikidata: Q594447
   tags:

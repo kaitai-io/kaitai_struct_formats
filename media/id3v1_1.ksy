@@ -2,6 +2,11 @@ meta:
   id: id3v1_1
   title: ID3v1.1 tag for .mp3 files
   file-extension: mp3
+  xref:
+    forensicswiki: ID3
+    justsolve: ID3
+    loc: fdd000107 # ID3v1
+    wikidata: Q1054220
   license: CC0-1.0
 doc: |
   ID3v1.1 tag is a method to store simple metadata in .mp3 files. The

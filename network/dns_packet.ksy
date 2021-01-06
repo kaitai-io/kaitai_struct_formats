@@ -3,6 +3,7 @@ meta:
   title: DNS (Domain Name Service) packet
   xref:
     rfc: 1035
+    wikidata: Q8767
   license: CC0-1.0
   encoding: utf-8
   endian: be

@@ -3,6 +3,9 @@ meta:
   application: Microsoft Network Monitor, v2.x
   file-extension: cap
   license: CC0-1.0
+  xref:
+    pronom: fmt/778
+    wikidata: Q47245444
   ks-version: 0.7
   imports:
     - /network/ethernet_frame

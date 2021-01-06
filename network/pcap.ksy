@@ -6,6 +6,8 @@ meta:
   xref:
     forensicswiki: PCAP
     justsolve: PCAP
+    pronom: fmt/779
+    wikidata: Q28009435
   license: CC0-1.0
   ks-version: 0.8
   imports:

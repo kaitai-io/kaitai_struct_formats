@@ -2,6 +2,10 @@ meta:
   id: mifare_classic
   title: Mifare Classic RFID tag dump
   file-extension: mfd
+  xref:
+    wikidata:
+      - Q29000512 # MIFARE Classic 1k
+      - Q29000513 # MIFARE Classic 4k
   license: BSD-2-Clause
   ks-version: 0.9
   endian: le

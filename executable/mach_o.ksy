@@ -5,6 +5,11 @@
 # https://github.com/opensource-apple/xnu/blob/10.11/bsd/sys/codesign.h
 meta:
   id: mach_o
+  xref:
+    pronom:
+      - fmt/692 # Mach-O 32bit
+      - fmt/693 # Mach-O 64bit
+    wikidata: Q2627217
   endian: le
 seq:
   - id: magic

@@ -2,7 +2,9 @@ meta:
   id: vfat
   # actually FAT12
   xref:
-    justsolve: FAT12
+    forensicswiki: FAT
+    justsolve: FAT
+    wikidata: Q190167
   tags:
     - dos
   license: CC0-1.0

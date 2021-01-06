@@ -1,6 +1,8 @@
 meta:
   id: fallout2_dat
-  application: Fallout2
+  application: Fallout 2
+  xref:
+    wikidata: Q32097899
   license: CC0-1.0
   endian: le
 types:

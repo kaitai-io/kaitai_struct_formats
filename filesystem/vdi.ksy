@@ -5,6 +5,11 @@ meta:
     - VirtualBox
     - QEMU
     - VMWare Workstation
+  file-extension: vdi
+  xref:
+    forensicswiki: Virtual_Disk_Image_(VDI)
+    pronom: fmt/726
+    wikidata: Q29209126
   license: GPL3.0+
   encoding: utf-8
   endian: le

@@ -1,6 +1,10 @@
 meta:
   id: gpt_partition_table
   title: GPT (GUID) partition table
+  xref:
+    forensicswiki: GPT
+    justsolve: GUID_Partition_Table
+    wikidata: Q603889
   license: CC0-1.0
   endian: le
 doc-ref: Specification taken from https://en.wikipedia.org/wiki/GUID_Partition_Table

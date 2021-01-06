@@ -3,6 +3,9 @@ meta:
   title: MagicaVoxel File
   application: MagicaVoxel
   file-extension: vox
+  xref:
+    pronom: fmt/976
+    wikidata: Q50374901
   license: MIT
   ks-version: 0.9 # for doc-ref array
   endian: le

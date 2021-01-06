@@ -2,7 +2,10 @@ meta:
   id: genmidi_op2
   title: GENMIDI.OP2 OPL2 sound bank
   file-extension: op2
+  xref:
+    wikidata: Q32098356
   license: CC0-1.0
+  ks-version: 0.9
   encoding: ASCII
   endian: le
 doc: |
@@ -15,7 +18,10 @@ doc: |
 
   * Original Doom game engine (and games based on it: Heretic, Hexen, Strife, Chex Quest)
   * Raptor: Call of the Shadows
-doc-ref: http://www.fit.vutbr.cz/~arnost/muslib/op2_form.zip http://doom.wikia.com/wiki/GENMIDI
+doc-ref:
+  - http://www.fit.vutbr.cz/~arnost/muslib/op2_form.zip
+  - http://doom.wikia.com/wiki/GENMIDI
+  - http://www.shikadi.net/moddingwiki/OP2_Bank_Format
 seq:
   - id: magic
     contents: "#OPL_II#"

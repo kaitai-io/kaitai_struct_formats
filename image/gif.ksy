@@ -3,12 +3,14 @@ meta:
   title: GIF (Graphics Interchange Format) image file
   file-extension: gif
   xref:
+    forensicswiki: GIF
     justsolve: GIF
-    loc: fdd000133
+    loc: fdd000133 # GIF 89a
     mime: image/gif
     pronom:
-      - fmt/3
-      - fmt/4
+      - fmt/3 # GIF 87a
+      - fmt/4 # GIF 89a
+    wikidata: Q2192
   license: CC0-1.0
   endian: le
 doc: |

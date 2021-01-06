@@ -1,6 +1,8 @@
 meta:
   id: efivar_signature_list
   title: UEFI Variable with Signature List
+  xref:
+    wikidata: Q859398 # UEFI standard
   license: CC0-1.0
   endian: le
 doc: |

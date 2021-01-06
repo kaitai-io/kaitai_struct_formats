@@ -2,6 +2,8 @@ meta:
   id: gran_turismo_vol
   title: Gran Turismo File System (GTFS)
   file-extension: vol
+  xref:
+    wikidata: Q32096599
   license: CC0-1.0
   endian: le
 seq:
