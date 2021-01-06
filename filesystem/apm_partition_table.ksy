@@ -3,6 +3,7 @@ meta:
   title: APM (Apple Partition Map) partition table
   xref:
     forensicswiki: APM
+    justsolve: Apple_Partition_Map
     wikidata: Q375944
   tags:
     - filesystem
