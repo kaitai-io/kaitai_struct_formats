@@ -7,7 +7,7 @@ meta:
       - image/vnd.zbrush.pcx
       - image/x-pcx
     pronom:
-      # see `/enums/versions` key
+      # see `/enums/versions` map
       - fmt/86 # PCX 0
       - fmt/87 # PCX 2
       - fmt/88 # PCX 3
