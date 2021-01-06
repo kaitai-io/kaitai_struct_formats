@@ -10,7 +10,7 @@ meta:
   license: CC0-1.0
   encoding: ascii
   endian: be
-doc-ref: Specification taken from https://en.wikipedia.org/wiki/Apple_Partition_Map
+doc-ref: https://en.wikipedia.org/wiki/Apple_Partition_Map
 instances:
   sector_size:
     value: 0x200

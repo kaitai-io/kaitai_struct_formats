@@ -7,7 +7,7 @@ meta:
     wikidata: Q603889
   license: CC0-1.0
   endian: le
-doc-ref: Specification taken from https://en.wikipedia.org/wiki/GUID_Partition_Table
+doc-ref: https://en.wikipedia.org/wiki/GUID_Partition_Table
 instances:
   sector_size:
     value: 0x200
