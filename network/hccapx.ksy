@@ -52,7 +52,7 @@ types:
           be able to crack the hash.
 
           On the other hand, it could be very important to know if
-          “only” message 1 and message 2 were captured or if for
+          "only" message 1 and message 2 were captured or if for
           instance message 3 and/or message 4 were captured too. If
           message 3 and/or message 4 were captured it should be a hard
           evidence that the connection was established and that the

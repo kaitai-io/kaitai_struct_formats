@@ -20,7 +20,7 @@ doc: |
 
   GIF format allows encoding of palette-based images up to 256 colors
   (each of the colors can be chosen from a 24-bit RGB
-  colorspace). Image data stream uses LZW (Lempel–Ziv–Welch) lossless
+  colorspace). Image data stream uses LZW (Lempel-Ziv-Welch) lossless
   compression.
 
   Over the years, several version of the format were published and

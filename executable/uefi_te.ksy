@@ -16,7 +16,7 @@ meta:
 doc: |
   This type of executables could be found inside the UEFI firmware. The UEFI
   firmware is stored in SPI flash memory, which is a chip soldered on a
-  system’s motherboard. UEFI firmware is very modular: it usually contains
+  system's motherboard. UEFI firmware is very modular: it usually contains
   dozens, if not hundreds, of executables. To store all these separates files,
   the firmware is laid out in volumes using the Firmware File System (FFS), a
   file system specifically designed to store firmware images. The volumes
