@@ -17,14 +17,17 @@ seq:
   - id: depthmap_info
     type: type_depthmap_info
   - id: confidence_map
+    doc: the confidence map, probably
     type: sector
     repeat: until
     repeat-until: not _.has_next
   - id: depthmap
+    doc: the depthmap
     size-eos: true
     
 types:
   info:
+    doc: Header of the file. Contains the raw lenght and many fields i still don't undestand
     seq:
       - id: unknown1
         type: u2
@@ -33,33 +36,52 @@ types:
       - id: unknown3
         type: u2
       - id: unknown4
-        type: u1
+        type: u2
       - id: unknown5
-        type: u4
+        type: u2
       - id: unknown6
-        type: u4
-      - id: padding1
-        size: 5
+        type: u2
+      - id: depth_size
+        type: u2
       - id: unknown7
+        type: u2
+      - id: padding1
+        size: 4
+      - id: unknown8
         type: u4
-      - id: padding2
+      - id: unknown9
         type: u4
+  
   padding80:
+    doc: 1kb of 0x80
     seq:
-    - id: padding
-      size: 0x400
+    - id: head
+      contents: [0x80]
+    - id: padding 
+      size: 1022
+    - id: tail
+      contents: [0x80]
 
-  type_depthmap_info:
+
+  type_depthmap_info: 
+    doc: 17+1007 = 1kb, info about the shape of the depthmap
     seq:
-    - id: padding
-      size: 4
-    - id: depthmap_width
+    - id: head
+      contents: [01,00,0xFF,0xFF]
+    - id: image_width
       type: u4
+    - id: image_height_padded 
+      type: u4
+      doc: the size of the height _after padding_, the real image will be shorter
     - id: unknown1
       type: u4
+    - id: is_landscape
+      type: u1      
     - id: data
-      size: 1012
+      size: 1007
+  
   sector:
+    doc: A sector of the confidence map, probably. I still don't undestand this part.
     seq:
       - id: padding
         size: 128
