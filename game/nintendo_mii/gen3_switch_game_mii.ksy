@@ -4,7 +4,7 @@ meta:
     - ufsd
   endian: le
 seq:
-  - id: unknown_data
+  -
     type: u1
     repeat: expr
     repeat-expr: 16
@@ -14,7 +14,7 @@ seq:
     size: 20
     encoding: utf-16
     doc: Mii name. Can be up to 10 characters long. Different from the Mii name that appears in Smash - in game, this is never seen.
-  - id: unknown_buffer
+  -
     type: u1
     repeat: expr
     repeat-expr: 3
@@ -31,7 +31,7 @@ seq:
   - id: body_weight
     type: u1
     doc: Body weight. Ranges from 0 to 127, small to large.
-  - id: unknown_buffer2
+  -
     type: u1
     repeat: expr
     repeat-expr: 2
@@ -162,7 +162,7 @@ seq:
   - id: mole_vertical
     type: u1
     doc: Mole Y (vertical) position. Ranges from 30 to 0, low to high.
-  - id: unknown_buffer3
+  -
     type: u1
     repeat: expr
     repeat-expr: 1

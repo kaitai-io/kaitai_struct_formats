@@ -5,7 +5,7 @@ meta:
     - ffsd
   endian: le
 seq:
-  - id: unknown_1
+  -
     type: u1
     doc: Always 3?
   - id: character_set
@@ -18,7 +18,7 @@ seq:
     type: b1
   - id: copying
     type: b1
-  - id: unknown_2
+  -
     type: b2
   - id: mii_position_slot_index
     type: b4
@@ -26,7 +26,7 @@ seq:
     type: b4
   - id: version
     type: b4
-  - id: unknown_3
+  -
     type: b4
   - id: system_id
     type: u1
@@ -64,7 +64,7 @@ seq:
     type: b4
   - id: hair_type
     type: u1
-  - id: unknown_5
+  -
     type: b4
   - id: hair_flip
     type: b1

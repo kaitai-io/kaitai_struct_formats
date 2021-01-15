@@ -148,7 +148,7 @@ seq:
     size: 20
     encoding: utf-16
     doc: Mii name. Can be up to 10 characters long.
-  - id: unknown
+  -
     type: u1
     repeat: expr
     repeat-expr: 16
