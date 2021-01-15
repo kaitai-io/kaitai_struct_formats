@@ -69,30 +69,39 @@ meta:
     - bumii
     - bvege
     - bactcapt
+  xref:
+    zeldamods: AAMP
   endian: le
 seq:
   - id: header
     type: header
+    doc-ref: https://zeldamods.org/wiki/AAMP#Header
   - id: parameter_lists
     type: parameter_list
     repeat: expr
     repeat-expr: header.num_lists
+    doc-ref: https://zeldamods.org/wiki/AAMP#Parameter_list
   - id: parameter_objects
     type: parameter_object
     repeat: expr
     repeat-expr: header.num_objects
+    doc-ref: https://zeldamods.org/wiki/AAMP#Parameter_object
   - id: parameters
     type: parameter
     repeat: expr
     repeat-expr: header.num_parameters
+    doc-ref: https://zeldamods.org/wiki/AAMP#Parameter
   - id: data_section
     size: header.data_section_size
+    doc-ref: https://zeldamods.org/wiki/AAMP#Section_order
   - id: string_section
     size: header.string_section_size
+    doc-ref: https://zeldamods.org/wiki/AAMP#Section_order
   - id: unknown_uint32_section
     type: u1
     repeat: eos
     doc: May be unused.
+    doc-ref: https://zeldamods.org/wiki/AAMP#Section_order
 types:
   header:
     seq:
@@ -164,9 +173,10 @@ types:
       data_offset:
         value: data
         doc:  Offset to data, divided by 4 and relative to parameter start.
-      param_type:
+      parameter_type:
         value: data >> 24
         enum: parameter_type
+        doc-ref: https://zeldamods.org/wiki/AAMP#ParameterType
 enums:
   parameter_type:
     0:  bool
