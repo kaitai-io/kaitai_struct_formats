@@ -1,5 +1,8 @@
 meta:
-  id: gen2_wiiu_3ds_miitomo
+  id: gen2_wiiu_3ds_miitomo_mii
+  file-extension:
+    - cfsd
+    - ffsd
   endian: le
 seq:
   - id: unknown_1
@@ -7,10 +10,10 @@ seq:
     doc: Always 3?
   - id: character_set
     type: b2
-    doc: 0=JPN+USA+EUR, 1=CHN, 2=KOR, 3=TWN
+    enum: character_set
   - id: region_lock
     type: b2
-    doc: 0=no lock, 1=JPN, 2=USA, 3=EUR
+    enum: region_lock
   - id: profanity_flag
     type: b1
   - id: copying
@@ -44,7 +47,7 @@ seq:
   - id: mii_name
     type: str
     size: 20
-    encoding: utf-16le
+    encoding: utf-16
   - id: body_height
     type: u1
   - id: body_weight
@@ -68,29 +71,41 @@ seq:
   - id: hair_color
     type: b3
   - id: eye
-    type: u4le
+    type: u4
   - id: eyebrow
-    type: u4le
+    type: u4
   - id: nose
-    type: u2le
+    type: u2
   - id: mouth
-    type: u2le
+    type: u2
   - id: mouth2
-    type: u2le
+    type: u2
   - id: beard
-    type: u2le
+    type: u2
   - id: glasses
-    type: u2le
+    type: u2
   - id: mole
-    type: u2le
+    type: u2
   - id: creator_name
     type: str
     size: 20
-    encoding: utf-16le
+    encoding: utf-16
   - id: padding2
-    type: u2le
+    type: u2
   - id: checksum
-    type: u2le
+    type: u2
+enums:
+  character_set:
+    0: jpn_usa_eur
+    1: chn
+    2: kor
+    3: twn
+  region_lock:
+    0: no_lock
+    1: jpn
+    2: usa
+    3: eur
+
 instances:
   favorite:
     value: data_1 >> 14 & 1

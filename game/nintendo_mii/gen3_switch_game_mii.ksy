@@ -1,5 +1,7 @@
 meta:
-  id: gen3_switchgame
+  id: gen3_switch_game_mii
+  file-extension:
+    - ufsd
   endian: le
 seq:
   - id: unknown_data
@@ -10,7 +12,7 @@ seq:
   - id: mii_name
     type: str
     size: 20
-    encoding: utf-16le
+    encoding: utf-16
     doc: Mii name. Can be up to 10 characters long. Different from the Mii name that appears in Smash - in game, this is never seen.
   - id: unknown_buffer
     type: u1

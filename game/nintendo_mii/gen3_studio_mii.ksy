@@ -1,5 +1,7 @@
 meta:
-  id: gen3_studio
+  id: gen3_studio_mii
+  file-extension:
+    - mnms
   endian: le
 seq:
   - id: facial_hair_color
