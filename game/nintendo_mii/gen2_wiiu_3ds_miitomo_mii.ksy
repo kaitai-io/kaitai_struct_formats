@@ -105,7 +105,6 @@ enums:
     1: jpn
     2: usa
     3: eur
-
 instances:
   favorite:
     value: data_1 >> 14 & 1

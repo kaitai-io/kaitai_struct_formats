@@ -63,7 +63,7 @@ seq:
     type: b1
     doc: Whether the Mii was allowed to travel to other consoles via WiiConnect24. 0 = yes, 1 = no.
   - id: unknown_2
-    type: 
+    type: b1
     doc: Currently unknown data.
   - id: downloaded
     type: b1
@@ -169,26 +169,36 @@ seq:
     doc: Glasses Y (vertical) position. Ranges from 20 to 0, low to high.
   - id: facial_hair_mustache
     type: b2
+    doc: Mustache type. Ranges from 0 to 3.
   - id: facial_hair_beard
     type: b2
+    doc: Beard type. Ranges from 0 to 3.
   - id: facial_hair_color
     type: b3
+    doc: Facial hair color. Ranges from 0 to 7. Not ordered the same as visible in editor.
   - id: facial_hair_size
     type: b4
+    doc: Mustache size. Ranges from 0 to 8, small to large.
   - id: facial_hair_vertical
     type: b5
+    doc: Mustache Y (vertical) position. Ranges from 22 to 0, low to high.
   - id: mole_enable
     type: b1
+    doc: Enable beauty mark. 0 = no, 1 = yes.
   - id: mole_size
     type: b4
+    doc: Beauty mark size. Ranges from 0 to 8, small to large.
   - id: mole_vertical
     type: b5
+    doc: Beauty mark Y (vertical) position. Ranges from 30 to 0, low to high.
   - id: mole_horizontal
     type: b5
+    doc: Beauty mark X (horizontal) position. Ranges from 0 to 16, left to right.
   - id: unknown_11
     size: 1
     doc: Currently unknown data.
   - id: creator_name
     type: str
     size: 20
-    encoding: utf-16
+    encoding: utf-16be
+    doc: Mii creator's name. Can be up to 10 characters long.
