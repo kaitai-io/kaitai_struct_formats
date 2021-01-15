@@ -71,7 +71,8 @@ seq:
     type: u1
     doc: Favorite color. Ranges from 0 to 11.
   - id: gender
-    type: u1
+    type: 
+    enum: gender
     doc: Mii gender. 0 = male, 1 = female.
   - id: glasses_color
     type: u1
@@ -142,3 +143,7 @@ seq:
   - id: nose_vertical
     type: u1
     doc: Nose Y (vertical) position. Ranges from 18 to 0, low to high.
+enums:
+  gender:
+    0: male
+    1: female

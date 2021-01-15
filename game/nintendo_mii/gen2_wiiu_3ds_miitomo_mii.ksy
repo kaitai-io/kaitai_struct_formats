@@ -105,6 +105,9 @@ enums:
     1: jpn
     2: usa
     3: eur
+  gender:
+    0: male
+    1: female
 instances:
   favorite:
     value: data_1 >> 14 & 1
@@ -116,6 +119,7 @@ instances:
     value: data_1 >> 1 & 15
   gender:
     value: data_1 & 1
+    enum: gender
   eye_vertical:
     value: eye >> 25 & 31
   eye_horizontal:

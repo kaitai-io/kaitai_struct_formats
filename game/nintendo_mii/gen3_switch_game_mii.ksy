@@ -167,3 +167,7 @@ seq:
     repeat: expr
     repeat-expr: 1
     doc: Currently unknown data - likely a 00 buffer between the Mii data and the Smash Ultimate data.
+enums:
+  gender:
+    0: male
+    1: female

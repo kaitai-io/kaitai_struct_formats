@@ -13,6 +13,7 @@ seq:
     doc: Has no apparent effect.
   - id: gender
     type: b1
+    enum: gender
     doc: Mii gender. 0 = male, 1 = female.
   - id: birth_month
     type: b4
@@ -41,7 +42,7 @@ seq:
     type: u1
     repeat: expr
     repeat-expr: 4
-    doc: Unique Mii identifier. Also governs color of Mii's pants
+    doc: Unique Mii identifier. Also governs color of the Mii's pants.
   - id: console_id
     type: u1
     repeat: expr
@@ -202,3 +203,7 @@ seq:
     size: 20
     encoding: utf-16be
     doc: Mii creator's name. Can be up to 10 characters long.
+enums:
+  gender:
+    0: male
+    1: female
