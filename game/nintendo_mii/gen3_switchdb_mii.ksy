@@ -7,13 +7,13 @@ seq:
   - id: hair_type
     type: u1
     doc: Hair type. Ranges from 0 to 131. Not ordered the same as visible in editor.
-  - id: mole_enable
+  - id: is_mole_enabled
     type: b1
     doc: Enable mole. 0 = no, 1 = yes.
   - id: body_height
     type: b7
     doc: Body height. Ranges from 0 to 127, short to tall. In the Mii editor, pressing right will add 1 to this value, and pressing left will subtract 1, allowing for precise editing.
-  - id: hair_flip
+  - id: is_hair_flipped
     type: b1
     doc: Flip hair. 0 = no, 1 = yes.
   - id: body_weight

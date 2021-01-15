@@ -24,7 +24,7 @@ seq:
   - id: favorite_color
     type: b4
     doc: Favorite color. Ranges from 0 to 11.
-  - id: favorite
+  - id: is_favorite
     type: b1
     doc: Whether the Mii is a favorite or not.
   - id: mii_name
@@ -60,13 +60,13 @@ seq:
   -
     type: b3
     doc: Currently unknown data.
-  - id: no_mingle
+  - id: is_not_mingled
     type: b1
     doc: Whether the Mii was allowed to travel to other consoles via WiiConnect24. 0 = yes, 1 = no.
   -
     type: b1
     doc: Currently unknown data.
-  - id: downloaded
+  - id: is_downloaded
     type: b1
     doc: Whether the Mii was downloaded from the Check Mii Out channel.
   - id: hair_type
@@ -75,7 +75,7 @@ seq:
   - id: hair_color
     type: b3
     doc: Hair color. Ranges from 0 to 7. Not ordered the same as visible in editor.
-  - id: hair_flip
+  - id: is_hair_flipped
     type: b1
     doc: Flip hair. 0 = no, 1 = yes.
   -
@@ -183,7 +183,7 @@ seq:
   - id: facial_hair_vertical
     type: b5
     doc: Mustache Y (vertical) position. Ranges from 22 to 0, low to high.
-  - id: mole_enable
+  - id: is_mole_enabled
     type: b1
     doc: Enable beauty mark. 0 = no, 1 = yes.
   - id: mole_size

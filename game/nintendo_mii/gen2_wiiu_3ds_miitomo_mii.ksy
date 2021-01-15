@@ -7,16 +7,16 @@ meta:
 seq:
   -
     type: u1
-    doc: Always 3?
+    doc: Always 3? May be an internal version identifier?
   - id: character_set
     type: b2
     enum: character_set
   - id: region_lock
     type: b2
     enum: region_lock
-  - id: profanity_flag
+  - id: is_profanity_flag_enabled
     type: b1
-  - id: copying
+  - id: is_copying_enabled
     type: b1
   -
     type: b2
@@ -58,6 +58,7 @@ seq:
     type: b4
   - id: mingle
     type: b1
+    doc: More info needed. Does this mean IS Mingled or IS NOT Mingled, such as on the Wii?
   - id: face_makeup
     type: b4
   - id: face_wrinkles
@@ -66,7 +67,7 @@ seq:
     type: u1
   -
     type: b4
-  - id: hair_flip
+  - id: is_hair_flipped
     type: b1
   - id: hair_color
     type: b3
