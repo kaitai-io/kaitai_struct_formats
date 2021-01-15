@@ -108,12 +108,10 @@ types:
     - id: magic
       contents: AAMP
     - id: version
-      type: u1
+      type: u4
       doc: Should be "2"
     - id: flags
-      type: u1
-      repeat: expr
-      repeat-expr: 7
+      type: u4
       doc: TODO: Flags (LittleEndian: 1 << 0, UTF8: 1 << 1)
     - id: file_size
       type: u4
@@ -144,14 +142,21 @@ types:
         type: u4
       - id: child_lists
         type: u4
-        doc: Number of child lists
       - id: child_objects
         type: u4
     instances:
       child_lists_offset:
-        value: child_lists
+        value: child_lists & 16
+        doc: Offset to child lists, divided by 4 and relative to parameter list start
       num_child_lists:
         value: child_lists >> 16
+        doc: Number of child lists
+      child_objects_offset:
+        value: child_objects & 16
+        doc: Offset to child objects, divided by 4 and relative to parameter list start
+      num_child_objects:
+        value: child_objects >> 16
+        doc: Number of child objects
   parameter_object:
     seq:
       - id: name_crc32
@@ -160,7 +165,7 @@ types:
         type: u4
     instances:
       child_offset:
-        value: data
+        value: data & 16
       num_child_params:
         value: data >> 16
   parameter:
@@ -171,7 +176,7 @@ types:
         type: u4
     instances:
       data_offset:
-        value: data
+        value: data & 24
         doc:  Offset to data, divided by 4 and relative to parameter start.
       parameter_type:
         value: data >> 24

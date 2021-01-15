@@ -50,10 +50,10 @@ seq:
     doc: Unique identifier for the console the Mii was created on. Consists of a checksum of the first 3 bytes of the console's mac address, followed by the last 3 bytes of the console's mac address
   - id: face_type
     type: b3
-    doc: Face shape. Ranges from 0 to 11. Not ordered the same as visible in editor.
+    doc: Face shape. Ranges from 0 to 7. Not ordered the same as visible in editor.
   - id: face_color
     type: b3
-    doc: Skin color. Ranges from 0 to 9. Not ordered the same as visible in editor. A map of the internal values in correlation to the Mii editor is at /maps.txt/{skin}.
+    doc: Skin color. Ranges from 0 to 5. Not ordered the same as visible in editor. A map of the internal values in correlation to the Mii editor is at /maps.txt/{skin}.
   - id: facial_feature
     type: b4
     doc: Facial feature. Ranges from 0 to 11.
@@ -132,42 +132,43 @@ seq:
     doc: Currently unknown data.
   - id: nose_type
     type: b4
-    doc: Nose type. Ranges from 0 to 17. Not ordered the same as visible in editor. A map of the internal values in correlation to the Mii editor is at /maps.txt/{nose}.
+    doc: Nose type. Ranges from 0 to 11. Not ordered the same as visible in editor.
   - id: nose_size
     type: b4
     doc: Nose size. Ranges from 0 to 8, small to big.
   - id: nose_vertical
     type: b5
-    doc: Nose Y (vertical) position. Ranges from 18 to 0, low to high.
+    doc: Nose Y (vertical) position. Ranges from 0 to 18, high to low.
   -
     type: b3
+    doc: Currently unknown data.
   - id: mouth_type
     type: b5
-    doc: Mouth type. Ranges from 0 to 35. Not ordered the same as visible in editor. A map of the internal values in correlation to the Mii editor is at /maps.txt/{mouth}.
+    doc: Mouth type. Ranges from 0 to 23.
   - id: mouth_color
     type: b2
-    doc: Mouth color. The default colors are ordered the same as visible in editor, ranging from 19 to 23. The custom colors are not and range from 0 to 99. A map of the internal values in correlation to the Mii editor is at /maps.txt/{colors} for custom colors.
+    doc: Mouth color. Ranges from 0 to 2.
   - id: mouth_size
     type: b4
     doc: Mouth size. Ranges from 0 to 8, small to large.
   - id: mouth_vertical
     type: b5
-    doc: Mouth Y (vertical) position. Ranges from 18 to 0, low to high.
+    doc: Mouth Y (vertical) position. Ranges from 0 to 18, high to low.
   - id: glasses_type
     type: b4
-    doc: Glasses type. Ranges from 0 to 19. Not ordered the same as visible in editor. A map of the internal values in correlation to the Mii editor is at /maps.txt/{glasses}.
+    doc: Glasses type. Ranges from 0 to 8.
   - id: glasses_color
     type: b3
-    doc: Glasses color. Ranges from 0 to 99. Not ordered the same as visible in editor. A map of the internal values in correlation to the Mii editor is at /maps.txt/{glasses-color} for default colors and /maps.txt/{colors} for custom colors.
+    doc: Glasses color. Ranges from 0 to 5
   -
     type: b1
-    doc: Currently unknown data.
+    doc: Currently unknown data. When enabled, mii does not appear.
   - id: glasses_size
     type: b3
     doc: Glasses size. Ranges from 0 to 7, small to large.
   - id: glasses_vertical
     type: b5
-    doc: Glasses Y (vertical) position. Ranges from 20 to 0, low to high.
+    doc: Glasses Y (vertical) position. Ranges from 0 to 20, high to low.
   - id: facial_hair_mustache
     type: b2
     doc: Mustache type. Ranges from 0 to 3.
