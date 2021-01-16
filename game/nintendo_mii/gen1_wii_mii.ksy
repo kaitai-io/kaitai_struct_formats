@@ -17,10 +17,11 @@ seq:
     doc: Mii gender. 0 = male, 1 = female.
   - id: birth_month
     type: b4
-    doc: Mii birthday month, Ranges from 1 to 12
+    enum: month
+    doc: Mii birthday month, Ranges from 0 to 11
   - id: birth_day
     type: b5
-    doc: Mii birthday day, Ranges from 1 to 31
+    doc: Mii birthday day, Ranges from 0 to 30
   - id: favorite_color
     type: b4
     enum: favorite_color
@@ -222,4 +223,17 @@ enums:
     9:  brown
     10: white
     11: black
+  month:
+    0: january
+    1: february
+    2: march
+    3: april
+    4: may
+    5: june
+    6: july
+    7: august
+    8: september
+    9: october
+    10: november
+    11: december
   

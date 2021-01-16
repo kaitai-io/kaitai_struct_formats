@@ -147,7 +147,7 @@ seq:
   - id: mii_name
     type: str
     size: 20
-    encoding: utf-16
+    encoding: utf-16le
     doc: Mii name. Can be up to 10 characters long.
   -
     type: u1

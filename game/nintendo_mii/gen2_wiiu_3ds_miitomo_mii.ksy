@@ -47,7 +47,7 @@ seq:
   - id: mii_name
     type: str
     size: 20
-    encoding: utf-16
+    encoding: utf-16le
   - id: body_height
     type: u1
   - id: body_weight
@@ -90,7 +90,7 @@ seq:
   - id: creator_name
     type: str
     size: 20
-    encoding: utf-16
+    encoding: utf-16le
   - id: padding2
     type: u2
   - id: checksum
@@ -122,6 +122,19 @@ enums:
     9:  brown
     10: white
     11: black
+  month:
+    1: january
+    2: february
+    3: march
+    4: april
+    5: may
+    6: june
+    7: july
+    8: august
+    9: september
+    10: october
+    11: november
+    12: december
 instances:
   favorite:
     value: data_1 >> 14 & 1
@@ -132,6 +145,7 @@ instances:
     value: data_1 >> 5 & 31
   birth_month:
     value: data_1 >> 1 & 15
+    enum: month
   gender:
     value: data_1 & 1
     enum: gender

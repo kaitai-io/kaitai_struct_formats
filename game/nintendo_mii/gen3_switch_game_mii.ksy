@@ -12,7 +12,7 @@ seq:
   - id: mii_name
     type: str
     size: 20
-    encoding: utf-16
+    encoding: utf-16le
     doc: Mii name. Can be up to 10 characters long. Different from the Mii name that appears in Super Smash Bros. Ultimate - in that game, this is never seen.
   - id: font_region
     type: u1
