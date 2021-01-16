@@ -132,7 +132,7 @@ types:
     - id: unknown
       size: 4
     - id: pio_type
-      type: str
+      type: strz
       size: 4
       encoding: utf-8
       doc: typically "xml"
