@@ -22,10 +22,11 @@ seq:
     doc: Font region. Currently, it's unknown which regions are supported.
   - id: favorite_color
     type: u1
-    enum: favorite_color
+    enum: favorite_colors
     doc: Favorite color. Ranges from 0 to 11.
   - id: gender
     type: u1
+    enum: genders
     doc: Mii gender. 0 = male, 1 = female.
   - id: body_height
     type: u1
@@ -173,10 +174,10 @@ seq:
     repeat-expr: 1
     doc: Currently unknown data - likely a 00 buffer between the Mii data and the Smash Ultimate data.
 enums:
-  gender:
+  genders:
     0: male
     1: female
-  favorite_color:
+  favorite_colors:
     0:  red
     1:  orange
     2:  yellow

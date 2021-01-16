@@ -3,7 +3,6 @@ meta:
   title: Nintendo Mii Studio character data
   file-extension:
     - mnms
-  endian: le
 seq:
   - id: facial_hair_color
     type: u1

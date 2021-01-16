@@ -14,10 +14,10 @@ seq:
       May be an internal version identifier?
   - id: character_set
     type: b2
-    enum: character_set
+    enum: character_sets
   - id: region_lock
     type: b2
-    enum: region_lock
+    enum: region_locks
   - id: is_profanity_flag_enabled
     type: b1
   - id: is_copying_enabled
@@ -102,64 +102,24 @@ seq:
     type: u2
   - id: checksum
     type: u2
-enums:
-  character_set:
-    0: jpn_usa_eur
-    1: chn
-    2: kor
-    3: twn
-  region_lock:
-    0: no_lock
-    1: jpn
-    2: usa
-    3: eur
-  gender:
-    0: male
-    1: female
-  favorite_color:
-    0:  red
-    1:  orange
-    2:  yellow
-    3:  light_green
-    4:  green
-    5:  blue
-    6:  light_blue
-    7:  pink
-    8:  purple
-    9:  brown
-    10: white
-    11: black
-  month:
-    1: january
-    2: february
-    3: march
-    4: april
-    5: may
-    6: june
-    7: july
-    8: august
-    9: september
-    10: october
-    11: november
-    12: december
 instances:
   favorite:
     value: data_1 >> 14 & 1
     doc: Whether the Mii is a favorite or not.
   favorite_color:
     value: data_1 >> 10 & 15
-    enum: favorite_color
+    enum: favorite_colors
     doc: Favorite color. Ranges from 0 to 11.
   birth_day:
     value: data_1 >> 5 & 31
     doc: Mii birthday day, Ranges from 0 to 30
   birth_month:
     value: data_1 >> 1 & 15
-    enum: month
+    enum: months
     doc: Mii birthday month, Ranges from 0 to 11
   gender:
     value: data_1 & 1
-    enum: gender
+    enum: genders
     doc: Mii gender. 0 = male, 1 = female.
   eye_vertical:
     value: eye >> 25 & 31
@@ -242,4 +202,43 @@ instances:
     value: mole >> 1 & 15
   mole_enable:
     value: mole >> 15
-    
+enums:
+  character_sets:
+    0: jpn_usa_eur
+    1: chn
+    2: kor
+    3: twn
+  region_locks:
+    0: no_lock
+    1: jpn
+    2: usa
+    3: eur
+  genders:
+    0: male
+    1: female
+  favorite_colors:
+    0:  red
+    1:  orange
+    2:  yellow
+    3:  light_green
+    4:  green
+    5:  blue
+    6:  light_blue
+    7:  pink
+    8:  purple
+    9:  brown
+    10: white
+    11: black
+  months:
+    0: january
+    1: february
+    2: march
+    3: april
+    4: may
+    5: june
+    6: july
+    7: august
+    8: september
+    9: october
+    10: november
+    11: december

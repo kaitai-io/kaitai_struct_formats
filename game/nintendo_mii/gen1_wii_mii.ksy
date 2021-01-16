@@ -14,18 +14,18 @@ seq:
     doc: Has no apparent effect.
   - id: gender
     type: b1
-    enum: gender
+    enum: genders
     doc: Mii gender. 0 = male, 1 = female.
   - id: birth_month
     type: b4
-    enum: month
+    enum: months
     doc: Mii birthday month, Ranges from 0 to 11
   - id: birth_day
     type: b5
     doc: Mii birthday day, Ranges from 0 to 30
   - id: favorite_color
     type: b4
-    enum: favorite_color
+    enum: favorite_colors
     doc: Favorite color. Ranges from 0 to 11.
   - id: is_favorite
     type: b1
@@ -218,12 +218,12 @@ seq:
 instances:
   mii_type:
     value: mii_id[0]
-    enum: mii_type
+    enum: mii_types
 enums:
-  gender:
+  genders:
     0: male
     1: female
-  favorite_color:
+  favorite_colors:
     0:  red
     1:  orange
     2:  yellow
@@ -236,7 +236,7 @@ enums:
     9:  brown
     10: white
     11: black
-  month:
+  months:
     0: january
     1: february
     2: march
@@ -249,7 +249,7 @@ enums:
     9: october
     10: november
     11: december
-  mii_type:
+  mii_types:
     0x00: special_mii_gold_pants
     0x20: normal_mii_black_pants
     0x40: special_mii_black_pants

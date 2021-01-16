@@ -25,7 +25,7 @@ seq:
     doc: Hair color. Ranges from 0 to 99. Not ordered the same as visible in editor.
   - id: gender
     type: b1
-    enum: gender
+    enum: genders
     doc: Mii gender. 0 = male, 1 = female.
   - id: eye_color
     type: b7
@@ -107,7 +107,7 @@ seq:
     doc: Face shape. Ranges from 0 to 11. Not ordered the same as visible in editor.
   - id: favorite_color
     type: b4
-    enum: favorite_color
+    enum: favorite_colors
     doc: Favorite color. Ranges from 0 to 11.
   - id: face_wrinkles
     type: b4
@@ -161,10 +161,10 @@ seq:
     repeat-expr: 4
     doc: Mii ID. An identifier used to save Miis in most games.
 enums:
-  gender:
+  genders:
     0: male
     1: female
-  favorite_color:
+  favorite_colors:
     0:  red
     1:  orange
     2:  yellow
