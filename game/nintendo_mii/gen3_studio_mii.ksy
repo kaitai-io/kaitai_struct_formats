@@ -96,7 +96,7 @@ seq:
     enum: favorite_color
     doc: Favorite color. Ranges from 0 to 11.
   - id: gender
-    type: 
+    type: b1
     enum: gender
     doc: Mii gender. 0 = male, 1 = female.
   - id: glasses_color
