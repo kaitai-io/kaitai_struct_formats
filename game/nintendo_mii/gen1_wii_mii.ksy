@@ -33,7 +33,7 @@ seq:
     type: str
     size: 20
     doc: Mii name. Can be up to 10 characters long.
-    encoding: utf-16
+    encoding: utf-16be
   - id: body_height
     type: u1
     doc: Body height. Ranges from 0 to 127, short to tall.
