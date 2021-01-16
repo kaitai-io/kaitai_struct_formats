@@ -98,9 +98,10 @@ seq:
     size: header.string_section_size
     doc-ref: https://zeldamods.org/wiki/AAMP#Section_order
   - id: unknown_uint32_section
-    type: u1
-    repeat: eos
-    doc: May be unused.
+    type: u4
+    repeat: expr
+    repeat-expr: header.num_unknown_uints
+    doc: Purpose is unknown. May be unused.
     doc-ref: https://zeldamods.org/wiki/AAMP#Section_order
 types:
   header:
@@ -112,7 +113,11 @@ types:
       doc: Should be "2"
     - id: flags
       type: u4
-      doc: TODO: Flags (LittleEndian: 1 << 0, UTF8: 1 << 1)
+      doc: |
+        TODO
+        Flags (LittleEndian 1 << 0, UTF8 1 << 1)
+        What does this mean?
+      doc-ref: https://zeldamods.org/wiki/AAMP#Header
     - id: file_size
       type: u4
     - id: pio_verision
@@ -129,8 +134,9 @@ types:
       type: u4
     - id: string_section_size
       type: u4
-    - id: unknown
+    - id: num_unknown_uints
       size: 4
+      doc: number of uint32s after the string section
     - id: pio_type
       type: strz
       size: 4
