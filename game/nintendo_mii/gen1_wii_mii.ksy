@@ -198,7 +198,7 @@ seq:
     type: b5
     doc: Beauty mark X (horizontal) position. Ranges from 0 to 16, left to right.
   -
-    size: 1
+    type: b1
     doc: Currently unknown data.
   - id: creator_name
     type: str
