@@ -93,11 +93,11 @@ seq:
     doc: Face wrinkles. Ranges from 0 to 11.
   - id: favorite_color
     type: u1
-    enum: favorite_color
+    enum: favorite_colors
     doc: Favorite color. Ranges from 0 to 11.
   - id: gender
     type: b1
-    enum: gender
+    enum: genders
     doc: Mii gender. 0 = male, 1 = female.
   - id: glasses_color
     type: u1
@@ -202,10 +202,10 @@ seq:
     type: u1
     doc: Nose Y (vertical) position. Ranges from 18 to 0, low to high.
 enums:
-  gender:
+  genders:
     0: male
     1: female
-  favorite_color:
+  favorite_colors:
     0:  red
     1:  orange
     2:  yellow
