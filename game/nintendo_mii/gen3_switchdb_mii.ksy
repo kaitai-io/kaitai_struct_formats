@@ -106,6 +106,7 @@ seq:
     doc: Face shape. Ranges from 0 to 11. Not ordered the same as visible in editor.
   - id: favorite_color
     type: b4
+    enum: favorite_color
     doc: Favorite color. Ranges from 0 to 11.
   - id: face_wrinkles
     type: b4
@@ -162,3 +163,16 @@ enums:
   gender:
     0: male
     1: female
+  favorite_color:
+    0:  red
+    1:  orange
+    2:  yellow
+    3:  light_green
+    4:  green
+    5:  blue
+    6:  light_blue
+    7:  pink
+    8:  purple
+    9:  brown
+    10: white
+    11: black

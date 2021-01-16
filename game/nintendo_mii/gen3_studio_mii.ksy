@@ -69,6 +69,7 @@ seq:
     doc: Face wrinkles. Ranges from 0 to 11.
   - id: favorite_color
     type: u1
+    enum: favorite_color
     doc: Favorite color. Ranges from 0 to 11.
   - id: gender
     type: 
@@ -147,3 +148,16 @@ enums:
   gender:
     0: male
     1: female
+  favorite_color:
+    0:  red
+    1:  orange
+    2:  yellow
+    3:  light_green
+    4:  green
+    5:  blue
+    6:  light_blue
+    7:  pink
+    8:  purple
+    9:  brown
+    10: white
+    11: black

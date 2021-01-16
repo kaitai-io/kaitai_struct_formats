@@ -109,11 +109,25 @@ enums:
   gender:
     0: male
     1: female
+  favorite_color:
+    0:  red
+    1:  orange
+    2:  yellow
+    3:  light_green
+    4:  green
+    5:  blue
+    6:  light_blue
+    7:  pink
+    8:  purple
+    9:  brown
+    10: white
+    11: black
 instances:
   favorite:
     value: data_1 >> 14 & 1
   favorite_color:
     value: data_1 >> 10 & 15
+    enum: favorite_color
   birth_day:
     value: data_1 >> 5 & 31
   birth_month:
@@ -191,3 +205,4 @@ instances:
     value: mole >> 1 & 15
   mole_enable:
     value: mole >> 15
+    

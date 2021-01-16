@@ -4,23 +4,24 @@ meta:
     - ufsd
   endian: le
 seq:
-  -
+  - id: mii_id
     type: u1
     repeat: expr
     repeat-expr: 16
-    doc: Currently unknown data.
+    doc: Mii ID. An identifier used to save Miis in most games.
   - id: mii_name
     type: str
     size: 20
     encoding: utf-16
-    doc: Mii name. Can be up to 10 characters long. Different from the Mii name that appears in Smash - in game, this is never seen.
-  -
+    doc: Mii name. Can be up to 10 characters long. Different from the Mii name that appears in Super Smash Bros. Ultimate - in that game, this is never seen.
+  - id: font_region
     type: u1
     repeat: expr
     repeat-expr: 3
-    doc: Currently unknown data - likely a 00 buffer between the name and misc. info and the rest of the Mii data.
+    doc: Font region. Currently, it's unknown which regions are supported.
   - id: favorite_color
     type: u1
+    enum: favorite_color
     doc: Favorite color. Ranges from 0 to 11.
   - id: gender
     type: u1
@@ -31,17 +32,20 @@ seq:
   - id: body_weight
     type: u1
     doc: Body weight. Ranges from 0 to 127, small to large.
-  -
+  - id: special_type
     type: u1
     repeat: expr
     repeat-expr: 2
-    doc: Currently unknown data - likely a 00 buffer between the Mii body data and the Mii face data.
+    doc: |
+      Toggleable "special" type function (possibly a "key code" according to "SetSpecialMiiKeyCode".
+      There is no function to set this value, but there does exist function to check if it is set, with "IsEnabledSpecialMii".
+      Remains unset in every Mii [HEYimHeroic] looked at.
   - id: face_type
     type: u1
-    doc: Face shape. Ranges from 0 to 11. Not ordered the same as visible in editor. A map of the internal values in correlation to the Mii editor is at /maps.txt/{face}.
+    doc: Face shape. Ranges from 0 to 11. Not ordered the same as visible in editor.
   - id: face_color
     type: u1
-    doc: Skin color. Ranges from 0 to 9. Not ordered the same as visible in editor. A map of the internal values in correlation to the Mii editor is at /maps.txt/{skin}.
+    doc: Skin color. Ranges from 0 to 9. Not ordered the same as visible in editor.
   - id: face_wrinkles
     type: u1
     doc: Face wrinkles. Ranges from 0 to 11.
@@ -171,3 +175,16 @@ enums:
   gender:
     0: male
     1: female
+  favorite_color:
+    0:  red
+    1:  orange
+    2:  yellow
+    3:  light_green
+    4:  green
+    5:  blue
+    6:  light_blue
+    7:  pink
+    8:  purple
+    9:  brown
+    10: white
+    11: black
