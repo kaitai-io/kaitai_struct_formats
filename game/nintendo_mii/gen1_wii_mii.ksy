@@ -210,7 +210,7 @@ seq:
     doc: Mii creator's name. Can be up to 10 characters long.
   - id: checksum
     type: u2
-    repeat: eos
+    if: not _io.eof
     doc: |
       The key difference between RCD and RSD files:
       RSD files contain a 2-byte checksum at the end.
