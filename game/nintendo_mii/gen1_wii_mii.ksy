@@ -113,6 +113,7 @@ seq:
     type: b2
     doc: Currently unknown data.
   - id: eye_rotation
+    doc: Eye rotation. Ranges from 0 to 7. 
     type: b3
   - id: eye_vertical
     type: b5
@@ -206,6 +207,17 @@ seq:
     size: 20
     encoding: utf-16be
     doc: Mii creator's name. Can be up to 10 characters long.
+  - id: checksum
+    type: u2
+    repeat: eos
+    doc: |
+      The key difference between RCD and RSD files:
+      RSD files contain a 2-byte checksum at the end.
+      RCD files omit this checksum.
+instances:
+  mii_type:
+    value: mii_id[0]
+    enum: mii_type
 enums:
   gender:
     0: male
@@ -236,4 +248,11 @@ enums:
     9: october
     10: november
     11: december
-  
+  mii_type:
+    0x00: special_mii_gold_pants
+    0x20: normal_mii_black_pants
+    0x40: special_mii_black_pants
+    0x60: normal_mii_black_pants
+    0xC0: foreign_mii_blue_pants_uneditable
+    0xE0: normal_mii_black_pants
+    0x100: unknown
