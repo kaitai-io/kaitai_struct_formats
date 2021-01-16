@@ -218,7 +218,6 @@ seq:
 instances:
   mii_type:
     value: mii_id[0]
-    enum: mii_types
 enums:
   genders:
     0: male
@@ -249,11 +248,3 @@ enums:
     9: october
     10: november
     11: december
-  mii_types:
-    0x00: special_mii_gold_pants
-    0x20: normal_mii_black_pants
-    0x40: special_mii_black_pants
-    0x60: normal_mii_black_pants
-    0xC0: foreign_mii_blue_pants_uneditable
-    0xE0: normal_mii_black_pants
-    0x100: unknown
