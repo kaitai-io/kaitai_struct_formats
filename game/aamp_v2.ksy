@@ -185,7 +185,10 @@ types:
 enums:
   parameter_type:
     0:  bool
-    1:  f32
+    1:
+      id: f4
+      -orig-id: f32
+      doc-ref: https://zeldamods.org/wiki/AAMP#ParameterType
     2:  int
     3:  vec2
     4:  vec3
