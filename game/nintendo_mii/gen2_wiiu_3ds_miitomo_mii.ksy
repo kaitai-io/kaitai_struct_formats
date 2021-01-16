@@ -7,7 +7,10 @@ meta:
 seq:
   -
     type: u1
-    doc: Always 3? May be an internal version identifier?
+    doc: |
+      Currently unknown data.
+      Always 3?
+      May be an internal version identifier?
   - id: character_set
     type: b2
     enum: character_set
@@ -20,6 +23,7 @@ seq:
     type: b1
   -
     type: b2
+    doc: Currently unknown data.
   - id: mii_position_slot_index
     type: b4
   - id: mii_position_page_index
@@ -28,6 +32,7 @@ seq:
     type: b4
   -
     type: b4
+    doc: Currently unknown data.
   - id: system_id
     type: u1
     repeat: expr
@@ -67,6 +72,7 @@ seq:
     type: u1
   -
     type: b4
+    doc: Currently unknown data.
   - id: is_hair_flipped
     type: b1
   - id: hair_color
@@ -138,29 +144,45 @@ enums:
 instances:
   favorite:
     value: data_1 >> 14 & 1
+    doc: Whether the Mii is a favorite or not.
   favorite_color:
     value: data_1 >> 10 & 15
     enum: favorite_color
+    doc: Favorite color. Ranges from 0 to 11.
   birth_day:
     value: data_1 >> 5 & 31
+    doc: Mii birthday day, Ranges from 0 to 30
   birth_month:
     value: data_1 >> 1 & 15
     enum: month
+    doc: Mii birthday month, Ranges from 0 to 11
   gender:
     value: data_1 & 1
     enum: gender
+    doc: Mii gender. 0 = male, 1 = female.
   eye_vertical:
     value: eye >> 25 & 31
+    doc: |
+      Eye Y (vertical) position.
+      Ranges from 0 to 18, high to low.
   eye_horizontal:
     value: eye >> 21 & 15
+    doc: |
+      Eye X (horizontal) distance.
+      Ranges from 0 to 12, close to far.
   eye_rotation:
     value: eye >> 16 & 31
+    doc: Eye rotation. Ranges from 0 to 7.
   eye_stretch:
     value: eye >> 13 & 7
   eye_size:
     value: eye >> 9 & 7
+    doc: Eye size. Ranges from 0 to 7, small to big.
   eye_color:
     value: eye >> 6 & 7
+    doc: |
+      Eye color. Ranges from 0 to 5.
+      Not ordered the same as visible in editor.
   eye_type:
     value: eye & 63
   eyebrow_vertical:
