@@ -1,5 +1,6 @@
 meta:
   id: gen3_switch_game_mii
+  title: Switch game Mii character data
   file-extension:
     - ufsd
   endian: le

@@ -1,5 +1,6 @@
 meta:
   id: gen1_wii_mii
+  title: Wii Mii character data
   file-extension:
     - mii
     - mae

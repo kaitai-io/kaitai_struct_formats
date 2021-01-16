@@ -1,5 +1,6 @@
 meta:
   id: gen2_wiiu_3ds_miitomo_mii
+  title: Wii U, 3DS, Miitomo Mii character data
   file-extension:
     - cfsd
     - ffsd

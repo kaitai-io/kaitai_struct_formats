@@ -1,5 +1,6 @@
 meta:
   id: gen3_studio_mii
+  title: Nintendo Mii Studio character data
   file-extension:
     - mnms
   endian: le

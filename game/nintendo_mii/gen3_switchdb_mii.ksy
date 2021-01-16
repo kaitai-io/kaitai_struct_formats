@@ -1,5 +1,6 @@
 meta:
   id: gen3_switchdb_mii
+  title: SwitchDB Mii character data
   file-extension:
     - nfsd
   endian: le
