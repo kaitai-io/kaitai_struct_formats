@@ -26,7 +26,7 @@ seq:
   - id: gender
     type: b1
     enum: genders
-    doc: Mii gender. 0 = male, 1 = female.
+    doc: Mii gender.
   - id: eye_color
     type: b7
     doc: Eye color. Ranges from 0 to 99. Not ordered the same as visible in editor.

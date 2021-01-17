@@ -120,7 +120,7 @@ instances:
   gender:
     value: data_1 & 1
     enum: genders
-    doc: Mii gender. 0 = male, 1 = female.
+    doc: Mii gender.
   eye_vertical:
     value: eye >> 25 & 31
     doc: |

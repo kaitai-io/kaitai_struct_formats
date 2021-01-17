@@ -98,7 +98,7 @@ seq:
   - id: gender
     type: b1
     enum: genders
-    doc: Mii gender. 0 = male, 1 = female.
+    doc: Mii gender.
   - id: glasses_color
     type: u1
     doc: |

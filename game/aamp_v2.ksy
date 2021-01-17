@@ -146,46 +146,48 @@ types:
     seq:
       - id: name_crc32
         type: u4
-      - id: child_lists
-        type: u4
-      - id: child_objects
-        type: u4
-    instances:
-      child_lists_offset:
-        value: child_lists & 16
+        doc: |
+          CRC32 checksum of the name of this list.
+          Can be compared against this list to get the name:
+        doc-ref: https://github.com/KillzXGaming/AampLibrary/blob/master/AampLibraryCSharp/aamp_hashed_names.txt
+      - id: child_lists_offset
+        type: u2
         doc: Offset to child lists, divided by 4 and relative to parameter list start
-      num_child_lists:
-        value: child_lists >> 16
+      - id: num_child_lists
+        type: u2
         doc: Number of child lists
-      child_objects_offset:
-        value: child_objects & 16
+      - id: child_objects_offset
+        type: u2
         doc: Offset to child objects, divided by 4 and relative to parameter list start
-      num_child_objects:
-        value: child_objects >> 16
+      - id: num_child_objects
         doc: Number of child objects
   parameter_object:
     seq:
       - id: name_crc32
         type: u4
-      - id: data
-        type: u4
-    instances:
-      child_offset:
-        value: data & 16
-      num_child_params:
-        value: data >> 16
+        doc: |
+          CRC32 checksum of the name of this object.
+          Can be compared against this list to get the name:
+        doc-ref: https://github.com/KillzXGaming/AampLibrary/blob/master/AampLibraryCSharp/aamp_hashed_names.txt
+      - id: child_offset
+        type: u2
+        doc: Offset to child parameters, divided by 4 and relative to parameter object start
+      - id: num_child_params
+        type: u2
+        doc: Number of child parameters
   parameter:
     seq:
       - id: name_crc32
         type: u4
-      - id: data
-        type: u4
-    instances:
-      data_offset:
-        value: data & 24
+        doc: |
+          CRC32 checksum of the name of this parameter.
+          Can be compared against this list to get the name:
+        doc-ref: https://github.com/KillzXGaming/AampLibrary/blob/master/AampLibraryCSharp/aamp_hashed_names.txt
+      - id: data_offset
+        type: u2
         doc:  Offset to data, divided by 4 and relative to parameter start.
-      parameter_type:
-        value: data >> 24
+      - id: parameter_type
+        type: u2
         enum: parameter_type
         doc-ref: https://zeldamods.org/wiki/AAMP#ParameterType
 enums:

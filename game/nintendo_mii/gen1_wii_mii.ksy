@@ -7,6 +7,7 @@ meta:
     - miigx
     - rcd
     - rsd
+  bit-endian: be
   endian: be
 seq:
   - id: invalid
@@ -15,7 +16,6 @@ seq:
   - id: gender
     type: b1
     enum: genders
-    doc: Mii gender. 0 = male, 1 = female.
   - id: birth_month
     type: b4
     enum: months
@@ -213,7 +213,7 @@ seq:
     if: not _io.eof
     doc: |
       The key difference between RCD and RSD files:
-      RSD files contain a 2-byte checksum at the end.
+      RSD files contain a 2-byte CRC-16 CCITT checksum at the end.
       RCD files omit this checksum.
 instances:
   mii_type:

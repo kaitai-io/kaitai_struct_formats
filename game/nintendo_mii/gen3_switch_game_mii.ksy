@@ -29,7 +29,7 @@ seq:
   - id: gender
     type: u1
     enum: genders
-    doc: Mii gender. 0 = male, 1 = female.
+    doc: Mii gender.
   - id: body_height
     type: u1
     doc: Body height. Ranges from 0 to 127, short to tall.
