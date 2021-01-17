@@ -4,6 +4,7 @@ meta:
   file-extension:
     - cfsd
     - ffsd
+  license: AGPL-3.0-or-later
   endian: le
 seq:
   -

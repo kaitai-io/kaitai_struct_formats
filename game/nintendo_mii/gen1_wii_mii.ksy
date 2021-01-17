@@ -1,12 +1,19 @@
 meta:
   id: gen1_wii_mii
   title: Wii Mii character data
+  application:
+    - Mii Channel (Nintendo Wii channel)
+    - SaveGame Manager GX (Nintendo Wii homebrew)
+    - My Avatar Editor (Adobe Flash application)
   file-extension:
     - mii
     - mae
     - miigx
     - rcd
     - rsd
+  xref:
+    wiibrew: Mii_Data
+  license: AGPL-3.0-or-later
   bit-endian: be
   endian: be
 seq:
