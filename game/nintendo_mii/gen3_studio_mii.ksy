@@ -1,8 +1,14 @@
 meta:
   id: gen3_studio_mii
+  application: Mii Studio (Web application)
   title: Nintendo Mii Studio character data
   file-extension:
     - mnms
+  xref:
+    wikidata: Q4252
+doc-ref:
+  - https://github.com/HEYimHeroic/MiiStudioMiiLoader
+  - https://github.com/HEYimHeroic/MiiDataFiles#switch-formats
 seq:
   - id: facial_hair_color
     type: u1

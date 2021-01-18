@@ -12,10 +12,17 @@ meta:
     - rcd
     - rsd
   xref:
+    wikidata: Q4252
     wiibrew: Mii_Data
   license: AGPL-3.0-or-later
   bit-endian: be
   endian: be
+doc: |
+  A Mii is a customizable avatar used on several Nintendo video game consoles and mobile apps.
+  This is the format used most commonly on the Wii console.
+doc-ref:
+  - https://wiibrew.org/wiki/Mii_Data#Mii_format
+  - https://github.com/HEYimHeroic/MiiDataFiles#wii-formats
 seq:
   - id: invalid
     type: b1

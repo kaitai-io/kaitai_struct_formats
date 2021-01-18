@@ -71,6 +71,8 @@ meta:
     - bactcapt
   xref:
     zeldamods: AAMP
+  license: AGPL-3.0-or-later
+  bit-endian: le
   endian: le
 seq:
   - id: header
@@ -184,10 +186,10 @@ types:
           Can be compared against this list to get the name:
         doc-ref: https://github.com/KillzXGaming/AampLibrary/blob/master/AampLibraryCSharp/aamp_hashed_names.txt
       - id: data_offset
-        type: u2
-        doc:  Offset to data, divided by 4 and relative to parameter start.
+        type: b24
+        doc: Offset to data, divided by 4 and relative to parameter start.
       - id: parameter_type
-        type: u2
+        type: b8
         enum: parameter_type
         doc-ref: https://zeldamods.org/wiki/AAMP#ParameterType
 enums:

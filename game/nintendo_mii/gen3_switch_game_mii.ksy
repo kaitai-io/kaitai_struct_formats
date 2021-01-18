@@ -1,9 +1,17 @@
 meta:
   id: gen3_switch_game_mii
+  application:
+    - Super Smash Bros. Ultimate (video game)
+    - Super Mario Maker 2 (Video game)
+    - Mario Kart 8 Deluxe (Video game)
   title: Switch game Mii character data
   file-extension:
     - ufsd
+  xref:
+    wikidata: Q4252
+  bit-endian: le
   endian: le
+doc-ref: https://github.com/HEYimHeroic/MiiDataFiles#switch-formats
 seq:
   - id: mii_id
     type: u1

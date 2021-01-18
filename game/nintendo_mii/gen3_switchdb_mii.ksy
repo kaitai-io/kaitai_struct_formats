@@ -3,7 +3,11 @@ meta:
   title: SwitchDB Mii character data
   file-extension:
     - nfsd
+  xref:
+    wikidata: Q4252
+  bit-endian: le
   endian: le
+doc-ref: https://github.com/HEYimHeroic/MiiDataFiles#switch-formats
 seq:
   - id: hair_type
     type: u1
