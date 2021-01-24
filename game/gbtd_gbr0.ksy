@@ -13,11 +13,11 @@ meta:
 doc: |
   GBR0 files are used by GameBoy Tile Designer
   to store tilemaps created with the program.
-doc-ref: http://www.devrs.com/gb/hmgd/gbtd.html
+doc-ref: https://www.devrs.com/gb/hmgd/gbtd.html
 
 seq:
   - id: magic
-    contents: [0x47, 0x42, 0x4F, 0x30] #GBO0
+    contents: GBO0
   - id: objects
     type: gbr_object
     repeat: eos
@@ -27,6 +27,7 @@ types:
     seq:
       - id: object_type
         type: u2
+        enum: object_type
       - id: object_id
         type: u2
       - id: record_length
@@ -36,15 +37,26 @@ types:
         type:
           switch-on: object_type
           cases:
-            0x0001: object_producer
-            0x0002: object_tile_data
-            0x0003: object_tile_settings
-            0x0004: object_tile_export
-            0x0005: object_tile_import
-            0x000D: object_palettes
-            0x000E: object_tile_pal
-            0x00FF: object_deleted
+            object_type::producer:      object_producer
+            object_type::tile_data:     object_tile_data
+            object_type::tile_settings: object_tile_settings
+            object_type::tile_export:   object_tile_export
+            object_type::tile_import:   object_tile_import
+            object_type::palettes:      object_palettes
+            object_type::tile_pal:      object_tile_pal
+            object_type::deleted:       object_deleted
     
+    enums:
+      object_type:
+        0x0001: producer
+        0x0002: tile_data
+        0x0003: tile_settings
+        0x0004: tile_export
+        0x0005: tile_import
+        0x000D: palettes
+        0x000E: tile_pal
+        0x00FF: deleted
+
   object_producer:
     seq:
       - id: name
