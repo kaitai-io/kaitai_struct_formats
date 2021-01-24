@@ -78,9 +78,13 @@ types:
       - id: size
         type: u4
       - id: tiles
+        type: tiles_entries
+        size: size
+  tiles_entries:
+    seq:
+      - id: tiles
         type: tile
-        repeat: expr
-        repeat-expr: size / ( 32 * 32 + 4)
+        repeat: eos
   tile:
       seq:
         - id: attributes
