@@ -157,6 +157,7 @@ types:
       - id: height
         type: u2
       - id: type
+        enum: zone_type
         type: u4
       - id: shared_counter
         type: u2
@@ -427,3 +428,23 @@ enums:
     2: snow
     3: forest
     5: swamp
+  zone_type:
+    0: none
+    1: empty
+    2: blockade_north
+    3: blockade_south
+    4: blockade_east
+    5: blockade_west
+    6: travel_start
+    7: travel_end
+    8: room
+    9: load
+    10: goal
+    11: town
+    13: win
+    14: lose
+    15: trade
+    16: use
+    17: find
+    18: find_unique_weapon
+  
