@@ -166,6 +166,9 @@ types:
         type: u2
         repeat: expr
         repeat-expr: 3 * width * height
+        doc: |
+          tile_ids is made up of three interleaved tile layers ordered from 
+          bottom (floor) to top (roof).
       - id: hotspot_count
         type: u2
       - id: hotspots
