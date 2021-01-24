@@ -57,7 +57,7 @@ doc: |
   as popular as the Java edition format.
 
   **Implementation note:** strings in `TAG_String` are incorrectly decoded with
-  standard UTF-8, while it is encoded in [**Modified UTF-8**](
+  standard UTF-8, while they are encoded in [**Modified UTF-8**](
     https://docs.oracle.com/javase/8/docs/api/java/io/DataInput.html#modified-utf-8
   ) (MUTF-8). That's because MUTF-8 is usually not supported natively by most target
   languages, and thus one must use external libraries to achieve a fully-compliant
