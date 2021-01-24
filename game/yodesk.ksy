@@ -143,6 +143,7 @@ types:
     seq:
       - id: planet
         type: u2
+        enum: planet
       - id: size
         type: u4
       - id: index
@@ -419,3 +420,10 @@ types:
       type: s4
     - id: y
       type: s4
+enums:
+  planet:
+    0: none
+    1: desert
+    2: snow
+    3: forest
+    5: swamp
