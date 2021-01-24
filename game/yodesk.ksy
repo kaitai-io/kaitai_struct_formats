@@ -3,6 +3,7 @@ meta:
   application: "Yoda Stories"
   file-extension: dta
   license: CC0-1.0
+  ks-version: 0.9
   endian: le
   encoding: ASCII
 seq:
