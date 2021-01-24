@@ -339,6 +339,7 @@ types:
         if: index != -1
       - id: type
         type: s2
+        enum: character_type
         if: index != -1
       - id: movement_type
         type: s2
@@ -447,4 +448,7 @@ enums:
     16: use
     17: find
     18: find_unique_weapon
-  
+  character_type:
+    1: hero
+    2: enemy
+    4: weapon
