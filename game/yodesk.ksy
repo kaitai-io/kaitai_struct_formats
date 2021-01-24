@@ -195,6 +195,7 @@ types:
     seq:
       - id: type
         type: u4
+        enum: hotspot_type
       - id: x
         type: u2
       - id: y
@@ -343,6 +344,7 @@ types:
         if: index != -1
       - id: movement_type
         type: s2
+        enum: movement_type
         if: index != -1
       - id: probably_garbage_1
         type: s2
@@ -452,3 +454,26 @@ enums:
     1: hero
     2: enemy
     4: weapon
+  hotspot_type:
+    0: drop_quest_item
+    1: spawn_location
+    2: drop_unique_weapon
+    3: vehicle_to
+    4: vehicle_back
+    5: drop_map
+    6: drop_item
+    7: npc
+    8: drop_weapon
+    9: door_in
+    10: door_out
+    11: unused
+    12: lock
+    13: teleporter
+    14: ship_to_planet
+    15: ship_from_planet
+  movement_type:
+    0: none
+    4: sit
+    9: wander
+    10: patrol
+    12: animation
