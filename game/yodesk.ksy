@@ -383,12 +383,12 @@ types:
       - id: index
         type: s2
       - id: reference
-        # if character is monster this is a reference to the their weapon (char idx)
-        # otherwise this is the index of the gun sound
+        doc: |
+          If character referenced by index is monster, this is a reference to
+          their weapon, otherwise this is the index of the weapon's sound
         type: u2
         if: index != -1
       - id: health
-          # unverified
         type: u2
         if: index != -1
   # Utilities
