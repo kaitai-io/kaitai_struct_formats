@@ -13,11 +13,11 @@ meta:
 doc: |
   GBR1 files are used by Gameboy Map Builder, GBMB
   to store maps created with the program.
-doc-ref: http://www.devrs.com/gb/hmgd/gbmb.html
+doc-ref: https://www.devrs.com/gb/hmgd/gbmb.html
 
 seq:
   - id: magic
-    contents: [0x47, 0x42, 0x4F, 0x31] #GBO1
+    contents: GBO1
   - id: objects
     type: gbr1_object
     repeat: eos
@@ -29,6 +29,7 @@ types:
         contents: [0x48, 0x50, 0x4a, 0x4d, 0x54, 0x4c] # HPJMTL
       - id: object_type
         type: u2
+        enum: object_type
       - id: object_id
         type: u2
       - id: master_id
@@ -42,18 +43,32 @@ types:
         type:
           switch-on: object_type
           cases:
-            0x0001: object_producer
-            0x0002: object_map
-            0x0003: object_map_tile_data
-            0x0004: object_map_properties
-            0x0005: object_map_property_data
-            0x0006: object_map_default_property_value
-            0x0007: object_map_settings
-            0x0008: object_map_property_colors
-            0x0009: object_map_export_settings
-            0x000A: object_map_export_properties
-            0xFFFF: object_deleted
+            object_type::producer:                   object_producer
+            object_type::map:                        object_map
+            object_type::map_tile_data:              object_map_tile_data
+            object_type::map_properties:             object_map_properties
+            object_type::map_property_data:          object_map_property_data
+            object_type::map_default_property_value: object_map_default_property_value
+            object_type::map_settings:               object_map_settings
+            object_type::map_property_colors:        object_map_property_colors
+            object_type::map_export_settings:        object_map_export_settings
+            object_type::map_export_properties:      object_map_export_properties
+            object_type::deleted:                    object_deleted
     
+    enums:
+      object_type:
+        0x0001: producer
+        0x0002: map
+        0x0003: map_tile_data
+        0x0004: map_properties
+        0x0005: map_property_data
+        0x0006: map_default_property_value
+        0x0007: map_settings
+        0x0008: map_property_colors
+        0x0009: map_export_settings
+        0x000A: map_export_properties
+        0xFFFF: deleted
+
   object_producer:
     seq:
       - id: name
