@@ -1,7 +1,8 @@
 meta:
   id: yodesk
-  file-extension: dta
   application: "Yoda Stories"
+  file-extension: dta
+  license: CC0-1.0
   endian: le
   encoding: ASCII
 seq:
