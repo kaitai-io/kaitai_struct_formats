@@ -312,12 +312,11 @@ types:
         18: find_unique_weapon
   zone_spot: 
     seq:
-      - id: floor
+      - id: column
+        doc: from bottom to top, -1 indicates empty tiles
         type: s2
-      - id: object
-        type: s2
-      - id: roof
-        type: s2
+        repeat: expr
+        repeat-expr: 3
   hotspot:
     seq:
       - id: type
