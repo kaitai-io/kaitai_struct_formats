@@ -90,7 +90,7 @@ seq:
     type: named_tag(true)
 types:
   named_tag:
-    -webide-representation: '{type}("{name.data}"): {payload:dec}'
+    -webide-representation: 'TAG_{type}("{name.data}"): {payload:dec}'
     params:
       - id: is_root
         type: bool
@@ -98,7 +98,7 @@ types:
       - id: root_type
         type: u1
         enum: tag
-        valid: tag::tag_compound
+        valid: tag::compound
         if: is_root
         doc: do not read this property, access `type` instead
       - id: nested_type
@@ -113,23 +113,23 @@ types:
         type:
           switch-on: type
           cases:
-            'tag::tag_byte': s1
-            'tag::tag_short': s2
-            'tag::tag_int': s4
-            'tag::tag_long': s8
-            'tag::tag_float': f4
-            'tag::tag_double': f8
-            'tag::tag_byte_array': tag_byte_array
-            'tag::tag_string': tag_string
-            'tag::tag_list': tag_list
-            'tag::tag_compound': tag_compound
-            'tag::tag_int_array': tag_int_array
-            'tag::tag_long_array': tag_long_array
+            'tag::byte': s1
+            'tag::short': s2
+            'tag::int': s4
+            'tag::long': s8
+            'tag::float': f4
+            'tag::double': f8
+            'tag::byte_array': tag_byte_array
+            'tag::string': tag_string
+            'tag::list': tag_list
+            'tag::compound': tag_compound
+            'tag::int_array': tag_int_array
+            'tag::long_array': tag_long_array
     instances:
       type:
         value: 'is_root ? root_type : nested_type'
       is_tag_end:
-        value: 'type == tag::tag_end'
+        value: 'type == tag::end'
   tag_byte_array:
     -webide-representation: '{len_data:dec} bytes'
     seq:
@@ -147,7 +147,7 @@ types:
         size: len_data
         type: str
   tag_list:
-    -webide-representation: '{num_tags:dec} entries of type {tags_type}'
+    -webide-representation: '{num_tags:dec} entries of type TAG_{tags_type}'
     seq:
       - id: tags_type
         type: u1
@@ -158,18 +158,18 @@ types:
         type:
           switch-on: tags_type
           cases:
-            'tag::tag_byte': s1
-            'tag::tag_short': s2
-            'tag::tag_int': s4
-            'tag::tag_long': s8
-            'tag::tag_float': f4
-            'tag::tag_double': f8
-            'tag::tag_byte_array': tag_byte_array
-            'tag::tag_string': tag_string
-            'tag::tag_list': tag_list
-            'tag::tag_compound': tag_compound
-            'tag::tag_int_array': tag_int_array
-            'tag::tag_long_array': tag_long_array
+            'tag::byte': s1
+            'tag::short': s2
+            'tag::int': s4
+            'tag::long': s8
+            'tag::float': f4
+            'tag::double': f8
+            'tag::byte_array': tag_byte_array
+            'tag::string': tag_string
+            'tag::list': tag_list
+            'tag::compound': tag_compound
+            'tag::int_array': tag_int_array
+            'tag::long_array': tag_long_array
         repeat: expr
         repeat-expr: num_tags
   tag_compound:
@@ -183,7 +183,7 @@ types:
       dump_num_tags:
         value: 'tags.size - (tags.last.is_tag_end ? 1 : 0)'
   tag_int_array:
-    -webide-representation: '{num_tags:dec} entries of type {tags_type}'
+    -webide-representation: '{num_tags:dec} entries of type TAG_{tags_type}'
     seq:
       - id: num_tags
         type: s4
@@ -193,9 +193,9 @@ types:
         repeat-expr: num_tags
     instances:
       tags_type:
-        value: 'tag::tag_int'
+        value: 'tag::int'
   tag_long_array:
-    -webide-representation: '{num_tags:dec} entries of type {tags_type}'
+    -webide-representation: '{num_tags:dec} entries of type TAG_{tags_type}'
     seq:
       - id: num_tags
         type: s4
@@ -205,19 +205,19 @@ types:
         repeat-expr: num_tags
     instances:
       tags_type:
-        value: 'tag::tag_long'
+        value: 'tag::long'
 enums:
   tag:
-    0: tag_end
-    1: tag_byte
-    2: tag_short
-    3: tag_int
-    4: tag_long
-    5: tag_float
-    6: tag_double
-    7: tag_byte_array
-    8: tag_string
-    9: tag_list
-    10: tag_compound
-    11: tag_int_array
-    12: tag_long_array
+    0: end
+    1: byte
+    2: short
+    3: int
+    4: long
+    5: float
+    6: double
+    7: byte_array
+    8: string
+    9: list
+    10: compound
+    11: int_array
+    12: long_array
