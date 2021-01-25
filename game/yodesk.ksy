@@ -258,9 +258,9 @@ types:
       - id: planet_again
         type: u2
       - id: tile_ids
-        type: u2
+        type: zone_spot
         repeat: expr
-        repeat-expr: 3 * width * height
+        repeat-expr: width * height
         doc: |
           tile_ids is made up of three interleaved tile layers ordered from 
           bottom (floor) to top (roof).
@@ -310,6 +310,14 @@ types:
         16: use
         17: find
         18: find_unique_weapon
+  zone_spot: 
+    seq:
+      - id: floor
+        type: s2
+      - id: object
+        type: s2
+      - id: roof
+        type: s2
   hotspot:
     seq:
       - id: type
