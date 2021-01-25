@@ -166,6 +166,7 @@ types:
     seq:
       - id: opcode
         type: u2
+        enum: instruction_opcode
       - id: arguments
         type: s2
         repeat: expr
@@ -175,6 +176,46 @@ types:
       - id: text
         type: str
         size: text_length
+    enums:
+      instruction_opcode:
+        0: place_tile
+        1: remove_tile
+        2: move_tile
+        3: draw_tile
+        4: speak_hero
+        5: speak_npc
+        6: set_tile_needs_display
+        7: set_rect_needs_display
+        8: wait
+        9: redraw
+        10: play_sound
+        11: stop_sound
+        12: roll_dice
+        13: set_counter
+        14: add_to_counter
+        15: set_variable
+        16: hide_hero
+        17: show_hero
+        18: move_hero_to
+        19: move_hero_by
+        20: disable_action
+        21: enable_hotspot
+        22: disable_hotspot
+        23: enable_monster
+        24: disable_monster
+        25: enable_all_monsters
+        26: disable_all_monsters
+        27: drop_item
+        28: add_item
+        29: remove_item
+        30: mark_as_solved
+        31: win_game
+        32: lose_game
+        33: change_zone
+        34: set_shared_counter
+        35: add_to_shared_counter
+        36: set_random
+        37: add_health
   monster:
     seq:
       - id: character
