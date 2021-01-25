@@ -191,6 +191,32 @@ types:
         type: action
         repeat: expr
         repeat-expr: action_count
+    enums:
+      planet:
+        0: none
+        1: desert
+        2: snow
+        3: forest
+        5: swamp
+      zone_type:
+        0: none
+        1: empty
+        2: blockade_north
+        3: blockade_south
+        4: blockade_east
+        5: blockade_west
+        6: travel_start
+        7: travel_end
+        8: room
+        9: load
+        10: goal
+        11: town
+        13: win
+        14: lose
+        15: trade
+        16: use
+        17: find
+        18: find_unique_weapon
   hotspot:
     seq:
       - id: type
@@ -204,6 +230,24 @@ types:
         type: u2
       - id: argument
         type: s2
+    enums:
+      hotspot_type:
+        0: drop_quest_item
+        1: spawn_location
+        2: drop_unique_weapon
+        3: vehicle_to
+        4: vehicle_back
+        5: drop_map
+        6: drop_item
+        7: npc
+        8: drop_weapon
+        9: door_in
+        10: door_out
+        11: unused
+        12: lock
+        13: teleporter
+        14: ship_to_planet
+        15: ship_from_planet
   zone_auxiliary:
     seq:
       - id: marker
@@ -361,6 +405,17 @@ types:
       - id: frame_3
         type: char_frame
         if: index != -1
+    enums:
+      character_type:
+        1: hero
+        2: enemy
+        4: weapon
+      movement_type:
+        0: none
+        4: sit
+        9: wander
+        10: patrol
+        12: animation
   char_frame:
     seq:
       - id: tiles
@@ -424,56 +479,3 @@ types:
       type: s4
     - id: y
       type: s4
-enums:
-  planet:
-    0: none
-    1: desert
-    2: snow
-    3: forest
-    5: swamp
-  zone_type:
-    0: none
-    1: empty
-    2: blockade_north
-    3: blockade_south
-    4: blockade_east
-    5: blockade_west
-    6: travel_start
-    7: travel_end
-    8: room
-    9: load
-    10: goal
-    11: town
-    13: win
-    14: lose
-    15: trade
-    16: use
-    17: find
-    18: find_unique_weapon
-  character_type:
-    1: hero
-    2: enemy
-    4: weapon
-  hotspot_type:
-    0: drop_quest_item
-    1: spawn_location
-    2: drop_unique_weapon
-    3: vehicle_to
-    4: vehicle_back
-    5: drop_map
-    6: drop_item
-    7: npc
-    8: drop_weapon
-    9: door_in
-    10: door_out
-    11: unused
-    12: lock
-    13: teleporter
-    14: ship_to_planet
-    15: ship_from_planet
-  movement_type:
-    0: none
-    4: sit
-    9: wander
-    10: patrol
-    12: animation
