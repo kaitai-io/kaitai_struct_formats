@@ -254,7 +254,7 @@ types:
         type: u4
       - id: shared_counter
         type: u2
-        # contents: 0xFF FF
+        valid: 0xFF FF
       - id: planet_again
         type: u2
       - id: tile_ids
