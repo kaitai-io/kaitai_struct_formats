@@ -113,18 +113,18 @@ types:
         type:
           switch-on: type
           cases:
-            'tag::byte': s1
-            'tag::short': s2
-            'tag::int': s4
-            'tag::long': s8
-            'tag::float': f4
-            'tag::double': f8
-            'tag::byte_array': tag_byte_array
-            'tag::string': tag_string
-            'tag::list': tag_list
-            'tag::compound': tag_compound
-            'tag::int_array': tag_int_array
-            'tag::long_array': tag_long_array
+            tag::byte: s1
+            tag::short: s2
+            tag::int: s4
+            tag::long: s8
+            tag::float: f4
+            tag::double: f8
+            tag::byte_array: tag_byte_array
+            tag::string: tag_string
+            tag::list: tag_list
+            tag::compound: tag_compound
+            tag::int_array: tag_int_array
+            tag::long_array: tag_long_array
     instances:
       type:
         value: 'is_root ? root_type : nested_type'
@@ -158,18 +158,18 @@ types:
         type:
           switch-on: tags_type
           cases:
-            'tag::byte': s1
-            'tag::short': s2
-            'tag::int': s4
-            'tag::long': s8
-            'tag::float': f4
-            'tag::double': f8
-            'tag::byte_array': tag_byte_array
-            'tag::string': tag_string
-            'tag::list': tag_list
-            'tag::compound': tag_compound
-            'tag::int_array': tag_int_array
-            'tag::long_array': tag_long_array
+            tag::byte: s1
+            tag::short: s2
+            tag::int: s4
+            tag::long: s8
+            tag::float: f4
+            tag::double: f8
+            tag::byte_array: tag_byte_array
+            tag::string: tag_string
+            tag::list: tag_list
+            tag::compound: tag_compound
+            tag::int_array: tag_int_array
+            tag::long_array: tag_long_array
         repeat: expr
         repeat-expr: num_tags
   tag_compound:
