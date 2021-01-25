@@ -7,6 +7,8 @@ meta:
     - dat
   xref:
     justsolve: Minecraft_NBT_format
+  tags:
+    - serialization
   license: CC0-1.0
   encoding: utf-8
   endian: be
