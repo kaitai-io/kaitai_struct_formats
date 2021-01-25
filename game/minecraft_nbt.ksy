@@ -86,26 +86,24 @@ doc-ref:
   - https://web.archive.org/web/20110723210920/https://www.minecraft.net/docs/NBT.txt
   - https://minecraft.gamepedia.com/NBT_format
 seq:
+  - size: 0
+    if: root_type == tag::end # always `false`, but it doesn't matter
+    doc: Invoke `valid` check before we start parsing
   - id: root
-    type: named_tag(true)
+    type: named_tag
+instances:
+  root_type:
+    pos: 0
+    type: u1
+    enum: tag
+    valid: tag::compound
 types:
   named_tag:
     -webide-representation: 'TAG_{type}("{name.data}"): {payload:dec}'
-    params:
-      - id: is_root
-        type: bool
     seq:
-      - id: root_type
+      - id: type
         type: u1
         enum: tag
-        valid: tag::compound
-        if: is_root
-        doc: do not read this property, access `type` instead
-      - id: nested_type
-        type: u1
-        enum: tag
-        if: not is_root
-        doc: do not read this property, access `type` instead
       - id: name
         type: tag_string
         if: not is_tag_end
@@ -126,8 +124,6 @@ types:
             tag::int_array: tag_int_array
             tag::long_array: tag_long_array
     instances:
-      type:
-        value: 'is_root ? root_type : nested_type'
       is_tag_end:
         value: 'type == tag::end'
   tag_byte_array:
@@ -176,7 +172,7 @@ types:
     -webide-representation: '{dump_num_tags:dec} entries'
     seq:
       - id: tags
-        type: named_tag(false)
+        type: named_tag
         repeat: until
         repeat-until: _.is_tag_end
     instances:
