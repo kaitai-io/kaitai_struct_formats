@@ -114,6 +114,7 @@ types:
     seq:
       - id: opcode
         type: u2
+        enum: condition_opcode
       - id: arguments
         type: s2
         repeat: expr
@@ -123,6 +124,44 @@ types:
       - id: text
         type: str
         size: text_length
+    enums:
+      condition_opcode:
+        0: zone_not_initialized
+        1: zone_entered
+        2: bump
+        3: placed_item_is
+        4: standing_on
+        5: counter_is
+        6: random_is
+        7: random_is_greater_than
+        8: random_is_less_than
+        9: enter_by_plane
+        10: tile_at_is
+        11: monster_is_dead
+        12: has_no_active_monsters
+        13: has_item
+        14: required_item_is
+        15: ending_is
+        16: zone_is_solved
+        17: no_item_placed
+        18: item_placed
+        19: health_is_less_than
+        20: health_is_greater_than
+        21: unused
+        22: find_item_is
+        23: placed_item_is_not
+        24: hero_is_at
+        25: shared_counter_is
+        26: shared_counter_is_less_than
+        27: shared_counter_is_greater_than
+        28: games_won_is
+        29: drops_quest_item_at
+        30: has_any_required_item
+        31: counter_is_not
+        32: random_is_not
+        33: shared_counter_is_not
+        34: is_variable
+        35: games_won_is_greater_than
   instruction:
     seq:
       - id: opcode
