@@ -123,6 +123,7 @@ types:
             tag::compound: tag_compound
             tag::int_array: tag_int_array
             tag::long_array: tag_long_array
+        if: not is_tag_end
     instances:
       is_tag_end:
         value: type == tag::end
