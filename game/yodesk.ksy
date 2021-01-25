@@ -101,16 +101,29 @@ types:
       - id: condition_count
         type: u2
       - id: conditions
-        type: action_item
+        type: condition
         repeat: expr
         repeat-expr: condition_count
       - id: instruction_count
         type: u2
       - id: instructions
-        type: action_item
+        type: instruction
         repeat: expr
         repeat-expr: instruction_count
-  action_item:
+  condition:
+    seq:
+      - id: opcode
+        type: u2
+      - id: arguments
+        type: s2
+        repeat: expr
+        repeat-expr: 5
+      - id: text_length
+        type: u2
+      - id: text
+        type: str
+        size: text_length
+  instruction:
     seq:
       - id: opcode
         type: u2
