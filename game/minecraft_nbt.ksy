@@ -125,7 +125,7 @@ types:
             tag::long_array: tag_long_array
     instances:
       is_tag_end:
-        value: 'type == tag::end'
+        value: type == tag::end
   tag_byte_array:
     -webide-representation: '{len_data:dec} bytes'
     seq:
@@ -189,7 +189,7 @@ types:
         repeat-expr: num_tags
     instances:
       tags_type:
-        value: 'tag::int'
+        value: tag::int
   tag_long_array:
     -webide-representation: '{num_tags:dec} entries of type TAG_{tags_type}'
     seq:
@@ -201,7 +201,7 @@ types:
         repeat-expr: num_tags
     instances:
       tags_type:
-        value: 'tag::long'
+        value: tag::long
 enums:
   tag:
     0:
