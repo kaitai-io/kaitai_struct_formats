@@ -208,7 +208,13 @@ types:
         value: 'tag::long'
 enums:
   tag:
-    0: end
+    0:
+      id: end
+      -affected-by: 90
+      doc: |
+        As of KSC 0.9, this enum key causes a syntax error in Lua.
+        See https://github.com/kaitai-io/kaitai_struct/issues/90#issuecomment-766440975
+        for more info.
     1: byte
     2: short
     3: int
