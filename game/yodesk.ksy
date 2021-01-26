@@ -313,8 +313,8 @@ types:
   zone_spot:
     seq:
       - id: column
-        doc: from bottom to top, -1 indicates empty tiles
-        type: s2
+        doc: from bottom to top, 0xFF FF indicates empty tiles
+        type: u2
         repeat: expr
         repeat-expr: 3
   hotspot:
