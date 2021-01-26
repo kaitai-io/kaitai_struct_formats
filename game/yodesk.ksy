@@ -35,11 +35,11 @@ types:
              '"TNAM"': tile_names
              '"ZONE"': zones
              '"ENDF"': endf
-             _: unknown_case_error
-  unknown_case_error:
+             _: unknown_catalog_entry
+  unknown_catalog_entry:
     seq:
-      - id: message
-        contents: "Value did not match any expected type"
+      - id: data
+        size: _parent.size
   version:
     seq:
       - id: version
