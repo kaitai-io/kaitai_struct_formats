@@ -178,7 +178,7 @@ types:
         repeat-until: _.is_tag_end
     instances:
       dump_num_tags:
-        value: 'tags.size - (tags.last.is_tag_end ? 1 : 0)'
+        value: 'tags.size - ((tags.size >= 1 and tags.last.is_tag_end) ? 1 : 0)'
   tag_int_array:
     -webide-representation: '{num_tags:dec} entries of type TAG_{tags_type}'
     seq:
