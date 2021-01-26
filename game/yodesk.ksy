@@ -17,6 +17,9 @@ types:
       - id: type
         type: str
         size: 4
+      - id: size
+        type: u4
+        if: type != "VERS" and type != "ENDF" and type != "ZONE"
       - id: content
         type:
           switch-on: type
@@ -43,14 +46,10 @@ types:
         type: u4
   setup_image:
     seq:
-      - id: size
-        type: u4
       - id: pixels
-        size: size
+        size: _parent.size
   sounds:
     seq:
-      - id: size
-        type: u4
       - id: count
         type: s2
       - id: sounds
@@ -59,8 +58,6 @@ types:
         repeat-expr: -count
   tile_names:
     seq:
-      - id: size
-        type: u4
       - id: names
         type: tile_name
         repeat: until
@@ -75,11 +72,9 @@ types:
         if: tile_id != 0xFF_FF
   tiles:
     seq:
-      - id: size
-        type: u4
       - id: tiles
         type: tiles_entries
-        size: size
+        size: _parent.size
   tiles_entries:
     seq:
       - id: tiles
@@ -417,8 +412,6 @@ types:
         repeat-expr: zone_count
   puzzles:
     seq:
-      - id: size
-        type: u4
       - id: puzzles
         type: puzzle
         repeat: until
@@ -462,8 +455,6 @@ types:
         type: u4
   characters:
     seq:
-      - id: size
-        type: u4
       - id: characters
         type: character
         repeat: until
@@ -524,8 +515,6 @@ types:
         repeat-expr: 0x8
   character_auxiliaries:
     seq:
-      - id: size
-        type: u4
       - id: auxiliaries
         type: character_auxiliary
         repeat: until
@@ -539,8 +528,6 @@ types:
         if: index != 0xFF_FF
   character_weapons:
     seq:
-      - id: size
-        type: u4
       - id: weapons
         type: character_weapon
         repeat: until
