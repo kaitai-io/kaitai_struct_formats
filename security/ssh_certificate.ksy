@@ -63,7 +63,7 @@ types:
         type: u4
       - id: key_id
         type: ssh_public_key::cstring
-      - id: validprincipals
+      - id: valid_principals
         type: packed_cstring
       - id: valid_after
         type: u8
