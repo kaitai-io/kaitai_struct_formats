@@ -9,12 +9,12 @@ doc: |
   OpenSSH Certificates are simple certs used by OpenSSH.
 doc-ref: 'https://cvsweb.openbsd.org/cgi-bin/cvsweb/~checkout~/src/usr.bin/ssh/PROTOCOL.certkeys?rev=HEAD&content-type=text/plain'
 seq:
-  - id: cert_name
+  - id: cert_type
     doc: type of ssh certificate
     type: cstring_utf8
   - id: body
     type:
-      switch-on: cert_name.value
+      switch-on: cert_type.value
       cases:
         '"ssh-rsa-cert-v01@openssh.com"': cert_rsa
         '"ssh-dss-cert-v01@openssh.com"': cert_dss
