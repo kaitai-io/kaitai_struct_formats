@@ -115,4 +115,3 @@ types:
         type: u4
       - id: value
         type: ssh_public_key
-
