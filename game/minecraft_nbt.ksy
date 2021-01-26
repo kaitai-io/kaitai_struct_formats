@@ -67,7 +67,7 @@ doc: |
   it usually works fine.
 
   All Unicode codepoints with incompatible representations in MUTF-8 and UTF-8 are
-  U+0000 (_NULL_), U+D800-U+DFFF (_High_ and _Low Surrogates_) and U+10000-U+10FFFF
+  U+0000 (_NUL_), U+D800-U+DFFF (_High_ and _Low Surrogates_) and U+10000-U+10FFFF
   (_Supplementary_ Planes; includes e.g. emoticons, pictograms).
   A _MUTF-8_-encoded string containing these code points cannot be successfully
   decoded as UTF-8. The behavior in this case depends on the target language -
