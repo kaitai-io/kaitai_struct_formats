@@ -87,9 +87,12 @@ doc-ref:
   - https://web.archive.org/web/20110723210920/https://www.minecraft.net/docs/NBT.txt
   - https://minecraft.gamepedia.com/NBT_format
 seq:
-  - size: 0
-    valid:
-      expr: root_type == tag::compound
+  - id: root_check
+    size: 0
+    if: root_type == tag::end and false # force evaluation of root_type's `valid` check
+    -affected-by: https://github.com/kaitai-io/kaitai_struct_formats/pull/404#discussion_r564852108
+    # valid:
+    #   expr: root_type == tag::compound # as of KS 0.9 does not compile for Go and Lua
   - id: root
     type: named_tag
 instances:
@@ -97,6 +100,7 @@ instances:
     pos: 0
     type: u1
     enum: tag
+    valid: tag::compound
 types:
   named_tag:
     -webide-representation: 'TAG_{type}("{name.data}"): {payload:dec}'
