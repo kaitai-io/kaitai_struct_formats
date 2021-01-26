@@ -64,15 +64,15 @@ types:
       - id: names
         type: tile_name
         repeat: until
-        repeat-until:  _.tile_id == -1
+        repeat-until:  _.tile_id == 0xFF_FF
   tile_name:
     seq:
       - id: tile_id
-        type: s2
+        type: u2
       - id: name
         type: str
         size: 0x18
-        if: tile_id != -1
+        if: tile_id != 0xFF_FF
   tiles:
     seq:
       - id: size
@@ -225,9 +225,9 @@ types:
       - id: y
         type: u2
       - id: loot
-        type: s2
+        type: u2
       - id: drops_loot
-        type: s4
+        type: u4
       - id: waypoints
         type: waypoint
         repeat: expr
@@ -329,7 +329,7 @@ types:
       - id: enabled
         type: u2
       - id: argument
-        type: s2
+        type: u2
     enums:
       hotspot_type:
         0: drop_quest_item
@@ -422,40 +422,40 @@ types:
       - id: puzzles
         type: puzzle
         repeat: until
-        repeat-until: _.index == -1
+        repeat-until: _.index == 0xFF_FF
   puzzle:
     seq:
       - id: index
-        type: s2
+        type: u2
       - id: marker
-        if: index != -1
+        if: index != 0xFF_FF
         contents: "IPUZ"
       - id: size
         type: u4
-        if: index != -1
+        if: index != 0xFF_FF
       - id: type
         type: u4
-        if: index != -1
+        if: index != 0xFF_FF
       - id: unknown1
         type: u4
-        if: index != -1
+        if: index != 0xFF_FF
       - id: unknown2
         type: u4
-        if: index != -1
+        if: index != 0xFF_FF
       - id: unknown3
         type: u2
-        if: index != -1
+        if: index != 0xFF_FF
       - id: strings
         type: prefixed_str
         repeat: expr
         repeat-expr: 5
-        if: index != -1
+        if: index != 0xFF_FF
       - id: item_1
         type: u2
-        if: index != -1
+        if: index != 0xFF_FF
       - id: item_2
         type: u2
-        if: index != -1
+        if: index != 0xFF_FF
   endf:
     seq:
       - id: empty
@@ -467,44 +467,44 @@ types:
       - id: characters
         type: character
         repeat: until
-        repeat-until: _.index == -1
+        repeat-until: _.index == 0xFF_FF
   character:
     seq:
       - id: index
-        type: s2
+        type: u2
       - id: marker
         contents: "ICHA"
-        if: index != -1
+        if: index != 0xFF_FF
       - id: size
         type: u4
-        if: index != -1
+        if: index != 0xFF_FF
       - id: name
         type: strz
         size: 16
-        if: index != -1
+        if: index != 0xFF_FF
       - id: type
-        type: s2
+        type: u2
         enum: character_type
-        if: index != -1
+        if: index != 0xFF_FF
       - id: movement_type
-        type: s2
+        type: u2
         enum: movement_type
-        if: index != -1
+        if: index != 0xFF_FF
       - id: probably_garbage_1
-        type: s2
-        if: index != -1
+        type: u2
+        if: index != 0xFF_FF
       - id: probably_garbage_2
         type: u4
-        if: index != -1
+        if: index != 0xFF_FF
       - id: frame_1
         type: char_frame
-        if: index != -1
+        if: index != 0xFF_FF
       - id: frame_2
         type: char_frame
-        if: index != -1
+        if: index != 0xFF_FF
       - id: frame_3
         type: char_frame
-        if: index != -1
+        if: index != 0xFF_FF
     enums:
       character_type:
         1: hero
@@ -519,7 +519,7 @@ types:
   char_frame:
     seq:
       - id: tiles
-        type: s2
+        type: u2
         repeat: expr
         repeat-expr: 0x8
   character_auxiliaries:
@@ -529,14 +529,14 @@ types:
       - id: auxiliaries
         type: character_auxiliary
         repeat: until
-        repeat-until: _.index == -1
+        repeat-until: _.index == 0xFF_FF
   character_auxiliary:
     seq:
       - id: index
-        type: s2
+        type: u2
       - id: damage
         type: s2
-        if: index != -1
+        if: index != 0xFF_FF
   character_weapons:
     seq:
       - id: size
@@ -544,20 +544,20 @@ types:
       - id: weapons
         type: character_weapon
         repeat: until
-        repeat-until: _.index == -1
+        repeat-until: _.index == 0xFF_FF
   character_weapon:
     seq:
       - id: index
-        type: s2
+        type: u2
       - id: reference
         doc: |
           If character referenced by index is monster, this is a reference to
           their weapon, otherwise this is the index of the weapon's sound
         type: u2
-        if: index != -1
+        if: index != 0xFF_FF
       - id: health
         type: u2
-        if: index != -1
+        if: index != 0xFF_FF
   # Utilities
   prefixed_str:
     seq:
@@ -576,6 +576,6 @@ types:
   waypoint:
     seq:
     - id: x
-      type: s4
+      type: u4
     - id: y
-      type: s4
+      type: u4
