@@ -44,7 +44,7 @@ doc: |
       * `python3 -c "import sys, gzip; sys.stdout.buffer.write(
         gzip.decompress(sys.stdin.buffer.read()) )" < input-gzip.nbt > output.nbt`
     * `application/zlib`, you can use
-      * `openssl zlib -d -in input.nbt.zlib -out output.nbt` (does not work on most systems)
+      * `openssl zlib -d -in input-zlib.nbt -out output.nbt` (does not work on most systems)
       * `python3 -c "import sys, zlib; sys.stdout.buffer.write(
         zlib.decompress(sys.stdin.buffer.read()) )" < input-zlib.nbt > output.nbt`
     * something else (especially `image/x-pcx` and `application/octet-stream`),
@@ -61,22 +61,20 @@ doc: |
   **Implementation note:** strings in `TAG_String` are incorrectly decoded with
   standard UTF-8, while they are encoded in [**Modified UTF-8**](
     https://docs.oracle.com/javase/8/docs/api/java/io/DataInput.html#modified-utf-8
-  ) (MUTF-8). That's because MUTF-8 is usually not supported natively by most target
+  ) (MUTF-8). That's because MUTF-8 is not supported natively by most target
   languages, and thus one must use external libraries to achieve a fully-compliant
   decoder. But decoding in standard UTF-8 is still better than nothing, and
   it usually works fine.
 
-  All Unicode codepoints with incompatible representations in MUTF-8 and UTF-8 are
+  All Unicode code points with incompatible representations in MUTF-8 and UTF-8 are
   U+0000 (_NUL_), U+D800-U+DFFF (_High_ and _Low Surrogates_) and U+10000-U+10FFFF
-  (_Supplementary_ Planes; includes e.g. emoticons, pictograms).
+  (all _Supplementary_ Planes; includes e.g. emoticons, pictograms).
   A _MUTF-8_-encoded string containing these code points cannot be successfully
   decoded as UTF-8. The behavior in this case depends on the target language -
   usually an exception is thrown, or the bytes that are not valid UTF-8
   are replaced or ignored.
 
-  ---
-
-  Sample files:
+  **Sample files:**
 
     * <https://wiki.vg/NBT#Download>
     * <https://github.com/twoolie/NBT/blob/f9e892e/tests/world_test/data/scoreboard.dat>
