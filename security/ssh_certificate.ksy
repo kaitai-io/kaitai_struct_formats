@@ -72,17 +72,21 @@ types:
       - id: key_id
         type: cstring_utf8
       - id: valid_principals
-        doc: | As a special case, a zero-length "valid principals"  field means
+        doc: | 
+          As a special case, a zero-length "valid principals"  field means
           the certificate is valid for any principal of the specified type.
         type: packed_cstring
       - id: valid_after
         doc: Unix timestamp (seconds since 1970-01-01 00:00:00)
         type: u8
       - id: valid_before
-        doc: Unix timestamp (seconds since 1970-01-01 00:00:00)
+        doc: | 
+          Unix timestamp (seconds since 1970-01-01 00:00:00)
+          When "forever" is requested this is set to 0xFFFF_FFFF_FFFF_FFFF
         type: u8
       - id: critical_options
-        doc: | critical options is a set of zero or more key options encoded as
+        doc: | 
+          critical options is a set of zero or more key options encoded as
           below. All such options are "critical" in the sense that an implementation
           must refuse to authorise a key that has an unrecognised option.
 
@@ -94,15 +98,17 @@ types:
           compatibility.
         type: packed_cstring_tuple
       - id: extensions
-        doc: | extensions is a set of zero or more optional extensions. These extensions
+        doc: | 
+          extensions is a set of zero or more optional extensions. These extensions
           are not critical, and an implementation that encounters one that it does
           not recognise may safely ignore it.
         type: packed_cstring_tuple
       - id: reserved
-        doc: | Unused currently
+        doc: Unused currently
         type: cstring_bytes
       - id: signature_key
-        doc: | The signature key field contains the CA key used to sign the
+        doc: | 
+          The signature key field contains the CA key used to sign the
           certificate. The valid key types for CA keys are ssh-rsa,
           ssh-dss, ssh-ed25519 and the ECDSA types ecdsa-sha2-nistp256,
           ecdsa-sha2-nistp384, ecdsa-sha2-nistp521. "Chained" certificates, where
@@ -111,7 +117,8 @@ types:
           Ed25519 or ECDSA CA key and vice-versa.
         type: cstring_sshkey
       - id: signature
-        doc: | signature is computed over all preceding fields from the initial string
+        doc: | 
+          signature is computed over all preceding fields from the initial string
           up to, and including the signature key. Signatures are computed and
           encoded according to the rules defined for the CA's public key algorithm
           (RFC4253 section 6.6 for ssh-rsa and ssh-dss, RFC5656 for the ECDSA
