@@ -254,7 +254,7 @@ types:
         type: u4
       - id: shared_counter
         type: u2
-        valid: 0xFF FF
+        valid: 0xFF_FF
       - id: planet_again
         type: u2
       - id: tile_ids
@@ -262,7 +262,7 @@ types:
         repeat: expr
         repeat-expr: width * height
         doc: |
-          tile_ids is made up of three interleaved tile layers ordered from 
+          tile_ids is made up of three interleaved tile layers ordered from
           bottom (floor) to top (roof).
       - id: hotspot_count
         type: u2
@@ -310,7 +310,7 @@ types:
         16: use
         17: find
         18: find_unique_weapon
-  zone_spot: 
+  zone_spot:
     seq:
       - id: column
         doc: from bottom to top, -1 indicates empty tiles
