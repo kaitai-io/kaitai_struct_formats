@@ -88,8 +88,8 @@ doc-ref:
   - https://minecraft.gamepedia.com/NBT_format
 seq:
   - size: 0
-    if: root_type == tag::end # always `false`, but it doesn't matter
-    doc: Invoke `valid` check before we start parsing
+    valid:
+      expr: root_type == tag::compound
   - id: root
     type: named_tag
 instances:
@@ -97,7 +97,6 @@ instances:
     pos: 0
     type: u1
     enum: tag
-    valid: tag::compound
 types:
   named_tag:
     -webide-representation: 'TAG_{type}("{name.data}"): {payload:dec}'
