@@ -88,7 +88,6 @@ seq:
   - id: root_check
     size: 0
     if: root_type == tag::end and false # force evaluation of root_type's `valid` check
-    -affected-by: https://github.com/kaitai-io/kaitai_struct_formats/pull/404#discussion_r564852108
     # valid:
     #   expr: root_type == tag::compound # as of KS 0.9 does not compile for Go and Lua
   - id: root
