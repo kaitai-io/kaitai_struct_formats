@@ -67,7 +67,7 @@ types:
       - id: tile_id
         type: u2
       - id: name
-        type: str
+        type: strz
         size: 0x18
         if: tile_id != 0xFF_FF
   tiles:
