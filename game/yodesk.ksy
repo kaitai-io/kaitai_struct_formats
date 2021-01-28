@@ -86,7 +86,6 @@ types:
           type: u4
         - id: pixels
           size: 32 * 32
-
   action:
     seq:
       - id: marker
@@ -381,7 +380,6 @@ types:
         type: u2
         repeat: expr
         repeat-expr: provided_item_count
-
   zone_auxiliary_3:
      seq:
       - id: marker
@@ -564,3 +562,4 @@ types:
       type: u4
     - id: y
       type: u4
+
