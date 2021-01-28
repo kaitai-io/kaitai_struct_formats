@@ -562,4 +562,3 @@ types:
       type: u4
     - id: y
       type: u4
-
