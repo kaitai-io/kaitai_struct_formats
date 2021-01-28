@@ -19,7 +19,7 @@ types:
         size: 4
       - id: size
         type: u4
-        if: type != "VERS" and type != "ENDF" and type != "ZONE"
+        if: type != "VERS" and type != "ZONE"
       - id: content
         type:
           switch-on: type
@@ -450,9 +450,7 @@ types:
         type: u2
         if: index != 0xFF_FF
   endf:
-    seq:
-      - id: empty
-        type: u4
+    seq: []
   characters:
     seq:
       - id: characters
