@@ -34,13 +34,13 @@ types:
       - id: boundary_padding
         size: (- _io.pos) % 4
   option_field:
-    doc: the options field of the record
+    doc: the option field of the record
     seq:
       - id: option_elements
         type: option_element
         repeat: eos
   option_element:
-    doc: one element of the options field
+    doc: one element of the option field
     seq:
       - id: element_format
         type: u2
