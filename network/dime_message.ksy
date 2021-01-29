@@ -34,7 +34,7 @@ types:
         type: b1
       - id: is_last_record
         type: b1
-      - id: is_chunck_record
+      - id: is_chunk_record
         type: b1
       - id: type_format
         enum: type_formats
