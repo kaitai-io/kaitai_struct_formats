@@ -6,6 +6,17 @@ meta:
   ks-version: 0.9
   endian: le
   encoding: ASCII
+doc: |
+  [Star Wars: Yoda Stories](https://en.wikipedia.org/wiki/Star_Wars:_Yoda_Stories) is a unique tile based game with procedurally generated worlds.
+  This spec describes the file format used for all assets of the windows version of the game.
+
+  The game generates a new world (aka _story_) by picking a random sample of puzzles from `PUZ2`, one of which will be the goal, which, when solved, wins the game.
+  Each puzzle provides an item when solved and some require one for their solution. Next, zones are chosen based on the selected puzzles and placed on
+  a 10 by 10 map. Each zone consists of three layers of tiles and is either 9x9 or 18x18 tiles in size. To add variety and interactivity to each zone the
+  game includes a simple scripting engine. Zones can declare actions that, when executed, can set, move or delete tiles, drop items or activate enemies.
+
+  The file format follows the TLV (type-length-value) pattern to build a central catalog containing the most important (and globally accessable) assets of the game
+  (e.g. puzzles, zones, tiles, etc.). The same pattern is also found in some root catalog entries to encode arrays of variable-length structures.:w
 seq:
   - id: catalog
     type: catalog_entry
