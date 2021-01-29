@@ -23,7 +23,7 @@ types:
   padding:
     doc: padding to the next 4-byte boundary
     seq:
-    - id: padding
+    - id: boundary_padding
       size: (4 - _io.pos) % 4
   record:
     doc: each individual fragment of the message
