@@ -24,6 +24,7 @@ doc: |
 doc-ref: 
   - https://tools.ietf.org/html/draft-nielsen-dime-02
   - https://docs.microsoft.com/en-us/archive/msdn-magazine/2002/december/sending-files-attachments-and-soap-messages-via-dime
+  - http://imrannazar.com/Parsing-the-DIME-Message-Format
 seq:
   - id: records
     type: record
@@ -53,25 +54,35 @@ types:
     doc: each individual fragment of the message
     seq:
       - id: version
+        doc: DIME format version (always 1)
         type: b5
       - id: is_first_record
+        doc: Set if this is the first record in the message
         type: b1
       - id: is_last_record
+        doc: Set if this is the last record in the message
         type: b1
       - id: is_chunk_record
+        doc: Set if the file contained in this record is chunked into multiple records
         type: b1
       - id: type_format
+        doc: Indicates the structure and format of the value of the TYPE field
         enum: type_formats
         type: b4
       - id: reserved
+        doc: Reserved for future use
         type: b4
       - id: len_options
+        doc: Length of the Options field
         type: u2
       - id: len_id
+        doc: Length of the ID field
         type: u2
       - id: len_type
+        doc: Length of the Type field
         type: u2
       - id: len_data
+        doc: Length of the Data field
         type: u4
       - id: options
         size: len_options
@@ -79,16 +90,19 @@ types:
       - id: options_padding
         type: padding
       - id: id
+        doc: Unique identifier of the file (set in the first record of file)
         type: str
         size: len_id
       - id: id_padding
         type: padding
       - id: type
+        doc: Specified type in the format set with type_format
         type: str
         size: len_type
       - id: type_padding
         type: padding
       - id: data
+        doc: The file data
         size: len_data
       - id: data_padding
         type: padding
