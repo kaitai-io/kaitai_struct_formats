@@ -10,6 +10,7 @@ meta:
   license: CC0-1.0
   bit-endian: be
   endian: be
+  encoding: ASCII
 doc: |
   Direct Internet Message Encapsulation (DIME)
   is an old Microsoft specification for sending and receiving
@@ -78,10 +79,12 @@ types:
       - id: options_padding
         type: padding
       - id: id
+        type: str
         size: len_id
       - id: id_padding
         type: padding
       - id: type
+        type: str
         size: len_type
       - id: type_padding
         type: padding
