@@ -1,7 +1,10 @@
 meta:
   id: dime_message
   title: DIME (Direct Internet Message Encapsulation) Message
+  xref:
+    wikidata: Q1227457
   license: CC0-1.0
+  bit-endian: be
   endian: be
 doc: |
   Direct Internet Message Encapsulation (DIME)
@@ -13,49 +16,61 @@ doc-ref:
   - http://xml.coverpages.org/draft-nielsen-dime-02.txt
   - https://docs.microsoft.com/en-us/archive/msdn-magazine/2002/december/sending-files-attachments-and-soap-messages-via-dime
 seq:
-  - id: dime
-    type: message
+  - id: records
+    type: record
+    repeat: eos
 types:
-  message:
+  padding:
+    doc: |
+      padding to the next 4-byte boundary
     seq:
-    - id: message
-      type: record
-      repeat: eos
+    - id: padding
+      size: ((_io.pos + 3) & ~3) - _io.pos
   record:
+    doc: |
+      each individual fragment of the message
     seq:
     - id: version
       type: b5
-    - id: first_record
+    - id: is_first_record
       type: b1
-    - id: last_record
+    - id: is_last_record
       type: b1
-    - id: chunck_record
+    - id: is_chunck_record
       type: b1
     - id: type_format
+      enum: type_formats
       type: b4
     - id: reserved
       type: b4
-    - id: options_length
+    - id: len_options
       type: u2
-    - id: id_length
+    - id: len_id
       type: u2
-    - id: type_length
+    - id: len_type
       type: u2
-    - id: data_length
+    - id: len_data
       type: u4
     - id: options
-      size: options_length
+      size: len_options
     - id: options_padding
-      size: (4 - _io.pos) % 4
+      type: padding
     - id: id
-      size: id_length
+      size: len_id
     - id: id_padding
-      size: (4 - _io.pos) % 4
+      type: padding
     - id: type
-      size: type_length
+      size: len_type
     - id: type_padding
-      size: (4 - _io.pos) % 4
+      type: padding
     - id: data
-      size: data_length
+      size: len_data
     - id: data_padding
-      size: (4 - _io.pos) % 4
+      type: padding
+enums:
+  type_formats:
+    0: unchanged
+    1: media_type
+    2: absolute_uri
+    3: unknown
+    4: none
