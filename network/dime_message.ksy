@@ -21,14 +21,12 @@ seq:
     repeat: eos
 types:
   padding:
-    doc: |
-      padding to the next 4-byte boundary
+    doc: padding to the next 4-byte boundary
     seq:
     - id: padding
       size: (4 - _io.pos) % 4
   record:
-    doc: |
-      each individual fragment of the message
+    doc: each individual fragment of the message
     seq:
     - id: version
       type: b5
