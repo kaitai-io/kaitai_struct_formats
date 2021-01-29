@@ -1,7 +1,11 @@
 meta:
   id: dime_message
   title: DIME (Direct Internet Message Encapsulation) Message
+  file-extension:
+    - dim
+    - dime
   xref:
+    mime: application/dime
     wikidata: Q1227457
   license: CC0-1.0
   bit-endian: be
