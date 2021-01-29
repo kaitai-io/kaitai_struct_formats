@@ -21,7 +21,7 @@ doc: |
   https://github.com/kaitai-io/kaitai_struct_formats/files/5890499/scanner.dump.gz
   | gunzip -c > scanner.dump`
 doc-ref: 
-  - http://xml.coverpages.org/draft-nielsen-dime-02.txt
+  - https://tools.ietf.org/html/draft-nielsen-dime-02
   - https://docs.microsoft.com/en-us/archive/msdn-magazine/2002/december/sending-files-attachments-and-soap-messages-via-dime
 seq:
   - id: records
