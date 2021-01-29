@@ -33,6 +33,21 @@ types:
     seq:
       - id: boundary_padding
         size: (- _io.pos) % 4
+  option_field:
+    doc: the options field of the record
+    seq:
+      - id: option_elements
+        type: option_element
+        repeat: eos
+  option_element:
+    doc: one element of the options field
+    seq:
+      - id: element_format
+        type: u2
+      - id: len_element
+        type: u2
+      - id: element_data
+        size: len_element
   record:
     doc: each individual fragment of the message
     seq:
@@ -59,6 +74,7 @@ types:
         type: u4
       - id: options
         size: len_options
+        type: option_field
       - id: options_padding
         type: padding
       - id: id
