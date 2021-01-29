@@ -23,48 +23,48 @@ types:
   padding:
     doc: padding to the next 4-byte boundary
     seq:
-    - id: boundary_padding
-      size: (4 - _io.pos) % 4
+      - id: boundary_padding
+        size: (4 - _io.pos) % 4
   record:
     doc: each individual fragment of the message
     seq:
-    - id: version
-      type: b5
-    - id: is_first_record
-      type: b1
-    - id: is_last_record
-      type: b1
-    - id: is_chunck_record
-      type: b1
-    - id: type_format
-      enum: type_formats
-      type: b4
-    - id: reserved
-      type: b4
-    - id: len_options
-      type: u2
-    - id: len_id
-      type: u2
-    - id: len_type
-      type: u2
-    - id: len_data
-      type: u4
-    - id: options
-      size: len_options
-    - id: options_padding
-      type: padding
-    - id: id
-      size: len_id
-    - id: id_padding
-      type: padding
-    - id: type
-      size: len_type
-    - id: type_padding
-      type: padding
-    - id: data
-      size: len_data
-    - id: data_padding
-      type: padding
+      - id: version
+        type: b5
+      - id: is_first_record
+        type: b1
+      - id: is_last_record
+        type: b1
+      - id: is_chunck_record
+        type: b1
+      - id: type_format
+        enum: type_formats
+        type: b4
+      - id: reserved
+        type: b4
+      - id: len_options
+        type: u2
+      - id: len_id
+        type: u2
+      - id: len_type
+        type: u2
+      - id: len_data
+        type: u4
+      - id: options
+        size: len_options
+      - id: options_padding
+        type: padding
+      - id: id
+        size: len_id
+      - id: id_padding
+        type: padding
+      - id: type
+        size: len_type
+      - id: type_padding
+        type: padding
+      - id: data
+        size: len_data
+      - id: data_padding
+        type: padding
 enums:
   type_formats:
     0: unchanged
