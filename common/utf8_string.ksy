@@ -30,6 +30,7 @@ seq:
     repeat: eos
 types:
   utf8_codepoint:
+    -webide-representation: 'U+{value_as_int:hex}'
     params:
       - id: ofs
         type: u8
