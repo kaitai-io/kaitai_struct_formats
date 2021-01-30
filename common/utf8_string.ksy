@@ -43,7 +43,7 @@ types:
         type: u1
         if: len >= 4
     instances:
-      len:
+      len_bytes:
         value: |
           (byte0 & 0b1000_0000 == 0) ? 1 :
           (byte0 & 0b1110_0000 == 0b1100_0000) ? 2 :
@@ -53,25 +53,25 @@ types:
       raw0:
         value: |
           byte0 & (
-            len == 1 ? 0b0111_1111 :
-            len == 2 ? 0b0001_1111 :
-            len == 3 ? 0b0000_1111 :
-            len == 4 ? 0b0000_0111 :
+            len_bytes == 1 ? 0b0111_1111 :
+            len_bytes == 2 ? 0b0001_1111 :
+            len_bytes == 3 ? 0b0000_1111 :
+            len_bytes == 4 ? 0b0000_0111 :
             0
           )
       raw1:
         value: 'byte1 & 0b0011_1111'
-        if: len >= 2
+        if: len_bytes >= 2
       raw2:
         value: 'byte2 & 0b0011_1111'
-        if: len >= 3
+        if: len_bytes >= 3
       raw3:
         value: 'byte3 & 0b0011_1111'
-        if: len >= 4
+        if: len_bytes >= 4
       value_as_int:
         value: >
-          len == 1 ? raw0 :
-          len == 2 ? ((raw0 << 6) | raw1) :
-          len == 3 ? ((raw0 << 12) | (raw1 << 6) | raw2) :
-          len == 4 ? ((raw0 << 18) | (raw1 << 12) | (raw2 << 6) | raw3) :
+          len_bytes == 1 ? raw0 :
+          len_bytes == 2 ? ((raw0 << 6) | raw1) :
+          len_bytes == 3 ? ((raw0 << 12) | (raw1 << 6) | raw2) :
+          len_bytes == 4 ? ((raw0 << 18) | (raw1 << 12) | (raw2 << 6) | raw3) :
           -1
