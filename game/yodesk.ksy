@@ -359,8 +359,7 @@ types:
         contents: "IZAX"
       - id: size
         type: u4
-      - id: unknown
-        type: u2
+      - type: u2
       - id: num_monsters
         type: u2
       - id: monsters
@@ -409,8 +408,7 @@ types:
         contents: "IZX4"
       - id: size
         type: u4
-      - id: unknown
-        type: u2
+      - type: u2
   zones:
     seq:
       - id: num_zones
@@ -438,14 +436,11 @@ types:
       - id: type
         type: u4
         if: index != 0xFF_FF
-      - id: unknown1
-        type: u4
+      - type: u4
         if: index != 0xFF_FF
-      - id: unknown2
-        type: u4
+      - type: u4
         if: index != 0xFF_FF
-      - id: unknown3
-        type: u2
+      - type: u2
         if: index != 0xFF_FF
       - id: strings
         type: prefixed_str
