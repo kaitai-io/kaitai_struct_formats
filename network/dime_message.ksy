@@ -19,7 +19,7 @@ doc: |
   SOAP messages, using standard transport protocols like HTTP.
   
   Sample file: `curl -L
-  https://github.com/kaitai-io/kaitai_struct_formats/files/5890499/scanner.dump.gz
+  https://github.com/kaitai-io/kaitai_struct_formats/files/5894723/scanner_withoptions.dump.gz
   | gunzip -c > scanner.dump`
 doc-ref: 
   - https://tools.ietf.org/html/draft-nielsen-dime-02
