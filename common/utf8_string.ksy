@@ -26,23 +26,20 @@ doc: |
   for educational / research purposes.
 seq:
   - id: codepoints
-    type: utf8_codepoint
+    type: utf8_codepoint(_io.pos)
     repeat: eos
 types:
   utf8_codepoint:
+    params:
+      - id: ofs
+        type: u8
     seq:
-      - id: byte0
-        type: u1
-      - id: byte1
-        type: u1
-        if: len >= 2
-      - id: byte2
-        type: u1
-        if: len >= 3
-      - id: byte3
-        type: u1
-        if: len >= 4
+      - id: bytes
+        size: len_bytes
     instances:
+      byte0:
+        pos: ofs
+        type: u1
       len_bytes:
         value: |
           (byte0 & 0b1000_0000 == 0) ? 1 :
@@ -52,7 +49,7 @@ types:
           -1
       raw0:
         value: |
-          byte0 & (
+          bytes[0] & (
             len_bytes == 1 ? 0b0111_1111 :
             len_bytes == 2 ? 0b0001_1111 :
             len_bytes == 3 ? 0b0000_1111 :
@@ -60,13 +57,13 @@ types:
             0
           )
       raw1:
-        value: 'byte1 & 0b0011_1111'
+        value: 'bytes[1] & 0b0011_1111'
         if: len_bytes >= 2
       raw2:
-        value: 'byte2 & 0b0011_1111'
+        value: 'bytes[2] & 0b0011_1111'
         if: len_bytes >= 3
       raw3:
-        value: 'byte3 & 0b0011_1111'
+        value: 'bytes[3] & 0b0011_1111'
         if: len_bytes >= 4
       value_as_int:
         value: >
