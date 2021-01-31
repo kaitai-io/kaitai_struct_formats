@@ -67,7 +67,6 @@ types:
         0x0008: map_property_colors
         0x0009: map_export_settings
         0x000A: map_export_properties
-        0xFFFF: deleted
 
     types:
       producer:
@@ -167,6 +166,3 @@ types:
         seq:
           - id: dummy
             size: 0
-
-      deleted:
-        doc: Deleted object
