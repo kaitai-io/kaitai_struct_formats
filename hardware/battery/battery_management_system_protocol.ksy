@@ -146,6 +146,7 @@ types:
             type: b1
             enum: fet_bit
       voltage:
+        -affected-by: 522
         seq:
           - id: raw
             type: u2
@@ -155,6 +156,7 @@ types:
             value: raw * 0.01
             doc: Pack voltage (V)
       capacity:
+        -affected-by: 522
         seq:
           - id: raw
             type: u2
@@ -164,6 +166,7 @@ types:
             value: raw * 0.01
             doc: Capacity (Ah)
       current:
+        -affected-by: 522
         seq:
           - id: raw
             type: s2
@@ -173,6 +176,7 @@ types:
             value: raw * 0.01
             doc: Actual current (A)
       temp:
+        -affected-by: 522
         seq:
           - id: raw
             type: u2
@@ -187,6 +191,7 @@ types:
         repeat: eos
     types:
       voltage:
+        -affected-by: 522
         seq:
           - id: raw
             type: u2
