@@ -25,9 +25,14 @@ seq:
         0xa5: read_req
         0x5a: write_req
         _: response(cmd)
-  
+
   - id: checksum
-    size: 2
+    type: u2
+    doc: |
+      Should be equal to the result from: 0x10000 - sum(body)
+      Where sum() is calculated over the value a every byte individually
+      and body includes everything besides magic start/end, cmd and checksum,
+      so excluding 2 bytes on the beginning and 3 bytes on the end.
   - id: magic_end
     contents: [0x77]
 
