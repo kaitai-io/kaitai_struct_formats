@@ -7,16 +7,27 @@
     endian: le
     encoding: ASCII
   doc: |
-    [Star Wars: Yoda Stories](https://en.wikipedia.org/wiki/Star_Wars:_Yoda_Stories) is a unique tile based game with procedurally generated worlds.
-    This spec describes the file format used for all assets of the windows version of the game.
+    [Star Wars: Yoda Stories](https://en.wikipedia.org/wiki/Star_Wars:_Yoda_Stories) is a unique tile based game with procedurally
+    generated worlds.
+    This spec describes the file format used for all assets of the windows
+    version of the game.
 
-    The file format follows the TLV (type-length-value) pattern to build a central catalog containing the most important (and globally accessible) assets of the game (e.g. puzzles, zones, tiles, etc.). The same pattern is also found in some catalog entries to encode arrays of variable-length structures.
+    The file format follows the TLV (type-length-value) pattern to build a
+    central catalog containing the most important (and globally accessible)
+    assets of the game (e.g. puzzles, zones, tiles, etc.). The same pattern is
+    also found in some catalog entries to encode arrays of variable-length
+    structures.
 
-    With every new game, Yoda Stories generates a new world. This is done by picking a random sample of puzzles from `PUZ2`. One of the chosen puzzles will be the goal, which when solved wins the game.
+    With every new game, Yoda Stories generates a new world. This is done by
+    picking a random sample of puzzles from `PUZ2`. One of the chosen puzzles
+    will be the goal, which when solved wins the game.
     Each puzzle provides an item when solved and some require one to be completed.
-    During world generation a global world map of 10x10 sectors is filled with zones based on the selected puzzles.
+    During world generation a global world map of 10x10 sectors is filled with
+    zones based on the selected puzzles.
 
-    To add variety and interactivity to each zone the game includes a simple scripting engine. Zones can declare actions that when executed can for example set, move or delete tiles, drop items or activate enemies.
+    To add variety and interactivity to each zone the game includes a simple
+    scripting engine. Zones can declare actions that when executed can for
+    example set, move or delete tiles, drop items or activate enemies.
 
   seq:
     - id: catalog
@@ -59,14 +70,19 @@
           doc: Version of the file. This value is always set to 512.
           type: u4
     setup_image:
-      doc: A 288x288 bitmap to be shown while other assets are loaded and a new world is generated.
+      doc: |
+        A 288x288 bitmap to be shown while other assets are loaded and a new
+        world is generated.
       seq:
         - id: pixels
           size: _parent.size
     sounds:
       doc: |
-        This section declares sounds used in the game. The actual audio data is stored in wav files on the disk (in a directory named `sfx`) so this section contains paths to each sound file.
-        Sounds can be referenced from the scripting language (see `play_sound` instruction opcode below) and from weapon (see `character` structure).
+        This section declares sounds used in the game. The actual audio data is
+        stored in wav files on the disk (in a directory named `sfx`) so this
+        section contains paths to each sound file.
+        Sounds can be referenced from the scripting language (see `play_sound`
+        instruction opcode below) and from weapon (see `character` structure).
         Some sound ids (like the one when the hero is hit, or can't leave a
         zone) are hard coded in the game.
       seq:
@@ -80,7 +96,9 @@
       seq:
         - id: names
           doc: |
-            List of tile ids and their corresponding names. These are shown in the inventory or used in dialogs (see `speak_hero` and `speak_npc` opcodes).
+            List of tile ids and their corresponding names. These are shown in
+            the inventory or used in dialogs (see `speak_hero` and `speak_npc`
+            opcodes).
           type: tile_name
           repeat: until
           repeat-until:  _.tile_id == 0xFF_FF
@@ -106,24 +124,36 @@
         seq:
           - id: attributes
             doc: |
-              Bit mask of various tile attributes. Most bits are purely informational and do not have any effect on game play.
+              Bit mask of various tile attributes. Most bits are purely
+              informational and do not have any effect on game play.
 
               Their meaning is as follows:
-               * Bit 0: Affects how tile image should be drawn. If set, the value 0 in `pixels` is treated as transparent. Otherwise it is drawn as black.
-               * Bit 1: Tile is usually placed on the lowest layer of a zone (floor)
-               * Bit 2: Tile is usually placed on the middle layer of a zone (objects)
-               * Bit 3: If set and the tile is placed on the object layer it can be dragged and pushed around by the hero.
+               * Bit 0: Affects how tile image should be drawn. If set, the
+                        value 0 in `pixels` is treated as transparent. Otherwise
+                        it is drawn as black.
+               * Bit 1: Floor, tile is usually placed on the lowest layer of a
+                        zone
+               * Bit 2: Object, tile is usually placed on the middle layer of a
+                        zone
+               * Bit 3: If set and the tile is placed on the object layer it can
+                        be dragged and pushed around by the hero.
                * Bit 4: Tile is usually placed on the top layer (roof)
 
-              Bits 5 - 8 declare a sub type and influence the meaning of the remaining bits:
+              Bits 5 - 8 declare a sub type and influence the meaning of the
+              remaining bits:
                 * Bit 5: Locator, tile is used in world map view overview
                 * Bit 6: Identifies tiles that are mapped to weapons
                 * Bit 7: Item
                 * Bit 8: Character
 
-              If the `locator` bit is set, bits 17 - 31 uniquely identify the tiles used to draw the map view. It's unclear whether the games uses this to find the tiles or if the tile ids are just hard coded.
+              If the `locator` bit is set, bits 17 - 31 uniquely identify the
+              tiles used to draw the map view. It's unclear whether the games
+              uses this to find the tiles or if the tile ids are just hard
+              coded.
 
-              If bit 7 is set, bits 16 - 22 are used to determine the hints shown in map view. They are defined as follows:
+              If bit 7 is set, bits 16 - 22 are used to determine the hints
+              shown in map view.
+              They are defined as follows:
                * Bit 16: Key card
                * Bit 17: Tool
                * Bit 18: Part
@@ -132,9 +162,11 @@
                * Bit 21: unused
                * Bit 22: Consumable
 
-              For tiles marked as characters (bit 8), bits 16 - 18 are defined as follows:
+              For tiles marked as characters (bit 8), bits 16 - 18 are defined
+              as follows:
                * Bit 16: Hero
-               * Bit 17: Enemy, tiles without this flag can not be hit by the hero
+               * Bit 17: Enemy, tiles without this flag can not be hit by the
+                         hero
                * Bit 18: NPC
             type: u4
           - id: pixels
@@ -165,7 +197,6 @@
 
         See `condition_opcode` and `instruction_opcode` enums for a list of
         available opcodes and their meanings.
-
       seq:
         - id: marker
           contents: "IACT"
@@ -198,7 +229,8 @@
           type: str
           size: len_text
           doc: |
-            The `text_attribute` is never used, but seems to be included to shared the type with instructions.
+            The `text_attribute` is never used, but seems to be included to
+            shared the type with instructions.
       enums:
         condition_opcode:
           0x0:
@@ -213,7 +245,9 @@
             id:  placed_item_is
           0x4:
             id:  standing_on
-            doc: Check if hero is at `args[0]`x`args[1]` and the floor tile is `args[2]`
+            doc: |
+              Check if hero is at `args[0]`x`args[1]` and the floor tile is
+              `args[2]`
           0x5:
             id:  counter_is
             doc: Current zone's `counter` value is equal to `args[0]`
@@ -230,7 +264,9 @@
             id:  enter_by_plane
           0xa:
             id:  tile_at_is
-            doc: Check if tile at `args[0]`x`args[1]`x`args[2]` is equal to `args[3]`
+            doc: |
+              Check if tile at `args[0]`x`args[1]`x`args[2]` is equal to
+              `args[3]`
           0xb:
             id:  monster_is_dead
             doc: True if monster `args[0]` is dead.
@@ -240,7 +276,9 @@
           0xd:
             id:  has_item
             doc: |
-              True if inventory contains `args[0]`.  If `args[0]` is `0xFFFF` check if inventory contains the item provided by the current zone's puzzle
+              True if inventory contains `args[0]`.  If `args[0]` is `0xFFFF`
+              check if inventory contains the item provided by the current
+              zone's puzzle
           0xe:
             id:  required_item_is
           0xf:
@@ -287,7 +325,8 @@
           0x1e:
             id:  has_any_required_item
             doc: |
-              Determines if inventory contains any of the required items needed for current zone
+              Determines if inventory contains any of the required items needed
+              for current zone
           0x1f:
             id:  counter_is_not
             doc: Current zone's `counter` value is not equal to `args[0]`
@@ -300,7 +339,10 @@
           0x22:
             id:  is_variable
             doc: |
-              Check if variable identified by `args[0]`⊕`args[1]`⊕`args[2]` is set to `args[3]`. Internally this is implemented as opcode 0x0a, check if tile at `args[0]`x`args[1]`x`args[2]` is equal to `args[3]`
+              Check if variable identified by `args[0]`⊕`args[1]`⊕`args[2]` is
+              set to `args[3]`. Internally this is implemented as opcode 0x0a,
+              check if tile at `args[0]`x`args[1]`x`args[2]` is equal to
+              `args[3]`
           0x23:
             id:  games_won_is_greater_than
             doc: True, if total games won is greater than `args[0]`
@@ -324,14 +366,17 @@
           0x0:
             id:  place_tile
             doc: |
-              Place tile `args[3]` at `args[0]`x`args[1]`x`args[2]`. To remove a tile `args[3]` can be set to 0xFFFF.
+              Place tile `args[3]` at `args[0]`x`args[1]`x`args[2]`. To remove a
+              tile `args[3]` can be set to `0xFFFF`.
           0x1:
             id:  remove_tile
             doc: Remove tile at `args[0]`x`args[1]`x`args[2]`
           0x2:
             id:  move_tile
             doc: |
-              Move tile at `args[0]`x`args[0]`x`args[2]` to `args[3]`x`args[4]`x`args[2]`.  *Note that this can not be used to move tiles between layers!*
+              Move tile at `args[0]`x`args[0]`x`args[2]` to
+              `args[3]`x`args[4]`x`args[2]`.  *Note that this can not be used to
+              move tiles between layers!*
           0x3:
             id:  draw_tile
           0x4:
@@ -343,7 +388,9 @@
           0x5:
             id:  speak_npc
             doc: |
-              Show speech bubble at `args[0]`x`args[1]`. _Uses `text` attribute_. The characters `¢` and `¥` are used as placeholders for provided and required items of the current zone, respectively.
+              Show speech bubble at `args[0]`x`args[1]`. _Uses `text`
+              attribute_. The characters `¢` and `¥` are used as placeholders
+              for provided and required items of the current zone, respectively.
 
               Script execution is paused until the speech bubble is dismissed.
           0x6:
@@ -352,7 +399,9 @@
           0x7:
             id:  set_rect_needs_display
             doc: |
-              Redraw the part of the current scene, specified by a rectangle positioned at `args[0]`x`args[1]` with width `args[2]` and height `args[3]`.
+              Redraw the part of the current scene, specified by a rectangle
+              positioned at `args[0]`x`args[1]` with width `args[2]` and height
+              `args[3]`.
           0x8:
             id:  wait
             doc: Pause script execution for one tick.
@@ -368,7 +417,8 @@
           0xc:
             id:  roll_dice
             doc: |
-              Set current zone's `random` to a random value between 1 and `args[0]`.
+              Set current zone's `random` to a random value between 1 and
+              `args[0]`.
           0xd:
             id:  set_counter
             doc: Set current zone's `counter` value to a `args[0]`
@@ -378,7 +428,9 @@
           0xf:
             id:  set_variable
             doc: |
-              Set variable identified by `args[0]`⊕`args[1]`⊕`args[2]` to `args[3]`.  Internally this is implemented as opcode 0x00, setting tile at `args[0]`x`args[1]`x`args[2]` to `args[3]`.
+              Set variable identified by `args[0]`⊕`args[1]`⊕`args[2]` to
+              `args[3]`.  Internally this is implemented as opcode 0x00, setting
+              tile at `args[0]`x`args[1]`x`args[2]` to `args[3]`.
           0x10:
             id:  hide_hero
             doc: Hide hero
@@ -388,15 +440,19 @@
           0x12:
             id: move_hero_to
             doc: |
-              Set hero's position to `args[0]`x`args[1]` ignoring impassable tiles.  Execute hotspot actions, redraw the current scene and move camera if the hero is not hidden.
+              Set hero's position to `args[0]`x`args[1]` ignoring impassable
+              tiles.  Execute hotspot actions, redraw the current scene and move
+              camera if the hero is not hidden.
           0x13:
             id: move_hero_by
             doc: |
-              Moves hero relative to the current location by `args[0]` in x and `args[1]` in y direction.
+              Moves hero relative to the current location by `args[0]` in x and
+              `args[1]` in y direction.
           0x14:
             id: disable_action
             doc: |
-              Disable current action, note that there's no way to activate the action again.
+              Disable current action, note that there's no way to activate the
+              action again.
           0x15:
             id: enable_hotspot
             doc: Enable hotspot `args[0]` so it can be triggered.
@@ -418,7 +474,8 @@
           0x1b:
             id: drop_item
             doc: |
-              Drops item `args[0]` for pickup at `args[1]`x`args[2]`. If the item is 0xFFFF, it drops the current sector's find item instead.
+              Drops item `args[0]` for pickup at `args[1]`x`args[2]`. If the
+              item is 0xFFFF, it drops the current sector's find item instead.
 
               Script execution is paused until the item is picked up.
           0x1c:
@@ -440,7 +497,8 @@
           0x21:
             id: change_zone
             doc: |
-              Change current zone to `args[0]`. Hero will be placed at `args[1]`x`args[2]` in the new zone.
+              Change current zone to `args[0]`. Hero will be placed at
+              `args[1]`x`args[2]` in the new zone.
           0x22:
             id:  set_shared_counter
             doc: Set current zone's `shared_counter` value to a `args[0]`
@@ -453,7 +511,9 @@
           0x25:
             id:  add_health
             doc: |
-              Increase hero's health by `args[0]`. New health is capped at hero's max health (0x300). Argument 0 can also be negative subtract from hero's health.
+              Increase hero's health by `args[0]`. New health is capped at
+              hero's max health (0x300). Argument 0 can also be negative
+              subtract from hero's health.
     monster:
       doc: A monster is a enemy in a zone.
       seq:
@@ -464,10 +524,14 @@
         - id: y
           type: u2
         - id: loot
-          doc: References the item (loot - 1) that will be dropped if the monster is killed. If set to `0xFFFF` the current zone's quest item will be dropped.
+          doc: |
+            References the item (loot - 1) that will be dropped if the monster
+            is killed. If set to `0xFFFF` the current zone's quest item will be
+            dropped.
           type: u2
         - id: drops_loot
-          doc: If this field is anything other than 0 the monster may drop an item when killed.
+          doc: If this field is anything other than 0 the monster may drop an
+            item when killed.
           type: u4
         - id: waypoints
           type: waypoint
@@ -479,7 +543,9 @@
           doc: |
             Planet this zone can be placed on.
 
-            During world generation the goal puzzle dictates which planet is chosen. Apart from `swamp` zones, only the zones with type `empty` or the chosen type are loaded when a game is in progress.
+            During world generation the goal puzzle dictates which planet is
+            chosen. Apart from `swamp` zones, only the zones with type `empty`
+            or the chosen type are loaded when a game is in progress.
           type: u2
           enum: planet
         - id: size
@@ -512,8 +578,11 @@
           repeat: expr
           repeat-expr: width * height
           doc: |
-            `tile_ids` is made up of three interleaved tile layers ordered from bottom (floor) to top (roof).
-            Tiles are often references via 3 coordinates (xyz), which corresponds to an index into this array calculated as `n = y * width * 3 + x * 3 = z`.
+            `tile_ids` is made up of three interleaved tile layers ordered from
+            bottom (floor) to top (roof).
+            Tiles are often references via 3 coordinates (xyz), which
+            corresponds to an index into this array calculated as `n = y * width
+            * 3 + x * 3 = z`.
         - id: num_hotspots
           type: u2
         - id: hotspots
@@ -547,51 +616,68 @@
           1:
             id: empty
             doc: |
-              Empty zones do not contain a puzzle to be solved and are used to fill the space between between zones that are relevant for winning the game.
+              Empty zones do not contain a puzzle to be solved and are used to
+              fill the space between between zones that are relevant for winning
+              the game.
           2:
             id: blockade_north
             doc: |
-              This type of zone blocks access to sectors north of it until the puzzle is solved.
+              This type of zone blocks access to sectors north of it until the
+              puzzle is solved.
           3:
             id: blockade_south
             doc: |
-              This type of zone blocks access to sectors south of it until the puzzle is solved.
+              This type of zone blocks access to sectors south of it until the
+              puzzle is solved.
           4:
             id: blockade_east
             doc: |
-              This type of zone blocks access to sectors east of it until the puzzle is solved.
+              This type of zone blocks access to sectors east of it until the
+              puzzle is solved.
           5:
             id: blockade_west
             doc: |
-              This type of zone blocks access to sectors west of it until the puzzle is solved.
+              This type of zone blocks access to sectors west of it until the
+              puzzle is solved.
           6:
             id: travel_start
             doc: |
-              Starting point to travel to an island on the edge of the world. `travel_start` and `travel_end` zones are connected through hotspot of type `vehicle_to` and `vehicle_back`.
+              Starting point to travel to an island on the edge of the world.
+              `travel_start` and `travel_end` zones are connected through
+              hotspot of type `vehicle_to` and `vehicle_back`.
           7:
             id: travel_end
             doc: |
-              Travel target that is only placed on an island at the edge of the world map during world generation.
+              Travel target that is only placed on an island at the edge of the
+              world map during world generation.
           8:
             id: room
             doc: |
-              A zone that can not be placed on the world map directly. Instead rooms are accessed via actions or hotspots of type `door_in`. They usually contain at least one `door_out` hotspot to get back to the other zone.
+              A zone that can not be placed on the world map directly. Instead
+              rooms are accessed via actions or hotspots of type `door_in`. They
+              usually contain at least one `door_out` hotspot to get back to the
+              other zone.
           9:
             id: load
             doc: |
-              This type of zone is shown after the game has loaded all assets. It should resemble the image from the catalog entry of type `setup_image` for a smooth transition from loading to game play.
+              This type of zone is shown after the game has loaded all assets.
+              It should resemble the image from the catalog entry of type
+              `setup_image` for a smooth transition from loading to game play.
           10:
             id: goal
             doc: |
-              Every world contains exactly one goal zone. Solving this zone wins the game.
+              Every world contains exactly one goal zone. Solving this zone wins
+              the game.
           11:
             id: town
             doc: |
-              This is the entry zone where the hero arrives after leaving the swamp planet. Each planet can only have one town zone.
+              This is the entry zone where the hero arrives after leaving the
+              swamp planet. Each planet can only have one town zone.
           13:
             id: win
             doc: |
-              Shown when a game is won. The score is rendered above the tiles at coordinates 5x7 and 6x7.
+              Shown when a game is won. The score is rendered above the tiles at
+              coordinates 5x7 and 6x7.
           14:
             id: lose
             doc: |
@@ -599,11 +685,13 @@
           15:
             id: trade
             doc: |
-              In order to solve this zone and gain a new item the hero has to trade something in.
+              In order to solve this zone and gain a new item the hero has to
+              trade something in.
           16:
             id: use
             doc: |
-              This type of zone can be solved by making applying a tool or using a keycard.
+              This type of zone can be solved by making applying a tool or using
+              a keycard.
           17:
             id: find
             doc: |
@@ -611,7 +699,8 @@
           18:
             id: find_unique_weapon
             doc: |
-              This zone provides the hero with a unique weapon and will be placed closed to a town zone.
+              This zone provides the hero with a unique weapon and will be
+              placed closed to a town zone.
     zone_spot:
       seq:
         - id: column
@@ -645,7 +734,9 @@
           0:
             id: drop_quest_item
             doc: |
-              Drops the item provided by the zone when solved. Can be set to a specific item, or to `0xFFFF` to use the one from the currently assigned puzzle.
+              Drops the item provided by the zone when solved. Can be set to a
+              specific item, or to `0xFFFF` to use the one from the currently
+              assigned puzzle.
           1:
             id: spawn_location
             doc: |
@@ -653,23 +744,32 @@
           2:
             id: drop_unique_weapon
             doc: |
-              Hotspot that drops the unique weapon found in zones of type `find_unique_weapon`.
+              Hotspot that drops the unique weapon found in zones of type
+              `find_unique_weapon`.
           3:
             id: vehicle_to
             doc: |
-              Used in `travel_start` zones as a trigger to teleport to the corresponding `travel_end` zone. The hotspot argument contains the id of the zone to teleport to.
+              Used in `travel_start` zones as a trigger to teleport to the
+              corresponding `travel_end` zone. The hotspot argument contains the
+              id of the zone to teleport to.
           4:
             id: vehicle_back
             doc: |
-              Counter part to `vehicle_to` hotspots. This is used to determine the hero's position on the zone after the `vehicle_to` hotspot has been triggered and to teleport back to the zone on main land.
+              Counter part to `vehicle_to` hotspots. This is used to determine
+              the hero's position on the zone after the `vehicle_to` hotspot has
+              been triggered and to teleport back to the zone on main land.
           5:
             id: drop_map
             doc: |
-              Hotspot that drops the map (aka locator) tile. One `find` zone with a hotspot of this type will be placed next to a town during world generation.
+              Hotspot that drops the map (aka locator) tile. One `find` zone
+              with a hotspot of this type will be placed next to a town during
+              world generation.
           6:
             id: drop_item
             doc: |
-               Hotspot that, when triggered drops the item specified in the hotspot's argument. If the item is set to `0xFFFF` the zone's quest item will be dropped.
+               Hotspot that, when triggered drops the item specified in the
+               hotspot's argument. If the item is set to `0xFFFF` the zone's
+               quest item will be dropped.
           7:
             id: npc
             doc: |
@@ -681,25 +781,33 @@
           9:
             id: door_in
             doc: |
-              When triggered this hotspot type move the hero to the zone specified in the hotspot argument. The hero's location on the new zone will be determined by a corresponding `door_out` hotspot in the target zone.
+              When triggered this hotspot type move the hero to the zone
+              specified in the hotspot argument. The hero's location on the new
+              zone will be determined by a corresponding `door_out` hotspot in
+              the target zone.
           10:
             id: door_out
             doc:
-              Determines where the hero will be placed when the zone is entered through a door. When triggered, this transports the player back to the `door_in` hotspot they game from.
+              Determines where the hero will be placed when the zone is entered
+              through a door. When triggered, this transports the player back to
+              the `door_in` hotspot they game from.
           11: unused
           12: lock
           13:
             id: teleporter
             doc: |
-              Teleporter hotspots can be used to instantly teleport to other (visited) teleporters on the map
+              Teleporter hotspots can be used to instantly teleport to other
+              (visited) teleporters on the map
           14:
             id: ship_to_planet
             doc: |
-              Behaves similar to the `vehicle_to` hotspot type but travels between the town and the swamp planet.
+              Behaves similar to the `vehicle_to` hotspot type but travels
+              between the town and the swamp planet.
           15:
             id: ship_from_planet
             doc: |
-              Behaves similar to the `vehicle_back` hotspot type but travels between the town and the swamp planet.
+              Behaves similar to the `vehicle_back` hotspot type but travels
+              between the town and the swamp planet.
 
     zone_auxiliary:
       seq:
@@ -725,7 +833,8 @@
           type: u2
         - id: goal_items
           doc: |
-            Additional items that are needed to solve the zone. Only used if the zone type is `goal`.
+            Additional items that are needed to solve the zone. Only used if the
+            zone type is `goal`.
           type: u2
           repeat: expr
           repeat-expr: num_goal_items
@@ -894,7 +1003,9 @@
           type: u2
         - id: reference
           doc: |
-            If the character referenced by index is a monster, this is a reference to their weapon, otherwise this is the index of the weapon's sound
+            If the character referenced by index is a monster, this is a
+            reference to their weapon, otherwise this is the index of the
+            weapon's sound
           type: u2
           if: index != 0xFF_FF
         - id: health
