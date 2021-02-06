@@ -2,8 +2,9 @@ meta:
   id: battery_management_system_protocol
   title: Communication protocol of smart battery management systems from LLT power
   license: CC0-1.0
-  ks-version: 0.8
+  ks-version: 0.9
   endian: be
+  bit-endian: be
 
 doc: |
   Many modern general purpose BMS include a UART/Bluetooth based communication interface.
