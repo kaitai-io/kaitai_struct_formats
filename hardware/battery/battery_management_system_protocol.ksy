@@ -84,7 +84,6 @@ types:
         doc: Portion of remaining capacity
       - id: fet_status
         type: fet_bits
-        size: 1
       - id: cell_count
         type: u1
       - id: ntc_count
@@ -94,14 +93,10 @@ types:
         size: 2
         repeat: expr
         repeat-expr: ntc_count
-    enums:
-      fet_bit:
-        0: off
-        1: on
     types:
       balance_list:
         seq:
-          - id: flag
+          - id: is_balancing
             type: b1
             repeat: expr
             repeat-expr: 32
@@ -109,42 +104,40 @@ types:
         seq:
           - id: reserved
             type: b3
-          - id: fet_lock
+          - id: is_fet_lock
             type: b1
-          - id: ic_error
+          - id: is_ic_error
             type: b1
-          - id: ocp_short
+          - id: is_ocp_short
             type: b1
-          - id: ocp_discharge
+          - id: is_ocp_discharge
             type: b1
-          - id: ocp_charge
+          - id: is_ocp_charge
             type: b1
-          - id: utp_discharge
+          - id: is_utp_discharge
             type: b1
-          - id: otp_discharge
+          - id: is_otp_discharge
             type: b1
-          - id: utp_charge
+          - id: is_utp_charge
             type: b1
-          - id: otp_charge
+          - id: is_otp_charge
             type: b1
-          - id: uvp_pack
+          - id: is_uvp_pack
             type: b1
-          - id: ovp_pack
+          - id: is_ovp_pack
             type: b1
-          - id: uvp_cell
+          - id: is_uvp_cell
             type: b1
-          - id: ovp_cell
+          - id: is_ovp_cell
             type: b1
       fet_bits:
         seq:
           - id: reserved
             type: b6
-          - id: discharge
+          - id: is_discharge_enabled
             type: b1
-            enum: fet_bit
-          - id: charge
+          - id: is_charge_enabled
             type: b1
-            enum: fet_bit
       voltage:
         -affected-by: 522
         seq:
