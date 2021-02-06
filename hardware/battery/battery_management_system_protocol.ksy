@@ -31,9 +31,9 @@ seq:
     type: u2
     doc: |
       Should be equal to the result from: 0x10000 - sum(body)
-      Where sum() is calculated over the value a every byte individually
-      and body includes everything besides magic start/end, cmd and checksum,
-      so excluding 2 bytes on the beginning and 3 bytes on the end.
+      Where sum() is calculated over the value of every byte individually.
+      Body includes everything besides magic start/end byte, cmd and checksum,
+      so excluding 2 bytes at the beginning and 3 bytes at the end.
   - id: magic_end
     contents: [0x77]
 
