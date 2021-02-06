@@ -19,6 +19,8 @@ seq:
   - id: cmd
     type: u1
 
+  - size: 0
+    if: ofs_body_start < 0 # storing current position
   - id: body
     type:
       switch-on: cmd
@@ -26,6 +28,8 @@ seq:
         0xa5: read_req
         0x5a: write_req
         _: response(cmd)
+  - size: 0
+    if: ofs_body_end < 0 # storing current position
 
   - id: checksum
     type: u2
@@ -36,6 +40,16 @@ seq:
       so excluding 2 bytes at the beginning and 3 bytes at the end.
   - id: magic_end
     contents: [0x77]
+
+instances:
+  ofs_body_start:
+    value: _io.pos
+  ofs_body_end:
+    value: _io.pos
+  checksum_input:
+    -affected-by: 84
+    pos: ofs_body_start
+    size: ofs_body_end - ofs_body_start
 
 types:
   read_req:
