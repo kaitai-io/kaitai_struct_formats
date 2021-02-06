@@ -18,6 +18,7 @@ seq:
     contents: [0xdd]
   - id: cmd
     type: u1
+    -affected-by: 778
 
   - size: 0
     if: ofs_body_start < 0 # storing current position
@@ -25,8 +26,8 @@ seq:
     type:
       switch-on: cmd
       cases:
-        0xa5: read_req
-        0x5a: write_req
+        commands::read.to_i: read_req
+        commands::write.to_i: write_req
         _: response(cmd)
   - size: 0
     if: ofs_body_end < 0 # storing current position
@@ -50,6 +51,11 @@ instances:
     -affected-by: 84
     pos: ofs_body_start
     size: ofs_body_end - ofs_body_start
+
+enums:
+  commands:
+    0xa5: read
+    0x5a: write
 
 types:
   read_req:
