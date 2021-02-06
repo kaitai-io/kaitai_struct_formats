@@ -76,7 +76,6 @@ types:
         doc: List of balance bits
       - id: prot_status
         type: prot_list
-        size: 2
         doc: List of protection bits
       - id: software_version
         type: u1
