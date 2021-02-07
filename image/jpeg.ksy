@@ -19,6 +19,7 @@ meta:
       - fmt/43 # JFIF 1.01
       - fmt/44 # JFIF 1.02
     wikidata: Q26329975
+  license: CC0-1.0
   imports:
     - exif
   endian: be
