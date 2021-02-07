@@ -10,6 +10,7 @@ meta:
       - x-fmt/391 # Exif 2.2
       - fmt/645 # Exif 2.21 ("2.2.1" in PRONOM is misspelled)
     wikidata: Q26383099
+  license: CC0-1.0
 seq:
   - id: endianness
     type: u2le
