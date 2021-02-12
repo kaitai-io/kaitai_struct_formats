@@ -16,11 +16,12 @@ require 'pygments'
 Pygments.start 'pygments/'
 
 class FormatPagesGenerator
+  CPP_STL_CANONICAL = {id: 'cpp_stl', name: 'C++/STL'}
   LANGS = {
     'index' => {name: 'Overview', lexer: 'yaml'},
 
-    'cpp_stl_11' => {name: 'C++11/STL', lexer: 'cpp'},
-    'cpp_stl_98' => {name: 'C++98/STL', lexer: 'cpp'},
+    'cpp_stl_11' => {name: 'C++11/STL', lexer: 'cpp', canonical: CPP_STL_CANONICAL},
+    'cpp_stl_98' => {name: 'C++98/STL', lexer: 'cpp', canonical: CPP_STL_CANONICAL},
     'csharp' => {name: 'C#', ext: 'cs'},
     'go' => {name: 'Go', ext: 'go'},
     'graphviz' => {name: 'GraphViz', ext: 'dot'},
@@ -90,7 +91,7 @@ class FormatPagesGenerator
 
     @erb_usage = {}
     LANGS.each_key { |lang|
-      lang_prim = (lang == 'cpp_stl_11' || lang == 'cpp_stl_98') ? 'cpp_stl' : lang
+      lang_prim = LANGS[lang].fetch(:canonical, {})[:id] || lang
       fn = "usage_#{lang_prim}"
       @erb_usage[lang] = erb(fn) if FileTest.exists?("#{fn}.html.erb")
     }
