@@ -31,7 +31,8 @@ doc: |
 
   This spec can only handle uncompressed NBT data, so be sure to first detect
   what type of data you are dealing with. You can use the Unix `file` command
-  to do this:
+  to do this (`file-5.20` or later is required; older versions do not recognize
+  _zlib_-compressed data and return `application/octet-stream` instead):
 
   ```shell
   file --brief --mime-type input-unknown.nbt
@@ -39,7 +40,7 @@ doc: |
 
   If it says:
 
-    * `application/gzip`, you can decompress it by
+    * `application/x-gzip` or `application/gzip` (since `file-5.37`), you can decompress it by
       * `gunzip -c input-gzip.nbt > output.nbt` or
       * `python3 -c "import sys, gzip; sys.stdout.buffer.write(
         gzip.decompress(sys.stdin.buffer.read()) )" < input-gzip.nbt > output.nbt`
