@@ -5,6 +5,8 @@ meta:
   file-extension:
     - nbt
     - dat
+    - schematic # https://minecraft.gamepedia.com/Schematic_file_format
+    - schem
   xref:
     justsolve: Minecraft_NBT_format
   tags:
