@@ -4,8 +4,8 @@ meta:
   file-extension: glb
   endian: le
   license: MIT
-  doc-ref: https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#binary-gltf-layout
   xref:
+    doc-ref: https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#binary-gltf-layout
     mime: model/gltf-binary
 
 seq:

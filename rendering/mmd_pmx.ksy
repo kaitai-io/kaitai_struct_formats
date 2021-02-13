@@ -122,12 +122,12 @@ types:
             2: u2
             4: u4
         repeat: expr
-        repeat-expr: type == 0 ? 1 : type == 1 ? 2 : type == 2 ? 4 : type == 3 ? 2 : -1
+        repeat-expr: 'type == 0 ? 1 : type == 1 ? 2 : type == 2 ? 4 : type == 3 ? 2 : -1'
       - id: skin_weights
         type: f4
         if: type == 1 or type == 2 or type == 3
         repeat: expr
-        repeat-expr: type == 1 ? 1 : type == 2 ? 4 : type == 3 ? 1 : -1
+        repeat-expr: 'type == 1 ? 1 : type == 2 ? 4 : type == 3 ? 1 : -1'
       - id: skin_c
         type: f4_3
         if: type == 3
@@ -197,7 +197,7 @@ types:
         type: u1
       - id: toon_index
         type:
-          switch-on: toon_flag == 1 ? 1 : toon_flag == 0 ? _root.header.texture_index_size : -1
+          switch-on: 'toon_flag == 1 ? 1 : toon_flag == 0 ? _root.header.texture_index_size : -1'
           cases:
             1: u1
             2: u2
@@ -444,7 +444,7 @@ types:
         type: u1
       - id: index
         type:
-          switch-on: target == 0 ? _root.header.bone_index_size : _root.header.morph_index_size
+          switch-on: 'target == 0 ? _root.header.bone_index_size : _root.header.morph_index_size'
           cases:
             1: u1
             2: u2
