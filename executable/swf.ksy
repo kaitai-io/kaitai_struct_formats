@@ -4,17 +4,9 @@ meta:
   file-extension: swf
   xref:
     justsolve: SWF
-    pronom: fmt/507
-      # - fmt/{505..507} # Adobe Flash {8..10}
-      # - fmt/{757..776} # Adobe Flash {11..30}
-    loc:
-      - fdd000130 # SWF 7
-      - fdd000248 # SWF 8
+    loc: fmt/507
     mime: application/x-shockwave-flash
     wikidata: Q594447
-  tags:
-    - executable
-    - media
   license: CC0-1.0
   endian: le
 #  imports:
@@ -90,6 +82,20 @@ types:
         type: u1
       - id: b
         type: u1
+  rgba:
+    seq:
+      - id: r
+        type: u1
+      - id: g
+        type: u1
+      - id: b
+        type: u1
+      - id: a
+        type: u1
+  matrix:
+    seq:
+      - id: has_scale
+        type: b1
   tag:
     seq:
       - id: record_header
@@ -104,7 +110,94 @@ types:
             'tag_type::script_limits': script_limits_body
             'tag_type::symbol_class': symbol_class_body
             'tag_type::set_background_color': rgb
+            'tag_type::define_sprite': define_sprite_body
             'tag_type::export_assets': symbol_class_body
+            'tag_type::define_shape4': define_shape4_body
+  define_shape4_body:
+    seq:
+      - id: id
+        -orig-id: ShapeId
+        type: u2
+      - id: shape_bounds
+        type: rect
+      - id: edge_bounds
+        type: rect
+      - id: reserved
+        type: b5
+      - id: use_fill_winding_rule
+        type: b1
+      - id: use_non_scaling_stroke
+        type: b1
+      - id: use_scaling_stroke
+        type: b1
+      - id: shapes
+        type: shape_with_style
+  shape_with_style:
+    seq:
+      - id: fill_styles
+        type: fill_style_array
+  fill_style_array:
+    seq:
+      - id: fill_style_count
+        type: u1
+      - id: fill_style_count_extended
+        type: u2
+        if: fill_style_count == 0xFF
+      - id: fill_styles
+        type: fill_style
+        repeat: expr
+        repeat-expr: fill_style_count
+  fill_style:
+    seq:
+      - id: fill_style_type
+        type: u1
+        enum: fill_style_type_enum
+      - id: color_a
+        type: rgba
+        if: fill_style_type == fill_style_type_enum::solid and _parent._parent._parent._parent.record_header.tag_type == tag_type::define_shape4
+      - id: color
+        type: rgb
+        if: fill_style_type == fill_style_type_enum::solid and _parent._parent._parent._parent.record_header.tag_type != tag_type::define_shape4
+      - id: gradient_matrix
+        type: matrix
+        if: fill_style_type == fill_style_type_enum::linear_gradient or fill_style_type == fill_style_type_enum::radial_gradient or fill_style_type == fill_style_type_enum::focal_gradient
+      - id: gradient
+        type: gradient_type
+        if: fill_style_type == fill_style_type_enum::linear_gradient or fill_style_type == fill_style_type_enum::radial_gradient
+  gradient_type:
+    seq:
+      - id: spread_mode
+        type: b2
+      - id: interpolation_mode
+        type: b2
+      - id: num_gradient
+        type: b4
+      - id: gradient_records
+        type: grad_record
+        repeat: expr
+        repeat-expr: num_gradient
+  grad_record:
+    seq:
+      - id: ratio
+        type: u1
+      - id: color_a
+        type: rgba
+        if:  _parent._parent._parent._parent._parent._parent.record_header.tag_type == tag_type::define_shape4
+      - id: color
+        type: rgb
+        if: _parent._parent._parent._parent._parent._parent.record_header.tag_type != tag_type::define_shape4
+
+  define_sprite_body:
+    seq:
+      - id: id
+        -orig-id: SpriteId
+        type: u2
+      - id: frame_count
+        type: u2
+      - id: tags
+        type: tag
+        repeat: until
+        repeat-until: _.record_header.tag_type == tag_type::end_of_file
   define_sound_body:
     seq:
       - id: id
@@ -192,14 +285,26 @@ enums:
     0x46: none # F
     0x43: zlib # C
     0x5a: lzma # Z
+  fill_style_type_enum:
+    0x00: solid
+    0x10: linear_gradient
+    0x12: radial_gradient
+    0x13: focal_gradient
+    0x40: repeat_bitmap
+    0x41: clipped_bitmap
+    0x42: non_smoothed_repeat_bitmap
+    0x43: non_smoothed_clipped_bitmap
   tag_type:
     0: end_of_file
+    1: show_frame
+    2: define_shape
     4: place_object
     5: remove_object
     9: set_background_color
     14: define_sound
     26: place_object2
     28: remove_object2
+    39: define_sprite
     43: frame_label
     56: export_assets
     65: script_limits
@@ -209,4 +314,5 @@ enums:
     77: metadata
     78: define_scaling_grid
     82: do_abc
+    83: define_shape4
     86: define_scene_and_frame_label_data
