@@ -4,9 +4,17 @@ meta:
   file-extension: swf
   xref:
     justsolve: SWF
-    loc: fmt/507
+    pronom: fmt/507
+      # - fmt/{505..507} # Adobe Flash {8..10}
+      # - fmt/{757..776} # Adobe Flash {11..30}
+    loc:
+      - fdd000130 # SWF 7
+      - fdd000248 # SWF 8
     mime: application/x-shockwave-flash
     wikidata: Q594447
+  tags:
+    - executable
+    - media
   license: CC0-1.0
   endian: le
 #  imports:
@@ -48,6 +56,12 @@ seq:
     process: zlib
     type: swf_body
     if: compression == compressions::zlib
+# lzma is not yet supporting in java runtime, that's why it's commented out
+#  - id: lzma_body
+#    size-eos: true
+#    process: lzma_raw
+#    type: swf_body
+#    if: compression == compressions::lzma
 types:
   swf_body:
     seq:
@@ -82,6 +96,7 @@ types:
         type: u1
       - id: b
         type: u1
+  # Swf specs has 3 types for color, rgb, rgba and arg.
   rgba:
     seq:
       - id: r
@@ -92,10 +107,37 @@ types:
         type: u1
       - id: a
         type: u1
+# I wish I was able to load Fixed Floating point with Kaitai but couldn't find out how to do it.
   matrix:
     seq:
       - id: has_scale
         type: b1
+      - id: n_scale_bits
+        type: b5
+        if: has_scale == true
+      - id: scale_x
+        size: n_scale_bits
+        if: has_scale == true
+      - id: scale_y
+        size: n_scale_bits
+        if: has_scale == true
+      - id: has_rotate
+        type: b1
+      - id: n_rotate_bits
+        type: b5
+        if: has_rotate == true
+      - id: rotate_skew_0
+        size: n_rotate_bits
+        if: has_rotate == true
+      - id: rotate_skew_1
+        size: n_rotate_bits
+        if: has_rotate == true
+      - id: n_translate_bits
+        type: b5
+      - id: translate_x
+        size: n_translate_bits
+      - id: translate_y
+        size: n_translate_bits
   tag:
     seq:
       - id: record_header
@@ -131,12 +173,91 @@ types:
       - id: use_scaling_stroke
         type: b1
       - id: shapes
-        type: shape_with_style
+        # We need to carry the version of the shape as it impact the layout of the struct down the tree
+        type: shape_with_style(4)
   shape_with_style:
+    params:
+      - id: shape_version
+        type: u1
     seq:
       - id: fill_styles
-        type: fill_style_array
+        type: fill_style_array(shape_version)
+      - id: line_styles
+        type: line_style_array(shape_version)
+  line_style_array:
+    params:
+      - id: shape_version
+        type: u1
+    seq:
+      - id: line_style_count
+        type: u1
+      - id: line_style_count_extended
+        type: u2
+        if: line_style_count == 0xFF
+      - id: line_styles
+        type: line_style(shape_version)
+        repeat: expr
+        repeat-expr: line_style_count
+        if: shape_version != 4
+      - id: line_styles2
+        type: line_style2(shape_version)
+        repeat: expr
+        repeat-expr: line_style_count
+        if: shape_version == 4
+  line_style:
+    params:
+      - id: shape_version
+        type: u1
+    seq:
+      - id: width
+        type: u2
+      - id: color_a
+        type: rgba
+        if: shape_version == 4
+      - id: color
+        type: rgb
+        if: shape_version != 4
+  line_style2:
+    params:
+      - id: shape_version
+        type: u1
+    seq:
+      - id: width
+        type: u2
+      - id: start_cap_style
+        type: b2
+        enum: cap_type
+      - id: join_style
+        type: b2
+        enum: join_style
+      - id: has_fill_flag
+        type: b1
+      - id: no_h_scale_flag
+        type: b1
+      - id: no_v_scale_flag
+        type: b1
+      - id: pixel_hinting_flag
+        type: b1
+      - id: reserved
+        type: b5
+      - id: no_close
+        type: b1
+      - id: end_cap_style
+        type: b2
+        enum: cap_type
+      - id: meter_limit_factor
+        type: u2
+        if: join_style == join_style::miter_join
+      - id: color
+        type: rgba
+        if: has_fill_flag == false
+      - id: fill_type
+        type: fill_style(shape_version)
+        if: has_fill_flag == true
   fill_style_array:
+    params:
+      - id: shape_version
+        type: u1
     seq:
       - id: fill_style_count
         type: u1
@@ -144,48 +265,59 @@ types:
         type: u2
         if: fill_style_count == 0xFF
       - id: fill_styles
-        type: fill_style
+        type: fill_style(shape_version)
         repeat: expr
         repeat-expr: fill_style_count
   fill_style:
+    params:
+      - id: shape_version
+        type: u1
     seq:
       - id: fill_style_type
         type: u1
         enum: fill_style_type_enum
       - id: color_a
         type: rgba
-        if: fill_style_type == fill_style_type_enum::solid and _parent._parent._parent._parent.record_header.tag_type == tag_type::define_shape4
+        if: fill_style_type == fill_style_type_enum::solid and shape_version == 4
       - id: color
         type: rgb
-        if: fill_style_type == fill_style_type_enum::solid and _parent._parent._parent._parent.record_header.tag_type != tag_type::define_shape4
+        if: fill_style_type == fill_style_type_enum::solid and shape_version != 4
       - id: gradient_matrix
         type: matrix
         if: fill_style_type == fill_style_type_enum::linear_gradient or fill_style_type == fill_style_type_enum::radial_gradient or fill_style_type == fill_style_type_enum::focal_gradient
       - id: gradient
-        type: gradient_type
+        type: gradient_type(shape_version)
         if: fill_style_type == fill_style_type_enum::linear_gradient or fill_style_type == fill_style_type_enum::radial_gradient
   gradient_type:
+    params:
+      - id: shape_version
+        type: u1
     seq:
       - id: spread_mode
         type: b2
+        enum: spread_mode_enum
       - id: interpolation_mode
         type: b2
+        enum: interpolation_mode_enum
       - id: num_gradient
         type: b4
       - id: gradient_records
-        type: grad_record
+        type: grad_record(shape_version)
         repeat: expr
         repeat-expr: num_gradient
   grad_record:
+    params:
+      - id: shape_version
+        type: u1
     seq:
       - id: ratio
         type: u1
       - id: color_a
         type: rgba
-        if:  _parent._parent._parent._parent._parent._parent.record_header.tag_type == tag_type::define_shape4
+        if:  shape_version == 4
       - id: color
         type: rgb
-        if: _parent._parent._parent._parent._parent._parent.record_header.tag_type != tag_type::define_shape4
+        if: shape_version != 4
 
   define_sprite_body:
     seq:
@@ -285,6 +417,14 @@ enums:
     0x46: none # F
     0x43: zlib # C
     0x5a: lzma # Z
+  join_style:
+    0: round_join
+    1: bevel_join
+    2: miter_join
+  cap_type:
+    0: round_cap
+    1: no_cap
+    2: square_cap
   fill_style_type_enum:
     0x00: solid
     0x10: linear_gradient
@@ -294,6 +434,16 @@ enums:
     0x41: clipped_bitmap
     0x42: non_smoothed_repeat_bitmap
     0x43: non_smoothed_clipped_bitmap
+  spread_mode_enum:
+    0: pad_mode
+    1: reflect_mode
+    2: repeat_mode
+    3: reserved
+  interpolation_mode_enum:
+    0: normal_rgb
+    1: linear_rgb
+    2: reserved
+    3: reserved
   tag_type:
     0: end_of_file
     1: show_frame
