@@ -202,7 +202,7 @@ types:
       - id: line_styles2
         type: line_style2(shape_version)
         repeat: expr
-        repeat-expr: line_style_count
+        repeat-expr: line_style_count == 0xFF ? line_style_count_extended : line_style_count
         if: shape_version == 4
   line_style:
     params:
@@ -267,7 +267,7 @@ types:
       - id: fill_styles
         type: fill_style(shape_version)
         repeat: expr
-        repeat-expr: fill_style_count
+        repeat-expr: fill_style_count == 0xFF ? fill_style_count_extended : fill_style_count
   fill_style:
     params:
       - id: shape_version
