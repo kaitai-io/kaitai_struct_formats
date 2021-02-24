@@ -147,8 +147,7 @@ types:
 #     - id: ext_time
 #       variable size
 #       if: '_parent.flags & 0x1000 != 0'
-  block_v5:
-    {}
+  block_v5: {}
     # not yet implemented
 enums:
   block_types:

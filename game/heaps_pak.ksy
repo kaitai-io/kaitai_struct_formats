@@ -40,8 +40,8 @@ types:
             type:
               switch-on: flags.is_dir
               cases:
-                true : dir
-                false : file
+                true: dir
+                false: file
         types:
           flags:
             seq:

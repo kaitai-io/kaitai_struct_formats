@@ -21,20 +21,20 @@ seq:
 types:
   sd_option:
     seq:
-    - id: header
-      type: sd_option_header
-    - id: content
-      type:
-        switch-on: header.type
-        cases:
-          option_types::configuration_option : sd_configuration_option
-          option_types::load_balancing_option : sd_load_balancing_option
-          option_types::ipv4_endpoint_option : sd_ipv4_endpoint_option
-          option_types::ipv6_endpoint_option : sd_ipv6_endpoint_option
-          option_types::ipv4_multicast_option : sd_ipv4_multicast_option
-          option_types::ipv6_multicast_option : sd_ipv6_multicast_option
-          option_types::ipv4_sd_endpoint_option : sd_ipv4_sd_endpoint_option
-          option_types::ipv6_sd_endpoint_option : sd_ipv6_sd_endpoint_option
+      - id: header
+        type: sd_option_header
+      - id: content
+        type:
+          switch-on: header.type
+          cases:
+            option_types::configuration_option: sd_configuration_option
+            option_types::load_balancing_option: sd_load_balancing_option
+            option_types::ipv4_endpoint_option: sd_ipv4_endpoint_option
+            option_types::ipv6_endpoint_option: sd_ipv6_endpoint_option
+            option_types::ipv4_multicast_option: sd_ipv4_multicast_option
+            option_types::ipv6_multicast_option: sd_ipv6_multicast_option
+            option_types::ipv4_sd_endpoint_option: sd_ipv4_sd_endpoint_option
+            option_types::ipv6_sd_endpoint_option: sd_ipv6_sd_endpoint_option
 
     types:
       sd_option_header:
@@ -70,14 +70,14 @@ types:
 
       sd_config_kv_pair:
         seq:
-        - id: key
-          type: str
-          terminator: 0x3D
-          encoding: ASCII
-        - id: value
-          type: str
-          size-eos: true
-          encoding: ASCII
+          - id: key
+            type: str
+            terminator: 0x3D
+            encoding: ASCII
+          - id: value
+            type: str
+            size-eos: true
+            encoding: ASCII
 
 
       sd_load_balancing_option:

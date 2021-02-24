@@ -126,19 +126,19 @@ types:
         types:
           header_main:
             seq:
-                - id: packing_type
-                  type: u1
-                  doc: Packing type (always 0)
-                - id: num_rows_raw
-                  type:
-                    switch-on: _root.preheader.version_number.value
-                    cases:
-                      0x0102: u1
-                      _: u2
-                  doc: Number of rows in pattern (1..256)
-                - id: len_packed_pattern
-                  type: u2
-                  doc: Packed pattern data size
+              - id: packing_type
+                type: u1
+                doc: Packing type (always 0)
+              - id: num_rows_raw
+                type:
+                  switch-on: _root.preheader.version_number.value
+                  cases:
+                    0x0102: u1
+                    _: u2
+                doc: Number of rows in pattern (1..256)
+              - id: len_packed_pattern
+                type: u2
+                doc: Packed pattern data size
             instances:
               num_rows:
                 value: 'num_rows_raw + (_root.preheader.version_number.value == 0x0102 ? 1 : 0)'
