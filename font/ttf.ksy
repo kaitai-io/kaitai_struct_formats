@@ -8,6 +8,7 @@ meta:
     wikidata: Q751800
   license: MIT
   endian: be
+  ks-version: '0.9'
 doc: |
   A TrueType font file contains data, in table format, that comprises
   an outline font.
@@ -17,8 +18,8 @@ seq:
     type: offset_table
   - id: directory_table
     type: dir_table_entry
-    repeat: expr
-    repeat-expr: offset_table.num_tables
+    repeat:
+      expr: offset_table.num_tables
 types:
   fixed:
     -webide-representation: '{major:dec}.{minor:dec}'
@@ -85,8 +86,8 @@ types:
         type: u2
       - id: tables
         type: subtable_header
-        repeat: expr
-        repeat-expr: number_of_encoding_tables
+        repeat:
+          expr: number_of_encoding_tables
     types:
       subtable_header:
         -webide-representation: "p:{platform_id:dec}, e:{encoding_id:dec}"
@@ -136,9 +137,8 @@ types:
             seq:
               - id: sub_header_keys
                 type: u2
-                repeat: expr
-                repeat-expr: 256
-              # TODO
+                repeat:
+                  expr: 256
           segment_mapping_to_delta_values:
             seq:
               - id: seg_count_x2
@@ -151,22 +151,22 @@ types:
                 type: u2
               - id: end_count
                 type: u2
-                repeat: expr
-                repeat-expr: seg_count
+                repeat:
+                  expr: seg_count
               - id: reserved_pad
                 type: u2
               - id: start_count
                 type: u2
-                repeat: expr
-                repeat-expr: seg_count
+                repeat:
+                  expr: seg_count
               - id: id_delta
                 type: u2
-                repeat: expr
-                repeat-expr: seg_count
+                repeat:
+                  expr: seg_count
               - id: id_range_offset
                 type: u2
-                repeat: expr
-                repeat-expr: seg_count
+                repeat:
+                  expr: seg_count
               - id: glyph_id_array
                 type: u2
                 repeat: eos
@@ -182,8 +182,8 @@ types:
                 type: u2
               - id: glyph_id_array
                 type: u2
-                repeat: expr
-                repeat-expr: entry_count
+                repeat:
+                  expr: entry_count
   cvt:
     doc: >
       cvt  - Control Value Table
@@ -215,16 +215,16 @@ types:
         seq:
           - id: end_pts_of_contours
             type: u2
-            repeat: expr
-            repeat-expr: _parent.number_of_contours
+            repeat:
+              expr: _parent.number_of_contours
           - id: instruction_length
             type: u2
           - id: instructions
             size: instruction_length
           - id: flags
             type: flag
-            repeat: expr
-            repeat-expr: point_count
+            repeat:
+              expr: point_count
         instances:
           point_count:
             value: end_pts_of_contours.max + 1
@@ -785,8 +785,8 @@ types:
                 type: u2
               - id: kerning_pairs
                 type: kerning_pair
-                repeat: expr
-                repeat-expr: pair_count
+                repeat:
+                  expr: pair_count
         seq:
           - id: version
             type: u2
@@ -814,8 +814,8 @@ types:
         type: u2
       - id: subtables
         type: subtable
-        repeat: expr
-        repeat-expr: subtable_count
+        repeat:
+          expr: subtable_count
   maxp:
     seq:
       - id: table_version_number
@@ -890,12 +890,12 @@ types:
             type: u2
           - id: glyph_name_index
             type: u2
-            repeat: expr
-            repeat-expr: number_of_glyphs
+            repeat:
+              expr: number_of_glyphs
           - id: glyph_names
             type: pascal_string
-            repeat: until
-            repeat-until: _.length == 0 or _io.eof
+            repeat:
+              until: _.length == 0 or _io.eof
     seq:
       - id: format
         type: fixed
@@ -981,8 +981,8 @@ types:
       - id: name_records
         -orig-id: nameRecord
         type: name_record
-        repeat: expr
-        repeat-expr: num_name_records
+        repeat:
+          expr: num_name_records
     enums:
       platforms:
         0: unicode

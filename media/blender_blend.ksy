@@ -11,6 +11,7 @@ meta:
     wikidata: Q15671948
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 doc: |
   Blender is an open source suite for 3D modelling, sculpting,
   animation, compositing, rendering, preparation of assets for its own
@@ -109,9 +110,8 @@ types:
       - id: names
         type: strz
         encoding: UTF-8
-        repeat: expr
-        repeat-expr: num_names
-
+        repeat:
+          expr: num_names
       - id: padding_1
         size: (4 - _io.pos) % 4
 
@@ -123,9 +123,8 @@ types:
       - id: types
         type: strz
         encoding: UTF-8
-        repeat: expr
-        repeat-expr: num_types
-
+        repeat:
+          expr: num_types
       - id: padding_2
         size: (4 - _io.pos) % 4
 
@@ -134,9 +133,8 @@ types:
         #align: 4 - https://github.com/kaitai-io/kaitai_struct/issues/12
       - id: lengths
         type: u2
-        repeat: expr
-        repeat-expr: num_types
-
+        repeat:
+          expr: num_types
       - id: padding_3
         size: (4 - _io.pos) % 4
 
@@ -146,8 +144,8 @@ types:
         type: u4
       - id: structs
         type: dna_struct
-        repeat: expr
-        repeat-expr: num_structs
+        repeat:
+          expr: num_structs
   dna_struct:
     doc: |
       DNA struct contains a `type` (type name), which is specified as
@@ -159,8 +157,8 @@ types:
         type: u2
       - id: fields
         type: dna_field
-        repeat: expr
-        repeat-expr: num_fields
+        repeat:
+          expr: num_fields
     instances:
       type:
         value: _parent.types[idx_type]

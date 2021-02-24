@@ -15,7 +15,7 @@ meta:
     pronom: fmt/366 # NITF 2.1
     wikidata: Q1961044
   license: MIT
-  ks-version: 0.8
+  ks-version: 0.9
   encoding: UTF-8
   endian: be
 doc: |
@@ -35,24 +35,24 @@ seq:
     type: header
   - id: image_segments
     type: image_segment(_index)
-    repeat: expr
-    repeat-expr: header.num_image_segments.to_i
+    repeat:
+      expr: header.num_image_segments.to_i
   - id: graphics_segments
     type: graphics_segment(_index)
-    repeat: expr
-    repeat-expr: header.num_graphics_segments.to_i
+    repeat:
+      expr: header.num_graphics_segments.to_i
   - id: text_segments
     type: text_segment(_index)
-    repeat: expr
-    repeat-expr: header.num_text_files.to_i
+    repeat:
+      expr: header.num_text_files.to_i
   - id: data_extension_segments
     type: data_extension_segment(_index)
-    repeat: expr
-    repeat-expr: header.num_data_extension.to_i
+    repeat:
+      expr: header.num_data_extension.to_i
   - id: reserved_extension_segments
     type: reserved_extension_segment(_index)
-    repeat: expr
-    repeat-expr: header.num_reserved_extension.to_i
+    repeat:
+      expr: header.num_reserved_extension.to_i
 types:
   header:
     seq:
@@ -119,16 +119,16 @@ types:
         size: 3
       - id: linfo
         type: length_image_info
-        repeat: expr
-        repeat-expr: num_image_segments.to_i
+        repeat:
+          expr: num_image_segments.to_i
       - id: num_graphics_segments
         -orig-id: nums
         type: str
         size: 3
       - id: lnnfo
         type: length_graphic_info
-        repeat: expr
-        repeat-expr: num_graphics_segments.to_i
+        repeat:
+          expr: num_graphics_segments.to_i
       - id: reserved_numx
         -orig-id: numx
         type: str
@@ -139,24 +139,24 @@ types:
         size: 3
       - id: ltnfo
         type: length_text_info
-        repeat: expr
-        repeat-expr: num_text_files.to_i
+        repeat:
+          expr: num_text_files.to_i
       - id: num_data_extension
         -orig-id: numdes
         type: str
         size: 3
       - id: ldnfo
         type: length_data_info
-        repeat: expr
-        repeat-expr: num_data_extension.to_i
+        repeat:
+          expr: num_data_extension.to_i
       - id: num_reserved_extension
         -orig-id: numres
         type: str
         size: 3
       - id: lrnfo
         type: length_reserved_info
-        repeat: expr
-        repeat-expr: num_reserved_extension.to_i
+        repeat:
+          expr: num_reserved_extension.to_i
       - id: user_defined_header
         type: tre_header
       - id: extended_header
@@ -378,8 +378,8 @@ types:
       - id: img_comments
         -orig-id: icom
         type: image_comment
-        repeat: expr
-        repeat-expr: num_img_comments.to_i
+        repeat:
+          expr: num_img_comments.to_i
       - id: img_compression
         -orig-id: ic
         type: str
@@ -399,8 +399,8 @@ types:
         if: num_bands.to_i == 0
       - id: bands
         type: band_info
-        repeat: expr
-        repeat-expr: "num_bands.to_i != 0 ? num_bands.to_i : num_multispectral_bands.to_i"
+        repeat:
+          expr: "num_bands.to_i != 0 ? num_bands.to_i : num_multispectral_bands.to_i"
       - id: img_sync_code
         -orig-id: isync
         type: str
@@ -460,8 +460,8 @@ types:
         -orig-id: udid
         type: u1
         if: user_def_img_data_len.to_i > 2
-        repeat: expr
-        repeat-expr: user_def_img_data_len.to_i - 3
+        repeat:
+          expr: user_def_img_data_len.to_i - 3
       - id: image_extended_sub_header
         type: tre_header
   band_info:
@@ -496,8 +496,8 @@ types:
       - id: luts
         -orig-id: lutd
         size: num_lut_entries.to_i
-        repeat: expr
-        repeat-expr: num_luts.to_i
+        repeat:
+          expr: num_luts.to_i
   image_comment:
     seq:
       - type: str
@@ -542,14 +542,14 @@ types:
         doc: 'Pad Output Pixel Code'
       - id: bmrbnd
         type: u4
-        repeat: expr
-        repeat-expr: bmrtmr_count
+        repeat:
+          expr: bmrtmr_count
         if: has_bmr
         doc: 'Block n, Band m Offset'
       - id: tmrbnd
         type: u4
-        repeat: expr
-        repeat-expr: bmrtmr_count
+        repeat:
+          expr: bmrtmr_count
         if: has_tmr
         doc: 'Pad Pixel n, Band m'
   graphics_segment:
@@ -633,8 +633,8 @@ types:
       - id: header_data
         type: u1
         if: header_data_length.to_i > 2
-        repeat: expr
-        repeat-expr: header_data_length.to_i - 3
+        repeat:
+          expr: header_data_length.to_i - 3
   text_segment:
     params:
       - id: idx
@@ -759,8 +759,8 @@ types:
         doc: 'Shall contain the value 0x0A6E1D97.'
       - id: sfh_dr
         type: u1
-        repeat: expr
-        repeat-expr: sfh_l1.to_i
+        repeat:
+          expr: sfh_l1.to_i
       - id: sfh_delim2
         type: u4
         doc: 'Shall contain the value 0x0ECA14BF.'

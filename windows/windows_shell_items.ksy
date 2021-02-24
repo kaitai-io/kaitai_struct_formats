@@ -5,6 +5,7 @@ meta:
     forensicswiki: Shell_Item
   license: CC0-1.0
   endian: le
+  ks-version: '0.9'
 doc: |
   Windows Shell Items (AKA "shellbags") is an undocumented set of
   structures used internally within Windows to identify paths in
@@ -22,8 +23,8 @@ seq:
   - id: items
     -orig-id: IDList
     type: shell_item
-    repeat: until
-    repeat-until: _.len_data == 0
+    repeat:
+      until: _.len_data == 0
     doc-ref: 'https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.2.1'
 types:
   shell_item:

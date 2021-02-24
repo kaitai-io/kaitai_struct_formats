@@ -16,6 +16,7 @@ meta:
     wikidata: Q535473
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 doc: |
   PCX is a bitmap image format originally used by PC Paintbrush from
   ZSoft Corporation. Originally, it was a relatively simple 128-byte
@@ -94,8 +95,8 @@ types:
         contents: [0x0c]
       - id: colors
         type: rgb
-        repeat: expr
-        repeat-expr: 256
+        repeat:
+          expr: 256
   rgb:
     seq:
       - id: r

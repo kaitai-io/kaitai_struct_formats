@@ -3,7 +3,7 @@ meta:
   title: Compressed Macintosh resource data, Apple `'dcmp' (0)` format
   application: Mac OS
   license: MIT
-  ks-version: "0.8"
+  ks-version: "0.9"
   imports:
     - dcmp_variable_length_integer
   endian: be
@@ -38,8 +38,8 @@ doc-ref: 'https://github.com/dgelessus/python-rsrcfork/blob/f891a6e/src/rsrcfork
 seq:
   - id: chunks
     type: chunk
-    repeat: until
-    repeat-until: _.tag == 0xff
+    repeat:
+      until: _.tag == 0xff
     doc: |
       The sequence of chunks that make up the compressed data.
 types:
@@ -360,8 +360,8 @@ types:
                   Raw variable-length integer representation of `num_addresses`.
               - id: addresses_raw
                 type: dcmp_variable_length_integer
-                repeat: expr
-                repeat-expr: num_addresses
+                repeat:
+                  expr: num_addresses
                 doc: |
                   The addresses for each generated jump table entry,
                   stored as variable-length integers.
@@ -462,8 +462,8 @@ types:
                   Raw variable-length integer representation of `num_deltas`.
               - id: deltas
                 type: s1
-                repeat: expr
-                repeat-expr: num_deltas
+                repeat:
+                  expr: num_deltas
                 doc: |
                   The deltas for each value relative to the previous value.
 
@@ -504,8 +504,8 @@ types:
                   Raw variable-length integer representation of `num_deltas`.
               - id: deltas_raw
                 type: dcmp_variable_length_integer
-                repeat: expr
-                repeat-expr: num_deltas
+                repeat:
+                  expr: num_deltas
                 doc: |
                   The deltas for each value relative to the previous value,
                   stored as variable-length integers.

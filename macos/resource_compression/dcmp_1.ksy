@@ -3,7 +3,7 @@ meta:
   title: Compressed Macintosh resource data, Apple `'dcmp' (1)` format
   application: Mac OS
   license: MIT
-  ks-version: "0.8"
+  ks-version: '0.9'
   imports:
     - dcmp_variable_length_integer
   endian: be
@@ -35,8 +35,8 @@ doc-ref: 'https://github.com/dgelessus/python-rsrcfork/blob/f891a6e/src/rsrcfork
 seq:
   - id: chunks
     type: chunk
-    repeat: until
-    repeat-until: _.tag == 0xff
+    repeat:
+      until: _.tag == 0xff
     doc: |
       The sequence of chunks that make up the compressed data.
 types:

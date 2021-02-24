@@ -11,6 +11,7 @@ meta:
   license: CC0-1.0
   encoding: ASCII
   endian: be
+  ks-version: 0.9
 seq:
   - id: header
     type: profile_header
@@ -514,8 +515,8 @@ types:
         type: u4
       - id: tags
         type: tag_definition
-        repeat: expr
-        repeat-expr: tag_count
+        repeat:
+          expr: tag_count
     types:
       tag_definition:
         seq:
@@ -1109,8 +1110,8 @@ types:
                 enum: colorant_and_phosphor_encodings
               - id: ciexy_coordinates_per_channel
                 type: ciexy_coordinate_values
-                repeat: expr
-                repeat-expr: number_of_device_channels
+                repeat:
+                  expr: number_of_device_channels
             types:
               ciexy_coordinate_values:
                 seq:
@@ -1133,8 +1134,8 @@ types:
                 type: u4
               - id: numbers_of_colorants_in_order_of_printing
                 type: u1
-                repeat: expr
-                repeat-expr: count_of_colorants
+                repeat:
+                  expr: count_of_colorants
           colorant_table_type:
             seq:
               - id: reserved
@@ -1143,8 +1144,8 @@ types:
                 type: u4
               - id: colorants
                 type: colorant
-                repeat: expr
-                repeat-expr: count_of_colorants
+                repeat:
+                  expr: count_of_colorants
             types:
               colorant:
                 seq:
@@ -1152,8 +1153,8 @@ types:
                     type: strz
                   - id: padding
                     contents: [0x00]
-                    repeat: expr
-                    repeat-expr: 32 - name.length
+                    repeat:
+                      expr: 32 - name.length
                   - id: pcs_values
                     size: 6
           curve_type:
@@ -1164,8 +1165,8 @@ types:
                 type: u4
               - id: curve_values
                 type: u2
-                repeat: expr
-                repeat-expr: number_of_entries
+                repeat:
+                  expr: number_of_entries
                 if: number_of_entries > 1
               - id: curve_value
                 type: u1
@@ -1199,8 +1200,8 @@ types:
                 contents: [0x00]
               - id: encoded_e_parameters
                 type: s4
-                repeat: expr
-                repeat-expr: 9
+                repeat:
+                  expr: 9
               - id: number_of_input_table_entries
                 type: u2
               - id: number_of_output_table_entries
@@ -1225,8 +1226,8 @@ types:
                 contents: [0x00]
               - id: encoded_e_parameters
                 type: s4
-                repeat: expr
-                repeat-expr: 9
+                repeat:
+                  expr: 9
               - id: number_of_input_table_entries
                 type: u4
               - id: number_of_output_table_entries
@@ -1320,8 +1321,8 @@ types:
                 type: u4
               - id: records
                 type: record
-                repeat: expr
-                repeat-expr: number_of_records
+                repeat:
+                  expr: number_of_records
             types:
               record:
                 seq:
@@ -1351,8 +1352,8 @@ types:
                 type: u4
               - id: process_element_positions_table
                 type: position_number
-                repeat: expr
-                repeat-expr: number_of_processing_elements
+                repeat:
+                  expr: number_of_processing_elements
               - id: data
                 size-eos: true
           named_color_2_type:
@@ -1369,18 +1370,18 @@ types:
                 type: strz
               - id: prefix_for_each_colour_name_padding
                 contents: [0x00]
-                repeat: expr
-                repeat-expr: 32 - prefix_for_each_colour_name.length
+                repeat:
+                  expr: 32 - prefix_for_each_colour_name.length
               - id: suffix_for_each_colour_name
                 type: strz
               - id: suffix_for_each_colour_name_padding
                 contents: [0x00]
-                repeat: expr
-                repeat-expr: 32 - suffix_for_each_colour_name.length
+                repeat:
+                  expr: 32 - suffix_for_each_colour_name.length
               - id: named_colour_definitions
                 type: named_colour_definition
-                repeat: expr
-                repeat-expr: count_of_named_colours
+                repeat:
+                  expr: count_of_named_colours
             types:
               named_colour_definition:
                 seq:
@@ -1388,14 +1389,14 @@ types:
                     type: strz
                   - id: root_name_padding
                     contents: [0x00]
-                    repeat: expr
-                    repeat-expr: 32 - root_name.length
+                    repeat:
+                      expr: 32 - root_name.length
                   - id: pcs_coordinates
                     size: 6
                   - id: device_coordinates
                     type: u2
-                    repeat: expr
-                    repeat-expr: _parent.number_of_device_coordinates_for_each_named_colour
+                    repeat:
+                      expr: _parent.number_of_device_coordinates_for_each_named_colour
                     if: _parent.number_of_device_coordinates_for_each_named_colour > 0
           parametric_curve_type:
             seq:
@@ -1481,8 +1482,8 @@ types:
                 type: u4
               - id: profile_descriptions
                 type: profile_description
-                repeat: expr
-                repeat-expr: number_of_description_structures
+                repeat:
+                  expr: number_of_description_structures
             types:
               profile_description:
                 seq:
@@ -1507,12 +1508,12 @@ types:
                 type: u4
               - id: positions_table
                 type: position_number
-                repeat: expr
-                repeat-expr: number_of_structures
+                repeat:
+                  expr: number_of_structures
               - id: profile_identifiers
                 type: profile_identifier
-                repeat: expr
-                repeat-expr: number_of_structures
+                repeat:
+                  expr: number_of_structures
             types:
               profile_identifier:
                 seq:
@@ -1530,8 +1531,8 @@ types:
                 type: u2
               - id: response_curve_structure_offsets
                 type: u4
-                repeat: expr
-                repeat-expr: count_of_measurement_types
+                repeat:
+                  expr: count_of_measurement_types
               - id: response_curve_structures
                 size-eos: true
           s_15_fixed_16_array_type:

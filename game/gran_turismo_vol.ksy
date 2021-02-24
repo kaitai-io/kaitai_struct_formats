@@ -6,6 +6,7 @@ meta:
     wikidata: Q32096599
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 seq:
   - id: magic
     contents: ["GTFS", 0, 0, 0, 0]
@@ -17,16 +18,16 @@ seq:
     contents: [0, 0, 0, 0]
   - id: offsets
     type: u4
-    repeat: expr
-    repeat-expr: num_files
+    repeat:
+      expr: num_files
 instances:
   ofs_dir:
     value: offsets[1]
   files:
     pos: ofs_dir & 0xFFFFF800
     type: file_info
-    repeat: expr
-    repeat-expr: _root.num_entries
+    repeat:
+      expr: _root.num_entries
 types:
   file_info:
     seq:

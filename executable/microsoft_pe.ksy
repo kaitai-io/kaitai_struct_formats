@@ -14,7 +14,7 @@ meta:
     - executable
     - windows
   license: CC0-1.0
-  ks-version: 0.7
+  ks-version: 0.9
   endian: le
 doc-ref: https://learn.microsoft.com/en-us/windows/win32/debug/pe-format
 seq:
@@ -49,8 +49,8 @@ types:
         type: optional_header
         size: coff_hdr.size_of_optional_header
       - id: sections
-        repeat: expr
-        repeat-expr: coff_hdr.number_of_sections
+        repeat:
+          expr: coff_hdr.number_of_sections
         type: section
     instances:
       certificate_table:
@@ -87,8 +87,8 @@ types:
       symbol_table:
         pos: pointer_to_symbol_table
         type: coff_symbol
-        repeat: expr
-        repeat-expr: number_of_symbols
+        repeat:
+          expr: number_of_symbols
     enums:
       machine_type:
         # 3.3.1. Machine Types

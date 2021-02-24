@@ -9,6 +9,7 @@ meta:
     wikidata: Q81095
   license: MIT
   endian: le
+  ks-version: '0.9'
 doc-ref: 'https://dicom.nema.org/medical/dicom/current/output/html/part10.html#chapter_7'
 doc: |
   DICOM (Digital Imaging and Communications in Medicine), AKA NEMA
@@ -60,8 +61,8 @@ types:
         if: value_len != 0xffff_ffff
       - id: items
         type: seq_item
-        repeat: until
-        repeat-until: _.tag_elem == 0xe0dd
+        repeat:
+          until: _.tag_elem == 0xe0dd
         if: vr == 'SQ' and value_len == 0xffff_ffff
       - id: elements_implicit
         type: t_data_element_implicit
@@ -118,8 +119,8 @@ types:
         if: value_len != 0xffff_ffff
       - id: items
         type: seq_item
-        repeat: until
-        repeat-until: _.tag_elem == 0xe0dd
+        repeat:
+          until: _.tag_elem == 0xe0dd
         if: vr == 'SQ' and value_len == 0xffff_ffff
       - id: elements
         type: t_data_element_explicit
@@ -163,8 +164,8 @@ types:
         if: value_len != 0xffff_ffff
       - id: items
         type: t_data_element_explicit
-        repeat: until
-        repeat-until: _.tag_group == 0xfffe and _.tag_elem == 0xe00d
+        repeat:
+          until: _.tag_group == 0xfffe and _.tag_elem == 0xe00d
         if: value_len == 0xffff_ffff
 enums:
   tags:

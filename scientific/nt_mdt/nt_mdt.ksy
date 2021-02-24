@@ -10,6 +10,7 @@ meta:
   file-extension: mdt
   license: GPL-3.0-or-later
   endian: le
+  ks-version: 0.9
 doc: |
   A native file format of NT-MDT scientific software. Usually contains
   any of:
@@ -46,14 +47,16 @@ types:
     seq:
       - id: data
         type: u1
-        repeat: expr
-        repeat-expr: 16
+        repeat:
+          expr: 16
   framez:
     seq:
       - id: frames
         type: frame
+==== BASE ====
         repeat: expr
-        repeat-expr: '_root.last_frame+1'
+        repeat-expr: _root.last_frame+1
+==== BASE ====
   title:
     seq:
       - id: title_len
@@ -159,12 +162,12 @@ types:
             if: fm_ndots > 0
           - id: coordinates
             type: dots_data
-            repeat: expr
-            repeat-expr: fm_ndots
+            repeat:
+              expr: fm_ndots
           - id: data
             type: data_linez(_index)
-            repeat: expr
-            repeat-expr: fm_ndots
+            repeat:
+              expr: fm_ndots
         types:
           dots_header:
             seq:
@@ -202,12 +205,12 @@ types:
             seq:
               - id: forward
                 type: s2
-                repeat: expr
-                repeat-expr: _parent.coordinates[index].forward_size
+                repeat:
+                  expr: _parent.coordinates[index].forward_size
               - id: backward
                 type: s2
-                repeat: expr
-                repeat-expr: _parent.coordinates[index].backward_size
+                repeat:
+                  expr: _parent.coordinates[index].backward_size
       axis_scale:
         seq:
           - id: offset
@@ -234,18 +237,18 @@ types:
             type: u4
           - id: blocks_headers
             type: block_descr
-            repeat: expr
-            repeat-expr: block_count
+            repeat:
+              expr: block_count
           - id: blocks_names
             type: str
             encoding: UTF-8
             size: blocks_headers[_index].name_len
-            repeat: expr
-            repeat-expr: block_count
+            repeat:
+              expr: block_count
           - id: blocks_data
             size: blocks_headers[_index].len
-            repeat: expr
-            repeat-expr: block_count
+            repeat:
+              expr: block_count
         types:
           block_descr:
             seq:
@@ -270,9 +273,8 @@ types:
 
           - id: data
             type: s2
-            repeat: expr
-            repeat-expr: fm_xres*fm_yres
-
+            repeat:
+              expr: fm_xres*fm_yres
           - id: title
             type: title
           - id: xml
@@ -328,8 +330,8 @@ types:
             type: u4
           - id: guids
             type: uuid
-            repeat: expr
-            repeat-expr: 2
+            repeat:
+              expr: 2
           - id: frame_status
             size: 4
           - id: name_size
@@ -368,12 +370,12 @@ types:
             type: u4
           - id: dimensions
             type: calibration
-            repeat: expr
-            repeat-expr: n_dimensions
+            repeat:
+              expr: n_dimensions
           - id: mesurands
             type: calibration
-            repeat: expr
-            repeat-expr: n_mesurands
+            repeat:
+              expr: n_mesurands
         instances:
           image:
             pos: data_offset
@@ -405,8 +407,8 @@ types:
                         #"data_type::float48": s8
                         #"data_type::float80": s8
                         #"data_type::floatfix": s8
-                    repeat: expr
-                    repeat-expr: _parent._parent.n_mesurands
+                    repeat:
+                      expr: _parent._parent.n_mesurands
           calibration:
             seq:
               - id: len_tot
@@ -505,10 +507,8 @@ types:
 
           - id: image
             type: s2
-            repeat: expr
-            repeat-expr: fm_xres * fm_yres
-
-            #Stuff after data
+            repeat:
+              expr: fm_xres * fm_yres
           - id: title
             type: title
           - id: xml

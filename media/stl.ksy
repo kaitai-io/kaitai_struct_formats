@@ -9,6 +9,7 @@ meta:
     wikidata: Q1238229
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 doc: |
   STL files are used to represent simple 3D models, defined using
   triangular 3D faces.
@@ -33,8 +34,8 @@ seq:
     type: u4
   - id: triangles
     type: triangle
-    repeat: expr
-    repeat-expr: num_triangles
+    repeat:
+      expr: num_triangles
 types:
   triangle:
     doc: |
@@ -46,8 +47,8 @@ types:
         type: vec3d
       - id: vertices
         type: vec3d
-        repeat: expr
-        repeat-expr: 3
+        repeat:
+          expr: 3
       - id: abr
         type: u2
         doc: |

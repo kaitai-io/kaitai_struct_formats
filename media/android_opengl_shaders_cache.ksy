@@ -8,6 +8,7 @@ meta:
   license: Apache-2.0
   endian: le
 
+  ks-version: 0.9
 doc: |
   Android apps using directly or indirectly OpenGL cache compiled shaders
   into com.android.opengl.shaders_cache file.
@@ -62,8 +63,8 @@ types:
         if: version >= 3 # hypothesis, needs deeper investigation
       - id: entries
         type: entry
-        repeat: expr
-        repeat-expr: num_entries
+        repeat:
+          expr: num_entries
     types:
       entry:
         seq:

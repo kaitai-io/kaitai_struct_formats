@@ -5,7 +5,7 @@ meta:
   xref:
     wikidata: Q61774549
   license: CC0-1.0
-  ks-version: 0.7
+  ks-version: 0.9
   endian: le
 doc: |
   IVF is a simple container format for raw VP8 data, which is an open and
@@ -50,11 +50,8 @@ seq:
 ## payload start
   - id: image_data
     type: blocks
-    repeat: expr
-    repeat-expr: num_frames
-## payload end
-
-## type definitions
+    repeat:
+      expr: num_frames
 types:
   blocks:
     seq:

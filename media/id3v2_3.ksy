@@ -10,6 +10,7 @@ meta:
   license: CC0-1.0
   endian: be
 
+  ks-version: '0.9'
 doc-ref: https://id3.org/id3v2.3.0
 
 seq:
@@ -27,8 +28,8 @@ types:
         if: header.flags.flag_headerex
       - id: frames
         type: frame
-        repeat: until
-        repeat-until: _io.pos + _.size > header.size.value or _.is_invalid
+        repeat:
+          until: _io.pos + _.size > header.size.value or _.is_invalid
       - id: padding
         if: header.flags.flag_headerex
         size: header_ex.padding_size - _io.pos

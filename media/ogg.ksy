@@ -14,6 +14,7 @@ meta:
     wikidata: Q188199
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 doc: |
   Ogg is a popular media container format, which provides basic
   streaming / buffering mechanisms and is content-agnostic. Most
@@ -98,12 +99,12 @@ types:
           maximum of 255 segments in any one page.
       - id: len_segments
         type: u1
-        repeat: expr
-        repeat-expr: num_segments
+        repeat:
+          expr: num_segments
         doc: |
           Table of lengths of segments.
       - id: segments
-        repeat: expr
-        repeat-expr: num_segments
+        repeat:
+          expr: num_segments
         size: len_segments[_index]
         doc: Segment content bytes make up the rest of the Ogg page.

@@ -14,6 +14,7 @@ meta:
   license: GPL-3.0-or-later
   encoding: utf-8
   endian: le
+  ks-version: 0.9
 doc-ref: https://github.com/qemu/qemu/blob/master/block/vdi.c
 #  - https://github.com/qemu/qemu/blob/master/block/vdi.c
 #  - https://www.virtualbox.org/browser/vbox/trunk/src/VBox/Storage/VDI.cpp
@@ -202,8 +203,8 @@ types:
     seq:
       - id: index
         type: block_index
-        repeat: expr
-        repeat-expr: _root.header.header_main.blocks_in_image
+        repeat:
+          expr: _root.header.header_main.blocks_in_image
     types:
       block_index:
         seq:
@@ -220,8 +221,8 @@ types:
     seq:
       - id: blocks
         type: block
-        repeat: expr
-        repeat-expr: _root.header.header_main.blocks_in_image
+        repeat:
+          expr: _root.header.header_main.blocks_in_image
     types:
       block:
         seq:

@@ -15,6 +15,7 @@ meta:
   license: Unlicense
   endian: le
   encoding: utf-8
+  ks-version: 0.9
 doc: |
   XM (standing for eXtended Module) is a popular module music file
   format, that was introduced in 1994 in FastTracker2 by Triton demo
@@ -34,12 +35,12 @@ seq:
     type: header
   - id: patterns
     type: pattern
-    repeat: expr
-    repeat-expr: header.num_patterns
+    repeat:
+      expr: header.num_patterns
   - id: instruments
     type: instrument
-    repeat: expr
-    repeat-expr: header.num_instruments
+    repeat:
+      expr: header.num_instruments
 types:
   preheader:
     seq:
@@ -98,9 +99,9 @@ types:
       - id: pattern_order_table
         type: u1
         doc: "max 256"
-        repeat: expr
-        #repeat-expr: song_length
-        repeat-expr: 256
+        repeat:
+          expr: 256
+          #expr: song_length
   flags:
     seq:
       - id: reserved
@@ -163,12 +164,12 @@ types:
         type: header
       - id: samples_headers
         type: sample_header
-        repeat: expr
-        repeat-expr: header.num_samples
+        repeat:
+          expr: header.num_samples
       - id: samples
         type: samples_data(samples_headers[_index])
-        repeat: expr
-        repeat-expr: header.num_samples
+        repeat:
+          expr: header.num_samples
     types:
       header:
         seq:
@@ -189,21 +190,21 @@ types:
             type: u4
           - id: idx_sample_per_note
             type: u1
-            repeat: expr
-            repeat-expr: 96
+            repeat:
+              expr: 96
             doc: |
               Index of sample that should be used for any particular
               note. In the simplest case, where it's only one sample
               is available, it's an array of full of zeroes.
           - id: volume_points
             type: envelope_point
-            repeat: expr
-            repeat-expr: 12
+            repeat:
+              expr: 12
             doc: Points for volume envelope. Only `num_volume_points` will be actually used.
           - id: panning_points
             type: envelope_point
-            repeat: expr
-            repeat-expr: 12
+            repeat:
+              expr: 12
             doc: Points for panning envelope. Only `num_panning_points` will be actually used.
           - id: num_volume_points
             type: u1

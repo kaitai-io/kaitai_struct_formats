@@ -5,6 +5,7 @@ meta:
   license: MIT
   encoding: UTF-8
   endian: le
+  ks-version: 0.9
 doc-ref: 'https://github.com/HeapsIO/heaps/blob/2bbc2b386952dfd8856c04a854bb706a52cb4b58/hxd/fmt/pak/Reader.hx'
 seq:
   - id: header
@@ -69,5 +70,5 @@ types:
             type: u4
           - id: entries
             type: entry
-            repeat: expr
-            repeat-expr: num_entries
+            repeat:
+              expr: num_entries

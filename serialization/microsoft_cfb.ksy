@@ -9,6 +9,7 @@ meta:
     wikidata: Q5156830
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 seq:
   - id: header
     type: cfb_header
@@ -72,8 +73,8 @@ types:
         type: s4
         doc: Number of DIFAT sectors in this file.
       - id: difat
-        repeat: expr
-        repeat-expr: 109
+        repeat:
+          expr: 109
         type: s4
   fat_entries:
     seq:

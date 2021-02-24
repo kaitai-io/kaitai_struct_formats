@@ -10,6 +10,7 @@ meta:
     wikidata: Q7190889
   license: CC0-1.0
   endian: le
+  ks-version: '0.9'
 doc: |
   Python Pickle format serializes Python objects to a byte stream, as a sequence
   of operations to run on the Pickle Virtual Machine.
@@ -41,8 +42,8 @@ seq:
   # TODO is there a way to declare PROTO is optional, but only valid at position 0?
   - id: ops
     type: op
-    repeat: until
-    repeat-until: _.code == opcode::stop
+    repeat:
+      until: _.code == opcode::stop
 types:
   op:
     seq:

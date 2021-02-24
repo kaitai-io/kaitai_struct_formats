@@ -9,6 +9,7 @@ meta:
     - log
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 doc: |
   systemd, a popular user-space system/service management suite on Linux,
   offers logging functionality, storing incoming logs in a binary journal
@@ -25,8 +26,8 @@ seq:
     size: len_header
   - id: objects
     type: journal_object
-    repeat: expr
-    repeat-expr: header.num_objects
+    repeat:
+      expr: header.num_objects
 instances:
   len_header:
     pos: 0x58

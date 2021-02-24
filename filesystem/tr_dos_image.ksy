@@ -6,6 +6,7 @@ meta:
     justsolve: TRD
   license: CC0-1.0
   endian: le
+  ks-version: '0.9'
 doc: |
   .trd file is a raw dump of TR-DOS (ZX-Spectrum) floppy. .trd files are
   headerless and contain consequent "logical tracks", each logical track
@@ -28,11 +29,11 @@ doc: |
 seq:
   - id: files
     type: file
-    repeat: until
+    repeat:
     # After 128 files there is disk info entry, which also has 0x00 terminator
     # in the same position as file name. So usually even with 128 files you can
     # just read until 0x00.
-    repeat-until: _.is_terminator
+      until: _.is_terminator
 instances:
   volume_info:
     pos: 0x800

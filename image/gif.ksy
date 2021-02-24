@@ -13,6 +13,7 @@ meta:
     wikidata: Q2192
   license: CC0-1.0
   endian: le
+  ks-version: '0.9'
 doc: |
   GIF (Graphics Interchange Format) is an image file format, developed
   in 1987. It became popular in 1990s as one of the main image formats
@@ -43,8 +44,8 @@ seq:
     doc-ref: https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 18
   - id: blocks
     type: block
-    repeat: until
-    repeat-until: _io.eof or _.block_type == block_type::end_of_file
+    repeat:
+      until: _io.eof or _.block_type == block_type::end_of_file
 types:
   header:
     doc-ref: https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 17
@@ -152,8 +153,8 @@ types:
         type: application_id
       - id: subblocks
         type: subblock
-        repeat: until
-        repeat-until: _.len_bytes == 0
+        repeat:
+          until: _.len_bytes == 0
   ext_graphic_control:
     doc-ref: https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 23
     seq:
@@ -176,8 +177,8 @@ types:
     seq:
       - id: entries
         type: subblock
-        repeat: until
-        repeat-until: _.len_bytes == 0
+        repeat:
+          until: _.len_bytes == 0
   subblock:
     seq:
       - id: len_bytes

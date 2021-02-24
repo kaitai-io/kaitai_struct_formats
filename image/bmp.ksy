@@ -440,8 +440,8 @@ types:
     seq:
       - id: colors
         type: rgb_record(has_reserved_field)
-        repeat: expr
-        repeat-expr: 'num_colors > 0 and num_colors < num_colors_present ? num_colors : num_colors_present'
+        repeat:
+          expr: 'num_colors > 0 and num_colors < num_colors_present ? num_colors : num_colors_present'
     instances:
       num_colors_present:
         value: '_io.size / (has_reserved_field ? 4 : 3)'

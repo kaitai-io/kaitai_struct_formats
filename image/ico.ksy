@@ -13,6 +13,7 @@ meta:
     - windows
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 doc: |
   Microsoft Windows uses specific file format to store applications
   icons - ICO. This is a container that contains one or more image
@@ -29,8 +30,8 @@ seq:
   - id: images
     -orig-id: idEntries
     type: icon_dir_entry
-    repeat: expr
-    repeat-expr: num_images
+    repeat:
+      expr: num_images
 types:
   icon_dir_entry:
     -orig-id: ICONDIRENTRY
