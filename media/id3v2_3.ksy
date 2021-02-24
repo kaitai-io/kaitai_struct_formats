@@ -95,7 +95,7 @@ types:
         size: size
     instances:
       is_invalid:
-        value: "id == '\x00\x00\x00\x00'"
+        value: "id == '\0\0\0\0'"
     types:
       flags:
         seq:
