@@ -496,116 +496,116 @@ types:
             enum: x_height
       unicode_range:
         seq:
-          - { id: basic_latin, type: b1 }
-          - { id: latin_1_supplement, type: b1 }
-          - { id: latin_extended_a, type: b1 }
-          - { id: latin_extended_b, type: b1 }
-          - { id: ipa_extensions, type: b1 }
-          - { id: spacing_modifier_letters, type: b1 }
-          - { id: combining_diacritical_marks, type: b1 }
-          - { id: basic_greek, type: b1 }
-          - { id: greek_symbols_and_coptic, type: b1 }
-          - { id: cyrillic, type: b1 }
-          - { id: armenian, type: b1 }
-          - { id: basic_hebrew, type: b1 }
-          - { id: hebrew_extended, type: b1 }
-          - { id: basic_arabic, type: b1 }
-          - { id: arabic_extended, type: b1 }
-          - { id: devanagari, type: b1 }
-          - { id: bengali, type: b1 }
-          - { id: gurmukhi, type: b1 }
-          - { id: gujarati, type: b1 }
-          - { id: oriya, type: b1 }
-          - { id: tamil, type: b1 }
-          - { id: telugu, type: b1 }
-          - { id: kannada, type: b1 }
-          - { id: malayalam, type: b1 }
-          - { id: thai, type: b1 }
-          - { id: lao, type: b1 }
-          - { id: basic_georgian, type: b1 }
-          - { id: georgian_extended, type: b1 }
-          - { id: hangul_jamo, type: b1 }
-          - { id: latin_extended_additional, type: b1 }
-          - { id: greek_extended, type: b1 }
-          - { id: general_punctuation, type: b1 }
-          - { id: superscripts_and_subscripts, type: b1 }
-          - { id: currency_symbols, type: b1 }
-          - { id: combining_diacritical_marks_for_symbols, type: b1 }
-          - { id: letterlike_symbols, type: b1 }
-          - { id: number_forms, type: b1 }
-          - { id: arrows, type: b1 }
-          - { id: mathematical_operators, type: b1 }
-          - { id: miscellaneous_technical, type: b1 }
-          - { id: control_pictures, type: b1 }
-          - { id: optical_character_recognition, type: b1 }
-          - { id: enclosed_alphanumerics, type: b1 }
-          - { id: box_drawing, type: b1 }
-          - { id: block_elements, type: b1 }
-          - { id: geometric_shapes, type: b1 }
-          - { id: miscellaneous_symbols, type: b1 }
-          - { id: dingbats, type: b1 }
-          - { id: cjk_symbols_and_punctuation, type: b1 }
-          - { id: hiragana, type: b1 }
-          - { id: katakana, type: b1 }
-          - { id: bopomofo, type: b1 }
-          - { id: hangul_compatibility_jamo, type: b1 }
-          - { id: cjk_miscellaneous, type: b1 }
-          - { id: enclosed_cjk_letters_and_months, type: b1 }
-          - { id: cjk_compatibility, type: b1 }
-          - { id: hangul, type: b1 }
-          - { id: reserved_for_unicode_subranges1, type: b1 }
-          - { id: reserved_for_unicode_subranges2, type: b1 }
-          - { id: cjk_unified_ideographs, type: b1 }
-          - { id: private_use_area, type: b1 }
-          - { id: cjk_compatibility_ideographs, type: b1 }
-          - { id: alphabetic_presentation_forms, type: b1 }
-          - { id: arabic_presentation_forms_a, type: b1 }
-          - { id: combining_half_marks, type: b1 }
-          - { id: cjk_compatibility_forms, type: b1 }
-          - { id: small_form_variants, type: b1 }
-          - { id: arabic_presentation_forms_b, type: b1 }
-          - { id: halfwidth_and_fullwidth_forms, type: b1 }
-          - { id: specials, type: b1 }
-          - { id: reserved, size: 7 }
+          - {id: basic_latin, type: b1}
+          - {id: latin_1_supplement, type: b1}
+          - {id: latin_extended_a, type: b1}
+          - {id: latin_extended_b, type: b1}
+          - {id: ipa_extensions, type: b1}
+          - {id: spacing_modifier_letters, type: b1}
+          - {id: combining_diacritical_marks, type: b1}
+          - {id: basic_greek, type: b1}
+          - {id: greek_symbols_and_coptic, type: b1}
+          - {id: cyrillic, type: b1}
+          - {id: armenian, type: b1}
+          - {id: basic_hebrew, type: b1}
+          - {id: hebrew_extended, type: b1}
+          - {id: basic_arabic, type: b1}
+          - {id: arabic_extended, type: b1}
+          - {id: devanagari, type: b1}
+          - {id: bengali, type: b1}
+          - {id: gurmukhi, type: b1}
+          - {id: gujarati, type: b1}
+          - {id: oriya, type: b1}
+          - {id: tamil, type: b1}
+          - {id: telugu, type: b1}
+          - {id: kannada, type: b1}
+          - {id: malayalam, type: b1}
+          - {id: thai, type: b1}
+          - {id: lao, type: b1}
+          - {id: basic_georgian, type: b1}
+          - {id: georgian_extended, type: b1}
+          - {id: hangul_jamo, type: b1}
+          - {id: latin_extended_additional, type: b1}
+          - {id: greek_extended, type: b1}
+          - {id: general_punctuation, type: b1}
+          - {id: superscripts_and_subscripts, type: b1}
+          - {id: currency_symbols, type: b1}
+          - {id: combining_diacritical_marks_for_symbols, type: b1}
+          - {id: letterlike_symbols, type: b1}
+          - {id: number_forms, type: b1}
+          - {id: arrows, type: b1}
+          - {id: mathematical_operators, type: b1}
+          - {id: miscellaneous_technical, type: b1}
+          - {id: control_pictures, type: b1}
+          - {id: optical_character_recognition, type: b1}
+          - {id: enclosed_alphanumerics, type: b1}
+          - {id: box_drawing, type: b1}
+          - {id: block_elements, type: b1}
+          - {id: geometric_shapes, type: b1}
+          - {id: miscellaneous_symbols, type: b1}
+          - {id: dingbats, type: b1}
+          - {id: cjk_symbols_and_punctuation, type: b1}
+          - {id: hiragana, type: b1}
+          - {id: katakana, type: b1}
+          - {id: bopomofo, type: b1}
+          - {id: hangul_compatibility_jamo, type: b1}
+          - {id: cjk_miscellaneous, type: b1}
+          - {id: enclosed_cjk_letters_and_months, type: b1}
+          - {id: cjk_compatibility, type: b1}
+          - {id: hangul, type: b1}
+          - {id: reserved_for_unicode_subranges1, type: b1}
+          - {id: reserved_for_unicode_subranges2, type: b1}
+          - {id: cjk_unified_ideographs, type: b1}
+          - {id: private_use_area, type: b1}
+          - {id: cjk_compatibility_ideographs, type: b1}
+          - {id: alphabetic_presentation_forms, type: b1}
+          - {id: arabic_presentation_forms_a, type: b1}
+          - {id: combining_half_marks, type: b1}
+          - {id: cjk_compatibility_forms, type: b1}
+          - {id: small_form_variants, type: b1}
+          - {id: arabic_presentation_forms_b, type: b1}
+          - {id: halfwidth_and_fullwidth_forms, type: b1}
+          - {id: specials, type: b1}
+          - {id: reserved, size: 7}
       # TODO: is this correct?
       code_page_range:
         seq:
-          - { id: symbol_character_set, type: b1 }
-          - { id: oem_character_set, type: b1 }
-          - { id: macintosh_character_set, type: b1 }
-          - { id: reserved_for_alternate_ansi_oem, type: b7 }
-          - { id: cp1361_korean_johab, type: b1 }
-          - { id: cp950_chinese_traditional_chars_taiwan_and_hong_kong, type: b1 }
-          - { id: cp949_korean_wansung, type: b1 }
-          - { id: cp936_chinese_simplified_chars_prc_and_singapore, type: b1 }
-          - { id: cp932_jis_japan, type: b1 }
-          - { id: cp874_thai, type: b1 }
-          - { id: reserved_for_alternate_ansi, type: b8 }
-          - { id: cp1257_windows_baltic, type: b1 }
-          - { id: cp1256_arabic, type: b1 }
-          - { id: cp1255_hebrew, type: b1 }
-          - { id: cp1254_turkish, type: b1 }
-          - { id: cp1253_greek, type: b1 }
-          - { id: cp1251_cyrillic, type: b1 }
-          - { id: cp1250_latin_2_eastern_europe, type: b1 }
-          - { id: cp1252_latin_1, type: b1 }
-          - { id: cp437_us, type: b1 }
-          - { id: cp850_we_latin_1, type: b1 }
-          - { id: cp708_arabic_asmo_708, type: b1 }
-          - { id: cp737_greek_former_437_g, type: b1 }
-          - { id: cp775_ms_dos_baltic, type: b1 }
-          - { id: cp852_latin_2, type: b1 }
-          - { id: cp855_ibm_cyrillic_primarily_russian, type: b1 }
-          - { id: cp857_ibm_turkish, type: b1 }
-          - { id: cp860_ms_dos_portuguese, type: b1 }
-          - { id: cp861_ms_dos_icelandic, type: b1 }
-          - { id: cp862_hebrew, type: b1 }
-          - { id: cp863_ms_dos_canadian_french, type: b1 }
-          - { id: cp864_arabic, type: b1 }
-          - { id: cp865_ms_dos_nordic, type: b1 }
-          - { id: cp866_ms_dos_russian, type: b1 }
-          - { id: cp869_ibm_greek, type: b1 }
-          - { id: reserved_for_oem, type: b16 }
+          - {id: symbol_character_set, type: b1}
+          - {id: oem_character_set, type: b1}
+          - {id: macintosh_character_set, type: b1}
+          - {id: reserved_for_alternate_ansi_oem, type: b7}
+          - {id: cp1361_korean_johab, type: b1}
+          - {id: cp950_chinese_traditional_chars_taiwan_and_hong_kong, type: b1}
+          - {id: cp949_korean_wansung, type: b1}
+          - {id: cp936_chinese_simplified_chars_prc_and_singapore, type: b1}
+          - {id: cp932_jis_japan, type: b1}
+          - {id: cp874_thai, type: b1}
+          - {id: reserved_for_alternate_ansi, type: b8}
+          - {id: cp1257_windows_baltic, type: b1}
+          - {id: cp1256_arabic, type: b1}
+          - {id: cp1255_hebrew, type: b1}
+          - {id: cp1254_turkish, type: b1}
+          - {id: cp1253_greek, type: b1}
+          - {id: cp1251_cyrillic, type: b1}
+          - {id: cp1250_latin_2_eastern_europe, type: b1}
+          - {id: cp1252_latin_1, type: b1}
+          - {id: cp437_us, type: b1}
+          - {id: cp850_we_latin_1, type: b1}
+          - {id: cp708_arabic_asmo_708, type: b1}
+          - {id: cp737_greek_former_437_g, type: b1}
+          - {id: cp775_ms_dos_baltic, type: b1}
+          - {id: cp852_latin_2, type: b1}
+          - {id: cp855_ibm_cyrillic_primarily_russian, type: b1}
+          - {id: cp857_ibm_turkish, type: b1}
+          - {id: cp860_ms_dos_portuguese, type: b1}
+          - {id: cp861_ms_dos_icelandic, type: b1}
+          - {id: cp862_hebrew, type: b1}
+          - {id: cp863_ms_dos_canadian_french, type: b1}
+          - {id: cp864_arabic, type: b1}
+          - {id: cp865_ms_dos_nordic, type: b1}
+          - {id: cp866_ms_dos_russian, type: b1}
+          - {id: cp869_ibm_greek, type: b1}
+          - {id: reserved_for_oem, type: b16}
     enums:
       weight_class:
         100: thin

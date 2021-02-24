@@ -84,16 +84,16 @@ types:
         doc: The name of the user who created the data record
   coarse_timestamp:
     seq:
-     - id: scaled_seconds
-       type: s4
+      - id: scaled_seconds
+        type: s4
     instances:
       seconds:
         value: scaled_seconds * 24000.
   illum_angle:
     seq:
-     - id: angl
-       type: s4
-       doc: >
+      - id: angl
+        type: s4
+        doc: >
           (Integer*4 number, in arc-seconds*6000).
           (90 degrees=1944000000; -90 deg <= angle <= 90 deg)
     instances:
@@ -243,18 +243,18 @@ types:
         doc: 1532 characters of text.
   record:
     seq:
-    - id: icflag
-      type: icflag
-      doc: Total number of bytes comprising the document.
-    - id: content
-      size: 1536 - 4
-      type:
-        switch-on: icflag.type
-        cases:
-          record_type::data_initial: data_initial
-          record_type::data_continuation: data_continuation
-          record_type::text_initial: text_initial
-          record_type::text_continuation: text_continuation
+      - id: icflag
+        type: icflag
+        doc: Total number of bytes comprising the document.
+      - id: content
+        size: 1536 - 4
+        type:
+          switch-on: icflag.type
+          cases:
+            record_type::data_initial: data_initial
+            record_type::data_continuation: data_continuation
+            record_type::text_initial: text_initial
+            record_type::text_continuation: text_continuation
 enums:
   record_type: # if I use 0b notation it doesn't work
     0: data_initial
