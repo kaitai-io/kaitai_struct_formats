@@ -20,7 +20,7 @@ meta:
     - executable
     - linux
   license: CC0-1.0
-  ks-version: 0.8
+  ks-version: 0.9
 doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=HEAD
 seq:
   - id: magic
@@ -491,14 +491,14 @@ types:
         pos: program_header_offset
         size: program_header_entry_size
         type: program_header
-        repeat: expr
-        repeat-expr: qty_program_header
+        repeat:
+          expr: qty_program_header
       section_headers:
         pos: section_header_offset
         size: section_header_entry_size
         type: section_header
-        repeat: expr
-        repeat-expr: qty_section_header
+        repeat:
+          expr: qty_section_header
       strings:
         pos: section_headers[section_names_idx].ofs_body
         size: section_headers[section_names_idx].len_body

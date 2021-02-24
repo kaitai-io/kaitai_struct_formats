@@ -34,8 +34,8 @@ seq:
     type: u4
   - id: tables
     type: table
-    repeat: expr
-    repeat-expr: num_tables
+    repeat:
+      expr: num_tables
 types:
   table:
     doc: |
@@ -85,8 +85,8 @@ types:
             type: u4
           - id: props
             type: prop
-            repeat: expr
-            repeat-expr: num_props
+            repeat:
+              expr: num_props
           - id: padding
             size: '(num_props & 3) == 0 ? 0 : (4 - (num_props & 3))'
             # In reality: align to next 4-byte boundary
@@ -169,12 +169,12 @@ types:
             type: u4
           - id: offsets
             type: u4
-            repeat: expr
-            repeat-expr: num_glyphs
+            repeat:
+              expr: num_glyphs
           - id: bitmap_sizes
             type: u4
-            repeat: expr
-            repeat-expr: 4
+            repeat:
+              expr: 4
       bdf_encodings:
         doc: |
           Table that allows mapping of character codes to glyphs present in the
@@ -202,8 +202,8 @@ types:
           - id: glyph_indexes
             -orig-id: glyphindeces
             type: u2
-            repeat: expr
-            repeat-expr: (max_char_or_byte2 - min_char_or_byte2 + 1) * (max_byte1 - min_byte1 + 1)
+            repeat:
+              expr: (max_char_or_byte2 - min_char_or_byte2 + 1) * (max_byte1 - min_byte1 + 1)
       swidths:
         doc: |
           Table containing scalable widths of characters.
@@ -216,8 +216,8 @@ types:
             type: u4
           - id: swidths
             type: u4
-            repeat: expr
-            repeat-expr: num_glyphs
+            repeat:
+              expr: num_glyphs
             doc: |
               The scalable width of a character is the width of the corresponding
               PostScript character in em-units (1/1000ths of an em).
@@ -233,8 +233,8 @@ types:
             type: u4
           - id: names
             type: string_ref
-            repeat: expr
-            repeat-expr: num_glyphs
+            repeat:
+              expr: num_glyphs
             doc: |
               Glyph names are represented as string references in strings buffer.
           - id: len_strings

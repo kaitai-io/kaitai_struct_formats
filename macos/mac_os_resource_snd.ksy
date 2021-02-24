@@ -7,6 +7,7 @@ meta:
     wikidata: Q7564684
   license: MIT
   endian: be
+  ks-version: 0.9
 doc: |
   Sound resources were introduced in Classic MacOS with the Sound Manager program.
   They can contain sound commands to generate sounds with given frequencies as well as sampled sound data.
@@ -21,8 +22,8 @@ seq:
     if: format == 1
   - id: data_formats
     type: data_format
-    repeat: expr
-    repeat-expr: num_data_formats
+    repeat:
+      expr: num_data_formats
     if: format == 1
   - id: reference_count
     type: u2
@@ -32,8 +33,8 @@ seq:
     type: u2
   - id: sound_commands
     type: sound_command
-    repeat: expr
-    repeat-expr: num_sound_commands
+    repeat:
+      expr: num_sound_commands
 instances:
   midi_note_to_frequency:
     value: |

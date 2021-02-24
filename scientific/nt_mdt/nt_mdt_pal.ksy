@@ -9,6 +9,7 @@ meta:
     - Image Analysis
     - NanoEducator
   license: Unlicense
+  ks-version: 0.9
 doc: It is a color scheme for visualising SPM scans.
 seq:
   - id: signature
@@ -17,14 +18,14 @@ seq:
     type: u4
   - id: meta
     type: meta
-    repeat: expr
-    repeat-expr: count
+    repeat:
+      expr: count
   - id: something2
     size: 1
   - id: tables
     type: col_table(_index)
-    repeat: expr
-    repeat-expr: count
+    repeat:
+      expr: count
 types:
   meta:
     seq:
@@ -78,5 +79,5 @@ types:
         type: u2
       - id: colors
         type: color
-        repeat: expr
-        repeat-expr: _root.meta[index].colors_count-1
+        repeat:
+          expr: _root.meta[index].colors_count-1

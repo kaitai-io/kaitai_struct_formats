@@ -11,6 +11,7 @@ meta:
     - macos
   license: CC0-1.0
   endian: be
+  ks-version: 0.9
 doc: |
   AppleSingle and AppleDouble files are used by certain Mac
   applications (e.g. Finder) to store Mac-specific file attributes on
@@ -45,8 +46,8 @@ seq:
     type: u2
   - id: entries
     type: entry
-    repeat: expr
-    repeat-expr: num_entries
+    repeat:
+      expr: num_entries
 enums:
   file_type:
     0x00051600: apple_single

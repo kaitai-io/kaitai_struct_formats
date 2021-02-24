@@ -4,7 +4,7 @@ meta:
   xref:
     wikidata: Q749940
   license: CC0-1.0
-  ks-version: 0.7
+  ks-version: 0.9
   endian: be
 
 doc: RTCP is the Real-Time Control Protocol
@@ -57,8 +57,8 @@ types:
         type: u4
       - id: report_block
         type: report_block
-        repeat: expr
-        repeat-expr: _parent.subtype
+        repeat:
+          expr: _parent.subtype
     instances:
       ntp:
         value: (ntp_msw << 32) & ntp_lsw
@@ -69,9 +69,8 @@ types:
         type: u4
       - id: report_block
         type: report_block
-        repeat: expr
-        repeat-expr: _parent.subtype
-
+        repeat:
+          expr: _parent.subtype
   report_block:
     seq:
       - id: ssrc_source
@@ -96,8 +95,8 @@ types:
     seq:
       - id: source_chunk
         type: source_chunk
-        repeat: expr
-        repeat-expr: source_count
+        repeat:
+          expr: source_count
     instances:
       source_count:
         value: _parent.subtype
@@ -217,8 +216,8 @@ types:
         type: b18
       - id: ssrc_list
         type: u4
-        repeat: expr
-        repeat-expr: num_ssrc
+        repeat:
+          expr: num_ssrc
     instances:
       max_total_bitrate:
         value: br_mantissa * (1<<br_exp)

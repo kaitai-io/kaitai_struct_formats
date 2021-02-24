@@ -5,6 +5,7 @@ meta:
     wikidata: Q6821738
   license: CC0-1.0
   endian: be
+  ks-version: 0.9
 doc: |
   MessagePack (msgpack) is a system to serialize arbitrary structured
   data into a compact binary stream.
@@ -60,8 +61,8 @@ seq:
     if: is_array_32
   - id: array_elements
     type: msgpack
-    repeat: expr
-    repeat-expr: num_array_elements
+    repeat:
+      expr: num_array_elements
     if: is_array
   # ========================================================================
   - id: num_map_elements_16
@@ -72,8 +73,8 @@ seq:
     if: is_map_32
   - id: map_elements
     type: map_tuple
-    repeat: expr
-    repeat-expr: num_map_elements
+    repeat:
+      expr: num_map_elements
     if: is_map
 instances:
 #  value:

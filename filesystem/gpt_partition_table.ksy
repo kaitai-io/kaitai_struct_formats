@@ -7,6 +7,7 @@ meta:
     wikidata: Q603889
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 doc-ref: https://en.wikipedia.org/wiki/GUID_Partition_Table
 instances:
   sector_size:
@@ -75,5 +76,5 @@ types:
         pos: entries_start * _root.sector_size
         size: entries_size
         type: partition_entry
-        repeat: expr
-        repeat-expr: entries_count
+        repeat:
+          expr: entries_count

@@ -5,6 +5,7 @@ meta:
   license: CC0-1.0
   encoding: UTF-8
   endian: be
+  ks-version: '0.9'
 doc: |
   Allegro library for C (mostly used for game and multimedia apps
   programming) used its own container file format.
@@ -28,15 +29,15 @@ seq:
     type: u4
   - id: objects
     type: dat_object
-    repeat: expr
-    repeat-expr: num_objects
+    repeat:
+      expr: num_objects
 types:
   dat_object:
     seq:
       - id: properties
         type: property
-        repeat: until
-        repeat-until: 'not _.is_valid'
+        repeat:
+          until: not _.is_valid
       - id: len_compressed
         type: s4
       - id: len_uncompressed
@@ -112,8 +113,8 @@ types:
     seq:
       - id: chars
         size: 8
-        repeat: expr
-        repeat-expr: 95
+        repeat:
+          expr: 95
   dat_font_16:
     doc: |
       Simple monochrome monospaced font, 95 characters, 8x16 px
@@ -121,8 +122,8 @@ types:
     seq:
       - id: chars
         size: 16
-        repeat: expr
-        repeat-expr: 95
+        repeat:
+          expr: 95
   dat_font_3_9:
     doc: |
       New bitmap font format introduced since Allegro 3.9: allows
@@ -133,8 +134,8 @@ types:
         type: s2
       - id: ranges
         type: range
-        repeat: expr
-        repeat-expr: num_ranges
+        repeat:
+          expr: num_ranges
     types:
       range:
         seq:
@@ -148,8 +149,8 @@ types:
             doc: Last character in range (inclusive)
           - id: chars
             type: font_char
-            repeat: expr
-            repeat-expr: end_char - start_char + 1
+            repeat:
+              expr: end_char - start_char + 1
       font_char:
         seq:
           - id: width

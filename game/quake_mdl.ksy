@@ -4,27 +4,27 @@ meta:
   application: Quake 1 (idtech2)
   file-extension: mdl
   license: CC0-1.0
-  ks-version: 0.7
+  ks-version: 0.9
   endian: le
 seq:
   - id: header
     type: mdl_header
   - id: skins
     type: mdl_skin
-    repeat: expr
-    repeat-expr: header.num_skins
+    repeat:
+      expr: header.num_skins
   - id: texture_coordinates
     type: mdl_texcoord
-    repeat: expr
-    repeat-expr: header.num_verts
+    repeat:
+      expr: header.num_verts
   - id: triangles
     type: mdl_triangle
-    repeat: expr
-    repeat-expr: header.num_tris
+    repeat:
+      expr: header.num_tris
   - id: frames
     type: mdl_frame
-    repeat: expr
-    repeat-expr: header.num_frames
+    repeat:
+      expr: header.num_frames
 types:
   vec3:
     seq:
@@ -83,13 +83,13 @@ types:
         if: group != 0
       - id: frame_times
         type: f4
-        repeat: expr
-        repeat-expr: num_frames
+        repeat:
+          expr: num_frames
         if: group != 0
       - id: group_texture_data
         size: _root.header.skin_size
-        repeat: expr
-        repeat-expr: num_frames
+        repeat:
+          expr: num_frames
         if: group != 0
   mdl_texcoord:
     seq:
@@ -105,14 +105,14 @@ types:
         type: s4
       - id: vertices
         type: s4
-        repeat: expr
-        repeat-expr: 3
+        repeat:
+          expr: 3
   mdl_vertex:
     seq:
       - id: values
         type: u1
-        repeat: expr
-        repeat-expr: 3
+        repeat:
+          expr: 3
       - id: normal_index
         type: u1
   mdl_simple_frame:
@@ -129,8 +129,8 @@ types:
         pad-right: 0x00
       - id: vertices
         type: mdl_vertex
-        repeat: expr
-        repeat-expr: _root.header.num_verts
+        repeat:
+          expr: _root.header.num_verts
   mdl_frame:
     seq:
       - id: type
@@ -143,13 +143,13 @@ types:
         if: type != 0
       - id: time
         type: f4
-        repeat: expr
-        repeat-expr: type
+        repeat:
+          expr: type
         if: type != 0
       - id: frames
         type: mdl_simple_frame
-        repeat: expr
-        repeat-expr: num_simple_frames
+        repeat:
+          expr: num_simple_frames
     instances:
       num_simple_frames:
         value: '(type == 0 ? 1 : type)'

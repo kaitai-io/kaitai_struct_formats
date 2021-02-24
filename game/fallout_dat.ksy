@@ -5,6 +5,7 @@ meta:
     wikidata: Q32097740
   license: CC0-1.0
   endian: be
+  ks-version: 0.9
 seq:
   - id: folder_count
     type: u4
@@ -16,12 +17,12 @@ seq:
     type: u4
   - id: folder_names
     type: pstr
-    repeat: expr
-    repeat-expr: folder_count
+    repeat:
+      expr: folder_count
   - id: folders
     type: folder
-    repeat: expr
-    repeat-expr: folder_count
+    repeat:
+      expr: folder_count
 types:
   pstr:
     seq:
@@ -43,8 +44,8 @@ types:
         type: u4
       - id: files
         type: file
-        repeat: expr
-        repeat-expr: file_count
+        repeat:
+          expr: file_count
   file:
     seq:
       - id: name

@@ -2,6 +2,7 @@ meta:
   id: ruby_marshal
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 doc: |
   Ruby's Marshal module allows serialization and deserialization of
   many standard and arbitrary Ruby objects in a compact binary
@@ -140,8 +141,8 @@ types:
         type: packed_int
       - id: elements
         type: record
-        repeat: expr
-        repeat-expr: num_elements.value
+        repeat:
+          expr: num_elements.value
   ruby_hash:
     doc-ref: 'https://docs.ruby-lang.org/en/2.4.0/marshal_rdoc.html#label-Hash+and+Hash+with+Default+Value'
     seq:
@@ -149,8 +150,8 @@ types:
         type: packed_int
       - id: pairs
         type: pair
-        repeat: expr
-        repeat-expr: num_pairs.value
+        repeat:
+          expr: num_pairs.value
   bignum:
     doc-ref: 'https://docs.ruby-lang.org/en/2.4.0/marshal_rdoc.html#label-Bignum'
     seq:
@@ -174,8 +175,8 @@ types:
         doc: Number of members in a struct
       - id: members
         type: pair
-        repeat: expr
-        repeat-expr: num_members.value
+        repeat:
+          expr: num_members.value
   instance_var:
     doc-ref: 'https://docs.ruby-lang.org/en/2.4.0/marshal_rdoc.html#label-Instance+Variables'
     seq:
@@ -185,8 +186,8 @@ types:
         type: packed_int
       - id: vars
         type: pair
-        repeat: expr
-        repeat-expr: num_vars.value
+        repeat:
+          expr: num_vars.value
   pair:
     seq:
       - id: key

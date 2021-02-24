@@ -8,6 +8,7 @@ meta:
     - linux
   license: MIT
   endian: le
+  ks-version: 0.9
 seq:
   - id: super_block
     type: super_block_struct
@@ -126,10 +127,8 @@ types:
     seq:
       - id: block_end_index
         type: u4
-        repeat: expr
-        repeat-expr: (_parent.size + _root.page_size - 1) / _root.page_size
-
-      # Correct decoding can't yet be described -- raw data for now.
+        repeat:
+          expr: (_parent.size + _root.page_size - 1) / _root.page_size
       - id: raw_blocks
         size-eos: true
 

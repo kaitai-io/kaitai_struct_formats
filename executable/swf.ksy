@@ -19,6 +19,7 @@ meta:
   endian: le
 #  imports:
 #    - abc_bytecode
+  ks-version: 0.9
 doc: |
   SWF files are used by Adobe Flash (AKA Shockwave Flash, Macromedia
   Flash) to encode rich interactive multimedia content and are,
@@ -162,8 +163,8 @@ types:
         type: u2
       - id: symbols
         type: symbol
-        repeat: expr
-        repeat-expr: num_symbols
+        repeat:
+          expr: num_symbols
     types:
       symbol:
         seq:

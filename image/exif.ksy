@@ -11,6 +11,7 @@ meta:
       - fmt/645 # Exif 2.21 ("2.2.1" in PRONOM is misspelled)
     wikidata: Q26383099
   license: CC0-1.0
+  ks-version: 0.9
 seq:
   - id: endianness
     type: u2le
@@ -40,8 +41,8 @@ types:
             type: u2
           - id: fields
             type: ifd_field
-            repeat: expr
-            repeat-expr: num_fields
+            repeat:
+              expr: num_fields
           - id: next_ifd_ofs
             type: u4
         instances:

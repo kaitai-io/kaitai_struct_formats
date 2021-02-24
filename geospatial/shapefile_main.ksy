@@ -8,6 +8,7 @@ meta:
     wikidata: Q27486884
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 seq:
   - id: header
     type: file_header
@@ -115,12 +116,12 @@ types:
         type: s4
       - id: parts
         type: s4
-        repeat: expr
-        repeat-expr: number_of_parts
+        repeat:
+          expr: number_of_parts
       - id: points
         type: point
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
   polygon:
     seq:
       - id: bounding_box
@@ -131,12 +132,12 @@ types:
         type: s4
       - id: parts
         type: s4
-        repeat: expr
-        repeat-expr: number_of_parts
+        repeat:
+          expr: number_of_parts
       - id: points
         type: point
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
   multi_point:
     seq:
       - id: bounding_box
@@ -145,8 +146,8 @@ types:
         type: s4
       - id: points
         type: point
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
   point_z:
     seq:
       - id: x
@@ -167,24 +168,24 @@ types:
         type: s4
       - id: parts
         type: s4
-        repeat: expr
-        repeat-expr: number_of_parts
+        repeat:
+          expr: number_of_parts
       - id: points
         type: point
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
       - id: z_range
         type: bounds_min_max
       - id: z_values
         type: f8
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
       - id: m_range
         type: bounds_min_max
       - id: m_values
         type: f8
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
   polygon_z:
     seq:
       - id: bounding_box
@@ -195,24 +196,24 @@ types:
         type: s4
       - id: parts
         type: s4
-        repeat: expr
-        repeat-expr: number_of_parts
+        repeat:
+          expr: number_of_parts
       - id: points
         type: point
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
       - id: z_range
         type: bounds_min_max
       - id: z_values
         type: f8
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
       - id: m_range
         type: bounds_min_max
       - id: m_values
         type: f8
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
   multi_point_z:
     seq:
       - id: bounding_box
@@ -221,20 +222,20 @@ types:
         type: s4
       - id: points
         type: point
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
       - id: z_range
         type: bounds_min_max
       - id: z_values
         type: f8
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
       - id: m_range
         type: bounds_min_max
       - id: m_values
         type: f8
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
   point_m:
     seq:
       - id: x
@@ -253,18 +254,18 @@ types:
         type: s4
       - id: parts
         type: s4
-        repeat: expr
-        repeat-expr: number_of_parts
+        repeat:
+          expr: number_of_parts
       - id: points
         type: point
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
       - id: m_range
         type: bounds_min_max
       - id: m_values
         type: f8
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
   polygon_m:
     seq:
       - id: bounding_box
@@ -275,18 +276,18 @@ types:
         type: s4
       - id: parts
         type: s4
-        repeat: expr
-        repeat-expr: number_of_parts
+        repeat:
+          expr: number_of_parts
       - id: points
         type: point
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
       - id: m_range
         type: bounds_min_max
       - id: m_values
         type: f8
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
   multi_point_m:
     seq:
       - id: bounding_box
@@ -295,14 +296,14 @@ types:
         type: s4
       - id: points
         type: point
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
       - id: m_range
         type: bounds_min_max
       - id: m_values
         type: f8
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
   multi_patch:
     seq:
       - id: bounding_box
@@ -313,29 +314,29 @@ types:
         type: s4
       - id: parts
         type: s4
-        repeat: expr
-        repeat-expr: number_of_parts
+        repeat:
+          expr: number_of_parts
       - id: part_types
         type: s4
         enum: part_type
-        repeat: expr
-        repeat-expr: number_of_parts
+        repeat:
+          expr: number_of_parts
       - id: points
         type: point
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
       - id: z_range
         type: bounds_min_max
       - id: z_values
         type: f8
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
       - id: m_range
         type: bounds_min_max
       - id: m_values
         type: f8
-        repeat: expr
-        repeat-expr: number_of_points
+        repeat:
+          expr: number_of_points
 enums:
   shape_type:
     0: null_shape

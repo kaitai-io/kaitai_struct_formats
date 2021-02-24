@@ -6,6 +6,7 @@ meta:
     wikidata: Q859938
   license: CC0-1.0
   endian: be
+  ks-version: '0.9'
 doc: |
   The WebSocket protocol establishes a two-way communication channel via TCP.
   Messages are made up of one or more dataframes, and are delineated by
@@ -16,9 +17,8 @@ seq:
   - id: trailing_frames
     type: dataframe
     if: initial_frame.header.finished != true
-    repeat: until
-    repeat-until: _.header.finished
-
+    repeat:
+      until: _.header.finished
 types:
   frame_header:
     seq:

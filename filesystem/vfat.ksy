@@ -21,8 +21,8 @@ instances:
   fats:
     pos: boot_sector.pos_fats
     size: boot_sector.size_fat
-    repeat: expr
-    repeat-expr: boot_sector.bpb.num_fats
+    repeat:
+      expr: boot_sector.bpb.num_fats
   root_dir:
     pos: boot_sector.pos_root_dir
     size: boot_sector.size_root_dir
@@ -282,8 +282,8 @@ types:
     seq:
       - id: records
         type: root_directory_rec
-        repeat: expr
-        repeat-expr: _root.boot_sector.bpb.max_root_dir_rec
+        repeat:
+          expr: _root.boot_sector.bpb.max_root_dir_rec
   root_directory_rec:
     seq:
       - id: file_name

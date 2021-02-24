@@ -12,6 +12,7 @@ meta:
     wikidata: Q2627217
   license: MIT
   endian: le
+  ks-version: '0.9'
 seq:
   - id: magic
     type: u4be
@@ -20,8 +21,8 @@ seq:
     type: mach_header
   - id: load_commands
     type: load_command
-    repeat: expr
-    repeat-expr: header.ncmds
+    repeat:
+      expr: header.ncmds
 enums:
   magic_type:
     0xFEEDFACE: macho_be_x86 # MH_MAGIC:    mach-o, big-endian,    x86
@@ -384,8 +385,8 @@ types:
         type: u4
       - id: sections
         type: section_64
-        repeat: expr
-        repeat-expr: nsects
+        repeat:
+          expr: nsects
     types:
       section_64:
         -webide-representation: '{sect_name}: offs={offset}, size={size}'
@@ -584,8 +585,8 @@ types:
         seq:
           - id: items
             type: rebase_item
-            repeat: until
-            repeat-until: _.opcode == opcode::done
+            repeat:
+              until: _.opcode == opcode::done
         types:
           rebase_item:
             -webide-representation: "{opcode}, imm:{immediate}, uleb:{uleb}, skip:{skip}"
@@ -655,8 +656,8 @@ types:
         seq:
           - id: items
             type: bind_item
-            repeat: until
-            repeat-until: _.opcode == bind_opcode::done
+            repeat:
+              until: _.opcode == bind_opcode::done
       lazy_bind_data:
         seq:
           - id: items
@@ -671,8 +672,8 @@ types:
             type: u1
           - id: children
             type: child
-            repeat: expr
-            repeat-expr: children_count
+            repeat:
+              expr: children_count
           - id: terminal
             size: terminal_size.value
         types:
@@ -729,8 +730,8 @@ types:
             magic_type::macho_be_x64 : nlist_64
             magic_type::macho_le_x86 : nlist
             magic_type::macho_be_x86 : nlist
-        repeat: expr
-        repeat-expr: n_syms
+        repeat:
+          expr: n_syms
       strs:
         io: _root._io
         pos: str_off
@@ -745,8 +746,8 @@ types:
           - id: items
             type: strz
             encoding: utf-8
-            repeat: until
-            repeat-until: _ == ""
+            repeat:
+              until: _ == ""
             eos-error: false
       nlist_64:
         -webide-representation: "un={un} type={type} sect={sect} desc={desc} value={value}"
@@ -847,8 +848,8 @@ types:
         io: _root._io
         pos: indirect_sym_off
         type: u4
-        repeat: expr
-        repeat-expr: n_indirect_syms
+        repeat:
+          expr: n_indirect_syms
   lc_str:
     -webide-representation: '{value}'
     seq:
@@ -906,8 +907,8 @@ types:
       - id: strings
         type: strz
         encoding: utf-8
-        repeat: expr
-        repeat-expr: num_strings
+        repeat:
+          expr: num_strings
   sub_command:
     seq:
       - id: name
@@ -1068,8 +1069,8 @@ types:
           hashes:
             pos: hash_offset - 8 - hash_size * n_special_slots
             size: hash_size
-            repeat: expr
-            repeat-expr: n_special_slots + n_code_slots
+            repeat:
+              expr: n_special_slots + n_code_slots
       blob_index:
         seq:
           - id: type
@@ -1274,8 +1275,8 @@ types:
             type: u4be
           - id: items
             type: requirements_blob_index
-            repeat: expr
-            repeat-expr: count
+            repeat:
+              expr: count
       blob_wrapper:
         seq:
           - id: data
@@ -1286,8 +1287,8 @@ types:
             type: u4be
           - id: blobs
             type: blob_index
-            repeat: expr
-            repeat-expr: count
+            repeat:
+              expr: count
   build_version_command:
     seq:
       - id: platform
@@ -1300,8 +1301,8 @@ types:
         type: u4
       - id: tools
         type: build_tool_version
-        repeat: expr
-        repeat-expr: ntools
+        repeat:
+          expr: ntools
     types:
       build_tool_version:
         seq:
@@ -1334,8 +1335,8 @@ types:
         type: u4
       - id: sections
         type: section
-        repeat: expr
-        repeat-expr: nsects
+        repeat:
+          expr: nsects
     types:
       section:
         seq:

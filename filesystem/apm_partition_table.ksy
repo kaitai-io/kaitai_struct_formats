@@ -11,6 +11,7 @@ meta:
   license: CC0-1.0
   encoding: ascii
   endian: be
+  ks-version: 0.9
 doc-ref: https://en.wikipedia.org/wiki/Apple_Partition_Map
 instances:
   sector_size:
@@ -32,8 +33,8 @@ instances:
     pos: _root.sector_size
     size: sector_size
     type: partition_entry
-    repeat: expr
-    repeat-expr: _root.partition_lookup.number_of_partitions
+    repeat:
+      expr: _root.partition_lookup.number_of_partitions
 types:
   partition_entry:
     seq:
