@@ -53,7 +53,7 @@ types:
       - id: frames
         type: frame
         repeat: expr
-        repeat-expr: _root.last_frame+1
+        repeat-expr: _root.last_frame + 1
   title:
     seq:
       - id: title_len

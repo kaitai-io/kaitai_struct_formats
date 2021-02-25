@@ -73,9 +73,9 @@ types:
                 repeat-expr: 4
             instances:
               value_valid:
-                value: valuez[0]==~valuez[1] and valuez[0]==valuez[2]
+                value: valuez[0] == ~valuez[1] and valuez[0] == valuez[2]
               addr_valid:
-                value: addrz[0]==~addrz[1] and addrz[0]==addrz[2] and addrz[1]==addrz[3]
+                value: addrz[0] == ~addrz[1] and addrz[0] == addrz[2] and addrz[1] == addrz[3]
               valid:
                 value: value_valid and addr_valid
               addr:
@@ -170,11 +170,11 @@ types:
                 type: u1
             instances:
               shift_value:
-                value: (bit_no==1?-1:1)
+                value: bit_no == 1 ?-1 : 1
               chunk_no:
-                value: ((inv_chunk_no+shift_value+_parent._parent.ac_count_of_chunks)%_parent._parent.ac_count_of_chunks)
+                value: ((inv_chunk_no + shift_value + _parent._parent.ac_count_of_chunks) % _parent._parent.ac_count_of_chunks)
               inv_chunk_no:
-                value: bit_no+shift_value
+                value: bit_no + shift_value
           valid_chunk:
             params:
               - id: inv_chunk
@@ -224,7 +224,7 @@ types:
                 value: ac.inv_shift_val <= 0b010
                 doc: key A is required
               can_write_keys:
-                value: (ac.inv_shift_val+1)%3 != 0 and (ac.inv_shift_val<6)
+                value: (ac.inv_shift_val + 1) % 3 != 0 and ac.inv_shift_val < 6
               can_write_access_bits:
                 value: ac.bits[2].b
               key_b_controls_write:

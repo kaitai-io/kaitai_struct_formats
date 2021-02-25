@@ -33,7 +33,7 @@ doc: |
 doc-ref: https://www.sqlite.org/fileformat.html
 seq:
   - id: magic
-    contents: [SQLite format 3, 0]
+    contents: [SQLite format 3, 0x00]
   - id: len_page_mod
     type: u2
     doc: |

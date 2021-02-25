@@ -35,7 +35,7 @@ types:
   buddy_allocator_header:
     seq:
       - id: magic
-        contents: [Bud1]
+        contents: Bud1
         doc: Magic number 'Bud1'.
       - id: ofs_bookkeeping_info_block
         type: u4
