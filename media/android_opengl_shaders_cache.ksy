@@ -46,7 +46,7 @@ types:
     seq:
       - id: magic
         -orig-id: mMagicNumber, blobCacheMagic
-        contents: [$bB_]
+        contents: $bB_
       - id: version
         type: u4
         -orig-id: mBlobCacheVersion, blobCacheVersion
