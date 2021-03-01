@@ -6,7 +6,7 @@ meta:
 doc: |
   Microsoft Windows SYSTEMTIME structure, stores individual components
   of date and time as individual fields, up to millisecond precision.
-doc-ref: https://msdn.microsoft.com/en-us/library/windows/desktop/ms724950.aspx
+doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/minwinbase/ns-minwinbase-systemtime
 seq:
   - id: year
     -orig-id: wYear

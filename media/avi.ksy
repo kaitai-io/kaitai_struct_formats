@@ -11,7 +11,7 @@ meta:
   license: CC0-1.0
   ks-version: 0.7
   endian: le
-doc-ref: https://msdn.microsoft.com/en-us/library/ms779636.aspx
+doc-ref: https://docs.microsoft.com/en-us/previous-versions/ms779636(v=vs.85)
 seq:
   - id: magic1
     contents: RIFF
@@ -53,7 +53,7 @@ types:
         type: blocks
   avih_body:
     doc: Main header of an AVI file, defined as AVIMAINHEADER structure
-    doc-ref: https://msdn.microsoft.com/en-us/library/ms779632.aspx
+    doc-ref: https://docs.microsoft.com/en-us/previous-versions/ms779632(v=vs.85)
     seq:
       - id: micro_sec_per_frame
         type: u4
@@ -79,7 +79,7 @@ types:
         size: 16
   strh_body:
     doc: Stream header (one header per stream), defined as AVISTREAMHEADER structure
-    doc-ref: https://msdn.microsoft.com/en-us/library/ms779638.aspx
+    doc-ref: https://docs.microsoft.com/en-us/previous-versions/ms779638(v=vs.85)
     seq:
       - id: fcc_type
         type: u4

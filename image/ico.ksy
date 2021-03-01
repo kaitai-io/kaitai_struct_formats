@@ -18,7 +18,7 @@ doc: |
   icons - ICO. This is a container that contains one or more image
   files (effectively, DIB parts of BMP files or full PNG files are
   contained inside).
-doc-ref: https://msdn.microsoft.com/en-us/library/ms997538.aspx
+doc-ref: https://docs.microsoft.com/en-us/previous-versions/ms997538(v=msdn.10)
 seq:
   - id: magic
     contents: [0, 0, 1, 0]
