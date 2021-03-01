@@ -12,7 +12,7 @@ meta:
   tags:
     - filesystem
     - linux
-  license: GFDL-1.3+
+  license: GFDL-1.3-or-later
   encoding: ascii
   endian: le
 doc: |
