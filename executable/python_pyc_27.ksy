@@ -1,4 +1,4 @@
-# http://demoseen.com/blog/2010-02-20_Python_Marshal_Format.html
+# https://web.archive.org/web/20170825122655/http://demoseen.com/blog/2010-02-20_Python_Marshal_Format.html
 # https://github.com/python/cpython/blob/master/Lib/dis.py
 # https://github.com/python/cpython/blob/master/Lib/opcode.py
 # https://github.com/python/cpython/blob/2.7/Lib/dis.py
@@ -291,7 +291,7 @@ types:
         116: interned         # t
         117: unicode_string   # u
 enums:
-  # http://svn.python.org/view/python/trunk/Python/import.c?view=markup
+  # https://github.com/python/cpython/blob/v2.7.18/Python/import.c
   version:
     20121: v15
     50428: v16

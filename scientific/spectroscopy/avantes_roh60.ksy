@@ -26,7 +26,7 @@ doc: |
 
   The rest of the header floats is not known to the author. Note that the
   newer version of Avantes software has a different format, see also
-  https://kr.mathworks.com/examples/matlab/community/20341-reading-spectra-from-avantes-binary-files-demonstration
+  <https://www.mathworks.com/matlabcentral/fileexchange/37103-avantes-to-matlab>
 
   The RCM file contains the user-specified comment, so it may be useful
   for automatic conversion of data. You may wish to divide the spectra by

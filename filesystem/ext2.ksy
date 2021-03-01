@@ -143,7 +143,7 @@ types:
         2: act_ro
         3: act_panic
   # http://www.nongnu.org/ext2-doc/ext2.html#BLOCK-GROUP-DESCRIPTOR-STRUCTURE
-  # http://www.virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1-7.html
+  # http://web.archive.org/web/20160804172310/http://virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1-7.html
   bgd:
     seq:
       - id: block_bitmap_block
@@ -168,7 +168,7 @@ types:
         pos: inode_bitmap_block * _root.bg1.super_block.block_size
         size: 1024
       # http://www.nongnu.org/ext2-doc/ext2.html#INODE-TABLE
-      # http://www.virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1-10.html
+      # http://web.archive.org/web/20161114202411/http://www.virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1-10.html
       inodes:
         pos: inode_table_block * _root.bg1.super_block.block_size
         type: inode

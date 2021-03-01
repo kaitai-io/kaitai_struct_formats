@@ -2,7 +2,7 @@
 # https://opensource.apple.com/source/python_modules/python_modules-43/Modules/macholib-1.5.1/macholib-1.5.1.tar.gz
 # https://github.com/comex/cs/blob/master/macho_cs.py
 # https://opensource.apple.com/source/Security/Security-55471/libsecurity_codesigning/requirements.grammar.auto.html
-# https://github.com/opensource-apple/xnu/blob/10.11/bsd/sys/codesign.h
+# https://github.com/apple/darwin-xnu/blob/xnu-2782.40.9/bsd/sys/codesign.h
 meta:
   id: mach_o
   xref:
@@ -51,7 +51,7 @@ enums:
     0x1000012:  powerpc64 # abi64 | powerpc
     0x100000c:  arm64     # abi64 | arm
   file_type:
-    # http://opensource.apple.com//source/xnu/xnu-1456.1.26/EXTERNAL_HEADERS/mach-o/loader.h
+    # https://opensource.apple.com/source/xnu/xnu-1456.1.26/EXTERNAL_HEADERS/mach-o/loader.h
     0x1: object      # relocatable object file
     0x2: execute     # demand paged executable file
     0x3: fvmlib      # fixed VM shared library file
@@ -64,7 +64,7 @@ enums:
     0xa: dsym        # companion file with only debug sections
     0xb: kext_bundle # x86_64 kexts
   load_command_type:
-    # http://opensource.apple.com//source/xnu/xnu-1456.1.26/EXTERNAL_HEADERS/mach-o/loader.h
+    # https://opensource.apple.com/source/xnu/xnu-1456.1.26/EXTERNAL_HEADERS/mach-o/loader.h
     0x80000000: req_dyld
     0x1       : segment        # segment of this file to be mapped
     0x2       : symtab         # link-edit stab symbol table info
