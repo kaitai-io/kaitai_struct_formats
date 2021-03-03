@@ -4,7 +4,7 @@ meta:
   file-extension: gbr
   license: CC0-1.0
   endian: be
-doc-ref: https://gitlab.gnome.org/GNOME/gimp/-/blob/master/devel-docs/gbr.txt
+doc-ref: https://gitlab.gnome.org/GNOME/gimp/-/raw/master/devel-docs/gbr.txt
 seq:
   - id: header_size
     type: u4be
