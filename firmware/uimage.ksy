@@ -7,7 +7,7 @@ doc: |
   The new uImage format allows more flexibility in handling images of various
   types (kernel, ramdisk, etc.), it also enhances integrity protection of images
   with sha1 and md5 checksums.
-doc-ref: https://github.com/EmcraftSystems/u-boot/blob/master/include/image.h
+doc-ref: https://source.denx.de/u-boot/u-boot/-/raw/master/include/image.h
 seq:
   - id: header
     type: uheader
@@ -114,6 +114,27 @@ enums:
     21:
       id: integrity
       doc: INTEGRITY
+    22:
+      id: ose
+      doc: OSE
+    23:
+      id: plan9
+      doc: Plan 9
+    24:
+      id: openrtos
+      doc: OpenRTOS
+    25:
+      id: arm_trusted_firmware
+      doc: ARM Trusted Firmware
+    26:
+      id: tee
+      doc: Trusted Execution Environment
+    27:
+      id: opensbi
+      doc: RISC-V OpenSBI
+    28:
+      id: efi
+      doc: EFI Firmware (e.g. GRUB2)
   uimage_arch:
     0:
       id: invalid
@@ -172,6 +193,30 @@ enums:
     18:
       id: st200
       doc: STMicroelectronics ST200
+    19:
+      id: sandbox
+      doc: Sandbox architecture (test only)
+    20:
+      id: nds32
+      doc: ANDES Technology - NDS32
+    21:
+      id: openrisc
+      doc: OpenRISC 1000
+    22:
+      id: arm64
+      doc: ARM64
+    23:
+      id: arc
+      doc: Synopsys DesignWare ARC
+    24:
+      id: x86_64
+      doc: AMD x86_64, Intel and Via
+    25:
+      id: xtensa
+      doc: Xtensa
+    26:
+      id: riscv
+      doc: RISC-V
   uimage_comp:
     0:
       id: none
@@ -188,6 +233,12 @@ enums:
     4:
       id: lzo
       doc: lzo Compression Used
+    5:
+      id: lz4
+      doc: lz4 Compression Used
+    6:
+      id: zstd
+      doc: zstd Compression Used
   uimage_type:
     0:
       id: invalid
@@ -222,3 +273,93 @@ enums:
     10:
       id: imximage
       doc: Freescale IMXBoot Image
+    11:
+      id: ublimage
+      doc: Davinci UBL Image
+    12:
+      id: omapimage
+      doc: TI OMAP Config Header Image
+    13:
+      id: aisimage
+      doc: TI Davinci AIS Image
+    14:
+      id: kernel_noload
+      doc: OS Kernel Image, can run from any load address
+    15:
+      id: pblimage
+      doc: Freescale PBL Boot Image
+    16:
+      id: mxsimage
+      doc: Freescale MXSBoot Image
+    17:
+      id: gpimage
+      doc: TI Keystone GPHeader Image
+    18:
+      id: atmelimage
+      doc: ATMEL ROM bootable Image
+    19:
+      id: socfpgaimage
+      doc: Altera SOCFPGA CV/AV Preloader
+    20:
+      id: x86_setup
+      doc: x86 setup.bin Image
+    21:
+      id: lpc32xximage
+      doc: x86 setup.bin Image
+    22:
+      id: loadable
+      doc: A list of typeless images
+    23:
+      id: rkimage
+      doc: Rockchip Boot Image
+    24:
+      id: rksd
+      doc: Rockchip SD card
+    25:
+      id: rkspi
+      doc: Rockchip SPI image
+    26:
+      id: zynqimage
+      doc: Xilinx Zynq Boot Image
+    27:
+      id: zynqmpimage
+      doc: Xilinx ZynqMP Boot Image
+    28:
+      id: zynqmpbif
+      doc: Xilinx ZynqMP Boot Image (bif)
+    29:
+      id: fpga
+      doc: FPGA Image
+    30:
+      id: vybridimage
+      doc: VYBRID .vyb Image
+    31:
+      id: tee
+      doc: Trusted Execution Environment OS Image
+    32:
+      id: firmware_ivt
+      doc: Firmware Image with HABv4 IVT
+    33:
+      id: pmmc
+      doc: TI Power Management Micro-Controller Firmware
+    34:
+      id: stm32image
+      doc: STMicroelectronics STM32 Image
+    35:
+      id: socfpgaimage_v1
+      doc: Altera SOCFPGA A10 Preloader
+    36:
+      id: mtkimage
+      doc: MediaTek BootROM loadable Image
+    37:
+      id: imx8mimage
+      doc: Freescale IMX8MBoot Image
+    38:
+      id: imx8image
+      doc: Freescale IMX8Boot Image
+    39:
+      id: copro
+      doc: Coprocessor Image for remoteproc
+    40:
+      id: sunxi_egon
+      doc: Allwinner eGON Boot Image
