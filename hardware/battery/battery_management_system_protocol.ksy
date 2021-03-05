@@ -57,6 +57,10 @@ enums:
   commands:
     0xa5: read
     0x5a: write
+  registers:
+    0x03: basic_info
+    0x04: cell_voltages
+    0x05: hardware
 
 types:
   read_req:
@@ -241,7 +245,7 @@ types:
         type:
           switch-on: cmd
           cases:
-            0x03: basic_info
-            0x04: cell_voltages
-            0x05: hardware
+            registers::basic_info.to_i: basic_info
+            registers::cell_voltages.to_i: cell_voltages
+            registers::hardware.to_i: hardware
         size: data_len
