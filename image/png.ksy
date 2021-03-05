@@ -71,6 +71,11 @@ types:
             '"iTXt"': international_text_chunk
             '"tEXt"': text_chunk
             '"zTXt"': compressed_text_chunk
+
+            # animated PNG chunks
+            '"acTL"': animation_control_chunk
+            '"fcTL"': frame_control_chunk
+            '"fdAT"': frame_data_chunk
       - id: crc
         size: 4
   ihdr_chunk:
@@ -292,6 +297,56 @@ types:
       - id: text_datastream
         process: zlib
         size-eos: true
+  animation_control_chunk:
+    doc-ref: https://wiki.mozilla.org/APNG_Specification#.60acTL.60:_The_Animation_Control_Chunk
+    seq:
+      - id: num_frames
+        type: u4
+        doc: Number of frames
+      - id: num_plays
+        type: u4
+        doc: Number of times to loop, 0 indicates infinite looping.
+  frame_control_chunk:
+    doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fcTL.60:_The_Frame_Control_Chunk
+    seq:
+      - id: sequence_number
+        type: u4
+        doc: Sequence number of the animation chunk
+      - id: width
+        type: u4
+        doc: Width of the following frame
+      - id: height
+        type: u4
+        doc: Height of the following frame
+      - id: x_offset
+        type: u4
+        doc: X position at which to render the following frame
+      - id: y_offset
+        type: u4
+        doc: Y position at which to render the following frame
+      - id: delay_num
+        type: u2
+        doc: Frame delay fraction numerator
+      - id: delay_den
+        type: u2
+        doc: Frame delay fraction denominator
+      - id: dispose_op
+        type: u1
+        enum: dispose_op_values
+        doc: Type of frame area disposal to be done after rendering this frame
+      - id: blend_op
+        type: u1
+        enum: blend_op_values
+        doc: Type of frame area rendering for this frame
+  frame_data_chunk:
+    doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fdAT.60:_The_Frame_Data_Chunk
+    seq:
+      - id: sequence_number
+        type: u4
+        doc: Sequence number of the animation chunk
+      - id: frame_data
+        size-eos: true
+        doc: Frame data for the frame
 enums:
   color_type:
     0: greyscale
@@ -304,3 +359,10 @@ enums:
     1: meter
   compression_methods:
     0: zlib
+  dispose_op_values:
+   0: none
+   1: background
+   2: previous
+  blend_op_values:
+   0: source
+   1: over
