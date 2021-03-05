@@ -36,7 +36,8 @@ seq:
     type: u2
     doc: |
       Should be equal to the result from: 0x10000 - sum(body)
-      Where sum() is calculated over the value of every byte individually.
+      Where sum() is calculated over the value of every byte individually. This works
+      for up to 256 bytes, for more it must be clamped to 16 bits: result & 0xffff
       Body includes everything besides magic start/end byte, cmd and checksum,
       so excluding 2 bytes at the beginning and 3 bytes at the end.
   - id: magic_end
