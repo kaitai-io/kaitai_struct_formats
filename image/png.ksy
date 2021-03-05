@@ -360,9 +360,9 @@ enums:
   compression_methods:
     0: zlib
   dispose_op_values:
-   0: none
-   1: background
-   2: previous
+    0: none
+    1: background
+    2: previous
   blend_op_values:
-   0: source
-   1: over
+    0: source
+    1: over
