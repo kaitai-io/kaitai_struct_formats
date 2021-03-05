@@ -94,7 +94,7 @@ types:
         type: u2
         doc: Cycle times
       - id: prod_date
-        type: u2
+        type: date
         doc: Production date
       - id: balance_status
         type: balance_list
@@ -193,6 +193,24 @@ types:
           amp:
             value: raw * 0.01
             doc: Actual current (A)
+      date:
+        seq:
+          - id: year_after_2000
+            type: b7
+          - id: month
+            type: b4
+            valid: 
+              min: 1
+              max: 12
+          - id: day
+            type: b5
+            valid: 
+              min: 1
+              max: 31
+        instances:
+          year:
+            value: 2000 + year_after_2000
+            doc: only years from 2000 to 2127 (2000 + 127) can be represented
       temp:
         -affected-by: 522
         seq:
