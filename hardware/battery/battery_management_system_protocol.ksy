@@ -82,9 +82,9 @@ types:
 
   basic_info:
     seq:
-      - id: total
+      - id: pack_voltage
         type: voltage
-      - id: current
+      - id: pack_current
         type: current
       - id: remain_cap
         type: capacity
