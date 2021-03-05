@@ -68,17 +68,17 @@ types:
       - id: req_cmd
         type: u1
         doc: Same value as cmd for response
-      - id: data_len
+      - id: len_data
         contents: [0x00]
   write_req:
     seq:
       - id: req_cmd
         type: u1
         doc: Same value as cmd for response
-      - id: data_len
+      - id: len_write_data
         type: u1
       - id: write_data
-        size: data_len
+        size: len_write_data
 
   basic_info:
     seq:
@@ -111,13 +111,13 @@ types:
         type: fet_bits
       - id: cell_count
         type: u1
-      - id: ntc_count
+      - id: num_temps
         type: u1
       - id: temps
         type: temp
         size: 2
         repeat: expr
-        repeat-expr: ntc_count
+        repeat-expr: num_temps
     types:
       balance_list:
         seq:
@@ -257,7 +257,7 @@ types:
       - id: status
         type: u1
         enum: status
-      - id: data_len
+      - id: len_data
         type: u1
       - id: data
         type:
@@ -266,4 +266,4 @@ types:
             registers::basic_info.to_i: basic_info
             registers::cell_voltages.to_i: cell_voltages
             registers::hardware.to_i: hardware
-        size: data_len
+        size: len_data
