@@ -322,9 +322,13 @@ types:
         doc: Height of the following frame
       - id: x_offset
         type: u4
+        valid:
+          max: _root.ihdr.width
         doc: X position at which to render the following frame
       - id: y_offset
         type: u4
+        valid:
+          max: _root.ihdr.height
         doc: Y position at which to render the following frame
       - id: delay_num
         type: u2
