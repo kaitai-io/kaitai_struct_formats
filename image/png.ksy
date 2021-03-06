@@ -7,7 +7,9 @@ meta:
     iso: 15948:2004
     justsolve: PNG
     loc: fdd000153
-    mime: image/png
+    mime:
+      - image/png
+      - image/apng
     pronom:
       - fmt/11 # PNG 1.0
       - fmt/12 # PNG 1.1
@@ -15,7 +17,7 @@ meta:
     rfc: 2083
     wikidata: Q178051
   license: CC0-1.0
-  ks-version: 0.8
+  ks-version: 0.9
   endian: be
 seq:
   # https://www.w3.org/TR/PNG/#5PNG-file-signature
@@ -360,9 +362,31 @@ enums:
   compression_methods:
     0: zlib
   dispose_op_values:
-    0: none
-    1: background
-    2: previous
+    0:
+      id: none
+      doc: |
+        No disposal is done on this frame before rendering the next;
+        the contents of the output buffer are left as is.
+      doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fcTL.60:_The_Frame_Control_Chunk
+    1:
+      id: background
+      doc: |
+        The frame's region of the output buffer is to be cleared to
+        fully transparent black before rendering the next frame.
+      doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fcTL.60:_The_Frame_Control_Chunk
+    2:
+      id: previous
+      doc: |
+        The frame's region of the output buffer is to be reverted
+        to the previous contents before rendering the next frame.
+      doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fcTL.60:_The_Frame_Control_Chunk
   blend_op_values:
-    0: source
-    1: over
+    0:
+      id: source
+      doc: |
+        All color components of the frame, including alpha,
+        overwrite the current contents of the frame's output buffer region.
+    1:
+      id: over
+      doc: |
+        The frame is composited onto the output buffer based on its alpha
