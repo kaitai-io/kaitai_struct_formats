@@ -53,7 +53,6 @@ types:
             type::map_property_colors:        map_property_colors
             type::map_export_settings:        map_export_settings
             type::map_export_properties:      map_export_properties
-            type::deleted:                    deleted
 
     enums:
       type:
