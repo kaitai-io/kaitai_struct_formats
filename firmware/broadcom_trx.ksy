@@ -1,8 +1,8 @@
 meta:
-  id: asus_trx
-  title: ASUS routers .trx official firmware packaging
+  id: broadcom_trx
+  title: Broadcom devices .trx firmware packaging
   file-extension: trx
-  license: GPL-2.0
+  license: GPL-2.0-or-later
   ks-version: 0.9
   bit-endian: le
   encoding: utf-8
@@ -27,8 +27,8 @@ meta:
   USA
 
 doc: |
-  .trx file format is widely used for distribution of stock firmware
-  updates for ASUS routers.
+  .trx file format is widely used for distribution of firmware
+  updates for Broadcom devices. The most well-known are ASUS routers.
 
   Fundamentally, it includes a footer which acts as a safeguard
   against installing a firmware package on a wrong hardware model or
@@ -37,7 +37,10 @@ doc: |
 
   trx files not necessarily contain all these headers.
 
-doc-ref: https://github.com/openwrt/openwrt/blob/3f5619f/tools/firmware-utils/src/trx.c
+doc-ref:
+  - https://github.com/openwrt/openwrt/blob/3f5619f/tools/firmware-utils/src/trx.c
+  - https://web.archive.org/web/20190127154419/https://openwrt.org/docs/techref/header
+  - https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/mtd/partitions/brcm,trx.txt
 
 instances:
   header:
