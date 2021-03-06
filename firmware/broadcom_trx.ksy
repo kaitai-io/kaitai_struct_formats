@@ -2,7 +2,7 @@ meta:
   id: broadcom_trx
   title: Broadcom devices .trx firmware packaging
   file-extension: trx
-  license: GPL-2.0
+  license: GPL-2.0-or-later
   ks-version: 0.9
   bit-endian: le
   encoding: utf-8
