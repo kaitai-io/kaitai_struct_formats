@@ -140,7 +140,9 @@ types:
         enums:
           compression:
             0x00: none
-            0x01: gb_compress
+            0x01:
+              - id: gb_compress
+                doc-ref: The source code for the "GB Compress" algorithm can be found here: http://www.devrs.com/gb/hmgd/source.html
 
           format:
             0x00: gameboy_4_color
