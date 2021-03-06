@@ -207,6 +207,7 @@ types:
             enum: palettes
           - id: make_meta_tiles
             type: u1
+            doc: This flag indicates whether "Metatiles" should be created. These are not described in the file format specification and further investigation is needed to implement these.
           - id: meta_offset
             type: u4
           - id: meta_counter
