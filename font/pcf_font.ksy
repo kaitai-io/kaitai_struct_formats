@@ -5,6 +5,7 @@ meta:
   xref:
     justsolve: PCF
     wikidata: Q3398726
+  license: CC0-1.0
   ks-version: 0.9
   imports:
     - /common/bytes_with_io
