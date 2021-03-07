@@ -4,6 +4,7 @@ meta:
   encoding: ascii
   title: GBM file
   license: MIT
+  ks-opaque-types: true
   application: Gameboy Map Builder, GBMB
   file-extension:
     - gbm
@@ -100,68 +101,197 @@ types:
             type: u4
 
       map_tile_data:
+        types:
+          record:
+            seq:
+              - id: flipped_vertically
+                type: b1
+              - id: flipped_horizontally
+                type: b1
+              - id: reserved1
+                type: b3
+              - id: sgb_palette
+                type: b3
+              - id: reserved2
+                type: b1
+              - id: gbc_palette
+                type: b5
+              - id: tile_number
+                type: b10
         seq:
-          - id: master_id
-            type: u2
           - id: data
-            type: map_tile_data_record
+            type: record
             repeat: expr
-            #repeat-expr: master.tile_count
-            repeat-expr: 0
+            repeat-expr: num_records
         instances:
+          num_records:
+            value: master.object.as<gbr1_object>.body.as<map>.width * master.object.as<gbr1_object>.body.as<map>.height
           master:
-          #  value: find_master(master_id) # <--- Doesn't work (https://github.com/kaitai-io/kaitai_struct/issues/172)
-            value: 0
-            
-
-      map_tile_data_record:
-        seq:
-          - id: flipped_vertically
-            type: b1
-          - id: flipped_horizontally
-            type: b1
-          - id: reserved1
-            type: b3
-          - id: sgb_palette
-            type: b3
-          - id: reserved2
-            type: b1
-          - id: gbc_palette
-            type: b5
-          - id: tile_number
-            type: b10
+            type: "lookup_object(_root.objects, _parent.master_id)"
 
       map_properties:
+        types:
+          record:
+            seq:
+              - id: type
+                type: u4
+              - id: size
+                type: u4
+              - id: name
+                type: strz
+                size: 32
         seq:
-          - id: dummy
-            size: 0
+          - id: data
+            type: record
+            repeat: expr
+            repeat-expr: num_records
+
+        instances:
+          num_records:
+            value: master.object.as<gbr1_object>.body.as<map>.prop_count
+          master:
+            type: "lookup_object(_root.objects, _parent.master_id)"
 
       map_property_data:
+        types:
+          record:
+            seq:
+              - id: value
+                type: u2
         seq:
-          - id: dummy
-            size: 0
+          - id: data
+            type: record
+            repeat: expr
+            repeat-expr: num_records
+
+        instances:
+          num_records:
+            value: master.object.as<gbr1_object>.body.as<map>.prop_count * master.object.as<gbr1_object>.body.as<map>.width * master.object.as<gbr1_object>.body.as<map>.height
+          master:
+            type: "lookup_object(_root.objects, _parent.master_id)"
 
       map_default_property_value:
+        types:
+          record:
+            seq:
+              - id: value
+                type: u2
         seq:
-          - id: dummy
-            size: 0
+          - id: data
+            type: record
+            repeat: expr
+            repeat-expr: num_records
+
+        instances:
+          num_records:
+            value: master.object.as<gbr1_object>.body.as<map>.prop_count * master.object.as<gbr1_object>.body.as<map>.tile_count
+          master:
+            type: "lookup_object(_root.objects, _parent.master_id)"
 
       map_settings:
         seq:
-          - id: dummy
-            size: 0
+          - id: form_width
+            type: u4
+          - id: form_height
+            type: u4
+          - id: form_maximized
+            type: u1
+          - id: info_panel
+            type: u1
+          - id: grid
+            type: u1
+          - id: double_markers
+            type: u1
+          - id: prop_colors
+            type: u1
+          - id: zoom
+            type: u2
+          - id: color_set
+            type: u2
+          - id: bookmarks
+            type: u2
+            repeat: expr
+            repeat-expr: 3
+          - id: block_fill_pattern
+            type: u4
+          - id: block_fill_width
+            type: u4
+          - id: block_fill_height
+            type: u4
 
       map_property_colors:
+        types:
+          record:
+            seq:
+              - id: property
+                type: u4
+              - id: operator
+                type: u4
+              - id: value
+                type: u4
         seq:
-          - id: dummy
-            size: 0
+          - id: data
+            type: record
+            repeat: expr
+            repeat-expr: num_records
+
+        instances:
+          num_records:
+            value: master.object.as<gbr1_object>.body.as<map>.prop_color_count
+          master:
+            type: "lookup_object(_root.objects, _parent.master_id)"
 
       map_export_settings:
         seq:
-          - id: dummy
-            size: 0
+          - id: file_name
+            type: strz
+            size: 255
+            doc: Specification incorrectly lists this attribute as string(256)
+          - id: file_type
+            type: u1
+          - id: section_name
+            type: strz
+            size: 40
+          - id: label_name
+            type: strz
+            size: 40
+          - id: bank
+            type: u1
+          - id: plane_count
+            type: u2
+          - id: plane_order
+            type: u2
+          - id: map_layout
+            type: u2
+          - id: split
+            type: u1
+          - id: split_size
+            type: u4
+          - id: split_bank
+            type: u1
+          - id: sel_tab
+            type: u1
+          - id: prop_count
+            type: u2
+          - id: tile_offset
+            type: u2
 
       map_export_properties:
+        types:
+          record:
+            seq:
+              - id: property
+                type: u4
+              - id: size
+                type: u4
         seq:
-          - id: dummy
-            size: 0
+          - id: data
+            type: record
+            repeat: expr
+            repeat-expr: num_records
+
+        instances:
+          num_records:
+            value: master.object.as<gbr1_object>.body.as<map>.prop_count
+          master:
+            type: "lookup_object(_root.objects, _parent.master_id)"
