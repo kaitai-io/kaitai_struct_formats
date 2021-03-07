@@ -10,6 +10,7 @@ meta:
       - fmt/692 # Mach-O 32bit
       - fmt/693 # Mach-O 64bit
     wikidata: Q2627217
+  license: MIT
   endian: le
 seq:
   - id: magic
