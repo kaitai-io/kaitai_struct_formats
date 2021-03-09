@@ -143,7 +143,7 @@ types:
         repeat: expr
         repeat-expr: _parent.header.num_leap_second_records
         doc: Leap-second records.
-      - id: is_std
+      - id: is_std_flags
         # standard/wall indicators
         type: u1
         repeat: expr
@@ -157,7 +157,7 @@ types:
           If `_parent.header.num_is_std_flags` is zero (0), all transition times
           associated with local time types are assumed to be specified as wall
           time.
-      - id: is_ut
+      - id: is_ut_flags
         # UT/local indicators
         type: b8
         repeat: expr
