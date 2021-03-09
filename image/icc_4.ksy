@@ -97,14 +97,18 @@ types:
         0x44676f53: logosync_cmm #LgoS
         0x48444d20: heidelberg_cmm #HDM
         0x6C636d73: little_cms_cmm #lcms
+        0x52494d58: reficcmax_cmm #RIMX
+        0x44494d58: demoiccmax_cmm #DIMX
         0x4b434d53: kodak_cmm #kcms
         0x4d434d44: konica_minolta_cmm #MCML
         0x57435320: windows_color_system_cmm #WCS
         0x5349474E: mutoh_cmm #SIGN
+        0x4f4e5958: onyx_graphics_cmm #ONYX
         0x52474d53: device_link_cmm #RGMS
         0x53494343: sample_icc_cmm #SICC
         0x54434d4d: toshiba_cmm #TCMM
         0x33324254: the_imaging_factory_cmm #32BT
+        0x7669766f: vivo_cmm #vivo
         0x57544720: ware_to_go_cmm #WTG
         0x7a633030: zoran_cmm #zc00
       profile_classes:
