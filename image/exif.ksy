@@ -67,7 +67,7 @@ types:
           byte_length:
             value: length * type_byte_length
           is_immediate_data:
-            value: 'byte_length <= 4'
+            value: byte_length <= 4
           data:
             io: _root._io
             pos: ofs_or_data

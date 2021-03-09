@@ -50,7 +50,7 @@ types:
         doc: Size of the header structure, must be 0x30.
       - id: magic
         -orig-id: Signature
-        contents: "LfLe"
+        contents: LfLe
       - id: version_major
         -orig-id: MajorVersion
         type: u4
@@ -211,7 +211,7 @@ types:
         4: info
         5: warning
   cursor_record_body:
-    doc-ref: 'http://www.forensicswiki.xyz/page/Windows_Event_Log_(EVT)#Cursor_Record'
+    doc-ref: http://www.forensicswiki.xyz/page/Windows_Event_Log_(EVT)#Cursor_Record
     seq:
       - id: magic
         contents: [0x22, 0x22, 0x22, 0x22, 0x33, 0x33, 0x33, 0x33, 0x44, 0x44, 0x44, 0x44]

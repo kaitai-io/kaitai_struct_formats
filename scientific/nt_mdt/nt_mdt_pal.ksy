@@ -12,7 +12,7 @@ meta:
 doc: It is a color scheme for visualising SPM scans.
 seq:
   - id: signature
-    contents: "NT-MDT Palette File  1.00!"
+    contents: NT-MDT Palette File  1.00!
   - id: count #?
     type: u4
   - id: meta

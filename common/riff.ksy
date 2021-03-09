@@ -23,7 +23,7 @@ instances:
     value: chunk.id
     enum: fourcc
   is_riff_chunk:
-    value: 'chunk_id == fourcc::riff'
+    value: chunk_id == fourcc::riff
   parent_chunk_data:
     io: chunk.data_slot._io
     pos: 0
@@ -83,7 +83,7 @@ types:
         type:
           switch-on: chunk_id
           cases:
-            'fourcc::list': list_chunk_data
+            fourcc::list: list_chunk_data
   list_chunk_data:
     seq:
       - id: save_parent_chunk_data_ofs
@@ -108,7 +108,7 @@ types:
         type:
           switch-on: form_type
           cases:
-            'fourcc::info': info_subchunk
+            fourcc::info: info_subchunk
             _: chunk_type
         repeat: eos
   info_subchunk:

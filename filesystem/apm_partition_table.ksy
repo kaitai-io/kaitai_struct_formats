@@ -38,17 +38,17 @@ types:
   partition_entry:
     seq:
       - id: magic
-        contents: [ 0x50, 0x4d ]
+        contents: [0x50, 0x4d]
       - id: reserved_1
         size: 0x2
       - id: number_of_partitions
         type: u4
       - id: partition_start
         type: u4
-        doc: "First sector"
+        doc: First sector
       - id: partition_size
         type: u4
-        doc: "Number of sectors"
+        doc: Number of sectors
       - id: partition_name
         type: strz
         size: 0x20
@@ -57,31 +57,31 @@ types:
         size: 0x20
       - id: data_start
         type: u4
-        doc: "First sector"
+        doc: First sector
       - id: data_size
         type: u4
-        doc: "Number of sectors"
+        doc: Number of sectors
       - id: partition_status
         type: u4
       - id: boot_code_start
         type: u4
-        doc: "First sector"
+        doc: First sector
       - id: boot_code_size
         type: u4
-        doc: "Number of bytes"
+        doc: Number of bytes
       - id: boot_loader_address
         type: u4
-        doc: "Address of bootloader code"
+        doc: Address of bootloader code
       - id: reserved_2
         size: 0x4
       - id: boot_code_entry
         type: u4
-        doc: "Boot code entry point"
+        doc: Boot code entry point
       - id: reserved_3
         size: 0x4
       - id: boot_code_cksum
         type: u4
-        doc: "Boot code checksum"
+        doc: Boot code checksum
       - id: processor_type
         type: strz
         size: 0x10
@@ -91,7 +91,7 @@ types:
         io: _root._io
         pos: partition_start * _root.sector_size
         size: partition_size * _root.sector_size
-        if: 'partition_status & 1 != 0'
+        if: partition_status & 1 != 0
       data:
         io: _root._io
         pos: data_start * _root.sector_size

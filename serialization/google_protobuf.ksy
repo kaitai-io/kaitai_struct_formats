@@ -62,13 +62,13 @@ types:
         type:
           switch-on: wire_type
           cases:
-            'wire_types::varint': vlq_base128_le
-            'wire_types::len_delimited': delimited_bytes
-            'wire_types::bit_64': u8le
-            'wire_types::bit_32': u4le
+            wire_types::varint: vlq_base128_le
+            wire_types::len_delimited: delimited_bytes
+            wire_types::bit_64: u8le
+            wire_types::bit_32: u4le
     instances:
       wire_type:
-        value: 'key.value & 0b111'
+        value: key.value & 0b111
         enum: wire_types
         doc: |
           "Wire type" is a part of the "key" that carries enough
@@ -79,7 +79,7 @@ types:
           signed zigzag-encoded varints from regular unsigned varints,
           arbitrary bytes from UTF-8 encoded strings, etc.
       field_tag:
-        value: 'key.value >> 3'
+        value: key.value >> 3
         doc: |
           Identifies a field of protocol. One can look up symbolic
           field name in a `.proto` file by this field tag.

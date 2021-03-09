@@ -31,13 +31,13 @@ seq:
     type:
       switch-on: protocol
       cases:
-        'protocol_enum::hopopt': option_hop_by_hop
-        'protocol_enum::tcp': tcp_segment
-        'protocol_enum::icmp': icmp_packet
-        'protocol_enum::udp': udp_datagram
-        'protocol_enum::ipv4': ipv4_packet
-        'protocol_enum::ipv6': ipv6_packet
-        'protocol_enum::ipv6_nonxt': no_next_header
+        protocol_enum::hopopt: option_hop_by_hop
+        protocol_enum::tcp: tcp_segment
+        protocol_enum::icmp: icmp_packet
+        protocol_enum::udp: udp_datagram
+        protocol_enum::ipv4: ipv4_packet
+        protocol_enum::ipv6: ipv6_packet
+        protocol_enum::ipv6_nonxt: no_next_header
 instances:
   protocol:
     value: protocol_num

@@ -42,7 +42,7 @@ types:
   header:
     seq:
       - id: magic
-        contents: 'ID3'
+        contents: ID3
       - id: version_major
         type: u1
       - id: version_revision
@@ -98,7 +98,7 @@ types:
   footer:
     seq:
       - id: magic
-        contents: '3DI'
+        contents: 3DI
       - id: version_major
         type: u1
       - id: version_revision

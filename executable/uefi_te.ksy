@@ -46,7 +46,7 @@ types:
   te_header:
     seq:
       - id: magic
-        contents: "VZ"
+        contents: VZ
       - id: machine
         type: u2
         enum: machine_type
