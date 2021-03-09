@@ -154,7 +154,7 @@ types:
           The value MUST be 0 or 1. A value of one (1) indicates standard time.
           The value MUST be set to one (1) if the corresponding UT/local
           indicator is set to one (1). A value of zero (0) indicates wall time.
-          If `v1_header.num_is_std_flags` is zero (0), all transition times
+          If `_parent.header.num_is_std_flags` is zero (0), all transition times
           associated with local time types are assumed to be specified as wall
           time.
       - id: is_ut
@@ -167,9 +167,10 @@ types:
           local time types were specified as UT or local time. The value MUST be
           0 or 1. A value of one (1) indicates UT, and the corresponding
           standard/wall indicator in `is_std` MUST also be set to one (1). A
-          value of zero (0) indicates local time. If `v1_header.num_is_ut_flags`
-          is zero (0), all transition times associated with local time types are
-          assumed to be specified as local time.
+          value of zero (0) indicates local time. If
+          `_parent.header.num_is_ut_flags` is zero (0), all transition times
+          associated with local time types are assumed to be specified as local
+          time.
   tz_local_time_type:
     seq:
       - id: utoff
