@@ -32,7 +32,7 @@ types:
   tz_struct:
     params:
       - id: is_ts64
-        type: b1
+        type: bool
         doc: |
           Chooses whether to use 64-bit or 32-bit time values. Set to `false`
           for 32-bit time values (used in the version 1 data block). Set to
@@ -95,7 +95,7 @@ types:
   tz_data:
     params:
       - id: is_ts64
-        type: b1
+        type: bool
         doc: |
           Chooses whether to use 64-bit or 32-bit time values. Set to `false`
           for 32-bit time values (used in the version 1 data block). Set to
@@ -201,7 +201,7 @@ types:
   tz_leap_second_record:
     params:
       - id: is_ts64
-        type: b1
+        type: bool
         doc: |
           Chooses whether to use 64-bit or 32-bit time values. Set to `false`
           for 32-bit time values (used in the version 1 data block). Set to
