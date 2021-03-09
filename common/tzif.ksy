@@ -169,8 +169,8 @@ types:
           Values indicating whether the transition times associate with the
           local time types were specified as UT or local time. The value MUST be
           0 or 1. A value of one (1) indicates UT, and the corresponding
-          standard/wall indicator in `is_std` MUST also be set to one (1). A
-          value of zero (0) indicates local time. If
+          standard/wall indicator in `is_std_flags` MUST also be set to one (1).
+          A value of zero (0) indicates local time. If
           `_parent.header.num_is_ut_flags` is zero (0), all transition times
           associated with local time types are assumed to be specified as local
           time.
@@ -255,7 +255,7 @@ types:
           the string is empty, the corresponding information is not available.
           If the string is nonempty and one or more transitions appear in the
           version 2+ data, the string MUST be consistent with the last version
-          2+ transition. The string MUST NOT contain NUL octets or by
+          2+ transition. The string MUST NOT contain NUL octets or be
           NUL-terminated, and it SHOULD NOT begin with the ':' (colon)
           character.
       - id: tail_nl
