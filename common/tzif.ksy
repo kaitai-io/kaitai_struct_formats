@@ -16,6 +16,7 @@ doc: |
   relatively populous location within the geographic region covered by the time
   zone, for example: "America/New_York" or "Europe/Paris". This identifier is
   external to the TZif file itself.
+doc-ref: https://tools.ietf.org/html/rfc8536
 seq:
   - id: v1_struct
     type: tz_struct(false)
@@ -43,6 +44,7 @@ types:
       - id: data
         type: tz_data(is_ts64)
   tz_header:
+    doc-ref: https://tools.ietf.org/html/rfc8536#section-3.1
     seq:
       - id: magic
         contents: TZif
@@ -93,6 +95,7 @@ types:
       version:
         value: 'ver_byte >= 0x32 ? ver_byte - 0x30 : 1'
   tz_data:
+    doc-ref: https://tools.ietf.org/html/rfc8536#section-3.2
     params:
       - id: is_ts64
         type: bool
@@ -172,6 +175,7 @@ types:
           associated with local time types are assumed to be specified as local
           time.
   tz_local_time_type:
+    doc-ref: https://tools.ietf.org/html/rfc8536#section-3.2
     seq:
       - id: utoff
         type: s4
@@ -199,6 +203,7 @@ types:
           be empty.) A NUL octet MUST exist in the time zone designations at or
           after position `desig_idx`.
   tz_leap_second_record:
+    doc-ref: https://tools.ietf.org/html/rfc8536#section-3.2
     params:
       - id: is_ts64
         type: bool
@@ -232,6 +237,7 @@ types:
           leap-second record (or for all timestamps if there are no leap-second
           records).
   tz_footer:
+    doc-ref: https://tools.ietf.org/html/rfc8536#section-3.3
     seq:
       - id: head_nl
         contents: [0x0a]
