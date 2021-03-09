@@ -36,7 +36,7 @@ types:
   assembly:
     seq:
       - id: string_magic
-        contents: "s"
+        contents: s
       - id: length
         type: u4
       - id: items
@@ -55,7 +55,7 @@ types:
         enum: op_code_enum
       - id: arg
         type: u2
-        if: "op_code.to_i >= op_code_enum::store_name.to_i" # store_name == have_arguments
+        if: op_code.to_i >= op_code_enum::store_name.to_i # store_name == have_arguments
     enums:
       op_code_enum:
         0  : stop_code
@@ -224,15 +224,15 @@ types:
         type:
           switch-on: type
           cases:
-            "object_type::code_object": code_object
-            "object_type::string":      py_string
-            "object_type::string_ref":  string_ref
-            "object_type::interned":    interned_string
-            "object_type::tuple":       tuple
-            "object_type::int":         u4
-            "object_type::py_false":    py_false
-            "object_type::py_true":     py_true
-            "object_type::none":        py_none
+            object_type::code_object: code_object
+            object_type::string: py_string
+            object_type::string_ref: string_ref
+            object_type::interned: interned_string
+            object_type::tuple: tuple
+            object_type::int: u4
+            object_type::py_false: py_false
+            object_type::py_true: py_true
+            object_type::none: py_none
     types:
       py_string:
         -webide-representation: "{data}"
@@ -274,7 +274,7 @@ types:
             repeat: expr
             repeat-expr: count
       py_none:
-        -webide-representation: "None"
+        -webide-representation: None
       py_true:
         -webide-representation: "true"
       py_false:

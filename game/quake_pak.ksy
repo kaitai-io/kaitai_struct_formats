@@ -7,10 +7,10 @@ meta:
     wikidata: Q105854676
   license: CC0-1.0
   endian: le
-doc-ref: 'https://quakewiki.org/wiki/.pak#Format_specification'
+doc-ref: https://quakewiki.org/wiki/.pak#Format_specification
 seq:
   - id: magic
-    contents: 'PACK'
+    contents: PACK
   - id: ofs_index
     type: u4
   - id: len_index

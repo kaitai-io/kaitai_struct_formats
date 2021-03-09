@@ -68,7 +68,7 @@ types:
         type:
           switch-on: type
           cases:
-            'types::finder_info': finder_info
+            types::finder_info: finder_info
     enums:
       types:
         1:

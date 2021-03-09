@@ -28,7 +28,7 @@ types:
       - id: future
         type: u4
       - id: signature
-        contents: 'Compressed ROMFS'
+        contents: Compressed ROMFS
       - id: fsid
         type: info
       - id: name

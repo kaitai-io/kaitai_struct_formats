@@ -57,7 +57,7 @@ types:
         type: u2
     instances:
       dbase_level:
-        value: 'version & 0b111'
+        value: version & 0b111
   header2:
     seq:
       - id: header_dbase_3

@@ -19,12 +19,12 @@ doc: |
   choice for a digital sound container in lots of games and multimedia
   software due to simplicity and availability of Creative's recording
   / editing tools.
-doc-ref: 'https://wiki.multimedia.cx/index.php?title=Creative_Voice'
+doc-ref: https://wiki.multimedia.cx/index.php?title=Creative_Voice
 # https://fabiensanglard.net/reverse_engineering_strike_commander/docs/Creative%20Voice%20(VOC)%20file%20format.txt
 seq:
   - id: magic
     contents:
-      - 'Creative Voice File'
+      - Creative Voice File
       - 0x1a
   - id: header_size
     type: u2
@@ -56,14 +56,14 @@ types:
         type:
           switch-on: block_type
           cases:
-            'block_types::sound_data': block_sound_data
-            'block_types::silence': block_silence
-            'block_types::marker': block_marker
-            #'block_types::text': block_text
-            'block_types::repeat_start': block_repeat_start
-            #'block_types::repeat_end': always_empty_block
-            'block_types::extra_info': block_extra_info
-            'block_types::sound_data_new': block_sound_data_new
+            block_types::sound_data: block_sound_data
+            block_types::silence: block_silence
+            block_types::marker: block_marker
+            #block_types::text: block_text
+            block_types::repeat_start: block_repeat_start
+            #block_types::repeat_end: always_empty_block
+            block_types::extra_info: block_extra_info
+            block_types::sound_data_new: block_sound_data_new
         if: block_type != block_types::terminator
         doc: Block body, type depends on block type byte
     instances:
@@ -75,7 +75,7 @@ types:
           emulating that by adding two standard-sized integers
           (body_size1 and body_size2).
   block_sound_data:
-    doc-ref: 'https://wiki.multimedia.cx/index.php?title=Creative_Voice#Block_type_0x01:_Sound_data'
+    doc-ref: https://wiki.multimedia.cx/index.php?title=Creative_Voice#Block_type_0x01:_Sound_data
     seq:
       - id: freq_div
         type: u1
@@ -89,7 +89,7 @@ types:
       sample_rate:
         value: 1000000.0 / (256 - freq_div)
   block_silence:
-    doc-ref: 'https://wiki.multimedia.cx/index.php?title=Creative_Voice#Block_type_0x03:_Silence'
+    doc-ref: https://wiki.multimedia.cx/index.php?title=Creative_Voice#Block_type_0x03:_Silence
     seq:
       - id: duration_samples
         type: u2
@@ -104,19 +104,19 @@ types:
         value: duration_samples / sample_rate
         doc: Duration of silence, in seconds
   block_marker:
-    doc-ref: 'https://wiki.multimedia.cx/index.php?title=Creative_Voice#Block_type_0x04:_Marker'
+    doc-ref: https://wiki.multimedia.cx/index.php?title=Creative_Voice#Block_type_0x04:_Marker
     seq:
       - id: marker_id
         type: u2
         doc: Marker ID
   block_repeat_start:
-    doc-ref: 'https://wiki.multimedia.cx/index.php?title=Creative_Voice#Block_type_0x06:_Repeat_start'
+    doc-ref: https://wiki.multimedia.cx/index.php?title=Creative_Voice#Block_type_0x06:_Repeat_start
     seq:
       - id: repeat_count_1
         type: u2
         doc: Number of repetitions minus 1; 0xffff means infinite repetitions
   block_extra_info:
-    doc-ref: 'https://wiki.multimedia.cx/index.php?title=Creative_Voice#Block_type_0x08:_Extra_info'
+    doc-ref: https://wiki.multimedia.cx/index.php?title=Creative_Voice#Block_type_0x08:_Extra_info
     seq:
       - id: freq_div
         type: u2
@@ -134,7 +134,7 @@ types:
       sample_rate:
         value: 256000000.0 / (num_channels * (65536 - freq_div))
   block_sound_data_new:
-    doc-ref: 'https://wiki.multimedia.cx/index.php?title=Creative_Voice#Block_type_0x09:_Sound_data_.28New_format.29'
+    doc-ref: https://wiki.multimedia.cx/index.php?title=Creative_Voice#Block_type_0x09:_Sound_data_.28New_format.29
     seq:
       - id: sample_rate
         type: u4

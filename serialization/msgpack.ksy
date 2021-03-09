@@ -84,14 +84,14 @@ instances:
 #      0
   is_nil:
     value: b1 == 0xc0
-    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-nil'
+    doc-ref: https://github.com/msgpack/msgpack/blob/master/spec.md#formats-nil
   # ========================================================================
   is_bool:
     value: b1 == 0xc2 or b1 == 0xc3
   bool_value:
     value: b1 == 0xc3
     if: is_bool
-    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-bool'
+    doc-ref: https://github.com/msgpack/msgpack/blob/master/spec.md#formats-bool
   # ========================================================================
   is_pos_int7:
     value: b1 & 0b1000_0000 == 0
@@ -114,10 +114,10 @@ instances:
   # ========================================================================
   is_float_32:
     value: b1 == 0xca
-    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-float'
+    doc-ref: https://github.com/msgpack/msgpack/blob/master/spec.md#formats-float
   is_float_64:
     value: b1 == 0xcb
-    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-float'
+    doc-ref: https://github.com/msgpack/msgpack/blob/master/spec.md#formats-float
   is_float:
     value: is_float_32 or is_float_64
   float_value:
@@ -127,16 +127,16 @@ instances:
   # ========================================================================
   is_fix_str:
     value: b1 & 0b111_00000 == 0b101_00000
-    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-str'
+    doc-ref: https://github.com/msgpack/msgpack/blob/master/spec.md#formats-str
   is_str_8:
     value: b1 == 0xd9
-    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-str'
+    doc-ref: https://github.com/msgpack/msgpack/blob/master/spec.md#formats-str
   is_str_16:
     value: b1 == 0xda
-    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-str'
+    doc-ref: https://github.com/msgpack/msgpack/blob/master/spec.md#formats-str
   is_str_32:
     value: b1 == 0xdb
-    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-str'
+    doc-ref: https://github.com/msgpack/msgpack/blob/master/spec.md#formats-str
   is_str:
     value: is_fix_str or is_str_8 or is_str_16 or is_str_32
   str_len:
@@ -149,43 +149,43 @@ instances:
   # ========================================================================
   is_array:
     value: is_fix_array or is_array_16 or is_array_32
-    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-array'
+    doc-ref: https://github.com/msgpack/msgpack/blob/master/spec.md#formats-array
   is_fix_array:
     value: b1 & 0b1111_0000 == 0b1001_0000
-    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-array'
+    doc-ref: https://github.com/msgpack/msgpack/blob/master/spec.md#formats-array
   is_array_16:
     value: b1 == 0xdc
-    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-array'
+    doc-ref: https://github.com/msgpack/msgpack/blob/master/spec.md#formats-array
   is_array_32:
     value: b1 == 0xdd
-    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-array'
+    doc-ref: https://github.com/msgpack/msgpack/blob/master/spec.md#formats-array
   num_array_elements:
     value: >-
       is_fix_array ? b1 & 0b0000_1111 :
       is_array_16 ? num_array_elements_16 :
       num_array_elements_32
     if: is_array
-    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-array'
+    doc-ref: https://github.com/msgpack/msgpack/blob/master/spec.md#formats-array
   # ========================================================================
   is_map:
     value: is_fix_map or is_map_16 or is_map_32
-    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-map'
+    doc-ref: https://github.com/msgpack/msgpack/blob/master/spec.md#formats-map
   is_fix_map:
     value: b1 & 0b1111_0000 == 0b1000_0000
-    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-map'
+    doc-ref: https://github.com/msgpack/msgpack/blob/master/spec.md#formats-map
   is_map_16:
     value: b1 == 0xde
-    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-map'
+    doc-ref: https://github.com/msgpack/msgpack/blob/master/spec.md#formats-map
   is_map_32:
     value: b1 == 0xdf
-    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-map'
+    doc-ref: https://github.com/msgpack/msgpack/blob/master/spec.md#formats-map
   num_map_elements:
     value: >-
       is_fix_map ? b1 & 0b0000_1111 :
       is_map_16 ? num_map_elements_16 :
       num_map_elements_32
     if: is_map
-    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-map'
+    doc-ref: https://github.com/msgpack/msgpack/blob/master/spec.md#formats-map
 types:
   map_tuple:
     seq:

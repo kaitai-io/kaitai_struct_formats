@@ -41,7 +41,7 @@ types:
   pk_section:
     seq:
       - id: magic
-        contents: 'PK'
+        contents: PK
       - id: section_type
         type: u2
       - id: body
@@ -135,14 +135,14 @@ types:
               or _parent.compression_method == compression::enhanced_deflated
           imploded_dict_byte_size:
             value: '((comp_options_raw & 0b01) != 0 ? 8 : 4) * 1024'
-            if: '_parent.compression_method == compression::imploded'
+            if: _parent.compression_method == compression::imploded
             doc: 8KiB or 4KiB in bytes
           imploded_num_sf_trees:
             value: '(comp_options_raw & 0b10) != 0 ? 3 : 2'
-            if: '_parent.compression_method == compression::imploded'
+            if: _parent.compression_method == compression::imploded
           lzma_has_eos_marker:
-            value: '(comp_options_raw & 0b01) != 0'
-            if: '_parent.compression_method == compression::lzma'
+            value: (comp_options_raw & 0b01) != 0
+            if: _parent.compression_method == compression::lzma
         enums:
           deflate_mode:
             0: normal
@@ -237,12 +237,12 @@ types:
         type:
           switch-on: code
           cases:
-            'extra_codes::ntfs': ntfs
-            'extra_codes::extended_timestamp': extended_timestamp
-            'extra_codes::infozip_unix_var_size': infozip_unix_var_size
+            extra_codes::ntfs: ntfs
+            extra_codes::extended_timestamp: extended_timestamp
+            extra_codes::infozip_unix_var_size: infozip_unix_var_size
     types:
       ntfs:
-        doc-ref: 'https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt#L191'
+        doc-ref: https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt#L191
         seq:
           - id: reserved
             type: u4
@@ -271,7 +271,7 @@ types:
               - id: creation_time
                 type: u8
       extended_timestamp:
-        doc-ref: 'https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt#L817'
+        doc-ref: https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt#L817
         seq:
           - id: flags
             size: 1
@@ -300,7 +300,7 @@ types:
               - id: reserved
                 type: b5
       infozip_unix_var_size:
-        doc-ref: 'https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt#L1339'
+        doc-ref: https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt#L1339
         seq:
           - id: version
             type: u1

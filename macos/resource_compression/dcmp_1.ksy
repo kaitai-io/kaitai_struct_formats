@@ -31,7 +31,7 @@ doc: |
   The `'dcmp' (0)` format also appears to be generally preferred over `'dcmp' (1)`,
   with the latter only being used in resource files that contain mostly unaligned data,
   such as text.
-doc-ref: 'https://github.com/dgelessus/python-rsrcfork/blob/f891a6e/src/rsrcfork/compress/dcmp1.py'
+doc-ref: https://github.com/dgelessus/python-rsrcfork/blob/f891a6e/src/rsrcfork/compress/dcmp1.py
 seq:
   - id: chunks
     type: chunk
@@ -70,11 +70,11 @@ types:
             : tag == 0xff ? tag_kind::end
             : tag_kind::invalid
           cases:
-            'tag_kind::literal': literal_body(tag)
-            'tag_kind::backreference': backreference_body(tag)
-            'tag_kind::table_lookup': table_lookup_body(tag)
-            'tag_kind::extended': extended_body
-            'tag_kind::end': end_body
+            tag_kind::literal: literal_body(tag)
+            tag_kind::backreference: backreference_body(tag)
+            tag_kind::table_lookup: table_lookup_body(tag)
+            tag_kind::extended: extended_body
+            tag_kind::end: end_body
         doc: |
           The chunk's body.
 

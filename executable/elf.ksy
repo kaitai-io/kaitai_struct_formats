@@ -29,7 +29,7 @@ seq:
   - id: magic
     -orig-id: e_ident[EI_MAG0]..e_ident[EI_MAG3]
     size: 4
-    contents: [0x7f, "ELF"]
+    contents: [0x7f, ELF]
     doc: File identification, must be 0x7f + "ELF".
   - id: bits
     -orig-id: e_ident[EI_CLASS]
@@ -107,46 +107,46 @@ types:
     instances:
       write:
         value: value & 0x01 != 0
-        doc: "writable"
+        doc: writable
       alloc:
         value: value & 0x02 != 0
-        doc: "occupies memory during execution"
+        doc: occupies memory during execution
       exec_instr:
         value: value & 0x04 != 0
-        doc: "executable"
+        doc: executable
       merge:
         value: value & 0x10 != 0
-        doc: "might be merged"
+        doc: might be merged
       strings:
         value: value & 0x20 != 0
-        doc: "contains nul-terminated strings"
+        doc: contains nul-terminated strings
       info_link:
         value: value & 0x40 != 0
         doc: "'sh_info' contains SHT index"
       link_order:
         value: value & 0x80 != 0
-        doc: "preserve order after combining"
+        doc: preserve order after combining
       os_non_conforming:
         value: value & 0x100 != 0
-        doc: "non-standard OS specific handling required"
+        doc: non-standard OS specific handling required
       group:
         value: value & 0x200 != 0
-        doc: "section is member of a group"
+        doc: section is member of a group
       tls:
         value: value & 0x400 != 0
-        doc: "section hold thread-local data"
+        doc: section hold thread-local data
       ordered:
         value: value & 0x04000000 != 0
-        doc: "special ordering requirement (Solaris)"
+        doc: special ordering requirement (Solaris)
       exclude:
         value: value & 0x08000000 != 0
-        doc: "section is excluded unless referenced or allocated (Solaris)"
+        doc: section is excluded unless referenced or allocated (Solaris)
       mask_os:
         value: value & 0x0ff00000 != 0
-        doc: "OS-specific"
+        doc: OS-specific
       mask_proc:
         value: value & 0xf0000000 != 0
-        doc: "Processor-specific"
+        doc: Processor-specific
   dt_flag_values:
     doc-ref:
       - 'https://refspecs.linuxbase.org/elf/gabi4+/ch5.dynamic.html Figure 5-11: DT_FLAGS values'
@@ -180,57 +180,57 @@ types:
     instances:
       now:
         value: value & 0x00000001 != 0
-        doc: "Set RTLD_NOW for this object."
+        doc: Set RTLD_NOW for this object.
       rtld_global:
         value: value & 0x00000002 != 0
-        doc: "Set RTLD_GLOBAL for this object."
+        doc: Set RTLD_GLOBAL for this object.
       group:
         value: value & 0x00000004 != 0
-        doc: "Set RTLD_GROUP for this object."
+        doc: Set RTLD_GROUP for this object.
       nodelete:
         value: value & 0x00000008 != 0
-        doc: "Set RTLD_NODELETE for this object."
+        doc: Set RTLD_NODELETE for this object.
       loadfltr:
         value: value & 0x00000010 != 0
-        doc: "Trigger filtee loading at runtime."
+        doc: Trigger filtee loading at runtime.
       initfirst:
         value: value & 0x00000020 != 0
-        doc: "Set RTLD_INITFIRST for this object"
+        doc: Set RTLD_INITFIRST for this object
       noopen:
         value: value & 0x00000040 != 0
-        doc: "Set RTLD_NOOPEN for this object."
+        doc: Set RTLD_NOOPEN for this object.
       origin:
         value: value & 0x00000080 != 0
-        doc: "$ORIGIN must be handled."
+        doc: $ORIGIN must be handled.
       direct:
         value: value & 0x00000100 != 0
-        doc: "Direct binding enabled."
+        doc: Direct binding enabled.
       trans:
         value: value & 0x00000200 != 0
       interpose:
         value: value & 0x00000400 != 0
-        doc: "Object is used to interpose."
+        doc: Object is used to interpose.
       nodeflib:
         value: value & 0x00000800 != 0
-        doc: "Ignore default lib search path."
+        doc: Ignore default lib search path.
       nodump:
         value: value & 0x00001000 != 0
-        doc: "Object can't be dldump'ed."
+        doc: Object can't be dldump'ed.
       confalt:
         value: value & 0x00002000 != 0
-        doc: "Configuration alternative created."
+        doc: Configuration alternative created.
       endfiltee:
         value: value & 0x00004000 != 0
-        doc: "Filtee terminates filters search."
+        doc: Filtee terminates filters search.
       dispreldne:
         value: value & 0x00008000 != 0
-        doc: "Disp reloc applied at build time."
+        doc: Disp reloc applied at build time.
       disprelpnd:
         value: value & 0x00010000 != 0
-        doc: "Disp reloc applied at run-time."
+        doc: Disp reloc applied at run-time.
       nodirect:
         value: value & 0x00020000 != 0
-        doc: "Object has no-direct binding."
+        doc: Object has no-direct binding.
       ignmuldef:
         value: value & 0x00040000 != 0
       noksyms:
@@ -239,18 +239,18 @@ types:
         value: value & 0x00100000 != 0
       edited:
         value: value & 0x00200000 != 0
-        doc: "Object is modified after built."
+        doc: Object is modified after built.
       noreloc:
         value: value & 0x00400000 != 0
       symintpose:
         value: value & 0x00800000 != 0
-        doc: "Object has individual interposers."
+        doc: Object has individual interposers.
       globaudit:
         value: value & 0x01000000 != 0
-        doc: "Global auditing required."
+        doc: Global auditing required.
       singleton:
         value: value & 0x02000000 != 0
-        doc: "Singleton symbols are used."
+        doc: Singleton symbols are used.
       stub:
         value: value & 0x04000000 != 0
       pie:
@@ -260,8 +260,8 @@ types:
       endian:
         switch-on: _root.endian
         cases:
-          'endian::le': le
-          'endian::be': be
+          endian::le: le
+          endian::be: be
     seq:
       - id: e_type
         type: u2
@@ -276,22 +276,22 @@ types:
         type:
           switch-on: _root.bits
           cases:
-            'bits::b32': u4
-            'bits::b64': u8
+            bits::b32: u4
+            bits::b64: u8
       # e_phoff
       - id: program_header_offset
         type:
           switch-on: _root.bits
           cases:
-            'bits::b32': u4
-            'bits::b64': u8
+            bits::b32: u4
+            bits::b64: u8
       # e_shoff
       - id: section_header_offset
         type:
           switch-on: _root.bits
           cases:
-            'bits::b32': u4
-            'bits::b64': u8
+            bits::b32: u4
+            bits::b64: u8
       # e_flags
       - id: flags
         size: 4
@@ -330,36 +330,36 @@ types:
             type:
               switch-on: _root.bits
               cases:
-                'bits::b32': u4
-                'bits::b64': u8
+                bits::b32: u4
+                bits::b64: u8
           # p_vaddr
           - id: vaddr
             type:
               switch-on: _root.bits
               cases:
-                'bits::b32': u4
-                'bits::b64': u8
+                bits::b32: u4
+                bits::b64: u8
           # p_paddr
           - id: paddr
             type:
               switch-on: _root.bits
               cases:
-                'bits::b32': u4
-                'bits::b64': u8
+                bits::b32: u4
+                bits::b64: u8
           # p_filesz
           - id: filesz
             type:
               switch-on: _root.bits
               cases:
-                'bits::b32': u4
-                'bits::b64': u8
+                bits::b32: u4
+                bits::b64: u8
           # p_memsz
           - id: memsz
             type:
               switch-on: _root.bits
               cases:
-                'bits::b32': u4
-                'bits::b64': u8
+                bits::b32: u4
+                bits::b64: u8
           # p_flags
           - id: flags32
             type: u4
@@ -369,15 +369,15 @@ types:
             type:
               switch-on: _root.bits
               cases:
-                'bits::b32': u4
-                'bits::b64': u8
+                bits::b32: u4
+                bits::b64: u8
         instances:
           flags_obj:
             type:
               switch-on: _root.bits
               cases:
-                'bits::b32': phdr_type_flags(flags32)
-                'bits::b64': phdr_type_flags(flags64)
+                bits::b32: phdr_type_flags(flags32)
+                bits::b64: phdr_type_flags(flags64)
             -webide-parse-mode: eager
         -webide-representation: "{type} - f:{flags_obj:flags} (o:{offset}, s:{filesz:dec})"
       section_header:
@@ -395,29 +395,29 @@ types:
             type:
               switch-on: _root.bits
               cases:
-                'bits::b32': u4
-                'bits::b64': u8
+                bits::b32: u4
+                bits::b64: u8
           - id: addr
             -orig-id: sh_addr
             type:
               switch-on: _root.bits
               cases:
-                'bits::b32': u4
-                'bits::b64': u8
+                bits::b32: u4
+                bits::b64: u8
           - id: ofs_body
             -orig-id: sh_offset
             type:
               switch-on: _root.bits
               cases:
-                'bits::b32': u4
-                'bits::b64': u8
+                bits::b32: u4
+                bits::b64: u8
           - id: len_body
             -orig-id: sh_size
             type:
               switch-on: _root.bits
               cases:
-                'bits::b32': u4
-                'bits::b64': u8
+                bits::b32: u4
+                bits::b64: u8
           - id: linked_section_idx
             -orig-id: sh_link
             type: u4
@@ -429,15 +429,15 @@ types:
             type:
               switch-on: _root.bits
               cases:
-                'bits::b32': u4
-                'bits::b64': u8
+                bits::b32: u4
+                bits::b64: u8
           - id: entry_size
             -orig-id: sh_entsize
             type:
               switch-on: _root.bits
               cases:
-                'bits::b32': u4
-                'bits::b64': u8
+                bits::b32: u4
+                bits::b64: u8
         instances:
           body:
             io: _root._io
@@ -446,6 +446,7 @@ types:
             type:
               switch-on: type
               cases:
+==== BASE ====
                 'sh_type::dynamic': dynamic_section
                 'sh_type::strtab': strings_struct
                 'sh_type::dynsym': dynsym_section
@@ -453,7 +454,7 @@ types:
                 'sh_type::note': note_section
                 'sh_type::rel': relocation_section(false)
                 'sh_type::rela': relocation_section(true)
-            if: type != sh_type::nobits
+==== BASE ====
           linked_section:
             value: _root.header.section_headers[linked_section_idx]
             if: |
@@ -497,14 +498,14 @@ types:
             type:
               switch-on: _root.bits
               cases:
-                'bits::b32': u4
-                'bits::b64': u8
+                bits::b32: u4
+                bits::b64: u8
           - id: value_or_ptr
             type:
               switch-on: _root.bits
               cases:
-                'bits::b32': u4
-                'bits::b64': u8
+                bits::b32: u4
+                bits::b64: u8
         instances:
           tag_enum:
             value: tag
@@ -515,7 +516,7 @@ types:
             -webide-parse-mode: eager
           flag_1_values:
             type: dt_flag_1_values(value_or_ptr)
-            if: "tag_enum == dynamic_array_tags::flags_1"
+            if: tag_enum == dynamic_array_tags::flags_1
             -webide-parse-mode: eager
           value_str:
             io: _parent._parent.linked_section.body.as<strings_struct>._io
@@ -554,7 +555,7 @@ types:
         doc-ref:
           - https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/symbol-table-section.html
           - https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.symtab.html
-        -webide-representation: 'v:{value} s:{size:dec} t:{type} b:{bind} vis:{visibility} i:{sh_idx:dec}[={sh_idx_special}] n:{name}'
+        -webide-representation: v:{value} s:{size:dec} t:{type} b:{bind} vis:{visibility} i:{sh_idx:dec}[={sh_idx_special}] n:{name}
         seq:
           - id: ofs_name
             -orig-id: st_name
@@ -685,20 +686,20 @@ types:
             type:
               switch-on: _root.bits
               cases:
-                'bits::b32': u4
-                'bits::b64': u8
+                bits::b32: u4
+                bits::b64: u8
           - id: info
             type:
               switch-on: _root.bits
               cases:
-                'bits::b32': u4
-                'bits::b64': u8
+                bits::b32: u4
+                bits::b64: u8
           - id: addend
             type:
               switch-on: _root.bits
               cases:
-                'bits::b32': s4
-                'bits::b64': s8
+                bits::b32: s4
+                bits::b64: s8
             if: _parent.has_addend
     instances:
       program_headers:

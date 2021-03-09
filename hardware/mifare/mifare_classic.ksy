@@ -73,19 +73,19 @@ types:
                 repeat-expr: 4
             instances:
               value_valid:
-                value: 'valuez[0]==~valuez[1] and valuez[0]==valuez[2]'
+                value: valuez[0]==~valuez[1] and valuez[0]==valuez[2]
               addr_valid:
-                value: 'addrz[0]==~addrz[1] and addrz[0]==addrz[2] and addrz[1]==addrz[3]'
+                value: addrz[0]==~addrz[1] and addrz[0]==addrz[2] and addrz[1]==addrz[3]
               valid:
-                value: 'value_valid and addr_valid'
+                value: value_valid and addr_valid
               addr:
-                value: 'addrz[0]'
+                value: addrz[0]
                 if: valid
               value:
                 value: valuez[0]
                 if: valid
       filler:
-        doc: "only to create _io"
+        doc: only to create _io
         seq:
           - id: data
             size: _io.size
@@ -172,16 +172,16 @@ types:
               shift_value:
                 value: (bit_no==1?-1:1)
               chunk_no:
-                value: '((inv_chunk_no+shift_value+_parent._parent.ac_count_of_chunks)%_parent._parent.ac_count_of_chunks)'
+                value: ((inv_chunk_no+shift_value+_parent._parent.ac_count_of_chunks)%_parent._parent.ac_count_of_chunks)
               inv_chunk_no:
-                value: 'bit_no+shift_value'
+                value: bit_no+shift_value
           valid_chunk:
             params:
               - id: inv_chunk
                 type: u1
               - id: chunk
                 type: u1
-                doc: "c3 c2 c1 c0"
+                doc: c3 c2 c1 c0
             instances:
               valid:
                 value: inv_chunk ^ chunk == 0b1111
@@ -198,7 +198,7 @@ types:
 
               val:
                 value: (bits[2].n << 2) | (bits[1].n << 1) | bits[0].n
-                doc: "c3 c2 c1"
+                doc: c3 c2 c1
               inv_shift_val:
                 value: (bits[0].n << 2) | (bits[1].n << 1) | bits[2].n
 
@@ -224,7 +224,7 @@ types:
                 value: ac.inv_shift_val <= 0b010
                 doc: key A is required
               can_write_keys:
-                value: "(ac.inv_shift_val+1)%3 != 0 and (ac.inv_shift_val<6)"
+                value: (ac.inv_shift_val+1)%3 != 0 and (ac.inv_shift_val<6)
               can_write_access_bits:
                 value: ac.bits[2].b
               key_b_controls_write:

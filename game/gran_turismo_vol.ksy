@@ -8,7 +8,7 @@ meta:
   endian: le
 seq:
   - id: magic
-    contents: ["GTFS", 0, 0, 0, 0]
+    contents: [GTFS, 0, 0, 0, 0]
   - id: num_files
     type: u2
   - id: num_entries
@@ -44,12 +44,12 @@ types:
         terminator: 0
     instances:
       size:
-        value: '(_root.offsets[offset_idx + 1] & 0xFFFFF800) - _root.offsets[offset_idx]'
+        value: (_root.offsets[offset_idx + 1] & 0xFFFFF800) - _root.offsets[offset_idx]
       body:
         pos: _root.offsets[offset_idx] & 0xFFFFF800
         size: size
         if: not is_dir
       is_dir:
-        value: 'flags & 1 != 0'
+        value: flags & 1 != 0
       is_last_entry:
-        value: 'flags & 0x80 != 0'
+        value: flags & 0x80 != 0

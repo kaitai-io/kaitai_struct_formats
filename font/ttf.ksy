@@ -77,7 +77,7 @@ types:
     doc: >
       cmap - Character To Glyph Index Mapping Table
       This table defines the mapping of character codes to the glyph index values used in the font.
-    -webide-represetation: "hello"
+    -webide-represetation: hello
     seq:
       - id: version_number
         type: u2
@@ -89,7 +89,7 @@ types:
         repeat-expr: number_of_encoding_tables
     types:
       subtable_header:
-        -webide-representation: "p:{platform_id:dec}, e:{encoding_id:dec}"
+        -webide-representation: p:{platform_id:dec}, e:{encoding_id:dec}
         seq:
           - id: platform_id
             type: u2
@@ -306,37 +306,37 @@ types:
         type: fixed
       - id: ascender
         type: s2
-        doc: 'Typographic ascent'
+        doc: Typographic ascent
       - id: descender
         type: s2
-        doc: 'Typographic descent'
+        doc: Typographic descent
       - id: line_gap
         type: s2
-        doc: 'Typographic line gap. Negative LineGap values are treated as zero in Windows 3.1, System 6, and System 7.'
+        doc: Typographic line gap. Negative LineGap values are treated as zero in Windows 3.1, System 6, and System 7.
       - id: advance_width_max
         type: u2
-        doc: 'Maximum advance width value in `hmtx` table.'
+        doc: Maximum advance width value in `hmtx` table.
       - id: min_left_side_bearing
         type: s2
-        doc: 'Minimum left sidebearing value in `hmtx` table.'
+        doc: Minimum left sidebearing value in `hmtx` table.
       - id: min_right_side_bearing
         type: s2
-        doc: 'Minimum right sidebearing value; calculated as Min(aw - lsb - (xMax - xMin)).'
+        doc: Minimum right sidebearing value; calculated as Min(aw - lsb - (xMax - xMin)).
       - id: x_max_extend
         type: s2
-        doc: 'Max(lsb + (xMax - xMin)).'
+        doc: Max(lsb + (xMax - xMin)).
       - id: caret_slope_rise
         type: s2
       - id: caret_slope_run
         type: s2
       - id: reserved
-        contents: [0,0,0,0,0,0,0,0,0,0]
+        contents: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       - id: metric_data_format
         type: s2
       - id: number_of_hmetrics
         type: u2
   os2:
-    doc: 'The OS/2 table consists of a set of metrics that are required by Windows and OS/2.'
+    doc: The OS/2 table consists of a set of metrics that are required by Windows and OS/2.
     types:
       panose:
         enums:
@@ -650,7 +650,7 @@ types:
     seq:
       - id: version
         type: u2
-        doc: 'The version number for this OS/2 table.'
+        doc: The version number for this OS/2 table.
       - id: x_avg_char_width
         type: s2
         doc: >
@@ -683,37 +683,37 @@ types:
           granted by the vendor of the font.
       - id: y_subscript_x_size
         type: s2
-        doc: 'The recommended horizontal size in font design units for subscripts for this font.'
+        doc: The recommended horizontal size in font design units for subscripts for this font.
       - id: y_subscript_y_size
         type: s2
-        doc: 'The recommended vertical size in font design units for subscripts for this font.'
+        doc: The recommended vertical size in font design units for subscripts for this font.
       - id: y_subscript_x_offset
         type: s2
-        doc: 'The recommended horizontal offset in font design untis for subscripts for this font.'
+        doc: The recommended horizontal offset in font design untis for subscripts for this font.
       - id: y_subscript_y_offset
         type: s2
-        doc: 'The recommended vertical offset in font design units from the baseline for subscripts for this font.'
+        doc: The recommended vertical offset in font design units from the baseline for subscripts for this font.
       - id: y_superscript_x_size
         type: s2
-        doc: 'The recommended horizontal size in font design units for superscripts for this font.'
+        doc: The recommended horizontal size in font design units for superscripts for this font.
       - id: y_superscript_y_size
         type: s2
-        doc: 'The recommended vertical size in font design units for superscripts for this font.'
+        doc: The recommended vertical size in font design units for superscripts for this font.
       - id: y_superscript_x_offset
         type: s2
-        doc: 'The recommended horizontal offset in font design units for superscripts for this font.'
+        doc: The recommended horizontal offset in font design units for superscripts for this font.
       - id: y_superscript_y_offset
         type: s2
-        doc: 'The recommended vertical offset in font design units from the baseline for superscripts for this font.'
+        doc: The recommended vertical offset in font design units from the baseline for superscripts for this font.
       - id: y_strikeout_size
         type: s2
-        doc: 'Width of the strikeout stroke in font design units.'
+        doc: Width of the strikeout stroke in font design units.
       - id: y_strikeout_position
         type: s2
-        doc: 'The position of the strikeout stroke relative to the baseline in font design units.'
+        doc: The position of the strikeout stroke relative to the baseline in font design units.
       - id: s_family_class
         type: s2
-        doc: 'This parameter is a classification of font-family design.'
+        doc: This parameter is a classification of font-family design.
       - id: panose
         type: panose
       - id: unicode_range
@@ -722,35 +722,35 @@ types:
         type: str
         size: 4
         encoding: ascii
-        doc: 'The four character identifier for the vendor of the given type face.'
+        doc: The four character identifier for the vendor of the given type face.
       - id: selection
         type: u2
         enum: fs_selection
-        doc: 'Contains information concerning the nature of the font patterns'
+        doc: Contains information concerning the nature of the font patterns
       - id: first_char_index
         type: u2
-        doc: 'The minimum Unicode index (character code) in this font, according to the cmap subtable for platform ID 3 and encoding ID 0 or 1.'
+        doc: The minimum Unicode index (character code) in this font, according to the cmap subtable for platform ID 3 and encoding ID 0 or 1.
       - id: last_char_index
         type: u2
-        doc: 'The maximum Unicode index (character code) in this font, according to the cmap subtable for platform ID 3 and encoding ID 0 or 1.'
+        doc: The maximum Unicode index (character code) in this font, according to the cmap subtable for platform ID 3 and encoding ID 0 or 1.
       - id: typo_ascender
         type: s2
-        doc: 'The typographic ascender for this font.'
+        doc: The typographic ascender for this font.
       - id: typo_descender
         type: s2
-        doc: 'The typographic descender for this font.'
+        doc: The typographic descender for this font.
       - id: typo_line_gap
         type: s2
-        doc: 'The typographic line gap for this font.'
+        doc: The typographic line gap for this font.
       - id: win_ascent
         type: u2
-        doc: 'The ascender metric for Windows.'
+        doc: The ascender metric for Windows.
       - id: win_descent
         type: u2
-        doc: 'The descender metric for Windows.'
+        doc: The descender metric for Windows.
       - id: code_page_range
         type: code_page_range
-        doc: 'This field is used to specify the code pages encompassed by the font file in the `cmap` subtable for platform 3, encoding ID 1 (Microsoft platform).'
+        doc: This field is used to specify the code pages encompassed by the font file in the `cmap` subtable for platform 3, encoding ID 1 (Microsoft platform).
   prep:
     seq:
       - id: instructions
@@ -820,10 +820,10 @@ types:
     seq:
       - id: table_version_number
         type: fixed
-        doc: '0x00010000 for version 1.0.'
+        doc: 0x00010000 for version 1.0.
       - id: num_glyphs
         type: u2
-        doc: 'The number of glyphs in the font.'
+        doc: The number of glyphs in the font.
       - id: version10_body
         type: maxp_version10_body
         if: is_version10
@@ -834,43 +834,43 @@ types:
     seq:
       - id: max_points
         type: u2
-        doc: 'Maximum points in a non-composite glyph.'
+        doc: Maximum points in a non-composite glyph.
       - id: max_contours
         type: u2
-        doc: 'Maximum contours in a non-composite glyph.'
+        doc: Maximum contours in a non-composite glyph.
       - id: max_composite_points
         type: u2
-        doc: 'Maximum points in a composite glyph.'
+        doc: Maximum points in a composite glyph.
       - id: max_composite_contours
         type: u2
-        doc: 'Maximum contours in a composite glyph.'
+        doc: Maximum contours in a composite glyph.
       - id: max_zones
         type: u2
-        doc: '1 if instructions do not use the twilight zone (Z0), or 2 if instructions do use Z0; should be set to 2 in most cases.'
+        doc: 1 if instructions do not use the twilight zone (Z0), or 2 if instructions do use Z0; should be set to 2 in most cases.
       - id: max_twilight_points
         type: u2
-        doc: 'Maximum points used in Z0.'
+        doc: Maximum points used in Z0.
       - id: max_storage
         type: u2
-        doc: 'Number of Storage Area locations.'
+        doc: Number of Storage Area locations.
       - id: max_function_defs
         type: u2
-        doc: 'Number of FDEFs.'
+        doc: Number of FDEFs.
       - id: max_instruction_defs
         type: u2
-        doc: 'Number of IDEFs.'
+        doc: Number of IDEFs.
       - id: max_stack_elements
         type: u2
-        doc: 'Maximum stack depth.'
+        doc: Maximum stack depth.
       - id: max_size_of_instructions
         type: u2
-        doc: 'Maximum byte count for glyph instructions.'
+        doc: Maximum byte count for glyph instructions.
       - id: max_component_elements
         type: u2
-        doc: 'Maximum number of components referenced at "top level" for any composite glyph.'
+        doc: Maximum number of components referenced at "top level" for any composite glyph.
       - id: max_component_depth
         type: u2
-        doc: 'Maximum levels of recursion; 1 for simple components.'
+        doc: Maximum levels of recursion; 1 for simple components.
   post:
     types:
       format20:

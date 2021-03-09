@@ -33,7 +33,7 @@ types:
   mz_placeholder:
     seq:
       - id: magic
-        contents: "MZ"
+        contents: MZ
       - id: data1
         size: 0x3a
       - id: ofs_pe
@@ -42,7 +42,7 @@ types:
   pe_header:
     seq:
       - id: pe_signature
-        contents: ["PE", 0, 0]
+        contents: [PE, 0, 0]
       - id: coff_hdr
         type: coff_header
       - id: optional_hdr
@@ -328,7 +328,7 @@ types:
       - id: size
         type: u4
   section:
-    -webide-representation: "{name}"
+    -webide-representation: '{name}'
     seq:
       - id: name
         type: str
@@ -363,7 +363,7 @@ types:
         type: certificate_entry
         repeat: eos
   certificate_entry:
-    doc-ref: 'https://learn.microsoft.com/en-us/windows/win32/debug/pe-format#the-attribute-certificate-table-image-only'
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/debug/pe-format#the-attribute-certificate-table-image-only
     enums:
       certificate_revision:
         0x0100:
@@ -382,10 +382,10 @@ types:
             Not Supported
         0x0002:
           id: pkcs_signed_data
-          doc: 'bCertificate contains a PKCS#7 SignedData structure'
+          doc: bCertificate contains a PKCS#7 SignedData structure
         0x0003:
           id: reserved_1
-          doc: 'Reserved'
+          doc: Reserved
         0x0004:
           id: ts_stack_signed
           doc: |

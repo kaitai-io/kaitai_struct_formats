@@ -33,9 +33,9 @@ seq:
 
 instances:
   block_discarded:
-    value: "0xfffffffe"
+    value: '0xfffffffe'
   block_unallocated:
-    value: "0xffffffff"
+    value: '0xffffffff'
   blocks_map:
     -orig-id: bmap
     pos: header.blocks_map_offset
@@ -137,7 +137,7 @@ types:
           - id: block_data_size
             -orig-id: block_size
             type: u4
-            doc: "Size of block (bytes)."
+            doc: Size of block (bytes).
 
           - id: block_metadata_size
             -orig-id: block_extra

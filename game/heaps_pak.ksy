@@ -5,7 +5,7 @@ meta:
   license: MIT
   encoding: UTF-8
   endian: le
-doc-ref: 'https://github.com/HeapsIO/heaps/blob/2bbc2b386952dfd8856c04a854bb706a52cb4b58/hxd/fmt/pak/Reader.hx'
+doc-ref: https://github.com/HeapsIO/heaps/blob/2bbc2b386952dfd8856c04a854bb706a52cb4b58/hxd/fmt/pak/Reader.hx
 seq:
   - id: header
     type: header
@@ -13,7 +13,7 @@ types:
   header:
     seq:
       - id: magic1
-        contents: 'PAK'
+        contents: PAK
       - id: version
         type: u1
       - id: len_header
@@ -24,10 +24,10 @@ types:
         type: entry
         size: len_header - 16
       - id: magic2
-        contents: 'DATA'
+        contents: DATA
     types:
       entry:
-        doc-ref: 'https://github.com/HeapsIO/heaps/blob/2bbc2b386952dfd8856c04a854bb706a52cb4b58/hxd/fmt/pak/Data.hx'
+        doc-ref: https://github.com/HeapsIO/heaps/blob/2bbc2b386952dfd8856c04a854bb706a52cb4b58/hxd/fmt/pak/Data.hx
         seq:
           - id: len_name
             type: u1

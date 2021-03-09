@@ -11,24 +11,24 @@ doc: |
   (No support for Auth-Name + Add-Name for simplicity)
 seq:
   - id: transaction_id
-    doc: "ID to keep track of request/responces"
+    doc: ID to keep track of request/responces
     type: u2
   - id: flags
     type: packet_flags
   - id: qdcount
-    doc: "How many questions are there"
+    doc: How many questions are there
     if: flags.is_opcode_valid
     type: u2
   - id: ancount
-    doc: "Number of resource records answering the question"
+    doc: Number of resource records answering the question
     if: flags.is_opcode_valid
     type: u2
   - id: nscount
-    doc: "Number of resource records pointing toward an authority"
+    doc: Number of resource records pointing toward an authority
     if: flags.is_opcode_valid
     type: u2
   - id: arcount
-    doc: "Number of resource records holding additional information"
+    doc: Number of resource records holding additional information
     if: flags.is_opcode_valid
     type: u2
   - id: queries
@@ -73,43 +73,43 @@ types:
         type: u2
         enum: class_type
       - id: ttl
-        doc: "Time to live (in seconds)"
+        doc: Time to live (in seconds)
         type: s4
       - id: rdlength
-        doc: "Length in octets of the following payload"
+        doc: Length in octets of the following payload
         type: u2
       - id: payload
         size: rdlength
         type:
           switch-on: type
           cases:
-            "type_type::ptr": domain_name
-            "type_type::a": address
-            "type_type::aaaa": address_v6
-            "type_type::cname": domain_name
-            "type_type::soa": authority_info
-            "type_type::mx": mx_info
-            "type_type::ns": domain_name
-            "type_type::srv": service
-            "type_type::txt": txt_body
+            type_type::ptr: domain_name
+            type_type::a: address
+            type_type::aaaa: address_v6
+            type_type::cname: domain_name
+            type_type::soa: authority_info
+            type_type::mx: mx_info
+            type_type::ns: domain_name
+            type_type::srv: service
+            type_type::txt: txt_body
   domain_name:
     seq:
       - id: name
         type: label
         repeat: until
-        doc: "Repeat until the length is 0 or it is a pointer (bit-hack to get around lack of OR operator)"
-        repeat-until: "_.length == 0 or _.length >= 192"
+        doc: Repeat until the length is 0 or it is a pointer (bit-hack to get around lack of OR operator)
+        repeat-until: _.length == 0 or _.length >= 192
   label:
     seq:
       - id: length
         doc: "RFC1035 4.1.4: If the first two bits are raised it's a pointer-offset to a previously defined name"
         type: u1
       - id: pointer
-        if: "is_pointer"
+        if: is_pointer
         type: pointer_struct
       - id: name
-        if: "not is_pointer"
-        doc: "Otherwise its a string the length of the length value"
+        if: not is_pointer
+        doc: Otherwise its a string the length of the length value
         type: str
         size: length
     instances:
@@ -118,7 +118,7 @@ types:
   pointer_struct:
     seq:
       - id: value
-        doc: "Read one byte, then offset to that position, read one domain-name and return"
+        doc: Read one byte, then offset to that position, read one domain-name and return
         type: u1
     instances:
       contents:

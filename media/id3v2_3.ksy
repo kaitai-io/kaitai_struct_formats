@@ -38,7 +38,7 @@ types:
     doc-ref: Section 3.1. ID3v2 header
     seq:
       - id: magic
-        contents: 'ID3'
+        contents: ID3
       - id: version_major
         type: u1
       - id: version_revision

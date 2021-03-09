@@ -38,7 +38,7 @@ types:
       - id: creation_date_time
         type: date_time_number
       - id: file_signature
-        contents: 'acsp'
+        contents: acsp
       - id: primary_platform
         type: u4
         enum: primary_platforms
