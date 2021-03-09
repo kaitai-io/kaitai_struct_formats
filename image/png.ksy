@@ -316,19 +316,23 @@ types:
         doc: Sequence number of the animation chunk
       - id: width
         type: u4
+        valid:
+          max: _root.ihdr.width
         doc: Width of the following frame
       - id: height
         type: u4
+        valid:
+          max: _root.ihdr.height
         doc: Height of the following frame
       - id: x_offset
         type: u4
         valid:
-          max: _root.ihdr.width
+          max: _root.ihdr.width - width
         doc: X position at which to render the following frame
       - id: y_offset
         type: u4
         valid:
-          max: _root.ihdr.height
+          max: _root.ihdr.height - height
         doc: Y position at which to render the following frame
       - id: delay_num
         type: u2
