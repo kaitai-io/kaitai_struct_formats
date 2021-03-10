@@ -73,7 +73,7 @@ types:
         type: cstring_utf8
       - id: valid_principals
         doc: | 
-          As a special case, a zero-length "valid principals"  field means
+          As a special case, a zero-length "valid principals" field means
           the certificate is valid for any principal of the specified type.
         type: packed_cstring
       - id: valid_after
