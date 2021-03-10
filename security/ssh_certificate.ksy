@@ -143,14 +143,15 @@ types:
       string "testing" is represented as 00 00 00 07 t e s t i n g. The
       UTF-8 mapping does not alter the encoding of US-ASCII characters.
     doc-ref: 'https://tools.ietf.org/html/rfc4251#section-5'
+    -webide-representation: '{len_value:dec} bytes'
     seq:
       - id: len_value
         type: u4
       - id: value
         size: len_value
-    -webide-representation: '{len_value:dec} bytes'
   cstring_utf8:
     doc: variant of cstring_bytes that decodes to UTF-8
+    -webide-representation: '{value}'
     seq:
       - id: len_value
         type: u4
@@ -158,4 +159,3 @@ types:
         type: str
         encoding: UTF-8
         size: len_value
-    -webide-representation: '{value}'
