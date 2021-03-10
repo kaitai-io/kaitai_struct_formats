@@ -348,6 +348,10 @@ types:
         type: u1
         enum: blend_op_values
         doc: Type of frame area rendering for this frame
+    instances:
+      delay:
+        value: delay_num / (delay_den == 0 ? 100.0 : delay_den)
+        doc: delay in seconds
   frame_data_chunk:
     doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fdAT.60:_The_Frame_Data_Chunk
     seq:
