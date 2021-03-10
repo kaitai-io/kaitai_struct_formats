@@ -22,7 +22,7 @@ doc-ref:
 seq:
   - id: magic
     type: u4
-    valid: 0x12349876
+    valid: 0x12_34_98_76
   - id: num_entries
     type: u4
     -orig-id: entryCount
