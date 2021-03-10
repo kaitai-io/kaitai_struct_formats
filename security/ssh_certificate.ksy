@@ -98,13 +98,13 @@ types:
       - id: packed_strings
         size: len_packed_strings
         type: cstrings
-  packed_cstring_tuple:
+  packed_cstring_tuples:
     seq:
-      - id: len_packed_strings
+      - id: len_tuples
         type: u4
-      - id: packed_strings
+      - id: tuples
         type: cstring_tuples
-        size: len_packed_strings
+        size: len_tuples
   cstrings:
     seq:
       - id: strings
@@ -112,7 +112,7 @@ types:
         repeat: eos
   cstring_tuples:
     seq:
-      - id: strings
+      - id: tuples
         type: cstring_tuple
         repeat: eos
   cstring_tuple:
