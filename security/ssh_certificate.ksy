@@ -80,12 +80,12 @@ types:
         doc: Unix timestamp (seconds since 1970-01-01 00:00:00)
         type: u8
       - id: valid_before
-        doc: | 
+        doc: |
           Unix timestamp (seconds since 1970-01-01 00:00:00)
           When "forever" is requested this is set to 0xFFFF_FFFF_FFFF_FFFF
         type: u8
       - id: critical_options
-        doc: | 
+        doc: |
           critical options is a set of zero or more key options encoded as
           below. All such options are "critical" in the sense that an implementation
           must refuse to authorise a key that has an unrecognised option.
