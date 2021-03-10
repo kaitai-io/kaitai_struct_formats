@@ -2,8 +2,9 @@ meta:
   id: tzif
   title: The Time Zone Information Format (TZif)
   xref:
-    mime: application/tzif
-    # mime: "application/tzif-leap" if leap-second records are included
+    mime:
+      - application/tzif
+      - application/tzif-leap
     rfc: 8536
   license: CC0-1.0
   ks-version: 0.8
