@@ -123,7 +123,7 @@ types:
         type: cstring_bytes
   cstring_sshkey:
     seq:
-      - id: len_cstring_sshkey
+      - id: len_value
         type: u4
       - id: value
         type: ssh_public_key
