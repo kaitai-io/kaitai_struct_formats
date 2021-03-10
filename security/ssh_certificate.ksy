@@ -2,9 +2,9 @@ meta:
   id: ssh_certificate
   title: OpenSSH Certificate
   license: CC0-1.0
-  endian: be
   imports:
     - /security/ssh_public_key
+  endian: be
 doc: |
   OpenSSH Certificates are simple certs used by OpenSSH.
 doc-ref: 'https://cvsweb.openbsd.org/cgi-bin/cvsweb/~checkout~/src/usr.bin/ssh/PROTOCOL.certkeys?rev=HEAD&content-type=text/plain'
