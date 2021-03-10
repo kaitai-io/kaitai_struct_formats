@@ -162,7 +162,7 @@ types:
           time.
       - id: is_ut_flags
         # UT/local indicators
-        type: b8
+        type: u1
         repeat: expr
         repeat-expr: _parent.header.num_is_ut_flags
         doc: |
