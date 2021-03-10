@@ -177,7 +177,8 @@ types:
   tz_local_time_type:
     doc-ref: https://tools.ietf.org/html/rfc8536#section-3.2
     seq:
-      - id: utoff
+      - id: ut_offset
+        -orig-id: utoff
         type: s4
         doc: |
           Number of seconds to be added to UT in order to determine local time.
