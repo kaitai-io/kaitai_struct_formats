@@ -7,61 +7,29 @@ meta:
   endian: be
 doc: |
   OpenSSH Certificates are simple certs used by OpenSSH.
-doc-ref: 'https://cvsweb.openbsd.org/cgi-bin/cvsweb/~checkout~/src/usr.bin/ssh/PROTOCOL.certkeys?rev=HEAD&content-type=text/plain'
+doc-ref: 'https://cvsweb.openbsd.org/cgi-bin/cvsweb/~checkout~/src/usr.bin/ssh/PROTOCOL.certkeys?rev=1.17&content-type=text/plain'
 seq:
   - id: cert_type
     doc: type of ssh certificate
     type: cstring_utf8
   - id: body
-    type:
-      switch-on: cert_type.value
-      cases:
-        '"ssh-rsa-cert-v01@openssh.com"': cert_rsa
-        '"ssh-dss-cert-v01@openssh.com"': cert_dss
-        '"ecdsa-sha2-nistp256-cert-v01@openssh.com"': cert_ecdsa
-        '"ecdsa-sha2-nistp384-cert-v01@openssh.com"': cert_ecdsa
-        '"ecdsa-sha2-nistp521-cert-v01@openssh.com"': cert_ecdsa
-        '"ssh-ed25519-cert-v01@openssh.com"': cert_ed25519
+    type: cert_body
 types:
-  cert_rsa:
-    doc-ref: 'https://tools.ietf.org/html/rfc4253#section-6.6'
+  cert_body:
     seq:
       - id: nonce
         doc: CA-provided random bitstring to prevent hash collisions in the signature
         type: cstring_bytes
-      - id: rsa
-        type: ssh_public_key::key_rsa
-      - id: footer
-        type: cert_footer
-  cert_dss:
-    seq:
-      - id: nonce
-        doc: CA-provided random bitstring to prevent hash collisions in the signature
-        type: cstring_bytes
-      - id: dsa
-        type: ssh_public_key::key_dsa
-      - id: footer
-        type: cert_footer
-  cert_ecdsa:
-    seq:
-      - id: nonce
-        doc: CA-provided random bitstring to prevent hash collisions in the signature
-        type: cstring_bytes
-      - id: ecdsa
-        type: ssh_public_key::key_ecdsa
-      - id: footer
-        type: cert_footer
-  cert_ed25519:
-    seq:
-      - id: nonce
-        doc: CA-provided random bitstring to prevent hash collisions in the signature
-        type: cstring_bytes
-      - id: ed25519
-        type: ssh_public_key::key_ed25519
-      - id: footer
-        type: cert_footer
-  cert_footer:
-    seq:
+      - id: key
+        type:
+          switch-on: _parent.cert_type.value
+          cases:
+            '"ssh-rsa-cert-v01@openssh.com"': ssh_public_key::key_rsa
+            '"ssh-dss-cert-v01@openssh.com"': ssh_public_key::key_dsa
+            '"ecdsa-sha2-nistp256-cert-v01@openssh.com"': ssh_public_key::key_ecdsa
+            '"ecdsa-sha2-nistp384-cert-v01@openssh.com"': ssh_public_key::key_ecdsa
+            '"ecdsa-sha2-nistp521-cert-v01@openssh.com"': ssh_public_key::key_ecdsa
+            '"ssh-ed25519-cert-v01@openssh.com"': ssh_public_key::key_ed25519
       - id: serial
         doc: optional serial number; if zero the CA doesn't use serial numbers
         type: u8
@@ -86,16 +54,11 @@ types:
         type: u8
       - id: critical_options
         doc: |
-          critical options is a set of zero or more key options encoded as
-          below. All such options are "critical" in the sense that an implementation
-          must refuse to authorise a key that has an unrecognised option.
-
-          Generally, critical options are used to control features that restrict
-          access where extensions are used to enable features that grant access.
-          This ensures that certificates containing unknown restrictions do not
-          inadvertently grant access while allowing new protocol features to be
-          enabled via extensions without breaking certificates' backwards
-          compatibility.
+          Contains one or more options that are considered "critical".
+          They are considered "critical" as implementations must refuse
+          to authorize a certificate that has unrecognised options.  This 
+          prevents an unknown restriction in the certificate from failing to
+          applied.
         type: packed_cstring_tuple
       - id: extensions
         doc: | 
