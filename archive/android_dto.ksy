@@ -30,7 +30,7 @@ types:
   dt_table_header:
     seq:
       - id: magic
-        contents: [ 0xd7, 0xb7, 0xab, 0x1e ]
+        contents: [0xd7, 0xb7, 0xab, 0x1e]
       - id: total_size
         type: u4
         doc: includes dt_table_header + all dt_table_entry and all dtb/dtbo
