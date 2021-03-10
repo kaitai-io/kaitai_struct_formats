@@ -17,7 +17,6 @@ doc: |
   relatively populous location within the geographic region covered by the time
   zone, for example: "America/New_York" or "Europe/Paris". This identifier is
   external to the TZif file itself.
-doc-ref: https://tools.ietf.org/html/rfc8536
 seq:
   - id: v1_struct
     type: tz_struct(false)
