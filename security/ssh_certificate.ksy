@@ -53,7 +53,7 @@ types:
           Unix timestamp (seconds since 1970-01-01 00:00:00)
           When "forever" is requested this is set to 0xFFFF_FFFF_FFFF_FFFF
       - id: critical_options
-        type: packed_cstring_tuple
+        type: packed_cstring_tuples
         doc: |
           Contains zero or more options that are considered "critical".
           They are considered "critical" as implementations must refuse
@@ -61,7 +61,7 @@ types:
           prevents an unknown restriction in the certificate from failing to
           be applied.
       - id: extensions
-        type: packed_cstring_tuple
+        type: packed_cstring_tuples
         doc: |
           Contains zero or more optional extensions. These extensions
           are not critical, and an implementation that encounters one
@@ -80,7 +80,7 @@ types:
           Note that it is possible for a RSA certificate key to be signed by a
           Ed25519 or ECDSA CA key and vice-versa.
       - id: signature
-        type: packed_cstring_tuple
+        type: packed_cstring_tuples
         doc: |
           signature is computed over all preceding fields from the initial string
           up to, and including the signature key. Signatures are computed and
@@ -93,10 +93,10 @@ types:
         2: host
   packed_cstring:
     seq:
-      - id: len_packed_strings
+      - id: len_strings
         type: u4
-      - id: packed_strings
-        size: len_packed_strings
+      - id: strings
+        size: len_strings
         type: cstrings
   packed_cstring_tuples:
     seq:
