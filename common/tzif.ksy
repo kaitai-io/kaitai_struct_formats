@@ -212,7 +212,7 @@ types:
           for 32-bit time values (used in the version 1 data block). Set to
           `true` for 64-bit time values (used in the version 2+ data block).
     seq:
-      - id: occurence
+      - id: occurrence
         -orig-id: occur
         type:
           switch-on: is_ts64
