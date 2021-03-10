@@ -5,7 +5,7 @@ meta:
   encoding: utf-8
 
 doc: |
-  Signature that samsung appends to android images files.
+  Signature that Samsung appends to Android image files.
   Only part of the fields reversed. A phone's bootloader
   checks images signature validity during boot.
 
