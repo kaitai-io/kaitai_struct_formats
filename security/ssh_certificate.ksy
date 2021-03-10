@@ -167,18 +167,18 @@ types:
   cstring_bytes:
     doc-ref: 'https://tools.ietf.org/html/rfc4251#section-5'
     doc: |
-      Arbitrary length binary string.  Strings are allowed to contain
+      Arbitrary length binary string. Strings are allowed to contain
       arbitrary binary data, including null characters and 8-bit
-      characters.  They are stored as a uint32 containing its length
+      characters. They are stored as a uint32 containing its length
       (number of bytes that follow) and zero (= empty string) or more
-      bytes that are the value of the string.  Terminating null
+      bytes that are the value of the string. Terminating null
       characters are not used.
 
-      Strings are also used to store text.  In that case, US-ASCII is
+      Strings are also used to store text. In that case, US-ASCII is
       used for internal names, and ISO-10646 UTF-8 for text that might
-      be displayed to the user.  The terminating null character SHOULD
-      NOT normally be stored in the string.  For example: the US-ASCII
-      string "testing" is represented as 00 00 00 07 t e s t i n g.  The
+      be displayed to the user. The terminating null character SHOULD
+      NOT normally be stored in the string. For example: the US-ASCII
+      string "testing" is represented as 00 00 00 07 t e s t i n g. The
       UTF-8 mapping does not alter the encoding of US-ASCII characters.
     seq:
       - id: len
