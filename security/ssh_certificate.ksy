@@ -128,7 +128,6 @@ types:
       - id: value
         type: ssh_public_key
   cstring_bytes:
-    doc-ref: 'https://tools.ietf.org/html/rfc4251#section-5'
     doc: |
       Arbitrary length binary string. Strings are allowed to contain
       arbitrary binary data, including null characters and 8-bit
@@ -143,15 +142,15 @@ types:
       NOT normally be stored in the string. For example: the US-ASCII
       string "testing" is represented as 00 00 00 07 t e s t i n g. The
       UTF-8 mapping does not alter the encoding of US-ASCII characters.
-    -webide-representation: '{len_value:dec} bytes'
+    doc-ref: 'https://tools.ietf.org/html/rfc4251#section-5'
     seq:
       - id: len_value
         type: u4
       - id: value
         size: len_value
+    -webide-representation: '{len_value:dec} bytes'
   cstring_utf8:
     doc: variant of cstring_bytes that decodes to UTF-8
-    -webide-representation: '{value}'
     seq:
       - id: len_value
         type: u4
@@ -159,3 +158,4 @@ types:
         type: str
         encoding: UTF-8
         size: len_value
+    -webide-representation: '{value}'
