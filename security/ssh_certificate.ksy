@@ -40,7 +40,7 @@ types:
       - id: key_id
         type: cstring_utf8
       - id: valid_principals
-        doc: | 
+        doc: |
           As a special case, a zero-length "valid principals" field means
           the certificate is valid for any principal of the specified type.
         type: packed_cstring
@@ -54,23 +54,23 @@ types:
         type: u8
       - id: critical_options
         doc: |
-          Contains one or more options that are considered "critical".
+          Contains zero or more options that are considered "critical".
           They are considered "critical" as implementations must refuse
-          to authorize a certificate that has unrecognised options.  This 
+          to authorize a certificate that has unrecognized options. This
           prevents an unknown restriction in the certificate from failing to
-          applied.
+          be applied.
         type: packed_cstring_tuple
       - id: extensions
-        doc: | 
-          extensions is a set of zero or more optional extensions. These extensions
-          are not critical, and an implementation that encounters one that it does
-          not recognise may safely ignore it.
+        doc: |
+          Contains zero or more optional extensions. These extensions
+          are not critical, and an implementation that encounters one
+          that it does not recognize may safely ignore it.
         type: packed_cstring_tuple
       - id: reserved
         doc: Unused currently
         type: cstring_bytes
       - id: signature_key
-        doc: | 
+        doc: |
           The signature key field contains the CA key used to sign the
           certificate. The valid key types for CA keys are ssh-rsa,
           ssh-dss, ssh-ed25519 and the ECDSA types ecdsa-sha2-nistp256,
@@ -80,7 +80,7 @@ types:
           Ed25519 or ECDSA CA key and vice-versa.
         type: cstring_sshkey
       - id: signature
-        doc: | 
+        doc: |
           signature is computed over all preceding fields from the initial string
           up to, and including the signature key. Signatures are computed and
           encoded according to the rules defined for the CA's public key algorithm
@@ -93,18 +93,18 @@ types:
         2: host
   packed_cstring:
     seq:
-      - id: len
+      - id: len_packed_cstring
         type: u4
       - id: packed_strings
-        size: len
+        size: len_packed_cstring
         type: cstrings
   packed_cstring_tuple:
     seq:
-      - id: len
+      - id: len_packed_cstring_tuple
         type: u4
       - id: packed_strings
         type: cstring_tuples
-        size: len
+        size: len_packed_cstring_tuple
   cstrings:
     seq:
       - id: strings
@@ -123,7 +123,7 @@ types:
         type: cstring_bytes
   cstring_sshkey:
     seq:
-      - id: len
+      - id: len_cstring_sshkey
         type: u4
       - id: value
         type: ssh_public_key
@@ -144,16 +144,16 @@ types:
       string "testing" is represented as 00 00 00 07 t e s t i n g. The
       UTF-8 mapping does not alter the encoding of US-ASCII characters.
     seq:
-      - id: len
+      - id: len_cstring_bytes
         type: u4
       - id: value
-        size: len
+        size: len_cstring_bytes
   cstring_utf8:
     doc: variant of cstring_bytes that decodes to UTF-8
     seq:
-      - id: len
+      - id: len_cstring_utf8
         type: u4
       - id: value
         type: str
         encoding: UTF-8
-        size: len
+        size: len_cstring_utf8
