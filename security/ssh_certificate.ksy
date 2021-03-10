@@ -32,7 +32,7 @@ types:
             '"ssh-ed25519-cert-v01@openssh.com"': ssh_public_key::key_ed25519
       - id: serial
         type: u8
-        doc: optional serial number; if zero the CA doesn't use serial numbers
+        doc: optional serial number; if zero, the CA doesn't use serial numbers
       - id: type
         type: u4
         enum: cert_type
