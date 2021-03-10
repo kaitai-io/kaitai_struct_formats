@@ -150,6 +150,7 @@ types:
         size: len_cstring_bytes
   cstring_utf8:
     doc: variant of cstring_bytes that decodes to UTF-8
+    -webide-representation: '{value}'
     seq:
       - id: len_cstring_utf8
         type: u4
