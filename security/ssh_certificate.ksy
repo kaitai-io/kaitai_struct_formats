@@ -116,6 +116,7 @@ types:
         type: cstring_tuple
         repeat: eos
   cstring_tuple:
+    -webide-representation: '{name}: {data}'
     seq:
       - id: name
         type: cstring_utf8
