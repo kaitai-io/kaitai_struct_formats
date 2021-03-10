@@ -188,9 +188,9 @@ types:
   cstring_utf8:
     doc: variant of cstring_bytes that decodes to UTF-8
     seq:
-    - id: len
-      type: u4
-    - id: value
-      type: str
-      encoding: UTF-8
-      size: len
+      - id: len
+        type: u4
+      - id: value
+        type: str
+        encoding: UTF-8
+        size: len
