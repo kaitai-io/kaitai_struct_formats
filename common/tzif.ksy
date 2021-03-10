@@ -7,7 +7,7 @@ meta:
       - application/tzif-leap
     rfc: 8536
   license: CC0-1.0
-  ks-version: 0.8
+  ks-version: 0.9
   endian: be
 doc: |
   TZif is the binary file format used to represent data for a single time zone
@@ -23,6 +23,8 @@ seq:
   - id: v2_struct
     type: tz_struct(true)
     if: version >= 2
+    valid:
+      expr: '_.header.ver_byte == _root.v1_struct.header.ver_byte'
   - id: v2_footer
     type: tz_footer
     if: version >= 2
@@ -51,6 +53,9 @@ types:
       - id: ver_byte
         -orig-id: ver
         type: u1
+        valid:
+          expr: '_ == 0 or (_ >= 0x32 and _ <= 0x39)'
+          # not sure what would be used after 0x39, but unlikely to get there
         doc: |
           Identifies version of file's format. Version 1 sets the byte to ASCII
           NUL. Version 2 onwards sets it to the corresponding ASCII digit.
@@ -60,12 +65,14 @@ types:
       - id: num_is_ut_flags
         -orig-id: isutcnt
         type: u4
+        # validated in 'num_local_time_types' below
         doc: |
           Number of UT/local indicators contained in the data block. MUST
           either be 0 or equal to `num_local_time_types`.
       - id: num_is_std_flags
         -orig-id: isstdcnt
         type: u4
+        # validated in 'num_local_time_types' below
         doc: |
           Number of standard/wall indicators contained in the data block. MUST
           either be 0 or equal to `num_local_time_types`.
@@ -80,12 +87,18 @@ types:
       - id: num_local_time_types
         -orig-id: typecnt
         type: u4
+        valid:
+          expr: >
+            _ != 0 and (num_is_ut_flags == 0 or _ == num_is_ut_flags) and
+            (num_is_std_flags == 0 or _ == num_is_std_flags)
         doc: |
           Number of local time type records contained in the data block. MUST
           NOT be 0.
       - id: len_tz_designations
         -orig-id: charcnt
         type: u4
+        valid:
+          expr: '_ != 0'
         doc: |
           Total number of octets used by the set of time zone designations
           contained in the data block. MUST NOT be 0.
@@ -135,6 +148,8 @@ types:
         doc: Local time type records.
       - id: tz_designations
         size: _parent.header.len_tz_designations
+        valid:
+          expr: '_[_parent.header.len_tz_designations - 1] == 0'
         doc: |
           Space for one or more NUL-terminated time zone designation strings.
           Two designation strings MAY overlap if one is a suffix of the other.
@@ -195,6 +210,8 @@ types:
       - id: is_dst
         -orig-id: dst
         type: u1
+        valid:
+          max: 1
         doc: |
           Indicates whether local time should be considered Daylight Saving Time
           (DST). The value MUST be 0 or 1. A value of one (1) indicates that
@@ -203,6 +220,8 @@ types:
       - id: desig_idx
         -orig-id: idx
         type: u1
+        valid:
+          max: '_parent._parent.header.len_tz_designations - 1'
         doc: |
           Specifies a zero-based index into the `_parent.tz_designations` array
           of time zone designation octets. The index MUST be less than
