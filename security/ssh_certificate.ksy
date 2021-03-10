@@ -143,6 +143,7 @@ types:
       NOT normally be stored in the string. For example: the US-ASCII
       string "testing" is represented as 00 00 00 07 t e s t i n g. The
       UTF-8 mapping does not alter the encoding of US-ASCII characters.
+    -webide-representation: '{len_value:dec} bytes'
     seq:
       - id: len_cstring_bytes
         type: u4
