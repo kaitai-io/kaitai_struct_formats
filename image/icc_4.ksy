@@ -99,7 +99,7 @@ types:
         0x6C636d73: little_cms_cmm #lcms
         0x52494d58: reficcmax_cmm #RIMX
         0x44494d58: demoiccmax_cmm #DIMX
-        0x4b434d53: kodak_cmm #kcms
+        0x4b434d53: kodak_cmm #KCMS
         0x4d434d44: konica_minolta_cmm #MCML
         0x57435320: windows_color_system_cmm #WCS
         0x5349474E: mutoh_cmm #SIGN
