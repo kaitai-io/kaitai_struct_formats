@@ -133,8 +133,8 @@ types:
       - id: len
         type: u4
       - id: packed_strings
-        type: cstrings
         size: len
+        type: cstrings
   packed_cstring_tuple:
     seq:
       - id: len
