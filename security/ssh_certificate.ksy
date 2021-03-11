@@ -1,6 +1,7 @@
 meta:
   id: ssh_certificate
   title: OpenSSH Certificate
+  file-extension: pub
   license: CC0-1.0
   imports:
     - /security/ssh_public_key
@@ -36,7 +37,7 @@ types:
       - id: type
         type: u4
         enum: cert_type
-        doc: specifies the certificate type (user vs host)
+        doc: specifies the certificate type (user or host)
       - id: key_id
         type: cstring_utf8
       - id: valid_principals
@@ -68,7 +69,7 @@ types:
           that it does not recognize may safely ignore it.
       - id: reserved
         type: cstring_bytes
-        doc: Unused currently
+        doc: Currently unused
       - id: signature_key
         type: cstring_sshkey
         doc: |
