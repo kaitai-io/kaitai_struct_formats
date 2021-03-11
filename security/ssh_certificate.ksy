@@ -40,13 +40,15 @@ types:
       - id: key_id
         type: cstring_utf8
       - id: valid_principals
-        type: packed_cstring
+        type: packed_cstrings
         doc: |
           As a special case, a zero-length "valid principals" field means
           the certificate is valid for any principal of the specified type.
       - id: valid_after
         type: u8
-        doc: Unix timestamp (seconds since 1970-01-01 00:00:00)
+        doc: |
+          Unix timestamp (seconds since 1970-01-01 00:00:00)
+          When "always" is requested this is set to 0
       - id: valid_before
         type: u8
         doc: |
@@ -91,7 +93,7 @@ types:
       cert_type:
         1: user
         2: host
-  packed_cstring:
+  packed_cstrings:
     seq:
       - id: len_strings
         type: u4
