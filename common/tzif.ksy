@@ -149,7 +149,11 @@ types:
       - id: tz_designations
         size: _parent.header.len_tz_designations
         valid:
-          expr: '_[_parent.header.len_tz_designations - 1] == 0'
+          expr: '_.last == 0'
+          # Technically, the last byte of `tz_designations` does not have to be
+          # NUL; there just needs to be a NUL byte at or beyond the greatest
+          # `desig_idx` in the local time type records.  Practically, writers
+          # do not put junk after the last NUL byte.
         doc: |
           Space for one or more NUL-terminated time zone designation strings.
           Two designation strings MAY overlap if one is a suffix of the other.
