@@ -41,7 +41,7 @@ types:
       - id: key_id
         type: cstring_utf8
       - id: valid_principals
-        type: packed_cstrings
+        type: packed_cstrings_utf8
         doc: |
           As a special case, a zero-length "valid principals" field means
           the certificate is valid for any principal of the specified type.
@@ -94,13 +94,28 @@ types:
       cert_type:
         1: user
         2: host
-  packed_cstrings:
+  packed_cstrings_utf8:
     seq:
       - id: len_strings
         type: u4
       - id: strings
         size: len_strings
-        type: cstrings
+        type: cstrings_utf8
+  packed_cstrings_bytes:
+    seq:
+      - id: len_strings
+        type: u4
+      - id: strings
+        size: len_strings
+        type: cstrings_bytes
+  nested_cstring_bytes:
+    seq:
+      - id: len_string
+        type: u4
+      - id: string
+        size: len_string
+        type: cstring_bytes
+        if: len_string != 0
   packed_cstring_tuples:
     seq:
       - id: len_tuples
@@ -108,10 +123,15 @@ types:
       - id: tuples
         type: cstring_tuples
         size: len_tuples
-  cstrings:
+  cstrings_utf8:
     seq:
       - id: strings
         type: cstring_utf8
+        repeat: eos
+  cstrings_bytes:
+    seq:
+      - id: strings
+        type: cstring_bytes
         repeat: eos
   cstring_tuples:
     seq:
@@ -119,12 +139,12 @@ types:
         type: cstring_tuple
         repeat: eos
   cstring_tuple:
-    -webide-representation: '{name}: {data}'
+    -webide-representation: '{name}: {data.string.value:str}'
     seq:
       - id: name
         type: cstring_utf8
       - id: data
-        type: cstring_bytes
+        type: nested_cstring_bytes
   cstring_sshkey:
     seq:
       - id: len_value
