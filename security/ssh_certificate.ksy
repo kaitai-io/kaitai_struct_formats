@@ -101,13 +101,6 @@ types:
       - id: strings
         size: len_strings
         type: cstrings_utf8
-  packed_cstrings_bytes:
-    seq:
-      - id: len_strings
-        type: u4
-      - id: strings
-        size: len_strings
-        type: cstrings_bytes
   nested_cstring_bytes:
     seq:
       - id: len_string
@@ -127,11 +120,6 @@ types:
     seq:
       - id: strings
         type: cstring_utf8
-        repeat: eos
-  cstrings_bytes:
-    seq:
-      - id: strings
-        type: cstring_bytes
         repeat: eos
   cstring_tuples:
     seq:
