@@ -20,7 +20,7 @@ types:
         type: u4
       - id: height
         type: u4
-      - id: color_depth
+      - id: bytes_per_pixel
         type: u4
       - id: magic
         contents: GIMP
