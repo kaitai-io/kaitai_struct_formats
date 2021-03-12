@@ -44,7 +44,11 @@ types:
       - id: header
         type: tz_header
       - id: data
-        type: tz_data(is_ts64)
+        type: >-
+          tz_data(is_ts64, header.num_transition_times,
+          header.num_local_time_types, header.len_tz_designations,
+          header.num_leap_second_records, header.num_std_flags,
+          header.num_ut_flags)
   tz_header:
     doc-ref: https://tools.ietf.org/html/rfc8536#section-3.1
     seq:
@@ -117,6 +121,25 @@ types:
           Chooses whether to use 64-bit or 32-bit time values. Set to `false`
           for 32-bit time values (used in the version 1 data block). Set to
           `true` for 64-bit time values (used in the version 2+ data block).
+      - id: num_transition_times
+        type: u4
+        doc: Number of transition times.
+      - id: num_local_time_types
+        type: u4
+        doc: Number of local time types.
+      - id: len_tz_designations
+        type: u4
+        doc: |
+          Length of space (in octets) holding the time zone designation strings.
+      - id: num_leap_second_records
+        type: u4
+        doc: Number of leap-second records.
+      - id: num_std_flags
+        type: u4
+        doc: Number of standard/wall indicator flags.
+      - id: num_ut_flags
+        type: u4
+        doc: Number of UT/local indicator flags.
     seq:
       - id: transition_times
         type:
@@ -125,29 +148,28 @@ types:
             false: s4
             true: s8
         repeat: expr
-        repeat-expr: _parent.header.num_transition_times
+        repeat-expr: num_transition_times
         doc: |
           Array of POSIX time values sorted in ascending order. Each is used as
           a transition time at which the rules for computing local time change.
       - id: transition_types
         type: u1
         repeat: expr
-        repeat-expr: _parent.header.num_transition_times
+        repeat-expr: num_transition_times
         doc: |
           Array of transition type numbers. All but the last one map transition
           times in the `transition_times` array to local time type records in
           the `local_time_types` array. (The last one is present only for
           consistency checking with the POSIX-style TZ string at the end of the
           file.) The transition type numbers MUST be less than
-          `_parent.header.num_local_time_types` (the length of the
-          `local_time_types` array).
+          `num_local_time_types` (the length of the `local_time_types` array).
       - id: local_time_types
         type: tz_local_time_type
         repeat: expr
-        repeat-expr: _parent.header.num_local_time_types
+        repeat-expr: num_local_time_types
         doc: Local time type records.
       - id: tz_designations
-        size: _parent.header.len_tz_designations
+        size: len_tz_designations
         valid:
           expr: '_.last == 0'
           # Technically, the last byte of `tz_designations` does not have to be
@@ -163,7 +185,7 @@ types:
       - id: leap_second_records
         type: tz_leap_second_record(is_ts64)
         repeat: expr
-        repeat-expr: _parent.header.num_leap_second_records
+        repeat-expr: num_leap_second_records
         doc: |
           Array of leap-second records sorted in ascending order of occurrence
           time for successive leap-second corrections. The first leap-second
@@ -177,7 +199,7 @@ types:
         # standard/wall indicators
         type: u1
         repeat: expr
-        repeat-expr: _parent.header.num_std_flags
+        repeat-expr: num_std_flags
         doc: |
           Array of values indicating whether the transition times associated
           with the corresponding local time types were specified as standard
@@ -191,7 +213,7 @@ types:
         # UT/local indicators
         type: u1
         repeat: expr
-        repeat-expr: _parent.header.num_ut_flags
+        repeat-expr: num_ut_flags
         doc: |
           Array of values indicating whether the transition times associated
           with the corresponding local time types were specified as UT or local
@@ -225,13 +247,13 @@ types:
         -orig-id: idx
         type: u1
         valid:
-          max: '_parent._parent.header.len_tz_designations - 1'
+          max: '_parent.len_tz_designations - 1'
         doc: |
           Specifies a zero-based index into the `_parent.tz_designations` array
           of time zone designation octets. The index MUST be less than
-          `_parent._parent.header.len_tz_designations`. The time zone
-          designation string for this local time type starts at the specified
-          index within the array and MUST be NUL-terminated, but MAY be empty.
+          `_parent.len_tz_designations`. The time zone designation string for
+          this local time type starts at the specified index within the array
+          and MUST be NUL-terminated, but MAY be empty.
   tz_leap_second_record:
     doc-ref: https://tools.ietf.org/html/rfc8536#section-3.2
     params:
