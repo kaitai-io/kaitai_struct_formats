@@ -6,11 +6,11 @@ meta:
   endian: be
 doc-ref: https://gitlab.gnome.org/GNOME/gimp/-/raw/441631322be109da6489b2aad670bdba916315c0/devel-docs/gbr.txt
 seq:
-  - id: header_size
+  - id: len_header
     type: u4
   - id: header
     type: header
-    size: header_size
+    size: len_header
 types:
   header:
     seq:
