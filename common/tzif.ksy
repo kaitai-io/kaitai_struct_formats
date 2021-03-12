@@ -215,7 +215,7 @@ types:
         -orig-id: dst
         type: u1
         valid:
-          max: 1
+          any-of: [0, 1]
         doc: |
           Indicates whether local time should be considered Daylight Saving Time
           (DST). The value MUST be 0 or 1. A value of one (1) indicates that
