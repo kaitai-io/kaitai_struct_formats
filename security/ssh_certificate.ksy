@@ -56,19 +56,27 @@ types:
           Unix timestamp (seconds since 1970-01-01 00:00:00)
           When "forever" is requested this is set to 0xFFFF_FFFF_FFFF_FFFF
       - id: critical_options
-        type: packed_cstring_tuples
+        type: packed_cstring_tuples_nested
         doc: |
           Contains zero or more options that are considered "critical".
           They are considered "critical" as implementations must refuse
           to authorize a certificate that has unrecognized options. This
           prevents an unknown restriction in the certificate from failing to
           be applied.
+
+          The nested type here makes an assumption that the data field will
+          either be empty or a single nested "cstring" which is the case for
+          all known options today.
       - id: extensions
-        type: packed_cstring_tuples
+        type: packed_cstring_tuples_nested
         doc: |
           Contains zero or more optional extensions. These extensions
           are not critical, and an implementation that encounters one
           that it does not recognize may safely ignore it.
+
+          The nested type here makes an assumption that the data field will
+          either be empty or a single nested "cstring" which is the case for
+          all known extensions today.
       - id: reserved
         type: cstring_bytes
         doc: Currently unused
@@ -83,7 +91,7 @@ types:
           Note that it is possible for a RSA certificate key to be signed by a
           Ed25519 or ECDSA CA key and vice-versa.
       - id: signature
-        type: packed_cstring_tuples
+        type: packed_cstring_tuples_packed
         doc: |
           signature is computed over all preceding fields from the initial string
           up to, and including the signature key. Signatures are computed and
@@ -101,6 +109,13 @@ types:
       - id: strings
         size: len_strings
         type: cstrings_utf8
+  packed_cstrings_bytes:
+    seq:
+      - id: len_strings
+        type: u4
+      - id: strings
+        size: len_strings
+        type: cstrings_bytes
   nested_cstring_bytes:
     seq:
       - id: len_string
@@ -109,30 +124,54 @@ types:
         size: len_string
         type: cstring_bytes
         if: len_string != 0
-  packed_cstring_tuples:
+  packed_cstring_tuples_nested:
     seq:
       - id: len_tuples
         type: u4
       - id: tuples
-        type: cstring_tuples
+        type: cstring_tuples_nested
+        size: len_tuples
+  packed_cstring_tuples_packed:
+    seq:
+      - id: len_tuples
+        type: u4
+      - id: tuples
+        type: cstring_tuples_packed
         size: len_tuples
   cstrings_utf8:
     seq:
       - id: strings
         type: cstring_utf8
         repeat: eos
-  cstring_tuples:
+  cstrings_bytes:
+    seq:
+      - id: strings
+        type: cstring_bytes
+        repeat: eos
+  cstring_tuples_nested:
     seq:
       - id: tuples
-        type: cstring_tuple
+        type: cstring_tuple_nested
         repeat: eos
-  cstring_tuple:
+  cstring_tuples_packed:
+    seq:
+      - id: tuples
+        type: cstring_tuple_packed
+        repeat: eos
+  cstring_tuple_nested:
     -webide-representation: '{name}: {data.string.value:str}'
     seq:
       - id: name
         type: cstring_utf8
       - id: data
         type: nested_cstring_bytes
+  cstring_tuple_packed:
+    -webide-representation: '{name}, Length:{data.lenStrings}'
+    seq:
+      - id: name
+        type: cstring_utf8
+      - id: data
+        type: packed_cstrings_bytes
   cstring_sshkey:
     seq:
       - id: len_value
