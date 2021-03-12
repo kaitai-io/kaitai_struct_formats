@@ -4,10 +4,10 @@ meta:
   file-extension: gbr
   license: CC0-1.0
   endian: be
-doc-ref: https://gitlab.gnome.org/GNOME/gimp/-/raw/master/devel-docs/gbr.txt
+doc-ref: https://gitlab.gnome.org/GNOME/gimp/-/raw/441631322be109da6489b2aad670bdba916315c0/devel-docs/gbr.txt
 seq:
   - id: header_size
-    type: u4be
+    type: u4
   - id: header
     type: header
     size: header_size
@@ -15,17 +15,17 @@ types:
   header:
     seq:
       - id: version
-        type: u4be
+        type: u4
       - id: width
-        type: u4be
+        type: u4
       - id: height
-        type: u4be
+        type: u4
       - id: color_depth
-        type: u4be
+        type: u4
       - id: magic
         contents: GIMP
       - id: spacing
-        type: u4be
+        type: u4
       - id: brush_name
         type: strz
         size-eos: true
