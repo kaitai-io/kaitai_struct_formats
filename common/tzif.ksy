@@ -247,7 +247,7 @@ types:
         -orig-id: idx
         type: u1
         valid:
-          max: '_parent.len_tz_designations - 1'
+          expr: '_ < _parent.len_tz_designations'
         doc: |
           Specifies a zero-based index into the `_parent.tz_designations` array
           of time zone designation octets. The index MUST be less than
