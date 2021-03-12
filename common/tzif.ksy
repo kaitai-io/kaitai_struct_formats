@@ -62,14 +62,14 @@ types:
       - id: reserved
         size: 15
         doc: Fifteen bytes defaulting to zeros, reserved for future use.
-      - id: num_is_ut_flags
+      - id: num_ut_flags
         -orig-id: isutcnt
         type: u4
         # validated in 'num_local_time_types' below
         doc: |
           Number of UT/local indicators contained in the data block. MUST
           either be 0 or equal to `num_local_time_types`.
-      - id: num_is_std_flags
+      - id: num_std_flags
         -orig-id: isstdcnt
         type: u4
         # validated in 'num_local_time_types' below
@@ -89,8 +89,8 @@ types:
         type: u4
         valid:
           expr: >
-            _ != 0 and (num_is_ut_flags == 0 or _ == num_is_ut_flags) and
-            (num_is_std_flags == 0 or _ == num_is_std_flags)
+            _ != 0 and (num_ut_flags == 0 or _ == num_ut_flags) and
+            (num_std_flags == 0 or _ == num_std_flags)
         doc: |
           Number of local time type records contained in the data block. MUST
           NOT be 0.
@@ -173,11 +173,11 @@ types:
           2419199 greater than that of the previous record. The correction
           values of two successive leap-second records MUST differ by exactly
           one (1).
-      - id: is_std_flags
+      - id: std_flags
         # standard/wall indicators
         type: u1
         repeat: expr
-        repeat-expr: _parent.header.num_is_std_flags
+        repeat-expr: _parent.header.num_std_flags
         doc: |
           Array of values indicating whether the transition times associated
           with the corresponding local time types were specified as standard
@@ -186,12 +186,12 @@ types:
           specified as wall-clock time. Each value MUST be 0 or 1. A value of
           one (1) indicates standard time. A value of zero (0) indicates
           wall-clock time. The value MUST be one (1) if the corresponding
-          UT/local indicator in the `is_ut_flags` array is one (1).
-      - id: is_ut_flags
+          UT/local indicator in the `ut_flags` array is one (1).
+      - id: ut_flags
         # UT/local indicators
         type: u1
         repeat: expr
-        repeat-expr: _parent.header.num_is_ut_flags
+        repeat-expr: _parent.header.num_ut_flags
         doc: |
           Array of values indicating whether the transition times associated
           with the corresponding local time types were specified as UT or local
@@ -199,8 +199,8 @@ types:
           associated with local time types are assumed to be specified as local
           time. Each values MUST be 0 or 1. A value of one (1) indicates UT. A
           value of zero (0) indicates local time. If the value is one (1) then
-          the corresponding standard/wall indicator in `is_std_flags` MUST also
-          be set to one (1).
+          the corresponding standard/wall indicator in `std_flags` MUST also be
+          set to one (1).
   tz_local_time_type:
     doc-ref: https://tools.ietf.org/html/rfc8536#section-3.2
     seq:
@@ -211,7 +211,7 @@ types:
           Number of seconds to be added to UT in order to determine local time.
           The value MUST NOT be -2**31 and SHOULD be in the range [-89999,
           93599].
-      - id: is_dst
+      - id: dst_flag
         -orig-id: dst
         type: u1
         valid:
