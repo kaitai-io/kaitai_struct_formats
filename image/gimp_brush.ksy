@@ -32,7 +32,7 @@ types:
         encoding: UTF-8
 instances:
   body_size:
-    value: header.width * header.height * header.color_depth
+    value: header.width * header.height * header.bytes_per_pixel
   body:
     pos: header_size
     size: body_size
