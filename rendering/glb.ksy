@@ -25,7 +25,7 @@ types:
   header:
     seq:
       - id: magic
-        contents: 'glTF'
+        contents: glTF
       - id: version
         type: u4
       - id: length
