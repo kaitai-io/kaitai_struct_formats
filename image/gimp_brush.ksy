@@ -34,5 +34,5 @@ instances:
   body_size:
     value: header.width * header.height * header.bytes_per_pixel
   body:
-    pos: header_size
+    pos: len_header
     size: body_size
