@@ -22,6 +22,7 @@ types:
         type: u4
       - id: bytes_per_pixel
         type: u4
+        enum: color_depth
       - id: magic
         contents: GIMP
       - id: spacing
@@ -32,7 +33,11 @@ types:
         encoding: UTF-8
 instances:
   body_size:
-    value: header.width * header.height * header.bytes_per_pixel
+    value: header.width * header.height * header.bytes_per_pixel.to_i
   body:
     pos: len_header
     size: body_size
+enums:
+  color_depth:
+    1: grayscale
+    4: rgba
