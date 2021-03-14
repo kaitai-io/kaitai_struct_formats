@@ -49,9 +49,9 @@ types:
   json:
     seq:
       - id: data
+        size-eos: true
         type: str
         encoding: UTF-8
-        size-eos: true
         doc: |
           This is where GLB deviates from being an elegant format.
           To parse the rest of the file, you have to parse the JSON first.
