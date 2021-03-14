@@ -310,7 +310,7 @@ types:
     seq:
       - id: num_frames
         type: u4
-        doc: Number of frames
+        doc: Number of frames, must be equal to the number of `frame_control_chunk`s
       - id: num_plays
         type: u4
         doc: Number of times to loop, 0 indicates infinite looping.
@@ -323,11 +323,13 @@ types:
       - id: width
         type: u4
         valid:
+          min: 1
           max: _root.ihdr.width
         doc: Width of the following frame
       - id: height
         type: u4
         valid:
+          min: 1
           max: _root.ihdr.height
         doc: Height of the following frame
       - id: x_offset
@@ -357,7 +359,7 @@ types:
     instances:
       delay:
         value: 'delay_num / (delay_den == 0 ? 100.0 : delay_den)'
-        doc: delay in seconds
+        doc: Time to display this frame, in seconds
   frame_data_chunk:
     doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fdAT.60:_The_Frame_Data_Chunk
     seq:
