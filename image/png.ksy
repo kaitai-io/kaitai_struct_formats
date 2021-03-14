@@ -25,6 +25,10 @@ meta:
   license: CC0-1.0
   ks-version: 0.9
   endian: be
+doc: |
+  Test files for APNG can be found at the following locations:
+  https://philip.html5.org/tests/apng/tests.html
+  http://littlesvr.ca/apng/
 seq:
   # https://www.w3.org/TR/PNG/#5PNG-file-signature
   - id: magic
@@ -365,10 +369,21 @@ types:
     seq:
       - id: sequence_number
         type: u4
-        doc: Sequence number of the animation chunk
+        doc: |
+          Sequence number of the animation chunk. The fcTL and fdAT chunks
+          have a 4 byte sequence number. Both chunk types share the sequence.
+          The purpose of this number is to detect (and optionally correct)
+          sequence errors in an Animated PNG, since the PNG specification
+          does not impose ordering restrictions on ancillary chunks.
+          The first fcTL chunk must contain sequence number 0, and the sequence
+          numbers in the remaining fcTL and fdAT chunks must be in order, with
+          no gaps or duplicates.
       - id: frame_data
         size-eos: true
-        doc: Frame data for the frame
+        doc: |
+          Frame data for the frame. At least one fdAT chunk is required for
+          each frame. The compressed datastream is the concatenation of the
+          contents of the data fields of all the fdAT chunks within a frame.
 enums:
   color_type:
     0: greyscale
