@@ -28,18 +28,22 @@ types:
         contents: glTF
       - id: version
         type: u4
+        doc: |
+          Indicates the version of the Binary glTF container format.
+          For this specification, should be set to 2.
       - id: length
         type: u4
+        doc: Total length of the Binary glTF, including Header and all Chunks, in bytes.
 
   chunk:
     seq:
-      - id: length
+      - id: len_data
         type: u4
       - id: type
         type: u4
         enum: chunk_type
       - id: data
-        size: length
+        size: len_data
         type:
           switch-on: type
           cases:
@@ -63,7 +67,5 @@ types:
 
 enums:
   chunk_type:
-    # Literally "JSON"
-    0x4E4F534A: json
-    # Literally "BIN\0"
-    0x004E4942: bin
+    0x4E4F534A: json # "JSON"
+    0x004E4942: bin  # "BIN\0"
