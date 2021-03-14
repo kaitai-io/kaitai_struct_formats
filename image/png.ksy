@@ -372,9 +372,6 @@ types:
         doc: |
           Sequence number of the animation chunk. The fcTL and fdAT chunks
           have a 4 byte sequence number. Both chunk types share the sequence.
-          The purpose of this number is to detect (and optionally correct)
-          sequence errors in an Animated PNG, since the PNG specification
-          does not impose ordering restrictions on ancillary chunks.
           The first fcTL chunk must contain sequence number 0, and the sequence
           numbers in the remaining fcTL and fdAT chunks must be in order, with
           no gaps or duplicates.
