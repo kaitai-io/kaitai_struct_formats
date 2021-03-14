@@ -448,26 +448,26 @@ enums:
     110: private_experimental_algorithm_10
 
   subpacket_types:
-    0: reserved
-    1: reserved
+    0: reserved_0
+    1: reserved_1
     2: signature_creation_time
     3: signature_expiration_time
     4: exportable_certification
     5: trust_signature
     6: regular_expression
     7: revocable
-    8: reserved
+    8: reserved_8
     9: key_expiration_time
     10: placeholder_for_backward_compatibility
     11: preferred_symmetric_algorithms
     12: revocation_key
-    13: reserved
-    14: reserved
-    15: reserved
+    13: reserved_13
+    14: reserved_14
+    15: reserved_15
     16: issuer
-    17: reserved
-    18: reserved
-    19: reserved
+    17: reserved_17
+    18: reserved_18
+    19: reserved_19
     20: notation_data
     21: preferred_hash_algorithms
     22: preferred_compression_algorithms
