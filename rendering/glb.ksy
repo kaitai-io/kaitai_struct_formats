@@ -2,11 +2,11 @@ meta:
   id: glb
   title: GL Transmission Format, binary container
   file-extension: glb
-  endian: le
-  license: MIT
   xref:
     mime: model/gltf-binary
     wikidata: Q28135989
+  license: MIT
+  endian: le
 
 doc: |
   glTF is a format for distribution of 3D models optimized for being used in software
