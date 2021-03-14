@@ -11,7 +11,7 @@ meta:
 doc: |
   glTF is a format for distribution of 3D models optimized for being used in software
 
-doc-ref: https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#binary-gltf-layout
+doc-ref: https://github.com/KhronosGroup/glTF/tree/2354846/specification/2.0#binary-gltf-layout
 
 seq:
   - id: header
