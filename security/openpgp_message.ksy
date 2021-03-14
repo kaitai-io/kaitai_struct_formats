@@ -388,8 +388,8 @@ enums:
     2: triple_des
     3: cast5
     4: blowfisch
-    5: reserved_5
-    6: reserved_6
+    5: reserved5
+    6: reserved6
     7: aes_128
     8: aes_192
     9: aes_256
@@ -410,10 +410,10 @@ enums:
     1: md5
     2: sha1
     3: ripemd160
-    4: reserved_4
-    5: reserved_5
-    6: reserved_6
-    7: reserved_7
+    4: reserved4
+    5: reserved5
+    6: reserved6
+    7: reserved7
     8: sha256
     9: sha384
     10: sha512
@@ -448,26 +448,26 @@ enums:
     110: private_experimental_algorithm_10
 
   subpacket_types:
-    0: reserved_0
-    1: reserved_1
+    0: reserved0
+    1: reserved1
     2: signature_creation_time
     3: signature_expiration_time
     4: exportable_certification
     5: trust_signature
     6: regular_expression
     7: revocable
-    8: reserved_8
+    8: reserved8
     9: key_expiration_time
     10: placeholder_for_backward_compatibility
     11: preferred_symmetric_algorithms
     12: revocation_key
-    13: reserved_13
-    14: reserved_14
-    15: reserved_15
+    13: reserved13
+    14: reserved14
+    15: reserved15
     16: issuer
-    17: reserved_17
-    18: reserved_18
-    19: reserved_19
+    17: reserved17
+    18: reserved18
+    19: reserved19
     20: notation_data
     21: preferred_hash_algorithms
     22: preferred_compression_algorithms
