@@ -1,5 +1,5 @@
 meta:
-  id: glb
+  id: gltf_binary
   title: GL Transmission Format, binary container
   file-extension: glb
   xref:
