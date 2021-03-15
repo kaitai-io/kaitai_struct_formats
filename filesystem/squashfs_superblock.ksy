@@ -4,6 +4,7 @@ meta:
   file-extension:
     - squashfs
     - snap
+    - sqfs
   endian: le
   license: CC0-1.0
   xref:
