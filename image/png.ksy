@@ -1,22 +1,34 @@
 meta:
   id: png
   title: PNG (Portable Network Graphics) file
-  file-extension: png
+  file-extension:
+    - png
+    - apng
   xref:
     forensicswiki: Portable_Network_Graphics_(PNG)
     iso: 15948:2004
-    justsolve: PNG
+    justsolve:
+      - PNG
+      - APNG
     loc: fdd000153
-    mime: image/png
+    mime:
+      - image/png
+      - image/apng
+      - image/vnd.mozilla.apng
     pronom:
       - fmt/11 # PNG 1.0
       - fmt/12 # PNG 1.1
       - fmt/13 # PNG 1.2
+      - fmt/935 # APNG
     rfc: 2083
     wikidata: Q178051
   license: CC0-1.0
-  ks-version: 0.8
+  ks-version: 0.9
   endian: be
+doc: |
+  Test files for APNG can be found at the following locations:
+  https://philip.html5.org/tests/apng/tests.html
+  http://littlesvr.ca/apng/
 seq:
   # https://www.w3.org/TR/PNG/#5PNG-file-signature
   - id: magic
@@ -71,6 +83,11 @@ types:
             '"iTXt"': international_text_chunk
             '"tEXt"': text_chunk
             '"zTXt"': compressed_text_chunk
+
+            # animated PNG chunks
+            '"acTL"': animation_control_chunk
+            '"fcTL"': frame_control_chunk
+            '"fdAT"': frame_data_chunk
       - id: crc
         size: 4
   ihdr_chunk:
@@ -292,6 +309,78 @@ types:
       - id: text_datastream
         process: zlib
         size-eos: true
+  animation_control_chunk:
+    doc-ref: https://wiki.mozilla.org/APNG_Specification#.60acTL.60:_The_Animation_Control_Chunk
+    seq:
+      - id: num_frames
+        type: u4
+        doc: Number of frames, must be equal to the number of `frame_control_chunk`s
+      - id: num_plays
+        type: u4
+        doc: Number of times to loop, 0 indicates infinite looping.
+  frame_control_chunk:
+    doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fcTL.60:_The_Frame_Control_Chunk
+    seq:
+      - id: sequence_number
+        type: u4
+        doc: Sequence number of the animation chunk
+      - id: width
+        type: u4
+        valid:
+          min: 1
+          max: _root.ihdr.width
+        doc: Width of the following frame
+      - id: height
+        type: u4
+        valid:
+          min: 1
+          max: _root.ihdr.height
+        doc: Height of the following frame
+      - id: x_offset
+        type: u4
+        valid:
+          max: _root.ihdr.width - width
+        doc: X position at which to render the following frame
+      - id: y_offset
+        type: u4
+        valid:
+          max: _root.ihdr.height - height
+        doc: Y position at which to render the following frame
+      - id: delay_num
+        type: u2
+        doc: Frame delay fraction numerator
+      - id: delay_den
+        type: u2
+        doc: Frame delay fraction denominator
+      - id: dispose_op
+        type: u1
+        enum: dispose_op_values
+        doc: Type of frame area disposal to be done after rendering this frame
+      - id: blend_op
+        type: u1
+        enum: blend_op_values
+        doc: Type of frame area rendering for this frame
+    instances:
+      delay:
+        value: 'delay_num / (delay_den == 0 ? 100.0 : delay_den)'
+        doc: Time to display this frame, in seconds
+  frame_data_chunk:
+    doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fdAT.60:_The_Frame_Data_Chunk
+    seq:
+      - id: sequence_number
+        type: u4
+        doc: |
+          Sequence number of the animation chunk. The fcTL and fdAT chunks
+          have a 4 byte sequence number. Both chunk types share the sequence.
+          The first fcTL chunk must contain sequence number 0, and the sequence
+          numbers in the remaining fcTL and fdAT chunks must be in order, with
+          no gaps or duplicates.
+      - id: frame_data
+        size-eos: true
+        doc: |
+          Frame data for the frame. At least one fdAT chunk is required for
+          each frame. The compressed datastream is the concatenation of the
+          contents of the data fields of all the fdAT chunks within a frame.
 enums:
   color_type:
     0: greyscale
@@ -304,3 +393,32 @@ enums:
     1: meter
   compression_methods:
     0: zlib
+  dispose_op_values:
+    0:
+      id: none
+      doc: |
+        No disposal is done on this frame before rendering the next;
+        the contents of the output buffer are left as is.
+      doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fcTL.60:_The_Frame_Control_Chunk
+    1:
+      id: background
+      doc: |
+        The frame's region of the output buffer is to be cleared to
+        fully transparent black before rendering the next frame.
+      doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fcTL.60:_The_Frame_Control_Chunk
+    2:
+      id: previous
+      doc: |
+        The frame's region of the output buffer is to be reverted
+        to the previous contents before rendering the next frame.
+      doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fcTL.60:_The_Frame_Control_Chunk
+  blend_op_values:
+    0:
+      id: source
+      doc: |
+        All color components of the frame, including alpha,
+        overwrite the current contents of the frame's output buffer region.
+    1:
+      id: over
+      doc: |
+        The frame is composited onto the output buffer based on its alpha
