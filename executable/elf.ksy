@@ -532,6 +532,8 @@ enums:
     0x12: openvos # Stratus Technologies OpenVOS
   # e_type
   obj_type:
+    # ET_NONE
+    0: no_file_type
     # ET_REL
     1: relocatable
     # ET_EXEC
@@ -542,22 +544,39 @@ enums:
     4: core
   machine:
     0x00: not_set
+    # EM_M32
+    0x01: m32
     # EM_SPARC
     0x02: sparc
     # EM_386
     0x03: x86
+    # EM_68K
+    0x04: m68k
+    # EM_88K
+    0x05: m88k
     0x08: mips
     0x14: powerpc
+    # EM_PPC64
+    0x15: powerpc64
+    # EM_S390
+    0x16: s390
     # EM_ARM
     0x28: arm
     # EM_SH
     0x2A: superh
+    # EM_SPARCV9
+    0x2b: sparcv9
     0x32: ia_64
     # EM_X86_64
     0x3E: x86_64
+    0x53: avr
+    0xa4: qdsp6
+    0xb9: avr32
     0xB7: aarch64
+    0xe0: amdgpu
     0xF3: riscv
     0xF7: bpf
+    0xfc: csky
   ph_type:
     0: null_type
     1: load
