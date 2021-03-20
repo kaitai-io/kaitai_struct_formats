@@ -39,7 +39,8 @@ seq:
   # https://www.w3.org/TR/PNG/#11IHDR
   # Always appears first, stores values referenced by other chunks
   - id: ihdr_len
-    contents: [0, 0, 0, 13]
+    type: u4
+    valid: 13
   - id: ihdr_type
     contents: "IHDR"
   - id: ihdr
