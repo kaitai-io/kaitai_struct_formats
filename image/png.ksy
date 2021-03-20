@@ -30,8 +30,8 @@ meta:
 doc: |
   Test files for APNG can be found at the following locations:
 
-    - https://philip.html5.org/tests/apng/tests.html
-    - http://littlesvr.ca/apng/
+    * <https://philip.html5.org/tests/apng/tests.html>
+    * <http://littlesvr.ca/apng/>
 seq:
   # https://www.w3.org/TR/PNG/#5PNG-file-signature
   - id: magic
