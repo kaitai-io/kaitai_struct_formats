@@ -21,14 +21,17 @@ meta:
       - fmt/13 # PNG 1.2
       - fmt/935 # APNG
     rfc: 2083
-    wikidata: Q178051
+    wikidata:
+      - Q178051 # PNG
+      - Q433224 # APNG
   license: CC0-1.0
   ks-version: 0.9
   endian: be
 doc: |
   Test files for APNG can be found at the following locations:
-  https://philip.html5.org/tests/apng/tests.html
-  http://littlesvr.ca/apng/
+
+    - https://philip.html5.org/tests/apng/tests.html
+    - http://littlesvr.ca/apng/
 seq:
   # https://www.w3.org/TR/PNG/#5PNG-file-signature
   - id: magic
