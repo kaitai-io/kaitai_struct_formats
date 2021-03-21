@@ -405,6 +405,7 @@ types:
                 'sh_type::strtab': strings_struct
                 'sh_type::dynsym': dynsym_section
                 'sh_type::dynstr': strings_struct
+                'sh_type::note': note_section
           name:
             io: _root.header.strings._io
             pos: ofs_name
@@ -486,6 +487,23 @@ types:
             type: u8
           - id: size
             type: u8
+      note_section:
+        seq:
+          - id: entries
+            type: note_section_entry
+            repeat: eos
+      note_section_entry:
+        seq:
+          - id: name_size
+            type: u4
+          - id: description_size
+            type: u4
+          - id: note_type
+            type: u4
+          - id: note_name
+            size: "name_size % 4 == 0 ? name_size: name_size + (4 - name_size % 4)"
+          - id: note_description
+            size: "description_size % 4 == 0 ? description_size: description_size + (4 - description_size % 4)"
     instances:
       program_headers:
         pos: program_header_offset
