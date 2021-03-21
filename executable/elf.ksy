@@ -328,7 +328,11 @@ types:
             type: dynamic_section
             if: type == ph_type::dynamic
           flags_obj:
-            type: phdr_type_flags(flags64|flags32)
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': phdr_type_flags(flags32)
+                'bits::b64': phdr_type_flags(flags64)
             -webide-parse-mode: eager
         -webide-representation: "{type} - f:{flags_obj:flags} (o:{offset}, s:{filesz:dec})"
       section_header:
