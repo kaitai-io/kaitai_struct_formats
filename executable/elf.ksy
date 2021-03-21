@@ -543,7 +543,7 @@ enums:
     # ET_CORE
     4: core
   machine:
-    0x00: not_set
+    0x00: no_machine
     # EM_M32
     0x01: m32
     # EM_SPARC
