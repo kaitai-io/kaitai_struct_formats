@@ -563,19 +563,19 @@ enums:
     # EM_ARM
     0x28: arm
     # EM_SH
-    0x2A: superh
+    0x2a: superh
     # EM_SPARCV9
     0x2b: sparcv9
     0x32: ia_64
     # EM_X86_64
-    0x3E: x86_64
+    0x3e: x86_64
     0x53: avr
     0xa4: qdsp6
     0xb9: avr32
-    0xB7: aarch64
+    0xb7: aarch64
     0xe0: amdgpu
-    0xF3: riscv
-    0xF7: bpf
+    0xf3: riscv
+    0xf7: bpf
     0xfc: csky
   ph_type:
     0: null_type
