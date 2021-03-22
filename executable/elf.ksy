@@ -501,9 +501,14 @@ types:
           - id: note_type
             type: u4
           - id: note_name
-            size: "name_size % 4 == 0 ? name_size: name_size + (4 - name_size % 4)"
+            size: name_size + (-name_size % 4)
+            doc: |
+              Although the ELF specification seems to hint that the note_name field
+              is ASCII this isn't the case on Linux binaries that have the
+              .gnu.build.attributes section.
+            doc-ref: https://fedoraproject.org/wiki/Toolchain/Watermark#Proposed_Specification_for_non-loaded_notes
           - id: note_description
-            size: "description_size % 4 == 0 ? description_size: description_size + (4 - description_size % 4)"
+            size: description_size + (-description_size % 4)
     instances:
       program_headers:
         pos: program_header_offset
