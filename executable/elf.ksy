@@ -404,7 +404,6 @@ types:
                 'sh_type::dynamic': dynamic_section
                 'sh_type::strtab': strings_struct
                 'sh_type::dynsym': dynsym_section
-                'sh_type::dynstr': strings_struct
                 'sh_type::note': note_section
           name:
             io: _root.header.strings._io
