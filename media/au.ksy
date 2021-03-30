@@ -5,8 +5,7 @@ meta:
     - au
     - snd
   xref:
-    justsolve:
-      - AU
+    justsolve: AU
     mime:
       - audio/basic
     pronom:
@@ -26,6 +25,7 @@ seq:
     contents: ".snd"
   - id: header_size
     type: u4
+    min: 24
   - id: data_size
     type: u4
   - id: encoding
