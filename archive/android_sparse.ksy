@@ -30,10 +30,8 @@ types:
      seq:
        - id: magic
          contents: [0x3a, 0xff, 0x26, 0xed]
-       - id: major_version
-         type: u2
-       - id: minor_version
-         type: u2
+       - id: version
+         type: version
        - id: file_header_size
          type: u2
          doc: size of file header, should be 28
@@ -67,6 +65,12 @@ types:
         doc: in bytes of chunk input file including chunk header and data
       - id: body
         size: total_size - 12
+  version:
+    seq:
+      - id: major
+        type: u2
+      - id: minor
+        type: u2
 enums:
   chunk_types:
     0xcac1: raw
