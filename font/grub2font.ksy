@@ -103,3 +103,22 @@ types:
             type: u1
           - id: offset
             type: u4
+        instances:
+          bitmap:
+            io: _root._io
+            pos: offset
+            type: character_definition
+      character_definition:
+        seq:
+          - id: width
+            type: u2
+          - id: height
+            type: u2
+          - id: x_offset
+            type: u2
+          - id: y_offset
+            type: u2
+          - id: device_width
+            type: u2
+          - id: bitmap_data
+            size: (width * height + 7) / 8
