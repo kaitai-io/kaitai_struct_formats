@@ -17,6 +17,11 @@ seq:
     type: font_section
     repeat: until
     repeat-until: _.section_name == "DATA"
+    doc: |
+      The "DATA" section acts as a terminator. The documentation says:
+      "A marker that indicates the remainder of the file is data accessed
+      via the character index (CHIX) section. When reading this font file,
+      the rest of the file can be ignored when scanning the sections."
 types:
   font_section:
      seq:
@@ -84,12 +89,12 @@ types:
         type: u2
   character_index:
     seq:
-      - id: character_entries
-        type: character_entry
+      - id: entries
+        type: character
         repeat: expr
-        repeat-expr: _parent.section_length/9
+        repeat-expr: _parent.section_length/sizeof<character>
     types:
-      character_entry:
+      character:
         seq:
           - id: code_point
             type: u4
