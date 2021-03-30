@@ -15,26 +15,34 @@ doc-ref: https://android.googlesource.com/device/huawei/angler/+/673cfb95bf3dcca
 seq:
   - id: img_header
     type: header
-  - id: img_header_entries
-    type: image_header_entry
-    repeat: expr
-    repeat-expr: img_header.image_header_size/80
+  - id: entries
+    type: entries
+    size: img_header.image_header_size
 types:
   header:
      seq:
         - id: magic
           contents: [0x3c, 0xd6, 0x1a, 0xce]
-        - id: major_version
-          type: u2
-        - id: minor_version
-          type: u2
+        - id: version
+          type: version
         - id: image_version
           size: 64
         - id: meta_header_size
           type: u2
         - id: image_header_size
           type: u2
-  image_header_entry:
+  version:
+    seq:
+      - id: major
+        type: u2
+      - id: minor
+        type: u2
+  entries:
+    seq:
+      - id: entries
+        type: entry
+        repeat: eos
+  entry:
     seq:
       - id: name
         type: strz
