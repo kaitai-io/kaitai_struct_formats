@@ -544,7 +544,7 @@ enums:
     0xa120: vocord_g723_1
     0xa121: vocord_lbc
     0xa122: nice_g728
-    0xa123: frace_telecom_g729
+    0xa123: france_telecom_g729
     0xa124: codian
     0xf1ac: flac
     0xfffe: extensible
@@ -563,3 +563,5 @@ enums:
     0x64696d75: umid
     0x666e696d: minf
     0x6e676572: regn
+    0x20336469: id3
+    0x4b414550: peak
