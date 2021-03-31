@@ -16,27 +16,41 @@ meta:
   ks-version: 0.9
   endian: be
 doc: |
-  Test files for AU can be found in any Python release in the
-  directory Lib/test/sndhdrdata/
+  Test files for AU can be found in the Python Git repository:
+
+  https://github.com/python/cpython/tree/b8a7daf077dab18e9e3701c5380b542ae0aa9a94/Lib/test/sndhdrdata
+
+  as well as:
+
+  ftp://ftp-ccrma.stanford.edu/pub/Lisp/sf.tar.gz
 doc-ref:
   - https://en.wikipedia.org/wiki/Au_file_format
   - https://web.archive.org/web/20121028010008/http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/AU/AU.html
 seq:
-  - id: magic
-    contents: ".snd"
-  - id: header_size
-    type: u4
-    valid:
-      min: 24
-  - id: data_size
-    type: u4
-  - id: encoding
-    type: u4
-    enum: encodings
-  - id: sample_rate
-    type: u4
-  - id: channels
-    type: u4
+  - id: header
+    type: header
+  - id: description
+    type: strz
+    encoding: ASCII
+    size: header.header_size - sizeof<header>
+types:
+  header:
+    seq:
+      - id: magic
+        contents: ".snd"
+      - id: header_size
+        type: u4
+        valid:
+          min: 24
+      - id: data_size
+        type: u4
+      - id: encoding
+        type: u4
+        enum: encodings
+      - id: sample_rate
+        type: u4
+      - id: channels
+        type: u4
 enums:
   encodings:
     1: mulaw_8
