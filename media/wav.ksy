@@ -565,3 +565,5 @@ enums:
     0x6e676572: regn
     0x20336469: id3
     0x4b414550: peak
+    0x584d505f: pmx
+    0x74636166: fact
