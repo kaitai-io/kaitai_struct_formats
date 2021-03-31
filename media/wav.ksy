@@ -77,6 +77,7 @@ types:
             'fourcc::data': data_chunk_type
             'fourcc::list': list_chunk_type
             'fourcc::pmx': pmx_chunk_type
+            'fourcc::fact': fact_chunk_type
 
   list_chunk_type:
     seq:
@@ -169,6 +170,13 @@ types:
     seq:
       - id: data
         size-eos: true
+
+  fact_chunk_type:
+    seq:
+      - id: sample_length
+        type: u4
+        doc: Number of samples per channel
+        doc-ref: http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html
 
   format_chunk_type:
     seq:
