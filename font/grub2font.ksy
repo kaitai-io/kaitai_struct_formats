@@ -121,4 +121,7 @@ types:
           - id: device_width
             type: u2
           - id: bitmap_data
-            size: (width * height + 7) / 8
+            size: (width * height + 7) / 8 # ceiled integer division
+            doc: |
+              Rows of pixels (one bit per pixel), top-down, left-to-right.
+              Padded to be on a byte boundary.
