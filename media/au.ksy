@@ -6,12 +6,9 @@ meta:
     - snd
   xref:
     justsolve: AU
-    mime:
-      - audio/basic
-    pronom:
-      - x-fmt/139
-    wikidata:
-      - Q672985
+    mime: audio/basic
+    pronom: x-fmt/139
+    wikidata: Q672985
   license: CC0-1.0
   ks-version: 0.9
   endian: be
