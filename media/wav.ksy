@@ -297,6 +297,8 @@ types:
         size-eos: true
         type: str
         encoding: UTF-8
+        doc: chunk containing XMP data
+        doc-ref: https://wwwimages2.adobe.com/content/dam/acom/en/devnet/xmp/pdfs/XMP%20SDK%20Release%20cc-2016-08/XMPSpecificationPart3.pdf
 enums:
   w_format_tag_type:
     0x0000: unknown
