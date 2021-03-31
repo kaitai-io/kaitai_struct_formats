@@ -76,6 +76,7 @@ types:
             'fourcc::cue': cue_chunk_type
             'fourcc::data': data_chunk_type
             'fourcc::list': list_chunk_type
+            'fourcc::pmx': pmx_chunk_type
 
   list_chunk_type:
     seq:
@@ -282,6 +283,12 @@ types:
       - id: sample
         type: u2
 
+  pmx_chunk_type:
+    seq:
+      - id: data
+        size-eos: true
+        type: str
+        encoding: UTF-8
 enums:
   w_format_tag_type:
     0x0000: unknown
