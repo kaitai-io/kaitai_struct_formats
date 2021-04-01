@@ -51,20 +51,25 @@ types:
          doc: CRC32 checksum of the original data
   image_header_entry:
     seq:
-      - id: chunk_type
-        type: u2
-        enum: chunk_types
-        doc: chunk type
-      - id: reserved
-        type: u2
-      - id: chunk_size
-        type: u4
-        doc: in blocks in output image
-      - id: total_size
-        type: u4
-        doc: in bytes of chunk input file including chunk header and data
+      - id: header
+        type: fixed_header
       - id: body
-        size: total_size - 12
+        size: header.total_size - header._sizeof
+    types:
+      fixed_header:
+        seq:
+          - id: chunk_type
+            type: u2
+            enum: chunk_types
+            doc: chunk type
+          - id: reserved
+            type: u2
+          - id: chunk_size
+            type: u4
+            doc: in blocks in output image
+          - id: total_size
+            type: u4
+            doc: in bytes of chunk input file including chunk header and data
   version:
     seq:
       - id: major
