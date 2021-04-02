@@ -506,7 +506,7 @@ types:
             size: name_size + (-name_size % 4)
             doc: |
               Although the ELF specification seems to hint that the note_name field
-              is ASCII this isn't the case on Linux binaries that have the
+              is ASCII this isn't the case for Linux binaries that have a
               .gnu.build.attributes section.
             doc-ref: https://fedoraproject.org/wiki/Toolchain/Watermark#Proposed_Specification_for_non-loaded_notes
           - id: note_description
