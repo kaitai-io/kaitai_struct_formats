@@ -10,7 +10,7 @@ seq:
     type: u4
   - id: header
     type: header
-    size: len_header
+    size: len_header - len_header._sizeof
 types:
   header:
     seq:
