@@ -2,12 +2,18 @@ meta:
   id: dtb
   title: Flattened Devicetree Format
   file-extension: dtb
+  xref:
+    - wikidata: Q16960371
   license: CC0-1.0
   endian: be
 doc: |
   Also referred to as Devicetree Blob (DTB). It is a flat
   binary encoding of data (primarily devicetree data, although
   other data is possible as well).
+
+  The encoding of strings used in the specification is actually a subset of ASCII:
+
+  https://github.com/devicetree-org/devicetree-specification/blob/master/source/chapter2-devicetree-basics.rst
 doc-ref:
   - https://github.com/devicetree-org/devicetree-specification/releases/tag/v0.3
   - https://github.com/devicetree-org/devicetree-specification/blob/ba2aa679679fc4fedf67130f18a6f0ecc4cf0382/source/flattened-format.rst
@@ -15,26 +21,36 @@ doc-ref:
 seq:
   - id: magic
     contents: [0xd0, 0x0d, 0xfe, 0xed]
+    -orig-id: magic
   - id: total_size
     type: u4
+    -orig-id: totalsize
   - id: structure_block_offset
     type: u4
+    -orig-id: off_dt_struct
   - id: strings_block_offset
     type: u4
+    -orig-id: off_dt_strings
   - id: memory_reservation_block_offset
     type: u4
+    -orig-id: off_mem_rsvmap
   - id: version
     type: u4
+    -orig-id: version
   - id: last_compatible_version
     type: u4
     valid:
       max: version
+    -orig-id: last_comp_version
   - id: boot_cpuid_phys
     type: u4
-  - id: size_dt_strings
+    -orig-id: boot_cpuid_phys
+  - id: strings_block_size
     type: u4
-  - id: size_dt_struct
+    -orig-id: size_dt_strings
+  - id: structure_block_size
     type: u4
+    -orig-id: size_dt_struct
 instances:
   memory_reservation_block:
     pos: memory_reservation_block_offset
@@ -45,7 +61,7 @@ instances:
     type: fdt_block
   strings_block:
     pos: strings_block_offset
-    size: size_dt_strings
+    size: strings_block_size
     type: strings
 types:
   strings:
@@ -82,8 +98,10 @@ types:
     seq:
       - id: length
         type: u4
+        -orig-id: len
       - id: name_offset
         type: u4
+        -orig-id: nameoff
       - id: property
         size: length
       - id: boundary_padding
