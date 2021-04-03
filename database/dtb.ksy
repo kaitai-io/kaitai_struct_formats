@@ -11,9 +11,18 @@ doc: |
   binary encoding of data (primarily devicetree data, although
   other data is possible as well).
 
+  On Linux systems that support this the blobs can be accessed in
+  /sys/firmware/fdt
+
+  https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-firmware-ofw
+
   The encoding of strings used in the specification is actually a subset of ASCII:
 
   https://github.com/devicetree-org/devicetree-specification/blob/master/source/chapter2-devicetree-basics.rst
+
+  Example files:
+
+  - https://github.com/qemu/qemu/tree/master/pc-bios
 doc-ref:
   - https://github.com/devicetree-org/devicetree-specification/releases/tag/v0.3
   - https://github.com/devicetree-org/devicetree-specification/blob/ba2aa679679fc4fedf67130f18a6f0ecc4cf0382/source/flattened-format.rst
