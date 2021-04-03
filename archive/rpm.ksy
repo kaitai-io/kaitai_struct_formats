@@ -78,23 +78,6 @@ types:
       - id: storage_section
         #type: storage_section
         size: header_record.index_storage_size
-  header_record:
-    seq:
-      - id: magic
-        contents: [0x8e, 0xad, 0xe8, 0x01]
-      - id: reserved
-        contents: [0, 0, 0, 0]
-      - id: index_record_count
-        -orig-id: nindex
-        type: u4
-        valid:
-          min: 1
-      - id: index_storage_size
-        -orig-id: hsize
-        type: u4
-        doc: | 
-          Size of the storage area for the data
-          pointed to by the Index Records.
   signature_index_record:
     seq:
       - id: tag
@@ -133,6 +116,23 @@ types:
         type: u4
       - id: count
         type: u4
+  header_record:
+    seq:
+      - id: magic
+        contents: [0x8e, 0xad, 0xe8, 0x01]
+      - id: reserved
+        contents: [0, 0, 0, 0]
+      - id: index_record_count
+        -orig-id: nindex
+        type: u4
+        valid:
+          min: 1
+      - id: index_storage_size
+        -orig-id: hsize
+        type: u4
+        doc: |
+          Size of the storage area for the data
+          pointed to by the Index Records.
 enums:
   rpm_types:
     0: binary
@@ -229,6 +229,10 @@ enums:
     1053: conflictflags
     1054: conflictname
     1055: conflictversion
+    1059: excludearch # from lib/rpmtag.h
+    1060: excludeos # from lib/rpmtag.h
+    1061: exclusivearch # from lib/rpmtag.h
+    1062: exclusiveos # from lib/rpmtag.h
     1064: rpmversion
     1065: triggerscripts # from lib/rpmtag.h
     1066: triggername # from lib/rpmtag.h
@@ -242,12 +246,14 @@ enums:
     1086: postinstall_interpreter # /bin/sh
     1087: preuninstall_interpreter # /bin/sh
     1088: postuninstall_interpreter # /bin/sh
+    1089: buildarchs # from lib/rpmtag.h
     1090: obsoletename
     1092: triggerscriptprog # from lib/rpmtag.h
     1094: cookie
     1095: filedevices
     1096: fileinodes
     1097: filelangs
+    1106: sourcepackage # from lib/rpmtag.h
     1112: provideflags
     1113: provideversion
     1114: obsoleteflags
@@ -260,6 +266,9 @@ enums:
     1124: payload_format
     1125: payload_compressor
     1126: payload_flags
+    1127: installcolor # from lib/rpmtag.h
+    1128: installtid # from lib/rpmtag.h
+    1129: removetid # from lib/rpmtag.h
     1131: rhnplatform
     1132: platform
     # below are all from lib/rpmtag.h
@@ -270,18 +279,98 @@ enums:
     1144: filedependsn
     1145: dependsdict
     1146: sourcepkgid
+    1148: fscontexts
+    1149: recontexts
+    1150: policies
+    1151: pretrans
+    1152: posttrans
+    1153: pretransprog
+    1154: posttransprog
+    1155: disttag
+    1195: dbinstance
+    1196: nvra
+    5000: filenames
+    5001: fileprovide
+    5002: filerequire
+    5005: triggerconds
+    5006: triggertype
+    5007: origfilenames
+    5008: longfilesizes
+    5009: longsize
+    5010: filecaps
     5011: filedigestalgo
     5012: bugurl
+    5013: evr
+    5014: nvr
+    5015: nevr
+    5016: nevra
+    5017: headercolor
+    5018: verbose
+    5019: epochnum
+    5020: preinflags
+    5021: postinflags
+    5022: preunflags
+    5023: postunflags
+    5024: pretransflags
+    5025: posttransflags
+    5026: verifyscriptflags
+    5027: triggerscriptflags
+    5030: policynames
+    5031: policytypes
+    5032: policytypesindexes
+    5033: policyflags
     5034: vcs
+    5035: ordername
+    5036: orderversion
+    5037: orderflags
+    5040: instfilenames
+    5041: requirenevrs
+    5042: providenevrs
+    5043: obsoletenevrs
+    5044: conflictnevrs
+    5045: filenlinks
     5046: recommendname
     5047: recommendversion
     5048: recommendflags
     5049: suggestname
     5050: suggestversion
     5051: suggestname
+    5052: supplementname
+    5053: supplementversion
+    5054: supplementflags
+    5055: enhancename
+    5056: enhanceversion
+    5057: enhanceflags
+    5058: recommendnevrs
+    5059: suggestnevrs
+    5060: supplementnevrs
+    5061: enhancenevrs
     5062: encoding
+    5066: filetriggerscripts
+    5067: filetriggerscriptprog
+    5068: filetriggerscriptflags
+    5069: filetriggername
+    5070: filetriggerindex
+    5071: filetriggerversion
+    5072: filetriggerflags
+    5076: transfiletriggerscripts
+    5077: transfiletriggerscriptprog
+    5078: transfiletriggerscriptflags
+    5079: transfiletriggername
+    5080: transfiletriggerindex
+    5081: transfiletriggerversion
+    5082: transfiletriggerflags
+    5084: filetriggerpriorities
+    5085: transfiletriggerpriorities
+    5086: filetriggerconds
+    5087: filetriggertype
+    5088: transfiletriggerconds
+    5089: transfiletriggertype
+    5090: filesignatures
+    5091: filesignaturelength
     5092: payloaddigest
     5093: payloadddigestalgo
+    5096: modularitylabel
     5097: payloaddigestalt
   header_types:
     # from LSB
