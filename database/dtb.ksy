@@ -9,7 +9,8 @@ doc: |
   binary encoding of data (primarily devicetree data, although
   other data is possible as well).
 doc-ref:
-  - https://github.com/devicetree-org/devicetree-specification/releases/download/v0.3/devicetree-specification-v0.3.pdf
+  - https://github.com/devicetree-org/devicetree-specification/releases/tag/v0.3
+  - https://github.com/devicetree-org/devicetree-specification/blob/ba2aa679679fc4fedf67130f18a6f0ecc4cf0382/source/flattened-format.rst
   - https://elinux.org/images/f/f4/Elc2013_Fernandes.pdf
 seq:
   - id: magic
@@ -26,6 +27,8 @@ seq:
     type: u4
   - id: last_compatible_version
     type: u4
+    valid:
+      max: version
   - id: boot_cpuid_phys
     type: u4
   - id: size_dt_strings
