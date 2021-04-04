@@ -113,7 +113,8 @@ types:
         contents: [ 0x43, 0x44, 0x30, 0x30, 0x31 ]
       - id: version
         doc-ref: ecma-119 8.1.3
-        contents: [ 0x1 ]
+        type: u1
+        valid: 1
       - id: volume
         type:
           switch-on: type
@@ -154,7 +155,8 @@ types:
         seq:
           - id: unused01
             doc-ref: ecma-119 8.4.4
-            contents: [ 0x0 ]
+            type: u1
+            valid: 0
           - id: system_identifier
             doc-ref: ecma-119 8.4.5
             type: text32
@@ -373,7 +375,8 @@ types:
                 doc-ref: ecma-119 9.4.6
                 doc: |
                   Padding field is added when len_dir_name contains an odd number
-                contents: [ 0x0 ]
+                type: u1
+                valid: 0
                 if: len_dir_name % 2 == 1
             instances:
               directory_records:
@@ -464,7 +467,8 @@ types:
                 doc-ref: ecma-119 9.1.12
                 doc: |
                   Padding field is added when len_fi contains an even number
-                contents: [ 0x0 ]
+                type: u1
+                valid: 0
                 if: len_fi % 2 == 0
               - id: system_use
                 doc-ref: ecma-119 9.1.13
@@ -552,7 +556,8 @@ types:
                           - id: length
                             type: u1
                           - id: version
-                            contents: [ 0x1 ]
+                            type: u1
+                            valid: 1
                           - id: reserved
                             type: b5
                           - id: flag_continue
@@ -638,7 +643,8 @@ types:
                           - id: length
                             type: u1
                           - id: version
-                            contents: [ 0x1 ]
+                            type: u1
+                            valid: 1
                           - id: ca_location
                             type: u4bi
                           - id: ca_offset
@@ -651,7 +657,8 @@ types:
                           - id: length
                             type: u1
                           - id: version
-                            contents: [ 0x1 ]
+                            type: u1
+                            valid: 1
                           - id: lba_child
                             type: u4bi
                       susp_er:
@@ -660,7 +667,8 @@ types:
                           - id: length
                             type: u1
                           - id: version
-                            contents: [ 0x1 ]
+                            type: u1
+                            valid: 1
                           - id: len_id
                             type: u1
                           - id: len_des
@@ -681,7 +689,8 @@ types:
                           - id: length
                             type: u1
                           - id: version
-                            contents: [ 0x1 ]
+                            type: u1
+                            valid: 1
                           - id: ext_seq
                             type: u1
                       rrip_nm:
@@ -690,7 +699,8 @@ types:
                           - id: length
                             type: u1
                           - id: version
-                            contents: [ 0x1 ]
+                            type: u1
+                            valid: 1
                           - id: reserved
                             doc: |
                               Grouped all 4x reserved into a single reserved
@@ -710,7 +720,8 @@ types:
                           - id: length
                             type: u1
                           - id: version
-                            contents: [ 0x1 ]
+                            type: u1
+                            valid: 1
                           - id: padding_area
                             size: length - 4
                       rrip_pl:
@@ -719,7 +730,8 @@ types:
                           - id: length
                             type: u1
                           - id: version
-                            contents: [ 0x1 ]
+                            type: u1
+                            valid: 1
                           - id: lba_parent
                             type: u4bi
                       rrip_pn:
@@ -728,7 +740,8 @@ types:
                           - id: length
                             type: u1
                           - id: version
-                            contents: [ 0x1 ]
+                            type: u1
+                            valid: 1
                           - id: dev_t_high
                             type: u4bi
                           - id: dev_t_low
@@ -739,7 +752,8 @@ types:
                           - id: length
                             type: u1
                           - id: version
-                            contents: [ 0x1 ]
+                            type: u1
+                            valid: 1
                           - id: file_mode
                             type: u4bi
                           - id: links
@@ -757,14 +771,16 @@ types:
                           - id: length
                             type: u1
                           - id: version
-                            contents: [ 0x1 ]
+                            type: u1
+                            valid: 1
                       rrip_sf:
                         doc-ref: rrip 4.1.7
                         seq:
                           - id: length
                             type: u1
                           - id: version
-                            contents: [ 0x1 ]
+                            type: u1
+                            valid: 1
                           - id: virtual_file_size_high
                             type: u4bi
                           - id: virtual_file_size_low
@@ -787,7 +803,8 @@ types:
                           - id: length
                             type: u1
                           - id: version
-                            contents: [ 0x1 ]
+                            type: u1
+                            valid: 1
                           - id: reserved
                             type: b4
                           - id: root
@@ -819,14 +836,16 @@ types:
                           - id: length
                             type: u1
                           - id: version
-                            contents: [ 0x1 ]
+                            type: u1
+                            valid: 1
                       rrip_tf:
                         doc-ref: rrip 4.6.1
                         seq:
                           - id: length
                             type: u1
                           - id: version
-                            contents: [ 0x1 ]
+                            type: u1
+                            valid: 1
                           - id: long_form
                             type: b1
                           - id: effective
@@ -910,7 +929,8 @@ types:
                           - id: length
                             type: u1
                           - id: version
-                            contents: [ 0x1 ]
+                            type: u1
+                            valid: 1
                           - id: algorithm
                             type: u2be
                             enum: algorithm
