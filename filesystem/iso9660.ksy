@@ -807,7 +807,8 @@ types:
                           - id: length
                             type: u1
                           - id: version
-                            contents: [ 0x1 ]
+                            type: u1
+                            valid: 1
                           - id: check_bytes
                             contents: [ 0xbe, 0xef ]
                           - id: len_skp
