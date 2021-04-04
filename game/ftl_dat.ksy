@@ -1,8 +1,9 @@
 meta:
   id: ftl_dat
-  endian: le
   application: Faster Than Light (FTL)
   file-extension: dat
+  license: CC0-1.0
+  endian: le
 seq:
   - id: num_files
     type: u4
@@ -14,22 +15,22 @@ seq:
 types:
   file:
     seq:
-      - id: meta_ofs
+      - id: ofs_meta
         type: u4
     instances:
       meta:
-        pos: meta_ofs
+        pos: ofs_meta
         type: meta
-        if: meta_ofs != 0
+        if: ofs_meta != 0
   meta:
     seq:
-      - id: file_size
+      - id: len_file
         type: u4
-      - id: filename_size
+      - id: len_filename
         type: u4
       - id: filename
         type: str
-        size: filename_size
+        size: len_filename
         encoding: UTF-8
       - id: body
-        size: file_size
+        size: len_file

@@ -1,9 +1,11 @@
 meta:
   id: xwd
-  endian: be
   title: xwd (X Window Dump) bitmap image
   application: xwd
+  xref:
+    pronom: fmt/401
   license: CC0-1.0
+  endian: be
 doc: |
   xwd is a file format written by eponymous X11 screen capture
   application (xwd stands for "X Window Dump"). Typically, an average
@@ -15,11 +17,11 @@ doc: |
   etc. Note that technically format includes machine-dependent fields
   and thus is probably a poor choice for true cross-platform usage.
 seq:
-  - id: header_size
+  - id: len_header
     type: u4
     doc: Size of the header in bytes
   - id: hdr
-    size: header_size - 4
+    size: len_header - 4
     type: header
   - id: color_map
     size: 12

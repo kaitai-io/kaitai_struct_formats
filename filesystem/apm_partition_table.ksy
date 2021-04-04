@@ -1,10 +1,17 @@
 meta:
   id: apm_partition_table
   title: APM (Apple Partition Map) partition table
+  xref:
+    forensicswiki: APM
+    justsolve: Apple_Partition_Map
+    wikidata: Q375944
+  tags:
+    - filesystem
+    - macos
   license: CC0-1.0
-  endian: be
   encoding: ascii
-doc-ref: Specification taken from https://en.wikipedia.org/wiki/Apple_Partition_Map
+  endian: be
+doc-ref: https://en.wikipedia.org/wiki/Apple_Partition_Map
 instances:
   sector_size:
     value: 0x200
@@ -14,8 +21,8 @@ instances:
   partition_lookup:
     io: _root._io
     pos: _root.sector_size
-    type: partition_entry
     size: sector_size
+    type: partition_entry
     doc: |
       Every partition entry contains the number of partition entries.
       We parse the first entry, to know how many to parse, including the first one.
@@ -23,8 +30,8 @@ instances:
   partition_entries:
     io: _root._io
     pos: _root.sector_size
-    type: partition_entry
     size: sector_size
+    type: partition_entry
     repeat: expr
     repeat-expr: _root.partition_lookup.number_of_partitions
 types:
@@ -47,7 +54,7 @@ types:
         size: 0x20
       - id: partition_type
         type: strz
-        size: 0x20  
+        size: 0x20
       - id: data_start
         type: u4
         doc: "First sector"

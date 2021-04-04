@@ -2,25 +2,28 @@ meta:
   id: microsoft_pe
   title: Microsoft PE (Portable Executable) file format
   application: Microsoft Windows
-  endian: le
+  file-extension:
+    - exe
+    - dll
+    - sys
+  xref:
+    justsolve: Portable_Executable
+    pronom: x-fmt/411
+    wikidata: Q1076355
+  tags:
+    - executable
+    - windows
+  license: CC0-1.0
   ks-version: 0.7
-doc-ref: http://www.microsoft.com/whdc/system/platform/firmware/PECOFF.mspx
+  endian: le
+doc-ref: https://docs.microsoft.com/en-us/windows/win32/debug/pe-format
 seq:
-  - id: mz1
+  - id: mz
     type: mz_placeholder
-  - id: mz2
-    size: mz1.header_size - 0x40
-  - id: pe_signature
-    contents: ["PE", 0, 0]
-  - id: coff_hdr
-    type: coff_header
-  - id: optional_hdr
-    type: optional_header
-    size: coff_hdr.size_of_optional_header
-  - id: sections
-    repeat: expr
-    repeat-expr: coff_hdr.number_of_sections
-    type: section
+instances:
+  pe:
+    pos: mz.ofs_pe
+    type: pe_header
 enums:
   pe_format:
     0x107: rom_image
@@ -33,8 +36,28 @@ types:
         contents: "MZ"
       - id: data1
         size: 0x3a
-      - id: header_size
+      - id: ofs_pe
         type: u4
+        doc: In PE file, an offset to PE header
+  pe_header:
+    seq:
+      - id: pe_signature
+        contents: ["PE", 0, 0]
+      - id: coff_hdr
+        type: coff_header
+      - id: optional_hdr
+        type: optional_header
+        size: coff_hdr.size_of_optional_header
+      - id: sections
+        repeat: expr
+        repeat-expr: coff_hdr.number_of_sections
+        type: section
+    instances:
+      certificate_table:
+        pos: optional_hdr.data_dirs.certificate_table.virtual_address
+        size: optional_hdr.data_dirs.certificate_table.size
+        type: certificate_table
+        if: optional_hdr.data_dirs.certificate_table.virtual_address != 0
   coff_header:
     doc-ref: 3.3. COFF File Header (Object and Image)
     seq:
@@ -53,6 +76,19 @@ types:
         type: u2
       - id: characteristics
         type: u2
+    instances:
+      symbol_table_size:
+        value: number_of_symbols * 18
+      symbol_name_table_offset:
+        value: pointer_to_symbol_table + symbol_table_size
+      symbol_name_table_size:
+        pos: symbol_name_table_offset
+        type: u4
+      symbol_table:
+        pos: pointer_to_symbol_table
+        type: coff_symbol
+        repeat: expr
+        repeat-expr: number_of_symbols
     enums:
       machine_type:
         # 3.3.1. Machine Types
@@ -60,6 +96,7 @@ types:
         0x1d3: am33
         0x8664: amd64
         0x1c0: arm
+        0xaa64: arm64
         0x1c4: armnt
         0xebc: ebc
         0x14c: i386
@@ -80,6 +117,67 @@ types:
         0x1a8: sh5
         0x1c2: thumb
         0x169: wcemipsv2
+        # Not mentioned in Microsoft documentation, but widely regarded
+        0x184: alpha
+  coff_symbol:
+    seq:
+      - id: name_annoying
+        type: annoyingstring
+        size: 8
+      #- id: name_zeroes
+      #  type: u4
+      #- id: name_offset
+      #  type: u4
+      - id: value
+        type: u4
+      - id: section_number
+        type: u2
+      - id: type
+        type: u2
+      - id: storage_class
+        type: u1
+      - id: number_of_aux_symbols
+        type: u1
+    instances:
+      #effective_name:
+      #  value: name_zeroes == 0 ? name_from_offset : '"fixme"'
+      #name_from_offset:
+      #  io: _root._io
+      #  pos: name_zeroes == 0 ? _parent.symbol_name_table_offset + name_offset : 0
+      #  type: str
+      #  terminator: 0
+      #  encoding: ascii
+      section:
+        value: _root.pe.sections[section_number - 1]
+      data:
+        pos: section.pointer_to_raw_data + value
+        size: 1
+  annoyingstring:
+    -webide-representation: '{name}'
+    instances:
+      name_zeroes:
+        pos: 0
+        type: u4
+      name_offset:
+        pos: 4
+        type: u4
+      name_from_offset:
+        io: _root._io
+        pos: 'name_zeroes == 0 ? _parent._parent.symbol_name_table_offset + name_offset : 0'
+        type: str
+        terminator: 0
+        eos-error: false
+        encoding: ascii
+        if: name_zeroes == 0
+      name_from_short:
+        pos: 0
+        type: str
+        terminator: 0
+        eos-error: false
+        encoding: ascii
+        if: name_zeroes != 0
+      name:
+        value: 'name_zeroes == 0 ? name_from_offset : name_from_short'
   optional_header:
     seq:
       - id: std
@@ -188,6 +286,7 @@ types:
         12: efi_runtime_driver
         13: efi_rom
         14: xbox
+        16: windows_boot_application
   optional_header_data_dirs:
     seq:
       - id: export_table
@@ -227,6 +326,7 @@ types:
       - id: size
         type: u4
   section:
+    -webide-representation: "{name}"
     seq:
       - id: name
         type: str
@@ -255,3 +355,56 @@ types:
       body:
         pos: pointer_to_raw_data
         size: size_of_raw_data
+  certificate_table:
+    seq:
+      - id: items
+        type: certificate_entry
+        repeat: eos
+  certificate_entry:
+    doc-ref: 'https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format#the-attribute-certificate-table-image-only'
+    enums:
+      certificate_revision:
+        0x0100:
+          id: revision_1_0
+          doc: |
+            Version 1, legacy version of the Win_Certificate structure.
+            It is supported only for purposes of verifying legacy Authenticode signatures
+        0x0200:
+          id: revision_2_0
+          doc: Version 2 is the current version of the Win_Certificate structure.
+      certificate_type:
+        0x0001:
+          id: x509
+          doc: |
+            bCertificate contains an X.509 Certificate
+            Not Supported
+        0x0002:
+          id: pkcs_signed_data
+          doc: 'bCertificate contains a PKCS#7 SignedData structure'
+        0x0003:
+          id: reserved_1
+          doc: 'Reserved'
+        0x0004:
+          id: ts_stack_signed
+          doc: |
+            Terminal Server Protocol Stack Certificate signing
+            Not Supported
+    seq:
+      - id: length
+        -orig-id: dwLength
+        type: u4
+        doc: Specifies the length of the attribute certificate entry.
+      - id: revision
+        -orig-id: wRevision
+        type: u2
+        enum: certificate_revision
+        doc: Contains the certificate version number.
+      - id: certificate_type
+        -orig-id: wCertificateType
+        type: u2
+        enum: certificate_type
+        doc: Specifies the type of content in bCertificate
+      - id: certificate_bytes
+        -orig-id: bCertificate
+        size: length - 8
+        doc: Contains a certificate, such as an Authenticode signature.

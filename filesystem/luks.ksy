@@ -1,9 +1,15 @@
 meta:
   id: luks
   title: Linux Unified Key Setup
+  xref:
+    forensicswiki: Linux_Unified_Key_Setup_(LUKS)
+    wikidata: Q29000504
+  tags:
+    - filesystem
+    - linux
   license: CC0-1.0
-  endian: be
   encoding: ASCII
+  endian: be
 doc: |
   Linux Unified Key Setup (LUKS) is a format specification for storing disk
   encryption parameters and up to 8 user keys (which can unlock the master key).

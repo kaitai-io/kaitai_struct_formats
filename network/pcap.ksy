@@ -1,12 +1,24 @@
 meta:
   id: pcap
-  file-extension: pcapdump
+  file-extension:
+    - pcap
+    - pcapdump
+  xref:
+    forensicswiki: PCAP
+    justsolve: PCAP
+    pronom: fmt/779
+    wikidata: Q28009435
   license: CC0-1.0
-  ks-version: 0.7
-  endian: le
+  ks-version: 0.8
   imports:
     - /network/ethernet_frame
     - /network/packet_ppi
+  endian: le
+doc: |
+  PCAP (named after libpcap / winpcap) is a popular format for saving
+  network traffic grabbed by network sniffers. It is typically
+  produced by tools like [tcpdump](https://www.tcpdump.org/) or
+  [Wireshark](https://www.wireshark.org/).
 doc-ref: http://wiki.wireshark.org/Development/LibpcapFileFormat
 seq:
   - id: hdr
@@ -14,8 +26,6 @@ seq:
   - id: packets
     type: packet
     repeat: eos
--includes:
-  - ethernet_frame.ksy
 types:
   header:
     doc-ref: 'https://wiki.wireshark.org/Development/LibpcapFileFormat#Global_Header'

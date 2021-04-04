@@ -1,8 +1,10 @@
 meta:
   id: fallout2_dat
-  endian: le
-  application: Fallout2
+  application: Fallout 2
+  xref:
+    wikidata: Q32097899
   license: CC0-1.0
+  endian: le
 types:
   pstr:
     seq:
@@ -40,17 +42,20 @@ types:
       - id: offset
         type: u4
     instances:
-      contents:
+      contents_raw:
         io: _root._io
         pos: offset
         size: size_unpacked
         if: flags == compression::none
-      contents:
+      contents_zlib:
         io: _root._io
         pos: offset
         size: size_packed
         process: zlib
         if: flags == compression::zlib
+      contents:
+        value: 'flags == compression::zlib ? contents_zlib : contents_raw'
+        if: flags == compression::zlib or flags == compression::none
 instances:
   footer:
     pos: _io.size - 8

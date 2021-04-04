@@ -2,6 +2,10 @@ meta:
   id: shapefile_main
   title: Shapefile main file
   file-extension: shp
+  xref:
+    loc: fdd000280 # ESRI Shapefile
+    pronom: x-fmt/235
+    wikidata: Q27486884
   license: CC0-1.0
   endian: le
 seq:

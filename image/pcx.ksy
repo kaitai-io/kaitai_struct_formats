@@ -1,18 +1,47 @@
 meta:
   id: pcx
   file-extension: pcx
-  endian: le
+  xref:
+    justsolve: PCX
+    mime:
+      - image/vnd.zbrush.pcx
+      - image/x-pcx
+    pronom:
+      # see `/enums/versions` map
+      - fmt/86 # PCX 0
+      - fmt/87 # PCX 2
+      - fmt/88 # PCX 3
+      - fmt/89 # PCX 4
+      - fmt/90 # PCX 5
+    wikidata: Q535473
   license: CC0-1.0
+  endian: le
+doc: |
+  PCX is a bitmap image format originally used by PC Paintbrush from
+  ZSoft Corporation. Originally, it was a relatively simple 128-byte
+  header + uncompressed bitmap format, but latest versions introduced
+  more complicated palette support and RLE compression.
+
+  There's an option to encode 32-bit or 16-bit RGBA pixels, and thus
+  it can potentially include transparency. Theoretically, it's
+  possible to encode resolution or pixel density in the some of the
+  header fields too, but in reality there's no uniform standard for
+  these, so different implementations treat these differently.
+
+  PCX format was never made a formal standard. "ZSoft Corporation
+  Technical Reference Manual" for "Image File (.PCX) Format", last
+  updated in 1991, is likely the closest authoritative source.
+doc-ref: http://web.archive.org/web/20100206055706/http://www.qzx.com/pc-gpe/pcx.txt
 seq:
   - id: hdr
     type: header
     size: 128
 instances:
   palette_256:
-    doc-ref: http://web.archive.org/web/20100206055706/http://www.qzx.com/pc-gpe/pcx.txt - "VGA 256 Color Palette Information"
     pos: _io.size - 769
     type: t_palette_256
     if: hdr.version == versions::v3_0 and hdr.bits_per_pixel == 8 and hdr.num_planes == 1
+    doc-ref: http://web.archive.org/web/20100206055706/http://www.qzx.com/pc-gpe/pcx.txt - "VGA 256 Color Palette Information"
 types:
   header:
     doc-ref: http://web.archive.org/web/20100206055706/http://www.qzx.com/pc-gpe/pcx.txt - "ZSoft .PCX FILE HEADER FORMAT"

@@ -35,7 +35,7 @@ types:
 instances:
   filenames:
     pos: entries.last.offset + entries.last.size
-    type: filename
     size: 15
+    type: filename
     repeat: expr
     repeat-expr: num_files

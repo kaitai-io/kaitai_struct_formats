@@ -1,11 +1,17 @@
 meta:
   id: dos_mz
   title: DOS MZ executable
-  endian: le
   file-extension:
     - exe
     - ovl
+  xref:
+    justsolve: MS-DOS_EXE
+    pronom: x-fmt/409
+    wikidata: Q1882110
+  tags:
+    - dos
   license: CC0-1.0
+  endian: le
 doc: |
   DOS MZ file format is a traditional format for executables in MS-DOS
   environment. Many modern formats (i.e. Windows PE) still maintain
@@ -19,11 +25,11 @@ seq:
   - id: hdr
     type: mz_header
   - id: mz_header2
-    size: hdr.relocations_ofs - 0x1c
+    size: hdr.ofs_relocations - 0x1c
   - id: relocations
     type: relocation
     repeat: expr
-    repeat-expr: hdr.qty_relocations
+    repeat-expr: hdr.num_relocations
   - id: body
     size-eos: true
 types:
@@ -33,9 +39,9 @@ types:
         size: 2
       - id: last_page_extra_bytes
         type: u2
-      - id: qty_pages
+      - id: num_pages
         type: u2
-      - id: qty_relocations
+      - id: num_relocations
         type: u2
       - id: header_size
         type: u2
@@ -53,7 +59,7 @@ types:
         type: u2
       - id: initial_cs
         type: u2
-      - id: relocations_ofs
+      - id: ofs_relocations
         type: u2
       - id: overlay_id
         type: u2
@@ -65,7 +71,7 @@ types:
         type: u2
 #instances:
 #  relocations:
-#    pos: relocations_ofs
+#    pos: ofs_relocations
 #    type: relocation
 #    repeat: expr
-#    repeat-expr: hdr.qty_relocations
+#    repeat-expr: hdr.num_relocations

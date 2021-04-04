@@ -1,0 +1,96 @@
+<nav>
+    <div class="container">
+    <ol class="breadcrumb">
+        <li><a href="index.html">Format Gallery</a></li>
+        <li class="active">Cross-References</li>
+    </ol>
+    </div>
+</nav>
+
+<section id="format-index-header" class="format">
+    <div class="container">
+        <p>
+            This table provides a summary of all entries in Kaitai
+            Struct format gallery and their relevant cross-references.
+        </p>
+        <p>
+            As of now, format gallery includes <%= @all.count %> formats.
+        </p>
+    </div>
+</section>
+
+<section id="format-xref" class="format">
+    <div class="container">
+        <table class="table">
+            <tr>
+                <th rowspan="2">Kaitai Struct ID</th>
+                <th rowspan="3">File extension</th>
+                <th rowspan="3">.ksy License</th>
+                <th colspan="2">Standards</th>
+                <th colspan="3">Registries</th>
+                <th colspan="3">Wikis</th>
+            </tr>
+            <tr>
+                <th><abbr title="International Electrotechnical Commission">ISO</abbr>/<abbr title="International Electrotechnical Commission">IEC</abbr></th>
+                <th><abbr title="Request for Comments">RFC</abbr></th>
+                <!--
+                <th><abbr title="Deutsches Institut für Normung">DIN</abbr></th>
+                <th>EN</th>
+                <th>GOST</th>
+                <th><abbr title="Japanese Industrial Standards">JIS</abbr></th>
+                -->
+
+                <th>Media type (<abbr title="Multipurpose Internet Mail Extensions">MIME</abbr>)</th>
+                <th>LOC FDD</th>
+                <th>PRONOM</th>
+
+                <th>ForensicsWiki</th>
+                <th>Just Solve</th>
+                <th>Wikidata</th>
+            </tr>
+            <tr>
+                <th>Organization</th>
+                <td><a href="https://iso.org/">ISO</a>, <a href="https://iec.ch/">IEC</a></td>
+                <td>IETF, IRTF, IAB, ISOC</td>
+                <!--
+                <td><abbr title="Deutsches Institut für Normung">DIN</abbr></th>
+                <td>EN</th>
+                <td>GOST</th>
+                <td><abbr title="Japanese Industrial Standards">JIS</abbr></th>
+                -->
+                <td><a href="https://www.iana.org/">IANA</a></td>
+                <td><abbr title="Library of Congress, US">LOC</abbr></td>
+                <td>The National Archives, UK</td>
+            </tr>
+        <% @all.keys.sort.each { |id|
+            ksy = @all[id]
+            meta = ksy['meta'] || {}
+            xref = meta['xref'] || {} %>
+            <tr>
+                <td><a href="<%= id %>/index.html"><%= id %></a></td>
+                <td><%= meta['file-extension'] %></td>
+                <td><%= meta['license'] %></td>
+
+                <td><%= xref['iso'] %></td>
+                <td><%= xref_a('rfc', xref['rfc']) %></td>
+                <!--
+                <td><%= xref['din'] %></td>
+                <td><%= xref['en'] %></td>
+                <td><%= xref['gost'] %></td>
+                <td><%= xref['jis'] %></td>
+                -->
+
+                <td><%= xref_a('mime', xref['mime']) %></td>
+                <td><%= xref_a('loc', xref['loc']) %></td>
+                <td><%= xref_a('pronom', xref['pronom']) %></td>
+
+                <td><%= xref_a('forensicswiki', xref['forensicswiki']) %></td>
+                <td><%= xref_a('justsolve', xref['justsolve']) %></td>
+                <td><%= xref_a('wikidata', xref['wikidata']) %></td>
+
+                <td>
+            </tr>
+        <% } %>
+        </table>
+    </div>
+</section>

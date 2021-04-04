@@ -1,8 +1,13 @@
 meta:
   id: cramfs
-  endian: le
+  xref:
+    justsolve: Cramfs
+    wikidata: Q747406
+  tags:
+    - filesystem
+    - linux
   license: MIT
-
+  endian: le
 seq:
   - id: super_block
     type: super_block_struct
@@ -83,7 +88,7 @@ types:
         value: (mode >> 3) & 0b0111
       perm_o:
         value: mode & 0b0111
-      # -- [size_gid] --  
+      # -- [size_gid] --
       size:
         value: size_gid & 0xFFFFFF
       gid:
@@ -139,4 +144,3 @@ types:
         repeat: eos
         type: inode
         if: _io.size > 0
-

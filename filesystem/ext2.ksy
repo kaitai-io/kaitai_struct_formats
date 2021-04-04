@@ -1,11 +1,20 @@
 meta:
   id: ext2
+  title: ext2 filesystem
+  xref:
+    forensicswiki: Extended_File_System_(Ext)
+    justsolve: Ext2
+    wikidata: Q283527
+  tags:
+    - filesystem
+    - linux
+  license: CC0-1.0
   endian: le
 instances:
   # http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/Documentation/filesystems/ext2.txt#n106
   bg1:
-    type: block_group
     pos: 1024
+    type: block_group
   root_dir:
     value: bg1.block_groups[0].inodes[1].as_dir
 types:
@@ -134,7 +143,7 @@ types:
         2: act_ro
         3: act_panic
   # http://www.nongnu.org/ext2-doc/ext2.html#BLOCK-GROUP-DESCRIPTOR-STRUCTURE
-  # http://www.virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1-7.html
+  # http://web.archive.org/web/20160804172310/http://virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1-7.html
   bgd:
     seq:
       - id: block_bitmap_block
@@ -159,7 +168,7 @@ types:
         pos: inode_bitmap_block * _root.bg1.super_block.block_size
         size: 1024
       # http://www.nongnu.org/ext2-doc/ext2.html#INODE-TABLE
-      # http://www.virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1-10.html
+      # http://web.archive.org/web/20161114202411/http://www.virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1-10.html
       inodes:
         pos: inode_table_block * _root.bg1.super_block.block_size
         type: inode

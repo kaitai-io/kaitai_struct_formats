@@ -1,14 +1,34 @@
+<p>The Ruby runtime library can be installed <a href="https://rubygems.org/gems/kaitai-struct"
+    target="_blank" rel="noopener">from RubyGems</a>:</p>
+
+<pre><code>gem install kaitai-struct</code></pre>
+
+<h3>Code</h3>
+
 <p>Parse a local file and get structure in memory:</p>
 
 <% class_name = ucc(file_id) %>
 
-<pre><code class="ruby">data = <%= class_name %>.from_file("path/to/local/file.<%= meta['file-extension'] || format_name %>")</code></pre>
+<%= code cur_lang, <<-CODE
+data = #{ class_name }.from_file("path/to/local/file.#{ meta['file-extension'] || format_name }")
+CODE
+%>
 
 <p>Or parse structure from a string of bytes:</p>
 
-<pre><code class="ruby">bytes = "\x00\x01\x02..."
-data = <%= class_name %>.new(Kaitai::Struct::Stream.new(bytes))</code></pre>
+<%= code cur_lang, <<-CODE
+bytes = "\\x00\\x01\\x02..."
+data = #{ class_name }.new(Kaitai::Struct::Stream.new(bytes))
+CODE
+%>
 
 <p>After that, one can get various attributes from the structure by invoking getter methods like:</p>
 
-<pre><code class="ruby"><% usage_attrs.each { |attr| %>data.<%= attr[:name] %> # => <%= attr[:doc] %><% } %></code></pre>
+<% src_usage_attrs = ""
+usage_attrs.each { |attr|
+    src_usage_attrs += <<-CODE
+data.#{ attr[:name] } # => #{ attr[:doc] }
+    CODE
+}
+%>
+<%= code cur_lang, src_usage_attrs %>

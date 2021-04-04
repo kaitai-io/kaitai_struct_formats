@@ -2,6 +2,12 @@ meta:
   id: cpio_old_le
   title: cpio archive, old binary variant, little-endian
   file-extension: cpio
+  xref:
+    forensicswiki: Cpio
+    justsolve: Cpio
+    mime: application/x-cpio
+    pronom: fmt/635
+    wikidata: Q285296
   license: CC0-1.0
   endian: le
 seq:

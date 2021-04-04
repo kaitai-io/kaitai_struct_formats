@@ -3,6 +3,7 @@ meta:
   title: ICMP network packet
   xref:
     rfc: 792
+    wikidata: Q13162
   license: CC0-1.0
   endian: be
 seq:
@@ -42,6 +43,16 @@ types:
         3: port_unreachable
         4: fragmentation_needed_and_df_set
         5: source_route_failed
+        6: dst_net_unkown
+        7: sdt_host_unkown
+        8: src_isolated
+        9: net_prohibited_by_admin
+        10: host_prohibited_by_admin
+        11: net_unreachable_for_tos
+        12: host_unreachable_for_tos
+        13: communication_prohibited_by_admin
+        14: host_precedence_violation
+        15: precedence_cuttoff_in_effect
   time_exceeded_msg:
     seq:
       - id: code
@@ -63,3 +74,5 @@ types:
         type: u2
       - id: seq_num
         type: u2
+      - id: data
+        size-eos: true

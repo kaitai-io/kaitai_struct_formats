@@ -1,11 +1,13 @@
 meta:
   id: google_protobuf
   title: Google Protocol Buffers (protobuf)
+  xref:
+    justsolve: Protobuf
+    wikidata: Q1645574
   license: MIT
   ks-version: 0.7
   imports:
     - /common/vlq_base128_le
-doc-ref: https://developers.google.com/protocol-buffers/docs/encoding
 doc: |
   Google Protocol Buffers (AKA protobuf) is a popular data
   serialization scheme used for communication protocols, data storage,
@@ -34,6 +36,7 @@ doc: |
     required, which fields may be repeated or constitute a map, what
     restrictions are placed on fields usage in a single message, what
     are the fields' default values, etc, etc.
+doc-ref: https://developers.google.com/protocol-buffers/docs/encoding
 seq:
   - id: pairs
     type: pair

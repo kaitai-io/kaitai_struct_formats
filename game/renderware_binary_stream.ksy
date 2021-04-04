@@ -2,6 +2,8 @@ meta:
   id: renderware_binary_stream
   title: RenderWare binary stream
   application: Games based on RenderWare engine (Grand Theft Auto 3D series)
+  xref:
+    wikidata: Q29960668
   endian: le
 doc-ref: https://www.gtamodding.com/wiki/RenderWare_binary_stream_file
 seq:
@@ -10,7 +12,7 @@ seq:
     enum: sections
   - id: size
     type: u4
-  - id: version
+  - id: library_id_stamp
     type: u4
   - id: body
     size: size
@@ -23,6 +25,9 @@ seq:
         sections::geometry_list: list_with_header
         sections::texture_dictionary: list_with_header
         sections::texture_native: list_with_header
+instances:
+  version:
+    value: 'library_id_stamp & 0xFFFF0000 != 0 ? (library_id_stamp >> 14 & 0x3FF00) + 0x30000 | (library_id_stamp >> 16 & 0x3F) : library_id_stamp << 8'
 types:
   list_with_header:
     doc: |
@@ -37,7 +42,7 @@ types:
         contents: [1, 0, 0, 0]
       - id: header_size
         type: u4
-      - id: version
+      - id: library_id_stamp
         type: u4
       - id: header
         size: header_size
@@ -52,6 +57,9 @@ types:
       - id: entries
         type: renderware_binary_stream
         repeat: eos
+    instances:
+      version:
+        value: 'library_id_stamp & 0xFFFF0000 != 0 ? (library_id_stamp >> 14 & 0x3FF00) + 0x30000 | (library_id_stamp >> 16 & 0x3F) : library_id_stamp << 8'
   struct_texture_dictionary:
     seq:
       - id: num_textures
@@ -217,7 +225,7 @@ types:
       - id: z
         type: f4
       - id: radius
-        type: f4        
+        type: f4
 enums:
   sections:
     0x0001: struct

@@ -1,10 +1,10 @@
 meta:
   id: monomakh_sapr_chg
-  endian: le
-  file-extension: chg
   application: MONOMAKH-SAPR
-  ks-version: 0.7
+  file-extension: chg
   license: CC0-1.0
+  ks-version: 0.7
+  endian: le
 doc: |
   CHG is a container format file used by
   [MONOMAKH-SAPR](https://www.liraland.com/mono/index.php), a software

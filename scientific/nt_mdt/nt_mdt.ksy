@@ -8,7 +8,7 @@ meta:
     - Gwyddion
     - Callisto
   file-extension: mdt
-  license: GPL-3.0+
+  license: GPL-3.0-or-later
   endian: le
 doc: |
   A native file format of NT-MDT scientific software. Usually contains

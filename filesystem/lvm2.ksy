@@ -1,14 +1,20 @@
 meta:
-  title: Logical Volume Manager version 2
   id: lvm2
-  endian: le
-  encoding: ascii
+  title: Logical Volume Manager version 2
   application:
     - linux
     - grub2
     - lvm tools
     - libvslvm
-  license: GFDL-1.3+
+  xref:
+    forensicswiki: Linux_Logical_Volume_Manager_(LVM)
+    wikidata: Q6667482 # software, not format
+  tags:
+    - filesystem
+    - linux
+  license: GFDL-1.3-or-later
+  encoding: ascii
+  endian: le
 doc: |
   ### Building a test file
 
@@ -21,18 +27,18 @@ doc: |
   sudo losetup -d /dev/loop1
   ```
 doc-ref: https://github.com/libyal/libvslvm/blob/master/documentation/Logical%20Volume%20Manager%20(LVM)%20format.asciidoc
-instances:
-  sector_size:
-    value: 512 # TODO: how about 4k sectors?
 seq:
   - id: pv
     type: physical_volume
     doc: Physical volume
+instances:
+  sector_size:
+    value: 512 # TODO: how about 4k sectors?
 types:
   physical_volume:
     seq:
       - id: empty_sector
-        size: _root.sector_size 
+        size: _root.sector_size
       - id: label
         type: label
     types:
@@ -63,7 +69,7 @@ types:
                     doc: "The offset, in bytes, relative from the start of the physical volume label header where data is stored"
                   - id: type_indicator
                     contents: "LVM2 001"
-              
+
           volume_header:
             seq:
               - id: id

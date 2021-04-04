@@ -1,9 +1,13 @@
 meta:
   id: gpt_partition_table
   title: GPT (GUID) partition table
-  endian: le
+  xref:
+    forensicswiki: GPT
+    justsolve: GUID_Partition_Table
+    wikidata: Q603889
   license: CC0-1.0
-doc-ref: Specification taken from https://en.wikipedia.org/wiki/GUID_Partition_Table
+  endian: le
+doc-ref: https://en.wikipedia.org/wiki/GUID_Partition_Table
 instances:
   sector_size:
     value: 0x200
@@ -73,4 +77,3 @@ types:
         type: partition_entry
         repeat: expr
         repeat-expr: entries_count
-

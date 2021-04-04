@@ -1,8 +1,6 @@
 meta:
   id: jpeg
-  endian: be
-  imports:
-    - exif
+  title: JPEG (Joint Photographic Experts Group) File Interchange Format
   file-extension:
     - jpg
     - jpeg
@@ -10,6 +8,38 @@ meta:
     - jif
     - jfif
     - jfi
+  xref:
+    ecma: TR/98
+    forensicswiki: JPEG
+    justsolve: JFIF
+    loc: fdd000017
+    mime: image/jpeg
+    pronom:
+      - fmt/42 # JFIF 1.00
+      - fmt/43 # JFIF 1.01
+      - fmt/44 # JFIF 1.02
+    wikidata: Q26329975
+  license: CC0-1.0
+  imports:
+    - exif
+  endian: be
+doc: |
+  JPEG File Interchange Format, or JFIF, or, more colloquially known
+  as just "JPEG" or "JPG", is a popular 2D bitmap image file format,
+  offering lossy compression which works reasonably well with
+  photographic images.
+
+  Format is organized as a container format, serving multiple
+  "segments", each starting with a magic and a marker. JFIF standard
+  dictates order and mandatory apperance of segments:
+
+  * SOI
+  * APP0 (with JFIF magic)
+  * APP0 (with JFXX magic, optional)
+  * everything else
+  * SOS
+  * JPEG-compressed stream
+  * EOI
 seq:
   - id: segments
     type: segment

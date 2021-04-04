@@ -10,4 +10,4 @@ TARGET_DIR=$(realpath "$2")
 
 mkdir -p "$TARGET_DIR"
 
-find "$KSY_DIR" -name "*.ksy" | xargs ksc -- -t all --ksc-json-output --outdir "$TARGET_DIR" >"$TARGET_DIR"/log.json
+find "$KSY_DIR" -name "*.ksy" | xargs ksc -- -I "$KSY_DIR" -t all --ksc-json-output --outdir "$TARGET_DIR" >"$TARGET_DIR"/log.json
