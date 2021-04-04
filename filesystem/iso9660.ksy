@@ -19,7 +19,7 @@ doc: |
   access (which favors disc devices with relatively slow rotation
   speed).
 doc-ref: |
-  ecma-119 http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
+  ecma-119 https://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
   susp http://www.ymi.com/ymi/sites/default/files/pdf/Systems%20Use%20P1281.pdf
   rrip http://www.ymi.com/ymi/sites/default/files/pdf/Rockridge.pdf
   rras http://www.estamos.de/makecd/Rock_Ridge_Amiga_Specific
