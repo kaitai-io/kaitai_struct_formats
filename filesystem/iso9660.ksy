@@ -18,12 +18,12 @@ doc: |
   features and very conservative file names standards) and sequential
   access (which favors disc devices with relatively slow rotation
   speed).
-doc-ref: |
-  ecma-119 https://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
-  susp http://www.ymi.com/ymi/sites/default/files/pdf/Systems%20Use%20P1281.pdf
-  rrip http://www.ymi.com/ymi/sites/default/files/pdf/Rockridge.pdf
-  rras http://www.estamos.de/makecd/Rock_Ridge_Amiga_Specific
-  rrzf https://dev.lovelyhq.com/libburnia/web/wikis/Zisofs
+doc-ref:
+  - ecma-119 https://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
+  - susp http://www.ymi.com/ymi/sites/default/files/pdf/Systems%20Use%20P1281.pdf
+  - rrip http://www.ymi.com/ymi/sites/default/files/pdf/Rockridge.pdf
+  - rras http://www.estamos.de/makecd/Rock_Ridge_Amiga_Specific
+  - rrzf https://dev.lovelyhq.com/libburnia/web/wikis/Zisofs
 instances:
   sector_size:
     doc-ref: ecma-119 6.1.2
@@ -769,11 +769,11 @@ types:
                             type: u4bi
                           - id: virtual_file_size_low
                             type: u4bi
-                          - id: table_debth
+                          - id: table_depth
                             type: u1
-                            enum: table_debth
+                            enum: table_depth
                         enums:
-                          table_debth:
+                          table_depth:
                             0x2: max_64kb
                             0x4: max_64mb
                             0x8: max_4gb
