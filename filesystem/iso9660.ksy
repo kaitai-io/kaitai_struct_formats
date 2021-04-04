@@ -7,6 +7,8 @@ meta:
     pronom: fmt/468
     wikidata: Q815645
   license: CC0-1.0
+  ks-version: 0.9
+  bit-endian: be
   endian: be
   encoding: ASCII
 doc: |
@@ -20,8 +22,8 @@ doc: |
   speed).
 doc-ref:
   - ecma-119 https://www.ecma-international.org/publications/files/ECMA-ST/Ecma-119.pdf
-  - susp http://www.ymi.com/ymi/sites/default/files/pdf/Systems%20Use%20P1281.pdf
-  - rrip http://www.ymi.com/ymi/sites/default/files/pdf/Rockridge.pdf
+  - susp https://web.archive.org/web/20170404132301/http://www.ymi.com/ymi/sites/default/files/pdf/Systems%20Use%20P1281.pdf
+  - rrip https://web.archive.org/web/20170404043745/http://www.ymi.com/ymi/sites/default/files/pdf/Rockridge.pdf
   - rras http://www.estamos.de/makecd/Rock_Ridge_Amiga_Specific
   - rrzf https://dev.lovelyhq.com/libburnia/web/wikis/Zisofs
 instances:
@@ -62,25 +64,25 @@ types:
     seq:
       - id: year
         type: str
-        size: 0x4
+        size: 4
       - id: month
         type: str
-        size: 0x2
+        size: 2
       - id: day
         type: str
-        size: 0x2
+        size: 2
       - id: hour
         type: str
-        size: 0x2
+        size: 2
       - id: minute
         type: str
-        size: 0x2
+        size: 2
       - id: second
         type: str
-        size: 0x2
+        size: 2
       - id: hundredths_second
         type: str
-        size: 0x2
+        size: 2
       - id: timezone_offset
         type: s1
   datetime_short:
@@ -110,7 +112,7 @@ types:
         enum: volume_type
       - id: magic
         doc-ref: ecma-119 8.1.2
-        contents: [ 0x43, 0x44, 0x30, 0x30, 0x31 ]
+        contents: CD001
       - id: version
         doc-ref: ecma-119 8.1.3
         type: u1
@@ -165,13 +167,19 @@ types:
             type: text32
           - id: unused02
             doc-ref: ecma-119 8.4.7
-            contents: [ 0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0 ]
+            contents: [ 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 ]
           - id: volume_space_size
             doc-ref: ecma-119 8.4.8
             type: u4bi
           - id: unused03
             doc-ref: ecma-119 8.4.9
-            contents: [ 0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0 ]
+            contents: |
+              [
+                0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+                0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+                0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+                0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0
+              ]
           - id: volume_set_size
             doc-ref: ecma-119 8.4.10
             type: u2bi
