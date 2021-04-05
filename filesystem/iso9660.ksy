@@ -157,8 +157,7 @@ types:
         seq:
           - id: unused01
             doc-ref: ecma-119 8.4.4
-            type: u1
-            valid: 0
+            contents: [ 0x0 ]
           - id: system_identifier
             doc-ref: ecma-119 8.4.5
             type: text32
