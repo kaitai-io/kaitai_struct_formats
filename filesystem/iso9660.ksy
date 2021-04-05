@@ -126,32 +126,32 @@ types:
             'volume_type::supplementary_volume_descriptor': supplementary
             #'volume_type::volume_partition_descriptor': partition
     types:
-      text32: # 0x20
+      text32:
         seq:
           - id: text
             type: str
-            size: 0x20
-      text37: # 0x25
+            size: 32
+      text37:
         seq:
           - id: text
             type: str
-            size: 0x25
-      text128: # 0x80
+            size: 37
+      text128:
         seq:
           - id: text
             type: str
-            size: 0x80
+            size: 128
       boot_record:
         doc-ref: ecma-119 8.2
         seq:
           - id: boot_system_identifier
             doc-ref: ecma-119 8.2.4
             type: strz
-            size: 0x20
+            size: 32
           - id: boot_identifier
             doc-ref: ecma-119 8.2.5
             type: strz
-            size: 0x20
+            size: 32
       primary:
         doc-ref: ecma-119 8.4
         seq:
@@ -204,7 +204,7 @@ types:
               The root directory_record with body is 34 bytes.
               In other cases the size is variable.
             type: directory_record
-            size: 0x22
+            size: 34
           - id: volume_set_identifier
             doc-ref: ecma-119 8.4.19
             type: text128
@@ -273,7 +273,7 @@ types:
             doc: |
               This will not be all 0x0.
               This field can trigger the Directory Records to switch from ASCII to ISO-2022 ( UTF-8 in this code )
-            size: 0x20
+            size: 32
           - id: volume_set_size
             doc-ref: ecma-119 8.5
             type: u2bi
@@ -304,7 +304,7 @@ types:
               The root directory_record with body is 34 bytes.
               In other cases the size is variable.
             type: directory_record
-            size: 0x22
+            size: 34
           - id: volume_set_identifier
             doc-ref: ecma-119 8.5.13
             type: text128
