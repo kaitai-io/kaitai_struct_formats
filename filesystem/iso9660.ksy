@@ -52,6 +52,7 @@ types:
         type: u2le
       - id: be
         type: u2be
+        valid: le
   u4bi:
     doc-ref: ecma-119 7.3.3
     seq:
@@ -59,6 +60,7 @@ types:
         type: u4le
       - id: be
         type: u4be
+        valid: le
   datetime_long:
     doc-ref: ecma-119 8.4.26.1
     seq:
@@ -267,7 +269,7 @@ types:
             type: text32
           - id: unused01
             doc-ref: ecma-119 8.5
-            contents: [ 0x0, 0x0, 0x0, 0x0,  0x0, 0x0, 0x0, 0x0 ]
+            contents: [ 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 ]
           - id: volume_space_size
             doc-ref: ecma-119 8.5
             type: u4bi
