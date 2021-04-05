@@ -377,8 +377,7 @@ types:
                 doc-ref: ecma-119 9.4.6
                 doc: |
                   Padding field is added when len_dir_name contains an odd number
-                type: u1
-                valid: 0
+                contents: [ 0x0 ]
                 if: len_dir_name % 2 == 1
             instances:
               directory_records:
