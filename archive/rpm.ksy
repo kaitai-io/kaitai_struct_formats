@@ -16,7 +16,7 @@ doc: |
 doc-ref:
   - https://github.com/rpm-software-management/rpm/blob/master/doc/manual/format.md
   - https://github.com/rpm-software-management/rpm/blob/master/doc/manual/tags.md
-  - https://refspecs.linuxbase.org/LSB_4.1.0/LSB-Core-generic/LSB-Core-generic/pkgformat.html
+  - https://refspecs.linuxbase.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic/pkgformat.html
   - http://ftp.rpm.org/max-rpm/
 seq:
   - id: lead
@@ -28,8 +28,11 @@ seq:
   - id: header
     type: header
   #- id: payload
-    #type: payload
+    # size: ??
+    # doc: if signature has a SIZE value, then it is:
+    # signature[SIZE][0] - sizeof<header>
 types:
+  dummy: {}
   lead:
     seq:
       - id: magic
@@ -76,7 +79,7 @@ types:
         repeat: expr
         repeat-expr: header_record.index_record_count
       - id: storage_section
-        #type: storage_section
+        type: dummy
         size: header_record.index_storage_size
   signature_index_record:
     seq:
@@ -90,6 +93,73 @@ types:
         type: u4
       - id: count
         type: u4
+    instances:
+       body:
+          io: _parent.storage_section._io
+          pos: record_offset
+          type:
+            switch-on: record_type
+            cases:
+              header_types::int8: record_type_int8(count)
+              header_types::int16: record_type_int16(count)
+              header_types::int32: record_type_int32(count)
+              header_types::string: record_type_string
+              header_types::bin: record_type_bin(count)
+              header_types::string_array: record_type_string_array(count)
+              header_types::i18nstring: record_type_string_array(count)
+  record_type_int8:
+    params:
+      - id: count
+        type: u4
+    seq:
+      - id: values
+        type: u2
+        repeat: expr
+        repeat-expr: count
+  record_type_int16:
+    params:
+      - id: count
+        type: u4
+    seq:
+      - id: values
+        type: u2
+        repeat: expr
+        repeat-expr: count
+  record_type_int32:
+    params:
+      - id: count
+        type: u4
+    seq:
+      - id: values
+        type: u4
+        repeat: expr
+        repeat-expr: count
+  record_type_string:
+    seq:
+      - id: values
+        type: strz
+        encoding: UTF-8
+        repeat: expr
+        repeat-expr: 1
+  record_type_bin:
+    params:
+      - id: count
+        type: u4
+    seq:
+      - id: values
+        size: count
+        repeat: expr
+        repeat-expr: 1
+  record_type_string_array:
+    params:
+      - id: count
+        type: u4
+    seq:
+      - id: values
+        type: strz
+        encoding: UTF-8
+        repeat: expr
+        repeat-expr: count
   # header, which is almost identical to signature
   # except that some of the tags have a different
   # meaning in signature and header.
@@ -102,7 +172,7 @@ types:
         repeat: expr
         repeat-expr: header_record.index_record_count
       - id: storage_section
-        #type: storage_section
+        type: dummy
         size: header_record.index_storage_size
   header_index_record:
     seq:
@@ -116,6 +186,20 @@ types:
         type: u4
       - id: count
         type: u4
+    instances:
+       body:
+          io: _parent.storage_section._io
+          pos: record_offset
+          type:
+            switch-on: record_type
+            cases:
+              header_types::int8: record_type_int8(count)
+              header_types::int16: record_type_int16(count)
+              header_types::int32: record_type_int32(count)
+              header_types::string: record_type_string
+              header_types::bin: record_type_bin(count)
+              header_types::string_array: record_type_string_array(count)
+              header_types::i18nstring: record_type_string_array(count)
   header_record:
     seq:
       - id: magic
