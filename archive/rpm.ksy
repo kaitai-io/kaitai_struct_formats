@@ -12,7 +12,9 @@ meta:
   ks-version: 0.9
   endian: be
 doc: |
-  RPM version 3
+  This parser isr for RPM version 3 which is the current version of RPM. There
+  are historical versions of RPM, as well as a currently abandoned fork (rpm5).
+  These formats are not covered by this specification.
 doc-ref:
   - https://github.com/rpm-software-management/rpm/blob/master/doc/manual/format.md
   - https://github.com/rpm-software-management/rpm/blob/master/doc/manual/tags.md
