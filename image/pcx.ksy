@@ -31,7 +31,7 @@ doc: |
   PCX format was never made a formal standard. "ZSoft Corporation
   Technical Reference Manual" for "Image File (.PCX) Format", last
   updated in 1991, is likely the closest authoritative source.
-doc-ref: http://web.archive.org/web/20100206055706/http://www.qzx.com/pc-gpe/pcx.txt
+doc-ref: https://web.archive.org/web/20100206055706/http://www.qzx.com/pc-gpe/pcx.txt
 seq:
   - id: hdr
     type: header
@@ -41,10 +41,10 @@ instances:
     pos: _io.size - 769
     type: t_palette_256
     if: hdr.version == versions::v3_0 and hdr.bits_per_pixel == 8 and hdr.num_planes == 1
-    doc-ref: http://web.archive.org/web/20100206055706/http://www.qzx.com/pc-gpe/pcx.txt - "VGA 256 Color Palette Information"
+    doc-ref: https://web.archive.org/web/20100206055706/http://www.qzx.com/pc-gpe/pcx.txt - "VGA 256 Color Palette Information"
 types:
   header:
-    doc-ref: http://web.archive.org/web/20100206055706/http://www.qzx.com/pc-gpe/pcx.txt - "ZSoft .PCX FILE HEADER FORMAT"
+    doc-ref: https://web.archive.org/web/20100206055706/http://www.qzx.com/pc-gpe/pcx.txt - "ZSoft .PCX FILE HEADER FORMAT"
     seq:
       - id: magic
         contents: [0x0a]

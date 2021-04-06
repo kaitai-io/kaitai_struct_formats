@@ -600,7 +600,7 @@ enums:
     0x6474e551: gnu_stack
     0x6474e552: gnu_relro
     0x6474e553: gnu_property
-  # http://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-94076.html#chapter6-73445
+  # https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-94076.html#chapter6-73445
   sh_type:
     0: null_type
     1: progbits
