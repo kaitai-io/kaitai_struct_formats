@@ -81,7 +81,7 @@ types:
         doc-ref: 'https://wiki.wireshark.org/Development/LibpcapFileFormat#Packet_Data'
 enums:
   linktype:
-    # http://www.tcpdump.org/linktypes.html
+    # https://www.tcpdump.org/linktypes.html
     0: null_linktype
     1: ethernet
     3: ax25

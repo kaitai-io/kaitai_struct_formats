@@ -1,6 +1,6 @@
 # http://fileformats.archiveteam.org/wiki/TIM_(PlayStation_graphics)
 # http://mrclick.zophar.net/TilEd/download/timgfx.txt
-# http://www.romhacking.net/documents/31/
+# https://www.romhacking.net/documents/31/
 meta:
   id: psx_tim
   application: Sony PlayStation (PSX) typical image format
