@@ -19,7 +19,8 @@ doc: |
 
   https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-firmware-ofw
 
-  The encoding of strings used in the specification is actually a subset of ASCII:
+  The encoding of strings used in the strings block and struct block is
+  actually a subset of ASCII:
 
   https://github.com/devicetree-org/devicetree-specification/blob/master/source/chapter2-devicetree-basics.rst
 
