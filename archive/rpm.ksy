@@ -723,7 +723,7 @@ enums:
       id: file_class
       -orig-id: RPMTAG_FILECLASS
     1142:
-      id: classdict
+      id: class_dict
       -orig-id: RPMTAG_CLASSDICT
     1143:
       id: file_dependsx
