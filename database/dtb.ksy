@@ -82,7 +82,6 @@ types:
     seq:
       - id: strings
         type: strz
-        encoding: ASCII
         repeat: eos
   fdt_node:
     seq:
@@ -105,7 +104,6 @@ types:
     seq:
       - id: name
         type: strz
-        encoding: ASCII
       - id: boundary_padding
         size: (- _io.pos) % 4
   fdt_prop:
