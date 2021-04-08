@@ -39,13 +39,13 @@ seq:
   - id: total_size
     -orig-id: totalsize
     type: u4
-  - id: structure_block_offset
+  - id: ofs_structure_block
     -orig-id: off_dt_struct
     type: u4
-  - id: strings_block_offset
+  - id: ofs_strings_block
     -orig-id: off_dt_strings
     type: u4
-  - id: memory_reservation_block_offset
+  - id: ofs_memory_reservation_block
     -orig-id: off_mem_rsvmap
     type: u4
   - id: version
@@ -67,14 +67,14 @@ seq:
     type: u4
 instances:
   memory_reservation_block:
-    pos: memory_reservation_block_offset
-    size: structure_block_offset - memory_reservation_block_offset
+    pos: ofs_memory_reservation_block
+    size: ofs_structure_block - ofs_memory_reservation_block
   structure_block:
-    pos: structure_block_offset
-    size: strings_block_offset - structure_block_offset
+    pos: ofs_structure_block
+    size: ofs_strings_block - ofs_structure_block
     type: fdt_block
   strings_block:
-    pos: strings_block_offset
+    pos: ofs_strings_block
     size: strings_block_size
     type: strings
 types:
@@ -111,7 +111,7 @@ types:
       - id: length
         -orig-id: len
         type: u4
-      - id: name_offset
+      - id: ofs_name
         -orig-id: nameoff
         type: u4
       - id: property
