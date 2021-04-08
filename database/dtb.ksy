@@ -7,7 +7,10 @@ meta:
     - Das U-Boot
   xref:
     wikidata: Q16960371
+  tags:
+    - linux
   license: CC0-1.0
+  ks-version: 0.9
   encoding: ASCII
   endian: be
 doc: |
@@ -16,18 +19,18 @@ doc: |
   other data is possible as well).
 
   On Linux systems that support this the blobs can be accessed in
-  /sys/firmware/fdt :
+  `/sys/firmware/fdt`:
 
-  - https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-firmware-ofw
+  - <https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-firmware-ofw>
 
   The encoding of strings used in the strings block and struct block is
   actually a subset of ASCII:
 
-  https://github.com/devicetree-org/devicetree-specification/blob/master/source/chapter2-devicetree-basics.rst
+  <https://github.com/devicetree-org/devicetree-specification/blob/v0.3/source/devicetree-basics.rst>
 
   Example files:
 
-  - https://github.com/qemu/qemu/tree/master/pc-bios
+  - <https://github.com/qemu/qemu/tree/master/pc-bios>
 doc-ref:
   - https://github.com/devicetree-org/devicetree-specification/releases/tag/v0.3
   - https://github.com/devicetree-org/devicetree-specification/blob/ba2aa67/source/flattened-format.rst
@@ -49,7 +52,6 @@ seq:
     -orig-id: off_mem_rsvmap
     type: u4
   - id: version
-    -orig-id: version
     type: u4
   - id: last_compatible_version
     -orig-id: last_comp_version
@@ -59,10 +61,10 @@ seq:
   - id: boot_cpuid_phys
     -orig-id: boot_cpuid_phys
     type: u4
-  - id: strings_block_size
+  - id: len_strings_block
     -orig-id: size_dt_strings
     type: u4
-  - id: structure_block_size
+  - id: len_structure_block
     -orig-id: size_dt_struct
     type: u4
 instances:
@@ -71,11 +73,11 @@ instances:
     size: ofs_structure_block - ofs_memory_reservation_block
   structure_block:
     pos: ofs_structure_block
-    size: ofs_strings_block - ofs_structure_block
+    size: len_structure_block
     type: fdt_block
   strings_block:
     pos: ofs_strings_block
-    size: strings_block_size
+    size: len_strings_block
     type: strings
 types:
   strings:
@@ -84,13 +86,14 @@ types:
         type: strz
         repeat: eos
   fdt_node:
+    -webide-representation: '{type} {body}'
     seq:
-      - id: token_type
+      - id: type
         type: u4
         enum: fdt
-      - id: fdt_node_body
+      - id: body
         type:
-          switch-on: token_type
+          switch-on: type
           cases:
             fdt::begin_node: fdt_begin_node
             fdt::prop: fdt_prop
@@ -99,7 +102,7 @@ types:
       - id: fdt_nodes
         type: fdt_node
         repeat: until
-        repeat-until: _.token_type == fdt::end
+        repeat-until: _.type == fdt::end
   fdt_begin_node:
     seq:
       - id: name
@@ -107,17 +110,24 @@ types:
       - id: boundary_padding
         size: (- _io.pos) % 4
   fdt_prop:
+    -webide-representation: '{name}'
     seq:
-      - id: length
+      - id: len_property
         -orig-id: len
         type: u4
       - id: ofs_name
         -orig-id: nameoff
         type: u4
       - id: property
-        size: length
+        size: len_property
       - id: boundary_padding
         size: (- _io.pos) % 4
+    instances:
+      name:
+        io: _root.strings_block._io
+        pos: ofs_name
+        type: strz
+        -webide-parse-mode: eager
 enums:
   fdt:
     0x00000001: begin_node
