@@ -30,7 +30,7 @@ doc: |
   - https://github.com/qemu/qemu/tree/master/pc-bios
 doc-ref:
   - https://github.com/devicetree-org/devicetree-specification/releases/tag/v0.3
-  - https://github.com/devicetree-org/devicetree-specification/blob/ba2aa679679fc4fedf67130f18a6f0ecc4cf0382/source/flattened-format.rst
+  - https://github.com/devicetree-org/devicetree-specification/blob/ba2aa67/source/flattened-format.rst
   - https://elinux.org/images/f/f4/Elc2013_Fernandes.pdf
 seq:
   - id: magic
