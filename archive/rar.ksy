@@ -79,7 +79,7 @@ types:
         doc: CRC16 of whole block or some part of it (depends on block type)
       - id: block_type
         type: u1
-        enum: block_types
+        enum: block_type
       - id: flags
         type: u2
       - id: block_size
@@ -94,7 +94,7 @@ types:
         type:
           switch-on: block_type
           cases:
-            'block_types::file_header': block_file_header
+            'block_type::file_header': block_file_header
       - id: add_body
         size: add_size
         if: has_add
@@ -114,7 +114,7 @@ types:
         doc: Uncompressed file size (lower 32 bits, if 64-bit header flag is present)
       - id: host_os
         type: u1
-        enum: oses
+        enum: os
         doc: Operating system used for archiving
       - id: file_crc32
         type: u4
@@ -127,7 +127,7 @@ types:
         doc: RAR version needed to extract file (Version number is encoded as 10 * Major version + minor version.)
       - id: method
         type: u1
-        enum: methods
+        enum: method
         doc: Compression method
       - id: name_size
         type: u2
@@ -151,7 +151,7 @@ types:
     {}
     # not yet implemented
 enums:
-  block_types:
+  block_type:
     0x72: marker
     0x73: archive_header
     0x74: file_header
@@ -162,14 +162,14 @@ enums:
     0x79: old_style_authenticity_info_79
     0x7a: subblock
     0x7b: terminator
-  oses:
+  os:
     0: ms_dos
     1: os_2
     2: windows
     3: unix
     4: mac_os
     5: beos
-  methods:
+  method:
     0x30: store
     0x31: fastest
     0x32: fast
