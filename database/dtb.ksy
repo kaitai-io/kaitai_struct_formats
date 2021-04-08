@@ -6,8 +6,9 @@ meta:
     - Linux
     - Das U-Boot
   xref:
-    - wikidata: Q16960371
+    wikidata: Q16960371
   license: CC0-1.0
+  encoding: ASCII
   endian: be
 doc: |
   Also referred to as Devicetree Blob (DTB). It is a flat
@@ -15,9 +16,9 @@ doc: |
   other data is possible as well).
 
   On Linux systems that support this the blobs can be accessed in
-  /sys/firmware/fdt
+  /sys/firmware/fdt :
 
-  https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-firmware-ofw
+  - https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-firmware-ofw
 
   The encoding of strings used in the strings block and struct block is
   actually a subset of ASCII:
@@ -33,37 +34,37 @@ doc-ref:
   - https://elinux.org/images/f/f4/Elc2013_Fernandes.pdf
 seq:
   - id: magic
-    contents: [0xd0, 0x0d, 0xfe, 0xed]
     -orig-id: magic
+    contents: [0xd0, 0x0d, 0xfe, 0xed]
   - id: total_size
-    type: u4
     -orig-id: totalsize
+    type: u4
   - id: structure_block_offset
-    type: u4
     -orig-id: off_dt_struct
+    type: u4
   - id: strings_block_offset
-    type: u4
     -orig-id: off_dt_strings
+    type: u4
   - id: memory_reservation_block_offset
-    type: u4
     -orig-id: off_mem_rsvmap
-  - id: version
     type: u4
+  - id: version
     -orig-id: version
+    type: u4
   - id: last_compatible_version
+    -orig-id: last_comp_version
     type: u4
     valid:
       max: version
-    -orig-id: last_comp_version
   - id: boot_cpuid_phys
-    type: u4
     -orig-id: boot_cpuid_phys
+    type: u4
   - id: strings_block_size
-    type: u4
     -orig-id: size_dt_strings
-  - id: structure_block_size
     type: u4
+  - id: structure_block_size
     -orig-id: size_dt_struct
+    type: u4
 instances:
   memory_reservation_block:
     pos: memory_reservation_block_offset
@@ -110,11 +111,11 @@ types:
   fdt_prop:
     seq:
       - id: length
-        type: u4
         -orig-id: len
-      - id: name_offset
         type: u4
+      - id: name_offset
         -orig-id: nameoff
+        type: u4
       - id: property
         size: length
       - id: boundary_padding
