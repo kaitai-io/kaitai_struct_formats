@@ -14,10 +14,10 @@ doc: |
 
     A tool to create images for testing can be found in the Android source code tree:
 
-    https://android.googlesource.com/platform/system/core/+/master/libsparse - img2simg.c
+    <https://android.googlesource.com/platform/system/core/+/7b444f0/libsparse> - `img2simg.c`
 
     Note: this is not the same as the Android sparse data image format.
-doc-ref: https://android.googlesource.com/platform/system/core/+/master/libsparse/sparse_format.h
+doc-ref: https://android.googlesource.com/platform/system/core/+/7b444f0/libsparse/sparse_format.h
 seq:
   - id: img_header
     type: header
@@ -33,20 +33,26 @@ types:
        - id: version
          type: version
        - id: file_header_size
+         -orig-id: file_hdr_sz
          type: u2
          doc: size of file header, should be 28
        - id: chunk_header_size
+         -orig-id: chunk_hdr_sz
          type: u2
          doc: size of chunk header, should be 12
        - id: block_size
+         -orig-id: blk_sz
          type: u4
          doc: block size in bytes, multiple of 4
        - id: total_blocks
+         -orig-id: total_blks
          type: u4
          doc: blocks in the original data
        - id: total_chunks
+         -orig-id: total_chunks
          type: u4
        - id: checksum
+         -orig-id: image_checksum
          type: u4
          doc: CRC32 checksum of the original data
   image_header_entry:
@@ -73,8 +79,11 @@ types:
   version:
     seq:
       - id: major
+        -orig-id: major_version
         type: u2
+        valid: 1
       - id: minor
+        -orig-id: minor_version
         type: u2
 enums:
   chunk_types:
