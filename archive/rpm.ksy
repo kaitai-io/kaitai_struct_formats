@@ -86,6 +86,7 @@ types:
         type: dummy
         size: header_record.index_storage_size
   signature_index_record:
+    -webide-representation: '{tag}'
     seq:
       - id: tag
         type: u4
@@ -93,14 +94,14 @@ types:
       - id: record_type
         type: u4
         enum: header_types
-      - id: record_offset
+      - id: ofs_record
         type: u4
       - id: count
         type: u4
     instances:
       body:
         io: _parent.storage_section._io
-        pos: record_offset
+        pos: ofs_record
         type:
           switch-on: record_type
           cases:
@@ -179,6 +180,7 @@ types:
         type: dummy
         size: header_record.index_storage_size
   header_index_record:
+    -webide-representation: '{tag}'
     seq:
       - id: tag
         type: u4
