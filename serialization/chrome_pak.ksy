@@ -32,9 +32,7 @@ types:
       - id: resources
         type: resource
         repeat: expr
-        repeat-expr: number_of_resources
-      - id: end_of_resource
-        type: end_of_resource
+        repeat-expr: number_of_resources + 1
         doc: |
           The length is calculated by looking at the offset of
           the next item, so an extra entry is stored with id 0
@@ -54,9 +52,7 @@ types:
       - id: resources
         type: resource
         repeat: expr
-        repeat-expr: number_of_resources
-      - id: end_of_resource
-        type: end_of_resource
+        repeat-expr: number_of_resources + 1
         doc: |
           The length is calculated by looking at the offset of
           the next item, so an extra entry is stored with id 0
@@ -75,12 +71,6 @@ types:
     seq:
       - id: id
         type: u2
-      - id: offset
-        type: u4
-  end_of_resource:
-    seq:
-      - id: id
-        contents: [0, 0]
       - id: offset
         type: u4
 enums:
