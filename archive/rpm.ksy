@@ -19,8 +19,8 @@ doc: |
   RPM file format, as well as a currently abandoned fork (rpm5). These formats
   are not covered by this specification.
 doc-ref:
-  - https://github.com/rpm-software-management/rpm/blob/master/doc/manual/format.md
-  - https://github.com/rpm-software-management/rpm/blob/master/doc/manual/tags.md
+  - https://github.com/rpm-software-management/rpm/blob/911448/doc/manual/format.md
+  - https://github.com/rpm-software-management/rpm/blob/911448/doc/manual/tags.md
   - https://refspecs.linuxbase.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic/pkgformat.html
   - http://ftp.rpm.org/max-rpm/
 seq:
