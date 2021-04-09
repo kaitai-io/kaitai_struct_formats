@@ -5,6 +5,7 @@ meta:
   tags:
     - font
   license: CC0-1.0
+  encoding: ASCII
   endian: be
 doc: |
   Bitmap font format for the GRUB 2 bootloader.
@@ -28,11 +29,10 @@ types:
        - id: section_name
          size: 4
          type: str
-         encoding: ASCII
-       - id: section_length
+       - id: len_section
          type: u4
        - id: body
-         size: section_length
+         size: len_section
          type:
            switch-on: section_name
            cases:
@@ -51,22 +51,18 @@ types:
     seq:
       - id: name
         type: strz
-        encoding: ASCII
   font_family_name:
     seq:
       - id: name
         type: strz
-        encoding: ASCII
   font_weight:
     seq:
       - id: name
         type: strz
-        encoding: ASCII
   font_slant:
     seq:
       - id: name
         type: strz
-        encoding: ASCII
   font_point_size:
     seq:
       - id: point_size
@@ -92,7 +88,7 @@ types:
       - id: entries
         type: character
         repeat: expr
-        repeat-expr: _parent.section_length/sizeof<character>
+        repeat-expr: _parent.len_section/sizeof<character>
     types:
       character:
         seq:
@@ -101,12 +97,12 @@ types:
             doc: Unicode code point
           - id: flags
             type: u1
-          - id: offset
+          - id: ofs_character
             type: u4
         instances:
           bitmap:
             io: _root._io
-            pos: offset
+            pos: ofs_character
             type: character_definition
       character_definition:
         seq:
