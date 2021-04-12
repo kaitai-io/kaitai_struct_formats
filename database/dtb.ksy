@@ -71,6 +71,7 @@ instances:
   memory_reservation_block:
     pos: ofs_memory_reservation_block
     size: ofs_structure_block - ofs_memory_reservation_block
+    type: memory_block
   structure_block:
     pos: ofs_structure_block
     size: len_structure_block
@@ -80,6 +81,19 @@ instances:
     size: len_strings_block
     type: strings
 types:
+  memory_block:
+    seq:
+      - id: memory_block_entries
+        type: memory_block_entry
+        repeat: eos
+  memory_block_entry:
+    seq:
+      - id: address
+        type: u8
+        doc: physical address of a reserved memory region
+      - id: size
+        type: u8
+        doc: size of a reserved memory region
   strings:
     seq:
       - id: strings
