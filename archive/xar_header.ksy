@@ -42,7 +42,7 @@ types:
       - id: version
         type: u2
         valid: 1
-      - id: toc_length_compressed
+      - id: len_toc_compressed
         -orig-id: toc_length_compressed
         type: u8
       - id: toc_length_uncompressed
@@ -63,7 +63,7 @@ types:
       - id: version
         type: u2
         valid: 1
-      - id: toc_length_compressed
+      - id: len_toc_compressed
         -orig-id: toc_length_compressed
         type: u8
       - id: toc_length_uncompressed
