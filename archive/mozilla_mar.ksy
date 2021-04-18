@@ -62,7 +62,7 @@ types:
         type:
           switch-on: block_identifier
           cases:
-            block_identifiers::product_information_block: product_information_block
+            block_identifiers::product_information: product_information_block
   mar_index:
     seq:
       - id: len_index
@@ -113,4 +113,4 @@ enums:
     1: rsa_pkcs1_sha1
     2: rsa_pkcs1_sha384
   block_identifiers:
-    1: product_information_block
+    1: product_information
