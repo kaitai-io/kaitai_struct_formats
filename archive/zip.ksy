@@ -199,8 +199,8 @@ types:
       local_header:
         pos: ofs_local_header
         type: pk_section
-        doc-ref: https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT - 4.3.16
   end_of_central_dir:
+    doc-ref: https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT - 4.3.16
     seq:
       - id: disk_of_end_of_central_dir
         type: u2
@@ -356,4 +356,4 @@ enums:
     0x5455: extended_timestamp
     0x7855: infozip_unix
     0x7875: infozip_unix_var_size
-  doc-ref: https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt
+doc-ref: https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt
