@@ -199,7 +199,7 @@ types:
       local_header:
         pos: ofs_local_header
         type: pk_section
-  # https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT - 4.3.16
+        doc-ref: https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT - 4.3.16
   end_of_central_dir:
     seq:
       - id: disk_of_end_of_central_dir
@@ -335,7 +335,6 @@ enums:
     19: ibm_lz77_z
     98: ppmd
   extra_codes:
-    # https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt
     0x0001: zip64
     0x0007: av_info
 #    0x0008: reserved for extended language encoding data (PFS) (see APPENDIX D)
@@ -357,3 +356,4 @@ enums:
     0x5455: extended_timestamp
     0x7855: infozip_unix
     0x7875: infozip_unix_var_size
+  doc-ref: https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt
