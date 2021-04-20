@@ -334,6 +334,8 @@ enums:
     18: ibm_terse
     19: ibm_lz77_z
     98: ppmd
+  # doc-ref: https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt
+  # doc-refs in enums are not currently supported. Note to self: Update when it is supported.
   extra_codes:
     0x0001: zip64
     0x0007: av_info
@@ -356,4 +358,3 @@ enums:
     0x5455: extended_timestamp
     0x7855: infozip_unix
     0x7875: infozip_unix_var_size
-doc-ref: https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt
