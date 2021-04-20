@@ -9,7 +9,7 @@
   doc: |
     [Star Wars: Yoda Stories](https://en.wikipedia.org/wiki/Star_Wars:_Yoda_Stories) is a unique tile based game with procedurally
     generated worlds.
-    This spec describes the file format used for all assets of the windows
+    This spec describes the file format used for all assets of the Windows
     version of the game.
 
     The file format follows the TLV (type-length-value) pattern to build a
