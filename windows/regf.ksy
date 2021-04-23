@@ -3,7 +3,6 @@ meta:
   title: Windows registry database
   application: Windows NT and later
   xref:
-    forensicswiki: Windows_NT_Registry_File_(REGF)
     wikidata: Q463244
   license: CC0-1.0
   endian: le
@@ -15,11 +14,11 @@ doc: |
 
   Typically, registry files are stored in:
 
-  * System-wide: several files in `%SystemRoot%\System32\Config\`
+  * System-wide: several files in `%SystemRoot%\\System32\\Config\\`
   * User-wide:
-    * `%USERPROFILE%\Ntuser.dat`
-    * `%USERPROFILE%\Local Settings\Application Data\Microsoft\Windows\Usrclass.dat` (localized, Windows 2000, Server 2003 and Windows XP)
-    * `%USERPROFILE%\AppData\Local\Microsoft\Windows\Usrclass.dat` (non-localized, Windows Vista and later)
+    * `%USERPROFILE%\\Ntuser.dat`
+    * `%USERPROFILE%\\Local Settings\\Application Data\\Microsoft\\Windows\\Usrclass.dat` (localized, Windows 2000, Server 2003 and Windows XP)
+    * `%USERPROFILE%\\AppData\\Local\\Microsoft\\Windows\\Usrclass.dat` (non-localized, Windows Vista and later)
 
   Note that one typically can't access files directly on a mounted
   filesystem with a running Windows OS.
@@ -29,7 +28,6 @@ seq:
     type: file_header
   - id: hive_bins
     type: hive_bin
-    size: 4096
     repeat: eos
 types:
   file_header:
@@ -41,7 +39,7 @@ types:
       - id: secondary_sequence_number # Matches the primary sequence number if the hive was properly synchronized
         type: u4
       - id: last_modification_date_and_time # Contains a FILETIME in UTC
-        type: filetime
+        type: winfiletime
       - id: major_version
         type: u4
       - id: minor_version
@@ -78,8 +76,6 @@ types:
         1: direct_memory_load
   hive_bin_header:
     seq:
-      - id: signature
-        contents: "hbin"
       - id: offset
         type: u4
         doc: |
@@ -95,36 +91,38 @@ types:
         type: u4
         doc: 0 most of the time, can contain remnant data
       - id: timestamp
-        type: filetime
+        type: winfiletime
         doc: Only the root (first) hive bin seems to contain a valid FILETIME
       - id: unknown4
         type: u4
         doc: Contains number of bytes
   hive_bin_cell:
-    -webide-representation: "{identifier}"
     seq:
       - id: cell_size_raw
         type: s4
-      - id: identifier
-        type: str
-        size: 2
-        encoding: ascii
+      - id: identifier_raw
+        type: u2
       - id: data
         size: cell_size - 2 - 4
         type:
           switch-on: identifier
           cases:
-            "'nk'": named_key
-            "'lh'": sub_key_list_lh_lf
-            "'lf'": sub_key_list_lh_lf
-            "'li'": sub_key_list_li
-            "'ri'": sub_key_list_ri
-            "'vk'": sub_key_list_vk
-            "'sk'": sub_key_list_sk
+            0x6B6E: named_key # nk
+            0x686C: sub_key_list_lh_lf # lh
+            0x666C: sub_key_list_lh_lf # lf
+            0x696C: sub_key_list_li # li
+            0x6972: sub_key_list_ri # ri
+            0x6B76: sub_key_list_vk # vk
+            0x6B73: sub_key_list_sk # sk
+      - id: padding
+        size: (8 - _io.pos) % 8
+    -webide-representation: "{identifier}"
     instances:
       cell_size:
         value: "(cell_size_raw < 0 ? -1 : +1) * cell_size_raw"
         -webide-parse-mode: eager
+      identifier:
+        value: "(cell_size_raw > 0 ? 0 : identifier_raw)"
       is_allocated:
         value: "cell_size_raw < 0"
         -webide-parse-mode: eager
@@ -135,7 +133,7 @@ types:
             type: u2
             enum: nk_flags
           - id: last_key_written_date_and_time
-            type: filetime
+            type: winfiletime
           - id: unknown1 # empty value
             type: u4
           - id: parent_key_offset # The offset value is in bytes and relative from the start of the hive bin data
@@ -145,6 +143,8 @@ types:
           - id: number_of_volatile_sub_keys # The offset value is in bytes and relative from the start of the hive bin data / Refers to a sub keys list or contains -1 (0xffffffff) if empty.
             type: u4
           - id: sub_keys_list_offset # The offset value is in bytes and relative from the start of the hive bin data / Refers to a sub keys list or contains -1 (0xffffffff) if empty.
+            type: u4
+          - id: volatile_sub_keys_list_offset # The offset value is in bytes and relative from the start of the hive bin data / Refers to a sub keys list or contains -1 (0xffffffff) if empty.
             type: u4
           - id: number_of_values
             type: u4
@@ -168,12 +168,16 @@ types:
             type: u2
           - id: class_name_size
             type: u2
-          - id: unknown_string_size
-            type: u4
-          - id: unknown_string
+          - id: key_name
             type: str
-            size: unknown_string_size
-            encoding: ascii
+            encoding: iso-8859-1
+            size: key_name_size
+#          - id: unknown_string_size
+#            type: u4
+#          - id: unknown_string
+#            type: str
+#            size: unknown_string_size
+#            encoding: ascii
         enums:
           nk_flags:
             0x0001: key_is_volatile   # Is volatile key
@@ -248,8 +252,8 @@ types:
           - id: value_name
             size: value_name_size
             type: str
-            encoding: ascii
-            if: "flags == vk_flags::value_comp_name"
+            encoding: iso-8859-1
+            if: 'flags == vk_flags::value_comp_name'
         enums:
           data_type_enum:
             0x00000000: reg_none # Undefined type
@@ -278,13 +282,37 @@ types:
             type: u4
   hive_bin:
     seq:
+      - id: signature
+        type: u4
+      - id: hive_bin_content
+        type:
+          switch-on: signature
+          cases:
+            0x6E696268: hive_bin_filled # hbin
+            _ : hive_bin_empty
+  hive_bin_filled:
+    seq:
       - id: header
         type: hive_bin_header
       - id: cells
+        size: header.size - 0x20
+        type: hive_bin_cells
+  hive_bin_cells:
+    seq:
+      - id: cells
         type: hive_bin_cell
         repeat: eos
-  filetime:
+  hive_bin_empty:
     seq:
-      - id: value
+      - id: content
+        size: 0x1000 - 0x4
+  winfiletime:
+    # timestamp: timestamp * (1e-07) --> seconds
+    # offset: 11644473600
+    seq:
+      - id: ts
         type: u8
+    instances:
+      unixts:
+        value: (ts * 1e-07) - 11644473600
     -webide-representation: "{value}"
