@@ -181,7 +181,7 @@ types:
             type: content
             size: content_size.value
       content:
-        -webide-representation: '{type}; flags: {flags}'
+        -webide-representation: '{type}: {specific}; flags: {flags}'
         seq:
           - id: block_type
             -orig-id: HeaderType
@@ -199,6 +199,15 @@ types:
             -orig-id: PackSize
             type: vlq_base128_le
             if: flags.has_data
+          - id: specific
+            type:
+              switch-on: block_type.value
+              cases:
+                # 0x00: mark # blocks of that type is not used in the original unrar utility
+                0x01: main
+                0x02: file_or_service
+                0x03: file_or_service
+                0x05: end
         instances:
           type:
             value: block_type.value
@@ -240,6 +249,129 @@ types:
                   Preserve a child block if host is modified
                   (this flag is only applicable to file or service header type)
                 value: (value.value & 0x0040) != 0
+      main:
+        -webide-representation: '{this:flags}, volume: {volume}'
+        doc: |
+          Specific content of the first block in the RAR file.
+
+          Technically, this block is not required to be the first. Reader should find
+          that block in the stream that it want to unpack. Practically that is always
+          the first block of the archive.
+        seq:
+          - id: flags
+            type: vlq_base128_le
+          - id: volume
+            doc: |
+              Volume number of the multi-volume archive. The first volume (`0`)
+              may not have this field
+            -orig-id: VolNumber
+            type: vlq_base128_le
+            if: has_volume
+        instances:
+          multi_volume:
+            doc: Archive split into several files
+            value: (flags.value & 0x0001) != 0
+          has_volume:
+            value: (flags.value & 0x0002) != 0
+          solid:
+            value: (flags.value & 0x0004) != 0
+          recovery_info:
+            -orig-id: Protected
+            doc: Archive contains information for restoration
+            value: (flags.value & 0x0008) != 0
+          locked:
+            value: (flags.value & 0x0010) != 0
+      file_or_service:
+        -webide-representation: '{file_name}, {unpacked_size}, {compression.method}'
+        doc: |
+          Specific content of the block that stores information about:
+
+          - files and directories (`file` record, file name is the full name of file)
+          - additional information (`service` record), which is identified by the file
+            name field:
+            - `ACL`: access control lists of files. That blocks is written just after
+              the corresponding `file` block
+            - `CMT`: archive comment
+            - `QO`: quick open information (archive index?)
+            - `RR`: recovery information
+            - `STM`: additional NTFS streams of a file
+        seq:
+          - id: flags
+            type: file_flags
+          - id: unpacked_size
+            doc: Only relevant if `is_unknown_unpacked_size` is `false`
+            type: vlq_base128_le
+          - id: attributes
+            type: vlq_base128_le
+          - id: mtime
+            doc: File modification time
+            type: u4
+            if: flags.has_mtime
+          - id: crc32
+            type: u4
+            if: flags.has_crc32
+          - id: compression
+            type: compression
+          - id: host_os
+            type: vlq_base128_le
+            # enum: os_v5
+          - id: file_name_len
+            type: vlq_base128_le
+          - id: file_name
+            doc: Original unrar will read to the size or end-of-block
+            type: str
+            size: 'file_name_len.value < 2048 ? file_name_len.value : 2048'
+            encoding: utf-8
+            eos-error: false
+        instances:
+          os:
+            value: host_os.value
+            enum: os_v5
+        types:
+          file_flags:
+            -webide-representation: '{this:flags}'
+            seq:
+              - id: value
+                type: vlq_base128_le
+            instances:
+              is_directory:
+                value: (value.value & 0x0001) != 0
+              has_mtime:
+                doc: Time field in Unix format is present
+                value: (value.value & 0x0002) != 0
+              has_crc32:
+                doc: CRC32 field is present
+                value: (value.value & 0x0004) != 0
+              is_unknown_unpacked_size:
+                value: (value.value & 0x0008) != 0
+          compression:
+            -webide-representation: '{method}, version: {version:dec}, solid: {solid}'
+            seq:
+              - id: value
+                type: vlq_base128_le
+            instances:
+              method:
+                value: (value.value >> 7) & 7
+                enum: method_v5
+              version:
+                value: (value.value & 0x3f) + 50
+              solid:
+                doc: Only file blocks has it, service is not
+                value: (value.value & 0x0040) != 0
+      end:
+        -webide-representation: '{this:flags}'
+        doc: |
+          Specific content of the last block in the RAR file.
+
+          Technically, this block is not required to be the last.
+          Practically that is always the last block of the archive.
+        seq:
+          - id: flags
+            type: vlq_base128_le
+        instances:
+          has_next_volume:
+            doc: Not last volume
+            value: (flags.value & 0x0001) != 0
 enums:
   version:
     0:
@@ -274,6 +406,9 @@ enums:
     3: unix
     4: mac_os
     5: beos
+  os_v5:
+    0: windows
+    1: unix
   method_v4:
     0x30: store
     0x31: fastest
@@ -281,3 +416,10 @@ enums:
     0x33: normal
     0x34: good
     0x35: best
+  method_v5:
+    0: store
+    1: fastest
+    2: fast
+    3: normal
+    4: good
+    5: best
