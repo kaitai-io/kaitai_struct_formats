@@ -12,11 +12,13 @@ doc: |
 
   * Standard MIDI file format
   * ASN.1 BER encoding
+  * RAR 5.0 file format
 
   More information on this encoding is available at
   https://en.wikipedia.org/wiki/Variable-length_quantity
 
   This particular implementation supports serialized values to up 8 bytes long.
+-webide-representation: '{value:dec}'
 seq:
   - id: groups
     type: group
@@ -24,6 +26,7 @@ seq:
     repeat-until: not _.has_next
 types:
   group:
+    -webide-representation: '{value}'
     doc: |
       One byte group, clearly divided into 7-bit "value" chunk and 1-bit "continuation" flag.
     seq:

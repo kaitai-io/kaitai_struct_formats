@@ -23,6 +23,7 @@ doc: |
   More information on this encoding is available at https://en.wikipedia.org/wiki/LEB128
 
   This particular implementation supports serialized values to up 8 bytes long.
+-webide-representation: '{value:dec}'
 seq:
   - id: groups
     type: group
@@ -30,6 +31,7 @@ seq:
     repeat-until: not _.has_next
 types:
   group:
+    -webide-representation: '{value}'
     doc: |
       One byte group, clearly divided into 7-bit "value" chunk and 1-bit "continuation" flag.
     seq:
