@@ -19,6 +19,7 @@ meta:
   ks-version: 0.7
   imports:
     - /common/dos_datetime
+    - /common/vlq_base128_le
   endian: le
 doc: |
   RAR is a archive format used by popular proprietary RAR archiver,
@@ -29,7 +30,9 @@ doc: |
   blocks. Each block has fixed header and custom body (that depends on
   block type), so it's possible to skip block even if one doesn't know
   how to process a certain block type.
-doc-ref: http://acritum.com/winrar/rar-format
+doc-ref:
+  - http://acritum.com/winrar/rar-format
+  - https://github.com/pmachapman/unrar
 seq:
   - id: magic
     type: magic_signature
@@ -149,8 +152,94 @@ types:
 #       variable size
 #       if: '_parent.flags & 0x1000 != 0'
   block_v5:
-    {}
-    # not yet implemented
+    -webide-representation: '{header}'
+    seq:
+      - id: header
+        type: header
+      - id: data
+        doc: |
+          Block payload. Content is dependent on the type of block (`header.content.block_type`):
+
+          - `file` records: compressed file data. If file is uncompressed, that is just a file data
+          - `service` records:
+            - `ACL`: access control lists of the file/folder from the previous block
+            - `CMT`: null-terminated string with an archive comment
+            - `QO`: index to some blocks of this file
+            - `RR`: recovery information
+        size: header.content.data_size.value
+        if: header.content.flags.has_data
+    types:
+      header:
+        -webide-representation: '{content}'
+        seq:
+          - id: crc32
+            type: u4
+          - id: content_size
+            -orig-id: BlockSize
+            type: vlq_base128_le
+          - id: content
+            type: content
+            size: content_size.value
+      content:
+        -webide-representation: '{type}; flags: {flags}'
+        seq:
+          - id: block_type
+            -orig-id: HeaderType
+            type: vlq_base128_le
+            # Impossible to use enum because vlq_base128_le not the built-in type
+            # enum: block_v5_type
+          - id: flags
+            type: flags
+          - id: extra_size
+            type: vlq_base128_le
+            doc: Original unrar produces error if this size is >= sizeof of block_v5
+            # valid: _.value < sizeof(block_v5)
+            if: flags.has_extra
+          - id: data_size
+            -orig-id: PackSize
+            type: vlq_base128_le
+            if: flags.has_data
+        instances:
+          type:
+            value: block_type.value
+            enum: block_v5_type
+        types:
+          flags:
+            -webide-representation: '{this:flags}'
+            seq:
+              - id: value
+                type: vlq_base128_le
+            instances:
+              has_extra:
+                doc: Additional extra area is present in the end of block header
+                value: (value.value & 0x0001) != 0
+              has_data:
+                doc: Additional data area is present in the end of block header
+                value: (value.value & 0x0002) != 0
+              skip_if_unknown:
+                doc: Unknown blocks with this flag must be skipped when updating an archive
+                value: (value.value & 0x0004) != 0
+              # This flags relevant only for file_or_service records
+              split_before:
+                doc: |
+                  Data area of this block is continuing from previous volume
+                  (this flag is only applicable to file or service header type)
+                value: (value.value & 0x0008) != 0
+              split_after:
+                doc: |
+                  Data area of this block is continuing in next volume
+                  (this flag is only applicable to file or service header type)
+                value: (value.value & 0x0010) != 0
+              sub_block:
+                doc: |
+                  Block depends on preceding file block
+                  (this flag is only applicable to file or service header type)
+                value: (value.value & 0x0020) != 0
+              inherited:
+                doc: |
+                  Preserve a child block if host is modified
+                  (this flag is only applicable to file or service header type)
+                value: (value.value & 0x0040) != 0
 enums:
   version:
     0:
@@ -170,6 +259,14 @@ enums:
     0x79: old_style_authenticity_info_79
     0x7a: subblock
     0x7b: terminator
+  block_v5_type:
+    0x00: mark
+    0x01: main
+    0x02: file
+    0x03: service
+    0x04: crypt
+    0x05: end
+    0xFF: unknown
   os_v4:
     0: ms_dos
     1: os_2
