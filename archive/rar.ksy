@@ -38,8 +38,8 @@ seq:
     type:
       switch-on: magic.version
       cases:
-        0: block
-        1: block_v5
+        version::v4: block
+        version::v5: block_v5
     repeat: eos
     doc: Sequence of blocks that constitute the RAR file
 types:
@@ -61,12 +61,13 @@ types:
         doc: "Fixed part of file's magic signature that doesn't change with RAR version"
       - id: version
         type: u1
+        enum: version
         doc: |
           Variable part of magic signature: 0 means old (RAR 1.5-4.0)
           format, 1 means new (RAR 5+) format
       - id: magic3
         contents: [0]
-        if: version == 1
+        if: version == version::v5
         doc: New format (RAR 5+) magic contains extra byte
   block:
     doc: |
@@ -151,6 +152,13 @@ types:
     {}
     # not yet implemented
 enums:
+  version:
+    0:
+      id: v4
+      doc: Format of RAR 1.5-4.0
+    1:
+      id: v5
+      doc: Format of RAR 5.0+
   block_type:
     0x72: marker
     0x73: archive_header
