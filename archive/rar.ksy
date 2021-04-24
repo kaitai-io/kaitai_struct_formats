@@ -38,7 +38,7 @@ seq:
     type:
       switch-on: magic.version
       cases:
-        version::v4: block
+        version::v4: block_v4
         version::v5: block_v5
     repeat: eos
     doc: Sequence of blocks that constitute the RAR file
@@ -69,7 +69,7 @@ types:
         contents: [0]
         if: version == version::v5
         doc: New format (RAR 5+) magic contains extra byte
-  block:
+  block_v4:
     doc: |
       Basic block that RAR files consist of. There are several block
       types (see `block_type`), which have different `body` and
@@ -80,7 +80,7 @@ types:
         doc: CRC16 of whole block or some part of it (depends on block type)
       - id: block_type
         type: u1
-        enum: block_type
+        enum: block_v4_type
       - id: flags
         type: u2
       - id: block_size
@@ -95,7 +95,7 @@ types:
         type:
           switch-on: block_type
           cases:
-            'block_type::file_header': block_file_header
+            'block_v4_type::file_header': block_v4_file_header
       - id: add_body
         size: add_size
         if: has_add
@@ -108,14 +108,14 @@ types:
         value: 'has_add ? 11 : 7'
       body_size:
         value: block_size - header_size
-  block_file_header:
+  block_v4_file_header:
     seq:
       - id: low_unp_size
         type: u4
         doc: Uncompressed file size (lower 32 bits, if 64-bit header flag is present)
       - id: host_os
         type: u1
-        enum: os
+        enum: os_v4
         doc: Operating system used for archiving
       - id: file_crc32
         type: u4
@@ -128,7 +128,7 @@ types:
         doc: RAR version needed to extract file (Version number is encoded as 10 * Major version + minor version.)
       - id: method
         type: u1
-        enum: method
+        enum: method_v4
         doc: Compression method
       - id: name_size
         type: u2
@@ -159,7 +159,7 @@ enums:
     1:
       id: v5
       doc: Format of RAR 5.0+
-  block_type:
+  block_v4_type:
     0x72: marker
     0x73: archive_header
     0x74: file_header
@@ -170,14 +170,14 @@ enums:
     0x79: old_style_authenticity_info_79
     0x7a: subblock
     0x7b: terminator
-  os:
+  os_v4:
     0: ms_dos
     1: os_2
     2: windows
     3: unix
     4: mac_os
     5: beos
-  method:
+  method_v4:
     0x30: store
     0x31: fastest
     0x32: fast
