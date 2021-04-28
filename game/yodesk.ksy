@@ -1044,9 +1044,13 @@ types:
       - id: type
         type: u4
         if: index != 0xFF_FF
-      - type: u4
+      - id: item1_class
+        type: u4
+        enum: puzzle_item_class
         if: index != 0xFF_FF
-      - type: u4
+      - id: item2_class
+        type: u4
+        enum: puzzle_item_class
         if: index != 0xFF_FF
       - type: u2
         if: index != 0xFF_FF
@@ -1061,6 +1065,13 @@ types:
       - id: item_2
         type: u2
         if: index != 0xFF_FF
+    enums:
+      puzzle_item_class:
+        0: keycard
+        1: tool
+        2: part
+        4: valuable
+        0xFFFF_FFFF: none
   endf:
     seq: []
   characters:
