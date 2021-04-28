@@ -49,7 +49,7 @@ types:
           switch-on: type
           cases:
              '"VERS"': version
-             '"STUP"': setup_image
+             '"STUP"': startup_image
              '"CHAR"': characters
              '"CAUX"': character_auxiliaries
              '"CHWP"': character_weapons
@@ -69,7 +69,7 @@ types:
       - id: version
         doc: Version of the file. This value is always set to 512.
         type: u4
-  setup_image:
+  startup_image:
     doc: |
       A 288x288 bitmap to be shown while other assets are loaded and a new
       world is generated.
@@ -807,7 +807,7 @@ types:
           doc: |
             This type of zone is shown after the game has loaded all assets.
             It should resemble the image from the catalog entry of type
-            `setup_image` for a smooth transition from loading to game play.
+            `startup_image` for a smooth transition from loading to game play.
         10:
           id: goal
           doc: |
