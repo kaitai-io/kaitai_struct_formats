@@ -3,6 +3,7 @@ meta:
   title: Windows registry database
   application: Windows NT and later
   xref:
+    forensicswiki: Windows_NT_Registry_File_(REGF)
     wikidata: Q463244
   license: CC0-1.0
   endian: le
@@ -34,12 +35,15 @@ types:
     seq:
       - id: signature
         contents: "regf"
-      - id: primary_sequence_number # Matches the secondary sequence number if the hive was properly synchronized
+      - id: primary_sequence_number
         type: u4
-      - id: secondary_sequence_number # Matches the primary sequence number if the hive was properly synchronized
+        doc: Matches the secondary sequence number if the hive was properly synchronized
+      - id: secondary_sequence_number
         type: u4
-      - id: last_modification_date_and_time # Contains a FILETIME in UTC
+        doc: Matches the primary sequence number if the hive was properly synchronized
+      - id: last_modification_date_and_time
         type: winfiletime
+        doc: Contains a FILETIME in UTC
       - id: major_version
         type: u4
       - id: minor_version
@@ -54,20 +58,26 @@ types:
         type: u4
       - id: hive_bins_data_size
         type: u4
-      - id: clustering_factor # Logical sector size of the underlying disk in bytes divided by 512
+      - id: clustering_factor
         type: u4
-      - id: unknown1 # Sometimes contains the last part of the filename in UTF-16 LE most of the time with an end-of-string character, but not always. Unused bytes are 0.
+        doc: Logical sector size of the underlying disk in bytes divided by 512
+      - id: unknown1
         size: 64
-      - id: unknown2 # Can contain remnant data, Padding used for the checksum?
+        doc: Sometimes contains the last part of the filename in UTF-16 LE most of the time with an end-of-string character, but not always. Unused bytes are 0.
+      - id: unknown2
         size: 396
-      - id: checksum # XOR-32 of the previous 508 bytes
+        doc: Can contain remnant data, Padding used for the checksum?
+      - id: checksum
         type: u4
+        doc: XOR-32 of the previous 508 bytes
       - id: reserved
         size: 3576
-      - id: boot_type # This field has no meaning on a disk
+      - id: boot_type
         type: u4
-      - id: boot_recover # This field has no meaning on a disk
+        doc: This field has no meaning on a disk
+      - id: boot_recover
         type: u4
+        doc: This field has no meaning on a disk
     enums:
       file_type:
         0: normal
@@ -102,27 +112,38 @@ types:
         type: s4
       - id: identifier_raw
         type: u2
+        enum: data_flags
       - id: data
         size: cell_size - 2 - 4
         type:
           switch-on: identifier
           cases:
-            0x6B6E: named_key # nk
-            0x686C: sub_key_list_lh_lf # lh
-            0x666C: sub_key_list_lh_lf # lf
-            0x696C: sub_key_list_li # li
-            0x6972: sub_key_list_ri # ri
-            0x6B76: sub_key_list_vk # vk
-            0x6B73: sub_key_list_sk # sk
+            data_flags::nk: named_key
+            data_flags::lh: sub_key_list_lh_lf
+            data_flags::lf: sub_key_list_lh_lf
+            data_flags::li: sub_key_list_li
+            data_flags::ri: sub_key_list_ri
+            data_flags::vk: sub_key_list_vk
+            data_flags::sk: sub_key_list_sk
       - id: padding
         size: (8 - _io.pos) % 8
+    enums:
+      data_flags:
+        0x6B6E: nk
+        0x686C: lh
+        0x666C: lf
+        0x696C: li
+        0x6972: ri
+        0x6B76: vk
+        0x6B73: sk
+        0x0000: nll
     -webide-representation: "{identifier}"
     instances:
       cell_size:
         value: "(cell_size_raw < 0 ? -1 : +1) * cell_size_raw"
         -webide-parse-mode: eager
       identifier:
-        value: "(cell_size_raw > 0 ? 0 : identifier_raw)"
+        value: "(cell_size_raw > 0 ? data_flags::nll : identifier_raw)"
       is_allocated:
         value: "cell_size_raw < 0"
         -webide-parse-mode: eager
@@ -134,20 +155,25 @@ types:
             enum: nk_flags
           - id: last_key_written_date_and_time
             type: winfiletime
-          - id: unknown1 # empty value
+          - id: unknown1
             type: u4
-          - id: parent_key_offset # The offset value is in bytes and relative from the start of the hive bin data
+            doc: empty value
+          - id: parent_key_offset
             type: u4
+            doc: The offset value is in bytes and relative from the start of the hive bin data
           - id: number_of_sub_keys
             type: u4
-          - id: number_of_volatile_sub_keys # The offset value is in bytes and relative from the start of the hive bin data / Refers to a sub keys list or contains -1 (0xffffffff) if empty.
+          - id: number_of_volatile_sub_keys
             type: u4
-          - id: sub_keys_list_offset # The offset value is in bytes and relative from the start of the hive bin data / Refers to a sub keys list or contains -1 (0xffffffff) if empty.
+            doc: The offset value is in bytes and relative from the start of the hive bin data / Refers to a sub keys list or contains -1 (0xffffffff) if empty.
+          - id: sub_keys_list_offset
             type: u4
-          - id: volatile_sub_keys_list_offset # The offset value is in bytes and relative from the start of the hive bin data / Refers to a sub keys list or contains -1 (0xffffffff) if empty.
+            doc: The offset value is in bytes and relative from the start of the hive bin data / Refers to a sub keys list or contains -1 (0xffffffff) if empty.
+          - id: volatile_sub_keys_list_offset
             type: u4
           - id: number_of_values
             type: u4
+            doc: The offset value is in bytes and relative from the start of the hive bin data / Refers to a sub keys list or contains -1 (0xffffffff) if empty.
           - id: values_list_offset
             type: u4
           - id: security_key_offset
@@ -162,8 +188,9 @@ types:
             type: u4
           - id: largest_value_data_size
             type: u4
-          - id: unknown2 # Some run-time caching index or hash?
+          - id: unknown2
             type: u4
+            doc: Some run-time caching index or hash?
           - id: key_name_size
             type: u2
           - id: class_name_size
@@ -172,12 +199,6 @@ types:
             type: str
             encoding: iso-8859-1
             size: key_name_size
-#          - id: unknown_string_size
-#            type: u4
-#          - id: unknown_string
-#            type: str
-#            size: unknown_string_size
-#            encoding: ascii
         enums:
           nk_flags:
             0x0001: key_is_volatile   # Is volatile key
@@ -203,10 +224,12 @@ types:
         types:
           item:
             seq:
-              - id: named_key_offset # The offset value is in bytes and relative from the start of the hive bin data
+              - id: named_key_offset
                 type: u4
-              - id: hash_value # A different hash function is used for different sub key list types
+                doc: The offset value is in bytes and relative from the start of the hive bin data
+              - id: hash_value
                 type: u4
+                doc: A different hash function is used for different sub key list types
       sub_key_list_li:
         seq:
           - id: count
@@ -218,8 +241,9 @@ types:
         types:
           item:
             seq:
-              - id: named_key_offset # The offset value is in bytes and relative from the start of the hive bin data
+              - id: named_key_offset
                 type: u4
+                doc: The offset value is in bytes and relative from the start of the hive bin data
       sub_key_list_ri:
         seq:
           - id: count
@@ -231,29 +255,33 @@ types:
         types:
           item:
             seq:
-              - id: sub_key_list_offset # The offset value is in bytes and relative from the start of the hive bin data
+              - id: sub_key_list_offset
                 type: u4
+                doc: The offset value is in bytes and relative from the start of the hive bin data
       sub_key_list_vk:
         seq:
-          - id: value_name_size # If the value name size is 0 the value name is "(default)"
+          - id: value_name_size
             type: u2
+            doc: If the value name size is 0 the value name is "(default)"
           - id: data_size
             type: u4
-          - id: data_offset # The offset value is in bytes and relative from the start of the hive bin data.
+          - id: data_offset
             type: u4
+            doc: The offset value is in bytes and relative from the start of the hive bin data.
           - id: data_type
             type: u4
             enum: data_type_enum
           - id: flags
             type: u2
             enum: vk_flags
-          - id: padding # unknown
+          - id: padding
             type: u2
+            doc: unknown
           - id: value_name
             size: value_name_size
             type: str
             encoding: iso-8859-1
-            if: 'flags == vk_flags::value_comp_name'
+            if: "flags == vk_flags::value_comp_name"
         enums:
           data_type_enum:
             0x00000000: reg_none # Undefined type
@@ -307,8 +335,9 @@ types:
       - id: content
         size: 0x1000 - 0x4
   winfiletime:
-    # timestamp: timestamp * (1e-07) --> seconds
-    # offset: 11644473600
+    doc: |
+      timestamp: timestamp * (1e-07) --> seconds
+      offset: 11644473600
     seq:
       - id: ts
         type: u8
