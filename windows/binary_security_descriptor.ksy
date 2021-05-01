@@ -6,7 +6,7 @@ meta:
   ks-version: 0.9
 doc: |
   Creator: Florian Bausch, ERNW Research GmbH, https://ernw-research.de
-  License: MIT
+doc-ref: |
   https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/2918391b-75b9-4eeb-83f0-7fdc04a5c6c9
   https://docs.microsoft.com/en-us/windows/win32/secauthz/sid-strings
   https://docs.microsoft.com/en-us/windows/win32/secauthz/well-known-sids
@@ -31,54 +31,8 @@ types:
     - id: reserved
       size: 1
       contents: [0]
-    - id: flag_dt
-      type: b1
-      doc: DACL Trustet
-    - id: flag_ss
-      type: b1
-      doc: Server Security
-    - id: flag_sd
-      type: b1
-      doc: SACL defaulted
-    - id: flag_sp
-      type: b1
-      doc: SACL present
-    - id: flag_dd
-      type: b1
-      doc: DACL defaulted
-    - id: flag_dp
-      type: b1
-      doc: DACL present
-    - id: flag_gd
-      type: b1
-      doc: Group defaulted
-    - id: flag_od
-      type: b1
-      doc: Owner defaulted
-    - id: flag_sr
-      type: b1
-      doc: Self-Relative
-    - id: flag_rm
-      type: b1
-      doc: Control Valid
-    - id: flag_ps
-      type: b1
-      doc: SACL-protected
-    - id: flag_pd
-      type: b1
-      doc: DACL-protected
-    - id: flag_si
-      type: b1
-      doc: SACL auto-inherited
-    - id: flag_di
-      type: b1
-      doc: DACL auto-inherited
-    - id: flag_ir
-      type: b1
-      doc: SACL Inheritance Required
-    - id: flag_dr
-      type: b1
-      doc: DACL Inheritance Required
+    - id: flags
+      type: binarysd_flags
     - id: owner_offset
       type: u4
     - id: group_offset
@@ -104,6 +58,56 @@ types:
         pos: sacl_offset
         type: acl
         if: 'sacl_offset > 0'
+  binarysd_flags:
+    seq:
+      - id: dacl_trusted
+        type: b1
+        doc: DACL Trusted
+      - id: server_security
+        type: b1
+        doc: Server Security
+      - id: sacl_defaulted
+        type: b1
+        doc: SACL defaulted
+      - id: sacl_present
+        type: b1
+        doc: SACL present
+      - id: dacl_defaulted
+        type: b1
+        doc: DACL defaulted
+      - id: dacl_present
+        type: b1
+        doc: DACL present
+      - id: group_defaulted
+        type: b1
+        doc: Group defaulted
+      - id: owner_defaulted
+        type: b1
+        doc: Owner defaulted
+      - id: self_relative
+        type: b1
+        doc: Self-Relative
+      - id: control_valid
+        type: b1
+        doc: Control Valid
+      - id: sacl_protected
+        type: b1
+        doc: SACL-protected
+      - id: dacl_protected
+        type: b1
+        doc: DACL-protected
+      - id: sacl_auto_inherited
+        type: b1
+        doc: SACL auto-inherited
+      - id: dacl_auto_inherited
+        type: b1
+        doc: DACL auto-inherited
+      - id: sacl_inheritance_required
+        type: b1
+        doc: SACL Inheritance Required
+      - id: dacl_inheritance_required
+        type: b1
+        doc: DACL Inheritance Required
   acl:
     seq:
       - id: revision
@@ -127,80 +131,102 @@ types:
         type: ace
         repeat: eos
   ace:
+    doc-ref: https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/628ebb1d-c509-4ea0-a10f-77ef97ca4586
     seq:
       - id: access_allow_type
         type: u1
-      - id: flag_fa
-        type: b1
-      - id: flag_sa
-        type: b1
-      - id: flag_unknown
-        type: b1
-      - id: flag_id
-        type: b1
-      - id: flag_io
-        type: b1
-      - id: flag_np
-        type: b1
-      - id: flag_ci
-        type: b1
-      - id: flag_oi
-        type: b1
+      - id: flags
+        type: ace_flags
       - id: ace_size
         type: u2
-      - id: acces_mask_specific_rights
-        type: u2
-        doc: |
-          Documentation says that this is an access mask, but there is no documentation about the different flags
-          see also https://docs.microsoft.com/en-us/windows/win32/secauthz/access-mask
-      - id: access_mask_standard_rights_unknown1
-        type: b1
-      - id: access_mask_standard_rights_unknown2
-        type: b1
-      - id: access_mask_standard_rights_unknown3
-        type: b1
-      - id: access_mask_standard_rights_sy
-        type: b1
-        doc: SYNCHRONIZE
-      - id: access_mask_standard_rights_wo
-        type: b1
-        doc: WRITE_OWNER
-      - id: access_mask_standard_rights_wd
-        type: b1
-        doc: WRIDE_DACL
-      - id: access_mask_standard_rights_rc
-        type: b1
-        doc: READ_CONTROL
-      - id: access_mask_standard_rights_sd
-        type: b1
-        doc: DELETE
-      - id: access_mask_generic_rights_gr
-        type: b1
-        doc: GENERIC_READ
-      - id: access_mask_generic_rights_gw
-        type: b1
-        doc: GENERIC_WRITE
-      - id: access_mask_generic_rights_gx
-        type: b1
-        doc: GENERIC_EXECUTE
-      - id: access_mask_generic_rights_ga
-        type: b1
-        doc: GENERIC_ALL
-      - id: access_mask_generic_rights_reserved1
-        type: b1
-        doc: reserved
-      - id: access_mask_generic_rights_reserved2
-        type: b1
-        doc: reserved
-      - id: access_mask_generic_rights_ma
-        type: b1
-        doc: MAXIMUM_ALLOWED
-      - id: access_mask_generic_rights_as
-        type: b1
-        doc: ACCESS_SYSTEM_SECURITY
+      - id: access_mask
+        type: access_mask
       - id: sid
         type: sid
         size: ace_size - 8
+  ace_flags:
+    seq:
+        - id: failed_access
+          type: b1
+        - id: successful_access
+          type: b1
+        - id: unknown
+          type: b1
+        - id: inherited
+          type: b1
+        - id: inherit_only
+          type: b1
+        - id: no_propagate_inherit
+          type: b1
+        - id: container_inherit
+          type: b1
+        - id: object_inherit
+          type: b1
+  access_mask:
+    doc-ref: https://docs.microsoft.com/en-us/windows/win32/secauthz/access-mask
+    seq:
+      - id: specific_rights
+        type: access_mask_specific_rights
+      - id: standard_rights
+        type: access_mask_standard_rights
+      - id: generic_rights
+        type: access_mask_generic_rights
+  access_mask_specific_rights:
+    seq:
+      - id: flags
+        size: 2
+        doc: |
+          Documentation says that this is an access mask, but there is no documentation about the different flags
+        doc-ref: https://docs.microsoft.com/en-us/windows/win32/secauthz/access-mask
+  access_mask_standard_rights:
+    seq:
+      - id: unknown1
+        type: b1
+      - id: unknown2
+        type: b1
+      - id: unknown3
+        type: b1
+      - id: synchronize
+        type: b1
+        doc: SYNCHRONIZE
+      - id: write_owner
+        type: b1
+        doc: WRITE_OWNER
+      - id: write_dacl
+        type: b1
+        doc: WRITE_DACL
+      - id: read_control
+        type: b1
+        doc: READ_CONTROL
+      - id: standard_delete
+        type: b1
+        doc: DELETE
+  access_mask_generic_rights:
+    seq:
+      - id: generic_read
+        type: b1
+        doc: GENERIC_READ
+      - id: generic_write
+        type: b1
+        doc: GENERIC_WRITE
+      - id: generic_execute
+        type: b1
+        doc: GENERIC_EXECUTE
+      - id: generic_all
+        type: b1
+        doc: GENERIC_ALL
+      - id: reserved1
+        type: b1
+        doc: reserved
+      - id: reserved2
+        type: b1
+        doc: reserved
+      - id: maximum_allowed
+        type: b1
+        doc: MAXIMUM_ALLOWED
+      - id: access_system_security
+        type: b1
+        doc: ACCESS_SYSTEM_SECURITY
   sid:
     seq:
       - id: revision
