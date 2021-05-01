@@ -57,3 +57,9 @@ seq:
     process: xor(0xaa)
     size-eos: true
     doc: The quarantined file, xored with 0xAA.
+instances:
+  mal_file_offset:
+    pos: malicious_offset
+    process: xor(0xaa)
+    size-eos: true
+    doc: The malware file retrieved using the malicious_offset field.
