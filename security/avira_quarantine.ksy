@@ -1,21 +1,22 @@
 meta:
-  id: qua
+  id: avira_quarantine
   file-extension: qua
   endian: le
-  title: Avira Antivirus quarantine file parser
+  title: Avira Antivirus quarantine file
   license: MIT
   ks-version: 0.9
 doc: |
   Creator: Florian Bausch, ERNW Research GmbH, https://ernw-research.de
-  License: MIT
-  https://github.com/ernw/quarantine-formats/blob/master/docs/Avira_Antivirus.md
-  Avira Antivirus quarantine files are usually stored under /ProgramData/Avira/Antivirus/INFECTED.
-  The file extension usually is .qua.
+  Avira quarantine files are created by the Avira Antivirus software.
+  They store suspected malware and its metadata, usually under /ProgramData/Avira/Antivirus/INFECTED. The file extension usually is .qua.
+  The parser was created by analyzing different quarantine files.
+  Avira qurantine files consist of an unencrypted metadata part and the encrypted suspected malware.
+doc-ref: https://github.com/ernw/quarantine-formats/blob/master/docs/Avira_Antivirus.md
 seq:
   - id: magic
     size: 16
     contents: ["AntiVir Qua", 0x00, 0x00, 0x00, 0x00, 0x00]
-  - id: malicious_offset
+  - id: ofs_mal_file
     type: u4
     doc: Points to the beginning of the xored malware.
   - id: len_filename
@@ -59,7 +60,9 @@ seq:
     doc: The quarantined file, xored with 0xAA.
 instances:
   mal_file_offset:
-    pos: malicious_offset
+    pos: ofs_mal_file
     process: xor(0xaa)
     size-eos: true
-    doc: The malware file retrieved using the malicious_offset field.
+    doc: |
+      The malware file retrieved using the malicious_offset field.
+      This field should have the same content as mal_file.
