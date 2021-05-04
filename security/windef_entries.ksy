@@ -1,12 +1,16 @@
 meta:
   id: windef_entries
   endian: le
-  title: Windows Defender quarantine entries file parser
-  license: CC-BY-SA-4.0
+  title: Windows Defender quarantine entries file
+  license: MIT
   ks-version: 0.9
 doc: |
   Creator: Florian Bausch, ERNW Research GmbH, https://ernw-research.de
-  License: CC-BY-SA-4.0 https://creativecommons.org/licenses/by-sa/4.0/
+  Entries files store metadata of quarantine files of Windows Defender.
+  The parser was created analyzing different files from the Entries subdirectory in the Windows Defender quarantine directory.
+  The file consists of three encrypted parts. The first part contains the size of the other two parts.
+  The other parts contain metadata like timestamps or paths of the original malware file.
+doc-ref: https://github.com/ernw/quarantine-formats/blob/master/docs/Windows_Defender.md
 seq:
   - id: header
     type: rc4encrypted_header
@@ -167,7 +171,7 @@ types:
     seq:
       - id: path
         type: null_terminated_utf16le
-      - id: number_of_elements
+      - id: num_element
         type: u2
       - id: typestr
         type: str
@@ -176,38 +180,38 @@ types:
       - id: padding
         size: (4 - _io.pos) % 4
       - id: element
-        type: listelement
+        type: list_element
         repeat: expr
-        repeat-expr: number_of_elements
+        repeat-expr: num_element
   null_terminated_utf16le:
     seq:
       - id: character
         type: u2
         repeat: until
         repeat-until: character[_index] == 0x0000
-  listelement:
+  list_element:
     seq:
-      - id: length
+      - id: len_content
         type: u2
-      - id: elementsubtype
+      - id: element_subtype
         type: u1
-      - id: elementtype
+      - id: element_type
         type: u1
-        enum: elementtypes
+        enum: element_types
       - id: content
-        size: length
+        size: len_content
         type:
-          switch-on: elementtype
+          switch-on: element_type
           cases:
-            elementtypes::guid: guid
-            elementtypes::winfiletime: winfiletime
-            elementtypes::uint4: u4
-            elementtypes::utf16: str_utf16le
-            elementtypes::uint8: u8
+            element_types::guid: guid
+            element_types::winfiletime: winfiletime
+            element_types::uint4: u4
+            element_types::utf16: str_utf16le
+            element_types::uint8: u8
       - id: padding
         size: (4 - _io.pos) % 4
     enums:
-      elementtypes:
+      element_types:
         0x20: utf16
         0x30: uint4
         0x40: guid
@@ -232,11 +236,12 @@ types:
       - id: id5
         size: 6
   winfiletime:
-    # timestamp: timestamp * (1e-07) --> seconds
-    # offset: 11644473600
     seq:
       - id: ts
         type: u8
     instances:
       unixts:
         value: (ts * 1e-07) - 11644473600
+        doc: |
+          timestamp: timestamp * (1e-07) --> seconds
+          offset: 11644473600

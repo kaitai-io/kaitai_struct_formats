@@ -1,12 +1,17 @@
 meta:
   id: windef_resources
   endian: le
-  title: Windows Defender quarantine resources file parser
-  license: CC-BY-SA-4.0
+  title: Windows Defender quarantine resources file
+  license: MIT
   ks-version: 0.9
 doc: |
   Creator: Florian Bausch, ERNW Research GmbH, https://ernw-research.de
-  License: CC-BY-SA-4.0 https://creativecommons.org/licenses/by-sa/4.0/
+  Resources files store metadata of quarantine files of Windows Defender.
+  The parser was created analyzing different files from the Resources subdirectory in the Windows Defender quarantine directory.
+  The file consists of three encrypted parts. The first part contains the size of the other two parts.
+  The second parts contains a SHA1 that is also the name of the Resources file and can be used to identify the matching ResourceData file.
+  The third pard contains a GUID that can be used to identify the matching Entries file.
+doc-ref: https://github.com/ernw/quarantine-formats/blob/master/docs/Windows_Defender.md
 seq:
   - id: header
     type: rc4encrypted_header
@@ -136,4 +141,3 @@ types:
         size: 2
       - id: id5
         size: 6
-
