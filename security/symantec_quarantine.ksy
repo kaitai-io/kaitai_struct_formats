@@ -1,69 +1,59 @@
 meta:
-  id: vbn
+  id: symantec_quarantine
   file-extension: vbn
   endian: le
-  title: Symantec Endpoint Protection quarantine file parser
-  license: CC-BY-SA-4.0
+  title: Symantec Endpoint Protection quarantine file
+  license: MIT
   ks-version: 0.9
 doc: |
   Creator: Florian Bausch, ERNW Research GmbH, https://ernw-research.de
-  License: CC-BY-SA-4.0 https://creativecommons.org/licenses/by-sa/4.0/
+  The Symantec quarantine files are created by Symantec Endpoint Protection and store suspected malware and its metadata.
+  The parser was created by analyzing different quarantine files.
+  The quarantine files consist of an unencrypted metadata part and an encrypted data part. The data part also holds the suspected malware.
+doc-ref: https://github.com/ernw/quarantine-formats/blob/master/docs/Symantec_Endpoint_Protection.md
 seq:
-  - id: encrypted_offset
+  - id: ofs_encrypted
     type: u4
   - id: filename
+    type: strz
+    encoding: utf-8
+    size: 0x180
+  - id: meta
     type: str
     encoding: utf-8
-    terminator: 0x0
-  - id: padding1
-    size: 0x180 - _io.pos
-  - id: padding2
-    type: u4
-  - id: meta1
-    type: str
-    encoding: utf-8
-    terminator: 0x0
-  - id: meta2
-    type: str
-    encoding: utf-8
-    terminator: 0x0
-  - id: padding3
-    size: 0x980 - _io.pos
-  - id: padding4
-    type: u4
+    size: 0x800
+    doc: |
+      The string can contain null bytes at arbitrary locations, therefore no strz.
+      Therefore, the null bytes have to be stripped manually.
   - id: unknown1
     type: u4
   - id: unixts1
     type: u4
-  - id: timestamp1
+  - id: mtime
     type: winfiletime
-  - id: timestamp2
+  - id: atime
     type: winfiletime
-  - id: timestamp3
+  - id: ctime
     type: winfiletime
   - id: unknown2
-    type: u4
-  - id: padding5
-    size: 0xb8c - _io.pos
-  - id: threat_location
-    type: str
+    type: strz
     encoding: utf-8
-    terminator: 0x0
-  - id: padding6
-    size: 0xbbc - _io.pos
+    size: 0x208
+  - id: location
+    type: strz
+    encoding: utf-8
+    size: 0x30
   - id: unknown3
     type: u4
   - id: tmp_file_name
-    type: str
+    type: strz
     encoding: utf-8
-    terminator: 0x0
-  - id: padding7
-    size: 0xd70 - _io.pos
+    size: 0x1B0
   - id: unixts2
     type: u4
-  - id: padding8
-    size: encrypted_offset - _io.pos
-  - id: enc_data
+instances:
+  encrypted:
+    pos: ofs_encrypted
     type: encrypted_data
     size-eos: true
     process: xor(0x5a)
@@ -73,22 +63,22 @@ types:
       - id: padding
         size: 8
         contents: [0, 0, 0, 0, 0, 0, 0, 0]
-      - id: meta_offset
+      - id: ofs_meta_entries
         type: u8
-      - id: meta_length
+      - id: len_meta_entries
         type: u8
-      - id: content_offset
+      - id: ofs_content_entries
         type: u8
-      - id: content_length
+      - id: len_content_entries
         type: u8
     instances:
       meta_entries:
-        pos: meta_offset
-        size: meta_length
+        pos: ofs_meta_entries
+        size: len_meta_entries
         type: list_of_entries
       content_entries:
-        pos: content_offset
-        size: content_length
+        pos: ofs_content_entries
+        size: len_content_entries
         type: list_of_entries
   list_of_entries:
     seq:
@@ -99,41 +89,52 @@ types:
     seq:
       - id: type_of_entry
         type: u1
+        enum: content_type
       - id: content
         type:
           switch-on: type_of_entry
           cases:
-            0x09: raw_content
-            0x08: utf16le
-            0x04: u8
-            0x03: u4
-            0x06: u4
-            0x01: u1
-            0x0a: u1
+            content_type::raw_stream: raw_content
+            content_type::utf16_string: utf16le
+            content_type::int_8byte: u8
+            content_type::int_4byte1: u4
+            content_type::int_4byte2: u4
+            content_type::int_1byte1: u1
+            content_type::int_1byte2: u1
+    enums:
+      content_type:
+        0x09: raw_stream
+        0x08: utf16_string
+        0x04: int_8byte
+        0x03: int_4byte1
+        0x06: int_4byte2
+        0x01: int_1byte1
+        0x0a: int_1byte2
   raw_content:
     seq:
-      - id: length
+      - id: len_raw_content
         type: u4
       - id: raw_content
-        size: length
+        size: len_raw_content
   utf16le:
     seq:
-      - id: length
+      - id: len_string
         type: u4
-      - id: string_content
+      - id: string
         type: str
         encoding: utf-16le
-        size: 'length > 2 ? length - 2 : length'
+        size: 'len_string > 2 ? len_string - 2 : len_string'
       - id: padding
         size: 2
         contents: [0x00, 0x00]
-        if: 'length >= 2'
+        if: 'len_string >= 2'
   winfiletime:
-    # timestamp: timestamp * (1e-07) --> seconds
-    # offset: 11644473600
     seq:
       - id: ts
         type: u8
     instances:
       unixts:
         value: (ts * 1e-07) - 11644473600
+        doc: |
+          timestamp: timestamp * (1e-07) --> seconds
+          offset: 11644473600
