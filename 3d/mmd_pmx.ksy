@@ -109,13 +109,13 @@ types:
   vertex:
     seq:
       - id: position
-        type: f4_3
+        type: vec3
       - id: normal
-        type: f4_3
+        type: vec3
       - id: uv
-        type: f4_2
+        type: vec2
       - id: additional_uvs
-        type: f4_4
+        type: vec4
         repeat: expr
         repeat-expr: _root.header.additional_uv_count
       - id: type
@@ -130,13 +130,13 @@ types:
         repeat: expr
         repeat-expr: 'type == 1 ? 1 : type == 2 ? 4 : type == 3 ? 1 : -1'
       - id: skin_c
-        type: f4_3
+        type: vec3
         if: type == 3
       - id: skin_r0
-        type: f4_3
+        type: vec3
         if: type == 3
       - id: skin_r1
-        type: f4_3
+        type: vec3
         if: type == 3
       - id: edge_ratio
         type: f4
@@ -160,17 +160,17 @@ types:
       - id: english_name
         type: len_string
       - id: diffuse
-        type: f4_4
+        type: vec4
       - id: specular
-        type: f4_3
+        type: vec3
       - id: shininess
         type: f4
       - id: ambient
-        type: f4_3
+        type: vec3
       - id: flags
         type: u1
       - id: edge_color
-        type: f4_4
+        type: vec4
       - id: edge_size
         type: f4
       - id: texture_index
@@ -204,7 +204,7 @@ types:
       - id: english_name
         type: len_string
       - id: position
-        type: f4_3
+        type: vec3
       - id: parent_index
         type: sized_index(_root.header.bone_index_size)
       - id: transformation_class
@@ -215,19 +215,19 @@ types:
         type: sized_index(_root.header.bone_index_size)
         if: flags & 0x1 != 0
       - id: offset_position
-        type: f4_3
+        type: vec3
         if: flags & 0x1 == 0
       - id: grant
         type: bone_grant
         if: flags & 0x100 != 0 or flags & 0x200 != 0
       - id: fix_axis
-        type: f4_3
+        type: vec3
         if: flags & 0x400 != 0
       - id: local_x_vector
-        type: f4_3
+        type: vec3
         if: flags & 0x800 != 0
       - id: local_z_vector
-        type: f4_3
+        type: vec3
         if: flags & 0x800 != 0
       - id: key
         type: u4
@@ -274,10 +274,10 @@ types:
       - id: angle_limitation
         type: u1
       - id: lower_limitation_angle
-        type: f4_3
+        type: vec3
         if: angle_limitation == 1
       - id: upper_limitation_angle
-        type: f4_3
+        type: vec3
         if: angle_limitation == 1
 
   morph:
@@ -320,23 +320,23 @@ types:
       - id: index
         type: sized_index(_root.header.vertex_index_size)
       - id: position
-        type: f4_3
+        type: vec3
 
   bone_morph_element:
     seq:
       - id: index
         type: sized_index(_root.header.bone_index_size)
       - id: position
-        type: f4_3
+        type: vec3
       - id: rotation
-        type: f4_4
+        type: vec4
 
   uv_morph_element:
     seq:
       - id: index
         type: sized_index(_root.header.vertex_index_size)
       - id: uv
-        type: f4_4
+        type: vec4
 
   material_morph_element:
     seq:
@@ -345,23 +345,23 @@ types:
       - id: type
         type: u1
       - id: diffuse
-        type: f4_4
+        type: vec4
       - id: specular
-        type: f4_3
+        type: vec3
       - id: shininess
         type: f4
       - id: ambient
-        type: f4_3
+        type: vec3
       - id: edge_color
-        type: f4_4
+        type: vec4
       - id: edge_size
         type: f4
       - id: texture_color
-        type: f4_4
+        type: vec4
       - id: sphere_texture_color
-        type: f4_4
+        type: vec4
       - id: toon_color
-        type: f4_4
+        type: vec4
 
   frame:
     seq:
@@ -411,9 +411,9 @@ types:
       - id: depth
         type: f4
       - id: position
-        type: f4_3
+        type: vec3
       - id: rotation
-        type: f4_3
+        type: vec3
       - id: weight
         type: f4
       - id: position_damping
@@ -441,21 +441,21 @@ types:
       - id: rigid_body_index2
         type: sized_index(_root.header.rigid_body_index_size)
       - id: position
-        type: f4_3
+        type: vec3
       - id: rotation
-        type: f4_3
+        type: vec3
       - id: translation_limitation1
-        type: f4_3
+        type: vec3
       - id: translation_limitation2
-        type: f4_3
+        type: vec3
       - id: rotation_limitation1
-        type: f4_3
+        type: vec3
       - id: rotation_limitation2
-        type: f4_3
+        type: vec3
       - id: spring_position
-        type: f4_3
+        type: vec3
       - id: spring_rotation
-        type: f4_3
+        type: vec3
 
   sized_index:
     doc: Variable-length type storing a vertex index
@@ -471,14 +471,14 @@ types:
             2: u2
             4: u4
 
-  f4_2:
+  vec2:
     seq:
       - id: x
         type: f4
       - id: y
         type: f4
 
-  f4_3:
+  vec3:
     seq:
       - id: x
         type: f4
@@ -487,7 +487,7 @@ types:
       - id: z
         type: f4
 
-  f4_4:
+  vec4:
     seq:
       - id: x
         type: f4

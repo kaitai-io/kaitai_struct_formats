@@ -54,9 +54,9 @@ types:
       - id: frame_number
         type: u4
       - id: position
-        type: f4_3
+        type: vec3
       - id: rotation
-        type: f4_4
+        type: vec4
       - id: interpolation
         type: u1
         repeat: expr
@@ -79,9 +79,9 @@ types:
       - id: distance
         type: f4
       - id: position
-        type: f4_3
+        type: vec3
       - id: rotation
-        type: f4_3
+        type: vec3
       - id: interpolation
         type: u1
         repeat: expr
@@ -91,7 +91,7 @@ types:
       - id: perspective
         type: u1
 
-  f4_3:
+  vec3:
     seq:
       - id: x
         type: f4
@@ -100,7 +100,7 @@ types:
       - id: z
         type: f4
 
-  f4_4:
+  vec4:
     seq:
       - id: x
         type: f4

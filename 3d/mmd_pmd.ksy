@@ -119,11 +119,11 @@ types:
   vertex:
     seq:
       - id: position
-        type: f4_3
+        type: vec3
       - id: normal
-        type: f4_3
+        type: vec3
       - id: uv
-        type: f4_2
+        type: vec2
       - id: skin_indices
         type: u2_2
       - id: skin_weights
@@ -139,13 +139,13 @@ types:
   material:
     seq:
       - id: diffuse
-        type: f4_4
+        type: vec4
       - id: shininess
         type: f4
       - id: specular
-        type: f4_3
+        type: vec3
       - id: ambient
-        type: f4_3
+        type: vec3
       - id: toon_index
         type: u1
       - id: edge_flag
@@ -170,7 +170,7 @@ types:
       - id: ik_index
         type: u2
       - id: position
-        type: f4_3
+        type: vec3
 
   ik:
     seq:
@@ -208,7 +208,7 @@ types:
       - id: index
         type: u4
       - id: position
-        type: f4_3
+        type: vec3
 
   morph_frame:
     seq:
@@ -285,9 +285,9 @@ types:
       - id: depth
         type: f4
       - id: position
-        type: f4_3
+        type: vec3
       - id: rotation
-        type: f4_3
+        type: vec3
       - id: weight
         type: f4
       - id: position_damping
@@ -311,21 +311,21 @@ types:
       - id: rigid_body_index2
         type: u4
       - id: position
-        type: f4_3
+        type: vec3
       - id: rotation
-        type: f4_3
+        type: vec3
       - id: translation_limitation1
-        type: f4_3
+        type: vec3
       - id: translation_limitation2
-        type: f4_3
+        type: vec3
       - id: rotation_limitation1
-        type: f4_3
+        type: vec3
       - id: rotation_limitation2
-        type: f4_3
+        type: vec3
       - id: spring_position
-        type: f4_3
+        type: vec3
       - id: spring_rotation
-        type: f4_3
+        type: vec3
 
   u2_2:
     seq:
@@ -343,14 +343,14 @@ types:
       - id: c
         type: u2
 
-  f4_2:
+  vec2:
     seq:
       - id: x
         type: f4
       - id: y
         type: f4
 
-  f4_3:
+  vec3:
     seq:
       - id: x
         type: f4
@@ -359,7 +359,7 @@ types:
       - id: z
         type: f4
 
-  f4_4:
+  vec4:
     seq:
       - id: x
         type: f4
