@@ -64,12 +64,12 @@ seq:
     type: rigid_body
     repeat: expr
     repeat-expr: rigid_body_count
-  - id: constraint_count
+  - id: joint_count
     type: u4
-  - id: constraints
-    type: constraint
+  - id: joints
+    type: joint
     repeat: expr
-    repeat-expr: constraint_count
+    repeat-expr: joint_count
 
 types:
 
@@ -79,10 +79,14 @@ types:
         contents: 'PMX '
       - id: version
         type: f4
+        doc: |
+          Tends to contain the value 2.0, which is the version of the format
+          described here.
       - id: header_size
         type: u1
       - id: encoding
         type: u1
+        doc: 0 for UTF-16LE, 1 for UTF-8
       - id: additional_uv_count
         type: u1
       - id: vertex_index_size
@@ -112,34 +116,90 @@ types:
         type: vec3
       - id: normal
         type: vec3
+        doc: normal vector, which is supposed to be normalized.
       - id: uv
         type: vec2
+        doc: texture coordinate.
       - id: additional_uvs
         type: vec4
         repeat: expr
         repeat-expr: _root.header.additional_uv_count
       - id: type
         type: u1
-      - id: skin_indices
-        type: sized_index(_root.header.bone_index_size)
-        repeat: expr
-        repeat-expr: 'type == 0 ? 1 : type == 1 ? 2 : type == 2 ? 4 : type == 3 ? 2 : -1'
+        enum: bone_type
       - id: skin_weights
-        type: f4
-        if: type == 1 or type == 2 or type == 3
-        repeat: expr
-        repeat-expr: 'type == 1 ? 1 : type == 2 ? 4 : type == 3 ? 1 : -1'
-      - id: skin_c
-        type: vec3
-        if: type == 3
-      - id: skin_r0
-        type: vec3
-        if: type == 3
-      - id: skin_r1
-        type: vec3
-        if: type == 3
+        type:
+          switch-on: type
+          cases:
+            'bone_type::bdef1': bdef1_weights
+            'bone_type::bdef2': bdef2_weights
+            'bone_type::bdef4': bdef4_weights
+            'bone_type::sdef': sdef_weights
       - id: edge_ratio
         type: f4
+
+  bdef1_weights:
+    seq:
+      - id: bone_index
+        type: sized_index(_root.header.bone_index_size)
+        doc: The weight of the bone will be 1.0
+
+  bdef2_weights:
+    seq:
+      - id: bone_index1
+        type: sized_index(_root.header.bone_index_size)
+        doc: Uses weight 1
+      - id: bone_index2
+        type: sized_index(_root.header.bone_index_size)
+        doc: Uses weight 2
+      - id: weight1
+        type: f4
+    instances:
+      weight2:
+        value: 1.0 - weight1
+
+  bdef4_weights:
+    seq:
+      - id: bone_index1
+        type: sized_index(_root.header.bone_index_size)
+        doc: Uses weight 1
+      - id: bone_index2
+        type: sized_index(_root.header.bone_index_size)
+        doc: Uses weight 2
+      - id: bone_index3
+        type: sized_index(_root.header.bone_index_size)
+        doc: Uses weight 3
+      - id: bone_index4
+        type: sized_index(_root.header.bone_index_size)
+        doc: Uses weight 4
+      - id: weight1
+        type: f4
+      - id: weight2
+        type: f4
+      - id: weight3
+        type: f4
+      - id: weight4
+        type: f4
+
+  sdef_weights:
+    seq:
+      - id: bone_index1
+        type: sized_index(_root.header.bone_index_size)
+        doc: Uses weight 1
+      - id: bone_index2
+        type: sized_index(_root.header.bone_index_size)
+        doc: Uses weight 2
+      - id: weight1
+        type: f4
+      - id: c
+        type: vec3
+      - id: r0
+        type: vec3
+      - id: r1
+        type: vec3
+    instances:
+      weight2:
+        value: 1.0 - weight1
 
   face:
     seq:
@@ -152,6 +212,7 @@ types:
     seq:
       - id: name
         type: len_string
+        doc: Indicates the filename of the texture image
 
   material:
     seq:
@@ -169,6 +230,12 @@ types:
         type: vec3
       - id: flags
         type: u1
+        doc: |
+          0b0000_0001 - Disables back-face culling
+          0b0000_0010 - Casts shadow on ground
+          0b0000_0100 - Writes to shadow map
+          0b0000_1000 - Reads from shadow map
+          0b0001_0000 - Draws pencil outline
       - id: edge_color
         type: vec4
       - id: edge_size
@@ -211,6 +278,21 @@ types:
         type: u4
       - id: flags
         type: u2
+        doc: |
+          0b0000_0000_0000_0001 - Connection	
+          0b0000_0000_0000_0010 - Rotatable	
+          0b0000_0000_0000_0100 - Movable	
+          0b0000_0000_0000_1000 - Display flag	
+          0b0000_0000_0001_0000 - Can operate	
+          0b0000_0000_0010_0000 - Inverse kinematics	
+          0b0000_0000_0100_0000 - unused?
+          0b0000_0000_1000_0000 - Add local deform	
+          0b0000_0001_0000_0000 - Add rotation	
+          0b0000_0010_0000_0000 - Add movement	
+          0b0000_0100_0000_0000 - Fixed axis	
+          0b0000_1000_0000_0000 - Local axis	
+          0b0001_0000_0000_0000 - Physical transform	
+          0b0010_0000_0000_0000 - External parent transform	
       - id: connect_index
         type: sized_index(_root.header.bone_index_size)
         if: flags & 0x1 != 0
@@ -236,9 +318,15 @@ types:
         type: bone_ik
         if: flags & 0x20 != 0
 
-
-  #TODO: Another project commented that this wasn't a good name. I'm not sure either way.
   bone_grant:
+    doc: |
+      Another project commented that this wasn't a good name. I'm not sure
+      either way. What this element _appears_ to do is grant additional motion
+      to a bone based on another bone, where those bones are not otherwise
+      related.
+      For example, you might have a watch hand spin at 1/12 the rate
+      of another watch hand, even though both hands are parented to the watch,
+      neither to each other.
     seq:
       - id: parent_index
         type: sized_index(_root.header.bone_index_size)
@@ -290,21 +378,24 @@ types:
         type: u1
       - id: type
         type: u1
+        enum: morph_type
       - id: element_count
         type: u4
       - id: elements
         type:
           switch-on: type
           cases:
-            0: group_morph_element
-            1: vertex_morph_element
-            2: bone_morph_element
-            3: uv_morph_element
-            #TODO 4: additional_uv1_morph_element
-            #TODO 5: additional_uv1_morph_element
-            #TODO 6: additional_uv1_morph_element
-            #TODO 7: additional_uv1_morph_element
-            8: material_morph_element
+            'morph_type::group': group_morph_element
+            'morph_type::vertex': vertex_morph_element
+            'morph_type::bone': bone_morph_element
+            'morph_type::uv': uv_morph_element
+            'morph_type::additional_uv1': uv_morph_element
+            'morph_type::additional_uv2': uv_morph_element
+            'morph_type::additional_uv3': uv_morph_element
+            'morph_type::additional_uv4': uv_morph_element
+            'morph_type::material': material_morph_element
+            'morph_type::flip': group_morph_element
+            'morph_type::impulse': impulse_morph_element
         repeat: expr
         repeat-expr: element_count
 
@@ -344,6 +435,7 @@ types:
         type: sized_index(_root.header.material_index_size)
       - id: type
         type: u1
+        doc: 0 = Multiply, 1 = Additive
       - id: diffuse
         type: vec4
       - id: specular
@@ -362,6 +454,20 @@ types:
         type: vec4
       - id: toon_color
         type: vec4
+
+  impulse_morph_element:
+    seq:
+      - id: rigid_body_index
+        type: sized_index(_root.header.rigid_body_index_size)
+      - id: local
+        type: u1
+      - id: translational_velocity
+        type: vec3
+      - id: angular_velocity
+        type: vec3
+        doc: |
+          another source had this as torque, but it would be odd for one
+          value to represent a velocity while the other represented a force
 
   frame:
     seq:
@@ -382,6 +488,7 @@ types:
     seq:
       - id: target
         type: u1
+        doc: 0 = target bone, 1 = target morph
       - id: index
         type:
           switch-on: target
@@ -391,13 +498,13 @@ types:
 
   rigid_body:
     seq:
-
       - id: name
         type: len_string
       - id: english_name
         type: len_string
       - id: bone_index
         type: sized_index(_root.header.bone_index_size)
+        doc: index of a related bone
       - id: group_index
         type: u1
       - id: group_target
@@ -426,16 +533,20 @@ types:
         type: f4
       - id: type
         type: u1
+        doc: |
+          0 = "Jelly" style bone follow
+          1 = Real physics
+          2 = Real physics affecting bone
 
-  constraint:
+  joint:
     seq:
-
       - id: name
         type: len_string
       - id: english_name
         type: len_string
       - id: type
         type: u1
+        doc: Only known type is 0, springy
       - id: rigid_body_index1
         type: sized_index(_root.header.rigid_body_index_size)
       - id: rigid_body_index2
@@ -444,13 +555,13 @@ types:
         type: vec3
       - id: rotation
         type: vec3
-      - id: translation_limitation1
+      - id: position_constraint_lower
         type: vec3
-      - id: translation_limitation2
+      - id: position_constraint_upper
         type: vec3
-      - id: rotation_limitation1
+      - id: rotation_constraint_lower
         type: vec3
-      - id: rotation_limitation2
+      - id: rotation_constraint_upper
         type: vec3
       - id: spring_position
         type: vec3
@@ -458,7 +569,7 @@ types:
         type: vec3
 
   sized_index:
-    doc: Variable-length type storing a vertex index
+    doc: Variable-length type storing an index of a vertex, bone, etc.
     params:
       - id: size
         type: u1
@@ -521,3 +632,22 @@ enums:
     4: bone
     5: morph
     6: rigid_body
+
+  bone_type:
+    0: bdef1
+    1: bdef2
+    2: bdef4
+    3: sdef
+
+  morph_type:
+    0: group
+    1: vertex
+    2: bone
+    3: uv
+    4: additional_uv1
+    5: additional_uv2
+    6: additional_uv3
+    7: additional_uv4
+    8: material
+    9: flip
+    10: impulse
