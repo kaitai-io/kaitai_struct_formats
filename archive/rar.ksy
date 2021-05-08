@@ -30,6 +30,9 @@ doc: |
   blocks. Each block has fixed header and custom body (that depends on
   block type), so it's possible to skip block even if one doesn't know
   how to process a certain block type.
+
+  Encrypted archives are not supported, although structures for holding
+  of encryption parameters are present in this KSY.
 doc-ref:
   - http://acritum.com/winrar/rar-format
   - https://github.com/pmachapman/unrar
@@ -207,6 +210,7 @@ types:
                 0x01: main
                 0x02: file_or_service
                 0x03: file_or_service
+                0x04: crypt
                 0x05: end
         instances:
           type:
@@ -358,6 +362,79 @@ types:
               solid:
                 doc: Only file blocks has it, service is not
                 value: (value.value & 0x0040) != 0
+      crypt:
+        doc: |
+          All data in the archive encrypted with AES-256 after end of this block.
+          Parameters of an encryption algorithm contained within this block.
+
+          In the real life this is the first block of an encrypted archive, so all
+          other blocks in an archive is encrypted.
+
+          Be notice, that the block size is encrypted as well, so we can not express
+          the decryption functionality as a Kaitai Struct `process` key, because it
+          is required a stream of known size.
+        seq:
+          - id: version
+            doc: |
+              Identifier of the encryption algorithm used. The only known algorithm
+              is AES-256 (`0`)
+            type: vlq_base128_le
+          - id: flags
+            type: vlq_base128_le
+          - id: lg2_count
+            doc: |
+              LOG2 of maximum accepted iteration count.
+
+              This number determines the iteration count for the [`pbkdf2`] key generation
+              function. The count is `1 << lg2_count`.
+
+              Currently the maximum is 24.
+
+              [`pbkdf2`]: https://en.wikipedia.org/wiki/PBKDF2
+            type: u1
+            # valid: _ <= 24
+          - id: salt
+            size: 16
+          - id: password_check
+            doc: |
+              Value used to check the correctness of the entered password.
+
+              This value calculated as [`pbkdf2`] derived key with additional 32
+              iterations after the encryption key, split for 4 parts and XORed:
+
+              ```
+              [xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx] = pbkdf2(
+                function         = hmac_sha256,
+                password         = ***,
+                salt             = _.salt,
+                count            = (1 << lg2_count) + 32,
+                derivedKeyLength = 32
+              );
+              password_check = [xxxxxxxx
+                            xor xxxxxxxx
+                            xor xxxxxxxx
+                            xor xxxxxxxx]
+              ```
+
+              If value, calculated from the entered archive password do not match
+              this value, password is invalid.
+
+              [`pbkdf2`]: https://en.wikipedia.org/wiki/PBKDF2
+            size: 8
+            if: use_password_check
+          - id: password_check_sum
+            doc: |
+              First 4 bytes of SHA-256(password_check)
+
+              This field is used to determine corrupted archives. Because block's
+              CRC32 is encrypted there is need another way to check data validity.
+            size: 4
+            if: use_password_check
+            # valid: sha256(password_check)[0..4]
+        instances:
+          use_password_check:
+            doc: Password check data is present
+            value: (flags.value & 0x0001) != 0
       end:
         -webide-representation: '{this:flags}'
         doc: |
@@ -372,6 +449,15 @@ types:
           has_next_volume:
             doc: Not last volume
             value: (flags.value & 0x0001) != 0
+  block_v5_encrypted:
+    seq:
+      - id: iv
+        doc: Initialization vector for AES-256
+        size: 16
+      - id: content
+        doc: Encrypted block
+        # process: aes(256, iv)
+        type: block_v5
 enums:
   version:
     0:
