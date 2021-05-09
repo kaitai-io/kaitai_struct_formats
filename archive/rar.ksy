@@ -210,7 +210,7 @@ types:
                 0x01: main
                 0x02: file_or_service
                 0x03: file_or_service
-                0x04: crypt
+                0x04: crypt(false)
                 0x05: end
           - id: extra
             doc: |
@@ -436,6 +436,7 @@ types:
                 type:
                   switch-on: raw_type.value
                   cases:
+                    0x01: crypt(true)
                     0x02: hash
                     0x03: hi_precision_time
                     0x04: version
@@ -626,6 +627,10 @@ types:
           Be notice, that the block size is encrypted as well, so we can not express
           the decryption functionality as a Kaitai Struct `process` key, because it
           is required a stream of known size.
+        params:
+          - id: extra
+            doc: Block is used as an `extra` block for `file` or `service` record
+            type: bool
         seq:
           - id: version
             doc: |
@@ -648,6 +653,10 @@ types:
             # valid: _ <= 24
           - id: salt
             size: 16
+          - id: iv
+            doc: Initialization vector for AES-256
+            size: 16
+            if: extra
           - id: password_check
             doc: |
               Value used to check the correctness of the entered password.
@@ -688,6 +697,10 @@ types:
           use_password_check:
             doc: Password check data is present
             value: (flags.value & 0x0001) != 0
+          use_hash_mac:
+            doc: Use MAC for unpacked data checksums
+            value: (flags.value & 0x0002) != 0
+            if: extra
       end:
         -webide-representation: '{this:flags}'
         doc: |
