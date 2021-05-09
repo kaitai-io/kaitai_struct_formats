@@ -212,6 +212,13 @@ types:
                 0x03: file_or_service
                 0x04: crypt
                 0x05: end
+          - id: extra
+            doc: |
+              The original unrar looks for it from the end of block, so in the future
+              additional fields can come between `specific` and `extra` fields
+            size: extra_size.value
+            type: extra
+            if: flags.has_extra
         instances:
           type:
             value: block_type.value
@@ -253,6 +260,24 @@ types:
                   Preserve a child block if host is modified
                   (this flag is only applicable to file or service header type)
                 value: (value.value & 0x0040) != 0
+          extra:
+            seq:
+              - id: entries
+                type: extra_entry
+                repeat: eos
+          extra_entry:
+            -webide-representation: '{field}'
+            seq:
+              - id: field_size
+                type: vlq_base128_le
+              - id: field
+                size: field_size.value
+                type:
+                  switch-on: _parent._parent.block_type.value
+                  cases:
+                    0x01: main::extra
+                    0x02: file_or_service::extra
+                    0x03: file_or_service::extra
       main:
         -webide-representation: '{this:flags}, volume: {volume}'
         doc: |
@@ -285,6 +310,45 @@ types:
             value: (flags.value & 0x0008) != 0
           locked:
             value: (flags.value & 0x0010) != 0
+        types:
+          extra:
+            -webide-representation: '{type}: {content}'
+            seq:
+              - id: raw_type
+                -orig-id: FieldType
+                type: vlq_base128_le
+              - id: content
+                type:
+                  switch-on: raw_type.value
+                  cases:
+                    0x01: locator
+            instances:
+              type:
+                value: raw_type.value
+                enum: extra_type
+          locator:
+            -webide-representation: '{this:flags}'
+            seq:
+              - id: flags
+                type: vlq_base128_le
+              - id: quick_open_off
+                doc: Offset from the beginning of block if not `0`
+                type: vlq_base128_le
+                if: has_quick_open
+              - id: recovery_off
+                doc: Offset from the beginning of block if not `0`
+                type: vlq_base128_le
+                if: has_recovery
+            instances:
+              has_quick_open:
+                doc: Quick open offset is present
+                value: (flags.value & 0x01) != 0
+              has_recovery:
+                doc: Recovery record offset is present
+                value: (flags.value & 0x02) != 0
+        enums:
+          extra_type:
+            0x01: locator
       file_or_service:
         -webide-representation: '{file_name}, {unpacked_size}, {compression.method}'
         doc: |
@@ -362,6 +426,195 @@ types:
               solid:
                 doc: Only file blocks has it, service is not
                 value: (value.value & 0x0040) != 0
+          extra:
+            -webide-representation: '{type}: {content}'
+            seq:
+              - id: raw_type
+                -orig-id: FieldType
+                type: vlq_base128_le
+              - id: content
+                type:
+                  switch-on: raw_type.value
+                  cases:
+                    0x02: hash
+                    0x03: hi_precision_time
+                    0x04: version
+                    0x05: redirection
+                    0x06: unix_owner
+                    0x07: sub_data
+            instances:
+              type:
+                value: raw_type.value
+                enum: extra_type
+          hash:
+            -webide-representation: '{type}: {digest}'
+            doc: (0x02) File hash
+            seq:
+              - id: raw_type
+                type: vlq_base128_le
+              - id: digest
+                doc: Blake2 digest
+                size: 32
+                if: type == algo::blake2
+            instances:
+              type:
+                value: raw_type.value
+                enum: algo
+            enums:
+              algo:
+                0: blake2
+          hi_precision_time:
+            -webide-representation: 'c:{ctime:dec}, m:{mtime:dec}, a:{atime:dec}'
+            doc: (0x03) High precision file time
+            seq:
+              - id: flags
+                type: vlq_base128_le
+              - id: mtime
+                type:
+                  switch-on: is_unix
+                  cases:
+                    true : u4 # Unix
+                    false: u8 # Windows
+                if: has_mtime
+              - id: ctime
+                type:
+                  switch-on: is_unix
+                  cases:
+                    true : u4 # Unix
+                    false: u8 # Windows
+                if: has_ctime
+              - id: atime
+                type:
+                  switch-on: is_unix
+                  cases:
+                    true : u4 # Unix
+                    false: u8 # Windows
+                if: has_atime
+              - id: mtime_ns
+                type: u4
+                if: is_unix and has_nanos and has_mtime
+              - id: ctime_ns
+                type: u4
+                if: is_unix and has_nanos and has_ctime
+              - id: atime_ns
+                type: u4
+                if: is_unix and has_nanos and has_atime
+            instances:
+              is_unix:
+                doc: Use Unix time_t format
+                value: (flags.value & 0x01) != 0
+              has_mtime:
+                doc: mtime is present
+                value: (flags.value & 0x02) != 0
+              has_ctime:
+                doc: ctime is present
+                value: (flags.value & 0x04) != 0
+              has_atime:
+                doc: atime is present
+                value: (flags.value & 0x08) != 0
+              has_nanos:
+                doc: Unix format with nanosecond precision
+                value: (flags.value & 0x10) != 0
+          version:
+            -webide-representation: '{version}'
+            doc: (0x04) File version information
+            seq:
+              - id: flags
+                type: vlq_base128_le
+              - id: version
+                type: vlq_base128_le
+          redirection:
+            -webide-representation: '{type}: {name}'
+            doc: (0x05) File system redirection (links, etc.)
+            seq:
+              - id: raw_type
+                -orig-id: RedirType
+                type: vlq_base128_le
+              - id: flags
+                type: vlq_base128_le
+              - id: name_len
+                type: vlq_base128_le
+              - id: name
+                type: str
+                size: 'name_len.value < 2048 ? name_len.value : 2048'
+                encoding: utf-8
+            instances:
+              is_dir:
+                -orig-id: DirTarget
+                doc: Link target is directory
+                value: (flags.value & 0x01) != 0
+              type:
+                value: raw_type.value
+                enum: redirection_type
+          unix_owner:
+            -webide-representation: 'u:{user_id}/{user}, g:{group_id}/{group}'
+            doc: (0x06) Unix owner and group information
+            seq:
+              - id: flags
+                type: vlq_base128_le
+              - id: user
+                -orig-id: UnixOwnerName
+                type: name
+                if: has_user_name
+              - id: group
+                -orig-id: UnixGroupName
+                type: name
+                if: has_group_name
+              - id: user_id
+                -orig-id: UnixOwnerId
+                type: vlq_base128_le
+                if: has_user_id
+              - id: group_id
+                -orig-id: UnixGroupId
+                type: vlq_base128_le
+                if: has_group_id
+            types:
+              name:
+                seq:
+                  - id: len
+                    type: vlq_base128_le
+                  - id: name
+                    type: str
+                    size: 'len.value < 256 ? len.value : 256'
+                    encoding: utf-8
+            instances:
+              has_user_name:
+                -orig-id: UnixOwnerNumeric
+                doc: User name string is present
+                value: (flags.value & 0x01) != 0
+              has_group_name:
+                -orig-id: UnixGroupNumeric
+                doc: Group name string is present
+                value: (flags.value & 0x02) != 0
+              has_user_id:
+                doc: Numeric user ID is present
+                value: (flags.value & 0x04) != 0
+              has_group_id:
+                doc: Numeric group ID is present
+                value: (flags.value & 0x08) != 0
+          sub_data:
+            -webide-representation: '{content}'
+            doc: (0x07) Service header subdata array
+            seq:
+              - id: content
+                doc: For `RR` service record there is one byte with recovery percent
+                size-eos: true
+        enums:
+          extra_type:
+            0x01: crypt
+            0x02: hash
+            0x03: hi_precision_time
+            0x04: version
+            0x05: redirection
+            0x06: unix_owner
+            0x07: sub_data
+          redirection_type:
+            0x00: none
+            0x01: unix_sym_link
+            0x02: win_sym_link
+            0x03: junction
+            0x04: hard_link
+            0x05: file_copy
       crypt:
         doc: |
           All data in the archive encrypted with AES-256 after end of this block.
