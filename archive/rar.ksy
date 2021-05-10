@@ -170,6 +170,8 @@ types:
             - `QO`: index to some blocks of this file
             - `RR`: recovery information
         size: header.content.data_size.value
+        # There are should be `qo_data` type in case of
+        # `header.content.specific.as<file_or_service>.file_name == "QO"`
         if: header.content.flags.has_data
     types:
       header:
@@ -715,6 +717,34 @@ types:
           has_next_volume:
             doc: Not last volume
             value: (flags.value & 0x0001) != 0
+      qo_data:
+        -webide-representation: '{entry}'
+        doc: Content of the `data` field of the QuickOpen block (`service` block `QO`)
+        seq:
+          - id: crc32
+            type: u4
+          - id: size
+            type: vlq_base128_le
+          - id: entry
+            type: entry
+            size: size.value
+        types:
+          entry:
+            -webide-representation: '{header}'
+            seq:
+            - id: flags
+              doc: Not used
+              type: vlq_base128_le
+            - id: offset
+              doc: |
+                Offset from beginning of the QO block to header.
+                This offset should be substracted from the QO block address
+              type: vlq_base128_le
+            - id: header_size
+              type: vlq_base128_le
+            - id: header
+              size: header_size.value
+              type: header
   block_v5_encrypted:
     seq:
       - id: iv
