@@ -2,6 +2,8 @@ meta:
   id: renderware_binary_stream
   title: RenderWare binary stream
   application: Games based on RenderWare engine (Grand Theft Auto 3D series)
+  xref:
+    wikidata: Q29960668
   endian: le
 doc-ref: https://www.gtamodding.com/wiki/RenderWare_binary_stream_file
 seq:
@@ -223,7 +225,7 @@ types:
       - id: z
         type: f4
       - id: radius
-        type: f4        
+        type: f4
 enums:
   sections:
     0x0001: struct

@@ -3,6 +3,8 @@ meta:
   title: ISO9660 CD filesystem
   file-extension: iso
   xref:
+    loc: fdd000348
+    pronom: fmt/468
     wikidata: Q815645
   license: CC0-1.0
 doc: |
@@ -269,5 +271,5 @@ instances:
   sector_size:
     value: 2048
   primary_vol_desc:
-    type: vol_desc
     pos: 0x010 * sector_size
+    type: vol_desc

@@ -2,6 +2,8 @@ meta:
   id: sudoers_ts
   title: Sudoers Time Stamp file
   license: CC0-1.0
+  tags:
+    - linux
   endian: le
 doc: |
   This spec can be used to parse sudo time stamp files located in directories

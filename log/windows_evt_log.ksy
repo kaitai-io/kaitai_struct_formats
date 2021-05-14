@@ -2,9 +2,15 @@ meta:
   id: windows_evt_log
   title: Windows Event Log (EVT)
   file-extension: evt
+  xref:
+    forensicswiki: Windows_Event_Log_(EVT)
+    justsolve: Windows_Event_Log
+  tags:
+    - windows
+    - log
   license: CC0-1.0
+  ks-version: 0.9
   endian: le
-doc-ref: https://msdn.microsoft.com/en-us/library/bb309026(v=vs.85).aspx
 doc: |
   EVT files are Windows Event Log files written by older Windows
   operating systems (2000, XP, 2003). They are used as binary log
@@ -20,13 +26,14 @@ doc: |
   file using relevant option in Event Viewer application.
 
   A Windows application can submit an entry into these logs using
-  [ReportEvent](https://msdn.microsoft.com/en-us/library/aa363679(v=vs.85).aspx)
+  [ReportEventA](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-reporteventa)
   function of Windows API.
 
   Internally, EVT files consist of a fixed-size header and event
   records. There are several usage scenarios (non-wrapping vs wrapping
   log files) which result in slightly different organization of
   records.
+doc-ref: https://docs.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format
 seq:
   - id: header
     type: header
@@ -35,7 +42,7 @@ seq:
     repeat: eos
 types:
   header:
-    doc-ref: https://msdn.microsoft.com/en-us/library/bb309024(v=vs.85).aspx
+    doc-ref: https://docs.microsoft.com/en-us/previous-versions/windows/desktop/legacy/bb309024(v=vs.85)
     seq:
       - id: len_header
         -orig-id: HeaderSize
@@ -106,7 +113,7 @@ types:
               True if write operation was in progress, but log file
               wasn't properly closed.
   record:
-    doc-ref: https://msdn.microsoft.com/en-us/library/windows/desktop/aa363646(v=vs.85).aspx
+    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-eventlogrecord
     seq:
       - id: len_record
         -orig-id: Length
@@ -134,7 +141,7 @@ types:
         type: u4
         doc: Size of whole record again.
   record_body:
-    doc-ref: https://msdn.microsoft.com/en-us/library/windows/desktop/aa363646(v=vs.85).aspx
+    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-eventlogrecord
     seq:
       - id: idx
         -orig-id: RecordNumber
@@ -159,7 +166,7 @@ types:
         type: u2
         enum: event_types
         doc: Type of event.
-        doc-ref: https://msdn.microsoft.com/en-us/library/windows/desktop/aa363662(v=vs.85).aspx
+        doc-ref: https://docs.microsoft.com/en-us/windows/win32/eventlog/event-types
       - id: num_strings
         -orig-id: NumStrings
         type: u2
@@ -167,7 +174,7 @@ types:
       - id: event_category
         -orig-id: EventCategory
         type: u2
-        doc-ref: https://msdn.microsoft.com/en-us/library/windows/desktop/aa363649(v=vs.85).aspx
+        doc-ref: https://docs.microsoft.com/en-us/windows/win32/eventlog/event-categories
       - id: reserved
         -orig-id: ReservedFlags, ClosingRecordNumber
         size: 6

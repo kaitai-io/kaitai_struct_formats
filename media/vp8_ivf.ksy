@@ -1,10 +1,12 @@
 meta:
   id: vp8_ivf
-  file-extension: ivf
-  endian: le
   title: VP8 raw file
-  ks-version: 0.7
+  file-extension: ivf
+  xref:
+    wikidata: Q61774549
   license: CC0-1.0
+  ks-version: 0.7
+  endian: le
 doc: |
   IVF is a simple container format for raw VP8 data, which is an open
   and royalty-free video compression format, currently developed by
@@ -25,16 +27,16 @@ seq:
     doc: Normally the header length is 32 byte
   - id: codec
     contents: VP80
-    doc: Name of the codec e.g. 'VP80' for VP8 
+    doc: Name of the codec e.g. 'VP80' for VP8
   - id: width
     type: u2
-    doc: The (initial) width of the video, every keyframe may change the resolution 
+    doc: The (initial) width of the video, every keyframe may change the resolution
   - id: height
     type: u2
     doc: The (initial) height of the video, every keyframe may change the resolution
   - id: framerate
     type: u4
-    doc: the (framerate * timescale) e.g. for 30 fps -> 30000 
+    doc: the (framerate * timescale) e.g. for 30 fps -> 30000
   - id: timescale
     type: u4
     doc: the timescale is a divider of the seconds (VPX is integer math only) mostly 1000
@@ -52,7 +54,7 @@ seq:
     repeat-expr: num_frames
 ## payload end
 
-## type definitions    
+## type definitions
 types:
   blocks:
     seq:

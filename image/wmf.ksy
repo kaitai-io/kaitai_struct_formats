@@ -3,10 +3,12 @@ meta:
   title: Windows Metafile (WMF) vector image
   file-extension: wmf
   xref:
-    justsolve: Windows Metafile
+    justsolve: Windows_Metafile
     mime: image/wmf
     pronom: x-fmt/119
     wikidata: Q1072083
+  tags:
+    - windows
   license: CC0-1.0
   endian: le
 doc: |

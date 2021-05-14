@@ -1,10 +1,21 @@
 meta:
   id: sqlite3
   title: SQLite3 database file
-  endian: be
+  file-extension:
+    - sqlite
+    - db
+    - db3
+    - sqlite3
+  xref:
+    forensicswiki: SQLite_database_format
+    justsolve: SQLite
+    loc: fdd000461
+    pronom: fmt/729
+    wikidata: Q28600453
+  license: CC0-1.0
   imports:
     - /common/vlq_base128_be
-  license: CC0-1.0
+  endian: be
 doc: |
   SQLite3 is a popular serverless SQL engine, implemented as a library
   to be used within other applications. It keeps its databases as

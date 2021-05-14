@@ -1,13 +1,16 @@
 meta:
   id: gettext_mo
-  file-extension: mo
-  encoding: UTF-8
   title: gettext binary database
   application:
     - GNU gettext
     - libintl
+  file-extension: mo
+  tags:
+    - database
+    - linux
   license: BSD-2-Clause
   ks-version: 0.9
+  encoding: UTF-8
 
 #  Copyright (c) 2000, 2001 Citrus Project,
 #  All rights reserved.
@@ -66,7 +69,7 @@ types:
         pos: 0
         type: lookup_iteration(current.next, query)
         if: not found
-      
+
   hashtable_lookup:
     doc: |
       def lookup(s:str, t:gettext_mo.GettextMo):
@@ -78,7 +81,7 @@ types:
           return e.current
         except:
           raise Exception("Not found "+s+" in the hashtable!")
-      
+
       lookup(t.mo.originals[145].str, t)
     doc-ref: https://gitlab.com/worr/libintl/raw/master/src/lib/libintl/gettext.c
     params:
@@ -119,18 +122,18 @@ types:
           '[0xde, 0x12, 0x04, 0x95]': le
           '[0x95, 0x04, 0x12, 0xde]': be
     seq:
-        - id: version
-          type: version
-        - id: num_translations
-          type: u4
-        - id: ofs_originals
-          type: u4
-        - id: ofs_translations
-          type: u4
-        - id: num_hashtable_items
-          type: u4
-        - id: ofs_hashtable_items
-          type: u4
+      - id: version
+        type: version
+      - id: num_translations
+        type: u4
+      - id: ofs_originals
+        type: u4
+      - id: ofs_translations
+        type: u4
+      - id: num_hashtable_items
+        type: u4
+      - id: ofs_hashtable_items
+        type: u4
     instances:
       originals:
         io: _root._io

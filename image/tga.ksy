@@ -1,6 +1,10 @@
 meta:
   id: tga
   title: TGA (AKA Truevision TGA, AKA TARGA) raster image file format
+  xref:
+    loc: fdd000180 # TGA 2.0
+    pronom: fmt/402 # TGA 2.0
+    wikidata: Q1063976
   file-extension:
     - tga
     - icb

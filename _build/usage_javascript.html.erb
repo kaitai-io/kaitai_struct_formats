@@ -1,11 +1,29 @@
-<% class_name = ucc(file_id) %>
-<p>See the usage examples in the <a href="http://doc.kaitai.io/lang_javascript.html" target="_blank">JavaScript notes</a>.</p>
+<p>The JavaScript runtime library is available
+<a href="https://www.npmjs.com/package/kaitai-struct" target="_blank" rel="noopener">at npm</a>:</p>
+
+<pre><code>npm install kaitai-struct</code></pre>
+
+<h3>Code</h3>
+
+<p>See the usage examples in the <a href="//doc.kaitai.io/lang_javascript.html" target="_blank">JavaScript notes</a>.</p>
 
 <p>Parse structure from an ArrayBuffer:</p>
 
-<pre><code class="javascript">var arrayBuffer = ...;
-var data = new <%= class_name %>(new KaitaiStream(arrayBuffer));</code></pre>
+<% class_name = ucc(file_id) %>
+
+<%= code cur_lang, <<-CODE
+var arrayBuffer = ...;
+var data = new #{ class_name }(new KaitaiStream(arrayBuffer));
+CODE
+%>
 
 <p>After that, one can get various attributes from the structure by accessing fields or properties like:</p>
 
-<pre><code class="javascript"><% usage_attrs.each { |attr| %>data.<%= lcc(attr[:name]) %> // => <%= attr[:doc] %><% } %></code></pre>
+<% src_usage_attrs = ""
+usage_attrs.each { |attr|
+    src_usage_attrs += <<-CODE
+data.#{ lcc(attr[:name]) } // => #{ attr[:doc] }
+    CODE
+}
+%>
+<%= code cur_lang, src_usage_attrs %>

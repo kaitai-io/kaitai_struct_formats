@@ -24,6 +24,7 @@
         <table class="table">
             <tr>
                 <th rowspan="2">Kaitai Struct ID</th>
+                <th rowspan="3">File extension</th>
                 <th rowspan="3">.ksy License</th>
                 <th colspan="2">Standards</th>
                 <th colspan="3">Registries</th>
@@ -67,6 +68,7 @@
             xref = meta['xref'] || {} %>
             <tr>
                 <td><a href="<%= id %>/index.html"><%= id %></a></td>
+                <td><%= meta['file-extension'] %></td>
                 <td><%= meta['license'] %></td>
 
                 <td><%= xref['iso'] %></td>

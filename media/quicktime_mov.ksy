@@ -1,6 +1,11 @@
 meta:
   id: quicktime_mov
   application: QuickTime, MP4 ISO 14496-14 media
+  xref:
+    justsolve: QuickTime
+    loc: fdd000052
+    pronom: x-fmt/384
+    wikidata: Q942350
   license: CC0-1.0
   endian: be
 doc-ref: 'https://developer.apple.com/library/content/documentation/QuickTime/QTFF/QTFFChap1/qtff1.html#//apple_ref/doc/uid/TP40000939-CH203-BBCGDDDF'
@@ -73,7 +78,7 @@ types:
         type: u4
         doc: |
           A time value that indicates the time scale for this
-          movie—that is, the number of time units that pass per second
+          movie - the number of time units that pass per second
           in its time coordinate system. A time coordinate system that
           measures time in sixtieths of a second, for example, has a
           time scale of 60.
@@ -82,14 +87,14 @@ types:
         doc: |
           A time value that indicates the duration of the movie in
           time scale units. Note that this property is derived from
-          the movie’s tracks. The value of this field corresponds to
+          the movie's tracks. The value of this field corresponds to
           the duration of the longest track in the movie.
       - id: preferred_rate
         type: fixed32
         doc: The rate at which to play this movie. A value of 1.0 indicates normal rate.
       - id: preferred_volume
         type: fixed16
-        doc: How loud to play this movie’s sound. A value of 1.0 indicates full volume.
+        doc: How loud to play this movie's sound. A value of 1.0 indicates full volume.
       - id: reserved1
         size: 10
       - id: matrix
@@ -176,7 +181,7 @@ enums:
     0x656c7374: elst
     0x66726565: free
     0x66747970: ftyp
-    0x68646c72: hdlr    
+    0x68646c72: hdlr
     0x696f6473: iods
     0x6d646174: mdat
     0x6d646864: mdhd

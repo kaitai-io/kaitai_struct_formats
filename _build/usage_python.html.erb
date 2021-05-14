@@ -1,16 +1,36 @@
+<p>The Python runtime library can be installed
+<a href="https://pypi.org/project/kaitaistruct/" target="_blank" rel="noopener">from PyPI</a>:</p>
+
+<pre><code>python3 -m pip install kaitaistruct</code></pre>
+
+<h3>Code</h3>
+
 <p>Parse a local file and get structure in memory:</p>
 
 <% class_name = ucc(file_id) %>
 
-<pre><code class="python">data = <%= class_name %>.from_file("path/to/local/file.<%= meta['file-extension'] || format_name %>")</code></pre>
+<%= code cur_lang, <<-CODE
+data = #{ class_name }.from_file("path/to/local/file.#{ meta['file-extension'] || format_name }")
+CODE
+%>
 
 <p>Or parse structure from a bytes:</p>
 
-<pre><code class="python">from kaitaistruct import KaitaiStream, BytesIO
+<%= code cur_lang, <<-CODE
+from kaitaistruct import KaitaiStream, BytesIO
 
-raw = b"\x00\x01\x02..."
-data = <%= class_name %>(KaitaiStream(BytesIO(raw)))</code></pre>
+raw = b"\\x00\\x01\\x02..."
+data = #{ class_name }(KaitaiStream(BytesIO(raw)))
+CODE
+%>
 
 <p>After that, one can get various attributes from the structure by invoking getter methods like:</p>
 
-<pre><code class="python"><% usage_attrs.each { |attr| %>data.<%= attr[:name] %> # => <%= attr[:doc] %><% } %></code></pre>
+<% src_usage_attrs = ""
+usage_attrs.each { |attr|
+    src_usage_attrs += <<-CODE
+data.#{ attr[:name] } # => #{ attr[:doc] }
+    CODE
+}
+%>
+<%= code cur_lang, src_usage_attrs %>

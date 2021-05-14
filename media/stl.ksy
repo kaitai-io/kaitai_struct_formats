@@ -1,11 +1,13 @@
 meta:
   id: stl
-  endian: le
   application: 3D Systems Stereolithography
   file-extension: stl
   xref:
+    loc: fdd000505
+    pronom: fmt/865
     wikidata: Q1238229
   license: CC0-1.0
+  endian: le
 doc: |
   STL files are used to represent simple 3D models, defined using
   triangular 3D faces.

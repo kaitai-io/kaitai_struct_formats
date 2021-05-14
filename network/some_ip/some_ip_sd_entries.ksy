@@ -6,10 +6,10 @@ meta:
   endian: be
 
 doc: |
-  The entries are used to synchronize the state of services instances and the 
+  The entries are used to synchronize the state of services instances and the
   Publish/-Subscribe handling.
 doc-ref: |
-  https://www.autosar.org/fileadmin/user_upload/standards/foundation/19-11/AUTOSAR_PRS_SOMEIPServiceDiscoveryProtocol.pdf 
+  https://www.autosar.org/fileadmin/user_upload/standards/foundation/19-11/AUTOSAR_PRS_SOMEIPServiceDiscoveryProtocol.pdf
   - section 4.1.2.3  Entry Format
 
 seq:
@@ -31,7 +31,7 @@ types:
           entry_types::subscribe : sd_eventgroup_entry
           entry_types::subscribe_ack : sd_eventgroup_entry
 
-    types: 
+    types:
       sd_entry_header:
         seq:
           - id: type
@@ -53,12 +53,12 @@ types:
             type: u1
           - id: ttl
             type: b24
-            
+
       sd_service_entry:
         seq:
           - id: minor_version
             type: u4
-            
+
       sd_eventgroup_entry:
         seq:
           - id: reserved
@@ -71,7 +71,7 @@ types:
             type: b4
           - id: event_group_id
             type: u2
-            
+
     enums:
       entry_types:
         0x00 : find

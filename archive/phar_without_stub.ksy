@@ -18,7 +18,7 @@ doc: |
   allow executing or including phar files as if they were regular PHP scripts.
   PHP 5.3 and later include the phar extension, which adds native support for
   reading and manipulating phar files.
-  
+
   The phar format was originally developed as part of the PEAR library
   PHP_Archive, first released in 2005. Later, a native PHP extension
   named "phar" was developed, which was first released on PECL in 2007,
@@ -26,25 +26,25 @@ doc: |
   superseded the PHP_Archive library, which has not been updated since 2010.
   The phar extension is also no longer released independently on PECL;
   it is now developed and released as part of PHP itself.
-  
+
   Because of current limitations in Kaitai Struct
   (seekaitai-io/kaitai_struct#158 and kaitai-io/kaitai_struct#538),
   the executable PHP stub that precedes the rest of the archive is not handled
   by this spec. Before parsing a phar using this spec, the stub must be
   removed manually.
-  
+
   A phar's stub is terminated by the special token `__HALT_COMPILER();`
   (which may be followed by at most one space, the PHP tag end `?>`,
   and an optional line terminator). The stub termination sequence is
   immediately followed by the remaining parts of the phar format,
   as described in this spec.
-  
+
   The phar stub usually contains code that loads the phar and runs
   a contained PHP file, but this is not required. A minimal valid phar stub
   is `<?php __HALT_COMPILER();` - such a stub makes it impossible to execute
   the phar directly, but still allows loading or manipulating it using the
   phar extension.
-  
+
   Note: The phar format does not specify any encoding for text fields
   (stub, alias name, and all file names), so these fields may contain arbitrary
   binary data. The actual text encoding used in a specific phar file usually
@@ -76,7 +76,7 @@ seq:
     doc: |
       The archive's signature - a digest of all archive data before
       the signature itself.
-      
+
       Note: Almost all of the available "signature" types are actually hashes,
       not signatures, and cannot be used to verify that the archive has not
       been tampered with. Only the OpenSSL signature type is a true
@@ -111,7 +111,7 @@ enums:
         PHP_Archive 0.12.0 (even though it claims to only support
         API version 1.1.0) and phar extension 1.3.0. This type is not
         documented in the phar extension's documentation of the phar format.
-        
+
         Note: In older versions of the phar extension, this value was used
         for an undocumented and unimplemented "PGP" signature type
         (`PHAR_SIG_PGP`).
@@ -189,22 +189,13 @@ types:
   api_version:
     meta:
       endian: be
-    seq:
-      - id: release
-        type: b4
-      - id: major
-        type: b4
-      - id: minor
-        type: b4
-      - id: unused
-        type: b4
     doc: |
       A phar API version number. This version number is meant to indicate
       which features are used in a specific phar, so that tools reading
       the phar can easily check that they support all necessary features.
-      
+
       The following API versions exist so far:
-      
+
       * 0.5, 0.6, 0.7, 0.7.1: The first official API versions. At this point,
         the phar format was only used by the PHP_Archive library, and the
         API version numbers were identical to the PHP_Archive versions that
@@ -231,6 +222,15 @@ types:
         all features from API verison 1.1.1, but it reports API version 1.1.0.)
         Adds the OpenSSL signature type and support for storing
         empty directories.
+    seq:
+      - id: release
+        type: b4
+      - id: major
+        type: b4
+      - id: minor
+        type: b4
+      - id: unused
+        type: b4
   global_flags:
     seq:
       - id: value
@@ -259,7 +259,7 @@ types:
         type: u4
         doc: |
           The length of the manifest, in bytes.
-          
+
           Note: The phar extension does not allow reading manifests
           larger than 100 MiB.
       - id: num_files

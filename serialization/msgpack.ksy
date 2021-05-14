@@ -1,8 +1,10 @@
 meta:
   id: msgpack
   title: MessagePack (msgpack) serialization format
-  endian: be
+  xref:
+    wikidata: Q6821738
   license: CC0-1.0
+  endian: be
 doc: |
   MessagePack (msgpack) is a system to serialize arbitrary structured
   data into a compact binary stream.
@@ -191,4 +193,3 @@ types:
         type: msgpack
       - id: value
         type: msgpack
-

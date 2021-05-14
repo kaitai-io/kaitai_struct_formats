@@ -1,13 +1,13 @@
 meta:
   id: hccap
   title: Hashcat capture file (old version)
-  license: Unlicense
-  file-extension: hccap
   application:
     - Hashcat
     - aircrack-ng
-  endian: le
+  file-extension: hccap
+  license: Unlicense
   encoding: utf-8
+  endian: le
 doc: |
   Native format of Hashcat password "recovery" utility.
 

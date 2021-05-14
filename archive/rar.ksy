@@ -1,8 +1,8 @@
 meta:
   id: rar
-  file-extension: rar
-  application: RAR archiver
   title: RAR (Roshall ARchiver) archive files
+  application: RAR archiver
+  file-extension: rar
   xref:
     forensicswiki: RAR
     justsolve: RAR
@@ -11,12 +11,14 @@ meta:
       - application/vnd.rar
       - application/x-rar-compressed
     pronom:
-      - fmt/411
-      - fmt/613
-      - x-fmt/264
+      - x-fmt/264 # RAR 2.0
+      - fmt/411 # RAR 2.9
+      - fmt/613 # RAR 5.0
     wikidata: Q243303
-  ks-version: 0.7
   license: CC0-1.0
+  ks-version: 0.7
+  imports:
+    - /common/dos_datetime
   endian: le
 doc: |
   RAR is a archive format used by popular proprietary RAR archiver,
@@ -27,8 +29,7 @@ doc: |
   blocks. Each block has fixed header and custom body (that depends on
   block type), so it's possible to skip block even if one doesn't know
   how to process a certain block type.
-doc-ref: |
-  http://acritum.com/winrar/rar-format  
+doc-ref: http://acritum.com/winrar/rar-format
 seq:
   - id: magic
     type: magic_signature
@@ -118,7 +119,8 @@ types:
       - id: file_crc32
         type: u4
       - id: file_time
-        type: dos_time
+        size: 4
+        type: dos_datetime
         doc: Date and time in standard MS DOS format
       - id: rar_version
         type: u1
@@ -148,25 +150,6 @@ types:
   block_v5:
     {}
     # not yet implemented
-  dos_time:
-    seq:
-      - id: time
-        type: u2
-      - id: date
-        type: u2
-    instances:
-      year:
-        value: '((date & 0b1111_1110_0000_0000) >> 9) + 1980'
-      month:
-        value: '(date & 0b0000_0001_1110_0000) >> 5'
-      day:
-        value: 'date & 0b0000_0000_0001_1111'
-      hours:
-        value: '(time & 0b1111_1000_0000_0000) >> 11'
-      minutes:
-        value: '(time & 0b0000_0111_1110_0000) >> 5'
-      seconds:
-        value: '(time & 0b0000_0000_0001_1111) * 2'
 enums:
   block_types:
     0x72: marker

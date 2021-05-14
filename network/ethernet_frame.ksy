@@ -71,7 +71,7 @@ types:
           VLAN Identifier (VID) specifies which VLAN this frame
           belongs to.
 enums:
-  # http://www.iana.org/assignments/ieee-802-numbers/ieee-802-numbers.xhtml
+  # https://www.iana.org/assignments/ieee-802-numbers/ieee-802-numbers.xhtml
   ether_type_enum:
     0x0800: ipv4
     0x0801: x_75_internet

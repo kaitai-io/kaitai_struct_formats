@@ -2,7 +2,7 @@ meta:
   id: windows_shell_items
   title: Windows Shell Items
   xref:
-    forensicswiki: Shell Item
+    forensicswiki: Shell_Item
   license: CC0-1.0
   endian: le
 doc: |

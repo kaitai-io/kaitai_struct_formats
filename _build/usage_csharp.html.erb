@@ -1,14 +1,34 @@
+<p>The C# runtime library is available <a
+    href="https://www.nuget.org/packages/KaitaiStruct.Runtime.CSharp/"
+    target="_blank" rel="noopener">in the NuGet Gallery</a>. Installation instructions
+can also be found there.</p>
+
+<h3>Code</h3>
+
 <p>Parse a local file and get structure in memory:</p>
 
 <% class_name = ucc(file_id) %>
 
-<pre><code class="csharp">var data = <%= class_name %>.FromFile("path/to/local/file.<%= meta['file-extension'] || meta['id'] %>");</code></pre>
+<%= code cur_lang, <<-CODE
+var data = #{ class_name }.FromFile("path/to/local/file.#{ meta['file-extension'] || meta['id'] }");
+CODE
+%>
 
 <p>Or parse structure from a byte array:</p>
 
-<pre><code class="csharp">byte[] someArray = new byte[] { ... };
-var data = new <%= class_name %>(new KaitaiStream(someArray));</code></pre>
+<%= code cur_lang, <<-CODE
+byte[] someArray = new byte[] { ... };
+var data = new #{ class_name }(new KaitaiStream(someArray));
+CODE
+%>
 
 <p>After that, one can get various attributes from the structure by accessing properties like:</p>
 
-<pre><code class="csharp"><% usage_attrs.each { |attr| %>data.<%= ucc(attr[:name]) %> // => <%= attr[:doc] %><% } %></code></pre>
+<% src_usage_attrs = ""
+usage_attrs.each { |attr|
+    src_usage_attrs += <<-CODE
+data.#{ ucc(attr[:name]) } // => #{ attr[:doc] }
+    CODE
+}
+%>
+<%= code cur_lang, src_usage_attrs %>

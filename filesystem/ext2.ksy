@@ -1,13 +1,20 @@
 meta:
   id: ext2
   title: ext2 filesystem
+  xref:
+    forensicswiki: Extended_File_System_(Ext)
+    justsolve: Ext2
+    wikidata: Q283527
+  tags:
+    - filesystem
+    - linux
   license: CC0-1.0
   endian: le
 instances:
-  # http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/Documentation/filesystems/ext2.txt#n106
+  # https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/Documentation/filesystems/ext2.txt#n106
   bg1:
-    type: block_group
     pos: 1024
+    type: block_group
   root_dir:
     value: bg1.block_groups[0].inodes[1].as_dir
 types:
@@ -16,13 +23,13 @@ types:
       - id: super_block
         type: super_block_struct
         size: 1024
-      # http://www.nongnu.org/ext2-doc/ext2.html#BLOCK-GROUP-DESCRIPTOR-TABLE
+      # https://www.nongnu.org/ext2-doc/ext2.html#BLOCK-GROUP-DESCRIPTOR-TABLE
       - id: block_groups
         type: bgd
         repeat: expr
         repeat-expr: super_block.block_group_count
-  # http://www.nongnu.org/ext2-doc/ext2.html#super_block
-  # http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/fs/ext2/ext2.h#n416
+  # https://www.nongnu.org/ext2-doc/ext2.html#super_block
+  # https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/fs/ext2/ext2.h#n416
   # https://ext4.wiki.kernel.org/index.php/Ext4_Disk_Layout#The_Super_Block
   super_block_struct:
     seq:
@@ -135,8 +142,8 @@ types:
         1: act_continue
         2: act_ro
         3: act_panic
-  # http://www.nongnu.org/ext2-doc/ext2.html#BLOCK-GROUP-DESCRIPTOR-STRUCTURE
-  # http://www.virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1-7.html
+  # https://www.nongnu.org/ext2-doc/ext2.html#BLOCK-GROUP-DESCRIPTOR-STRUCTURE
+  # https://web.archive.org/web/20160804172310/http://virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1-7.html
   bgd:
     seq:
       - id: block_bitmap_block
@@ -160,8 +167,8 @@ types:
       inode_bitmap:
         pos: inode_bitmap_block * _root.bg1.super_block.block_size
         size: 1024
-      # http://www.nongnu.org/ext2-doc/ext2.html#INODE-TABLE
-      # http://www.virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1-10.html
+      # https://www.nongnu.org/ext2-doc/ext2.html#INODE-TABLE
+      # https://web.archive.org/web/20161114202411/http://www.virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1-10.html
       inodes:
         pos: inode_table_block * _root.bg1.super_block.block_size
         type: inode
@@ -225,7 +232,7 @@ types:
     seq:
       - id: body
         size: _root.bg1.super_block.block_size
-  # http://www.nongnu.org/ext2-doc/ext2.html#LINKED-DIRECTORY-ENTRY-STRUCTURE
+  # https://www.nongnu.org/ext2-doc/ext2.html#LINKED-DIRECTORY-ENTRY-STRUCTURE
   dir:
     seq:
       - id: entries
@@ -252,7 +259,7 @@ types:
       inode:
         value: '_root.bg1.block_groups[(inode_ptr - 1) / _root.bg1.super_block.inodes_per_group].inodes[(inode_ptr - 1) % _root.bg1.super_block.inodes_per_group]'
     enums:
-      # http://www.nongnu.org/ext2-doc/ext2.html#IFDIR-FILE-TYPE
+      # https://www.nongnu.org/ext2-doc/ext2.html#IFDIR-FILE-TYPE
       file_type_enum:
         0: unknown
         1: reg_file

@@ -1,27 +1,31 @@
-# ID3v2.3.0 Specifications
-# http://id3.org/id3v2.3.0
-
 meta:
   id: id3v2_3
+  title: ID3v2.3 tag for .mp3 files
+  file-extension: mp3
+  xref:
+    forensicswiki: ID3
+    justsolve: ID3
+    loc: fdd000108 # ID3v2
+    wikidata: Q1054220
   license: CC0-1.0
   endian: be
-  file-extension:
-    - mp3
+
+doc-ref: https://id3.org/id3v2.3.0
 
 seq:
   - id: tag
     type: tag
 
 types:
-  # Section 3. ID3v2 overview
   tag:
+    doc-ref: Section 3. ID3v2 overview
     seq:
       - id: header
         type: header
       - id: header_ex
         type: header_ex
         if: header.flags.flag_headerex
-      - id: frames  
+      - id: frames
         type: frame
         repeat: until
         repeat-until: _io.pos + _.size > header.size.value or _.is_invalid
@@ -29,7 +33,6 @@ types:
         if: header.flags.flag_headerex
         size: header_ex.padding_size - _io.pos
 
-  # Section 3.1. ID3v2 header
   header:
     doc: ID3v2 fixed header
     doc-ref: Section 3.1. ID3v2 header
@@ -77,8 +80,8 @@ types:
           - id: reserved
             type: b15
 
-  # Section 3.3. ID3v2 frame overview
   frame:
+    doc-ref: Section 3.3. ID3v2 frame overview
     seq:
       - id: id
         type: str
@@ -90,6 +93,9 @@ types:
         type: flags
       - id: data
         size: size
+    instances:
+      is_invalid:
+        value: "id == '\x00\x00\x00\x00'"
     types:
       flags:
         seq:
@@ -109,9 +115,6 @@ types:
             type: b1
           - id: reserved2
             type: b5
-    instances:
-      is_invalid:
-        value: "id == '\x00\x00\x00\x00'"
 
   # Section 6.2. Synchsafe integers
   u1be_synchsafe:

@@ -1,7 +1,7 @@
 meta:
   id: ruby_marshal
-  endian: le
   license: CC0-1.0
+  endian: le
 doc: |
   Ruby's Marshal module allows serialization and deserialization of
   many standard and arbitrary Ruby objects in a compact binary
@@ -52,6 +52,7 @@ types:
             'codes::ruby_struct': ruby_struct
             'codes::ruby_symbol': ruby_symbol
             'codes::ruby_symbol_link': packed_int
+            'codes::ruby_object_link': packed_int
   packed_int:
     doc: |
       Ruby uses sophisticated system to pack integers: first `code`
@@ -198,6 +199,7 @@ enums:
     0x30: const_nil
     0x3a: ruby_symbol
     0x3b: ruby_symbol_link
+    0x40: ruby_object_link
     0x46: const_false
     0x49: instance_var
     0x53: ruby_struct

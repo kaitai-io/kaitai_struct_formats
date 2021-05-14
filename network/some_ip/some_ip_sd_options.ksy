@@ -4,10 +4,10 @@ meta:
   license: CC0-1.0
   ks-version: 0.9
   endian: be
-    
+
 doc: |
-  FormatOptions are used to transport additional information to the entries. 
-  This includes forinstance the information how a service instance is 
+  FormatOptions are used to transport additional information to the entries.
+  This includes forinstance the information how a service instance is
   reachable (IP-Address, TransportProtocol, Port Number).
 doc-ref: |
   https://www.autosar.org/fileadmin/user_upload/standards/foundation/19-11/AUTOSAR_PRS_SOMEIPServiceDiscoveryProtocol.pdf
@@ -17,7 +17,7 @@ seq:
   - id: entries
     type: sd_option
     repeat: eos
-    
+
 types:
   sd_option:
     seq:
@@ -35,7 +35,7 @@ types:
           option_types::ipv6_multicast_option : sd_ipv6_multicast_option
           option_types::ipv4_sd_endpoint_option : sd_ipv4_sd_endpoint_option
           option_types::ipv6_sd_endpoint_option : sd_ipv6_sd_endpoint_option
-          
+
     types:
       sd_option_header:
         seq:
@@ -44,7 +44,7 @@ types:
           - id: type
             type: u1
             enum: option_types
-            
+
       sd_configuration_option:
         seq:
           - id: reserved
@@ -52,13 +52,13 @@ types:
           - id: configurations
             type: sd_config_strings_container
             size: _parent.header.length - 1
-            
+
       sd_config_strings_container:
         seq:
           - id: config_strings
             type: sd_config_string
             repeat: eos
-      
+
       sd_config_string:
         seq:
           - id: length
@@ -67,7 +67,7 @@ types:
             type: sd_config_kv_pair
             size: length
             if: length != 0
-      
+
       sd_config_kv_pair:
         seq:
         - id: key
@@ -76,10 +76,10 @@ types:
           encoding: ASCII
         - id: value
           type: str
-          size-eos: true 
+          size-eos: true
           encoding: ASCII
-      
-      
+
+
       sd_load_balancing_option:
         seq:
           - id: reserved
@@ -88,7 +88,7 @@ types:
             type: u2
           - id: weight
             type: u2
-      
+
       sd_ipv4_endpoint_option:
         seq:
           - id: reserved
@@ -101,7 +101,7 @@ types:
             type: u1
           - id: port
             type: u2
-      
+
       sd_ipv6_endpoint_option:
         seq:
           - id: reserved
@@ -114,7 +114,7 @@ types:
             type: u1
           - id: port
             type: u2
-      
+
       sd_ipv4_multicast_option:
         seq:
           - id: reserved
@@ -127,7 +127,7 @@ types:
             type: u1
           - id: port
             type: u2
-      
+
       sd_ipv6_multicast_option:
         seq:
           - id: reserved
@@ -140,7 +140,7 @@ types:
             type: u1
           - id: port
             type: u2
-      
+
       sd_ipv4_sd_endpoint_option:
         seq:
           - id: reserved
@@ -153,7 +153,7 @@ types:
             type: u1
           - id: port
             type: u2
-      
+
       sd_ipv6_sd_endpoint_option:
         seq:
           - id: reserved
@@ -166,7 +166,7 @@ types:
             type: u1
           - id: port
             type: u2
-      
+
     enums:
       option_types:
         0x01 : configuration_option

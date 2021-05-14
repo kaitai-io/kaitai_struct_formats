@@ -1,8 +1,11 @@
 meta:
   id: android_img
   title: Android Boot Image
-  license: CC0-1.0
   file-extension: img
+  tags:
+    - archive
+    - android
+  license: CC0-1.0
   endian: le
 doc-ref: https://source.android.com/devices/bootloader/boot-image-header
 seq:

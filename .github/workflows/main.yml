@@ -4,19 +4,20 @@ on:
   push:
     branches:
       - master
-  pull_request: {}
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+        with:
+          submodules: true
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: '2.x'
       - uses: actions/setup-python@v1
         with:
-          python-version: '2.x'
+          python-version: '3.x'
       - name: Install deps
         run: |
           sudo apt-get update
@@ -44,8 +45,6 @@ jobs:
           echo 'gem: --no-document' | sudo tee /etc/gemrc
           cd _build
           bundle install
-      - name: Install Pygments
-        run: python -m pip install --user pygments
       - name: Install Graphviz lexer for Pygments
         run: python -m pip install --user git+https://github.com/nikeee/pygments-lexer-graphviz.git@master
       - name: Build targets
@@ -63,7 +62,14 @@ jobs:
         working-directory: _build
         run: ./build-html .. target html
       - name: Deploy
-        run: .github/publish
         env:
           BOT_SSH_KEY: ${{secrets.BOT_SSH_KEY}}
+        run: |
+          .github/push_artifacts/git_config_kaitai_bot
+          .github/push_artifacts/publish \
+            -o kaitai-io \
+            -r formats-kaitai-io.github.io \
+            -m "Build results of ${GITHUB_REF#refs/heads/*} $GITHUB_REPOSITORY@$GITHUB_SHA" \
+            -- --exclude=.git --exclude=.travis.yml --exclude=CNAME _build/html/
+        # NB: trailing slash in '_build/html/' is *very* important for rsync!
         if: github.ref == 'refs/heads/master'

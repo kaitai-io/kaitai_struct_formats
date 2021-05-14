@@ -7,6 +7,10 @@ meta:
     - oga
     - spx
     - ogx
+  xref:
+    loc: fdd000026
+    pronom: fmt/944
+    wikidata: Q188199
   license: CC0-1.0
   endian: le
 doc: |
@@ -48,7 +52,7 @@ types:
           BOS (Beginning Of Stream) mark. This page is the first page in
           the logical bitstream. The BOS flag must be set on the first
           page of every logical bitstream, and must not be set on any
-          other page.    
+          other page.
       - id: is_continuation
         type: b1
         doc: |

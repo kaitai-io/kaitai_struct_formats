@@ -2,6 +2,11 @@ meta:
   id: dicom
   title: Digital Imaging and Communications in Medicine (DICOM) file format
   file-extension: dcm
+  xref:
+    justsolve: DICOM
+    mime: application/dicom
+    pronom: fmt/574
+    wikidata: Q81095
   license: MIT
   endian: le
 doc-ref: 'http://dicom.nema.org/medical/dicom/current/output/html/part10.html#chapter_7'

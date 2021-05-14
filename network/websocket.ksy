@@ -3,8 +3,9 @@ meta:
   title: WebSocket
   xref:
     rfc: 6455
-  endian: be
+    wikidata: Q859938
   license: CC0-1.0
+  endian: be
 doc: |
   The WebSocket protocol establishes a two-way communication channel via TCP.
   Messages are made up of one or more dataframes, and are delineated by
@@ -75,7 +76,7 @@ types:
         type: str
         encoding: UTF-8
         if: '_root.initial_frame.header.opcode == opcode::text'
-    
+
 enums:
   opcode:
     0: continuation
@@ -94,4 +95,3 @@ enums:
     0xD: reserved_control_d
     0xE: reserved_control_e
     0xF: reserved_control_f
-

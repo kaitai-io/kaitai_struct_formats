@@ -5,25 +5,30 @@ meta:
   file-extension:
     - efi
     - te
-  ks-version: 0.7
+  xref:
+    wikidata: Q83443959
+  tags:
+    - executable
+    - firmware
   license: CC0-1.0
+  ks-version: 0.7
   endian: le
 doc: |
-  This type of executables could be found inside the UEFI firmware. The UEFI 
-  firmware is stored in SPI flash memory, which is a chip soldered on a 
-  system’s motherboard. UEFI firmware is very modular: it usually contains 
-  dozens, if not hundreds, of executables. To store all these separates files, 
-  the firmware is laid out in volumes using the Firmware File System (FFS), a 
-  file system specifically designed to store firmware images. The volumes 
-  contain files that are identified by GUIDs and each of these files contain 
-  one or more sections holding the data. One of these sections contains the 
-  actual executable image. Most of the executable images follow the PE format. 
+  This type of executables could be found inside the UEFI firmware. The UEFI
+  firmware is stored in SPI flash memory, which is a chip soldered on a
+  system's motherboard. UEFI firmware is very modular: it usually contains
+  dozens, if not hundreds, of executables. To store all these separates files,
+  the firmware is laid out in volumes using the Firmware File System (FFS), a
+  file system specifically designed to store firmware images. The volumes
+  contain files that are identified by GUIDs and each of these files contain
+  one or more sections holding the data. One of these sections contains the
+  actual executable image. Most of the executable images follow the PE format.
   However, some of them follow the TE format.
 
   The Terse Executable (TE) image format was created as a mechanism to reduce
-  the overhead of the PE/COFF headers in PE32/PE32+ images, resulting in a 
-  corresponding reduction of image sizes for executables running in the PI 
-  (Platform Initialization) Architecture environment. Reducing image size 
+  the overhead of the PE/COFF headers in PE32/PE32+ images, resulting in a
+  corresponding reduction of image sizes for executables running in the PI
+  (Platform Initialization) Architecture environment. Reducing image size
   provides an opportunity for use of a smaller system flash part.
 
   So the TE format is basically a stripped version of PE.

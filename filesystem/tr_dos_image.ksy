@@ -1,7 +1,7 @@
 meta:
   id: tr_dos_image
-  file-extension: trd
   title: "TR-DOS flat-file disk image"
+  file-extension: trd
   license: CC0-1.0
   endian: le
 doc: |

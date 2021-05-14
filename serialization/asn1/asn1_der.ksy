@@ -1,6 +1,10 @@
 meta:
   id: asn1_der
   title: ASN.1 DER (Abstract Syntax Notation One, Distinguished Encoding Rules)
+  file-extension: der
+  xref:
+    justsolve: DER
+    wikidata: Q28600469
   license: CC0-1.0
 doc: |
   ASN.1 (Abstract Syntax Notation One) DER (Distinguished Encoding

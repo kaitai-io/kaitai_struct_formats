@@ -3,6 +3,7 @@ meta:
   title: ZIP archive file
   file-extension: zip
   xref:
+    forensicswiki: ZIP
     iso: 21320-1
     justsolve: ZIP
     loc:
@@ -12,8 +13,12 @@ meta:
       - fdd000361
     pronom: x-fmt/263
     wikidata: Q136218
-  endian: le
   license: CC0-1.0
+  ks-version: 0.9
+  imports:
+    - /common/dos_datetime
+  endian: le
+  bit-endian: le
 doc: |
   ZIP is a popular archive file format, introduced in 1989 by Phil Katz
   and originally implemented in PKZIP utility by PKWARE.
@@ -25,7 +30,9 @@ doc: |
 
   For example, Java .jar files, OpenDocument, Office Open XML, EPUB files
   are actually ZIP archives.
-doc-ref: https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT
+doc-ref:
+  - https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT
+  - https://users.cs.jmu.edu/buchhofp/forensics/formats/pkzip.html
 seq:
   - id: sections
     type: pk_section
@@ -64,14 +71,14 @@ types:
       - id: version
         type: u2
       - id: flags
-        type: u2
+        type: gp_flags
+        size: 2
       - id: compression_method
         type: u2
         enum: compression
       - id: file_mod_time
-        type: u2
-      - id: file_mod_date
-        type: u2
+        size: 4
+        type: dos_datetime
       - id: crc32
         type: u4
       - id: len_body_compressed
@@ -89,6 +96,59 @@ types:
       - id: extra
         size: len_extra
         type: extras
+    types:
+      gp_flags:
+        -orig-id: general purpose bit flag
+        doc-ref:
+          - https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT - 4.4.4
+          - https://users.cs.jmu.edu/buchhofp/forensics/formats/pkzip.html Local file headers
+        seq:
+          - id: file_encrypted
+            type: b1
+          - id: comp_options_raw
+            type: b2
+            doc: internal; access derived value instances instead
+          - id: has_data_descriptor
+            type: b1
+          - id: reserved_1
+            type: b1
+          - id: comp_patched_data
+            type: b1
+          - id: strong_encrypt
+            type: b1
+          - id: reserved_2
+            type: b4
+          - id: lang_encoding
+            type: b1
+          - id: reserved_3
+            type: b1
+          - id: mask_header_values
+            type: b1
+          - id: reserved_4
+            type: b2
+        instances:
+          deflated_mode:
+            value: comp_options_raw
+            enum: deflate_mode
+            if: |
+              _parent.compression_method == compression::deflated
+              or _parent.compression_method == compression::enhanced_deflated
+          imploded_dict_byte_size:
+            value: '((comp_options_raw & 0b01) != 0 ? 8 : 4) * 1024'
+            if: '_parent.compression_method == compression::imploded'
+            doc: 8KiB or 4KiB in bytes
+          imploded_num_sf_trees:
+            value: '(comp_options_raw & 0b10) != 0 ? 3 : 2'
+            if: '_parent.compression_method == compression::imploded'
+          lzma_has_eos_marker:
+            value: '(comp_options_raw & 0b01) != 0'
+            if: '_parent.compression_method == compression::lzma'
+        enums:
+          deflate_mode:
+            0: normal
+            1: maximum
+            2: fast
+            3: super_fast
   central_dir_entry:
     doc-ref: https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT - 4.3.12
     seq:
@@ -101,10 +161,9 @@ types:
       - id: compression_method
         type: u2
         enum: compression
-      - id: last_mod_file_time
-        type: u2
-      - id: last_mod_file_date
-        type: u2
+      - id: file_mod_time
+        size: 4
+        type: dos_datetime
       - id: crc32
         type: u4
       - id: len_body_compressed
@@ -183,7 +242,7 @@ types:
             'extra_codes::infozip_unix_var_size': infozip_unix_var_size
     types:
       ntfs:
-        doc-ref: 'https://github.com/LuaDist/zip/blob/master/proginfo/extrafld.txt#L191'
+        doc-ref: 'https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt#L191'
         seq:
           - id: reserved
             type: u4
@@ -212,20 +271,36 @@ types:
               - id: creation_time
                 type: u8
       extended_timestamp:
-        doc-ref: 'https://github.com/LuaDist/zip/blob/master/proginfo/extrafld.txt#L817'
+        doc-ref: 'https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt#L817'
         seq:
           - id: flags
-            type: u1
+            size: 1
+            type: info_flags
           - id: mod_time
             type: u4
+            if: flags.has_mod_time
+            doc: Unix timestamp
           - id: access_time
             type: u4
-            if: not _io.eof
+            if: flags.has_access_time
+            doc: Unix timestamp
           - id: create_time
             type: u4
-            if: not _io.eof
+            if: flags.has_create_time
+            doc: Unix timestamp
+        types:
+          info_flags:
+            seq:
+              - id: has_mod_time
+                type: b1
+              - id: has_access_time
+                type: b1
+              - id: has_create_time
+                type: b1
+              - id: reserved
+                type: b5
       infozip_unix_var_size:
-        doc-ref: 'https://github.com/LuaDist/zip/blob/master/proginfo/extrafld.txt#L1339'
+        doc-ref: 'https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt#L1339'
         seq:
           - id: version
             type: u1
@@ -260,7 +335,7 @@ enums:
     19: ibm_lz77_z
     98: ppmd
   extra_codes:
-    # https://github.com/LuaDist/zip/blob/master/proginfo/extrafld.txt
+    # https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt
     0x0001: zip64
     0x0007: av_info
 #    0x0008: reserved for extended language encoding data (PFS) (see APPENDIX D)

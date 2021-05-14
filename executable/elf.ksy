@@ -2,6 +2,23 @@ meta:
   id: elf
   title: Executable and Linkable Format
   application: SVR4 ABI and up, many *nix systems
+  xref:
+    justsolve: Executable_and_Linkable_Format
+    mime:
+      - application/x-elf
+      - application/x-coredump
+      - application/x-executable
+      - application/x-object
+      - application/x-sharedlib
+    pronom:
+      - fmt/688 # 32bit Little Endian
+      - fmt/689 # 32bit Big Endian
+      - fmt/690 # 64bit Little Endian
+      - fmt/691 # 64bit Big Endian
+    wikidata: Q1343830
+  tags:
+    - executable
+    - linux
   license: CC0-1.0
   ks-version: 0.8
 doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=HEAD
@@ -307,11 +324,15 @@ types:
           dynamic:
             io: _root._io
             pos: offset
-            type: dynamic_section
             size: filesz
+            type: dynamic_section
             if: type == ph_type::dynamic
           flags_obj:
-            type: phdr_type_flags(flags64|flags32)
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': phdr_type_flags(flags32)
+                'bits::b64': phdr_type_flags(flags64)
             -webide-parse-mode: eager
         -webide-representation: "{type} - f:{flags_obj:flags} (o:{offset}, s:{filesz:dec})"
       section_header:
@@ -468,16 +489,16 @@ types:
     instances:
       program_headers:
         pos: program_header_offset
-        repeat: expr
-        repeat-expr: qty_program_header
         size: program_header_entry_size
         type: program_header
+        repeat: expr
+        repeat-expr: qty_program_header
       section_headers:
         pos: section_header_offset
-        repeat: expr
-        repeat-expr: qty_section_header
         size: section_header_entry_size
         type: section_header
+        repeat: expr
+        repeat-expr: qty_section_header
       strings:
         pos: section_headers[section_names_idx].ofs_body
         size: section_headers[section_names_idx].len_body
@@ -515,6 +536,8 @@ enums:
     0x12: openvos # Stratus Technologies OpenVOS
   # e_type
   obj_type:
+    # ET_NONE
+    0: no_file_type
     # ET_REL
     1: relocatable
     # ET_EXEC
@@ -524,23 +547,40 @@ enums:
     # ET_CORE
     4: core
   machine:
-    0x00: not_set
+    0x00: no_machine
+    # EM_M32
+    0x01: m32
     # EM_SPARC
     0x02: sparc
     # EM_386
     0x03: x86
+    # EM_68K
+    0x04: m68k
+    # EM_88K
+    0x05: m88k
     0x08: mips
     0x14: powerpc
+    # EM_PPC64
+    0x15: powerpc64
+    # EM_S390
+    0x16: s390
     # EM_ARM
     0x28: arm
     # EM_SH
-    0x2A: superh
+    0x2a: superh
+    # EM_SPARCV9
+    0x2b: sparcv9
     0x32: ia_64
     # EM_X86_64
-    0x3E: x86_64
-    0xB7: aarch64
-    0xF3: riscv
-    0xF7: bpf
+    0x3e: x86_64
+    0x53: avr
+    0xa4: qdsp6
+    0xb9: avr32
+    0xb7: aarch64
+    0xe0: amdgpu
+    0xf3: riscv
+    0xf7: bpf
+    0xfc: csky
   ph_type:
     0: null_type
     1: load
@@ -559,7 +599,8 @@ enums:
     0x6474e550: gnu_eh_frame
     0x6474e551: gnu_stack
     0x6474e552: gnu_relro
-  # http://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-94076.html#chapter6-73445
+    0x6474e553: gnu_property
+  # https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-94076.html#chapter6-73445
   sh_type:
     0: null_type
     1: progbits
@@ -602,7 +643,7 @@ enums:
 #    0x70000000: loproc
     0x70000000: sparc_gotdata
     0x70000001: amd64_unwind
-    0x70000001: arm_exidx
+#    0x70000001: arm_exidx
     0x70000002: arm_preemptmap
     0x70000003: arm_attributes
 #    0x7fffffff: hiproc
@@ -640,18 +681,14 @@ enums:
     28: fini_arraysz     # Size in bytes of DT_FINI_ARRAY
     29: runpath          # Library search path
     30: flags            # Flags for the object being loaded
-    32: encoding         # Start of encoded range
     32: preinit_array    # Array with addresses of preinit fct
     33: preinit_arraysz  # Size in bytes of DT_PREINIT_ARRAY
     34: maxpostags       # Number used
-    0x6000000d: loos
     0x6000000d: sunw_auxiliary
-    0x6000000e: sunw_rtldinf
     0x6000000e: sunw_filter
     0x60000010: sunw_cap
     0x60000011: sunw_symtab
     0x60000012: sunw_symsz
-    0x60000013: sunw_encoding
     0x60000013: sunw_sortent
     0x60000014: sunw_symsort
     0x60000015: sunw_symsortsz
@@ -663,21 +700,17 @@ enums:
     0x6000001b: sunw_ldmach
     0x6000001d: sunw_capchainent
     0x6000001f: sunw_capchainsz
-    0x6ffff000: hios
-    0x6ffffd00: valrnglo
     0x6ffffdf5: gnu_prelinked   # Prelinking timestamp
     0x6ffffdf6: gnu_conflictsz  # Size of conflict section
     0x6ffffdf7: gnu_liblistsz   # Size of library list
-    0x6ffffdf8: checksum        
-    0x6ffffdf9: pltpadsz        
-    0x6ffffdfa: moveent         
-    0x6ffffdfb: movesz          
+    0x6ffffdf8: checksum
+    0x6ffffdf9: pltpadsz
+    0x6ffffdfa: moveent
+    0x6ffffdfb: movesz
     0x6ffffdfc: feature_1       # Feature selection (DTF_*).
     0x6ffffdfd: posflag_1       # Flags for DT_* entries, effecting the following DT_* entry.
     0x6ffffdfe: syminsz         # Size of syminfo table (in bytes)
     0x6ffffdff: syminent        # Entry size of syminfo
-    0x6ffffdff: valrnghi
-    0x6ffffe00: addrrnglo
     0x6ffffef5: gnu_hash
     0x6ffffef6: tlsdesc_plt
     0x6ffffef7: tlsdesc_got
@@ -689,7 +722,6 @@ enums:
     0x6ffffefd: pltpad
     0x6ffffefe: movetab
     0x6ffffeff: syminfo
-    0x6ffffeff: addrrnghi
     0x6ffffff0: versym
     0x6ffffff9: relacount
     0x6ffffffa: relcount
@@ -698,9 +730,7 @@ enums:
     0x6ffffffd: verdefnum
     0x6ffffffe: verneed
     0x6fffffff: verneednum
-    0x70000000: loproc
     0x70000001: sparc_register
     0x7ffffffd: auxiliary
     0x7ffffffe: used
     0x7fffffff: filter
-    0x7fffffff: hiproc

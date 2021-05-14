@@ -1,12 +1,13 @@
 meta:
   id: zx_spectrum_tap
-  file-extension: tap
-  endian: le
-  license: CC0-1.0
   title: ZX Spectrum tape file
+  file-extension: tap
   xref:
     justsolve: TAP_(ZX_Spectrum)
     pronom: fmt/801
+    wikidata: Q34748140
+  license: CC0-1.0
+  endian: le
 doc: |
   TAP files are used by emulators of ZX Spectrum computer (released in
   1982 by Sinclair Research). TAP file stores blocks of data as if
@@ -16,7 +17,7 @@ doc: |
   metainformation prepended as a header.
 doc-ref: https://faqwiki.zxnet.co.uk/wiki/TAP_format
 seq:
-  - id: block
+  - id: blocks
     type: block
     repeat: eos
 enums:
@@ -60,8 +61,8 @@ types:
           switch-on: header_type
           cases:
             'header_type_enum::program': program_params
-            'header_type_enum::num_arry': array_params
-            'header_type_enum::char_arry': array_params
+            'header_type_enum::num_array': array_params
+            'header_type_enum::char_array': array_params
             'header_type_enum::bytes': bytes_params
       - id: checksum
         type: u1

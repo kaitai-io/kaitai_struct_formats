@@ -1,5 +1,16 @@
 meta:
   id: exif
+  xref:
+    forensicswiki: Exif
+    justsolve: Exif
+    loc: fdd000146
+    pronom:
+      - x-fmt/398 # Exif 2.0
+      - x-fmt/390 # Exif 2.1
+      - x-fmt/391 # Exif 2.2
+      - fmt/645 # Exif 2.21 ("2.2.1" in PRONOM is misspelled)
+    wikidata: Q26383099
+  license: CC0-1.0
 seq:
   - id: endianness
     type: u2le
@@ -20,8 +31,8 @@ types:
         type: u4
     instances:
       ifd0:
-        type: ifd
         pos: ifd0_ofs
+        type: ifd
     types:
       ifd:
         seq:
@@ -58,10 +69,10 @@ types:
           is_immediate_data:
             value: 'byte_length <= 4'
           data:
+            io: _root._io
             pos: ofs_or_data
             size: byte_length
             if: not is_immediate_data
-            io: _root._io
         enums:
           field_type_enum:
             1: byte

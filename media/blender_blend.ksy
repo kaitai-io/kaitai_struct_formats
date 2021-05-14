@@ -4,6 +4,7 @@ meta:
   file-extension: blend
   xref:
     justsolve: BLEND
+    mime: application/x-blender
     pronom:
       - fmt/902
       - fmt/903

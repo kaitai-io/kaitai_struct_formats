@@ -7,17 +7,22 @@ meta:
     loc: fdd000189
     mime: image/bmp
     pronom:
-      - fmt/115
-      - fmt/116
-      - fmt/117
-      - fmt/118
-      - fmt/119
-      - x-fmt/25
+      - fmt/114 # Windows Bitmap 1.0
+      - fmt/115 # Windows Bitmap 2.0
+      - fmt/116 # Windows Bitmap 3.0
+      - fmt/117 # Windows Bitmap 3.0 NT
+      - fmt/118 # Windows Bitmap 4.0
+      - fmt/119 # Windows Bitmap 5.0
+      - x-fmt/25 # OS/2 Bitmap 1.0
+      - x-fmt/270 # OS/2 Bitmap 2.0
     wikidata: Q192869
-  endian: le
+  tags:
+    - windows
   license: CC0-1.0
   ks-version: 0.9
-  # ks-opaque-types: true # uncomment if you provide an opaque type `bitmap` for bitmap data
+  endian: le
+  # ks-opaque-types: true # uncomment this line and comment `/types/bitmap`,
+                          # if you provide an opaque type `bitmap` for bitmap data
 doc: |
   The **BMP file format**, also known as **bitmap image file** or **device independent
   bitmap (DIB) file format** or simply a **bitmap**, is a raster graphics image file
@@ -64,8 +69,9 @@ doc: |
   Due to the fact that it isn't documented anywhere else, most applications don't support it.
 
   All Windows headers at once (including mentioned BITMAPV2INFOHEADER and BITMAPV3INFOHEADER):
+
   ![Bitmap headers overview](
-    https://forums.adobe.com/servlet/JiveServlet/showImage/2-3273299-47801/BMP_Headers.png
+    https://web.archive.org/web/20190527043845/https://forums.adobe.com/servlet/JiveServlet/showImage/2-3273299-47801/BMP_Headers.png
   )
 
   ## Specs
@@ -139,21 +145,19 @@ types:
         type: bitmap_header(len_header)
       - id: color_mask
         type: color_mask(header.bitmap_info_ext.compression == compressions::alpha_bitfields)
-        if: not _io.eof and is_color_mask_here
+        if: is_color_mask_here
         doc: Valid only for BITMAPINFOHEADER, in all headers extending it the masks are contained in the header itself.
       - id: color_table
         -orig-id: bmciColors
         size-eos: true
-        type: 'color_table(
-            not header.is_core_header,
-            header.extends_bitmap_info ? header.bitmap_info_ext.num_colors_used : 0
-          )'
+        type: 'color_table(not header.is_core_header, header.extends_bitmap_info ? header.bitmap_info_ext.num_colors_used : 0)'
         if: not _io.eof
     instances:
       is_color_mask_here:
         value: >-
-          header.len_header == header_type::bitmap_info_header.to_i
-            and (header.bitmap_info_ext.compression == compressions::bitfields or header.bitmap_info_ext.compression == compressions::alpha_bitfields)
+          not _io.eof
+          and header.len_header == header_type::bitmap_info_header.to_i
+          and (header.bitmap_info_ext.compression == compressions::bitfields or header.bitmap_info_ext.compression == compressions::alpha_bitfields)
       is_color_mask_given:
         value: >-
           header.extends_bitmap_info
@@ -392,8 +396,8 @@ types:
         type: u4
         enum: intent
       - id: ofs_profile
-        doc: The offset, in bytes, from the beginning of the BITMAPV5HEADER structure to the start of the profile data.
         -orig-id: bV5ProfileData
+        doc: The offset, in bytes, from the beginning of the BITMAPV5HEADER structure to the start of the profile data.
         type: u4
       - id: len_profile
         -orig-id: bV5ProfileSize
@@ -415,7 +419,7 @@ types:
           cases:
             true: strz
         if: has_profile
-        doc-ref: https://docs.microsoft.com/en-us/previous-versions/windows/desktop/wcs/using-structures-in-wcs-1-0 "If the profile is embedded,
+        doc-ref: https://docs.microsoft.com/en-us/windows/win32/wcs/using-structures-in-wcs-1-0 "If the profile is embedded,
           profile data is the actual profile, and if it is linked, the profile data is the
           null-terminated file name of the profile. This cannot be a Unicode string. It must be composed exclusively
           of characters from the Windows character set (code page 1252)."
@@ -451,8 +455,8 @@ types:
       - id: blue_mask
         type: u4
       - id: alpha_mask
-        if: has_alpha_mask
         type: u4
+        if: has_alpha_mask
   rgb_record:
     -orig-id:
       - RGB_TRIPLE
@@ -468,8 +472,8 @@ types:
       - id: red
         type: u1
       - id: reserved
-        if: has_reserved_field
         type: u1
+        if: has_reserved_field
     -webide-representation: "rgb({red:dec}, {green:dec}, {blue:dec})"
 # Common types
   fixed_point_2_dot_30:
@@ -479,7 +483,7 @@ types:
         type: u4
     instances:
       value:
-        value: raw.as<f4> / (1 << 30)
+        value: (raw + 0.0) / (1 << 30)
     -webide-representation: "{value}"
   fixed_point_16_dot_16:
     seq:
@@ -487,7 +491,7 @@ types:
         type: u4
     instances:
       value:
-        value: raw.as<f4> / (1 << 16)
+        value: (raw + 0.0) / (1 << 16)
     -webide-representation: "{value}"
 enums:
   compressions:
@@ -582,20 +586,20 @@ enums:
     # https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapv5header#members
     8:
       id: abs_colorimetric
-      doc: Maintains the white point. Matches the colors to their nearest color in the destination gamut.
       -orig-id: LCS_GM_ABS_COLORIMETRIC
+      doc: Maintains the white point. Matches the colors to their nearest color in the destination gamut.
     1:
       id: business
-      doc: Maintains saturation. Used for business charts and other situations in which undithered colors are required.
       -orig-id: LCS_GM_BUSINESS
+      doc: Maintains saturation. Used for business charts and other situations in which undithered colors are required.
     2:
       id: graphics
-      doc: Maintains colorimetric match. Used for graphic designs and named colors.
       -orig-id: LCS_GM_GRAPHICS
+      doc: Maintains colorimetric match. Used for graphic designs and named colors.
     4:
       id: images
-      doc: Maintains contrast. Used for photographs and natural images.
       -orig-id: LCS_GM_IMAGES
+      doc: Maintains contrast. Used for photographs and natural images.
 
   header_type:
     # https://forums.adobe.com/servlet/JiveServlet/showImage/2-3273299-47801/BMP_Headers.png

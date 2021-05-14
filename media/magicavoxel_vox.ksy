@@ -1,12 +1,17 @@
 meta:
   id: magicavoxel_vox
-  file-extension: vox
-  application: MagicaVoxel
-  endian: le
-  license: MIT
   title: MagicaVoxel File
-doc-ref: 'https://ephtracy.github.io/ MagicaVoxel Homepage'
-doc-ref: 'https://github.com/ephtracy/voxel-model/blob/master/MagicaVoxel-file-format-vox.txt Format Description'
+  application: MagicaVoxel
+  file-extension: vox
+  xref:
+    pronom: fmt/976
+    wikidata: Q50374901
+  license: MIT
+  ks-version: 0.9 # for doc-ref array
+  endian: le
+doc-ref:
+  - https://ephtracy.github.io/ MagicaVoxel Homepage
+  - https://github.com/ephtracy/voxel-model/blob/master/MagicaVoxel-file-format-vox.txt Format Description
 seq:
   - id: magic
     contents: 'VOX '
@@ -67,7 +72,7 @@ types:
         repeat: expr
         repeat-expr: 256
   voxel:
-    seq: 
+    seq:
       - id: x
         type: u1
       - id: y
@@ -88,41 +93,41 @@ types:
         type: u1
   matt:
     seq:
-    - id: id
-      type: u4
-    - id: material_type
-      type: u4
-      enum: material_type
-    - id: material_weight
-      type: f4
-    - id: property_bits
-      type: u4
-      # .to_i not implemented for C# runtime yet
-      #enum: property_bits_type
-    - id: plastic
-      if: has_plastic
-      type: f4
-    - id: roughness
-      if: has_roughness
-      type: f4
-    - id: specular
-      if: has_specular
-      type: f4
-    - id: ior
-      if: has_ior
-      type: f4
-    - id: attenuation
-      if: has_attenuation
-      type: f4
-    - id: power
-      if: has_power
-      type: f4
-    - id: glow
-      if: has_glow
-      type: f4
-    - id: is_total_power
-      if: has_is_total_power
-      type: f4
+      - id: id
+        type: u4
+      - id: material_type
+        type: u4
+        enum: material_type
+      - id: material_weight
+        type: f4
+      - id: property_bits
+        type: u4
+        # .to_i not implemented for C# runtime yet
+        #enum: property_bits_type
+      - id: plastic
+        if: has_plastic
+        type: f4
+      - id: roughness
+        if: has_roughness
+        type: f4
+      - id: specular
+        if: has_specular
+        type: f4
+      - id: ior
+        if: has_ior
+        type: f4
+      - id: attenuation
+        if: has_attenuation
+        type: f4
+      - id: power
+        if: has_power
+        type: f4
+      - id: glow
+        if: has_glow
+        type: f4
+      - id: is_total_power
+        if: has_is_total_power
+        type: f4
     instances:
       has_plastic:
         value: '(property_bits & 1) != 0'
@@ -140,7 +145,7 @@ types:
         value: '(property_bits & 64) != 0'
       has_is_total_power:
         value: '(property_bits & 128) != 0'
-enums: 
+enums:
   chunk_type:
     0x4d41494e: main
     0x5041434b: pack
@@ -165,7 +170,7 @@ enums:
 # Support for constant lists would be useful here for the default color palette when the RGBA chunk is missing
 # instances:
 #   default_palette:
-#     value: [ 
+#     value: [
 # 0x00000000, 0xffffffff, 0xffccffff, 0xff99ffff, 0xff66ffff, 0xff33ffff, 0xff00ffff, 0xffffccff, 0xffccccff, 0xff99ccff, 0xff66ccff, 0xff33ccff, 0xff00ccff, 0xffff99ff, 0xffcc99ff, 0xff9999ff,>
 # 0xff6699ff, 0xff3399ff, 0xff0099ff, 0xffff66ff, 0xffcc66ff, 0xff9966ff, 0xff6666ff, 0xff3366ff, 0xff0066ff, 0xffff33ff, 0xffcc33ff, 0xff9933ff, 0xff6633ff, 0xff3333ff, 0xff0033ff, 0xffff00ff,>
 #	0xffcc00ff, 0xff9900ff, 0xff6600ff, 0xff3300ff, 0xff0000ff, 0xffffffcc, 0xffccffcc, 0xff99ffcc, 0xff66ffcc, 0xff33ffcc, 0xff00ffcc, 0xffffcccc, 0xffcccccc, 0xff99cccc, 0xff66cccc, 0xff33cccc,>
@@ -183,5 +188,3 @@ enums:
 #	0xff000022, 0xff000011, 0xff00ee00, 0xff00dd00, 0xff00bb00, 0xff00aa00, 0xff008800, 0xff007700, 0xff005500, 0xff004400, 0xff002200, 0xff001100, 0xffee0000, 0xffdd0000, 0xffbb0000, 0xffaa0000,>
 #	0xff880000, 0xff770000, 0xff550000, 0xff440000, 0xff220000, 0xff110000, 0xffeeeeee, 0xffdddddd, 0xffbbbbbb, 0xffaaaaaa, 0xff888888, 0xff777777, 0xff555555, 0xff444444, 0xff222222, 0xff111111>
 #]
-
-

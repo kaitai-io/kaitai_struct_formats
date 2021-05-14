@@ -3,9 +3,10 @@ meta:
   file-extension: bson
   xref:
     justsolve: BSON
+    mime: application/bson
     wikidata: Q2661480
-  endian: le
   license: CC0-1.0
+  endian: le
 doc: >
   BSON, short for Binary JSON, is a binary-encoded serialization of JSON-like documents. Like JSON, BSON supports the embedding of documents and arrays within other documents and arrays. BSON also contains extensions that allow representation of data types that are not part of the JSON spec. For example, BSON has a Date type and a BinData type.
   BSON can be compared to binary interchange formats, like Protocol Buffers. BSON is more "schemaless" than Protocol Buffers, which can give it an advantage in flexibility but also a slight disadvantage in space efficiency (BSON has overhead for field names within the serialized data).
@@ -162,7 +163,7 @@ types:
         0x01: number_double
         0x02: string
         0x03: document
-        0x04: array #The document for an array is a normal BSON document with integer values for the keys, starting with 0 and continuing sequentially. For example, the array ['red', 'blue'] would be encoded as the document {'0': 'red', '1': 'blue'}. The keys must be in ascending numerical order. 
+        0x04: array #The document for an array is a normal BSON document with integer values for the keys, starting with 0 and continuing sequentially. For example, the array ['red', 'blue'] would be encoded as the document {'0': 'red', '1': 'blue'}. The keys must be in ascending numerical order.
         0x05: bin_data #This is the most commonly used binary subtype and should be the 'default' for drivers and tools.
         0x06: undefined
         0x07: object_id

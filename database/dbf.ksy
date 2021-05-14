@@ -1,14 +1,29 @@
 meta:
   id: dbf
-  file-extension: dbf
   application: dBASE
-  license: CC0-1.0
+  file-extension: dbf
   xref:
     justsolve: DBF
     loc: fdd000325
-    pronom: x-fmt/9
+    mime:
+      - application/dbf
+      - application/dbase
+    pronom:
+      - x-fmt/8 # dBASE Database II
+      - x-fmt/9 # dBASE Database III
+      - x-fmt/271 # dBASE Database III+
+      - x-fmt/10 # dBASE Database IV
+      - x-fmt/272 # dBASE Database V
     wikidata: Q16545707
+  license: CC0-1.0
   endian: le
+doc: |
+  .dbf is a relational database format introduced in DOS database
+  management system dBASE in 1982.
+
+  One .dbf file corresponds to one table and contains a series of headers,
+  specification of fields, and a number of fixed-size records.
+doc-ref: http://www.dbase.com/Knowledgebase/INT/db7_file_fmt.htm
 seq:
   - id: header1
     type: header1
@@ -83,7 +98,7 @@ types:
   field:
     seq:
       - id: name
-        type: str
+        type: strz
         encoding: ASCII
         size: 11
       - id: datatype

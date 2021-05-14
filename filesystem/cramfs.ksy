@@ -1,7 +1,11 @@
 meta:
   id: cramfs
   xref:
+    justsolve: Cramfs
     wikidata: Q747406
+  tags:
+    - filesystem
+    - linux
   license: MIT
   endian: le
 seq:
@@ -84,7 +88,7 @@ types:
         value: (mode >> 3) & 0b0111
       perm_o:
         value: mode & 0b0111
-      # -- [size_gid] --  
+      # -- [size_gid] --
       size:
         value: size_gid & 0xFFFFFF
       gid:

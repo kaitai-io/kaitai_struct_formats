@@ -4,6 +4,7 @@ meta:
   file-extension: wad
   xref:
     justsolve: Doom_WAD
+    mime: application/x-doom
     wikidata: Q1936828
   license: CC0-1.0
   endian: le

@@ -3,6 +3,7 @@ meta:
   title: EDID (VESA Enhanced Extended Display Identification Data)
   xref:
     repo: https://github.com/kaitai-io/edid.ksy.git
+    wikidata: Q1376385
   license: CC0-1.0
   endian: le
 seq:
@@ -21,7 +22,7 @@ seq:
     doc: Week of manufacture. Week numbering is not consistent between manufacturers.
   - id: mfg_year_mod
     type: u1
-    doc: Year of manufacture, less 1990. (1990–2245). If week=255, it is the model year instead.
+    doc: Year of manufacture, less 1990. (1990-2245). If week=255, it is the model year instead.
   - id: edid_version_major
     type: u1
     doc: EDID version, usually 1 (for 1.3)
@@ -38,7 +39,7 @@ seq:
     doc: Maximum vertical image size, in centimetres. If either byte is 0, undefined (e.g. projector)
   - id: gamma_mod
     type: u1
-    doc: Display gamma, datavalue = (gamma*100)-100 (range 1.00–3.54)
+    doc: Display gamma, datavalue = (gamma*100)-100 (range 1.00-3.54)
   - id: features_flags
     type: u1
   - id: chromacity

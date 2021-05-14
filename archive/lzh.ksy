@@ -1,6 +1,5 @@
 meta:
   id: lzh
-  endian: le
   application: LHA (AKA LHarc) by Yoshizaki Haruyasu
   file-extension: lzh
   xref:
@@ -8,6 +7,9 @@ meta:
     pronom: fmt/626
     wikidata: Q368782
   license: CC0-1.0
+  imports:
+    - /common/dos_datetime
+  endian: le
 doc: |
   LHA (LHarc, LZH) is a file format used by a popular freeware
   eponymous archiver, created in 1988 by Haruyasu Yoshizaki. Over the
@@ -78,7 +80,8 @@ types:
         type: u4
         doc: Uncompressed file size
       - id: file_timestamp
-        type: u4
+        size: 4
+        type: dos_datetime
         doc: Original file date/time
       - id: attr
         type: u1

@@ -2,6 +2,9 @@ meta:
   id: regf
   title: Windows registry database
   application: Windows NT and later
+  xref:
+    forensicswiki: Windows_NT_Registry_File_(REGF)
+    wikidata: Q463244
   license: CC0-1.0
   endian: le
 doc: |
@@ -98,6 +101,7 @@ types:
         type: u4
         doc: Contains number of bytes
   hive_bin_cell:
+    -webide-representation: "{identifier}"
     seq:
       - id: cell_size_raw
         type: s4
@@ -117,7 +121,6 @@ types:
             "'ri'": sub_key_list_ri
             "'vk'": sub_key_list_vk
             "'sk'": sub_key_list_sk
-    -webide-representation: "{identifier}"
     instances:
       cell_size:
         value: "(cell_size_raw < 0 ? -1 : +1) * cell_size_raw"

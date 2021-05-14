@@ -1,8 +1,7 @@
 meta:
   id: openpgp_message
   title: OpenPGP message
-  license: MIT
-  file-extension: 
+  file-extension:
     - gpg
     - pub
     - pgp
@@ -10,14 +9,15 @@ meta:
     justsolve: PGP
     rfc: 4880
     wikidata: Q2141493
-  endian: be
+  license: MIT
   encoding: UTF-8
+  endian: be
 doc: The OpenPGP Message Format is a format to store encryption and signature keys for emails.
 doc-ref: https://tools.ietf.org/html/rfc4880
 seq:
- - id: packets
-   type: packet
-   repeat: eos
+  - id: packets
+    type: packet
+    repeat: eos
 types:
   packet:
     -webide-representation: '{packet_type_old}'
@@ -38,16 +38,16 @@ types:
         type: b2
         if: not new_packet_format
       - id: body
-        type: 
+        type:
           switch-on: new_packet_format
           cases:
             #true: new_packet
             false: old_packet
-            
+
   old_packet:
     seq:
       - id: len
-        type: 
+        type:
           switch-on: _parent.len_type
           cases:
             0: u1
@@ -64,7 +64,7 @@ types:
             packet_tags::public_subkey_packet: public_key_packet
             packet_tags::secret_key_packet: secret_key_packet
             packet_tags::secret_subkey_packet: public_key_packet
-  
+
   public_key_packet:
     seq:
       - id: version
@@ -82,7 +82,7 @@ types:
         type: u2
       - id: rsa_e
         size: 3
-      
+
   user_id_packet:
     seq:
       - id: user_id
@@ -90,7 +90,7 @@ types:
         type: str
 
   signature_packet:
-    seq: 
+    seq:
       - id: version
         type: u1
         # enum: TODO switch?
@@ -119,7 +119,7 @@ types:
         type: u2
       - id: signature
         size-eos: true
-    
+
   secret_key_packet:
     seq:
       - id: public_key
@@ -132,13 +132,13 @@ types:
         if: string_to_key >= 254
       - id: secret_key
         size-eos: true
-        
+
   subpackets:
     seq:
       - id: subpacketss
         type: subpacket
         repeat: eos
-  
+
   subpacket:
     seq:
       - id: len
@@ -148,7 +148,7 @@ types:
         enum: subpacket_types
       - id: content
         size: len.len - 1
-        type: 
+        type:
           switch-on: subpacket_type
           cases:
             subpacket_types::signature_creation_time: signature_creation_time
@@ -173,7 +173,7 @@ types:
             subpacket_types::features: features
             subpacket_types::signature_target: signature_target
             subpacket_types::embedded_signature: embedded_signature
-      
+
   len_subpacket:
     -webide-representation: '{len}'
     seq:
@@ -188,63 +188,63 @@ types:
     instances:
       len:
         value: 'first_octet < 192 ? first_octet : ((first_octet >= 192 and first_octet < 255) ? (((first_octet - 192) << 8) + second_octet + 192) : scalar)'
-      
+
   signature_creation_time:
     seq:
       - id: time
         type: u4
-        
+
   issuer:
     seq:
       - id: keyid
         type: u8
-  
+
   key_expiration_time:
     seq:
       - id: time
         type: u4
-  
+
   preferred_hash_algorithms:
     seq:
       - id: algorithm
         type: u1
         enum: hash_algorithms
         repeat: eos
-  
+
   preferred_compression_algorithms:
     seq:
       - id: algorithm
         type: u1
         enum: compression_algorithms
         repeat: eos
-        
+
   signature_expiration_time:
     seq:
       - id: time
         type: u4
-        
+
   exportable_certification:
     seq:
       - id: exportable
         type: u1
-        
+
   revocable:
     seq:
       - id: revocable
         type: u1
-  
+
   trust_signature:
     seq:
       - id: level
         type: u1
       - id: amount
         type: u1
-        
+
   regular_expression:
     seq:
       - id: regex
         type: strz
-        
+
   revocation_key:
     seq:
       - id: class
@@ -254,7 +254,7 @@ types:
         type: u1
       - id: fingerprint
         size: 20
-        
+
   notation_data:
     seq:
       - id: flags
@@ -262,7 +262,7 @@ types:
       - id: len_name
         type: u2
       - id: len_value
-        type: u2 
+        type: u2
       - id: name
         size: len_name
       - id: value
@@ -274,13 +274,13 @@ types:
         type: u1
         enum: server_flags
         repeat: eos
-    
+
   preferred_key_server:
     seq:
       - id: uri
         type: str
         size-eos: true
-        
+
   primary_user_id:
     seq:
       - id: user_id
@@ -291,20 +291,20 @@ types:
       - id: uri
         type: str
         size-eos: true
-    
+
   key_flags:
     seq:
       - id: flag
         type: u1
         enum: key_flags
         repeat: eos
-      
+
   signers_user_id:
     seq:
       - id: user_id
         type: str
         size-eos: true
-        
+
   reason_for_revocation:
     seq:
       - id: revocation_code
@@ -313,12 +313,12 @@ types:
       - id: reason
         type: str
         size-eos: true
-  
+
   features:
     seq:
       - id: flags
         size-eos: true
-        
+
   signature_target:
     seq:
       - id: public_key_algorithm
@@ -329,12 +329,12 @@ types:
         enum: hash_algorithms
       - id: hash
         size-eos: true
-        
+
   embedded_signature:
     seq:
       - id: signature_packet
         type: signature_packet
-        
+
 enums:
   packet_tags:
     0: reserved_a_packet_tag_must_not_have_this_value
@@ -388,8 +388,8 @@ enums:
     2: triple_des
     3: cast5
     4: blowfisch
-    5: reserved_5
-    6: reserved_6
+    5: reserved5
+    6: reserved6
     7: aes_128
     8: aes_192
     9: aes_256
@@ -410,10 +410,10 @@ enums:
     1: md5
     2: sha1
     3: ripemd160
-    4: reserved_4
-    5: reserved_5
-    6: reserved_6
-    7: reserved_7
+    4: reserved4
+    5: reserved5
+    6: reserved6
+    7: reserved7
     8: sha256
     9: sha384
     10: sha512
@@ -446,28 +446,28 @@ enums:
     108: private_experimental_algorithm_08
     109: private_experimental_algorithm_09
     110: private_experimental_algorithm_10
-    
+
   subpacket_types:
-    0: reserved
-    1: reserved
+    0: reserved0
+    1: reserved1
     2: signature_creation_time
     3: signature_expiration_time
     4: exportable_certification
     5: trust_signature
     6: regular_expression
     7: revocable
-    8: reserved
+    8: reserved8
     9: key_expiration_time
     10: placeholder_for_backward_compatibility
     11: preferred_symmetric_algorithms
     12: revocation_key
-    13: reserved
-    14: reserved
-    15: reserved
+    13: reserved13
+    14: reserved14
+    15: reserved15
     16: issuer
-    17: reserved
-    18: reserved
-    19: reserved
+    17: reserved17
+    18: reserved18
+    19: reserved19
     20: notation_data
     21: preferred_hash_algorithms
     22: preferred_compression_algorithms
@@ -481,10 +481,10 @@ enums:
     30: features
     31: signature_target
     32: embedded_signature
-    
+
   server_flags:
     0x80: no_modify
-    
+
   key_flags:
     0x01: this_key_may_be_used_to_certify_other_keys
     0x02: this_key_may_be_used_to_sign_data
@@ -505,4 +505,3 @@ enums:
     102: private_use_3
     103: private_use_4
     110: private_use_11
-   

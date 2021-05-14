@@ -1,4 +1,4 @@
-# http://demoseen.com/blog/2010-02-20_Python_Marshal_Format.html
+# https://web.archive.org/web/20170825122655/http://demoseen.com/blog/2010-02-20_Python_Marshal_Format.html
 # https://github.com/python/cpython/blob/master/Lib/dis.py
 # https://github.com/python/cpython/blob/master/Lib/opcode.py
 # https://github.com/python/cpython/blob/2.7/Lib/dis.py
@@ -7,6 +7,10 @@ meta:
   id: python_pyc_27
   application: Python
   file-extension: pyc
+  xref:
+    pronom: fmt/939
+    mime: application/x-python-code
+    wikidata: Q28009469
   license: CC0-1.0
   endian: le
 doc: |
@@ -43,6 +47,7 @@ types:
         type: op_arg
         repeat: eos
   op_arg:
+    -webide-representation: "{op_code} {arg}"
     seq:
       - id: op_code
         type: u1
@@ -50,7 +55,6 @@ types:
       - id: arg
         type: u2
         if: "op_code.to_i >= op_code_enum::store_name.to_i" # store_name == have_arguments
-    -webide-representation: "{op_code} {arg}"
     enums:
       op_code_enum:
         0  : stop_code
@@ -173,6 +177,7 @@ types:
         146: set_add
         147: map_add
   code_object:
+    -webide-representation: "{name.value}"
     seq:
       - id: arg_count   # argcount
         type: u4
@@ -203,13 +208,13 @@ types:
         type: u4
       - id: lnotab
         type: py_object
-    -webide-representation: "{name.value}"
     enums:
       flags_enum:
         0x04: has_args
         0x08: has_kwargs
         0x20: generator
   py_object:
+    -webide-representation: "{type}: {value}"
     seq:
       - id: type
         type: u1
@@ -227,16 +232,16 @@ types:
             "object_type::py_false":    py_false
             "object_type::py_true":     py_true
             "object_type::none":        py_none
-    -webide-representation: "{type}: {value}"
     types:
       py_string:
+        -webide-representation: "{data}"
         seq:
           - id: length
             type: u4
           - id: data
             size: length
-        -webide-representation: "{data}"
       interned_string:
+        -webide-representation: "{data}"
         seq:
           - id: length
             type: u4
@@ -244,13 +249,13 @@ types:
             type: str
             size: length
             encoding: utf-8
-        -webide-representation: "{data}"
       string_ref:
+        -webide-representation: "#{interned_list_index:dec}"
         seq:
           - id: interned_list_index
             type: u4
-        -webide-representation: "#{interned_list_index:dec}"
       unicode_string:
+        -webide-representation: "{data}"
         seq:
           - id: length
             type: u4
@@ -258,8 +263,8 @@ types:
             size: length
             type: str
             encoding: utf-8
-        -webide-representation: "{data}"
       tuple:
+        -webide-representation: "{count:dec} items"
         seq:
           - id: count
             type: u4
@@ -267,7 +272,6 @@ types:
             type: py_object
             repeat: expr
             repeat-expr: count
-        -webide-representation: "{count:dec} items"
       py_none:
         -webide-representation: "None"
       py_true:
@@ -287,7 +291,7 @@ types:
         116: interned         # t
         117: unicode_string   # u
 enums:
-  # http://svn.python.org/view/python/trunk/Python/import.c?view=markup
+  # https://github.com/python/cpython/blob/v2.7.18/Python/import.c
   version:
     20121: v15
     50428: v16

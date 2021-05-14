@@ -4,12 +4,12 @@ meta:
   license: CC0-1.0
   ks-version: 0.9
   endian: be
-  imports: 
+  imports:
     - /network/some_ip/some_ip_sd
 
 doc: |
-  SOME/IP (Scalable service-Oriented MiddlewarE over IP) is an automotive/embedded 
-  communication protocol which supports remoteprocedure calls, event notifications 
+  SOME/IP (Scalable service-Oriented MiddlewarE over IP) is an automotive/embedded
+  communication protocol which supports remoteprocedure calls, event notifications
   and the underlying serialization/wire format.
 
 doc-ref: https://www.autosar.org/fileadmin/user_upload/standards/foundation/19-11/AUTOSAR_PRS_SOMEIPProtocol.pdf
@@ -26,7 +26,7 @@ seq:
 
 types:
   header:
-    seq: 
+    seq:
       - id: message_id
         type: message_id
         size: 4
@@ -36,42 +36,42 @@ types:
       - id: length
         type: u4
         doc: |
-          [PRS_SOMEIP_00042] Length field shall contain the length in Byte 
+          [PRS_SOMEIP_00042] Length field shall contain the length in Byte
           starting from Request ID/Client ID until the end of the SOME/IP message.
       - id: request_id
         type: request_id
         size: 4
         doc: |
-          The Request ID allows a provider and subscriber to differentiate 
+          The Request ID allows a provider and subscriber to differentiate
           multiple parallel uses of the same method, event, getter or setter.
       - id: protocol_version
         type: u1
-        doc: | 
-          The Protocol Version identifies the used SOME/IP Header format 
+        doc: |
+          The Protocol Version identifies the used SOME/IP Header format
           (not including the Payload format).
       - id: interface_version
         type: u1
         doc: |
-          Interface Version shall be an 8 Bit field that contains the 
+          Interface Version shall be an 8 Bit field that contains the
           MajorVersion of the Service Interface.
       - id: message_type
         type: u1
         enum: message_type_enum
-        doc: | 
-          The Message Type field is used to differentiate different types of 
+        doc: |
+          The Message Type field is used to differentiate different types of
           messages.
         doc-ref: AUTOSAR_PRS_SOMEIPProtocol.pdf - Table 4.4
       - id: return_code
         type: u1
         enum: return_code_enum
         doc: |
-          The Return Code shall be used to signal whether a request was 
+          The Return Code shall be used to signal whether a request was
           successfully processed.
         doc-ref: AUTOSAR_PRS_SOMEIPProtocol.pdf - Table 4.5
 
-    types: 
+    types:
       message_id:
-        seq: 
+        seq:
           - id: service_id
             type: u2
             doc: Service ID
@@ -89,20 +89,20 @@ types:
             doc: Event ID
             doc-ref: AUTOSAR_PRS_SOMEIPProtocol.pdf - Table 4.6
         doc: |
-          [PRS_SOMEIP_00035] The assignment of the Message ID shall be up to 
-          the user. However, the Message ID shall be unique for the whole 
+          [PRS_SOMEIP_00035] The assignment of the Message ID shall be up to
+          the user. However, the Message ID shall be unique for the whole
           system (i.e. the vehicle). TheMessage ID is similar to a CAN ID and
           should be handled via a comparable process.
           [PRS_SOMEIP_00038] Message IDs of method calls shall be structured in
-          the ID with 2^16 services with 2^15 methods.        
+          the ID with 2^16 services with 2^15 methods.
         doc-ref: AUTOSAR_PRS_SOMEIPProtocol.pdf 4.1.1.1  Message ID
-        
+
         instances:
           value:
             pos: 0
             type: u4
-            doc: The value provides the undissected Message ID 
-            
+            doc: The value provides the undissected Message ID
+
       request_id:
         seq:
           - id: client_id
@@ -110,22 +110,22 @@ types:
           - id: session_id
             type: u2
         doc: |
-          The Request ID allows a provider and subscriber to differentiate 
+          The Request ID allows a provider and subscriber to differentiate
           multiple parallel usesof the same method, event, getter or setter.
         doc-ref: AUTOSAR_PRS_SOMEIPProtocol.pdf - section 4.1.1.3  Request ID
-        
+
         instances:
           value:
             pos: 0
             type: u4
-            doc: The value provides the undissected Request ID 
+            doc: The value provides the undissected Request ID
 
     instances:
       is_valid_service_discovery:
         value: message_id.value == 0xffff8100 and protocol_version == 0x01 and interface_version == 0x01 and message_type == message_type_enum::notification and return_code == return_code_enum::ok
         doc: auxillary value
         doc-ref: AUTOSAR_PRS_SOMEIPServiceDiscoveryProtocol.pdf - section 4.1.2.1 General Requirements
-    
+
     enums:
       message_type_enum:
         0x00 : request

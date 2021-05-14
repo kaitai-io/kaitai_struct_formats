@@ -1,6 +1,8 @@
 meta:
   id: rtcp_payload
   title: rtcp network payload (single udp packet)
+  xref:
+    wikidata: Q749940
   license: CC0-1.0
   ks-version: 0.7
   endian: be
@@ -134,8 +136,8 @@ types:
         size-eos: true
     instances:
       fmt:
-        enum: rtpfb_subtype
         value: _parent.subtype
+        enum: rtpfb_subtype
 
   rtpfb_transport_feedback_packet:
     seq:
@@ -191,8 +193,8 @@ types:
         size-eos: true
     instances:
       fmt:
-        enum: psfb_subtype
         value: _parent.subtype
+        enum: psfb_subtype
 
   psfb_afb_packet:
     seq:
@@ -263,4 +265,3 @@ enums:
     4: tmmbn
     5: rrr
     15: transport_feedback
-

@@ -8,15 +8,15 @@ meta:
     - sys
   xref:
     justsolve: Portable_Executable
-    pronom:
-      - x-fmt/411
-      - fmt/899
-      - fmt/900
+    pronom: x-fmt/411
     wikidata: Q1076355
+  tags:
+    - executable
+    - windows
   license: CC0-1.0
   ks-version: 0.7
   endian: le
-doc-ref: http://www.microsoft.com/whdc/system/platform/firmware/PECOFF.mspx
+doc-ref: https://docs.microsoft.com/en-us/windows/win32/debug/pe-format
 seq:
   - id: mz
     type: mz_placeholder
@@ -55,9 +55,9 @@ types:
     instances:
       certificate_table:
         pos: optional_hdr.data_dirs.certificate_table.virtual_address
-        if: optional_hdr.data_dirs.certificate_table.virtual_address != 0
         size: optional_hdr.data_dirs.certificate_table.size
         type: certificate_table
+        if: optional_hdr.data_dirs.certificate_table.virtual_address != 0
   coff_header:
     doc-ref: 3.3. COFF File Header (Object and Image)
     seq:
@@ -139,7 +139,7 @@ types:
       - id: number_of_aux_symbols
         type: u1
     instances:
-      #effective_name: 
+      #effective_name:
       #  value: name_zeroes == 0 ? name_from_offset : '"fixme"'
       #name_from_offset:
       #  io: _root._io
@@ -166,15 +166,15 @@ types:
         pos: 'name_zeroes == 0 ? _parent._parent.symbol_name_table_offset + name_offset : 0'
         type: str
         terminator: 0
-        encoding: ascii
         eos-error: false
+        encoding: ascii
         if: name_zeroes == 0
       name_from_short:
         pos: 0
         type: str
         terminator: 0
-        encoding: ascii
         eos-error: false
+        encoding: ascii
         if: name_zeroes != 0
       name:
         value: 'name_zeroes == 0 ? name_from_offset : name_from_short'
@@ -361,6 +361,7 @@ types:
         type: certificate_entry
         repeat: eos
   certificate_entry:
+    doc-ref: 'https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format#the-attribute-certificate-table-image-only'
     enums:
       certificate_revision:
         0x0100:
@@ -375,7 +376,7 @@ types:
         0x0001:
           id: x509
           doc: |
-            bCertificate contains an X.509 Certificate 
+            bCertificate contains an X.509 Certificate
             Not Supported
         0x0002:
           id: pkcs_signed_data
@@ -386,13 +387,13 @@ types:
         0x0004:
           id: ts_stack_signed
           doc: |
-            Terminal Server Protocol Stack Certificate signing 
+            Terminal Server Protocol Stack Certificate signing
             Not Supported
     seq:
       - id: length
         -orig-id: dwLength
         type: u4
-        doc: Specifies the length of the attribute certificate entry. 
+        doc: Specifies the length of the attribute certificate entry.
       - id: revision
         -orig-id: wRevision
         type: u2
@@ -407,4 +408,3 @@ types:
         -orig-id: bCertificate
         size: length - 8
         doc: Contains a certificate, such as an Authenticode signature.
-    doc-ref: 'https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format#the-attribute-certificate-table-image-only'

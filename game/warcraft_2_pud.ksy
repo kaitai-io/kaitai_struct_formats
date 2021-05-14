@@ -1,8 +1,8 @@
 meta:
   id: warcraft_2_pud
   title: Warcraft II map files
-  file-extension: pud
   application: Warcraft II engine
+  file-extension: pud
   xref:
     justsolve: Warcraft_II_PUD
     wikidata: Q28009492

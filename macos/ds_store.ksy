@@ -1,6 +1,11 @@
 meta:
   id: ds_store
   title: macOS '.DS_Store' format
+  file-extension: DS_Store
+  xref:
+    justsolve: Desktop_Services_Store
+    pronom: fmt/394
+    wikidata: Q307271
   license: MIT
   ks-version: 0.8
   encoding: UTF-8
@@ -109,6 +114,11 @@ types:
     params:
       - id: idx
         type: u8
+    instances:
+      master_block:
+        pos: _parent.block_addresses[_parent.directory_entries[idx].block_id].offset
+        size: _parent.block_addresses[_parent.directory_entries[idx].block_id].size
+        type: master_block
     types:
       master_block:
         seq:
@@ -131,11 +141,6 @@ types:
             io: _root._io
             pos: _root.buddy_allocator_body.block_addresses[block_id].offset
             type: block
-    instances:
-      master_block:
-        pos: _parent.block_addresses[_parent.directory_entries[idx].block_id].offset
-        size: _parent.block_addresses[_parent.directory_entries[idx].block_id].size
-        type: master_block
   block:
     seq:
       - id: mode
@@ -159,6 +164,12 @@ types:
             if: mode > 0
           - id: record
             type: record
+        instances:
+          block:
+            io: _root._io
+            pos: _root.buddy_allocator_body.block_addresses[block_id].offset
+            type: block
+            if: mode > 0
         types:
           record:
             seq:
@@ -203,12 +214,6 @@ types:
                   - id: value
                     size: 4
                     type: str
-        instances:
-          block:
-            io: _root._io
-            pos: _root.buddy_allocator_body.block_addresses[block_id].offset
-            type: block
-            if: mode > 0
     instances:
       rightmost_block:
         io: _root._io

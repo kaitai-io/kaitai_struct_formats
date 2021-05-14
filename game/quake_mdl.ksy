@@ -1,11 +1,11 @@
 meta:
   id: quake_mdl
-  endian: le
   title: Quake 1 (idtech2) model format (MDL version 6)
   application: Quake 1 (idtech2)
   file-extension: mdl
   license: CC0-1.0
   ks-version: 0.7
+  endian: le
 seq:
   - id: header
     type: mdl_header

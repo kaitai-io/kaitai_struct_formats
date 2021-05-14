@@ -1,5 +1,12 @@
 meta:
   id: id3v1_1
+  title: ID3v1.1 tag for .mp3 files
+  file-extension: mp3
+  xref:
+    forensicswiki: ID3
+    justsolve: ID3
+    loc: fdd000107 # ID3v1
+    wikidata: Q1054220
   license: CC0-1.0
 doc: |
   ID3v1.1 tag is a method to store simple metadata in .mp3 files. The
@@ -8,7 +15,7 @@ doc: |
   This type is supposed to be used on full .mp3 files, seeking to
   proper position automatically. If you're interesting in parsing only
   the tag itself, please use `id3v1_1::id3_v1_1_tag` subtype.
-doc-ref: http://id3.org/ID3v1
+doc-ref: https://id3.org/ID3v1
 instances:
   id3v1_tag:
     pos: _io.size - 128

@@ -3,6 +3,7 @@ meta:
   title: ICMP network packet
   xref:
     rfc: 792
+    wikidata: Q13162
   license: CC0-1.0
   endian: be
 seq:

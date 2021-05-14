@@ -3,9 +3,9 @@ meta:
   title: IPv6 network packet
   license: CC0-1.0
   ks-version: 0.8
-  endian: be
   imports:
     - /network/protocol_body
+  endian: be
 seq:
   - id: version
     type: b4

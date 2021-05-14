@@ -1,5 +1,12 @@
 <% class_name = "#{file_id}_t" %>
 
+<p>For C++, the easiest way is to <a
+    href="https://github.com/kaitai-io/kaitai_struct_cpp_stl_runtime"
+    target="_blank" rel="noopener">clone the runtime library sources</a>
+and build them along with your project.</p>
+
+<h3>Code</h3>
+
 <p>Using Kaitai Struct in C++/STL usually consists of 3 steps.</p>
 
 <ol>
@@ -11,21 +18,30 @@
         </ul>
         <div class="tab-content" style="margin-top: 6px">
             <div role="tabpanel" class="tab-pane active" id="example-local-file">
-<pre><code class="cpp">#include &lt;fstream&gt;
+<%= code cur_lang, <<-CODE
+#include <fstream>
 
-std::ifstream is("path/to/local/file.<%= meta['file-extension'] || meta['id'] %>", std::ifstream::binary);</code></pre>
+std::ifstream is("path/to/local/file.#{meta['file-extension'] || meta['id']}", std::ifstream::binary);
+CODE
+%>
             </div>
             <div role="tabpanel" class="tab-pane" id="example-std-string">
-<pre><code class="cpp">#include &lt;sstream&gt;
+<%= code cur_lang, <<-CODE
+#include <sstream>
 
-std::istringstream is(str);</code></pre>
+std::istringstream is(str);
+CODE
+%>
             </div>
             <div role="tabpanel" class="tab-pane" id="example-char-ptr">
-<pre><code class="cpp">#include &lt;sstream&gt;
+<%= code cur_lang, <<-CODE
+#include <sstream>
 
 const char buf[] = { ... };
 std::string str(buf, sizeof buf);
-std::istringstream is(str);</code></pre>
+std::istringstream is(str);
+CODE
+%>
             </div>
         </div>
 
@@ -33,15 +49,29 @@ std::istringstream is(str);</code></pre>
 
     <li>We need to wrap our input stream into Kaitai stream:
 
-<pre><code class="cpp">#include &lt;kaitai/kaitaistream.h&gt;
+<%= code cur_lang, <<-CODE
+#include "kaitai/kaitaistream.h"
 
-kaitai::kstream ks(&amp;is);</code></pre></li>
+kaitai::kstream ks(&is);
+CODE
+%>
+    </li>
 
     <li>And finally, we can invoke the parsing:
-
-<pre><code class="cpp"><%= class_name %> data(&amp;ks);</code></pre></li>
+<%= code cur_lang, <<-CODE
+#{class_name} data(&ks);
+CODE
+%>
+    </li>
 </ol>
 
 <p>After that, one can get various attributes from the structure by invoking getter methods like:</p>
 
-<pre><code class="cpp"><% usage_attrs.each { |attr| %>data.<%= attr[:name] %>() // => <%= attr[:doc] %><% } %></code></pre>
+<% src_usage_attrs = ""
+usage_attrs.each { |attr|
+    src_usage_attrs += <<-CODE
+data.#{ attr[:name] }() // => #{ attr[:doc] }
+    CODE
+}
+%>
+<%= code cur_lang, src_usage_attrs %>

@@ -2,6 +2,11 @@ meta:
   id: systemd_journal
   title: systemd journal file
   file-extension: journal
+  xref:
+    forensicswiki: Systemd
+  tags:
+    - linux
+    - log
   license: CC0-1.0
   endian: le
 doc: |
