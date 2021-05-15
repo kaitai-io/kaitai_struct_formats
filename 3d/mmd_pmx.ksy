@@ -551,7 +551,7 @@ types:
         type: len_string
       - id: type
         type: u1
-        doc: Only known type is 0, springy
+        enum: joint_type
       - id: rigid_body_index1
         type: sized_index(_root.header.rigid_body_index_size)
       - id: rigid_body_index2
@@ -671,3 +671,11 @@ enums:
     8: material
     9: flip
     10: impulse
+
+  joint_type:
+    0: spring_sixdof
+    1: sixdof
+    2: p2p
+    3: cone_twist
+    4: slider
+    5: hinge
