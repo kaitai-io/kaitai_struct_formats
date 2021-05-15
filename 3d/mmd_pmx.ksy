@@ -14,6 +14,8 @@ doc: |
   now encoded in UTF-16 instead of Shift_JIS, and index arrays were
   made somewhat more compact.
 
+doc-ref: https://gist.github.com/felixjones/f8a06bd48f9da9a4539f
+
 seq:
   - id: header
     type: header
