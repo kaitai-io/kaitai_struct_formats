@@ -6,6 +6,7 @@ meta:
   encoding: UTF-16LE
   endian: le
   license: MIT
+  bit-endian: le
 
 doc: |
   PMX is the newer format for storing MikuMikuDance (MMD) model data.
@@ -227,17 +228,30 @@ types:
         type: f4
       - id: ambient
         type: vec3
-      - id: flags
-        type: u1
-        doc: |
-          0b0000_0001 - Disables back-face culling
-          0b0000_0010 - Casts shadow on ground
-          0b0000_0100 - Writes to shadow map
-          0b0000_1000 - Reads from shadow map
-          0b0001_0000 - Draws pencil outline
-          0b0010_0000 - Uses additional vec4 1 for vertex colour (since 2.1)
-          0b0100_0000 - Rendered as points (since 2.1)
-          0b1000_0000 - Rendered as lines (since 2.1)
+      - id: no_cull
+        type: b1
+        doc: Disables back-face culling
+      - id: ground_shadow
+        type: b1
+        doc: Projects a shadow onto the ground
+      - id: cast_shadow
+        type: b1
+        doc: Writes to shadow map
+      - id: receive_shadow
+        type: b1
+        doc: Reads from shadow map
+      - id: outlined
+        type: b1
+        doc: Draws pencil outline
+      - id: uses_vertex_color
+        type: b1
+        doc: Uses additional vec4 1 for vertex colour (since 2.1)
+      - id: render_points
+        type: b1
+        doc: Rendered as points (since 2.1)
+      - id: render_lines
+        type: b1
+        doc: Rendered as lines (since 2.1)
       - id: edge_color
         type: vec4
       - id: edge_size
