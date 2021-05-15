@@ -552,10 +552,10 @@ types:
       - id: type
         type: u1
         enum: joint_type
-      - id: rigid_body_index1
+      - id: rigid_body_indices
         type: sized_index(_root.header.rigid_body_index_size)
-      - id: rigid_body_index2
-        type: sized_index(_root.header.rigid_body_index_size)
+        repeat: expr
+        repeat-expr: 2
       - id: position
         type: vec3
       - id: rotation
