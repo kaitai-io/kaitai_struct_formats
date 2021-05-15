@@ -238,6 +238,9 @@ types:
           0b0000_0100 - Writes to shadow map
           0b0000_1000 - Reads from shadow map
           0b0001_0000 - Draws pencil outline
+          0b0010_0000 - Uses additional vec4 1 for vertex colour (since 2.1)
+          0b0100_0000 - Rendered as points (since 2.1)
+          0b1000_0000 - Rendered as lines (since 2.1)
       - id: edge_color
         type: vec4
       - id: edge_size
