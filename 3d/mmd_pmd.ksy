@@ -127,7 +127,7 @@ types:
       - id: skin_indices
         type: u2
         repeat: expr
-        repeat-expr: true
+        repeat-expr: 2
       - id: skin_weights
         type: u1
       - id: edge_flag
