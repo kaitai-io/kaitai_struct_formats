@@ -137,6 +137,7 @@ types:
             'bone_type::bdef2': bdef2_weights
             'bone_type::bdef4': bdef4_weights
             'bone_type::sdef': sdef_weights
+            'bone_type::qdef': qdef_weights
       - id: edge_ratio
         type: f4
 
@@ -186,6 +187,18 @@ types:
     instances:
       weights:
         value: '[weight1, 1.0 - weight1]'
+
+  qdef_weights:
+    doc: Since 2.1
+    seq:
+      - id: bone_indices
+        type: sized_index(_root.header.bone_index_size)
+        repeat: expr
+        repeat-expr: 4
+      - id: weights
+        type: f4
+        repeat: expr
+        repeat-expr: 4
 
   face:
     seq:
@@ -642,6 +655,7 @@ enums:
     1: bdef2
     2: bdef4
     3: sdef
+    4: qdef
 
   morph_type:
     0: group
