@@ -80,8 +80,10 @@ types:
       - id: version
         type: f4
         doc: |
-          Tends to contain the value 2.0, which is the version of the format
-          described here.
+          Version of the format as a floating-point number.
+          Can be either 2.0 or 2.1.
+          Specifies the lowest format version capable of reading the file, so
+          don't be surprised to see 2.0 files created recently.
       - id: header_size
         type: u1
       - id: encoding
