@@ -306,21 +306,21 @@ types:
       - id: name
         type: strz
         size: 20
-      - id: rigid_body_index1
+      - id: rigid_body_indices
         type: u4
-      - id: rigid_body_index2
-        type: u4
+        repeat: expr
+        repeat-expr: 2
       - id: position
         type: vec3
       - id: rotation
         type: vec3
-      - id: translation_limitation1
+      - id: translation_limitation_lower
         type: vec3
-      - id: translation_limitation2
+      - id: translation_limitation_upper
         type: vec3
-      - id: rotation_limitation1
+      - id: rotation_limitation_lower
         type: vec3
-      - id: rotation_limitation2
+      - id: rotation_limitation_upper
         type: vec3
       - id: spring_position
         type: vec3
