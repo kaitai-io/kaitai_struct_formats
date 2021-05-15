@@ -6,6 +6,8 @@ meta:
   encoding: Shift_JIS
   endian: le
   license: MIT
+  imports:
+    - vector_types
 
 doc: |
   PMD is the older format for storing MikuMikuDance (MMD) model data.
@@ -119,11 +121,11 @@ types:
   vertex:
     seq:
       - id: position
-        type: vec3
+        type: vector_types::vec3
       - id: normal
-        type: vec3
+        type: vector_types::vec3
       - id: uv
-        type: vec2
+        type: vector_types::vec2
       - id: skin_indices
         type: u2
         repeat: expr
@@ -143,13 +145,13 @@ types:
   material:
     seq:
       - id: diffuse
-        type: vec4
+        type: vector_types::color4
       - id: shininess
         type: f4
       - id: specular
-        type: vec3
+        type: vector_types::color3
       - id: ambient
-        type: vec3
+        type: vector_types::color3
       - id: toon_index
         type: u1
       - id: edge_flag
@@ -174,7 +176,7 @@ types:
       - id: ik_index
         type: u2
       - id: position
-        type: vec3
+        type: vector_types::vec3
 
   ik:
     seq:
@@ -212,7 +214,7 @@ types:
       - id: index
         type: u4
       - id: position
-        type: vec3
+        type: vector_types::vec3
 
   morph_frame:
     seq:
@@ -289,9 +291,9 @@ types:
       - id: depth
         type: f4
       - id: position
-        type: vec3
+        type: vector_types::vec3
       - id: rotation
-        type: vec3
+        type: vector_types::vec3
       - id: weight
         type: f4
       - id: position_damping
@@ -315,60 +317,19 @@ types:
         repeat: expr
         repeat-expr: 2
       - id: position
-        type: vec3
+        type: vector_types::vec3
       - id: rotation
-        type: vec3
+        type: vector_types::vec3
       - id: translation_limitation_lower
-        type: vec3
+        type: vector_types::vec3
       - id: translation_limitation_upper
-        type: vec3
+        type: vector_types::vec3
       - id: rotation_limitation_lower
-        type: vec3
+        type: vector_types::vec3
       - id: rotation_limitation_upper
-        type: vec3
+        type: vector_types::vec3
       - id: spring_position
-        type: vec3
+        type: vector_types::vec3
       - id: spring_rotation
-        type: vec3
+        type: vector_types::vec3
 
-  vec2:
-    seq:
-      - id: elements
-        type: f4
-        repeat: expr
-        repeat-expr: 2
-    instances:
-      x:
-        value: 'elements[0]'
-      y:
-        value: 'elements[1]'
-
-  vec3:
-    seq:
-      - id: elements
-        type: f4
-        repeat: expr
-        repeat-expr: 3
-    instances:
-      x:
-        value: 'elements[0]'
-      y:
-        value: 'elements[1]'
-      z:
-        value: 'elements[2]'
-
-  vec4:
-    seq:
-      - id: elements
-        type: f4
-        repeat: expr
-        repeat-expr: 4
-    instances:
-      x:
-        value: 'elements[0]'
-      y:
-        value: 'elements[1]'
-      z:
-        value: 'elements[2]'
-      w:
-        value: 'elements[3]'

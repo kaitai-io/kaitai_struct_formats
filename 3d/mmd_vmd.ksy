@@ -6,6 +6,8 @@ meta:
   encoding: Shift_JIS
   endian: le
   license: MIT
+  imports:
+    - vector_types
 
 doc: |
   VMD is the format used by MikuMikuDance (MMD) for storing animation data.
@@ -54,9 +56,9 @@ types:
       - id: frame_number
         type: u4
       - id: position
-        type: vec3
+        type: vector_types::vec3
       - id: rotation
-        type: vec4
+        type: vector_types::vec4
       - id: interpolation
         type: u1
         repeat: expr
@@ -79,9 +81,9 @@ types:
       - id: distance
         type: f4
       - id: position
-        type: vec3
+        type: vector_types::vec3
       - id: rotation
-        type: vec3
+        type: vector_types::vec3
       - id: interpolation
         type: u1
         repeat: expr
@@ -91,32 +93,3 @@ types:
       - id: perspective
         type: u1
 
-  vec3:
-    seq:
-      - id: elements
-        type: f4
-        repeat: expr
-        repeat-expr: 3
-    instances:
-      x:
-        value: 'elements[0]'
-      y:
-        value: 'elements[1]'
-      z:
-        value: 'elements[2]'
-
-  vec4:
-    seq:
-      - id: elements
-        type: f4
-        repeat: expr
-        repeat-expr: 4
-    instances:
-      x:
-        value: 'elements[0]'
-      y:
-        value: 'elements[1]'
-      z:
-        value: 'elements[2]'
-      w:
-        value: 'elements[3]'
