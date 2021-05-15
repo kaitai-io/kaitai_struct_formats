@@ -148,49 +148,33 @@ types:
 
   bdef2_weights:
     seq:
-      - id: bone_index1
+      - id: bone_indices
         type: sized_index(_root.header.bone_index_size)
-        doc: Uses weight 1
-      - id: bone_index2
-        type: sized_index(_root.header.bone_index_size)
-        doc: Uses weight 2
+        repeat: expr
+        repeat-expr: 2
       - id: weight1
         type: f4
     instances:
-      weight2:
-        value: 1.0 - weight1
+      weights:
+        value: '[weight1, 1.0 - weight1]'
 
   bdef4_weights:
     seq:
-      - id: bone_index1
+      - id: bone_indices
         type: sized_index(_root.header.bone_index_size)
-        doc: Uses weight 1
-      - id: bone_index2
-        type: sized_index(_root.header.bone_index_size)
-        doc: Uses weight 2
-      - id: bone_index3
-        type: sized_index(_root.header.bone_index_size)
-        doc: Uses weight 3
-      - id: bone_index4
-        type: sized_index(_root.header.bone_index_size)
-        doc: Uses weight 4
-      - id: weight1
+        repeat: expr
+        repeat-expr: 4
+      - id: weights
         type: f4
-      - id: weight2
-        type: f4
-      - id: weight3
-        type: f4
-      - id: weight4
-        type: f4
+        repeat: expr
+        repeat-expr: 4
 
   sdef_weights:
     seq:
-      - id: bone_index1
+      - id: bone_indices
         type: sized_index(_root.header.bone_index_size)
-        doc: Uses weight 1
-      - id: bone_index2
-        type: sized_index(_root.header.bone_index_size)
-        doc: Uses weight 2
+        repeat: expr
+        repeat-expr: 2
       - id: weight1
         type: f4
       - id: c
@@ -200,8 +184,8 @@ types:
       - id: r1
         type: vec3
     instances:
-      weight2:
-        value: 1.0 - weight1
+      weights:
+        value: '[weight1, 1.0 - weight1]'
 
   face:
     seq:
