@@ -292,47 +292,66 @@ types:
         type: sized_index(_root.header.bone_index_size)
       - id: transformation_class
         type: u4
-      - id: flags
-        type: u2
-        doc: |
-          0b0000_0000_0000_0001 - Connection	
-          0b0000_0000_0000_0010 - Rotatable	
-          0b0000_0000_0000_0100 - Movable	
-          0b0000_0000_0000_1000 - Display flag	
-          0b0000_0000_0001_0000 - Can operate	
-          0b0000_0000_0010_0000 - Inverse kinematics	
-          0b0000_0000_0100_0000 - unused?
-          0b0000_0000_1000_0000 - Add local deform	
-          0b0000_0001_0000_0000 - Add rotation	
-          0b0000_0010_0000_0000 - Add movement	
-          0b0000_0100_0000_0000 - Fixed axis	
-          0b0000_1000_0000_0000 - Local axis	
-          0b0001_0000_0000_0000 - Physical transform	
-          0b0010_0000_0000_0000 - External parent transform	
+      - id: indexed_tail_position
+        type: b1
+        doc: Is the tail position a vec3 or bone index
+      - id: rotatable
+        type: b1
+        doc: Enables rotation
+      - id: translatable
+        type: b1
+        doc: Enables translation
+      - id: visible
+        type: b1
+      - id: enabled
+        type: b1
+      - id: has_ik
+        type: b1
+      - id: unknown6
+        type: b1
+      - id: add_local_deform
+        type: b1
+      - id: inherit_rotation
+        type: b1
+        doc: Rotation inherits from another bone	
+      - id: inherit_translation
+        type: b1
+        doc: Translation inherits from another bone	
+      - id: has_fixed_axis
+        type: b1
+        doc: The bone's shaft is fixed in a direction	
+      - id: has_local_axes
+        type: b1
+      - id: physics_after_deform
+        type: b1
+      - id: external_parent_deform
+        type: b1
+      - id: reserved
+        type: b2
       - id: connect_index
         type: sized_index(_root.header.bone_index_size)
-        if: flags & 0x1 != 0
+        if: indexed_tail_position
       - id: offset_position
         type: vec3
-        if: flags & 0x1 == 0
+        if: not indexed_tail_position
       - id: grant
         type: bone_grant
-        if: flags & 0x100 != 0 or flags & 0x200 != 0
-      - id: fix_axis
+        if: inherit_rotation or inherit_translation
+      - id: fixed_axis
         type: vec3
-        if: flags & 0x400 != 0
+        if: has_fixed_axis
       - id: local_x_vector
         type: vec3
-        if: flags & 0x800 != 0
+        if: has_local_axes
       - id: local_z_vector
         type: vec3
-        if: flags & 0x800 != 0
+        if: has_local_axes
       - id: key
         type: u4
-        if: flags & 0x2000 != 0
+        if: external_parent_deform
       - id: ik
         type: bone_ik
-        if: flags & 0x20 != 0
+        if: has_ik
 
   bone_grant:
     doc: |
@@ -350,11 +369,11 @@ types:
         type: f4
     instances:
       local:
-        value: (_parent.flags & 0x80) != 0
+        value: _parent.add_local_deform
       affect_rotation:
-        value: (_parent.flags & 0x100) != 0
+        value: _parent.inherit_rotation
       affect_position:
-        value: (_parent.flags & 0x200) != 0
+        value: _parent.inherit_translation
 
   bone_ik:
     seq:
