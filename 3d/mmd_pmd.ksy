@@ -125,7 +125,9 @@ types:
       - id: uv
         type: vec2
       - id: skin_indices
-        type: u2_2
+        type: u2
+        repeat: expr
+        repeat-expr: true
       - id: skin_weights
         type: u1
       - id: edge_flag
@@ -134,7 +136,9 @@ types:
   face:
     seq:
       - id: indices
-        type: u2_3
+        type: u2
+        repeat: expr
+        repeat-expr: 3
 
   material:
     seq:
@@ -326,22 +330,6 @@ types:
         type: vec3
       - id: spring_rotation
         type: vec3
-
-  u2_2:
-    seq:
-      - id: a
-        type: u2
-      - id: b
-        type: u2
-
-  u2_3:
-    seq:
-      - id: a
-        type: u2
-      - id: b
-        type: u2
-      - id: c
-        type: u2
 
   vec2:
     seq:
