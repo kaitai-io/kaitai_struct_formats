@@ -93,20 +93,30 @@ types:
 
   vec3:
     seq:
-      - id: x
+      - id: elements
         type: f4
-      - id: y
-        type: f4
-      - id: z
-        type: f4
+        repeat: expr
+        repeat-expr: 3
+    instances:
+      x:
+        value: 'elements[0]'
+      y:
+        value: 'elements[1]'
+      z:
+        value: 'elements[2]'
 
   vec4:
     seq:
-      - id: x
+      - id: elements
         type: f4
-      - id: y
-        type: f4
-      - id: z
-        type: f4
-      - id: w
-        type: f4
+        repeat: expr
+        repeat-expr: 4
+    instances:
+      x:
+        value: 'elements[0]'
+      y:
+        value: 'elements[1]'
+      z:
+        value: 'elements[2]'
+      w:
+        value: 'elements[3]'
