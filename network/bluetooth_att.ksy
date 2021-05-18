@@ -15,7 +15,7 @@ seq:
   - id: opcode
     type: u1
     enum: att_opcode
-    doc: page 2330
+    doc-ref: https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=457080 page 2330
   - id: parameters
     type:
       switch-on: opcode
@@ -65,7 +65,7 @@ enums:
 
 types:
   error_response:
-    doc: page 2301
+    doc-ref: https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=457080 page 2301
     seq:
       - id: request_opcode_in_error
         type: u1
@@ -74,44 +74,39 @@ types:
       - id: error_code
         type: u1
   find_information_response:
-    doc: page 2306
+    doc-ref: https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=457080 page 2306
     seq:
       - id: format
         type: u1
       - id: information_data
-        type: u1
-        repeat: eos
+        size-eos: true
   read_by_type_request:
     # also for
     #   find_information_request
     #   read_by_group_type_request
-    doc: page 2310
+    doc-ref: https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=457080 page 2310
     seq:
       - id: starting_handle
         type: u2
       - id: ending_handle
         type: u2
       - id: attribute_type_bytes
-        type: u1
-        repeat: eos
+        size-eos: true
   read_by_type_response:
     # also for
     #  read_by_group_type_response
-    doc: page 2312
+    doc-ref: https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=457080 page 2312
     seq:
       - id: length
         type: u1
       - id: attribute_data_list_bytes
-        type: u1
-        repeat: eos
+        size-eos: true
   write_request:
     # also for
     #  handle_value_notification
-    doc: page 2320
+    doc-ref: https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=457080 page 2320
     seq:
       - id: attribute_handle
         type: u2
       - id: attribute_value_bytes
-        type: u1
-        repeat: eos
-
+        size-eos: true
