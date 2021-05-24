@@ -179,9 +179,10 @@ types:
         type: u4
       - id: root_digest_len
         type: u4
-      - id: flags
-        type: u4
-        enum: descriptor_hashtree_flags
+      - id: flags_reserved
+        type: b31
+      - id: do_not_use_ab
+        type: b1
       - id: reserved
         size: 60
       - id: partition_name
@@ -205,9 +206,10 @@ types:
         type: u4
       - id: digest_len
         type: u4
-      - id: flags
-        type: u4
-        enum: descriptor_hash_flags
+      - id: flags_reserved
+        type: b31
+      - id: do_not_use_ab
+        type: b1
       - id: reserved
         size: 60
       - id: partition_name
@@ -221,9 +223,12 @@ types:
   kernel_cmdline_descriptor:
     doc: A descriptor containing information to be appended to the kernel command-line.
     seq:
-      - id: flags
-        type: u4
-        enum: descriptor_cmdline_flags
+      - id: flags_reserved
+        type: b30
+      - id: use_only_if_hashtree_disabled
+        type: b1
+      - id: use_only_if_hashtree_not_disabled
+        type: b1
       - id: kernel_cmdline_length
         type: u4
       - id: cmdline
@@ -313,10 +318,3 @@ enums:
     2: hash
     3: kernel_cmdline
     4: chain_partition
-  descriptor_cmdline_flags:
-    1: use_only_if_hashtree_not_disabled
-    2: use_only_if_hashtree_disabled
-  descriptor_hashtree_flags:
-    1: do_not_use_ab
-  descriptor_hash_flags:
-    1: do_not_use_ab
