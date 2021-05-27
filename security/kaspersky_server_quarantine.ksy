@@ -1,5 +1,6 @@
 meta:
   id: kaspersky_server_quarantine
+  application: Kaspersky for Windows Server
   endian: le
   title: Kaspersky for Windows Server quarantine file
   license: MIT
