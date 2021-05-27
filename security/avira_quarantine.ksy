@@ -1,6 +1,7 @@
 meta:
   id: avira_quarantine
   file-extension: qua
+  application: Avira Antivirus
   endian: le
   title: Avira Antivirus quarantine file
   license: MIT
