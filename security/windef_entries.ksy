@@ -1,5 +1,6 @@
 meta:
   id: windef_entries
+  application: Windows Defender
   endian: le
   title: Windows Defender quarantine entries file
   license: MIT

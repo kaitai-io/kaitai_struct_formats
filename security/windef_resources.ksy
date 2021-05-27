@@ -1,5 +1,6 @@
 meta:
   id: windef_resources
+  application: Windows Defender
   endian: le
   title: Windows Defender quarantine resources file
   license: MIT
