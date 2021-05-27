@@ -1,6 +1,7 @@
 meta:
   id: symantec_quarantine
   file-extension: vbn
+  application: Symantec Endpoint Protection
   endian: le
   title: Symantec Endpoint Protection quarantine file
   license: MIT
