@@ -1,5 +1,5 @@
 meta:
-  id: binarysd
+  id: windows_binary_security_descriptor
   endian: le
   title: Windows Binary Security Descriptor parser
   license: MIT
@@ -15,7 +15,6 @@ doc-ref: |
 seq:
   - id: fixed
     contents: [0x03, 0, 0, 0, 0x02, 0, 0, 0]
-    size: 8
   - id: len_binarysd
     type: u4
   - id: padding
@@ -32,7 +31,7 @@ types:
       size: 1
       contents: [0]
     - id: flags
-      type: binarysd_flags
+      type: flags
     - id: owner_offset
       type: u4
     - id: group_offset
@@ -58,56 +57,57 @@ types:
         pos: sacl_offset
         type: acl
         if: 'sacl_offset > 0'
-  binarysd_flags:
-    seq:
-      - id: dacl_trusted
-        type: b1
-        doc: DACL Trusted
-      - id: server_security
-        type: b1
-        doc: Server Security
-      - id: sacl_defaulted
-        type: b1
-        doc: SACL defaulted
-      - id: sacl_present
-        type: b1
-        doc: SACL present
-      - id: dacl_defaulted
-        type: b1
-        doc: DACL defaulted
-      - id: dacl_present
-        type: b1
-        doc: DACL present
-      - id: group_defaulted
-        type: b1
-        doc: Group defaulted
-      - id: owner_defaulted
-        type: b1
-        doc: Owner defaulted
-      - id: self_relative
-        type: b1
-        doc: Self-Relative
-      - id: control_valid
-        type: b1
-        doc: Control Valid
-      - id: sacl_protected
-        type: b1
-        doc: SACL-protected
-      - id: dacl_protected
-        type: b1
-        doc: DACL-protected
-      - id: sacl_auto_inherited
-        type: b1
-        doc: SACL auto-inherited
-      - id: dacl_auto_inherited
-        type: b1
-        doc: DACL auto-inherited
-      - id: sacl_inheritance_required
-        type: b1
-        doc: SACL Inheritance Required
-      - id: dacl_inheritance_required
-        type: b1
-        doc: DACL Inheritance Required
+    types:
+      flags:
+        seq:
+          - id: dacl_trusted
+            type: b1
+            doc: DACL Trusted
+          - id: server_security
+            type: b1
+            doc: Server Security
+          - id: sacl_defaulted
+            type: b1
+            doc: SACL defaulted
+          - id: sacl_present
+            type: b1
+            doc: SACL present
+          - id: dacl_defaulted
+            type: b1
+            doc: DACL defaulted
+          - id: dacl_present
+            type: b1
+            doc: DACL present
+          - id: group_defaulted
+            type: b1
+            doc: Group defaulted
+          - id: owner_defaulted
+            type: b1
+            doc: Owner defaulted
+          - id: self_relative
+            type: b1
+            doc: Self-Relative
+          - id: control_valid
+            type: b1
+            doc: Control Valid
+          - id: sacl_protected
+            type: b1
+            doc: SACL-protected
+          - id: dacl_protected
+            type: b1
+            doc: DACL-protected
+          - id: sacl_auto_inherited
+            type: b1
+            doc: SACL auto-inherited
+          - id: dacl_auto_inherited
+            type: b1
+            doc: DACL auto-inherited
+          - id: sacl_inheritance_required
+            type: b1
+            doc: SACL Inheritance Required
+          - id: dacl_inheritance_required
+            type: b1
+            doc: DACL Inheritance Required
   acl:
     seq:
       - id: revision
