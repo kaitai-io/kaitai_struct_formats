@@ -1,6 +1,7 @@
 meta:
   id: gdata_quarantine
   file-extension: q
+  application: G Data Antivirus
   endian: le
   title: G Data quarantine file
   license: MIT
