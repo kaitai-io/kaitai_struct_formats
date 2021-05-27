@@ -1,5 +1,6 @@
 meta:
   id: windef_scan_history
+  application: Windows Defender
   endian: le
   title: Windows Defender scan history file
   license: MIT
