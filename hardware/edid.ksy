@@ -10,7 +10,7 @@ seq:
   - id: magic
     contents: [0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00]
   - id: mfg_bytes
-    type: u2
+    type: u2be
   - id: product_code
     type: u2
     doc: Manufacturer product code
@@ -232,15 +232,17 @@ types:
           Aspect ratio of the image. Can be used to calculate number
           of vertical pixels.
       - id: refresh_rate_mod
-        type: b5
+        type: b6
         doc: |
           Refresh rate in Hz, written in modified form: `refresh_rate
           - 60`. This yields an effective range of 60..123 Hz.
     instances:
       horiz_active_pixels:
+        if: not (horiz_active_pixels_mod == 0x01 and aspect_ratio == aspect_ratios::ratio_16_10 and refresh_rate_mod == 0x01)
         value: (horiz_active_pixels_mod + 31) * 8
         doc: Range of horizontal active pixels.
       refresh_rate:
+        if: not (horiz_active_pixels_mod == 0x01 and aspect_ratio == aspect_ratios::ratio_16_10 and refresh_rate_mod == 0x01)
         value: refresh_rate_mod + 60
         doc: Vertical refresh rate, Hz.
     enums:
