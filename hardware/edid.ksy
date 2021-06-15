@@ -54,6 +54,7 @@ seq:
       DMT (Discrete Monitor Timings) modes.
     doc-ref: Standard, section 3.8
   - id: std_timings
+    size: 2
     type: std_timing
     doc: |
       Array of descriptions of so called "standard timings", which are
@@ -237,13 +238,18 @@ types:
           Refresh rate in Hz, written in modified form: `refresh_rate
           - 60`. This yields an effective range of 60..123 Hz.
     instances:
+      bytes_lookahead:
+        pos: 0
+        size: 2
+      is_used:
+        value: bytes_lookahead != [0x01, 0x01]
       horiz_active_pixels:
-        if: not (horiz_active_pixels_mod == 0x01 and aspect_ratio == aspect_ratios::ratio_16_10 and refresh_rate_mod == 0x01)
         value: (horiz_active_pixels_mod + 31) * 8
+        if: is_used
         doc: Range of horizontal active pixels.
       refresh_rate:
-        if: not (horiz_active_pixels_mod == 0x01 and aspect_ratio == aspect_ratios::ratio_16_10 and refresh_rate_mod == 0x01)
         value: refresh_rate_mod + 60
+        if: is_used
         doc: Vertical refresh rate, Hz.
     enums:
       aspect_ratios:
