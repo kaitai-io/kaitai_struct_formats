@@ -10,7 +10,7 @@ seq:
   - id: magic
     contents: [0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00]
   - id: mfg_bytes
-    type: u2
+    type: u2be
   - id: product_code
     type: u2
     doc: Manufacturer product code
@@ -54,6 +54,7 @@ seq:
       DMT (Discrete Monitor Timings) modes.
     doc-ref: Standard, section 3.8
   - id: std_timings
+    size: 2
     type: std_timing
     doc: |
       Array of descriptions of so called "standard timings", which are
@@ -232,16 +233,23 @@ types:
           Aspect ratio of the image. Can be used to calculate number
           of vertical pixels.
       - id: refresh_rate_mod
-        type: b5
+        type: b6
         doc: |
           Refresh rate in Hz, written in modified form: `refresh_rate
           - 60`. This yields an effective range of 60..123 Hz.
     instances:
+      bytes_lookahead:
+        pos: 0
+        size: 2
+      is_used:
+        value: bytes_lookahead != [0x01, 0x01]
       horiz_active_pixels:
         value: (horiz_active_pixels_mod + 31) * 8
+        if: is_used
         doc: Range of horizontal active pixels.
       refresh_rate:
         value: refresh_rate_mod + 60
+        if: is_used
         doc: Vertical refresh rate, Hz.
     enums:
       aspect_ratios:
