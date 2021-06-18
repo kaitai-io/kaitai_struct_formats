@@ -65,7 +65,12 @@ jobs:
           .github/push_artifacts/publish \
             -o kaitai-io \
             -r formats-kaitai-io.github.io \
-            -m "Build results of ${GITHUB_REF#refs/heads/*} $GITHUB_REPOSITORY@$GITHUB_SHA" \
-            -- --exclude=.git --exclude=.travis.yml --exclude=CNAME _build/html/
+            -m "Build results of ${GITHUB_REF#refs/heads/*} $GITHUB_REPOSITORY@$GITHUB_SHA" -- \
+            --exclude=.git \
+            --exclude=.travis.yml \
+            --exclude=CNAME \
+            --exclude=favicon.ico \
+            --exclude=favicon.ico.license \
+            _build/html/
         # NB: trailing slash in '_build/html/' is *very* important for rsync!
         if: github.ref == 'refs/heads/master'
