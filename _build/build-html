@@ -35,6 +35,7 @@ class FormatPagesGenerator
   }
 
   CATS = {
+    '3d' => {title: '3D Models', icon: 'cube'},
     'archive' => {title: 'Archive Files', icon: 'archive'},
     'android' => {title: 'Android-specific', icon: 'android'},
     'cad' => {title: 'CAD', icon: 'space-shuttle'},
