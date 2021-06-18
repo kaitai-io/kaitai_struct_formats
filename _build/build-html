@@ -13,7 +13,6 @@ require 'set'
 
 require 'commonmarker'
 require 'pygments'
-Pygments.start 'pygments/'
 
 class FormatPagesGenerator
   CPP_STL_CANONICAL = {id: 'cpp_stl', name: 'C++/STL'}

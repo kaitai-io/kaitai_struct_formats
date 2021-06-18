@@ -43,8 +43,6 @@ jobs:
           echo 'gem: --no-document' | sudo tee /etc/gemrc
           cd _build
           bundle install
-      - name: Install Graphviz lexer for Pygments
-        run: python -m pip install --user git+https://github.com/nikeee/pygments-lexer-graphviz.git@master
       - name: Build targets
         working-directory: _build
         run: ./build-target .. target
