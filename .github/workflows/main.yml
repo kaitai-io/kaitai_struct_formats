@@ -21,11 +21,9 @@ jobs:
       - name: Install deps
         run: |
           sudo apt-get update
-          sudo apt-get install --no-install-recommends -y dirmngr
-          sudo apt-key add <.github/bintray.key
-          #apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv 379CE192D401AB61
-          echo "deb http://dl.bintray.com/kaitai-io/debian jessie main" | sudo tee /etc/apt/sources.list.d/kaitai.list
-          sudo apt-get update
+          curl -fsSL -O https://github.com/kaitai-io/kaitai_struct_compiler/releases/download/0.9/kaitai-struct-compiler_0.9_all.deb
+          sha256sum --check --warn .github/checksums
+          sudo apt-get install ./kaitai-struct-compiler_0.9_all.deb
           sudo apt-get install --no-install-recommends -y \
             git ssh \
             locales \
