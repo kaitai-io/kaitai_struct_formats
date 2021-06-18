@@ -35,7 +35,7 @@
                         <h4><%= cat_desc[:title] || cat_name %></h4>
                         <% cat.sort { |a, b| a[:id] <=> b[:id] }.each_with_index { |fmt, i| %>
                         <% if i > 0 %>, <% end %>
-                        <a href="<%= fmt[:id] %>/index.html"><%= fmt[:id] %></a>
+                        <a href="<%= fmt[:id] %>/"><%= fmt[:id] %></a>
                         <% } %>
                     </div>
                 </div>
