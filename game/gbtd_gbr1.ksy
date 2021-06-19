@@ -14,6 +14,10 @@ meta:
 doc: |
   GBR1 files are used by Gameboy Map Builder, GBMB
   to store maps created with the program.
+
+  An example of lookup_object implementation
+  required for this to work can be found at:
+  https://github.com/ZetaTwo/gameboy-project/blob/master/gbm-parser/lookup_object.py
 doc-ref: https://www.devrs.com/gb/hmgd/gbmb.html
 
 seq:
