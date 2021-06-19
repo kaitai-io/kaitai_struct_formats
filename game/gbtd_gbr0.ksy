@@ -1,14 +1,13 @@
 meta:
   id: gbr0
-  endian: le
-  encoding: ascii
   title: GBR file
-  license: MIT
   application: GameBoy Tile Designer, GBTD
-  file-extension:
-    - gbr
+  file-extension: gbr
   tags:
     - game
+  license: MIT
+  encoding: ascii
+  endian: le
 
 doc: |
   GBR0 files are used by GameBoy Tile Designer
