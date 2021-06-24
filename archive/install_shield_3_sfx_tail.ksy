@@ -1,6 +1,11 @@
 meta:
   id: install_shield_3_sfx_tail
   title: InstallShield 3 self-extracting installer tail data
+  application: InstallShield 3
+  tags:
+    - archive
+    - executable
+    - windows
   license: MIT
   imports:
     - /common/dos_datetime_backwards

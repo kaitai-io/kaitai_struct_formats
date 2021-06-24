@@ -7,6 +7,9 @@ meta:
   file-extension: z
   xref:
     justsolve: InstallShield_Z
+  tags:
+    - archive
+    - windows
   license: MIT
   ks-version: 0.9
   imports:
