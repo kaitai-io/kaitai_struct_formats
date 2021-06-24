@@ -23,6 +23,9 @@ doc-ref:
   - https://github.com/wfr/unshieldv3/blob/0037ff581a4d862757ccc2c584aefdc0fe58a38d/installshieldarchivev3.cpp
   - https://github.com/adrium/unshieldv3/blob/9f47d1c501abb778eb40beb7fdbb24ae556b7c46/installshieldarchivev3.cpp
   - https://github.com/lephilousophe/idecomp/blob/354961c0cfe86632a39e4fea01e0ca521ffac3e0/idecomp.py
+  - https://github.com/putara/isdecomp
+  - https://github.com/agrif/unshield
+  - http://kannegieser.net/veit/quelle/stix_src.arj # STIX.PAS
 seq:
   - id: magic
     contents: [0x13, 0x5d, 0x65, 0x8c]
