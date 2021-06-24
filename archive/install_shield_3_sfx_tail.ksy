@@ -1,10 +1,10 @@
 meta:
   id: install_shield_3_sfx_tail
   title: InstallShield 3 self-extracting installer tail data
-  endian: le
   license: MIT
   imports:
     - /common/dos_datetime_backwards
+  endian: le
 doc: |
   The data format used in InstallShield 3 self-extracting installers.
   These installers start with a normal Microsoft PE executable,
