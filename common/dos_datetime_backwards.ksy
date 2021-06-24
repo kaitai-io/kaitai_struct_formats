@@ -1,6 +1,7 @@
 meta:
   id: dos_datetime_backwards
   title: MS-DOS datetime (backwards order - date first)
+  license: CC0-1.0
   imports:
     - dos_datetime
 doc: |
