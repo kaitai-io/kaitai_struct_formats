@@ -92,41 +92,8 @@ types:
           this field's value is 0.
           It's not clear which other values are actually used (if any)
           and what their meanings are.
-      - id: is_split
-        type: b1
-        doc: |
-          Whether this archive file is in split (multi-part) format.
-          If this flag is set,
-          multiple additional fields in the archive header and TOC entries are enabled.
-          Most (but not all) of these extended fields are related to multi-part archives.
-          However,
-          this flag does *not* mean that the archive actually has multiple parts!
-          There are archives that only consist of a single part,
-          but still have the extended fields enabled.
-      - id: is_split_contiguous
-        type: b1
-        doc: |
-          Whether this archive file is in "contiguous" split (multi-part) format.
-
-          Untested.
-          idecomp.py documents this flag as:
-
-          > split file contiguously (a file is not split across archive parts)
-
-          This probably means that every file inside this split archive part
-          has all of its data stored completely inside this part,
-          i. e. no files have any section of their data stored in other archive parts.
-          Presumably other archive parts can contain other additional files.
-
-          It's not really clear if this flag can be set on its own
-          or if it should only be set together with is_split.
-          Most likely it's used on its own,
-          because when idecomp.py checks if an archive file is a split archive part,
-          it checks if either of the two flags is set.
-      - id: reserved_flags
-        type: b14
-        valid: 0
-        doc: Archive flags with no known use.
+      - id: flags
+        type: flags
       - id: num_files
         type: u2
         doc: Number of files in this archive file.
@@ -253,12 +220,50 @@ types:
           or equal to `len_archive` if in extended format.
     instances:
       is_extended:
-        value: is_split or is_split_contiguous
+        value: flags.is_split or flags.is_split_contiguous
         doc: |
           Whether any of the flags for split archive format are set,
           indicating that additional fields in the archive header and file TOC are filled out.
           As explained in the documentation for is_split,
           this does *not* mean that the archive actually has multiple parts!
+    types:
+      flags:
+        seq:
+          - id: is_split
+            type: b1
+            doc: |
+              Whether this archive file is in split (multi-part) format.
+              If this flag is set,
+              multiple additional fields in the archive header and TOC entries are enabled.
+              Most (but not all) of these extended fields are related to multi-part archives.
+              However,
+              this flag does *not* mean that the archive actually has multiple parts!
+              There are archives that only consist of a single part,
+              but still have the extended fields enabled.
+          - id: is_split_contiguous
+            type: b1
+            doc: |
+              Whether this archive file is in "contiguous" split (multi-part) format.
+
+              Untested.
+              idecomp.py documents this flag as:
+
+              > split file contiguously (a file is not split across archive parts)
+
+              This probably means that every file inside this split archive part
+              has all of its data stored completely inside this part,
+              i. e. no files have any section of their data stored in other archive parts.
+              Presumably other archive parts can contain other additional files.
+
+              It's not really clear if this flag can be set on its own
+              or if it should only be set together with is_split.
+              Most likely it's used on its own,
+              because when idecomp.py checks if an archive file is a split archive part,
+              it checks if either of the two flags is set.
+          - id: reserved
+            type: b14
+            valid: 0
+            doc: Archive flags with no known use.
   toc_directory:
     seq:
       - id: num_files
@@ -373,43 +378,8 @@ types:
       - id: len_entry
         type: u2
         doc: Total byte size of this file entry.
-      - id: reserved_flags_1
-        type: b4
-      - id: is_uncompressed
-        type: b1
-        doc: |
-          Whether this file's data is stored uncompressed.
-          If false,
-          the data is compressed using the PKWARE DCL Implode compression algorithm.
-      - id: internal_flag
-        type: b1
-        valid: false
-        doc: |
-          According to idecomp.py,
-          this flag is used internally by InstallShield's icomp
-          and should never be true in archive files.
-      - id: has_version
-        type: b1
-        doc: |
-          May be true if this file has a version number stored in the version field.
-          This flag isn't always set reliably
-          (see also the comments in idecomp.py) -
-          it's often false even for files which have a non-zero version number stored.
-      - id: reserved_flags_2
-        type: b1
-        valid: false
-      - id: is_split
-        type: b1
-        valid:
-          expr: _root.header.is_extended or not _
-        doc: |
-          Whether this file is split across multiple archive parts.
-          Only used in extended format -
-          otherwise this field is 0
-          and the file's data is not split.
-      - id: reserved_flags_3
-        type: b7
-        valid: 0
+      - id: flags
+        type: flags
       - id: reserved_1
         contents: [0x00]
         doc: |
@@ -419,7 +389,7 @@ types:
         type: u1
         valid:
           expr: |
-            is_split
+            flags.is_split
             ? (_ > 0 and _ < end_part)
             : _ == end_part
         doc: |
@@ -441,7 +411,7 @@ types:
               + modified._sizeof
               + attributes._sizeof
               + len_entry._sizeof
-              + 2
+              + flags._sizeof
               + reserved_1._sizeof
               + start_part._sizeof
               + len_name._sizeof
@@ -485,3 +455,44 @@ types:
         pos: ofs_data
         size: len_data_compressed
         doc: The possibly compressed data for this file.
+    types:
+      flags:
+        seq:
+          - id: reserved_1
+            type: b4
+            valid: 0
+          - id: is_uncompressed
+            type: b1
+            doc: |
+              Whether this file's data is stored uncompressed.
+              If false,
+              the data is compressed using the PKWARE DCL Implode compression algorithm.
+          - id: internal_flag
+            type: b1
+            valid: false
+            doc: |
+              According to idecomp.py,
+              this flag is used internally by InstallShield's icomp
+              and should never be true in archive files.
+          - id: has_version
+            type: b1
+            doc: |
+              May be true if this file has a version number stored in the version field.
+              This flag isn't always set reliably
+              (see also the comments in idecomp.py) -
+              it's often false even for files which have a non-zero version number stored.
+          - id: reserved_2
+            type: b1
+            valid: false
+          - id: is_split
+            type: b1
+            valid:
+              expr: _root.header.is_extended or not _
+            doc: |
+              Whether this file is split across multiple archive parts.
+              Only used in extended format -
+              otherwise this field is 0
+              and the file's data is not split.
+          - id: reserved_3
+            type: b7
+            valid: 0
