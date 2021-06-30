@@ -74,7 +74,7 @@ types:
         type: u4
         doc: Length of the packet as it appeared on the network when it was captured.
       - id: body
-        size: incl_len
+        size: "incl_len < _root.hdr.snaplen ? incl_len : _root.hdr.snaplen"
         type:
           switch-on: _root.hdr.network
           cases:
