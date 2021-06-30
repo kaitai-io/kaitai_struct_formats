@@ -52,7 +52,7 @@ types:
       - id: hdr_ext_len
         type: u1
       - id: body
-        size: hdr_ext_len - 1
+        size: 'hdr_ext_len > 0 ? hdr_ext_len - 1 : 1'
       - id: next_header
         type: protocol_body(next_header_type)
 enums:
