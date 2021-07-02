@@ -221,7 +221,7 @@ class FormatPagesGenerator
 
   def generate_xref
     File.open("#{@html_dir}/xref.html", 'w') { |out|
-      page_title = "File Formats Cross-References for Kaitai Struct"
+      page_title = "File Format Cross-References for Kaitai Struct"
       out.write @erb_header.result(binding)
       out.write @erb_xref.result(binding)
       out.write @erb_footer.result(binding)

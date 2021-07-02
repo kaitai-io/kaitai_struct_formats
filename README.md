@@ -1,4 +1,4 @@
-# Kaitai Struct: formats library
+# Kaitai Struct: format library
 
 This repository constitutes a library of ready-made binary file format
 descriptions using [Kaitai Struct](http://kaitai.io/) language (`.ksy`).
