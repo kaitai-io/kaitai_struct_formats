@@ -141,7 +141,7 @@ types:
         type: u4
       - id: header
         -orig-id: bmciHeader
-        size: len_header - 4
+        size: len_header - len_header._sizeof
         type: bitmap_header(len_header)
       - id: color_mask
         type: color_mask(header.bitmap_info_ext.compression == compressions::alpha_bitfields)
