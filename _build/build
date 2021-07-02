@@ -6,4 +6,3 @@ KSY_DIR=..
 ./check-errors target/log.json
 ./build-diagrams target html
 ./build-html "$KSY_DIR" target html
-cp favicon.ico favicon.ico.license html
