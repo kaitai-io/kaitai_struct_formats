@@ -5,7 +5,7 @@ meta:
   xref:
     wikidata: Q29960668
   endian: le
-doc-ref: https://www.gtamodding.com/wiki/RenderWare_binary_stream_file
+doc-ref: https://gtamods.com/wiki/RenderWare_binary_stream_file
 seq:
   - id: code
     type: u4
@@ -65,7 +65,7 @@ types:
       - id: num_textures
         type: u4
   struct_clump:
-    doc-ref: https://www.gtamodding.com/wiki/RpClump
+    doc-ref: https://gtamods.com/wiki/RpClump
     seq:
       - id: num_atomics
         type: u4
@@ -76,7 +76,7 @@ types:
         type: u4
         if: _parent.version >= 0x33000
   struct_frame_list:
-    doc-ref: 'https://www.gtamodding.com/wiki/Frame_List_(RW_Section)#Structure'
+    doc-ref: 'https://gtamods.com/wiki/Frame_List_(RW_Section)#Structure'
     seq:
       - id: num_frames
         type: u4
@@ -85,7 +85,7 @@ types:
         repeat: expr
         repeat-expr: num_frames
   frame:
-    doc-ref: 'https://www.gtamodding.com/wiki/Frame_List_(RW_Section)#Structure'
+    doc-ref: 'https://gtamods.com/wiki/Frame_List_(RW_Section)#Structure'
     seq:
       - id: rotation_matrix
         type: matrix
@@ -96,14 +96,14 @@ types:
       - id: matrix_creation_flags
         type: u4
   matrix:
-    doc-ref: 'https://www.gtamodding.com/wiki/Frame_List_(RW_Section)#Structure'
+    doc-ref: 'https://gtamods.com/wiki/Frame_List_(RW_Section)#Structure'
     seq:
       - id: entries
         type: vector_3d
         repeat: expr
         repeat-expr: 3
   vector_3d:
-    doc-ref: 'https://www.gtamodding.com/wiki/Frame_List_(RW_Section)#Structure'
+    doc-ref: 'https://gtamods.com/wiki/Frame_List_(RW_Section)#Structure'
     seq:
       - id: x
         type: f4
@@ -112,12 +112,12 @@ types:
       - id: z
         type: f4
   struct_geometry_list:
-    doc-ref: 'https://www.gtamodding.com/wiki/Geometry_List_(RW_Section)#Structure'
+    doc-ref: 'https://gtamods.com/wiki/Geometry_List_(RW_Section)#Structure'
     seq:
       - id: num_geometries
         type: u4
   struct_geometry:
-    doc-ref: https://www.gtamodding.com/wiki/RpGeometry
+    doc-ref: https://gtamods.com/wiki/RpGeometry
     seq:
       - id: format
         type: u4
@@ -147,7 +147,7 @@ types:
       is_native:
         value: format & 0x01000000 != 0
   surface_properties:
-    doc-ref: https://www.gtamodding.com/wiki/RpGeometry
+    doc-ref: https://gtamods.com/wiki/RpGeometry
     seq:
       - id: ambient
         type: f4
