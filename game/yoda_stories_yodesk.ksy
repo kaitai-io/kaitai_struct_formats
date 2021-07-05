@@ -25,7 +25,7 @@ doc: |
   During world generation a global world map of 10x10 sectors is filled with
   zones based on the selected puzzles.
 
-  To add variety and interactivity to each zone the game includes a simple
+  To add variety and interactivity to each zone, the game includes a simple
   scripting engine. Zones can declare actions that when executed can for
   example set, move or delete tiles, drop items or activate enemies.
 
