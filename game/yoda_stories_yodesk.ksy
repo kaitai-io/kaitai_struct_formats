@@ -89,12 +89,12 @@ types:
       Some sound ids (like the one when the hero is hit, or can't leave a
       zone) are hard coded in the game.
     seq:
-      - id: count
+      - id: num_sonuds_neg
         type: s2
       - id: sounds
         type: prefixed_strz
         repeat: expr
-        repeat-expr: -count
+        repeat-expr: -num_sonuds_neg
   tile_names:
     seq:
       - id: names
