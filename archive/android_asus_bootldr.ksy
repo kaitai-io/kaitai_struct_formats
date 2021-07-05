@@ -12,6 +12,9 @@ doc: |
   A bootloader image which only seems to have been used on a few ASUS
   devices. The encoding is ASCII, because the `releasetools.py` script
   is written using Python 2, where the default encoding is ASCII.
+
+  A test file can be found in the firmware files for the "fugu" device,
+  which can be downloaded from <https://developers.google.com/android/images>
 doc-ref: https://android.googlesource.com/device/asus/fugu/+/android-8.1.0_r5/releasetools.py
 seq:
   - id: magic
