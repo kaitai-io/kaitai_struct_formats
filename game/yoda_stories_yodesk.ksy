@@ -1,5 +1,5 @@
 meta:
-  id: yodesk
+  id: yoda_stories_yodesk
   application: "Star Wars: Yoda Stories"
   file-extension: dta
   license: CC0-1.0
