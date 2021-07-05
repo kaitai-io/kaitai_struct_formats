@@ -6,6 +6,7 @@ meta:
     - archive
     - android
   license: CC0-1.0
+  ks-version: 0.9
   encoding: ASCII
   endian: le
 doc: |
@@ -39,11 +40,18 @@ types:
     seq:
       - id: magic
         type: str
+        valid:
+          any-of:
+            - '"IFWI!!!!"' # ifwi.bin
+            - '"DROIDBT!"' # droidboot.img
+            - '"SPLASHS!"' # splashscreen.img
         size: 8
       - id: len_body
         type: u4
       - id: flags
         type: u1
+        valid:
+          expr: _ & 1 != 0
       - id: reserved1
         type: u1
       - id: reserved2
