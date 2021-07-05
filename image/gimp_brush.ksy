@@ -4,7 +4,9 @@ meta:
   application: GIMP (GNU Image Manipulation Program)
   file-extension: gbr
   xref:
+    justsolve: GIMP_Brush
     mime: image/x-gimp-gbr
+    wikidata: Q28206177
   license: CC0-1.0
   endian: be
 doc-ref: https://gitlab.gnome.org/GNOME/gimp/-/raw/4416313/devel-docs/gbr.txt
