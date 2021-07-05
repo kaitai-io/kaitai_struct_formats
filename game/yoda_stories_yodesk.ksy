@@ -172,144 +172,134 @@ types:
             Tile forms part of a character
         - id: unused
           type: b7
-        # Floor flags
-        - id: is_doorway
-          type: b1
-          doc: |
-            These tiles are doorways, monsters can't go
+        - id: floor_flags
+          type: floor_attributes
           if: is_floor
-        # Locator flags
-        - id: unused1
-          type: b1
+        - id: locator_flags
+          type: locator_attributes
           if: is_locator
-        - id: is_town
-          type: b1
-          doc: |
-            Marks the spaceport on the map
-          if: is_locator
-        - id: is_unsolved_puzzle
-          type: b1
-          doc: |
-            Marks a discovered, but unsolved puzzle on the map
-          if: is_locator
-        - id: is_solved_puzzle
-          type: b1
-          doc: |
-            Marks a solved puzzle on the map
-          if: is_locator
-        - id: is_unsolved_travel
-          type: b1
-          doc: |
-            Marks a place of travel on the map that has not been solved
-          if: is_locator
-        - id: is_solved_travel
-          type: b1
-          doc: |
-            Marks a solved place of travel on the map
-          if: is_locator
-        - id: is_unsolved_blockade_north
-          type: b1
-          doc: |
-            Marks a sector on the map that blocks access to northern zones
-          if: is_locator
-        - id: is_unsolved_blockade_south
-          type: b1
-          doc: |
-            Marks a sector on the map that blocks access to southern zones
-          if: is_locator
-        - id: is_unsolved_blockade_west
-          type: b1
-          doc: |
-            Marks a sector on the map that blocks access to western zones
-          if: is_locator
-        - id: is_unsolved_blockade_east
-          type: b1
-          doc: |
-            Marks a sector on the map that blocks access to eastern zones
-          if: is_locator
-        - id: is_solved_blockade_north
-          type: b1
-          doc: |
-            Marks a solved sector on the map that used to block access to
-            northern zones
-          if: is_locator
-        - id: is_solved_blockade_south
-          type: b1
-          doc: |
-            Marks a solved sector on the map that used to block access to
-            southern zones
-          if: is_locator
-        - id: is_solved_blockade_west
-          type: b1
-          doc: |
-            Marks a solved sector on the map that used to block access to
-            western zones
-          if: is_locator
-        - id: is_solved_blockade_east
-          type: b1
-          doc: |
-            Marks a solved sector on the map that used to block access to
-            eastern zones
-          if: is_locator
-        - id: is_unsolved_goal
-          type: b1
-          doc: |
-            The final puzzle of the world. Solving this wins the game
-          if: is_locator
-        - id: is_location_indicator
-          type: b1
-          doc: |
-            Overlay to mark the current position on the map
-          if: is_locator
-        # Item flags
-        - id: is_keycard
-          type: b1
+        - id: item_flags
+          type: item_attributes
           if: is_item
-        - id: is_tool
-          type: b1
-          if: is_item
-        - id: is_part
-          type: b1
-          if: is_item
-        - id: is_valuable
-          type: b1
-          if: is_item
-        - id: is_map
-          type: b1
-          if: is_item
-        - id: unused2
-          type: b1
-          if: is_item
-        - id: is_edible
-          type: b1
-          if: is_item
-        # Weapon flags
-        - id: is_low_blaster
-          type: b1
-          doc: |
-            Item is a low intensity blaster (like the blaster pistol)
+        - id: weapon_flags
+          type: weapon_attributes
           if: is_weapon
-        - id: is_high_blaster
-          type: b1
-          doc: |
-            Item is a high intensity blaster (like the blaster rifle)
-          if: is_weapon
-        - id: is_lightsaber
-          type: b1
-          if: is_weapon
-        - id: is_the_force
-          type: b1
-          if: is_weapon
-        # Character flags
-        - id: is_hero
-          type: b1
+        - id: character_flags
+          type: character_attributes
           if: is_character
-        - id: is_enemy
-          type: b1
-          if: is_character
-        - id: is_npc
-          type: b1
-          if: is_character
+      types:
+          floor_attributes:
+            seq:
+              - id: is_doorway
+                type: b1
+                doc: |
+                  These tiles are doorways, monsters can't go
+          locator_attributes:
+              seq:
+                - id: unused
+                  type: b1
+                - id: is_town
+                  type: b1
+                  doc: |
+                    Marks the spaceport on the map
+                - id: is_unsolved_puzzle
+                  type: b1
+                  doc: |
+                    Marks a discovered, but unsolved puzzle on the map
+                - id: is_solved_puzzle
+                  type: b1
+                  doc: |
+                    Marks a solved puzzle on the map
+                - id: is_unsolved_travel
+                  type: b1
+                  doc: |
+                    Marks a place of travel on the map that has not been solved
+                - id: is_solved_travel
+                  type: b1
+                  doc: |
+                    Marks a solved place of travel on the map
+                - id: is_unsolved_blockade_north
+                  type: b1
+                  doc: |
+                    Marks a sector on the map that blocks access to northern zones
+                - id: is_unsolved_blockade_south
+                  type: b1
+                  doc: |
+                    Marks a sector on the map that blocks access to southern zones
+                - id: is_unsolved_blockade_west
+                  type: b1
+                  doc: |
+                    Marks a sector on the map that blocks access to western zones
+                - id: is_unsolved_blockade_east
+                  type: b1
+                  doc: |
+                    Marks a sector on the map that blocks access to eastern zones
+                - id: is_solved_blockade_north
+                  type: b1
+                  doc: |
+                    Marks a solved sector on the map that used to block access to
+                    northern zones
+                - id: is_solved_blockade_south
+                  type: b1
+                  doc: |
+                    Marks a solved sector on the map that used to block access to
+                    southern zones
+                - id: is_solved_blockade_west
+                  type: b1
+                  doc: |
+                    Marks a solved sector on the map that used to block access to
+                    western zones
+                - id: is_solved_blockade_east
+                  type: b1
+                  doc: |
+                    Marks a solved sector on the map that used to block access to
+                    eastern zones
+                - id: is_unsolved_goal
+                  type: b1
+                  doc: |
+                    The final puzzle of the world. Solving this wins the game
+                - id: is_location_indicator
+                  type: b1
+                  doc: |
+                    Overlay to mark the current position on the map
+          item_attributes:
+              seq:
+                - id: is_keycard
+                  type: b1
+                - id: is_tool
+                  type: b1
+                - id: is_part
+                  type: b1
+                - id: is_valuable
+                  type: b1
+                - id: is_map
+                  type: b1
+                - id: unused
+                  type: b1
+                - id: is_edible
+                  type: b1
+          weapon_attributes:
+              seq:
+                - id: is_low_blaster
+                  type: b1
+                  doc: |
+                    Item is a low intensity blaster (like the blaster pistol)
+                - id: is_high_blaster
+                  type: b1
+                  doc: |
+                    Item is a high intensity blaster (like the blaster rifle)
+                - id: is_lightsaber
+                  type: b1
+                - id: is_the_force
+                  type: b1
+          character_attributes:
+              seq:
+                - id: is_hero
+                  type: b1
+                - id: is_enemy
+                  type: b1
+                - id: is_npc
+                  type: b1
   action:
     doc: |
       Actions are the game's way to make static tile based maps more engaging
