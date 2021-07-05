@@ -40,7 +40,7 @@ types:
       - id: magic
         type: str
         size: 8
-      - id: len_image
+      - id: len_body
         type: u4
       - id: flags
         type: u1
@@ -51,4 +51,4 @@ types:
       - id: reserved3
         type: u1
       - id: body
-        size: len_image
+        size: len_body
