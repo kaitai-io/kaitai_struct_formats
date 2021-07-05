@@ -40,8 +40,8 @@ types:
     -webide-representation: '{type}'
     seq:
       - id: type
-        type: str
         size: 4
+        type: str
       - id: len_content
         type: u4
         if: type != "VERS" and type != "ZONE"
@@ -110,8 +110,8 @@ types:
       - id: tile_id
         type: u2
       - id: name
-        type: strz
         size: 0x18
+        type: strz
         if: tile_id != 0xFF_FF
   tiles:
     seq:
@@ -125,8 +125,8 @@ types:
   tile:
       seq:
         - id: attributes
-          type: tile_attributes
           size: 4
+          type: tile_attributes
         - id: pixels
           size: 32 * 32
   tile_attributes:
@@ -350,8 +350,8 @@ types:
       - id: len_action_content
         type: u4
       - id: content
-        type: action_content
         size: len_action_content
+        type: action_content
   action_content:
     seq:
       - id: num_conditions
@@ -378,8 +378,8 @@ types:
       - id: len_text
         type: u2
       - id: text
-        type: str
         size: len_text
+        type: str
         doc: |
           The `text_attribute` is never used, but seems to be included to
           shared the type with instructions.
@@ -510,8 +510,8 @@ types:
       - id: len_text
         type: u2
       - id: text
-        type: str
         size: len_text
+        type: str
     enums:
       instruction_opcode:
         0x0:
@@ -702,8 +702,8 @@ types:
       - id: len_zone_content
         type: u4
       - id: content
-        type: zone_content
         size: len_zone_content
+        type: zone_content
     enums:
       planet:
         0: none
@@ -720,8 +720,8 @@ types:
       - id: len_inline_zone_content
         type: u4
       - id: content
-        type: inline_zone_content
         size: len_inline_zone_content - 8
+        type: inline_zone_content
       - id: num_hotspots
         type: u2
       - id: hotspots
@@ -1133,8 +1133,8 @@ types:
   character_content:
     seq:
       - id: name
-        type: strz
         size: 16
+        type: strz
       - id: type
         type: u2
         enum: character_type
@@ -1207,15 +1207,15 @@ types:
       - id: len_content
         type: u2
       - id: content
-        type: str
         size: len_content
+        type: str
   prefixed_strz:
     seq:
       - id: len_content
         type: u2
       - id: content
-        type: strz
         size: len_content
+        type: strz
   waypoint:
     seq:
     - id: x
