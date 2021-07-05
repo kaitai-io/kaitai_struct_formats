@@ -1063,15 +1063,18 @@ types:
       - id: index
         type: u2
       - id: magic
-        if: index != 0xFF_FF
+        if: not is_end
         contents: "IPUZ"
       - id: len_puzzle_content
         type: u4
-        if: index != 0xFF_FF
+        if: not is_end
       - id: content
         size: len_puzzle_content
         type: puzzle_content
-        if: index != 0xFF_FF
+        if: not is_end
+    instances:
+      is_end:
+        value: index == 0xFF_FF
   puzzle_content:
     seq:
       - id: type
@@ -1112,14 +1115,17 @@ types:
         type: u2
       - id: magic
         contents: "ICHA"
-        if: index != 0xFF_FF
+        if: not is_end
       - id: len_character_content
         type: u4
-        if: index != 0xFF_FF
+        if: not is_end
       - id: content
         size: len_character_content
         type: character_content
-        if: index != 0xFF_FF
+        if: not is_end
+    instances:
+      is_end:
+        value: index == 0xFF_FF
   character_content:
     seq:
       - id: name
@@ -1187,10 +1193,13 @@ types:
           reference to their weapon, otherwise this is the index of the
           weapon's sound
         type: u2
-        if: index != 0xFF_FF
+        if: not is_end
       - id: health
         type: u2
-        if: index != 0xFF_FF
+        if: not is_end
+    instances:
+      is_end:
+        value: index == 0xFF_FF
   # Utilities
   prefixed_str:
     seq:
