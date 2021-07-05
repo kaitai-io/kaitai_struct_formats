@@ -61,12 +61,63 @@ types:
         type: strz
         size-eos: true
         encoding: UTF-8
+  bitmap:
+    seq:
+      - id: rows
+        type: row
+        repeat: expr
+        repeat-expr: _root.header.height
+  row:
+    seq:
+      - id: pixels
+        type:
+          switch-on: _root.header.bytes_per_pixel
+          cases:
+            color_depth::grayscale: pixel_gray
+            color_depth::rgba: pixel_rgba
+        repeat: expr
+        repeat-expr: _root.header.width
+    types:
+      pixel_gray:
+        -webide-representation: 'R={red:dec} G={green:dec} B={blue:dec} A={alpha:dec}'
+        seq:
+          - id: gray
+            type: u1
+        instances:
+          red:
+            value: 0
+            -webide-parse-mode: eager
+          green:
+            value: 0
+            -webide-parse-mode: eager
+          blue:
+            value: 0
+            -webide-parse-mode: eager
+          alpha:
+            value: gray
+
+      pixel_rgba:
+        -webide-representation: 'R={red:dec} G={green:dec} B={blue:dec} A={alpha:dec}'
+        seq:
+          - id: red
+            type: u1
+          - id: green
+            type: u1
+          - id: blue
+            type: u1
+          - id: alpha
+            type: u1
 instances:
   len_body:
     value: header.width * header.height * header.bytes_per_pixel.to_i
   body:
     pos: len_header
     size: len_body
+    -affected-by: 188
+    # type: bitmap # The `bitmap` type works, but it might be slow and memory intensive for larger bitmaps
+                   # because it creates a class instance for every pixel.
+                   # So it is not suitable for production, but you can use it as a reference to create your
+                   # own implementation.
 enums:
   color_depth:
     1: grayscale
