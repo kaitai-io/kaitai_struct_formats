@@ -344,7 +344,7 @@ types:
       See `condition_opcode` and `instruction_opcode` enums for a list of
       available opcodes and their meanings.
     seq:
-      - id: marker
+      - id: magic
         contents: "IACT"
       - id: len_action
         type: u4
@@ -698,7 +698,7 @@ types:
         type: u4
       - id: index
         type: u2
-      - id: marker
+      - id: magic
         contents: "IZON"
       - id: len_izone
         type: u4
@@ -957,7 +957,7 @@ types:
 
   zone_auxiliary:
     seq:
-      - id: marker
+      - id: magic
         contents: "IZAX"
       - id: len_zone_auxiliary
         type: u4
@@ -986,7 +986,7 @@ types:
         repeat-expr: num_goal_items
   zone_auxiliary_2:
     seq:
-      - id: marker
+      - id: magic
         contents: "IZX2"
       - id: len_zone_auxiliary_2
         type: u4
@@ -999,7 +999,7 @@ types:
         repeat-expr: num_provided_items
   zone_auxiliary_3:
     seq:
-      - id: marker
+      - id: magic
         contents: "IZX3"
       - id: len_zone_auxiliary_3
         type: u4
@@ -1013,7 +1013,7 @@ types:
         repeat-expr: num_npcs
   zone_auxiliary_4:
     seq:
-      - id: marker
+      - id: magic
         contents: "IZX4"
       - id: len_zone_auxiliary_4
         type: u4
@@ -1036,7 +1036,7 @@ types:
     seq:
       - id: index
         type: u2
-      - id: marker
+      - id: magic
         if: index != 0xFF_FF
         contents: "IPUZ"
       - id: len_puzzle
@@ -1085,7 +1085,7 @@ types:
     seq:
       - id: index
         type: u2
-      - id: marker
+      - id: magic
         contents: "ICHA"
         if: index != 0xFF_FF
       - id: len_character
