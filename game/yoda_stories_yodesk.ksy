@@ -37,6 +37,7 @@ seq:
 
 types:
   catalog_entry:
+    -webide-representation: '{type}'
     seq:
       - id: type
         type: str
