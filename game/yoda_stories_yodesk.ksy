@@ -1163,7 +1163,7 @@ types:
       - id: tiles
         type: u2
         repeat: expr
-        repeat-expr: 0x8
+        repeat-expr: 8
   character_auxiliaries:
     seq:
       - id: auxiliaries
