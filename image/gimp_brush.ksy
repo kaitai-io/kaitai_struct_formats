@@ -62,11 +62,11 @@ types:
         size-eos: true
         encoding: UTF-8
 instances:
-  body_size:
+  len_body:
     value: header.width * header.height * header.bytes_per_pixel.to_i
   body:
     pos: len_header
-    size: body_size
+    size: len_body
 enums:
   color_depth:
     1: grayscale
