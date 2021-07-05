@@ -29,13 +29,13 @@ seq:
   - id: description
     type: strz
     encoding: ASCII
-    size: header.header_size - sizeof<header>
+    size: header.len_header - sizeof<header>
 types:
   header:
     seq:
       - id: magic
         contents: ".snd"
-      - id: header_size
+      - id: len_header
         type: u4
         valid:
           min: 24
