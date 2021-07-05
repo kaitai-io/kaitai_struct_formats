@@ -70,8 +70,8 @@ types:
   version:
     seq:
       - id: version_
-        doc: Version of the file. This value is always set to 512.
         type: u4
+        doc: Version of the file. This value is always set to 512.
   startup_image:
     doc: |
       A 288x288 bitmap to be shown while other assets are loaded and a new
@@ -98,13 +98,13 @@ types:
   tile_names:
     seq:
       - id: names
+        type: tile_name
+        repeat: until
+        repeat-until:  _.tile_id == 0xFF_FF
         doc: |
           List of tile ids and their corresponding names. These are shown in
           the inventory or used in dialogs (see `speak_hero` and `speak_npc`
           opcodes).
-        type: tile_name
-        repeat: until
-        repeat-until:  _.tile_id == 0xFF_FF
   tile_name:
     seq:
       - id: tile_id
@@ -665,15 +665,16 @@ types:
       - id: y
         type: u2
       - id: loot
+        type: u2
         doc: |
           References the item (loot - 1) that will be dropped if the monster
           is killed. If set to `0xFFFF` the current zone's quest item will be
           dropped.
-        type: u2
       - id: drops_loot
-        doc: If this field is anything other than 0 the monster may drop an
-          item when killed.
         type: u4
+        doc: |
+          If this field is anything other than 0 the monster may drop an
+          item when killed.
       - id: waypoints
         type: waypoint
         repeat: expr
@@ -681,14 +682,14 @@ types:
   zone:
     seq:
       - id: planet
+        type: u2
+        enum: planet
         doc: |
           Planet this zone can be placed on.
 
           During world generation the goal puzzle dictates which planet is
           chosen. Apart from `swamp` zones, only the zones with type `empty`
           or the chosen type are loaded when a game is in progress.
-        type: u2
-        enum: planet
       - id: len_zone_content
         type: u4
       - id: content
@@ -735,22 +736,22 @@ types:
   inline_zone_content:
     seq:
       - id: width
+        type: u2
         doc: Width of the zone in tiles. Either 9 or 18.
-        type: u2
       - id: height
-        doc: Height of the zone in tiles. Either 9 or 18.
         type: u2
+        doc: Height of the zone in tiles. Either 9 or 18.
       - id: type
         enum: zone_type
         type: u4
       - id: shared_counter
-        doc: |
-            Scripting register shared between the zone and its rooms.
         type: u2
         valid: 0xFF_FF
+        doc: |
+            Scripting register shared between the zone and its rooms.
       - id: planet_again
-        doc: Repetition of the `planet` field
         type: u2
+        doc: Repetition of the `planet` field
       - id: tile_ids
         type: zone_spot
         repeat: expr
@@ -856,10 +857,10 @@ types:
   zone_spot:
     seq:
       - id: column
-        doc: from bottom to top, 0xFFFF indicates empty tiles
         type: u2
         repeat: expr
         repeat-expr: 3
+        doc: from bottom to top, 0xFFFF indicates empty tiles
   hotspot:
     doc: |
       In addition to actions some puzzles and events are triggered by
@@ -875,10 +876,10 @@ types:
       - id: y
         type: u2
       - id: enabled
+        type: u2
         doc: |
           If disabled, hotspots can not be triggered. See instruction opcodes
           called `enable_hotspot` and `disable_hotspot`.
-        type: u2
       - id: argument
         type: u2
     enums:
@@ -982,19 +983,19 @@ types:
       - id: num_required_items
         type: u2
       - id: required_items
-        doc: List of items that can be used to solve the zone.
         type: u2
         repeat: expr
         repeat-expr: num_required_items
+        doc: List of items that can be used to solve the zone.
       - id: num_goal_items
         type: u2
       - id: goal_items
-        doc: |
-          Additional items that are needed to solve the zone. Only used if the
-          zone type is `goal`.
         type: u2
         repeat: expr
         repeat-expr: num_goal_items
+        doc: |
+          Additional items that are needed to solve the zone. Only used if the
+          zone type is `goal`.
   zone_auxiliary_2:
     seq:
       - id: magic
@@ -1009,10 +1010,10 @@ types:
       - id: num_provided_items
         type: u2
       - id: provided_items
-        doc: Items that can be gained when the zone is solved.
         type: u2
         repeat: expr
         repeat-expr: num_provided_items
+        doc: Items that can be gained when the zone is solved.
   zone_auxiliary_3:
     seq:
       - id: magic
@@ -1027,11 +1028,11 @@ types:
       - id: num_npcs
         type: u2
       - id: npcs
-        doc: |
-          NPCs that can be placed in the zone to trade items with the hero.
         type: u2
         repeat: expr
         repeat-expr: num_npcs
+        doc: |
+          NPCs that can be placed in the zone to trade items with the hero.
   zone_auxiliary_4:
     seq:
       - id: magic
@@ -1188,12 +1189,12 @@ types:
       - id: index
         type: u2
       - id: reference
+        type: u2
+        if: not is_end
         doc: |
           If the character referenced by index is a monster, this is a
           reference to their weapon, otherwise this is the index of the
           weapon's sound
-        type: u2
-        if: not is_end
       - id: health
         type: u2
         if: not is_end
