@@ -50,22 +50,22 @@ types:
         type:
           switch-on: type
           cases:
-             '"STUP"': startup_image
-             '"CHAR"': characters
-             '"CAUX"': character_auxiliaries
-             '"CHWP"': character_weapons
-             '"PUZ2"': puzzles
-             '"SNDS"': sounds
-             '"TILE"': tiles
-             '"TNAM"': tile_names
-             '"ENDF"': endf
+            '"STUP"': startup_image
+            '"CHAR"': characters
+            '"CAUX"': character_auxiliaries
+            '"CHWP"': character_weapons
+            '"PUZ2"': puzzles
+            '"SNDS"': sounds
+            '"TILE"': tiles
+            '"TNAM"': tile_names
+            '"ENDF"': endf
         if: type != "VERS" and type != "ZONE"
       - id: unlimited_content
         type:
           switch-on: type
           cases:
-             '"VERS"': version
-             '"ZONE"': zones
+            '"VERS"': version
+            '"ZONE"': zones
         if: type == "VERS" or type == "ZONE"
   version:
     seq:
