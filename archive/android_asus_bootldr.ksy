@@ -37,14 +37,15 @@ seq:
       and `splashscreen.img`
 types:
   image:
+    -webide-representation: '{file_name}'
     seq:
       - id: magic
         type: str
         valid:
           any-of:
-            - '"IFWI!!!!"' # ifwi.bin
-            - '"DROIDBT!"' # droidboot.img
-            - '"SPLASHS!"' # splashscreen.img
+            - '"IFWI!!!!"'
+            - '"DROIDBT!"'
+            - '"SPLASHS!"'
         size: 8
       - id: len_body
         type: u4
@@ -60,3 +61,10 @@ types:
         type: u1
       - id: body
         size: len_body
+    instances:
+      file_name:
+        value: |
+          magic == "IFWI!!!!" ? "ifwi.bin" :
+          magic == "DROIDBT!" ? "droidboot.img" :
+          magic == "SPLASHS!" ? "splashscreen.img" :
+          ""
