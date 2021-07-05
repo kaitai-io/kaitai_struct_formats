@@ -45,10 +45,10 @@ types:
         type: u4
         if: type != "VERS" and type != "ZONE"
       - id: content
+        size: len_content
         type:
           switch-on: type
           cases:
-             '"VERS"': version
              '"STUP"': startup_image
              '"CHAR"': characters
              '"CAUX"': character_auxiliaries
@@ -57,16 +57,18 @@ types:
              '"SNDS"': sounds
              '"TILE"': tiles
              '"TNAM"': tile_names
-             '"ZONE"': zones
              '"ENDF"': endf
-             _: unknown_catalog_entry
-  unknown_catalog_entry:
-    seq:
-      - id: data
-        size: _parent.len_content
+        if: type != "VERS" and type != "ZONE"
+      - id: unlimited_content
+        type:
+          switch-on: type
+          cases:
+             '"VERS"': version
+             '"ZONE"': zones
+        if: type == "VERS" or type == "ZONE"
   version:
     seq:
-      - id: version
+      - id: version_
         doc: Version of the file. This value is always set to 512.
         type: u4
   startup_image:
@@ -75,7 +77,7 @@ types:
       world is generated.
     seq:
       - id: pixels
-        size: _parent.len_content
+        size-eos: true
   sounds:
     doc: |
       This section declares sounds used in the game. The actual audio data is
@@ -114,7 +116,6 @@ types:
     seq:
       - id: tiles
         type: tiles_entries
-        size: _parent.len_content
   tiles_entries:
     seq:
       - id: tiles
