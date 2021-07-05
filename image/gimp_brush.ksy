@@ -8,6 +8,7 @@ meta:
     mime: image/x-gimp-gbr
     wikidata: Q28206177
   license: CC0-1.0
+  ks-version: 0.9
   endian: be
 doc: |
   GIMP brush format is native to the GIMP image editor for storing a brush or a texture.
