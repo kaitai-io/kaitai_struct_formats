@@ -45,6 +45,7 @@ types:
         contents: GIMP
       - id: spacing
         type: u4
+        doc: Default spacing to be used for brush. Percentage of brush width.
       - id: brush_name
         type: strz
         size-eos: true
