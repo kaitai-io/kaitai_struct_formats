@@ -163,57 +163,57 @@ types:
   est_timings_info:
     seq:
       # Byte 0: "Established Timing I"
-      - id: can_720_400_70
+      - id: can_720x400px_70hz
         type: b1
         doc: Supports 720 x 400 @ 70Hz
-      - id: can_720_400_88
+      - id: can_720x400px_88hz
         type: b1
         doc: Supports 720 x 400 @ 88Hz
-      - id: can_640_480_60
+      - id: can_640x480px_60hz
         type: b1
         doc: Supports 640 x 480 @ 60Hz
-      - id: can_640_480_67
+      - id: can_640x480px_67hz
         type: b1
         doc: Supports 640 x 480 @ 67Hz
-      - id: can_640_480_72
+      - id: can_640x480px_72hz
         type: b1
         doc: Supports 640 x 480 @ 72Hz
-      - id: can_640_480_75
+      - id: can_640x480px_75hz
         type: b1
         doc: Supports 640 x 480 @ 75Hz
-      - id: can_800_600_56
+      - id: can_800x600px_56hz
         type: b1
         doc: Supports 800 x 600 @ 56Hz
-      - id: can_800_600_60
+      - id: can_800x600px_60hz
         type: b1
         doc: Supports 800 x 600 @ 60Hz
       # Byte 1: "Established Timing II"
-      - id: can_800_600_72
+      - id: can_800x600px_72hz
         type: b1
         doc: Supports 800 x 600 @ 72Hz
-      - id: can_800_600_75
+      - id: can_800x600px_75hz
         type: b1
         doc: Supports 800 x 600 @ 75Hz
-      - id: can_832_624_75
+      - id: can_832x624px_75hz
         type: b1
         doc: Supports 832 x 624 @ 75Hz
-      - id: can_1024_768_87_i
+      - id: can_1024x768px_87hz_i
         type: b1
         doc: Supports 1024 x 768 @ 87Hz(I)
-      - id: can_1024_768_60
+      - id: can_1024x768px_60hz
         type: b1
         doc: Supports 1024 x 768 @ 60Hz
-      - id: can_1024_768_70
+      - id: can_1024x768px_70hz
         type: b1
         doc: Supports 1024 x 768 @ 70Hz
-      - id: can_1024_768_75
+      - id: can_1024x768px_75hz
         type: b1
         doc: Supports 1024 x 768 @ 75Hz
-      - id: can_1280_1024_75
+      - id: can_1280x1024px_75hz
         type: b1
         doc: Supports 1280 x 1024 @ 75Hz
       # Byte 2: "Manufacturer's Timings"
-      - id: can_1152_870_75
+      - id: can_1152x870px_75hz
         type: b1
         doc: Supports 1152 x 870 @ 75Hz
       - id: reserved
