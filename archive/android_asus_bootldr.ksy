@@ -40,13 +40,13 @@ types:
     -webide-representation: '{file_name}'
     seq:
       - id: magic
+        size: 8
         type: str
         valid:
           any-of:
             - '"IFWI!!!!"'
             - '"DROIDBT!"'
             - '"SPLASHS!"'
-        size: 8
       - id: len_body
         type: u4
       - id: flags
