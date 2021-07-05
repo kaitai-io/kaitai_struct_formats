@@ -1,6 +1,7 @@
 meta:
   id: gimp_brush
-  title: GIMP (GNU Image Manipulation Program) brush version 2 file
+  title: GIMP brush file version 2
+  application: GIMP (GNU Image Manipulation Program)
   file-extension: gbr
   xref:
     mime: image/x-gimp-gbr
