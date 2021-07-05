@@ -331,7 +331,7 @@ types:
         all_conditions_satisfied = False
         for condition in action.conditions:
             all_conditions_satisfied = check(condition)
-            if !all_conditions_satisfied:
+            if not all_conditions_satisfied:
               break
 
         if !all_conditions_satisfied:
