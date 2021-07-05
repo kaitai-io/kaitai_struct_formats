@@ -39,7 +39,7 @@ types:
   image:
     -webide-representation: '{file_name}'
     seq:
-      - id: magic
+      - id: chunk_id
         size: 8
         type: str
         valid:
@@ -64,7 +64,7 @@ types:
     instances:
       file_name:
         value: |
-          magic == "IFWI!!!!" ? "ifwi.bin" :
-          magic == "DROIDBT!" ? "droidboot.img" :
-          magic == "SPLASHS!" ? "splashscreen.img" :
+          chunk_id == "IFWI!!!!" ? "ifwi.bin" :
+          chunk_id == "DROIDBT!" ? "droidboot.img" :
+          chunk_id == "SPLASHS!" ? "splashscreen.img" :
           ""
