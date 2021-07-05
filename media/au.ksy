@@ -46,7 +46,7 @@ types:
         enum: encodings
       - id: sample_rate
         type: u4
-      - id: channels
+      - id: num_channels
         type: u4
 enums:
   encodings:
