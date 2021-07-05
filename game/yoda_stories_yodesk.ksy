@@ -41,7 +41,7 @@ types:
       - id: type
         type: str
         size: 4
-      - id: size
+      - id: len_content
         type: u4
         if: type != "VERS" and type != "ZONE"
       - id: content
@@ -63,7 +63,7 @@ types:
   unknown_catalog_entry:
     seq:
       - id: data
-        size: _parent.size
+        size: _parent.len_content
   version:
     seq:
       - id: version
@@ -75,7 +75,7 @@ types:
       world is generated.
     seq:
       - id: pixels
-        size: _parent.size
+        size: _parent.len_content
   sounds:
     doc: |
       This section declares sounds used in the game. The actual audio data is
@@ -114,7 +114,7 @@ types:
     seq:
       - id: tiles
         type: tiles_entries
-        size: _parent.size
+        size: _parent.len_content
   tiles_entries:
     seq:
       - id: tiles
@@ -345,7 +345,7 @@ types:
     seq:
       - id: marker
         contents: "IACT"
-      - id: size
+      - id: len_action
         type: u4
       - id: num_conditions
         type: u2
@@ -693,13 +693,13 @@ types:
           or the chosen type are loaded when a game is in progress.
         type: u2
         enum: planet
-      - id: size
+      - id: len_zone
         type: u4
       - id: index
         type: u2
       - id: marker
         contents: "IZON"
-      - id: size2
+      - id: len_izone
         type: u4
       - id: width
         doc: Width of the zone in tiles. Either 9 or 18.
@@ -958,7 +958,7 @@ types:
     seq:
       - id: marker
         contents: "IZAX"
-      - id: size
+      - id: len_zone_auxiliary
         type: u4
       - type: u2
       - id: num_monsters
@@ -987,7 +987,7 @@ types:
     seq:
       - id: marker
         contents: "IZX2"
-      - id: size
+      - id: len_zone_auxiliary_2
         type: u4
       - id: num_provided_items
         type: u2
@@ -1000,7 +1000,7 @@ types:
     seq:
       - id: marker
         contents: "IZX3"
-      - id: size
+      - id: len_zone_auxiliary_3
         type: u4
       - id: num_npcs
         type: u2
@@ -1014,7 +1014,7 @@ types:
     seq:
       - id: marker
         contents: "IZX4"
-      - id: size
+      - id: len_zone_auxiliary_4
         type: u4
       - type: u2
   zones:
@@ -1038,7 +1038,7 @@ types:
       - id: marker
         if: index != 0xFF_FF
         contents: "IPUZ"
-      - id: size
+      - id: len_puzzle
         type: u4
         if: index != 0xFF_FF
       - id: type
@@ -1087,7 +1087,7 @@ types:
       - id: marker
         contents: "ICHA"
         if: index != 0xFF_FF
-      - id: size
+      - id: len_character
         type: u4
         if: index != 0xFF_FF
       - id: name
