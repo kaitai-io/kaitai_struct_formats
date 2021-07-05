@@ -69,8 +69,9 @@ types:
         if: type == "VERS" or type == "ZONE"
   version:
     seq:
-      - id: version_
+      - id: version
         type: u4
+        valid: 512
         doc: Version of the file. This value is always set to 512.
   startup_image:
     doc: |
@@ -737,10 +738,18 @@ types:
     seq:
       - id: width
         type: u2
-        doc: Width of the zone in tiles. Either 9 or 18.
+        valid:
+          any-of:
+            - 9
+            - 18
+        doc: Width of the zone in number of tiles
       - id: height
         type: u2
-        doc: Height of the zone in tiles. Either 9 or 18.
+        valid:
+          any-of:
+            - 9
+            - 18
+        doc: Height of the zone in number of tiles
       - id: type
         enum: zone_type
         type: u4
