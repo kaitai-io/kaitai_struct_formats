@@ -30,7 +30,7 @@ doc: |
   example set, move or delete tiles, drop items or activate enemies.
 
 seq:
-  - id: catalog
+  - id: catalog_entries
     type: catalog_entry
     repeat: until
     repeat-until: _.type == "ENDF"
