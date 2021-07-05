@@ -346,8 +346,13 @@ types:
     seq:
       - id: magic
         contents: "IACT"
-      - id: len_action
+      - id: len_action_content
         type: u4
+      - id: content
+        type: action_content
+        size: len_action_content
+  action_content:
+    seq:
       - id: num_conditions
         type: u2
       - id: conditions
@@ -492,7 +497,6 @@ types:
         0x23:
           id:  games_won_is_greater_than
           doc: True, if total games won is greater than `args[0]`
-
   instruction:
     seq:
       - id: opcode
@@ -694,14 +698,51 @@ types:
           or the chosen type are loaded when a game is in progress.
         type: u2
         enum: planet
-      - id: len_zone
+      - id: len_zone_content
         type: u4
+      - id: content
+        type: zone_content
+        size: len_zone_content
+    enums:
+      planet:
+        0: none
+        1: desert
+        2: snow
+        3: forest
+        5: swamp
+  zone_content:
+    seq:
       - id: index
         type: u2
       - id: magic
         contents: "IZON"
-      - id: len_izone
+      - id: len_inline_zone_content
         type: u4
+      - id: content
+        type: inline_zone_content
+        size: len_inline_zone_content - 8
+      - id: num_hotspots
+        type: u2
+      - id: hotspots
+        type: hotspot
+        repeat: expr
+        repeat-expr: num_hotspots
+      - id: izax
+        type: zone_auxiliary
+      - id: izx2
+        type: zone_auxiliary_2
+      - id: izx3
+        type: zone_auxiliary_3
+      - id: izx4
+        type: zone_auxiliary_4
+      - id: num_actions
+        type: u2
+      - id: actions
+        type: action
+        repeat: expr
+        repeat-expr: num_actions
+  inline_zone_content:
+    seq:
       - id: width
         doc: Width of the zone in tiles. Either 9 or 18.
         type: u2
@@ -729,33 +770,7 @@ types:
           Tiles are often references via 3 coordinates (xyz), which
           corresponds to an index into this array calculated as `n = y * width
           * 3 + x * 3 = z`.
-      - id: num_hotspots
-        type: u2
-      - id: hotspots
-        type: hotspot
-        repeat: expr
-        repeat-expr: num_hotspots
-      - id: izax
-        type: zone_auxiliary
-      - id: izx2
-        type: zone_auxiliary_2
-      - id: izx3
-        type: zone_auxiliary_3
-      - id: izx4
-        type: zone_auxiliary_4
-      - id: num_actions
-        type: u2
-      - id: actions
-        type: action
-        repeat: expr
-        repeat-expr: num_actions
     enums:
-      planet:
-        0: none
-        1: desert
-        2: snow
-        3: forest
-        5: swamp
       zone_type:
         0:
           id: none
@@ -961,6 +976,11 @@ types:
         contents: "IZAX"
       - id: len_zone_auxiliary
         type: u4
+      - id: content
+        size: len_zone_auxiliary - 8
+        type: zone_auxiliary_content
+  zone_auxiliary_content:
+    seq:
       - type: u2
       - id: num_monsters
         type: u2
@@ -990,6 +1010,11 @@ types:
         contents: "IZX2"
       - id: len_zone_auxiliary_2
         type: u4
+      - id: content
+        size: len_zone_auxiliary_2 - 8
+        type: zone_auxiliary_2_content
+  zone_auxiliary_2_content:
+    seq:
       - id: num_provided_items
         type: u2
       - id: provided_items
@@ -1003,6 +1028,11 @@ types:
         contents: "IZX3"
       - id: len_zone_auxiliary_3
         type: u4
+      - id: content
+        size: len_zone_auxiliary_3 - 8
+        type: zone_auxiliary_3_content
+  zone_auxiliary_3_content:
+    seq:
       - id: num_npcs
         type: u2
       - id: npcs
@@ -1017,6 +1047,11 @@ types:
         contents: "IZX4"
       - id: len_zone_auxiliary_4
         type: u4
+      - id: content
+        size: len_zone_auxiliary_4
+        type: zone_auxiliary_4_content
+  zone_auxiliary_4_content:
+    seq:
       - type: u2
   zones:
     seq:
@@ -1039,33 +1074,32 @@ types:
       - id: magic
         if: index != 0xFF_FF
         contents: "IPUZ"
-      - id: len_puzzle
+      - id: len_puzzle_content
         type: u4
         if: index != 0xFF_FF
+      - id: content
+        size: len_puzzle_content
+        type: puzzle_content
+        if: index != 0xFF_FF
+  puzzle_content:
+    seq:
       - id: type
         type: u4
-        if: index != 0xFF_FF
       - id: item1_class
         type: u4
         enum: puzzle_item_class
-        if: index != 0xFF_FF
       - id: item2_class
         type: u4
         enum: puzzle_item_class
-        if: index != 0xFF_FF
       - type: u2
-        if: index != 0xFF_FF
       - id: strings
         type: prefixed_str
         repeat: expr
         repeat-expr: 5
-        if: index != 0xFF_FF
       - id: item_1
         type: u2
-        if: index != 0xFF_FF
       - id: item_2
         type: u2
-        if: index != 0xFF_FF
     enums:
       puzzle_item_class:
         0: keycard
@@ -1088,36 +1122,34 @@ types:
       - id: magic
         contents: "ICHA"
         if: index != 0xFF_FF
-      - id: len_character
+      - id: len_character_content
         type: u4
         if: index != 0xFF_FF
+      - id: content
+        size: len_character_content
+        type: character_content
+        if: index != 0xFF_FF
+  character_content:
+    seq:
       - id: name
         type: strz
         size: 16
-        if: index != 0xFF_FF
       - id: type
         type: u2
         enum: character_type
-        if: index != 0xFF_FF
       - id: movement_type
         type: u2
         enum: movement_type
-        if: index != 0xFF_FF
       - id: probably_garbage_1
         type: u2
-        if: index != 0xFF_FF
       - id: probably_garbage_2
         type: u4
-        if: index != 0xFF_FF
       - id: frame_1
         type: char_frame
-        if: index != 0xFF_FF
       - id: frame_2
         type: char_frame
-        if: index != 0xFF_FF
       - id: frame_3
         type: char_frame
-        if: index != 0xFF_FF
     enums:
       character_type:
         1: hero
