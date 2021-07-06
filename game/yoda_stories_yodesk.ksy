@@ -408,7 +408,7 @@ types:
         0xd:
           id:  has_item
           doc: |
-            True if inventory contains `args[0]`.  If `args[0]` is `0xFFFF`
+            True if inventory contains `args[0]`.  If `args[0]` is `-1`
             check if inventory contains the item provided by the current
             zone's puzzle
         0xe:
@@ -498,7 +498,7 @@ types:
           id:  place_tile
           doc: |
             Place tile `args[3]` at `args[0]`x`args[1]`x`args[2]`. To remove a
-            tile `args[3]` can be set to `0xFFFF`.
+            tile `args[3]` can be set to `-1`.
         0x1:
           id:  remove_tile
           doc: Remove tile at `args[0]`x`args[1]`x`args[2]`
@@ -606,7 +606,7 @@ types:
           id: drop_item
           doc: |
             Drops item `args[0]` for pickup at `args[1]`x`args[2]`. If the
-            item is 0xFFFF, it drops the current sector's find item instead.
+            item is `-1`, it drops the current sector's find item instead.
 
             Script execution is paused until the item is picked up.
         0x1c:
@@ -658,7 +658,7 @@ types:
         type: u2
         doc: |
           References the item (loot - 1) that will be dropped if the monster
-          is killed. If set to `0xFFFF` the current zone's quest item will be
+          is killed. If set to `-1` the current zone's quest item will be
           dropped.
       - id: drops_loot
         type: u4
