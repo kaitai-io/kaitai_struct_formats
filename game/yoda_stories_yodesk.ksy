@@ -33,40 +33,40 @@ seq:
   - id: catalog_entries
     type: catalog_entry
     repeat: until
-    repeat-until: _.type == "ENDF"
+    repeat-until: _.type == fourcc::endf
 
 types:
   catalog_entry:
     -webide-representation: '{type}'
     seq:
       - id: type
-        size: 4
-        type: str
+        type: u4
+        enum: fourcc
       - id: len_content
         type: u4
-        if: type != "VERS" and type != "ZONE"
+        if: type != fourcc::vers and type != fourcc::zone
       - id: content
         size: len_content
         type:
           switch-on: type
           cases:
-            '"STUP"': startup_image
-            '"CHAR"': characters
-            '"CAUX"': character_auxiliaries
-            '"CHWP"': character_weapons
-            '"PUZ2"': puzzles
-            '"SNDS"': sounds
-            '"TILE"': tiles
-            '"TNAM"': tile_names
-            '"ENDF"': endf
-        if: type != "VERS" and type != "ZONE"
+            fourcc::stup: startup_image
+            fourcc::char: characters
+            fourcc::caux: character_auxiliaries
+            fourcc::chwp: character_weapons
+            fourcc::puz2: puzzles
+            fourcc::snds: sounds
+            fourcc::tile: tiles
+            fourcc::tnam: tile_names
+            fourcc::endf: endf
+        if: type != fourcc::vers and type != fourcc::zone
       - id: unlimited_content
         type:
           switch-on: type
           cases:
-            '"VERS"': version
-            '"ZONE"': zones
-        if: type == "VERS" or type == "ZONE"
+            fourcc::vers: version
+            fourcc::zone: zones
+        if: type == fourcc::vers or type == fourcc::zone
   version:
     seq:
       - id: version
@@ -153,7 +153,7 @@ types:
           if: tile_type == tile_types::character
       instances:
         tile_type:
-          value: type_flags & 0b11111_0110
+          value: type_flags & 0b1111_1111_0110
           enum: tile_types
         has_transparency:
           value: (type_flags & 0b0000_0001) != 0
@@ -1216,7 +1216,21 @@ types:
         type: strz
   waypoint:
     seq:
-    - id: x
-      type: u4
-    - id: y
-      type: u4
+      - id: x
+        type: u4
+      - id: y
+        type: u4
+enums:
+  fourcc:
+    0x53524556: vers # "VERS"
+    0x50555453: stup # "STUP"
+    0x454E4F5A: zone # "ZONE"
+    0x52414843: char # "CHAR"
+    0x58554143: caux # "CAUX"
+    0x50574843: chwp # "CHWP"
+    0x325A5550: puz2 # "PUZ2"
+    0x53444E53: snds # "SNDS"
+    0x454C4954: tile # "TILE"
+    0x4D414E54: tnam # "TNAM"
+    0x4E454754: tgen # "TGEN"
+    0x46444E45: endf # "ENDF"
