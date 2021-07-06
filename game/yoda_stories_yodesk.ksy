@@ -469,7 +469,7 @@ types:
         0x22:
           id: is_variable
           doc: |
-            Check if variable identified by `args[0]`⊕`args[1]`⊕`args[2]` is
+            Check if variable identified by `(args[0], args[1], args[2])` is
             set to `args[3]`. Internally this is implemented as opcode 0x0a,
             check if tile at `(x, y, z) = (args[0], args[1], args[2])` is equal
             to `args[3]`
@@ -557,7 +557,7 @@ types:
         0xf:
           id: set_variable
           doc: |
-            Set variable identified by `args[0]`⊕`args[1]`⊕`args[2]` to
+            Set variable identified by `(args[0], args[1], args[2])` to
             `args[3]`.  Internally this is implemented as opcode 0x00, setting
             tile at `(x, y, z) = (args[0], args[1], args[2])` to `args[3]`.
         0x10:
