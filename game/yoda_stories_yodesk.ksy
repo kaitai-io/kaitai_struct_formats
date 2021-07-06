@@ -757,9 +757,8 @@ types:
         doc: |
           `tile_ids` is made up of three interleaved tile layers ordered from
           bottom (floor) to top (roof).
-          Tiles are often references via 3 coordinates (xyz), which
-          corresponds to an index into this array calculated as `n = y * width
-          * 3 + x * 3 = z`.
+          Tiles are often referenced via 3 coordinates `(x, y, z)` which
+          corresponds to the look up `tile_ids[y * width + x].column[z]`.
     enums:
       zone_type:
         0:
