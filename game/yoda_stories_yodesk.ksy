@@ -378,8 +378,8 @@ types:
         0x4:
           id:  standing_on
           doc: |
-            Check if hero is at `args[0]`x`args[1]` and the floor tile is
-            `args[2]`
+            Check if hero is at `(x, y) = (args[0], args[1])` and the floor tile
+            is `args[2]`
         0x5:
           id:  counter_is
           doc: Current zone's `counter` value is equal to `args[0]`
@@ -397,8 +397,8 @@ types:
         0xa:
           id:  tile_at_is
           doc: |
-            Check if tile at `args[0]`x`args[1]`x`args[2]` is equal to
-            `args[3]`
+            Check if tile at `(x, y, z) = (args[0], args[1], args[2])` is equal 
+            to `args[3]`
         0xb:
           id:  monster_is_dead
           doc: True if monster `args[0]` is dead.
@@ -439,7 +439,7 @@ types:
           id:  placed_item_is_not
         0x18:
           id:  hero_is_at
-          doc: True if hero's x/y position is `args[0]`x`args[1]`.
+          doc: True if hero's x/y position is `(x, y) = (args[0], args[1])`.
         0x19:
           id:  shared_counter_is
           doc: Current zone's `shared_counter` value is equal to `args[0]`
@@ -473,8 +473,8 @@ types:
           doc: |
             Check if variable identified by `args[0]`⊕`args[1]`⊕`args[2]` is
             set to `args[3]`. Internally this is implemented as opcode 0x0a,
-            check if tile at `args[0]`x`args[1]`x`args[2]` is equal to
-            `args[3]`
+            check if tile at `(x, y, z) = (args[0], args[1], args[2])` is equal 
+            to `args[3]`
         0x23:
           id:  games_won_is_greater_than
           doc: True, if total games won is greater than `args[0]`
@@ -497,17 +497,17 @@ types:
         0x0:
           id:  place_tile
           doc: |
-            Place tile `args[3]` at `args[0]`x`args[1]`x`args[2]`. To remove a
-            tile `args[3]` can be set to `-1`.
+            Place tile `args[3]` at `(x, y, z) = (args[0], args[1], args[2])`. To 
+            remove a tile `args[3]` can be set to `-1`.
         0x1:
           id:  remove_tile
-          doc: Remove tile at `args[0]`x`args[1]`x`args[2]`
+          doc: Remove tile at `(x, y, z) = (args[0], args[1], args[2])`
         0x2:
           id:  move_tile
           doc: |
-            Move tile at `args[0]`x`args[0]`x`args[2]` to
-            `args[3]`x`args[4]`x`args[2]`.  *Note that this can not be used to
-            move tiles between layers!*
+            Move tile at `(x, y, z) = (args[0], args[1], args[2])` to
+            `(x, y, z) = (args[3], args[4], args[2])`.  *Note that this can not 
+            be used to move tiles between layers!*
         0x3:
           id:  draw_tile
         0x4:
@@ -519,20 +519,20 @@ types:
         0x5:
           id:  speak_npc
           doc: |
-            Show speech bubble at `args[0]`x`args[1]`. _Uses `text`
+            Show speech bubble at `(x, y) = (args[0], args[1])`. _Uses `text`
             attribute_. The characters `¢` and `¥` are used as placeholders
             for provided and required items of the current zone, respectively.
 
             Script execution is paused until the speech bubble is dismissed.
         0x6:
           id:  set_tile_needs_display
-          doc: Redraw tile at `args[0]`x`args[1]`
+          doc: Redraw tile at `(x, y) = (args[0], args[1])`
         0x7:
           id:  set_rect_needs_display
           doc: |
             Redraw the part of the current scene, specified by a rectangle
-            positioned at `args[0]`x`args[1]` with width `args[2]` and height
-            `args[3]`.
+            positioned at `(x, y) = (args[0], args[1])` with width `args[2]` and 
+            height `args[3]`.
         0x8:
           id:  wait
           doc: Pause script execution for one tick.
@@ -561,7 +561,7 @@ types:
           doc: |
             Set variable identified by `args[0]`⊕`args[1]`⊕`args[2]` to
             `args[3]`.  Internally this is implemented as opcode 0x00, setting
-            tile at `args[0]`x`args[1]`x`args[2]` to `args[3]`.
+            tile at `(x, y, z) = (args[0], args[1], args[2])` to `args[3]`.
         0x10:
           id:  hide_hero
           doc: Hide hero
@@ -571,7 +571,7 @@ types:
         0x12:
           id: move_hero_to
           doc: |
-            Set hero's position to `args[0]`x`args[1]` ignoring impassable
+            Set hero's position to `(x, y) = (args[0], args[1])` ignoring impassable
             tiles.  Execute hotspot actions, redraw the current scene and move
             camera if the hero is not hidden.
         0x13:
@@ -605,8 +605,8 @@ types:
         0x1b:
           id: drop_item
           doc: |
-            Drops item `args[0]` for pickup at `args[1]`x`args[2]`. If the
-            item is `-1`, it drops the current sector's find item instead.
+            Drops item `args[0]` for pickup at `(x, y) = (args[1], args[2])`. If
+            the item is `-1`, it drops the current sector's find item instead.
 
             Script execution is paused until the item is picked up.
         0x1c:
@@ -629,7 +629,7 @@ types:
           id: change_zone
           doc: |
             Change current zone to `args[0]`. Hero will be placed at
-            `args[1]`x`args[2]` in the new zone.
+            `(x, y) = (args[1], args[2])` in the new zone.
         0x22:
           id:  set_shared_counter
           doc: Set current zone's `shared_counter` value to a `args[0]`
@@ -828,7 +828,7 @@ types:
           id: win
           doc: |
             Shown when a game is won. The score is rendered above the tiles at
-            coordinates 5x7 and 6x7.
+            coordinates `(5, 7)` and `(6, 7)`.
         14:
           id: lose
           doc: |
