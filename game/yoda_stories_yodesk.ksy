@@ -366,117 +366,117 @@ types:
     enums:
       condition_opcode:
         0x0:
-          id:  zone_not_initialised
+          id: zone_not_initialised
           doc: Evaluates to true exactly once (used for initialisation)
         0x1:
-          id:  zone_entered
+          id: zone_entered
           doc: Evaluates to true if hero just entered the zone
         0x2:
-          id:  bump
+          id: bump
         0x3:
-          id:  placed_item_is
+          id: placed_item_is
         0x4:
-          id:  standing_on
+          id: standing_on
           doc: |
             Check if hero is at `(x, y) = (args[0], args[1])` and the floor tile
             is `args[2]`
         0x5:
-          id:  counter_is
+          id: counter_is
           doc: Current zone's `counter` value is equal to `args[0]`
         0x6:
-          id:  random_is
+          id: random_is
           doc: Current zone's `random` value is equal to `args[0]`
         0x7:
-          id:  random_is_greater_than
+          id: random_is_greater_than
           doc: Current zone's `random` value is greater than `args[0]`
         0x8:
-          id:  random_is_less_than
+          id: random_is_less_than
           doc: Current zone's `random` value is less than `args[0]`
         0x9:
-          id:  enter_by_plane
+          id: enter_by_plane
         0xa:
-          id:  tile_at_is
+          id: tile_at_is
           doc: |
-            Check if tile at `(x, y, z) = (args[0], args[1], args[2])` is equal 
+            Check if tile at `(x, y, z) = (args[0], args[1], args[2])` is equal
             to `args[3]`
         0xb:
-          id:  monster_is_dead
+          id: monster_is_dead
           doc: True if monster `args[0]` is dead.
         0xc:
-          id:  has_no_active_monsters
+          id: has_no_active_monsters
           doc: undefined
         0xd:
-          id:  has_item
+          id: has_item
           doc: |
             True if inventory contains `args[0]`.  If `args[0]` is `-1`
             check if inventory contains the item provided by the current
             zone's puzzle
         0xe:
-          id:  required_item_is
+          id: required_item_is
         0xf:
-          id:  ending_is
+          id: ending_is
           doc: True if `args[0]` is equal to current goal item id
         0x10:
-          id:  zone_is_solved
+          id: zone_is_solved
           doc: True if the current zone is solved
         0x11:
-          id:  no_item_placed
+          id: no_item_placed
           doc: Returns true if the user did not place an item
         0x12:
-          id:  item_placed
+          id: item_placed
           doc: Returns true if the user placed an item
         0x13:
-          id:  health_is_less_than
+          id: health_is_less_than
           doc: Hero's health is less than `args[0]`.
         0x14:
-          id:  health_is_greater_than
+          id: health_is_greater_than
           doc: Hero's health is greater than `args[0]`.
         0x15: unused
         0x16:
-          id:  find_item_is
+          id: find_item_is
           doc: True the item provided by current zone is `args[0]`
         0x17:
-          id:  placed_item_is_not
+          id: placed_item_is_not
         0x18:
-          id:  hero_is_at
+          id: hero_is_at
           doc: True if hero's x/y position is `(x, y) = (args[0], args[1])`.
         0x19:
-          id:  shared_counter_is
+          id: shared_counter_is
           doc: Current zone's `shared_counter` value is equal to `args[0]`
         0x1a:
-          id:  shared_counter_is_less_than
+          id: shared_counter_is_less_than
           doc: Current zone's `shared_counter` value is less than `args[0]`
         0x1b:
-          id:  shared_counter_is_greater_than
+          id: shared_counter_is_greater_than
           doc: Current zone's `shared_counter` value is greater than `args[0]`
         0x1c:
-          id:  games_won_is
+          id: games_won_is
           doc: Total games won is equal to `args[0]`
         0x1d:
-          id:  drops_quest_item_at
+          id: drops_quest_item_at
         0x1e:
-          id:  has_any_required_item
+          id: has_any_required_item
           doc: |
             Determines if inventory contains any of the required items needed
             for current zone
         0x1f:
-          id:  counter_is_not
+          id: counter_is_not
           doc: Current zone's `counter` value is not equal to `args[0]`
         0x20:
-          id:  random_is_not
+          id: random_is_not
           doc: Current zone's `random` value is not equal to `args[0]`
         0x21:
-          id:  shared_counter_is_not
+          id: shared_counter_is_not
           doc: Current zone's `shared_counter` value is not equal to `args[0]`
         0x22:
-          id:  is_variable
+          id: is_variable
           doc: |
             Check if variable identified by `args[0]`⊕`args[1]`⊕`args[2]` is
             set to `args[3]`. Internally this is implemented as opcode 0x0a,
-            check if tile at `(x, y, z) = (args[0], args[1], args[2])` is equal 
+            check if tile at `(x, y, z) = (args[0], args[1], args[2])` is equal
             to `args[3]`
         0x23:
-          id:  games_won_is_greater_than
+          id: games_won_is_greater_than
           doc: True, if total games won is greater than `args[0]`
   instruction:
     seq:
@@ -495,29 +495,29 @@ types:
     enums:
       instruction_opcode:
         0x0:
-          id:  place_tile
+          id: place_tile
           doc: |
-            Place tile `args[3]` at `(x, y, z) = (args[0], args[1], args[2])`. To 
+            Place tile `args[3]` at `(x, y, z) = (args[0], args[1], args[2])`. To
             remove a tile `args[3]` can be set to `-1`.
         0x1:
-          id:  remove_tile
+          id: remove_tile
           doc: Remove tile at `(x, y, z) = (args[0], args[1], args[2])`
         0x2:
-          id:  move_tile
+          id: move_tile
           doc: |
             Move tile at `(x, y, z) = (args[0], args[1], args[2])` to
-            `(x, y, z) = (args[3], args[4], args[2])`.  *Note that this can not 
+            `(x, y, z) = (args[3], args[4], args[2])`.  *Note that this can not
             be used to move tiles between layers!*
         0x3:
-          id:  draw_tile
+          id: draw_tile
         0x4:
-          id:  speak_hero
+          id: speak_hero
           doc: |
             Show speech bubble next to hero. _Uses `text` attribute_.
 
             Script execution is paused until the speech bubble is dismissed.
         0x5:
-          id:  speak_npc
+          id: speak_npc
           doc: |
             Show speech bubble at `(x, y) = (args[0], args[1])`. _Uses `text`
             attribute_. The characters `¢` and `¥` are used as placeholders
@@ -525,48 +525,48 @@ types:
 
             Script execution is paused until the speech bubble is dismissed.
         0x6:
-          id:  set_tile_needs_display
+          id: set_tile_needs_display
           doc: Redraw tile at `(x, y) = (args[0], args[1])`
         0x7:
-          id:  set_rect_needs_display
+          id: set_rect_needs_display
           doc: |
             Redraw the part of the current scene, specified by a rectangle
-            positioned at `(x, y) = (args[0], args[1])` with width `args[2]` and 
+            positioned at `(x, y) = (args[0], args[1])` with width `args[2]` and
             height `args[3]`.
         0x8:
-          id:  wait
+          id: wait
           doc: Pause script execution for one tick.
         0x9:
-          id:  redraw
+          id: redraw
           doc: Redraw the whole scene immediately
         0xa:
-          id:  play_sound
+          id: play_sound
           doc: Play sound specified by `args[0]`
         0xb:
-          id:  stop_sound
+          id: stop_sound
           doc: Stop playing sounds
         0xc:
-          id:  roll_dice
+          id: roll_dice
           doc: |
             Set current zone's `random` to a random value between 1 and
             `args[0]`.
         0xd:
-          id:  set_counter
+          id: set_counter
           doc: Set current zone's `counter` value to a `args[0]`
         0xe:
-          id:  add_to_counter
+          id: add_to_counter
           doc: Add `args[0]` to current zone's `counter` value
         0xf:
-          id:  set_variable
+          id: set_variable
           doc: |
             Set variable identified by `args[0]`⊕`args[1]`⊕`args[2]` to
             `args[3]`.  Internally this is implemented as opcode 0x00, setting
             tile at `(x, y, z) = (args[0], args[1], args[2])` to `args[3]`.
         0x10:
-          id:  hide_hero
+          id: hide_hero
           doc: Hide hero
         0x11:
-          id:  show_hero
+          id: show_hero
           doc: Show hero
         0x12:
           id: move_hero_to
@@ -591,7 +591,7 @@ types:
           id: disable_hotspot
           doc: Disable hotspot `args[0]` so it can't be triggered anymore.
         0x17:
-          id:  enable_monster
+          id: enable_monster
           doc: Enable monster `args[0]`
         0x18:
           id: disable_monster
@@ -631,16 +631,16 @@ types:
             Change current zone to `args[0]`. Hero will be placed at
             `(x, y) = (args[1], args[2])` in the new zone.
         0x22:
-          id:  set_shared_counter
+          id: set_shared_counter
           doc: Set current zone's `shared_counter` value to a `args[0]`
         0x23:
-          id:  add_to_shared_counter
+          id: add_to_shared_counter
           doc: Add `args[0]` to current zone's `shared_counter` value
         0x24:
-          id:  set_random
+          id: set_random
           doc: Set current zone's `random` value to a `args[0]`
         0x25:
-          id:  add_health
+          id: add_health
           doc: |
             Increase hero's health by `args[0]`. New health is capped at
             hero's max health (0x300). Argument 0 can also be negative
