@@ -351,7 +351,7 @@ types:
       - id: opcode
         type: u2
         enum: condition_opcode
-      - id: arguments
+      - id: args
         type: s2
         repeat: expr
         repeat-expr: 5
@@ -483,7 +483,7 @@ types:
       - id: opcode
         type: u2
         enum: instruction_opcode
-      - id: arguments
+      - id: args
         type: s2
         repeat: expr
         repeat-expr: 5
