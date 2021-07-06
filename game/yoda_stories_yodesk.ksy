@@ -1,11 +1,11 @@
 meta:
   id: yoda_stories_yodesk
-  application: "Star Wars: Yoda Stories"
+  application: 'Star Wars: Yoda Stories'
   file-extension: dta
   license: CC0-1.0
   ks-version: 0.9
-  endian: le
   encoding: ASCII
+  endian: le
 doc: |
   [Star Wars: Yoda Stories](https://en.wikipedia.org/wiki/Star_Wars:_Yoda_Stories) is a unique tile based game with procedurally
   generated worlds.
@@ -28,13 +28,11 @@ doc: |
   To add variety and interactivity to each zone, the game includes a simple
   scripting engine. Zones can declare actions that when executed can for
   example set, move or delete tiles, drop items or activate enemies.
-
 seq:
   - id: catalog_entries
     type: catalog_entry
     repeat: until
     repeat-until: _.type == fourcc::endf
-
 types:
   catalog_entry:
     -webide-representation: '{type}'
@@ -101,7 +99,7 @@ types:
       - id: names
         type: tile_name
         repeat: until
-        repeat-until:  _.tile_id == 0xFF_FF
+        repeat-until: _.tile_id == 0xFF_FF
         doc: |
           List of tile ids and their corresponding names. These are shown in
           the inventory or used in dialogs (see `speak_hero` and `speak_npc`
@@ -124,172 +122,172 @@ types:
         type: tile
         repeat: eos
   tile:
-      seq:
-        - id: attributes
-          size: 4
-          type: tile_attributes
-        - id: pixels
-          size: 32 * 32
+    seq:
+      - id: attributes
+        size: 4
+        type: tile_attributes
+      - id: pixels
+        size: 32 * 32
   tile_attributes:
-      meta:
-        bit-endian: le
-      seq:
-        - id: type_flags
-          type: b16
-        - id: floor_flags
-          type: floor_attributes
-          if: tile_type == tile_types::floor
-        - id: locator_flags
-          type: locator_attributes
-          if: tile_type == tile_types::locator
-        - id: item_flags
-          type: item_attributes
-          if: tile_type == tile_types::item
-        - id: weapon_flags
-          type: weapon_attributes
-          if: tile_type == tile_types::weapon
-        - id: character_flags
-          type: character_attributes
-          if: tile_type == tile_types::character
-      instances:
-        tile_type:
-          value: type_flags & 0b1111_1111_0110
-          enum: tile_types
-        has_transparency:
-          value: (type_flags & 0b0000_0001) != 0
-          doc: |
-            Affects how tile image should be drawn. If set, the
-            value 0 in `pixels` is treated as transparent. Otherwise
-            it is drawn as black.
-        is_draggable:
-          value: (type_flags & 0b0000_1000) != 0
-          doc: |
-             If set and the tile is placed on the object layer it can be
-             dragged and pushed around by the hero.
-      enums:
-        tile_types:
-          # 0x01: transparency
-          0x02: floor
-          0x04: object
-          # 0x08: draggable
-          0x10: roof
-          0x20: locator
-          0x40: weapon
-          0x80: item
-          0x100: character
-      types:
-          floor_attributes:
-            seq:
-              - id: is_doorway
-                type: b1
-                doc: |
-                  These tiles are doorways, monsters can't go
-          locator_attributes:
-              seq:
-                - id: unused
-                  type: b1
-                - id: is_town
-                  type: b1
-                  doc: |
-                    Marks the spaceport on the map
-                - id: is_unsolved_puzzle
-                  type: b1
-                  doc: |
-                    Marks a discovered, but unsolved puzzle on the map
-                - id: is_solved_puzzle
-                  type: b1
-                  doc: |
-                    Marks a solved puzzle on the map
-                - id: is_unsolved_travel
-                  type: b1
-                  doc: |
-                    Marks a place of travel on the map that has not been solved
-                - id: is_solved_travel
-                  type: b1
-                  doc: |
-                    Marks a solved place of travel on the map
-                - id: is_unsolved_blockade_north
-                  type: b1
-                  doc: |
-                    Marks a sector on the map that blocks access to northern zones
-                - id: is_unsolved_blockade_south
-                  type: b1
-                  doc: |
-                    Marks a sector on the map that blocks access to southern zones
-                - id: is_unsolved_blockade_west
-                  type: b1
-                  doc: |
-                    Marks a sector on the map that blocks access to western zones
-                - id: is_unsolved_blockade_east
-                  type: b1
-                  doc: |
-                    Marks a sector on the map that blocks access to eastern zones
-                - id: is_solved_blockade_north
-                  type: b1
-                  doc: |
-                    Marks a solved sector on the map that used to block access to
-                    northern zones
-                - id: is_solved_blockade_south
-                  type: b1
-                  doc: |
-                    Marks a solved sector on the map that used to block access to
-                    southern zones
-                - id: is_solved_blockade_west
-                  type: b1
-                  doc: |
-                    Marks a solved sector on the map that used to block access to
-                    western zones
-                - id: is_solved_blockade_east
-                  type: b1
-                  doc: |
-                    Marks a solved sector on the map that used to block access to
-                    eastern zones
-                - id: is_unsolved_goal
-                  type: b1
-                  doc: |
-                    The final puzzle of the world. Solving this wins the game
-                - id: is_location_indicator
-                  type: b1
-                  doc: |
-                    Overlay to mark the current position on the map
-          item_attributes:
-              seq:
-                - id: is_keycard
-                  type: b1
-                - id: is_tool
-                  type: b1
-                - id: is_part
-                  type: b1
-                - id: is_valuable
-                  type: b1
-                - id: is_map
-                  type: b1
-                - id: unused
-                  type: b1
-                - id: is_edible
-                  type: b1
-          weapon_attributes:
-              seq:
-                - id: is_low_blaster
-                  type: b1
-                  doc: |
-                    Item is a low intensity blaster (like the blaster pistol)
-                - id: is_high_blaster
-                  type: b1
-                  doc: |
-                    Item is a high intensity blaster (like the blaster rifle)
-                - id: is_lightsaber
-                  type: b1
-                - id: is_the_force
-                  type: b1
-          character_attributes:
-              seq:
-                - id: is_hero
-                  type: b1
-                - id: is_enemy
-                  type: b1
-                - id: is_npc
-                  type: b1
+    meta:
+      bit-endian: le
+    seq:
+      - id: type_flags
+        type: b16
+      - id: floor_flags
+        type: floor_attributes
+        if: tile_type == tile_types::floor
+      - id: locator_flags
+        type: locator_attributes
+        if: tile_type == tile_types::locator
+      - id: item_flags
+        type: item_attributes
+        if: tile_type == tile_types::item
+      - id: weapon_flags
+        type: weapon_attributes
+        if: tile_type == tile_types::weapon
+      - id: character_flags
+        type: character_attributes
+        if: tile_type == tile_types::character
+    instances:
+      tile_type:
+        value: type_flags & 0b1111_1111_0110
+        enum: tile_types
+      has_transparency:
+        value: (type_flags & 0b0000_0001) != 0
+        doc: |
+          Affects how tile image should be drawn. If set, the
+          value 0 in `pixels` is treated as transparent. Otherwise
+          it is drawn as black.
+      is_draggable:
+        value: (type_flags & 0b0000_1000) != 0
+        doc: |
+          If set and the tile is placed on the object layer it can be
+          dragged and pushed around by the hero.
+    enums:
+      tile_types:
+        # 0x01: transparency
+        0x02: floor
+        0x04: object
+        # 0x08: draggable
+        0x10: roof
+        0x20: locator
+        0x40: weapon
+        0x80: item
+        0x100: character
+    types:
+      floor_attributes:
+        seq:
+          - id: is_doorway
+            type: b1
+            doc: |
+              These tiles are doorways, monsters can't go
+      locator_attributes:
+        seq:
+          - id: unused
+            type: b1
+          - id: is_town
+            type: b1
+            doc: |
+              Marks the spaceport on the map
+          - id: is_unsolved_puzzle
+            type: b1
+            doc: |
+              Marks a discovered, but unsolved puzzle on the map
+          - id: is_solved_puzzle
+            type: b1
+            doc: |
+              Marks a solved puzzle on the map
+          - id: is_unsolved_travel
+            type: b1
+            doc: |
+              Marks a place of travel on the map that has not been solved
+          - id: is_solved_travel
+            type: b1
+            doc: |
+              Marks a solved place of travel on the map
+          - id: is_unsolved_blockade_north
+            type: b1
+            doc: |
+              Marks a sector on the map that blocks access to northern zones
+          - id: is_unsolved_blockade_south
+            type: b1
+            doc: |
+              Marks a sector on the map that blocks access to southern zones
+          - id: is_unsolved_blockade_west
+            type: b1
+            doc: |
+              Marks a sector on the map that blocks access to western zones
+          - id: is_unsolved_blockade_east
+            type: b1
+            doc: |
+              Marks a sector on the map that blocks access to eastern zones
+          - id: is_solved_blockade_north
+            type: b1
+            doc: |
+              Marks a solved sector on the map that used to block access to
+              northern zones
+          - id: is_solved_blockade_south
+            type: b1
+            doc: |
+              Marks a solved sector on the map that used to block access to
+              southern zones
+          - id: is_solved_blockade_west
+            type: b1
+            doc: |
+              Marks a solved sector on the map that used to block access to
+              western zones
+          - id: is_solved_blockade_east
+            type: b1
+            doc: |
+              Marks a solved sector on the map that used to block access to
+              eastern zones
+          - id: is_unsolved_goal
+            type: b1
+            doc: |
+              The final puzzle of the world. Solving this wins the game
+          - id: is_location_indicator
+            type: b1
+            doc: |
+              Overlay to mark the current position on the map
+      item_attributes:
+        seq:
+          - id: is_keycard
+            type: b1
+          - id: is_tool
+            type: b1
+          - id: is_part
+            type: b1
+          - id: is_valuable
+            type: b1
+          - id: is_map
+            type: b1
+          - id: unused
+            type: b1
+          - id: is_edible
+            type: b1
+      weapon_attributes:
+        seq:
+          - id: is_low_blaster
+            type: b1
+            doc: |
+              Item is a low intensity blaster (like the blaster pistol)
+          - id: is_high_blaster
+            type: b1
+            doc: |
+              Item is a high intensity blaster (like the blaster rifle)
+          - id: is_lightsaber
+            type: b1
+          - id: is_the_force
+            type: b1
+      character_attributes:
+        seq:
+          - id: is_hero
+            type: b1
+          - id: is_enemy
+            type: b1
+          - id: is_npc
+            type: b1
   action:
     doc: |
       Actions are the game's way to make static tile based maps more engaging
@@ -326,7 +324,7 @@ types:
       available opcodes and their meanings.
     seq:
       - id: magic
-        contents: "IACT"
+        contents: IACT
       - id: len_action_content
         type: u4
       - id: content
@@ -497,8 +495,8 @@ types:
         0x0:
           id: place_tile
           doc: |
-            Place tile `args[3]` at `(x, y, z) = (args[0], args[1], args[2])`. To
-            remove a tile `args[3]` can be set to `-1`.
+            Place tile `args[3]` at `(x, y, z) = (args[0], args[1], args[2])`.
+            To remove a tile `args[3]` can be set to `-1`.
         0x1:
           id: remove_tile
           doc: Remove tile at `(x, y, z) = (args[0], args[1], args[2])`
@@ -571,9 +569,9 @@ types:
         0x12:
           id: move_hero_to
           doc: |
-            Set hero's position to `(x, y) = (args[0], args[1])` ignoring impassable
-            tiles.  Execute hotspot actions, redraw the current scene and move
-            camera if the hero is not hidden.
+            Set hero's position to `(x, y) = (args[0], args[1])` ignoring
+            impassable tiles.  Execute hotspot actions, redraw the current
+            scene and move camera if the hero is not hidden.
         0x13:
           id: move_hero_by
           doc: |
@@ -697,7 +695,7 @@ types:
       - id: index
         type: u2
       - id: magic
-        contents: "IZON"
+        contents: IZON
       - id: len_inline_zone_content
         type: u4
       - id: content
@@ -746,7 +744,7 @@ types:
         type: u2
         valid: 0xFF_FF
         doc: |
-            Scripting register shared between the zone and its rooms.
+          Scripting register shared between the zone and its rooms.
       - id: planet_again
         type: u2
         doc: Repetition of the `planet` field
@@ -917,9 +915,9 @@ types:
         6:
           id: drop_item
           doc: |
-             Hotspot that, when triggered drops the item specified in the
-             hotspot's argument. If the item is set to `0xFFFF` the zone's
-             quest item will be dropped.
+            Hotspot that, when triggered drops the item specified in the
+            hotspot's argument. If the item is set to `0xFFFF` the zone's
+            quest item will be dropped.
         7:
           id: npc
           doc: |
@@ -958,11 +956,10 @@ types:
           doc: |
             Behaves similar to the `vehicle_back` hotspot type but travels
             between the town and the swamp planet.
-
   zone_auxiliary:
     seq:
       - id: magic
-        contents: "IZAX"
+        contents: IZAX
       - id: len_zone_auxiliary
         type: u4
       - id: content
@@ -996,7 +993,7 @@ types:
   zone_auxiliary_2:
     seq:
       - id: magic
-        contents: "IZX2"
+        contents: IZX2
       - id: len_zone_auxiliary_2
         type: u4
       - id: content
@@ -1014,7 +1011,7 @@ types:
   zone_auxiliary_3:
     seq:
       - id: magic
-        contents: "IZX3"
+        contents: IZX3
       - id: len_zone_auxiliary_3
         type: u4
       - id: content
@@ -1033,7 +1030,7 @@ types:
   zone_auxiliary_4:
     seq:
       - id: magic
-        contents: "IZX4"
+        contents: IZX4
       - id: len_zone_auxiliary_4
         type: u4
       - id: content
@@ -1062,7 +1059,7 @@ types:
         type: u2
       - id: magic
         if: not is_end
-        contents: "IPUZ"
+        contents: IPUZ
       - id: len_puzzle_content
         type: u4
         if: not is_end
@@ -1112,7 +1109,7 @@ types:
       - id: index
         type: u2
       - id: magic
-        contents: "ICHA"
+        contents: ICHA
         if: not is_end
       - id: len_character_content
         type: u4
