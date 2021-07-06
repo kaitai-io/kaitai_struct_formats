@@ -137,9 +137,9 @@ types:
       - id: floor_flags
         type: floor_attributes
         if: tile_type == tile_types::floor
-      - id: locator_flags
-        type: locator_attributes
-        if: tile_type == tile_types::locator
+      - id: map_flags
+        type: map_attributes
+        if: tile_type == tile_types::map
       - id: item_flags
         type: item_attributes
         if: tile_type == tile_types::item
@@ -171,7 +171,7 @@ types:
         0x04: object
         # 0x08: draggable
         0x10: roof
-        0x20: locator
+        0x20: map
         0x40: weapon
         0x80: item
         0x100: character
@@ -182,7 +182,7 @@ types:
             type: b1
             doc: |
               These tiles are doorways, monsters can't go
-      locator_attributes:
+      map_attributes:
         seq:
           - id: unused
             type: b1
@@ -909,7 +909,7 @@ types:
         5:
           id: drop_map
           doc: |
-            Hotspot that drops the map (aka locator) tile. One `find` zone
+            Hotspot that drops the map tile. One `find` zone
             with a hotspot of this type will be placed next to a town during
             world generation.
         6:
