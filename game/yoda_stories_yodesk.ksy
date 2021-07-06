@@ -439,7 +439,7 @@ types:
           id:  placed_item_is_not
         0x18:
           id:  hero_is_at
-          doc: True if hero's x/y position is `args_0`x`args_1`.
+          doc: True if hero's x/y position is `args[0]`x`args[1]`.
         0x19:
           id:  shared_counter_is
           doc: Current zone's `shared_counter` value is equal to `args[0]`
