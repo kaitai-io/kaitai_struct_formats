@@ -134,60 +134,49 @@ types:
       meta:
         bit-endian: le
       seq:
-        - id: has_transparency
-          type: b1
+        - id: type_flags
+          type: b16
+        - id: floor_flags
+          type: floor_attributes
+          if: tile_type == tile_types::floor
+        - id: locator_flags
+          type: locator_attributes
+          if: tile_type == tile_types::locator
+        - id: item_flags
+          type: item_attributes
+          if: tile_type == tile_types::item
+        - id: weapon_flags
+          type: weapon_attributes
+          if: tile_type == tile_types::weapon
+        - id: character_flags
+          type: character_attributes
+          if: tile_type == tile_types::character
+      instances:
+        tile_type:
+          value: type_flags & 0b11111_0110
+          enum: tile_types
+        has_transparency:
+          value: (type_flags & 0b0000_0001) != 0
           doc: |
             Affects how tile image should be drawn. If set, the
             value 0 in `pixels` is treated as transparent. Otherwise
             it is drawn as black.
-        - id: is_floor
-          type: b1
-          doc: |
-            Tile is usually placed on the lowest layer of a zone
-        - id: is_object
-          type: b1
-          doc: |
-            Object, tile is usually placed on the middle layer of a zone
-        - id: is_draggable
-          type: b1
+        is_draggable:
+          value: (type_flags & 0b0000_1000) != 0
           doc: |
              If set and the tile is placed on the object layer it can be
              dragged and pushed around by the hero.
-        - id: is_roof
-          type: b1
-          doc: |
-             Tile is usually placed on the top layer (roof)
-        - id: is_locator
-          type: b1
-          doc: |
-             Locator, tile is used in world map view overview
-        - id: is_weapon
-          type: b1
-          doc: |
-             Identifies tiles that are mapped to weapons
-        - id: is_item
-          type: b1
-        - id: is_character
-          type: b1
-          doc: |
-            Tile forms part of a character
-        - id: unused
-          type: b7
-        - id: floor_flags
-          type: floor_attributes
-          if: is_floor
-        - id: locator_flags
-          type: locator_attributes
-          if: is_locator
-        - id: item_flags
-          type: item_attributes
-          if: is_item
-        - id: weapon_flags
-          type: weapon_attributes
-          if: is_weapon
-        - id: character_flags
-          type: character_attributes
-          if: is_character
+      enums:
+        tile_types:
+          # 0x01: transparency
+          0x02: floor
+          0x04: object
+          # 0x08: draggable
+          0x10: roof
+          0x20: locator
+          0x40: weapon
+          0x80: item
+          0x100: character
       types:
           floor_attributes:
             seq:
