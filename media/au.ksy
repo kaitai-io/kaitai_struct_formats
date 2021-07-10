@@ -43,7 +43,7 @@ types:
         type: u4
       - id: num_channels
         type: u4
-      - id: description
+      - id: comment
         size-eos: true
         type: strz
         encoding: ASCII
