@@ -24,21 +24,16 @@ doc-ref:
   - https://en.wikipedia.org/wiki/Au_file_format
   - https://web.archive.org/web/20121028010008/http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/AU/AU.html
 seq:
+  - id: magic
+    contents: ".snd"
+  - id: len_header
+    type: u4
   - id: header
     type: header
-  - id: description
-    type: strz
-    encoding: ASCII
-    size: header.len_header - sizeof<header>
+    size: len_header - magic._sizeof - len_header._sizeof
 types:
   header:
     seq:
-      - id: magic
-        contents: ".snd"
-      - id: len_header
-        type: u4
-        valid:
-          min: 24
       - id: data_size
         type: u4
       - id: encoding
@@ -48,6 +43,10 @@ types:
         type: u4
       - id: num_channels
         type: u4
+      - id: description
+        size-eos: true
+        type: strz
+        encoding: ASCII
 enums:
   encodings:
     1: mulaw_8
