@@ -52,10 +52,29 @@ types:
         type: u4
       - id: num_channels
         type: u4
+        valid:
+          min: 1
+        doc: number of interleaved channels
       - id: comment
         size-eos: true
         type: strz
         encoding: ASCII
+        doc: |
+          Most resources claim that this field must be at least 4 bytes long.
+          However, most programs don't enforce it, and [Audacity](
+          https://www.audacityteam.org/) even generates .au files with this field
+          being 0-byte long. According to <https://nixdoc.net/man-pages/IRIX/man4/dmedia/next.4.html>,
+          "NeXT files require that this chunk be at least 4 bytes (chars) long,
+          whereas this chunk may be zerolength in a Sun .au file."
+
+          By convention, size should be a multiple of 4 -
+          see <https://github.com/chirlu/sox/blob/dd8b63bd/src/au.c#L132-L133>.
+          Page <http://soundfile.sapp.org/doc/NextFormat/> also mentions that for some
+          sound playing programs, this field must have an even byte size. So a multiple
+          of 4 is probably best for compatibility.
+
+          Must be null-terminated. It is usually an ASCII text string, but this space
+          might be also used to store application-specific binary (i.e. non-ASCII) data.
 enums:
   encodings:
     1:
