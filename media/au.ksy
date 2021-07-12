@@ -40,14 +40,14 @@ doc-ref:
 seq:
   - id: magic
     contents: ".snd"
-  - id: len_header
+  - id: ofs_data
     type: u4
   - id: header
     type: header
-    size: len_header - magic._sizeof - len_header._sizeof
+    size: ofs_data - magic._sizeof - ofs_data._sizeof
 instances:
   len_data:
-    value: 'header.data_size == 0xffff_ffff ? _io.size - len_header : header.data_size'
+    value: 'header.data_size == 0xffff_ffff ? _io.size - ofs_data : header.data_size'
 types:
   header:
     seq:
