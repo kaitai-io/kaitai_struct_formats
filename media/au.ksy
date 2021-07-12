@@ -2,11 +2,15 @@ meta:
   id: au
   title: AU audio format
   file-extension:
-    - au
-    - snd
+    - au # Sun
+    - snd # NeXT
   xref:
     justsolve: AU
-    mime: audio/basic
+    mime:
+      - audio/basic
+      # According to <https://github.com/file/file/blob/905ca555b0/magic/Magdir/audio#L10-L45>
+      # and <https://ftp.gnu.org/gnu/ccaudio/ccaudio2-2.2.0.tar.gz> 'ccaudio2-2.2.0/src/friends.cpp:304-311':
+      - audio/x-adpcm # only for G.721 ADPCM (encodings::adpcm_g721)
     pronom: x-fmt/139
     wikidata: Q672985
   license: CC0-1.0
