@@ -13,13 +13,14 @@ meta:
   ks-version: 0.9
   endian: be
 doc: |
-  Test files for AU can be found in the Python Git repository:
+  The NeXT/Sun audio file format.
 
-  https://github.com/python/cpython/tree/b8a7daf077dab18e9e3701c5380b542ae0aa9a94/Lib/test/sndhdrdata
+  Sample files:
 
-  as well as:
+  * <https://github.com/python/cpython/tree/b8a7daf077da/Lib/test/sndhdrdata>
+  * <ftp://ftp-ccrma.stanford.edu/pub/Lisp/sf.tar.gz>
+  * <http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/AU/Samples.html>
 
-  ftp://ftp-ccrma.stanford.edu/pub/Lisp/sf.tar.gz
 doc-ref:
   # - https://en.wikipedia.org/wiki/Au_file_format # incorrect encoding enum, don't use
   - http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/AU/AU.html
