@@ -45,11 +45,18 @@ seq:
   - id: header
     type: header
     size: len_header - magic._sizeof - len_header._sizeof
+instances:
+  len_data:
+    value: 'header.data_size == 0xffff_ffff ? _io.size - len_header : header.data_size'
 types:
   header:
     seq:
       - id: data_size
         type: u4
+        doc: |
+          don't read this field, access `_root.len_data` instead
+
+          value `0xffff_ffff` means unspecified size
       - id: encoding
         type: u4
         enum: encodings
