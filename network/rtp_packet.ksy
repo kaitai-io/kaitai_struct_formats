@@ -78,18 +78,18 @@ enums:
     16: dvi4_3
     17: dvi4_4
     18: g729
-    19: reserved3
-    20: unassigned1
-    21: unassigned2
-    22: unassigned3
-    23: unassigned4
-    24: unassigned5
+    19: reserved19
+    20: unassigned20
+    21: unassigned21
+    22: unassigned22
+    23: unassigned23
+    24: unassigned24
     25: celb
     26: jpeg
-    27: unassigned6
+    27: unassigned27
     28: nv
-    29: unassigned7
-    30: unassigned8
+    29: unassigned29
+    30: unassigned30
     31: h261
     32: mpv
     33: mp2t
