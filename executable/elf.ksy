@@ -404,7 +404,10 @@ types:
                 'sh_type::dynamic': dynamic_section
                 'sh_type::strtab': strings_struct
                 'sh_type::dynsym': dynsym_section
-                'sh_type::dynstr': strings_struct
+                'sh_type::symtab': dynsym_section
+                'sh_type::note': note_section
+                'sh_type::rel': rel_section
+                'sh_type::rela': rela_section
           name:
             io: _root.header.strings._io
             pos: ofs_name
@@ -486,6 +489,74 @@ types:
             type: u8
           - id: size
             type: u8
+      note_section:
+        seq:
+          - id: entries
+            type: note_section_entry
+            repeat: eos
+      note_section_entry:
+        seq:
+          - id: name_size
+            type: u4
+          - id: description_size
+            type: u4
+          - id: note_type
+            type: u4
+          - id: note_name
+            size: name_size + (-name_size % 4)
+            doc: |
+              Although the ELF specification seems to hint that the note_name field
+              is ASCII this isn't the case for Linux binaries that have a
+              .gnu.build.attributes section.
+            doc-ref: https://fedoraproject.org/wiki/Toolchain/Watermark#Proposed_Specification_for_non-loaded_notes
+          - id: note_description
+            size: description_size + (-description_size % 4)
+      rel_section:
+        seq:
+          - id: entries
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': rel_section_entry32
+                'bits::b64': rel_section_entry64
+            repeat: eos
+      rel_section_entry32:
+        seq:
+          - id: rel_offs
+            type: u4
+          - id: rel_info
+            type: u4
+      rel_section_entry64:
+        seq:
+          - id: rel_offs
+            type: u8
+          - id: rel_info
+            type: u8
+      rela_section:
+        seq:
+          - id: entries
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': rela_section_entry32
+                'bits::b64': rela_section_entry64
+            repeat: eos
+      rela_section_entry32:
+        seq:
+          - id: rela_offs
+            type: u4
+          - id: rela_info
+            type: u4
+          - id: rela_addend
+            type: s4
+      rela_section_entry64:
+        seq:
+          - id: rela_offs
+            type: u8
+          - id: rela_info
+            type: u8
+          - id: rela_addend
+            type: s8
     instances:
       program_headers:
         pos: program_header_offset
