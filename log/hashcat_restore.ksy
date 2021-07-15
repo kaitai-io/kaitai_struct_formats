@@ -4,6 +4,7 @@ meta:
   file-extension: restore
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 doc-ref: https://hashcat.net/wiki/doku.php?id=restore
 seq:
   - id: version
@@ -28,5 +29,5 @@ seq:
     type: strz
     encoding: UTF-8
     terminator: 0x0A
-    repeat: expr
-    repeat-expr: argc
+    repeat:
+      expr: argc

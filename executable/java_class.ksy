@@ -7,6 +7,7 @@ meta:
     wikidata: Q2193155
   license: CC0-1.0
   endian: be
+  ks-version: 0.9
 doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.1'
 seq:
   - id: magic
@@ -19,8 +20,8 @@ seq:
     type: u2
   - id: constant_pool
     type: constant_pool_entry
-    repeat: expr
-    repeat-expr: constant_pool_count - 1
+    repeat:
+      expr: constant_pool_count - 1
   - id: access_flags
     type: u2
   - id: this_class
@@ -31,26 +32,26 @@ seq:
     type: u2
   - id: interfaces
     type: u2
-    repeat: expr
-    repeat-expr: interfaces_count
+    repeat:
+      expr: interfaces_count
   - id: fields_count
     type: u2
   - id: fields
     type: field_info
-    repeat: expr
-    repeat-expr: fields_count
+    repeat:
+      expr: fields_count
   - id: methods_count
     type: u2
   - id: methods
     type: method_info
-    repeat: expr
-    repeat-expr: methods_count
+    repeat:
+      expr: methods_count
   - id: attributes_count
     type: u2
   - id: attributes
     type: attribute_info
-    repeat: expr
-    repeat-expr: attributes_count
+    repeat:
+      expr: attributes_count
 types:
   constant_pool_entry:
     doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4'
@@ -232,8 +233,8 @@ types:
         type: u2
       - id: attributes
         type: attribute_info
-        repeat: expr
-        repeat-expr: attributes_count
+        repeat:
+          expr: attributes_count
     instances:
       name_as_str:
         value: _root.constant_pool[name_index - 1].cp_info.as<utf8_cp_info>.value
@@ -272,14 +273,14 @@ types:
             type: u2
           - id: exception_table
             type: exception_entry
-            repeat: expr
-            repeat-expr: exception_table_length
+            repeat:
+              expr: exception_table_length
           - id: attributes_count
             type: u2
           - id: attributes
             type: attribute_info
-            repeat: expr
-            repeat-expr: attributes_count
+            repeat:
+              expr: attributes_count
         types:
           exception_entry:
             doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.3'
@@ -314,8 +315,8 @@ types:
             type: u2
           - id: exceptions
             type: exception_table_entry
-            repeat: expr
-            repeat-expr: number_of_exceptions
+            repeat:
+              expr: number_of_exceptions
         types:
           exception_table_entry:
             seq:
@@ -341,8 +342,8 @@ types:
             type: u2
           - id: line_number_table
             type: line_number_table_entry
-            repeat: expr
-            repeat-expr: line_number_table_length
+            repeat:
+              expr: line_number_table_length
         types:
           line_number_table_entry:
             seq:
@@ -363,8 +364,8 @@ types:
         type: u2
       - id: attributes
         type: attribute_info
-        repeat: expr
-        repeat-expr: attributes_count
+        repeat:
+          expr: attributes_count
     instances:
       name_as_str:
         value: _root.constant_pool[name_index - 1].cp_info.as<utf8_cp_info>.value

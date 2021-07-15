@@ -6,6 +6,7 @@ meta:
     wikidata: Q1376385
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 seq:
   - id: magic
     contents: [0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00]
@@ -60,8 +61,8 @@ seq:
       Array of descriptions of so called "standard timings", which are
       used to specify up to 8 additional timings not included in
       "established timings".
-    repeat: expr
-    repeat-expr: 8
+    repeat:
+      expr: 8
 types:
   chromacity_info:
     doc: |

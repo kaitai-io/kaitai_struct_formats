@@ -63,8 +63,8 @@ seq:
       and its files.
   - id: files
     size: manifest.file_entries[_index].len_data_compressed
-    repeat: expr
-    repeat-expr: manifest.num_files
+    repeat:
+      expr: manifest.num_files
     doc: |
       The contents of each file in the archive (possibly compressed,
       as indicated by the file's flags in the manifest). The files are stored
@@ -292,8 +292,8 @@ types:
           about the archive.
       - id: file_entries
         type: file_entry
-        repeat: expr
-        repeat-expr: num_files
+        repeat:
+          expr: num_files
         doc: Manifest entries for the files contained in this phar.
   signature:
     seq:

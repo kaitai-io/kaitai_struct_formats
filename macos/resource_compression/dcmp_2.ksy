@@ -3,7 +3,7 @@ meta:
   title: Compressed Macintosh resource data, Apple `'dcmp' (2)` format
   application: Mac OS
   license: MIT
-  ks-version: "0.8"
+  ks-version: "0.9"
   imports:
     - /common/bytes_with_io
   endian: be
@@ -42,8 +42,8 @@ params:
 seq:
   - id: custom_lookup_table
     size: 2
-    repeat: expr
-    repeat-expr: header_parameters.num_custom_lookup_table_entries
+    repeat:
+      expr: header_parameters.num_custom_lookup_table_entries
     if: header_parameters.flags.has_custom_lookup_table
     doc: |
       The custom lookup table to be used instead of the default lookup table.
@@ -258,8 +258,8 @@ types:
         seq:
           - id: tag
             type: b1
-            repeat: expr
-            repeat-expr: 8
+            repeat:
+              expr: 8
             doc: |
               The bits of the tag byte control the format and meaning of the 8 compressed data units that follow the tag byte.
           - id: units
@@ -278,8 +278,8 @@ types:
             # even when the tag bit is true and an explicit size is not normally necessary.
             size: |
               tag[_index] ? 1 : 2
-            repeat: until
-            repeat-until: _index >= 7 or _io.eof
+            repeat:
+              until: _index >= 7 or _io.eof
             doc: |
               The compressed data units in this chunk.
 

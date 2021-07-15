@@ -7,6 +7,7 @@ meta:
     wikidata: Q1417897
   license: CC0-1.0
   endian: le
+  ks-version: '0.9'
 doc: |
   Windows resource file (.res) are binary bundles of
   "resources". Resource has some sort of ID (numerical or string),
@@ -135,8 +136,8 @@ types:
         if: not is_string
       - id: rest
         type: u2
-        repeat: until
-        repeat-until: _ == 0
+        repeat:
+          until: _ == 0
         if: is_string
       - id: noop
         size: 0

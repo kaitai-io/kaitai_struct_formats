@@ -8,6 +8,7 @@ meta:
     wikidata: Q1461901
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 doc: |
   Scream Tracker 3 module is a tracker music file format that, as all
   tracker music, bundles both sound samples and instructions on which
@@ -89,22 +90,22 @@ seq:
     doc: Offset of special data, not used by Scream Tracker directly.
   - id: channels
     type: channel
-    repeat: expr
-    repeat-expr: 32
+    repeat:
+      expr: 32
   - id: orders
     size: num_orders
   - id: instruments
     type: instrument_ptr
-    repeat: expr
-    repeat-expr: num_instruments
+    repeat:
+      expr: num_instruments
   - id: patterns
     type: pattern_ptr
-    repeat: expr
-    repeat-expr: num_patterns
+    repeat:
+      expr: num_patterns
   - id: channel_pans
     type: channel_pan
-    repeat: expr
-    repeat-expr: 32
+    repeat:
+      expr: 32
     if: has_custom_pan == 252
 types:
   channel:

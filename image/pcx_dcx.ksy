@@ -10,6 +10,7 @@ meta:
   imports:
     - pcx
   endian: le
+  ks-version: '0.9'
 doc: |
   DCX is a simple extension of PCX image format allowing to bundle
   many PCX images (typically, pages of a document) in one file. It saw
@@ -20,8 +21,8 @@ seq:
     contents: [0xb1, 0x68, 0xde, 0x3a]
   - id: files
     type: pcx_offset
-    repeat: until
-    repeat-until: _.ofs_body == 0
+    repeat:
+      until: _.ofs_body == 0
 types:
   pcx_offset:
     seq:

@@ -3,6 +3,7 @@ meta:
   title: Bitcoin Transaction
   license: MIT
   endian: le
+  ks-version: 0.9
 doc-ref: |
   https://bitcoin.org/en/developer-guide#transactions
   https://en.bitcoin.it/wiki/Transaction
@@ -17,8 +18,8 @@ seq:
       Number of input transactions.
   - id: vins
     type: vin
-    repeat: expr
-    repeat-expr: num_vins
+    repeat:
+      expr: num_vins
     doc: |
       Input transactions.
       An input refers to an output from a previous transaction.
@@ -28,8 +29,8 @@ seq:
       Number of output transactions.
   - id: vouts
     type: vout
-    repeat: expr
-    repeat-expr: num_vouts
+    repeat:
+      expr: num_vouts
     doc: |
       Output transactions.
   - id: locktime

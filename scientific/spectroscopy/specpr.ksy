@@ -6,6 +6,7 @@ meta:
   #encoding: "utf-8"
   encoding: "ascii"
   endian: be
+  ks-version: 0.9
 doc: |
   Specpr records are fixed format, 1536 bytes/record. Record number
   counting starts at 0. Binary data are in IEEE format real numbers
@@ -140,8 +141,8 @@ types:
       - id: iband
         type: s4
         doc: "The channel numbers which define the band normalization (scaling to unity). (integers*4)."
-        repeat: expr
-        repeat-expr: 2
+        repeat:
+          expr: 2
       - id: irwav
         type: s4
         doc: "The record number within the file where the wavelengths are found (integer*4)."
@@ -163,8 +164,8 @@ types:
         type: str
         size: 74
         doc: "Manual history. Program automatic for large history requirements."
-        repeat: expr
-        repeat-expr: 4
+        repeat:
+          expr: 4
       - id: nruns
         type: s4
         doc: "The number of independent spectral runs which were summed or averaged to make this spectrum (integer*4)."
@@ -208,8 +209,8 @@ types:
       - id: data
         type: f4
         doc: "The spectral data (256 channels of 32 bit real data numbers)."
-        repeat: expr
-        repeat-expr: 256
+        repeat:
+          expr: 256
     instances:
       phase_angle_arcsec:
         value: sphase / 1500.
@@ -218,8 +219,8 @@ types:
     seq:
       - id: cdata
         type: f4
-        repeat: expr
-        repeat-expr: 383
+        repeat:
+          expr: 383
         doc: "The continuation of the data values (383 channels of 32 bit real numbers)."
   text_initial:
     seq:

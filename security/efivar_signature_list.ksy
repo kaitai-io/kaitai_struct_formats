@@ -5,6 +5,7 @@ meta:
     wikidata: Q859398 # UEFI standard
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 doc: |
   Parse UEFI variables db and dbx that contain signatures, certificates and
   hashes. On a Linux system using UEFI, these variables are readable from
@@ -53,8 +54,8 @@ types:
         doc: An array of signatures
         -orig-id: Signatures
         size: len_signature
-        repeat: expr
-        repeat-expr: (len_signature_list - len_signature_header - 0x1c) / len_signature
+        repeat:
+          expr: (len_signature_list - len_signature_header - 0x1c) / len_signature
         if: len_signature > 0
         type: signature_data
     instances:

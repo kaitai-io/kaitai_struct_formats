@@ -15,6 +15,7 @@ meta:
   license: GFDL-1.3-or-later
   encoding: ascii
   endian: le
+  ks-version: '0.9'
 doc: |
   ### Building a test file
 
@@ -83,13 +84,13 @@ types:
                 doc: "Physical Volume size. Value in bytes"
               - id: data_area_descriptors
                 type: data_area_descriptor
-                repeat: until
-                repeat-until: _.size != 0 and _.offset != 0
+                repeat:
+                  until: _.size != 0 and _.offset != 0
                 doc: "The last descriptor in the list is terminator and consists of 0-byte values."
               - id: metadata_area_descriptors
                 type: metadata_area_descriptor
-                repeat: until
-                repeat-until: _.size != 0 and _.offset != 0
+                repeat:
+                  until: _.size != 0 and _.offset != 0
             types:
               data_area_descriptor:
                 seq:
@@ -144,8 +145,8 @@ types:
                       - id: raw_location_descriptors
                         type: raw_location_descriptor
                         doc: "The last descriptor in the list is terminator and consists of 0-byte values."
-                        repeat: until
-                        repeat-until: _.offset != 0 and _.size != 0 and _.checksum != 0 # and _.flags != 0
+                        repeat:
+                          until: _.offset != 0 and _.size != 0 and _.checksum != 0
                     instances:
                       metadata:
                         pos: metadata_area_offset

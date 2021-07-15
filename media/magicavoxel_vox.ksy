@@ -63,14 +63,14 @@ types:
         type: u4
       - id: voxels
         type: voxel
-        repeat: expr
-        repeat-expr: num_voxels
+        repeat:
+          expr: num_voxels
   rgba:
     seq:
       - id: colors
         type: color
-        repeat: expr
-        repeat-expr: 256
+        repeat:
+          expr: 256
   voxel:
     seq:
       - id: x

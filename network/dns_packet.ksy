@@ -7,6 +7,7 @@ meta:
   license: CC0-1.0
   encoding: utf-8
   endian: be
+  ks-version: '0.9'
 doc: |
   (No support for Auth-Name + Add-Name for simplicity)
 seq:
@@ -34,23 +35,23 @@ seq:
   - id: queries
     if: flags.is_opcode_valid
     type: query
-    repeat: expr
-    repeat-expr: qdcount
+    repeat:
+      expr: qdcount
   - id: answers
     if: flags.is_opcode_valid
     type: answer
-    repeat: expr
-    repeat-expr: ancount
+    repeat:
+      expr: ancount
   - id: authorities
     if: flags.is_opcode_valid
     type: answer
-    repeat: expr
-    repeat-expr: nscount
+    repeat:
+      expr: nscount
   - id: additionals
     if: flags.is_opcode_valid
     type: answer
-    repeat: expr
-    repeat-expr: arcount
+    repeat:
+      expr: arcount
 types:
   query:
     seq:
@@ -96,9 +97,9 @@ types:
     seq:
       - id: name
         type: label
-        repeat: until
         doc: "Repeat until the length is 0 or it is a pointer (bit-hack to get around lack of OR operator)"
-        repeat-until: "_.length == 0 or _.length >= 192"
+        repeat:
+          until: _.length == 0 or _.length >= 192
   label:
     seq:
       - id: length

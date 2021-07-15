@@ -7,6 +7,7 @@ meta:
     wikidata: Q463244
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 doc: |
   This spec allows to parse files used by Microsoft Windows family of
   operating systems to store parts of its "registry". "Registry" is a
@@ -194,8 +195,8 @@ types:
             type: u2
           - id: items
             type: item
-            repeat: expr
-            repeat-expr: count
+            repeat:
+              expr: count
         types:
           item:
             seq:
@@ -209,8 +210,8 @@ types:
             type: u2
           - id: items
             type: item
-            repeat: expr
-            repeat-expr: count
+            repeat:
+              expr: count
         types:
           item:
             seq:
@@ -222,8 +223,8 @@ types:
             type: u2
           - id: items
             type: item
-            repeat: expr
-            repeat-expr: count
+            repeat:
+              expr: count
         types:
           item:
             seq:

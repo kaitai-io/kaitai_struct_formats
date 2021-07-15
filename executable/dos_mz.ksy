@@ -12,6 +12,7 @@ meta:
     - dos
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 doc: |
   DOS MZ file format is a traditional format for executables in MS-DOS
   environment. Many modern formats (i.e. Windows PE) still maintain
@@ -28,8 +29,8 @@ seq:
     size: hdr.ofs_relocations - 0x1c
   - id: relocations
     type: relocation
-    repeat: expr
-    repeat-expr: hdr.num_relocations
+    repeat:
+      expr: hdr.num_relocations
   - id: body
     size-eos: true
 types:

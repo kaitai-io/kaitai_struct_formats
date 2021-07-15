@@ -14,6 +14,7 @@ meta:
   license: CC0-1.0
   encoding: utf-8
   endian: be
+  ks-version: '0.9'
 doc: |
   A structured binary format native to Minecraft for saving game data and transferring
   it over the network (in multiplayer), such as player data
@@ -171,15 +172,15 @@ types:
             tag::compound: tag_compound
             tag::int_array: tag_int_array
             tag::long_array: tag_long_array
-        repeat: expr
-        repeat-expr: num_tags
+        repeat:
+          expr: num_tags
   tag_compound:
     -webide-representation: '{dump_num_tags:dec} entries'
     seq:
       - id: tags
         type: named_tag
-        repeat: until
-        repeat-until: _.is_tag_end
+        repeat:
+          until: _.is_tag_end
     instances:
       dump_num_tags:
         value: 'tags.size - ((tags.size >= 1 and tags.last.is_tag_end) ? 1 : 0)'
@@ -190,8 +191,8 @@ types:
         type: s4
       - id: tags
         type: s4
-        repeat: expr
-        repeat-expr: num_tags
+        repeat:
+          expr: num_tags
     instances:
       tags_type:
         value: tag::int
@@ -202,8 +203,8 @@ types:
         type: s4
       - id: tags
         type: s8
-        repeat: expr
-        repeat-expr: num_tags
+        repeat:
+          expr: num_tags
     instances:
       tags_type:
         value: tag::long

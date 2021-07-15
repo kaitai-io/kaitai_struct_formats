@@ -11,7 +11,7 @@ meta:
     - executable
     - firmware
   license: CC0-1.0
-  ks-version: 0.7
+  ks-version: 0.9
   endian: le
 doc: |
   This type of executables could be found inside the UEFI firmware. The UEFI
@@ -40,8 +40,8 @@ seq:
     type: te_header
   - id: sections
     type: section
-    repeat: expr
-    repeat-expr: te_hdr.num_sections
+    repeat:
+      expr: te_hdr.num_sections
 types:
   te_header:
     seq:

@@ -8,6 +8,7 @@ meta:
     wikidata: Q1936828
   license: CC0-1.0
   endian: le
+  ks-version: '0.9'
 seq:
   - id: magic
     type: str
@@ -138,8 +139,8 @@ types:
         doc: Number of rows
       - id: linedefs_in_block
         type: blocklist
-        repeat: expr
-        repeat-expr: num_cols * num_rows
+        repeat:
+          expr: num_cols * num_rows
         doc: Lists of linedefs for every block
     types:
       blocklist:
@@ -151,8 +152,8 @@ types:
           linedefs:
             pos: offset * 2
             type: s2
-            repeat: until
-            repeat-until: _ == -1
+            repeat:
+              until: _ == -1
             doc: List of linedefs found in this block
   sectors:
     seq:
@@ -227,8 +228,8 @@ types:
         doc: Number of wall textures
       - id: textures
         type: texture_index
-        repeat: expr
-        repeat-expr: num_textures
+        repeat:
+          expr: num_textures
     types:
       texture_index:
         seq:
@@ -261,8 +262,8 @@ types:
             doc: Number of patches that are used in a texture
           - id: patches
             type: patch
-            repeat: expr
-            repeat-expr: num_patches
+            repeat:
+              expr: num_patches
       patch:
         -orig-id: mappatch_t
         seq:
@@ -290,11 +291,11 @@ types:
         size: 8
         encoding: ASCII
         pad-right: 0
-        repeat: expr
-        repeat-expr: num_patches
+        repeat:
+          expr: num_patches
 instances:
   index:
     pos: index_offset
     type: index_entry
-    repeat: expr
-    repeat-expr: num_index_entries
+    repeat:
+      expr: num_index_entries

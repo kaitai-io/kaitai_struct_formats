@@ -3,6 +3,7 @@ meta:
   title: Windows MiniDump
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 doc: |
   Windows MiniDump (MDMP) file provides a concise way to store process
   core dumps, which is useful for debugging. Given its small size,
@@ -42,8 +43,8 @@ instances:
   streams:
     pos: ofs_streams
     type: dir
-    repeat: expr
-    repeat-expr: num_streams
+    repeat:
+      expr: num_streams
 types:
   dir:
     -orig-id: MINIDUMP_DIRECTORY
@@ -175,8 +176,8 @@ types:
       - id: threads
         -orig-id: Threads
         type: thread
-        repeat: expr
-        repeat-expr: num_threads
+        repeat:
+          expr: num_threads
   thread:
     -orig-id: MINIDUMP_THREAD
     doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_thread
@@ -211,8 +212,8 @@ types:
         type: u4
       - id: mem_ranges
         type: memory_descriptor
-        repeat: expr
-        repeat-expr: num_mem_ranges
+        repeat:
+          expr: num_mem_ranges
   exception_stream:
     -orig-id: MINIDUMP_EXCEPTION_STREAM
     doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_exception_stream
@@ -255,8 +256,8 @@ types:
       - id: params
         -orig-id: ExceptionInformation
         type: u8
-        repeat: expr
-        repeat-expr: 15
+        repeat:
+          expr: 15
         doc: |
           Additional parameters passed along with exception raise
           function (for WinAPI, that is `RaiseException`). Meaning is
