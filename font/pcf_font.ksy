@@ -28,7 +28,7 @@ doc-ref: https://fontforge.org/docs/techref/pcf-format.html
 seq:
   - id: magic
     -orig-id: header
-    contents: [0x1, "fcp"]
+    contents: [0x1, fcp]
   - id: num_tables
     -orig-id: table_count
     type: u4
@@ -62,21 +62,21 @@ types:
         type:
           switch-on: type
           cases:
-            'types::properties': properties
+            types::properties: properties
             # TODO: accelerators
             # TODO: metrics
             # TODO: ink_metrics
-            'types::bitmaps': bitmaps
-            'types::bdf_encodings': bdf_encodings
-            'types::swidths': swidths
-            'types::glyph_names': glyph_names
+            types::bitmaps: bitmaps
+            types::bdf_encodings: bdf_encodings
+            types::swidths: swidths
+            types::glyph_names: glyph_names
             # TODO: bdf_accelerators
     types:
       properties:
         doc: |
           Array of properties (key-value pairs), used to convey different X11
           settings of a font. Key is always an X font atom.
-        doc-ref: 'https://fontforge.org/docs/techref/pcf-format.html#properties-table'
+        doc-ref: https://fontforge.org/docs/techref/pcf-format.html#properties-table
         -webide-representation: "{num_props:dec} properties"
         seq:
           - id: format
@@ -160,7 +160,7 @@ types:
       bitmaps:
         doc: |
           Table containing uncompressed glyph bitmaps.
-        doc-ref: 'https://fontforge.org/docs/techref/pcf-format.html#the-bitmap-table'
+        doc-ref: https://fontforge.org/docs/techref/pcf-format.html#the-bitmap-table
         seq:
           - id: format
             type: format
@@ -185,7 +185,7 @@ types:
           national encodings, etc. If application cares about it, normally
           encoding will be specified in `properties` table, in the properties named
           `CHARSET_REGISTRY` / `CHARSET_ENCODING`.
-        doc-ref: 'https://fontforge.org/docs/techref/pcf-format.html#the-encoding-table'
+        doc-ref: https://fontforge.org/docs/techref/pcf-format.html#the-encoding-table
         seq:
           - id: format
             type: format
@@ -207,7 +207,7 @@ types:
       swidths:
         doc: |
           Table containing scalable widths of characters.
-        doc-ref: 'https://fontforge.org/docs/techref/pcf-format.html#the-scalable-widths-table'
+        doc-ref: https://fontforge.org/docs/techref/pcf-format.html#the-scalable-widths-table
         -webide-representation: '{num_glyphs:dec} glyphs'
         seq:
           - id: format
@@ -224,7 +224,7 @@ types:
       glyph_names:
         doc: |
           Table containing character names for every glyph.
-        doc-ref: 'https://fontforge.org/docs/techref/pcf-format.html#the-glyph-names-table'
+        doc-ref: https://fontforge.org/docs/techref/pcf-format.html#the-glyph-names-table
         -webide-representation: '{num_glyphs:dec} glyphs'
         seq:
           - id: format
@@ -266,7 +266,7 @@ types:
       TODO: this format specification recognizes endianness and bit
       order format bits, but it does not really takes any parsing
       decisions based on them.
-    doc-ref: 'https://fontforge.org/docs/techref/pcf-format.html#file-header'
+    doc-ref: https://fontforge.org/docs/techref/pcf-format.html#file-header
     seq:
       - id: padding1
         type: b2

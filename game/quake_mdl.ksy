@@ -37,7 +37,7 @@ types:
   mdl_header:
     seq:
       - id: ident
-        contents: 'IDPO'
+        contents: IDPO
       - id: version_must_be_6
         contents: [ 0x06, 0x00, 0x00, 0x00 ]
       - id: scale

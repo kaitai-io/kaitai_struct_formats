@@ -102,7 +102,7 @@ types:
                 size: len_sig_r
                 doc: |
                   'r' value of the ECDSA signature.
-                doc-ref: 'https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm'
+                doc-ref: https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm
               - id: sep_2
                 contents: [0x02]
               - id: len_sig_s
@@ -113,7 +113,7 @@ types:
                 size: len_sig_s
                 doc: |
                   's' value of the ECDSA signature.
-                doc-ref: 'https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm'
+                doc-ref: https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm
           public_key:
             seq:
               - id: type

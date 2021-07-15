@@ -30,7 +30,7 @@ types:
   send_stream_header:
     seq:
       - id: magic
-        contents: ['btrfs-stream', 0x00]
+        contents: [btrfs-stream, 0x00]
       - id: version
         type: u4le
   send_command:
@@ -64,31 +64,31 @@ types:
             type:
               switch-on: type
               cases:
-                #'attribute::unspec':
-                'attribute::uuid': uuid
-                'attribute::ctransid': u8le
-                #'attribute:ino':
-                'attribute::size': u8le
-                'attribute::mode': u8le
-                'attribute::uid': u8le
-                'attribute::gid': u8le
-                'attribute::rdev': u8le
-                'attribute::ctime': timespec
-                'attribute::mtime': timespec
-                'attribute::atime': timespec
-                'attribute::otime': timespec
-                'attribute::xattr_name': string
-                #'attribute::xattr_data':
-                'attribute::path': string
-                'attribute::path_to': string
-                'attribute::path_link': string
-                'attribute::file_offset': u8le
-                #'attribute::data':
-                'attribute::clone_uuid': uuid
-                'attribute::clone_ctransid': u8le
-                'attribute::clone_path': string
-                'attribute::clone_offset': u8le
-                'attribute::clone_len': u8le
+                #attribute::unspec:
+                attribute::uuid: uuid
+                attribute::ctransid: u8le
+                #attribute:ino:
+                attribute::size: u8le
+                attribute::mode: u8le
+                attribute::uid: u8le
+                attribute::gid: u8le
+                attribute::rdev: u8le
+                attribute::ctime: timespec
+                attribute::mtime: timespec
+                attribute::atime: timespec
+                attribute::otime: timespec
+                attribute::xattr_name: string
+                #attribute::xattr_data:
+                attribute::path: string
+                attribute::path_to: string
+                attribute::path_link: string
+                attribute::file_offset: u8le
+                #attribute::data:
+                attribute::clone_uuid: uuid
+                attribute::clone_ctransid: u8le
+                attribute::clone_path: string
+                attribute::clone_offset: u8le
+                attribute::clone_len: u8le
       timespec:
         seq:
           - id: ts_sec

@@ -56,7 +56,7 @@ types:
   geometry:
     seq:
       - id: magic
-        contents: 'gDla'
+        contents: gDla
       - id: struct_size
         type: u4
       - id: checksum
@@ -74,7 +74,7 @@ types:
   metadata:
     seq:
       - id: magic
-        contents: '0PLA'
+        contents: 0PLA
       - id: major_version
         type: u2
       - id: minor_version
@@ -130,10 +130,10 @@ types:
             type:
               switch-on: kind
               cases:
-                'table_kind::partitions': partition
-                'table_kind::extents': extent
-                'table_kind::groups': group
-                'table_kind::block_devices': block_device
+                table_kind::partitions: partition
+                table_kind::extents: extent
+                table_kind::groups: group
+                table_kind::block_devices: block_device
             repeat: expr
             repeat-expr: num_entries
 

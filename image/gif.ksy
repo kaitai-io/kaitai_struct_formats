@@ -50,7 +50,7 @@ types:
     doc-ref: https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 17
     seq:
       - id: magic
-        contents: 'GIF'
+        contents: GIF
       - id: version
         type: str
         size: 3
@@ -70,9 +70,9 @@ types:
         type: u1
     instances:
       has_color_table:
-        value: '(flags & 0b10000000) != 0'
+        value: (flags & 0b10000000) != 0
       color_table_size:
-        value: '2 << (flags & 7)'
+        value: 2 << (flags & 7)
   color_table:
     doc-ref: https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 19
     seq:
@@ -97,8 +97,8 @@ types:
         type:
           switch-on: block_type
           cases:
-            'block_type::extension': extension
-            'block_type::local_image_descriptor': local_image_descriptor
+            block_type::extension: extension
+            block_type::local_image_descriptor: local_image_descriptor
   local_image_descriptor:
     seq:
       - id: left
@@ -119,13 +119,13 @@ types:
         type: image_data
     instances:
       has_color_table:
-        value: '(flags & 0b10000000) != 0'
+        value: (flags & 0b10000000) != 0
       has_interlace:
-        value: '(flags & 0b01000000) != 0'
+        value: (flags & 0b01000000) != 0
       has_sorted_color_table:
-        value: '(flags & 0b00100000) != 0'
+        value: (flags & 0b00100000) != 0
       color_table_size:
-        value: '2 << (flags & 7)'
+        value: 2 << (flags & 7)
   image_data:
     doc-ref: https://www.w3.org/Graphics/GIF/spec-gif89a.txt - section 22
     seq:
@@ -142,9 +142,9 @@ types:
         type:
           switch-on: label
           cases:
-            'extension_label::application': ext_application
-            'extension_label::comment': subblocks
-            'extension_label::graphic_control': ext_graphic_control
+            extension_label::application: ext_application
+            extension_label::comment: subblocks
+            extension_label::graphic_control: ext_graphic_control
             _: subblocks
   ext_application:
     seq:
@@ -169,9 +169,9 @@ types:
         contents: [0]
     instances:
       transparent_color_flag:
-        value: '(flags & 0b00000001) != 0'
+        value: (flags & 0b00000001) != 0
       user_input_flag:
-        value: '(flags & 0b00000010) != 0'
+        value: (flags & 0b00000010) != 0
   subblocks:
     seq:
       - id: entries

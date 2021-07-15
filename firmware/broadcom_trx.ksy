@@ -69,11 +69,11 @@ types:
         type: u1
 
   tail:
-    doc: "A safeguard against installation of firmware to an incompatible device"
+    doc: A safeguard against installation of firmware to an incompatible device
     seq:
       - id: version
         type: version
-        doc: "1.9.2.7 by default"
+        doc: 1.9.2.7 by default
       - id: product_id
         type: strz
         size: 12
@@ -81,7 +81,7 @@ types:
         type: hw_comp_info
         repeat: expr
         repeat-expr: 4
-        doc: "0.02 - 2.99"
+        doc: 0.02 - 2.99
       - id: reserved
         size: 32
     types:
@@ -95,7 +95,7 @@ types:
   header:
     seq:
       - id: magic
-        contents: "HDR0"
+        contents: HDR0
       - id: len
         type: u4
         doc: Length of file including header
@@ -108,7 +108,7 @@ types:
         type: flags
       - id: partitions
         type: partition(_index)
-        doc: "Offsets of partitions from start of header"
+        doc: Offsets of partitions from start of header
         repeat: until
         repeat-until: _index >= 4 or not _.is_present
 
@@ -124,7 +124,7 @@ types:
           is_present:
             value: ofs_body != 0
           is_last:
-            value: "(idx == _parent.partitions.size - 1) or (not _parent.partitions[idx + 1].is_present)"
+            value: (idx == _parent.partitions.size - 1) or (not _parent.partitions[idx + 1].is_present)
             if: is_present
           len_body:
             value: "is_last ? (_root._io.size - ofs_body) : _parent.partitions[idx + 1].ofs_body"

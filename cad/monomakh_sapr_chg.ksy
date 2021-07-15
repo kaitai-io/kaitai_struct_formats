@@ -19,7 +19,7 @@ seq:
   - id: title
     type: str
     size: 10
-    encoding: "ascii"
+    encoding: ascii
   - id: ent
     type: block
     repeat: eos
@@ -29,7 +29,7 @@ types:
       - id: header
         type: str
         size: 13
-        encoding: "ascii"
+        encoding: ascii
       - id: file_size
         type: u8
       - id: file
