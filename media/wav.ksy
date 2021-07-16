@@ -1,18 +1,37 @@
 meta:
   id: wav
   title: Microsoft WAVE audio file
-  file-extension: wav
+  file-extension:
+    - bwf
+    - wav
   xref:
     justsolve: WAV
-    loc: fdd000001
+    loc:
+      - fdd000001 # WAV
+      - fdd000003 # BWF
+      - fdd000356 # BWF
+      - fdd000357 # BWF
+      - fdd000359 # BWF
     mime:
       - audio/vnd.wave
       - audio/wav
       - audio/wave
       - audio/x-wav
-    pronom: fmt/6
+    pronom:
+      - fmt/1 # BWF
+      - fmt/2 # BWF
+      - fmt/6 # WAV
+      - fmt/527 # BWF
+      - fmt/703 # BWF
+      - fmt/704 # BWF
+      - fmt/705 # BWF
+      - fmt/709 # BWF
+      - fmt/710 # BWF
+      - fmt/711 # BWF
     rfc: 2361
-    wikidata: Q217570
+    wikidata:
+      - Q217570 # WAV
+      - Q922446 # BWF
   tags:
     - windows
   license: BSD-3-Clause-Attribution
@@ -26,11 +45,19 @@ doc: |
   followed by a sequence of data chunks. A WAVE file is often just a RIFF
   file with a single "WAVE" chunk which consists of two sub-chunks --
   a "fmt " chunk specifying the data format and a "data" chunk containing
-  the actual sample data.
+  the actual sample data, although other chunks exist and are used.
+
+  An extension of the file format is the Broadcast Wave Format for radio
+  broadcasts. Sample files can be found at:
+
+  https://www.bbc.co.uk/rd/publications/saqas
 
   This Kaitai implementation was written by John Byrd of Gigantic Software
   (jbyrd@giganticsoftware.com), and it is likely to contain bugs.
-doc-ref: http://soundfile.sapp.org/doc/WaveFormat/
+doc-ref:
+  - http://soundfile.sapp.org/doc/WaveFormat/
+  - https://web.archive.org/web/20101031101749/http://www.ebu.ch/fr/technical/publications/userguides/bwf_user_guide.php
+  - https://www.itu.int/rec/R-REC-BS.2076-2-201910-I/en
 seq:
   - id: chunk
     type: 'riff::chunk'
@@ -72,10 +99,15 @@ types:
           switch-on: chunk_id
           cases:
             'fourcc::fmt': format_chunk_type
-            'fourcc::bext': bext_chunk_type
             'fourcc::cue': cue_chunk_type
             'fourcc::data': data_chunk_type
             'fourcc::list': list_chunk_type
+            'fourcc::fact': fact_chunk_type
+            'fourcc::pmx': pmx_chunk_type
+            'fourcc::ixml': ixml_chunk_type
+            'fourcc::bext': bext_chunk_type
+            'fourcc::axml': axml_chunk_type
+            'fourcc::afsp': afsp_chunk_type
 
   list_chunk_type:
     seq:
@@ -139,6 +171,22 @@ types:
         type: u2
       - id: max_short_term_loudness
         type: u2
+    doc-ref: https://en.wikipedia.org/wiki/Broadcast_Wave_Format
+
+  axml_chunk_type:
+    seq:
+      - id: body
+        type: str
+        size-eos: true
+        encoding: UTF-8
+    doc-ref: https://tech.ebu.ch/docs/tech/tech3285s5.pdf
+
+  ixml_chunk_type:
+    seq:
+      - id: body
+        type: strz
+        encoding: UTF-8
+    doc-ref: https://en.wikipedia.org/wiki/IXML
 
   cue_chunk_type:
     seq:
@@ -168,6 +216,13 @@ types:
     seq:
       - id: data
         size-eos: true
+
+  fact_chunk_type:
+    seq:
+      - id: sample_length
+        type: u4
+        doc: Number of samples per channel
+        doc-ref: http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html
 
   format_chunk_type:
     seq:
@@ -281,6 +336,23 @@ types:
     seq:
       - id: sample
         type: u2
+
+  pmx_chunk_type:
+    seq:
+      - id: data
+        size-eos: true
+        type: str
+        encoding: UTF-8
+        doc: chunk containing XMP data
+        doc-ref: https://wwwimages2.adobe.com/content/dam/acom/en/devnet/xmp/pdfs/XMP%20SDK%20Release%20cc-2016-08/XMPSpecificationPart3.pdf
+  afsp_chunk_type:
+    seq:
+      - id: afspid
+        contents: "AFsp"
+      - id: text
+        type: strz
+        encoding: UTF-8
+    doc-ref: http://www-mmsp.ece.mcgill.ca/Documents/Downloads/AFsp/
 
 enums:
   w_format_tag_type:
@@ -544,7 +616,7 @@ enums:
     0xa120: vocord_g723_1
     0xa121: vocord_lbc
     0xa122: nice_g728
-    0xa123: frace_telecom_g729
+    0xa123: france_telecom_g729
     0xa124: codian
     0xf1ac: flac
     0xfffe: extensible
@@ -556,10 +628,21 @@ enums:
     0x45564157: wave
     0x5453494c: list
     0x4f464e49: info
+    0x74636166: fact
     0x20746d66: fmt
-    0x74786562: bext
     0x20657563: cue
     0x61746164: data
     0x64696d75: umid
     0x666e696d: minf
     0x6e676572: regn
+    0x20336469: id3
+    0x4b414550: peak
+    0x584d505f: pmx
+    0x4c4d5869: ixml
+    # BWF chunks
+    0x74786562: bext
+    0x6c6d7861: axml
+    # Audio definition model
+    0x616e6863: chna
+    # AFsp
+    0x70736661: afsp
