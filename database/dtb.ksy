@@ -118,6 +118,7 @@ types:
         repeat: until
         repeat-until: _.type == fdt::end
   fdt_begin_node:
+    -webide-representation: '{name}'
     seq:
       - id: name
         type: strz
