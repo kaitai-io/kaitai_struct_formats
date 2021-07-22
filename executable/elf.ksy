@@ -498,7 +498,7 @@ types:
         seq:
           - id: len_name
             type: u4
-          - id: len_description
+          - id: len_descriptor
             type: u4
           - id: type
             type: u4
@@ -511,10 +511,10 @@ types:
             doc-ref: https://fedoraproject.org/wiki/Toolchain/Watermark#Proposed_Specification_for_non-loaded_notes
           - id: name_padding
             size: -len_name % 4
-          - id: description
-            size: len_description
-          - id: description_padding
-            size: -len_description % 4
+          - id: descriptor
+            size: len_descriptor
+          - id: descriptor_padding
+            size: -len_descriptor % 4
       relocation_section:
         params:
           - id: has_addend
