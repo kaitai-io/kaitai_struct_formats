@@ -503,14 +503,18 @@ types:
           - id: type
             type: u4
           - id: name
-            size: len_name + (-len_name % 4)
+            size: len_name
             doc: |
               Although the ELF specification seems to hint that the `note_name` field
               is ASCII this isn't the case for Linux binaries that have a
               `.gnu.build.attributes` section.
             doc-ref: https://fedoraproject.org/wiki/Toolchain/Watermark#Proposed_Specification_for_non-loaded_notes
+          - id: name_padding
+            size: -len_name % 4
           - id: description
-            size: len_description + (-len_description % 4)
+            size: len_description
+          - id: description_padding
+            size: -len_description % 4
       relocation_section:
         params:
           - id: has_addend
