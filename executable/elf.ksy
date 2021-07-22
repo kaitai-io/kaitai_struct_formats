@@ -496,21 +496,21 @@ types:
             repeat: eos
       note_section_entry:
         seq:
-          - id: name_size
+          - id: len_name
             type: u4
-          - id: description_size
+          - id: len_description
             type: u4
           - id: note_type
             type: u4
           - id: note_name
-            size: name_size + (-name_size % 4)
+            size: len_name + (-len_name % 4)
             doc: |
               Although the ELF specification seems to hint that the `note_name` field
               is ASCII this isn't the case for Linux binaries that have a
               `.gnu.build.attributes` section.
             doc-ref: https://fedoraproject.org/wiki/Toolchain/Watermark#Proposed_Specification_for_non-loaded_notes
           - id: note_description
-            size: description_size + (-description_size % 4)
+            size: len_description + (-len_description % 4)
       relocation_section:
         params:
           - id: has_addend
