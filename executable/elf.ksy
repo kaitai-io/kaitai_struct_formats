@@ -20,7 +20,7 @@ meta:
     - executable
     - linux
   license: CC0-1.0
-  ks-version: 0.8
+  ks-version: 0.9
 doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=HEAD
 seq:
   - id: magic
@@ -404,7 +404,10 @@ types:
                 'sh_type::dynamic': dynamic_section
                 'sh_type::strtab': strings_struct
                 'sh_type::dynsym': dynsym_section
-                'sh_type::dynstr': strings_struct
+                'sh_type::symtab': dynsym_section
+                'sh_type::note': note_section
+                'sh_type::rel': relocation_section(false)
+                'sh_type::rela': relocation_section(true)
           name:
             io: _root.header.strings._io
             pos: ofs_name
@@ -486,6 +489,73 @@ types:
             type: u8
           - id: size
             type: u8
+      note_section:
+        seq:
+          - id: entries
+            type: note_section_entry
+            repeat: eos
+      note_section_entry:
+        doc-ref:
+          - https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-18048.html
+          # The following source claims that note's `name` and `descriptor` should be padded
+          # to 8 bytes in 64-bit ELFs, not always to 4 - although this seems to be an idea of
+          # the original spec, it did not catch on in the real world and most implementations
+          # always use 4-byte alignment - see
+          # <https://fa.linux.kernel.narkive.com/2Za5xb58/patch-01-02-elf-always-define-elf-addr-t-in-linux-elf-h#post13>
+          - https://refspecs.linuxfoundation.org/elf/gabi4+/ch5.pheader.html#note_section
+        seq:
+          - id: len_name
+            type: u4
+          - id: len_descriptor
+            type: u4
+          - id: type
+            type: u4
+          - id: name
+            size: len_name
+            terminator: 0
+            doc: |
+              Although the ELF specification seems to hint that the `note_name` field
+              is ASCII this isn't the case for Linux binaries that have a
+              `.gnu.build.attributes` section.
+            doc-ref: https://fedoraproject.org/wiki/Toolchain/Watermark#Proposed_Specification_for_non-loaded_notes
+          - id: name_padding
+            size: -len_name % 4
+          - id: descriptor
+            size: len_descriptor
+          - id: descriptor_padding
+            size: -len_descriptor % 4
+      relocation_section:
+        doc-ref:
+          - https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-54839.html
+          - https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.reloc.html
+        params:
+          - id: has_addend
+            type: bool
+        seq:
+          - id: entries
+            type: relocation_section_entry
+            repeat: eos
+      relocation_section_entry:
+        seq:
+          - id: offset
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': u4
+                'bits::b64': u8
+          - id: info
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': u4
+                'bits::b64': u8
+          - id: addend
+            type:
+              switch-on: _root.bits
+              cases:
+                'bits::b32': s4
+                'bits::b64': s8
+            if: _parent.has_addend
     instances:
       program_headers:
         pos: program_header_offset
