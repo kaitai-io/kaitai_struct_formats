@@ -504,6 +504,7 @@ types:
             type: u4
           - id: name
             size: len_name
+            terminator: 0
             doc: |
               Although the ELF specification seems to hint that the `note_name` field
               is ASCII this isn't the case for Linux binaries that have a
