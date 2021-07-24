@@ -20,7 +20,7 @@ meta:
     - executable
     - linux
   license: CC0-1.0
-  ks-version: 0.8
+  ks-version: 0.9
 doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=HEAD
 seq:
   - id: magic
@@ -495,6 +495,14 @@ types:
             type: note_section_entry
             repeat: eos
       note_section_entry:
+        doc-ref:
+          - https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-18048.html
+          # The following source claims that note's `name` and `descriptor` should be padded
+          # to 8 bytes in 64-bit ELFs, not always to 4 - although this seems to be an idea of
+          # the original spec, it did not catch on in the real world and most implementations
+          # always use 4-byte alignment - see
+          # <https://fa.linux.kernel.narkive.com/2Za5xb58/patch-01-02-elf-always-define-elf-addr-t-in-linux-elf-h#post13>
+          - https://refspecs.linuxfoundation.org/elf/gabi4+/ch5.pheader.html#note_section
         seq:
           - id: len_name
             type: u4
@@ -517,6 +525,9 @@ types:
           - id: descriptor_padding
             size: -len_descriptor % 4
       relocation_section:
+        doc-ref:
+          - https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-54839.html
+          - https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.reloc.html
         params:
           - id: has_addend
             type: bool
