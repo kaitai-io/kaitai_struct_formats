@@ -465,6 +465,8 @@ types:
                 'bits::b64': dynsym_section_entry64
             repeat: eos
       dynsym_section_entry32:
+        doc-ref: https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-79797.html
+        -orig-id: Elf32_Sym
         seq:
           - id: name_offset
             type: u4
@@ -476,9 +478,16 @@ types:
             type: u1
           - id: other
             type: u1
+            doc: don't read this field, access `visibility` instead
           - id: shndx
             type: u2
+        instances:
+          visibility:
+            value: other & 0x03
+            enum: symbol_visibility
       dynsym_section_entry64:
+        doc-ref: https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-79797.html
+        -orig-id: Elf64_Sym
         seq:
           - id: name_offset
             type: u4
@@ -492,6 +501,10 @@ types:
             type: u8
           - id: size
             type: u8
+        instances:
+          visibility:
+            value: other & 0x03
+            enum: symbol_visibility
       note_section:
         seq:
           - id: entries
@@ -722,6 +735,15 @@ enums:
 #    0x7fffffff: hiproc
 #    0x80000000: louser
 #    0xffffffff: hiuser
+  # https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-79797.html#chapter7-27
+  symbol_visibility:
+    0: default
+    1: internal
+    2: hidden
+    3: protected
+    4: exported
+    5: singleton
+    6: eliminate
   dynamic_array_tags:
     0: "null"            # Marks end of dynamic section
     1: needed            # Name of needed library
