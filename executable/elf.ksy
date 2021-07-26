@@ -21,7 +21,10 @@ meta:
     - linux
   license: CC0-1.0
   ks-version: 0.9
-doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=HEAD
+doc-ref:
+  - https://refspecs.linuxfoundation.org/elf/gabi4+/contents.html
+  - https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-46512.html
+  - https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=HEAD
 seq:
   - id: magic
     -orig-id: e_ident[EI_MAG0]..e[EI_MAG3]
