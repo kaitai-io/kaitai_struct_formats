@@ -676,12 +676,12 @@ enums:
     5: shlib
     6: phdr
     7: tls
-    # 0x60000000: loos
+    # 0x60000000: lo_os
     0x65041580: pax_flags
-    0x6fffffff: hios
-    # 0x70000000: loproc
+    # 0x6fffffff: hi_os
+    # 0x70000000: lo_proc
     0x70000001: arm_exidx
-    # 0x7fffffff: hiproc
+    # 0x7fffffff: hi_proc
     0x6474e550: gnu_eh_frame
     0x6474e551: gnu_stack
     0x6474e552: gnu_relro
@@ -705,8 +705,8 @@ enums:
     16: preinit_array
     17: group
     18: symtab_shndx
-    # 0x60000000: loos
-    # 0x6fffffef: losunw
+    # 0x60000000: lo_os
+    # 0x6fffffef: lo_sunw
     0x6fffffef: sunw_capchain
     0x6ffffff0: sunw_capinfo
     0x6ffffff1: sunw_symsort
@@ -724,17 +724,17 @@ enums:
     0x6ffffffd: sunw_verdef
     0x6ffffffe: sunw_verneed
     0x6fffffff: sunw_versym
-    # 0x6fffffff: HISUNW
-    # 0x6fffffff: hios
-    # 0x70000000: loproc
+    # 0x6fffffff: hi_sunw
+    # 0x6fffffff: hi_os
+    # 0x70000000: lo_proc
     0x70000000: sparc_gotdata
     0x70000001: amd64_unwind
     # 0x70000001: arm_exidx
     0x70000002: arm_preemptmap
     0x70000003: arm_attributes
-    # 0x7fffffff: hiproc
-    # 0x80000000: louser
-    # 0xffffffff: hiuser
+    # 0x7fffffff: hi_proc
+    # 0x80000000: lo_user
+    # 0xffffffff: hi_user
   # https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-79797.html#chapter7-27
   symbol_visibility:
     0: default
