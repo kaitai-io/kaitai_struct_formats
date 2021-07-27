@@ -486,6 +486,9 @@ types:
           - id: entries
             type: dynsym_section_entry
             repeat: eos
+        instances:
+          is_string_table_linked:
+            value: _parent.linked_section.type == sh_type::strtab
       dynsym_section_entry:
         -orig-id:
           - Elf32_Sym
@@ -493,7 +496,7 @@ types:
         doc-ref:
           - https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-79797.html
           - https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.symtab.html
-        -webide-representation: 'v:{value} s:{size:dec} t:{type} b:{bind} vis:{visibility} i:{sh_idx:dec}[={sh_idx_special}] o_nm:{ofs_name}'
+        -webide-representation: 'v:{value} s:{size:dec} t:{type} b:{bind} vis:{visibility} i:{sh_idx:dec}[={sh_idx_special}] n:{name}'
         seq:
           - id: ofs_name
             -orig-id: st_name
@@ -539,6 +542,13 @@ types:
               _root.bits == bits::b32 ? size_b32 :
               _root.bits == bits::b64 ? size_b64 :
               0
+          name:
+            io: _parent._parent.linked_section.body.as<strings_struct>._io
+            pos: ofs_name
+            type: strz
+            encoding: ASCII
+            if: ofs_name != 0 and _parent.is_string_table_linked
+            -webide-parse-mode: eager
           visibility:
             value: other & 0x03
             enum: symbol_visibility
