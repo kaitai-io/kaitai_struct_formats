@@ -430,6 +430,13 @@ types:
                 'sh_type::note': note_section
                 'sh_type::rel': relocation_section(false)
                 'sh_type::rela': relocation_section(true)
+          linked_section:
+            value: _root.header.section_headers[linked_section_idx]
+            if: |
+              linked_section_idx != section_header_idx_special::undefined.to_i
+              and linked_section_idx < _root.header.qty_section_header
+            doc: may reference a later section header, so don't try to access too early (use only lazy `instances`)
+            doc-ref: https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.sheader.html#sh_link
           name:
             io: _root.header.section_names._io
             pos: ofs_name
