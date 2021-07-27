@@ -27,7 +27,7 @@ doc-ref:
   - https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-46512.html
 seq:
   - id: magic
-    -orig-id: e_ident[EI_MAG0]..e[EI_MAG3]
+    -orig-id: e_ident[EI_MAG0]..e_ident[EI_MAG3]
     size: 4
     contents: [0x7f, "ELF"]
     doc: File identification, must be 0x7f + "ELF".
