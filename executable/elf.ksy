@@ -64,6 +64,25 @@ seq:
     size: 7
   - id: header
     type: endian_elf
+instances:
+  sh_idx_lo_reserved:
+    -orig-id: SHN_LORESERVE
+    value: 0xff00
+  sh_idx_lo_proc:
+    -orig-id: SHN_LOPROC
+    value: 0xff00
+  sh_idx_hi_proc:
+    -orig-id: SHN_HIPROC
+    value: 0xff1f
+  sh_idx_lo_os:
+    -orig-id: SHN_LOOS
+    value: 0xff20
+  sh_idx_hi_os:
+    -orig-id: SHN_HIOS
+    value: 0xff3f
+  sh_idx_hi_reserved:
+    -orig-id: SHN_HIRESERVE
+    value: 0xffff
 types:
   phdr_type_flags:
     params:
@@ -458,53 +477,79 @@ types:
       dynsym_section:
         seq:
           - id: entries
-            type:
-              switch-on: _root.bits
-              cases:
-                'bits::b32': dynsym_section_entry32
-                'bits::b64': dynsym_section_entry64
+            type: dynsym_section_entry
             repeat: eos
-      dynsym_section_entry32:
-        doc-ref: https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-79797.html
-        -orig-id: Elf32_Sym
+      dynsym_section_entry:
+        -orig-id:
+          - Elf32_Sym
+          - Elf64_Sym
+        doc-ref:
+          - https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-79797.html
+          - https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.symtab.html
+        -webide-representation: 'v:{value} s:{size:dec} t:{type} b:{bind} vis:{visibility} i:{sh_idx:dec}[={sh_idx_special}] o_nm:{ofs_name}'
         seq:
-          - id: name_offset
+          - id: ofs_name
+            -orig-id: st_name
             type: u4
-          - id: value
+
+          - id: value_b32
             type: u4
-          - id: size
+            if: _root.bits == bits::b32
+          - id: size_b32
             type: u4
-          - id: info
-            type: u1
+            if: _root.bits == bits::b32
+
+          - id: bind
+            -orig-id: ELF32_ST_BIND(st_info)
+            type: b4
+            enum: symbol_binding
+          - id: type
+            -orig-id: ELF32_ST_TYPE(st_info)
+            type: b4
+            enum: symbol_type
           - id: other
             type: u1
             doc: don't read this field, access `visibility` instead
-          - id: shndx
+          - id: sh_idx
+            -orig-id: st_shndx
             type: u2
+            doc: section header index
+
+          - id: value_b64
+            type: u8
+            if: _root.bits == bits::b64
+          - id: size_b64
+            type: u8
+            if: _root.bits == bits::b64
         instances:
+          value:
+            value: |
+              _root.bits == bits::b32 ? value_b32 :
+              _root.bits == bits::b64 ? value_b64 :
+              0
+          size:
+            value: |
+              _root.bits == bits::b32 ? size_b32 :
+              _root.bits == bits::b64 ? size_b64 :
+              0
           visibility:
             value: other & 0x03
             enum: symbol_visibility
-      dynsym_section_entry64:
-        doc-ref: https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-79797.html
-        -orig-id: Elf64_Sym
-        seq:
-          - id: name_offset
-            type: u4
-          - id: info
-            type: u1
-          - id: other
-            type: u1
-          - id: shndx
-            type: u2
-          - id: value
-            type: u8
-          - id: size
-            type: u8
-        instances:
-          visibility:
-            value: other & 0x03
-            enum: symbol_visibility
+          sh_idx_special:
+            value: sh_idx
+            enum: section_header_idx_special
+          is_sh_idx_reserved:
+            value: |
+              sh_idx >= _root.sh_idx_lo_reserved and
+              sh_idx <= _root.sh_idx_hi_reserved
+          is_sh_idx_proc:
+            value: |
+              sh_idx >= _root.sh_idx_lo_proc and
+              sh_idx <= _root.sh_idx_hi_proc
+          is_sh_idx_os:
+            value: |
+              sh_idx >= _root.sh_idx_lo_os and
+              sh_idx <= _root.sh_idx_hi_os
       note_section:
         seq:
           - id: entries
@@ -744,6 +789,91 @@ enums:
     4: exported
     5: singleton
     6: eliminate
+  # https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-79797.html#chapter6-tbl-21
+  symbol_binding:
+    0:
+      id: local
+      doc: not visible outside the object file containing their definition
+    1:
+      id: global
+      doc: visible to all object files being combined
+    2:
+      id: weak
+      doc: like `symbol_binding::global`, but their definitions have lower precedence
+    # 10: lo_os
+    10:
+      id: os10
+      doc: reserved for operating system-specific semantics
+    11:
+      id: os11
+      doc: reserved for operating system-specific semantics
+    12:
+      id: os12
+      doc: reserved for operating system-specific semantics
+    # 12: hi_os
+    # 13: lo_proc
+    13:
+      id: proc13
+      doc: reserved for processor-specific semantics
+    14:
+      id: proc14
+      doc: reserved for processor-specific semantics
+    15:
+      id: proc15
+      doc: reserved for processor-specific semantics
+    # 15: hi_proc
+  # https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-79797.html#chapter6-tbl-22
+  symbol_type:
+    0: no_type
+    1: object
+    2: func
+    3: section
+    4: file
+    5: common
+    6: tls
+    # 10: lo_os
+    10:
+      id: os10
+      doc: reserved for OS-specific semantics
+    11:
+      id: os11
+      doc: reserved for OS-specific semantics
+    12:
+      id: os12
+      doc: reserved for OS-specific semantics
+    # 12: hi_os
+    # 13: lo_proc
+    13:
+      id: proc13
+      doc: reserved for processor-specific semantics
+    14:
+      id: proc14
+      doc: reserved for processor-specific semantics
+    15:
+      id: proc15
+      doc: reserved for processor-specific semantics
+    # 15: hi_proc
+  # https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-94076.html#chapter6-tbl-16
+  # see also `_root.sh_idx_*` instances
+  section_header_idx_special:
+    0:
+      id: undefined
+      -orig-id: SHN_UNDEF
+    # 0xff00: lo_reserve
+    # 0xff00: lo_proc
+    0xff00: before
+    0xff01: after
+    0xff02: amd64_lcommon
+    # 0xff1f: hi_proc
+    # 0xff20: lo_os
+    # 0xff3f: lo_sunw
+    0xff3f: sunw_ignore
+    # 0xff3f: hi_sunw
+    # 0xff3f: hi_os
+    0xfff1: abs
+    0xfff2: common
+    0xffff: xindex
+    # 0xffff: hi_reserve
   dynamic_array_tags:
     0: "null"            # Marks end of dynamic section
     1: needed            # Name of needed library
