@@ -431,7 +431,7 @@ types:
                 'sh_type::rel': relocation_section(false)
                 'sh_type::rela': relocation_section(true)
           name:
-            io: _root.header.strings._io
+            io: _root.header.section_names._io
             pos: ofs_name
             type: strz
             encoding: ASCII
@@ -630,7 +630,7 @@ types:
         type: section_header
         repeat: expr
         repeat-expr: qty_section_header
-      strings:
+      section_names:
         pos: section_headers[section_names_idx].ofs_body
         size: section_headers[section_names_idx].len_body
         type: strings_struct
