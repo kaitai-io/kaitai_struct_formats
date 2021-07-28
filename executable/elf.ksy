@@ -343,12 +343,6 @@ types:
                 'bits::b32': u4
                 'bits::b64': u8
         instances:
-          dynamic:
-            io: _root._io
-            pos: offset
-            size: filesz
-            type: dynamic_section
-            if: type == ph_type::dynamic
           flags_obj:
             type:
               switch-on: _root.bits
@@ -458,7 +452,14 @@ types:
           - id: entries
             type: dynamic_section_entry
             repeat: eos
+        instances:
+          is_string_table_linked:
+            value: _parent.linked_section.type == sh_type::strtab
       dynamic_section_entry:
+        doc-ref:
+          - https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-42444.html
+          - https://refspecs.linuxfoundation.org/elf/gabi4+/ch5.dynamic.html#dynamic_section
+        -webide-representation: "{tag_enum}: {value_or_ptr} {value_str} {flag_1_values:flags}"
         seq:
           - id: tag
             type:
@@ -480,7 +481,28 @@ types:
             type: dt_flag_1_values(value_or_ptr)
             if: "tag_enum == dynamic_array_tags::flags_1"
             -webide-parse-mode: eager
-        -webide-representation: "{tag_enum}: {value_or_ptr} {flag_1_values:flags}"
+          value_str:
+            io: _parent._parent.linked_section.body.as<strings_struct>._io
+            pos: value_or_ptr
+            type: strz
+            encoding: ASCII
+            if: is_value_str and _parent.is_string_table_linked
+            -webide-parse-mode: eager
+          is_value_str:
+            value: |
+              value_or_ptr != 0 and (
+                tag_enum == dynamic_array_tags::needed or
+                tag_enum == dynamic_array_tags::soname or
+                tag_enum == dynamic_array_tags::rpath or
+                tag_enum == dynamic_array_tags::runpath or
+                tag_enum == dynamic_array_tags::sunw_auxiliary or
+                tag_enum == dynamic_array_tags::sunw_filter or
+                tag_enum == dynamic_array_tags::auxiliary or
+                tag_enum == dynamic_array_tags::filter or
+                tag_enum == dynamic_array_tags::config or
+                tag_enum == dynamic_array_tags::depaudit or
+                tag_enum == dynamic_array_tags::audit
+              )
       dynsym_section:
         seq:
           - id: entries
