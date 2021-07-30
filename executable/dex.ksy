@@ -8,7 +8,7 @@ meta:
   tags:
     - android
     - executable
-  license: CC-BY-SA-3.0
+  license: Apache-2.0
   # Portions of this page are reproduced from work created and shared by Google and used
   # according to terms described in the Creative Commons 3.0 Attribution License.
   imports:
