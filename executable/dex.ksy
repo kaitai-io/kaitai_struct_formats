@@ -9,8 +9,6 @@ meta:
     - android
     - executable
   license: Apache-2.0
-  # Portions of this page are reproduced from work created and shared by Google and used
-  # according to terms described in the Creative Commons 3.0 Attribution License.
   imports:
     - /common/vlq_base128_le
   endian: le
