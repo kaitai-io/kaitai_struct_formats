@@ -872,8 +872,11 @@ enums:
     6: tls
     # 10: lo_os
     10:
-      id: os10
-      doc: reserved for OS-specific semantics
+      id: gnu_ifunc
+      doc: |
+        reserved for OS-specific semantics
+
+        `STT_GNU_IFUNC` is a GNU extension to ELF format that adds support for "indirect functions"
     11:
       id: os11
       doc: reserved for OS-specific semantics
@@ -913,6 +916,8 @@ enums:
     0xfff2: common
     0xffff: xindex
     # 0xffff: hi_reserve
+  # https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-42444.html#chapter6-tbl-52
+  # https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=HEAD#l853
   dynamic_array_tags:
     0: "null"            # Marks end of dynamic section
     1: needed            # Name of needed library
@@ -947,7 +952,7 @@ enums:
     30: flags            # Flags for the object being loaded
     32: preinit_array    # Array with addresses of preinit fct
     33: preinit_arraysz  # Size in bytes of DT_PREINIT_ARRAY
-    34: maxpostags       # Number used
+    34: symtab_shndx     # Address of SYMTAB_SHNDX section
     0x6000000d: sunw_auxiliary
     0x6000000e: sunw_filter
     0x60000010: sunw_cap
