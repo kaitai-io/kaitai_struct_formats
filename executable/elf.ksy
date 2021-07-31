@@ -864,12 +864,32 @@ enums:
   # https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-79797.html#chapter6-tbl-22
   symbol_type:
     0: no_type
-    1: object
-    2: func
-    3: section
-    4: file
-    5: common
-    6: tls
+    1:
+      id: object
+      doc: associated with a data object, such as a variable, an array, and so on
+    2:
+      id: func
+      doc: associated with a function or other executable code
+    3:
+      id: section
+      doc: associated with a section
+    4:
+      id: file
+      doc: symbol's name gives the name of the source file associated with the object file
+    5:
+      id: common
+      doc: labels an uninitialized common block
+    6:
+      id: tls
+      doc: specifies a thread-local storage entity
+    8:
+      id: relc
+      doc: complex relocation expression
+      doc-ref: https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/common.h;h=0d381f0d27;hb=HEAD#l1009
+    9:
+      id: srelc
+      doc: signed complex relocation expression
+      doc-ref: https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/common.h;h=0d381f0d27;hb=HEAD#l1010
     # 10: lo_os
     10:
       id: gnu_ifunc
