@@ -24,7 +24,7 @@ meta:
 doc-ref:
   - https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=HEAD
   - https://refspecs.linuxfoundation.org/elf/gabi4+/contents.html
-  - https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-46512.html
+  - https://docs.oracle.com/cd/E37838_01/html/E36783/glcfv.html
 seq:
   - id: magic
     -orig-id: e_ident[EI_MAG0]..e_ident[EI_MAG3]
@@ -457,7 +457,7 @@ types:
             value: _parent.linked_section.type == sh_type::strtab
       dynamic_section_entry:
         doc-ref:
-          - https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-42444.html
+          - https://docs.oracle.com/cd/E37838_01/html/E36783/chapter6-42444.html
           - https://refspecs.linuxfoundation.org/elf/gabi4+/ch5.dynamic.html#dynamic_section
         -webide-representation: "{tag_enum}: {value_or_ptr} {value_str} {flag_1_values:flags}"
         seq:
@@ -516,7 +516,7 @@ types:
           - Elf32_Sym
           - Elf64_Sym
         doc-ref:
-          - https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-79797.html
+          - https://docs.oracle.com/cd/E37838_01/html/E36783/man-sts.html
           - https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.symtab.html
         -webide-representation: 'v:{value} s:{size:dec} t:{type} b:{bind} vis:{visibility} i:{sh_idx:dec}[={sh_idx_special}] n:{name}'
         seq:
@@ -596,7 +596,7 @@ types:
             repeat: eos
       note_section_entry:
         doc-ref:
-          - https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-18048.html
+          - https://docs.oracle.com/cd/E37838_01/html/E36783/chapter6-18048.html
           # The following source claims that note's `name` and `descriptor` should be padded
           # to 8 bytes in 64-bit ELFs, not always to 4 - although this seems to be an idea of
           # the original spec, it did not catch on in the real world and most implementations
@@ -626,7 +626,7 @@ types:
             size: -len_descriptor % 4
       relocation_section:
         doc-ref:
-          - https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-54839.html
+          - https://docs.oracle.com/cd/E37838_01/html/E36783/chapter6-54839.html
           - https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.reloc.html
         params:
           - id: has_addend
@@ -770,7 +770,7 @@ enums:
     0x6474e551: gnu_stack
     0x6474e552: gnu_relro
     0x6474e553: gnu_property
-  # https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-94076.html#chapter6-73445
+  # https://docs.oracle.com/cd/E37838_01/html/E36783/man-s.html#OSLLGchapter6-73445
   sh_type:
     0: null_type
     1: progbits
@@ -819,7 +819,7 @@ enums:
     # 0x7fffffff: hi_proc
     # 0x80000000: lo_user
     # 0xffffffff: hi_user
-  # https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-79797.html#chapter7-27
+  # https://docs.oracle.com/cd/E37838_01/html/E36783/man-sts.html#OSLLGchapter7-27
   symbol_visibility:
     0: default
     1: internal
@@ -828,7 +828,7 @@ enums:
     4: exported
     5: singleton
     6: eliminate
-  # https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-79797.html#chapter6-tbl-21
+  # https://docs.oracle.com/cd/E37838_01/html/E36783/man-sts.html#OSLLGchapter6-tbl-21
   symbol_binding:
     0:
       id: local
@@ -861,7 +861,7 @@ enums:
       id: proc15
       doc: reserved for processor-specific semantics
     # 15: hi_proc
-  # https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-79797.html#chapter6-tbl-22
+  # https://docs.oracle.com/cd/E37838_01/html/E36783/man-sts.html#OSLLGchapter6-tbl-22
   symbol_type:
     0: no_type
     1:
@@ -936,7 +936,7 @@ enums:
     0xfff2: common
     0xffff: xindex
     # 0xffff: hi_reserve
-  # https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-42444.html#chapter6-tbl-52
+  # https://docs.oracle.com/cd/E37838_01/html/E36783/chapter6-42444.html#OSLLGchapter6-tbl-52
   # https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=HEAD#l853
   dynamic_array_tags:
     0: "null"            # Marks end of dynamic section
