@@ -859,11 +859,16 @@ enums:
       id: local
       doc: not visible outside the object file containing their definition
     1:
-      id: global
-      doc: visible to all object files being combined
+      id: global_symbol
+      -affected-by: 90
+      doc: |
+        visible to all object files being combined
+
+        As of KSC 0.9, this enum key can't be called `global` because it would
+        cause a syntax error in Python (it is a keyword).
     2:
       id: weak
-      doc: like `symbol_binding::global`, but their definitions have lower precedence
+      doc: like `symbol_binding::global_symbol`, but their definitions have lower precedence
     # 10: lo_os
     10:
       id: os10
