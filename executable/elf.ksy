@@ -1096,7 +1096,7 @@ enums:
     0x70000001:
       id: sparc_register
       doc-ref: https://github.com/illumos/illumos-gate/blob/1d806c5f41/usr/src/boot/sys/sys/elf_common.h#L634-L635
-    0x_7000001:
+    0x07000001:
       id: deprecated_sparc_register
       doc: |
         DT_SPARC_REGISTER was originally assigned 0x7000001. It is processor
