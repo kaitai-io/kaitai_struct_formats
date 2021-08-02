@@ -771,6 +771,7 @@ enums:
     0x6474e552: gnu_relro
     0x6474e553: gnu_property
   # https://docs.oracle.com/cd/E37838_01/html/E36783/man-s.html#OSLLGchapter6-73445
+  # https://github.com/illumos/illumos-gate/blob/1d806c5f41/usr/src/boot/sys/sys/elf_common.h#L377-L462
   sh_type:
     0: null_type
     1: progbits
@@ -791,6 +792,15 @@ enums:
     18: symtab_shndx
     # 0x60000000: lo_os
     # 0x6fffffef: lo_sunw
+    0x6fffffec:
+      id: sunw_symnsort
+      doc-ref: https://docs.oracle.com/cd/E37838_01/html/E36783/man-s.html#OSLLGchapter6-73445
+    0x6fffffed:
+      id: sunw_phname
+      doc-ref: https://docs.oracle.com/cd/E37838_01/html/E36783/man-s.html#OSLLGchapter6-73445
+    0x6fffffee:
+      id: sunw_ancillary
+      doc-ref: https://docs.oracle.com/cd/E37838_01/html/E36783/man-s.html#OSLLGchapter6-73445
     0x6fffffef: sunw_capchain
     0x6ffffff0: sunw_capinfo
     0x6ffffff1: sunw_symsort
@@ -798,7 +808,10 @@ enums:
     0x6ffffff3: sunw_ldynsym
     0x6ffffff4: sunw_dof
     0x6ffffff5: sunw_cap
+    # 0x6ffffff5: gnu_attributes
     0x6ffffff6: sunw_signature
+    # 0x6ffffff6: gnu_hash
+    # 0x6ffffff7: gnu_liblist
     0x6ffffff7: sunw_annotate
     0x6ffffff8: sunw_debugstr
     0x6ffffff9: sunw_debug
@@ -806,8 +819,11 @@ enums:
     0x6ffffffb: sunw_comdat
     0x6ffffffc: sunw_syminfo
     0x6ffffffd: sunw_verdef
+    # 0x6ffffffd: gnu_verdef
     0x6ffffffe: sunw_verneed
+    # 0x6ffffffe: gnu_verneed
     0x6fffffff: sunw_versym
+    # 0x6fffffff: gnu_versym
     # 0x6fffffff: hi_sunw
     # 0x6fffffff: hi_os
     # 0x70000000: lo_proc
@@ -816,6 +832,12 @@ enums:
     # 0x70000001: arm_exidx
     0x70000002: arm_preemptmap
     0x70000003: arm_attributes
+    0x70000004:
+      id: arm_debugoverlay
+      doc-ref: https://github.com/illumos/illumos-gate/blob/1d806c5f41/usr/src/boot/sys/sys/elf_common.h#L425
+    0x70000005:
+      id: arm_overlaysection
+      doc-ref: https://github.com/illumos/illumos-gate/blob/1d806c5f41/usr/src/boot/sys/sys/elf_common.h#L426
     # 0x7fffffff: hi_proc
     # 0x80000000: lo_user
     # 0xffffffff: hi_user
