@@ -673,6 +673,9 @@ types:
         pos: section_headers[section_names_idx].ofs_body
         size: section_headers[section_names_idx].len_body
         type: strings_struct
+        if: |
+          section_names_idx != section_header_idx_special::undefined.to_i
+          and section_names_idx < _root.header.qty_section_header
 enums:
   # EI_CLASS
   bits:
