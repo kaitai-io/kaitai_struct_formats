@@ -21,7 +21,7 @@ doc: |
   On Linux systems that support this the blobs can be accessed in
   `/sys/firmware/fdt`:
 
-  - <https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-firmware-ofw>
+  * <https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-firmware-ofw>
 
   The encoding of strings used in the strings block and struct block is
   actually a subset of ASCII (section "2.2.1 Node Names"):
@@ -30,7 +30,7 @@ doc: |
 
   Example files:
 
-  - <https://github.com/qemu/qemu/tree/master/pc-bios>
+  * <https://github.com/qemu/qemu/tree/master/pc-bios>
 doc-ref:
   - https://github.com/devicetree-org/devicetree-specification/releases/download/v0.3/devicetree-specification-v0.3.pdf
     Flattened Devicetree (DTB) Format
