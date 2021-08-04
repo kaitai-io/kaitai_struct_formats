@@ -221,24 +221,12 @@ enums:
     0:
       id: none
       doc: No Compression Used
-    1:
-      id: gzip
-      doc: gzip Compression Used
-    2:
-      id: bzip2
-      doc: bzip2 Compression Used
-    3:
-      id: lzma
-      doc: lzma Compression Used
-    4:
-      id: lzo
-      doc: lzo Compression Used
-    5:
-      id: lz4
-      doc: lz4 Compression Used
-    6:
-      id: zstd
-      doc: zstd Compression Used
+    1: gzip
+    2: bzip2
+    3: lzma
+    4: lzo
+    5: lz4
+    6: zstd
   uimage_type:
     0:
       id: invalid
