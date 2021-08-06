@@ -1119,7 +1119,7 @@ types:
           - id: value
             size: length
           - id: padding
-            size: 4 - (length & 3)
+            size: -length % 4
       match:
         -webide-representation: "{match_op} {data.value:str}"
         seq:
