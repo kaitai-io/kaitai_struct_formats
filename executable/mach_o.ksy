@@ -1,8 +1,3 @@
-# http://www.stonedcoder.org/~kd/lib/MachORuntime.pdf
-# https://opensource.apple.com/source/python_modules/python_modules-43/Modules/macholib-1.5.1/macholib-1.5.1.tar.gz
-# https://github.com/comex/cs/blob/master/macho_cs.py
-# https://opensource.apple.com/source/Security/Security-55471/libsecurity_codesigning/requirements.grammar.auto.html
-# https://github.com/apple/darwin-xnu/blob/xnu-2782.40.9/bsd/sys/codesign.h
 meta:
   id: mach_o
   xref:
@@ -11,9 +6,16 @@ meta:
       - fmt/693 # Mach-O 64bit
     wikidata: Q2627217
   license: MIT
+  ks-version: 0.9
   imports:
     - /serialization/asn1/asn1_der
   endian: le
+doc-ref:
+  - http://www.stonedcoder.org/~kd/lib/MachORuntime.pdf
+  - https://opensource.apple.com/source/python_modules/python_modules-43/Modules/macholib-1.5.1/macholib-1.5.1.tar.gz
+  - https://github.com/comex/cs/blob/master/macho_cs.py
+  - https://opensource.apple.com/source/Security/Security-55471/libsecurity_codesigning/requirements.grammar.auto.htm
+  - https://github.com/apple/darwin-xnu/blob/xnu-2782.40.9/bsd/sys/codesign.h
 seq:
   - id: magic
     type: u4be
