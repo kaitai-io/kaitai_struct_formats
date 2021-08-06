@@ -1008,7 +1008,7 @@ types:
             'cs_magic::requirement'       : requirement
             'cs_magic::requirements'      : requirements
             'cs_magic::code_directory'    : code_directory
-            'cs_magic::entitlement'       : entitlement
+            'cs_magic::entitlements'      : entitlements
             'cs_magic::blob_wrapper'      : blob_wrapper
             'cs_magic::embedded_signature': super_blob
             'cs_magic::detached_signature': super_blob
@@ -1017,7 +1017,7 @@ types:
         0xfade0c00: requirement        # CSMAGIC_REQUIREMENT
         0xfade0c01: requirements       # CSMAGIC_REQUIREMENTS
         0xfade0c02: code_directory     # CSMAGIC_CODEDIRECTORY
-        0xfade7171: entitlement        # CSMAGIC_ENTITLEMENT
+        0xfade7171: entitlements       # CSMAGIC_EMBEDDED_ENTITLEMENTS
         0xfade0b01: blob_wrapper       # CSMAGIC_BLOBWRAPPER
         0xfade0cc0: embedded_signature # CSMAGIC_EMBEDDED_SIGNATURE
         0xfade0cc1: detached_signature # CSMAGIC_DETACHED_SIGNATURE
@@ -1246,7 +1246,7 @@ types:
             type: u4be
           - id: expr
             type: expr
-      entitlement:
+      entitlements:
         -webide-representation: "{data:str}"
         seq:
           - id: data
