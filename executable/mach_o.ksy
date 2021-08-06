@@ -16,6 +16,7 @@ doc-ref:
   - https://github.com/comex/cs/blob/master/macho_cs.py
   - https://opensource.apple.com/source/Security/Security-55471/libsecurity_codesigning/requirements.grammar.auto.htm
   - https://github.com/apple/darwin-xnu/blob/xnu-2782.40.9/bsd/sys/codesign.h
+  - https://opensource.apple.com/source/dyld/dyld-852/src/ImageLoaderMachO.cpp.auto.html
 seq:
   - id: magic
     type: u4be
@@ -568,21 +569,25 @@ types:
         pos: rebase_off
         size: rebase_size
         type: rebase_data
+        if: rebase_size != 0
       bind:
         io: _root._io
         pos: bind_off
         size: bind_size
         type: bind_data
+        if: bind_size != 0
       lazy_bind:
         io: _root._io
         pos: lazy_bind_off
         size: lazy_bind_size
         type: lazy_bind_data
+        if: lazy_bind_size != 0
       exports:
         io: _root._io
         pos: export_off
         size: export_size
         type: export_node
+        if: export_size != 0
     types:
       rebase_data:
         seq:
