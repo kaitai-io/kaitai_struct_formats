@@ -576,6 +576,12 @@ types:
         size: bind_size
         type: bind_data
         if: bind_size != 0
+      weak_bind:
+        io: _root._io
+        pos: weak_bind_off
+        size: weak_bind_size
+        type: bind_data
+        if: weak_bind_size != 0
       lazy_bind:
         io: _root._io
         pos: lazy_bind_off
