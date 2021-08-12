@@ -17,6 +17,7 @@ doc-ref:
   - https://opensource.apple.com/source/Security/Security-55471/libsecurity_codesigning/requirements.grammar.auto.htm
   - https://github.com/apple/darwin-xnu/blob/xnu-2782.40.9/bsd/sys/codesign.h
   - https://opensource.apple.com/source/dyld/dyld-852/src/ImageLoaderMachO.cpp.auto.html
+  - https://opensource.apple.com/source/dyld/dyld-852/src/ImageLoaderMachOCompressed.cpp.auto.html
 seq:
   - id: magic
     type: u4be
@@ -586,7 +587,7 @@ types:
         io: _root._io
         pos: lazy_bind_off
         size: lazy_bind_size
-        type: lazy_bind_data
+        type: bind_data
         if: lazy_bind_size != 0
       exports:
         io: _root._io
@@ -667,12 +668,6 @@ types:
             value: "opcode_and_immediate & 0x0f"
             -webide-parse-mode: eager
       bind_data:
-        seq:
-          - id: items
-            type: bind_item
-            repeat: until
-            repeat-until: _.opcode == bind_opcode::done
-      lazy_bind_data:
         seq:
           - id: items
             type: bind_item
