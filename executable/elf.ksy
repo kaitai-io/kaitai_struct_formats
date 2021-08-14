@@ -425,6 +425,7 @@ types:
                 'sh_type::note': note_section
                 'sh_type::rel': relocation_section(false)
                 'sh_type::rela': relocation_section(true)
+            if: type != sh_type::nobits
           linked_section:
             value: _root.header.section_headers[linked_section_idx]
             if: |
