@@ -47,6 +47,7 @@ seq:
   - id: ei_version
     -orig-id: e_ident[EI_VERSION]
     type: u1
+    valid: 1
     doc: ELF header version.
   - id: abi
     -orig-id: e_ident[EI_OSABI]
