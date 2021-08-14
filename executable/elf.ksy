@@ -721,547 +721,605 @@ enums:
     3: shared
     # ET_CORE
     4: core
+  # http://www.sco.com/developers/gabi/latest/ch4.eheader.html
+  # https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=0f62fe0532
+  # https://github.com/NationalSecurityAgency/ghidra/blob/f5615aa240/Ghidra/Features/Base/src/main/java/ghidra/app/util/bin/format/elf/ElfConstants.java#L158-L510
+  # https://github.com/llvm/llvm-project/blob/f6928cf45516/llvm/include/llvm/BinaryFormat/ELF.h#L130
   machine:
-    0x00:
+    0:
       id: no_machine
+      -orig-id: EM_NONE
       doc: No machine
-    0x01:
+    1:
       id: m32
       doc: AT&T WE 32100
-    0x02:
+    2:
       id: sparc
       doc: Sun SPARC
-    0x03:
+    3:
       id: x86
+      -orig-id: EM_386
       doc: Intel 80386
-    0x04:
+    4:
       id: m68k
+      -orig-id: EM_68K
       doc: Motorola m68k family
-    0x05:
+    5:
       id: m88k
+      -orig-id: EM_88K
       doc: Motorola m88k family
-    0x06:
+    6:
       id: iamcu
-      doc: Intel MCU
-    0x07:
+      doc: |
+        Intel MCU
+
+        was assigned to `EM_486` (for Intel i486), but that value was deprecated
+        and replaced with this one
+      doc-ref:
+        - https://sourceware.org/bugzilla/show_bug.cgi?id=18404
+        - https://gcc.gnu.org/legacy-ml/gcc/2015-05/msg00090.html
+        - https://github.com/gcc-mirror/gcc/blob/240f07805d/libgo/go/debug/elf/elf.go#L389
+    7:
       id: i860
+      -orig-id: EM_860
       doc: Intel 80860
-    0x08:
+    8:
       id: mips
       doc: MIPS R3000 big-endian
-    0x09:
+    9:
       id: s370
       doc: IBM System/370
-    0x0a:
+    10:
       id: mips_rs3_le
       doc: MIPS R3000 little-endian
-    0x0f:
+    15:
       id: parisc
-      doc: HPPA
-    0x11:
+      doc: Hewlett-Packard PA-RISC
+    17:
       id: vpp500
       doc: Fujitsu VPP500
-    0x12:
-      id: v8plus
+    18:
+      id: sparc32plus
       doc: Sun's "v8plus"
-    0x13:
+    19:
       id: i960
+      -orig-id: EM_960
       doc: Intel 80960
-    0x14:
+    20:
       id: powerpc
+      -orig-id: EM_PPC
       doc: PowerPC
-    0x15:
+    21:
       id: powerpc64
+      -orig-id: EM_PPC64
       doc: PowerPC 64-bit
-    0x16:
+    22:
       id: s390
-      doc: IBM S390
-    0x17:
+      doc: IBM System/390
+    23:
       id: spu
       doc: IBM SPU/SPC
-    0x24:
+    36:
       id: v800
       doc: NEC V800 series
-    0x25:
+    37:
       id: fr20
       doc: Fujitsu FR20
-    0x26:
+    38:
       id: rh32
       doc: TRW RH-32
-    0x27:
+    39:
       id: rce
       doc: Motorola RCE
-    0x28:
+    40:
       id: arm
       doc: ARM
-    0x29:
+    41:
       id: alpha
-      doc: Digital Alpha
-    0x2a:
+      -orig-id: EM_FAKE_ALPHA
+      doc: DEC Alpha
+    42:
       id: superh
+      -orig-id: EM_SH
       doc: Hitachi SH
-    0x2b:
-      id: sparcv9
+    43:
+      id: sparc_v9
+      -orig-id: EM_SPARCV9
       doc: SPARC v9 64-bit
-    0x2c:
+    44:
       id: tricore
-      doc: Siemens Tricore
-    0x2d:
+      doc: Siemens TriCore
+    45:
       id: arc
       doc: Argonaut RISC Core
-    0x2e:
+    46:
       id: h8_300
       doc: Hitachi H8/300
-    0x2f:
+    47:
       id: h8_300h
       doc: Hitachi H8/300H
-    0x30:
+    48:
       id: h8s
       doc: Hitachi H8S
-    0x31:
+    49:
       id: h8_500
       doc: Hitachi H8/500
-    0x32:
+    50:
       id: ia_64
-      doc: Intel IA64
-    0x33:
+      doc: Intel IA-64 processor architecture
+    51:
       id: mips_x
       doc: Stanford MIPS-X
-    0x34:
+    52:
       id: coldfire
-      doc: Motorola Coldfire
-    0x35:
+      doc: Motorola ColdFire
+    53:
       id: m68hc12
+      -orig-id: EM_68HC12
       doc: Motorola M68HC12
-    0x36:
+    54:
       id: mma
       doc: Fujitsu MMA Multimedia Accelerator
-    0x37:
+    55:
       id: pcp
       doc: Siemens PCP
-    0x38:
+    56:
       id: ncpu
-      doc: Sony nCPU embedded RISC
-    0x39:
+      doc: Sony nCPU embedded RISC processor
+    57:
       id: ndr1
       doc: Denso NDR1 microprocessor
-    0x3a:
+    58:
       id: starcore
       doc: Motorola Star*Core processor
-    0x3b:
+    59:
       id: me16
       doc: Toyota ME16 processor
-    0x3c:
+    60:
       id: st100
-      doc: STMicroelectronic ST100 processor
-    0x3d:
-      id: tiny
-      doc: Advanced Logic Corp. Tinyj emb.fam
-    0x3e:
+      doc: STMicroelectronics ST100 processor
+    61:
+      id: tinyj
+      doc: Advanced Logic Corp. TinyJ embedded processor family
+    62:
       id: x86_64
       doc: AMD x86-64 architecture
-    0x3f:
+    63:
       id: pdsp
       doc: Sony DSP Processor
-    0x40:
+    64:
       id: pdp10
-      doc: Digital PDP-10
-    0x41:
+      doc: Digital Equipment Corp. PDP-10
+    65:
       id: pdp11
-      doc: Digital PDP-11
-    0x42:
+      doc: Digital Equipment Corp. PDP-11
+    66:
       id: fx66
       doc: Siemens FX66 microcontroller
-    0x43:
+    67:
       id: st9plus
-      doc: STMicroelectronics ST9+ 8/16 microcontroller
-    0x44:
+      doc: STMicroelectronics ST9+ 8/16 bit microcontroller
+    68:
       id: st7
-      doc: STmicroelectronics ST7 8 bit microcontroller
-    0x45:
+      doc: STMicroelectronics ST7 8-bit microcontroller
+    69:
       id: mc68hc16
+      -orig-id: EM_68HC16
       doc: Motorola MC68HC16 microcontroller
-    0x46:
+    70:
       id: mc68hc11
+      -orig-id: EM_68HC11
       doc: Motorola MC68HC11 microcontroller
-    0x47:
+    71:
       id: mc68hc08
+      -orig-id: EM_68HC08
       doc: Motorola MC68HC08 microcontroller
-    0x48:
+    72:
       id: mc68hc05
+      -orig-id: EM_68HC05
       doc: Motorola MC68HC05 microcontroller
-    0x49:
+    73:
       id: svx
       doc: Silicon Graphics SVx
-    0x4a:
+    74:
       id: st19
-      doc: STMicroelectronics ST19 8 bit microcontroller
-    0x4b:
+      doc: STMicroelectronics ST19 8-bit microcontroller
+    75:
       id: vax
       doc: Digital VAX
-    0x4c:
+    76:
       id: cris
-      doc: CRIS, Axis Communications 32-bit embedded processor
-    0x4d:
+      doc: Axis Communications 32-bit embedded processor
+    77:
       id: javelin
-      doc: Javelin, Infineon Technologies 32-bit embedded processor
-    0x4e:
+      doc: Infineon Technologies 32-bit embedded processor
+    78:
       id: firepath
-      doc: Firepath, Element 14 64-bit DSP Processor
-    0x4f:
+      doc: Element 14 64-bit DSP Processor
+    79:
       id: zsp
-      doc: ZSP, LSI Logic 16-bit DSP Processor
-    0x50:
+      doc: LSI Logic 16-bit DSP Processor
+    80:
       id: mmix
-      doc: Donald Knuth's educational 64-bit proc
-    0x51:
+      doc: Donald Knuth's educational 64-bit processor
+    81:
       id: huany
       doc: Harvard University machine-independent object files
-    0x52:
+    82:
       id: prism
       doc: SiTera Prism
-    0x53:
+    83:
       id: avr
       doc: Atmel AVR 8-bit microcontroller
-    0x54:
+    84:
       id: fr30
       doc: Fujitsu FR30
-    0x55:
+    85:
       id: d10v
       doc: Mitsubishi D10V
-    0x56:
+    86:
       id: d30v
       doc: Mitsubishi D30V
-    0x57:
+    87:
       id: v850
       doc: NEC v850
-    0x58:
+    88:
       id: m32r
       doc: Mitsubishi M32R
-    0x59:
+    89:
       id: mn10300
       doc: Matsushita MN10300
-    0x5a:
+    90:
       id: mn10200
       doc: Matsushita MN10200
-    0x5b:
+    91:
       id: picojava
+      -orig-id: EM_PJ
       doc: picoJava
-    0x5c:
+    92:
       id: openrisc
       doc: OpenRISC 32-bit embedded processor
-    0x5d:
+    93:
       id: arc_compact
-      doc: ARC International ARCompact
-    0x5e:
+      doc: 'ARC International ARCompact processor (old spelling/synonym: EM_ARC_A5)'
+    94:
       id: xtensa
       doc: Tensilica Xtensa Architecture
-    0x5f:
+    95:
       id: videocore
-      doc: Alphamosaic VideoCore
-    0x60:
+      doc: Alphamosaic VideoCore processor
+    96:
       id: tmm_gpp
-      doc: Thompson Multimedia General Purpose Proc
-    0x61:
+      doc: Thompson Multimedia General Purpose Processor
+    97:
       id: ns32k
-      doc: National Semi. 32000
-    0x62:
+      doc: National Semiconductor 32000 series
+    98:
       id: tpc
-      doc: Tenor Network TPC
-    0x63:
+      doc: Tenor Network TPC processor
+    99:
       id: snp1k
-      doc: Trebia SNP 1000
-    0x64:
+      doc: Trebia SNP 1000 processor
+    100:
       id: st200
       doc: STMicroelectronics ST200
-    0x65:
+    101:
       id: ip2k
-      doc: Ubicom IP2xxx
-    0x66:
+      doc: Ubicom IP2xxx microcontroller family
+    102:
       id: max
       doc: MAX processor
-    0x67:
+    103:
       id: compact_risc
-      doc: National Semi. CompactRISC
-    0x68:
+      -orig-id: EM_CR
+      doc: National Semiconductor CompactRISC microprocessor
+    104:
       id: f2mc16
       doc: Fujitsu F2MC16
-    0x69:
+    105:
       id: msp430
-      doc: Texas Instruments msp430
-    0x6a:
+      doc: Texas Instruments embedded microcontroller MSP430
+    106:
       id: blackfin
-      doc: Analog Devices Blackfin DSP
-    0x6b:
+      doc: Analog Devices Blackfin (DSP) processor
+    107:
       id: se_c33
       doc: Seiko Epson S1C33 family
-    0x6c:
+    108:
       id: sep
       doc: Sharp embedded microprocessor
-    0x6d:
+    109:
       id: arca
-      doc: Arca RISC
-    0x6e:
+      doc: Arca RISC microprocessor
+    110:
       id: unicore
-      doc: PKU-Unity & MPRC Peking Uni. mc series
-    0x6f:
+      doc: microprocessor series from PKU-Unity Ltd. and MPRC of Peking University
+    111:
       id: excess
-      doc: eXcess configurable CPU
-    0x70:
+      doc: 'eXcess: 16/32/64-bit configurable embedded CPU'
+    112:
       id: dxp
-      doc: Icera Semi. Deep Execution Processor
-    0x71:
+      doc: Icera Semiconductor Inc. Deep Execution Processor
+    113:
       id: altera_nios2
-      doc: Altera Nios II
-    0x72:
+      doc: Altera Nios II soft-core processor
+    114:
       id: crx
-      doc: National Semi. CompactRISC CRX
-    0x73:
+      doc: National Semiconductor CompactRISC CRX microprocessor
+    115:
       id: xgate
-      doc: Motorola XGATE
-    0x74:
+      doc: Motorola XGATE embedded processor
+    116:
       id: c166
-      doc: Infineon C16x/XC16x
-    0x75:
+      doc: Infineon C16x/XC16x processor
+    117:
       id: m16c
-      doc: Renesas M16C
-    0x76:
+      doc: Renesas M16C series microprocessors
+    118:
       id: dspic30f
-      doc: Microchip Technology dsPIC30F
-    0x77:
+      doc: Microchip Technology dsPIC30F Digital Signal Controller
+    119:
       id: freescale_ce
-      doc: Freescale Communication Engine RIS
-    0x78:
+      -orig-id: EM_CE
+      doc: Freescale Communication Engine RISC core
+    120:
       id: m32c
-      doc: Renesas M32C
-    0x83:
+      doc: Renesas M32C series microprocessors
+    131:
       id: tsk3000
-      doc: Altium TSK3000
-    0x84:
+      doc: Altium TSK3000 core
+    132:
       id: rs08
-      doc: Freescale RS08
-    0x85:
+      doc: Freescale RS08 embedded processor
+    133:
       id: sharc
-      doc: Analog Devices SHARC family
-    0x86:
+      doc: Analog Devices SHARC family of 32-bit DSP processors
+    134:
       id: ecog2
-      doc: Cyan Technology eCOG2
-    0x87:
+      doc: Cyan Technology eCOG2 microprocessor
+    135:
       id: score7
-      doc: Sunplus S+core7 RISC
-    0x88:
+      doc: Sunplus S+core7 RISC processor
+    136:
       id: dsp24
-      doc: New Japan Radio (NJR) 24-bit DSP
-    0x89:
+      doc: New Japan Radio (NJR) 24-bit DSP Processor
+    137:
       id: videocore3
-      doc: Broadcom VideoCore III
-    0x8a:
+      doc: Broadcom VideoCore III processor
+    138:
       id: latticemico32
-      doc: RISC for Lattice FPGA
-    0x8b:
+      doc: RISC processor for Lattice FPGA architecture
+    139:
       id: se_c17
-      doc: Seiko Epson C17
-    0x8c:
+      doc: Seiko Epson C17 family
+    140:
       id: ti_c6000
-      doc: Texas Instruments TMS320C6000 DSP
-    0x8d:
+      doc: Texas Instruments TMS320C6000 DSP family
+    141:
       id: ti_c2000
-      doc: Texas Instruments TMS320C2000 DSP
-    0x8e:
+      doc: Texas Instruments TMS320C2000 DSP family
+    142:
       id: ti_c5500
-      doc: Texas Instruments TMS320C55x DSP
-    0x8f:
+      doc: Texas Instruments TMS320C55x DSP family
+    143:
       id: ti_arp32
-      doc: Texas Instruments App. Specific RISC
-    0x90:
+      doc: Texas Instruments Application Specific RISC Processor, 32bit fetch
+    144:
       id: ti_pru
-      doc: Texas Instruments Prog. Realtime Unit
-    0xa0:
+      doc: Texas Instruments Programmable Realtime Unit
+    160:
       id: mmdsp_plus
-      doc: STMicroelectronics 64bit VLIW DSP
-    0xa1:
+      doc: STMicroelectronics 64bit VLIW Data Signal Processor
+    161:
       id: cypress_m8c
-      doc: Cypress M8C
-    0xa2:
+      doc: Cypress M8C microprocessor
+    162:
       id: r32c
-      doc: Renesas R32C
-    0xa3:
+      doc: Renesas R32C series microprocessors
+    163:
       id: trimedia
-      doc: NXP Semi. TriMedia
-    0xa4:
+      doc: NXP Semiconductors TriMedia architecture family
+    164:
       id: qdsp6
-      doc: Qualcomm DSP6/Hexagon
-    0xa5:
+      doc: Qualcomm Hexagon processor
+    165:
       id: i8051
+      -orig-id: EM_8051
       doc: Intel 8051 and variants
-    0xa6:
+    166:
       id: stxp7x
-      doc: STMicroelectronics STxP7x
-    0xa7:
+      doc: STMicroelectronics STxP7x family of configurable and extensible RISC processors
+    167:
       id: nds32
-      doc: Andes Tech. compact code emb. RISC
-    0xa8:
+      doc: Andes Technology compact code size embedded RISC processor family
+    168:
       id: ecog1x
-      doc: Cyan Technology eCOG1X
-    0xa9:
+      doc: Cyan Technology eCOG1X family
+    169:
       id: maxq30
-      doc: Dallas Semi. MAXQ30 microcontroller
-    0xaa:
+      doc: Dallas Semiconductor MAXQ30 Core Micro-controllers
+    170:
       id: ximo16
-      doc: New Japan Radio (NJR) 16-bit DSP
-    0xab:
+      doc: New Japan Radio (NJR) 16-bit DSP Processor
+    171:
       id: manik
-      doc: M2000 Reconfigurable RISC
-    0xac:
+      doc: M2000 Reconfigurable RISC Microprocessor
+    172:
       id: craynv2
-      doc: Cray NV2 vector architecture
-    0xad:
+      doc: Cray Inc. NV2 vector architecture
+    173:
       id: rx
-      doc: Renesas RX
-    0xae:
+      doc: Renesas RX family
+    174:
       id: metag
-      doc: Imagination Tech. META
-    0xaf:
+      doc: Imagination Technologies META processor architecture
+    175:
       id: mcst_elbrus
-      doc: MCST Elbrus
-    0xb0:
+      doc: MCST Elbrus general purpose hardware architecture
+    176:
       id: ecog16
-      doc: Cyan Technology eCOG16
-    0xb1:
+      doc: Cyan Technology eCOG16 family
+    177:
       id: cr16
-      doc: National Semi. CompactRISC CR16
-    0xb2:
+      doc: National Semiconductor CompactRISC CR16 16-bit microprocessor
+    178:
       id: etpu
       doc: Freescale Extended Time Processing Unit
-    0xb3:
+    179:
       id: sle9x
-      doc: Infineon Tech. SLE9X
-    0xb4:
+      doc: Infineon Technologies SLE9X core
+    180:
       id: l10m
       doc: Intel L10M
-    0xb5:
+    181:
       id: k10m
       doc: Intel K10M
-    0xb7:
+    183:
       id: aarch64
-      doc: ARM AARCH64
-    0xb9:
+      doc: ARM AArch64
+    185:
       id: avr32
-      doc: Atmel 32-bit microprocessor
-    0xba:
+      doc: Atmel Corporation 32-bit microprocessor family
+    186:
       id: stm8
-      doc: STMicroelectronics STM8
-    0xbb:
+      doc: STMicroeletronics STM8 8-bit microcontroller
+    187:
       id: tile64
-      doc: Tilera TILE64
-    0xbc:
+      doc: Tilera TILE64 multicore architecture family
+    188:
       id: tilepro
-      doc: Tilera TILEPro
-    0xbd:
+      doc: Tilera TILEPro multicore architecture family
+    189:
       id: microblaze
-      doc: Xilinx MicroBlaze
-    0xbe:
+      doc: Xilinx MicroBlaze 32-bit RISC soft processor core
+    190:
       id: cuda
-      doc: NVIDIA CUDA
-    0xbf:
+      doc: NVIDIA CUDA architecture
+    191:
       id: tilegx
-      doc: Tilera TILE-Gx
-    0xc0:
+      doc: Tilera TILE-Gx multicore architecture family
+    192:
       id: cloudshield
-      doc: CloudShield
-    0xc1:
+      doc: CloudShield architecture family
+    193:
       id: corea_1st
-      doc: KIPO-KAIST Core-A 1st generation
-    0xc2:
+      doc: KIPO-KAIST Core-A 1st generation processor family
+    194:
       id: corea_2nd
-      doc: KIPO-KAIST Core-A 2nd generation
-    0xc3:
+      doc: KIPO-KAIST Core-A 2nd generation processor family
+    195:
       id: arcv2
       doc: Synopsys ARCv2 ISA
-    0xc4:
+    196:
       id: open8
-      doc: Open8 RISC
-    0xc5:
+      doc: Open8 8-bit RISC soft processor core
+    197:
       id: rl78
-      doc: Renesas RL78
-    0xc6:
+      doc: Renesas RL78 family
+    198:
       id: videocore5
-      doc: Broadcom VideoCore V
-    0xc7:
+      doc: Broadcom VideoCore V processor
+    199:
       id: renesas_78kor
-      doc: Renesas 78KOR
-    0xc8:
+      -orig-id: EM_78KOR
+      doc: Renesas 78KOR family
+    200:
       id: freescale_56800ex
-      doc: Freescale 56800EX DSC
-    0xc9:
+      -orig-id: EM_56800EX
+      doc: Freescale 56800EX Digital Signal Controller (DSC)
+    201:
       id: ba1
-      doc: Beyond BA1
-    0xca:
+      doc: Beyond BA1 CPU architecture
+    202:
       id: ba2
-      doc: Beyond BA2
-    0xcb:
+      doc: Beyond BA2 CPU architecture
+    203:
       id: xcore
-      doc: XMOS xCORE
-    0xcc:
-      id: mcip_pic
-      doc: Microchip 8-bit PIC(r)
-    0xcd:
+      doc: XMOS xCORE processor family
+    204:
+      id: mchp_pic
+      doc: Microchip 8-bit PIC(r) family
+    205:
       id: intelgt
       doc: Intel Graphics Technology
-    0xd2:
+      doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=0f62fe0532#l339
+    206:
+      id: intel206
+      doc: Reserved by Intel
+    207:
+      id: intel207
+      doc: Reserved by Intel
+    208:
+      id: intel208
+      doc: Reserved by Intel
+    209:
+      id: intel209
+      doc: Reserved by Intel
+    210:
       id: km32
-      doc: KM211 KM32
-    0xd3:
+      doc: KM211 KM32 32-bit processor
+    211:
       id: kmx32
-      doc: KM211 KMX32
-    0xd4:
+      doc: KM211 KMX32 32-bit processor
+    212:
       id: kmx16
-      doc: KM211 KMX16
-    0xd5:
+      -orig-id: EM_EMX16
+      doc: KM211 KMX16 16-bit processor
+    213:
       id: kmx8
-      doc: KM211 KMX8
-    0xd6:
+      -orig-id: EM_EMX8
+      doc: KM211 KMX8 8-bit processor
+    214:
       id: kvarc
-      doc: KM211 KVARC
-    0xd7:
+      doc: KM211 KVARC processor
+    215:
       id: cdp
-      doc: Paneve CDP
-    0xd8:
+      doc: Paneve CDP architecture family
+    216:
       id: coge
       doc: Cognitive Smart Memory Processor
-    0xd9:
+    217:
       id: cool
-      doc: Bluechip CoolEngine
-    0xda:
+      doc: Bluechip Systems CoolEngine
+    218:
       id: norc
       doc: Nanoradio Optimized RISC
-    0xdb:
+    219:
       id: csr_kalimba
-      doc: CSR Kalimba
-    0xdc:
+      doc: CSR Kalimba architecture family
+    220:
       id: z80
       doc: Zilog Z80
-    0xdd:
-      id: visum
+    221:
+      id: visium
       doc: Controls and Data Services VISIUMcore
-    0xde:
+    222:
       id: ft32
       doc: FTDI Chip FT32
-    0xdf:
+    223:
       id: moxie
       doc: Moxie processor
-    0xe0:
-      id: amdgpu
-      doc: AMD GPU
-    0xf3:
+    224:
+      id: amd_gpu
+      -orig-id: EM_AMDGPU
+      doc: AMD GPU architecture
+    243:
       id: riscv
       doc: RISC-V
-    0xf7:
+    244:
+      id: lanai
+      doc: Lanai 32-bit processor
+      doc-ref: https://github.com/llvm/llvm-project/blob/f6928cf45516/llvm/include/llvm/BinaryFormat/ELF.h#L319
+    247:
       id: bpf
-      doc: Linux BPF -- in-kernel virtual machine
-    0xfc:
+      doc: Linux BPF - in-kernel virtual machine
+    251:
+      id: ve
+      doc: NEC SX-Aurora VE
+      doc-ref: https://github.com/llvm/llvm-project/blob/f6928cf45516/llvm/include/llvm/BinaryFormat/ELF.h#L321
+    252:
       id: csky
-      doc: C-SKY
+      doc: C-SKY 32-bit processor
   ph_type:
     0: null_type
     1: load
