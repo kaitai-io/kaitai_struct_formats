@@ -22,7 +22,7 @@ meta:
   license: CC0-1.0
   ks-version: 0.9
 doc-ref:
-  - https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=HEAD
+  - https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=0f62fe0532
   - https://refspecs.linuxfoundation.org/elf/gabi4+/contents.html
   - https://docs.oracle.com/cd/E37838_01/html/E36783/glcfv.html
 seq:
@@ -969,7 +969,7 @@ enums:
     0xffff: xindex
     # 0xffff: hi_reserve
   # https://docs.oracle.com/cd/E37838_01/html/E36783/chapter6-42444.html#OSLLGchapter6-tbl-52
-  # https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=HEAD#l853
+  # https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=0f62fe0532#l853
   dynamic_array_tags:
     0: "null"            # Marks end of dynamic section
     1: needed            # Name of needed library
