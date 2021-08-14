@@ -1579,7 +1579,7 @@ enums:
     0x6000000e:
       id: sunw_rtldinf
       doc-ref:
-        - https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=libphobos/libdruntime/core/sys/solaris/sys/link.d;h=d9d47c0914;hb=HEAD#l76
+        - https://github.com/gcc-mirror/gcc/blob/240f07805d/libphobos/libdruntime/core/sys/solaris/sys/link.d#L76
         - https://github.com/illumos/illumos-gate/blob/1d806c5f41/usr/src/uts/common/sys/link.h#L135
     0x6000000f:
       id: sunw_filter
@@ -1590,7 +1590,7 @@ enums:
         the previous one (`DT_SUNW_RTLDINF`) and there is not even a single
         source supporting this other than verbatim copies of the same table.
       doc-ref:
-        - https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=libphobos/libdruntime/core/sys/solaris/sys/link.d;h=d9d47c0914;hb=HEAD#l77
+        - https://github.com/gcc-mirror/gcc/blob/240f07805d/libphobos/libdruntime/core/sys/solaris/sys/link.d#L77
         - https://github.com/illumos/illumos-gate/blob/1d806c5f41/usr/src/uts/common/sys/link.h#L136
     0x60000010: sunw_cap
     0x60000011: sunw_symtab
