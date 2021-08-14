@@ -1310,16 +1310,77 @@ enums:
       id: lanai
       doc: Lanai 32-bit processor
       doc-ref: https://github.com/llvm/llvm-project/blob/f6928cf45516/llvm/include/llvm/BinaryFormat/ELF.h#L319
+    245:
+      id: ceva
+      doc: CEVA Processor Architecture Family
+      doc-ref: https://groups.google.com/g/generic-abi/c/cmq1LFFpWqU
+    246:
+      id: ceva_x2
+      doc: CEVA X2 Processor Family
+      doc-ref: https://groups.google.com/g/generic-abi/c/cmq1LFFpWqU
     247:
       id: bpf
       doc: Linux BPF - in-kernel virtual machine
+    248:
+      id: graphcore_ipu
+      doc: Graphcore Intelligent Processing Unit
+      doc-ref: https://groups.google.com/g/generic-abi/c/cmq1LFFpWqU
+    249:
+      id: img1
+      doc: Imagination Technologies
+      doc-ref: https://groups.google.com/g/generic-abi/c/cmq1LFFpWqU
+    250:
+      id: nfp
+      doc: Netronome Flow Processor (NFP)
+      doc-ref: https://groups.google.com/g/generic-abi/c/cmq1LFFpWqU
     251:
       id: ve
-      doc: NEC SX-Aurora VE
+      doc: NEC SX-Aurora Vector Engine (VE) processor
       doc-ref: https://github.com/llvm/llvm-project/blob/f6928cf45516/llvm/include/llvm/BinaryFormat/ELF.h#L321
     252:
       id: csky
       doc: C-SKY 32-bit processor
+    253:
+      id: arc_compact3_64
+      -orig-id: EM_ARC_COMPACT3_64
+      doc: Synopsys ARCv3 64-bit ISA/HS6x cores
+      doc-ref:
+        - https://gitlab.com/gnutools/binutils-gdb/-/blob/4ffb22ec40/include/elf/common.h#L350
+        - https://github.com/file/file/blob/9b2538d/magic/Magdir/elf#L301
+        - https://bugs.astron.com/view.php?id=251
+    254:
+      id: mcs6502
+      doc: MOS Technology MCS 6502 processor
+      doc-ref: https://gitlab.com/gnutools/binutils-gdb/-/blob/4ffb22ec40/include/elf/common.h#L351
+    255:
+      id: arc_compact3
+      -orig-id: EM_ARC_COMPACT3
+      doc: Synopsys ARCv3 32-bit
+      doc-ref:
+        - https://gitlab.com/gnutools/binutils-gdb/-/blob/4ffb22ec40/include/elf/common.h#L352
+        - https://github.com/file/file/blob/9b2538d/magic/Magdir/elf#L303
+        - https://bugs.astron.com/view.php?id=251
+    256:
+      id: kvx
+      doc: Kalray VLIW core of the MPPA processor family
+      doc-ref: https://gitlab.com/gnutools/binutils-gdb/-/blob/4ffb22ec40/include/elf/common.h#L353
+    257:
+      id: wdc65816
+      -orig-id: EM_65816
+      doc: WDC 65816/65C816
+      doc-ref: https://gitlab.com/gnutools/binutils-gdb/-/blob/4ffb22ec40/include/elf/common.h#L354
+    258:
+      id: loongarch
+      -orig-id: EM_LOONGARCH
+      doc: LoongArch
+      doc-ref: https://gitlab.com/gnutools/binutils-gdb/-/blob/4ffb22ec40/include/elf/common.h#L355
+    259:
+      id: kf32
+      -orig-id: EM_KF32
+      doc: ChipON KungFu32
+      doc-ref:
+        - https://gitlab.com/gnutools/binutils-gdb/-/blob/4ffb22ec40/include/elf/common.h#L356
+        - https://groups.google.com/g/generic-abi/c/n8tLQxj02YY
   ph_type:
     0: null_type
     1: load
