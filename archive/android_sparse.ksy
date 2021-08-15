@@ -14,10 +14,10 @@ doc: |
 
     A tool to create images for testing can be found in the Android source code tree:
 
-    <https://android.googlesource.com/platform/system/core/+/7b444f0/libsparse> - `img2simg.c`
+    <https://android.googlesource.com/platform/system/core/+/7b444f08c1/libsparse> - `img2simg.c`
 
     Note: this is not the same as the Android sparse data image format.
-doc-ref: https://android.googlesource.com/platform/system/core/+/7b444f0/libsparse/sparse_format.h
+doc-ref: https://android.googlesource.com/platform/system/core/+/7b444f08c1/libsparse/sparse_format.h
 seq:
   - id: img_header
     type: header
