@@ -19,14 +19,14 @@ doc: |
     Note: this is not the same as the Android sparse data image format.
 doc-ref: https://android.googlesource.com/platform/system/core/+/7b444f08c1/libsparse/sparse_format.h
 seq:
-  - id: img_header
-    type: header
+  - id: header
+    type: file_header
   - id: chunks
     type: chunk
     repeat: expr
-    repeat-expr: img_header.total_chunks
+    repeat-expr: header.total_chunks
 types:
-  header:
+  file_header:
      seq:
        - id: magic
          contents: [0x3a, 0xff, 0x26, 0xed]
@@ -58,11 +58,11 @@ types:
   chunk:
     seq:
       - id: header
-        type: fixed_header
+        type: chunk_header
       - id: body
         size: header.total_size - header._sizeof
     types:
-      fixed_header:
+      chunk_header:
         seq:
           - id: chunk_type
             type: u2
