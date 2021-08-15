@@ -22,23 +22,30 @@ doc-ref:
   - https://android.googlesource.com/platform/system/core/+/7b444f08c1/libsparse/sparse_format.h
   - https://source.android.com/devices/bootloader/images#sparse-image-format
 seq:
+  - id: header_prefix
+    type: file_header_prefix
+    doc: internal; access `_root.header` instead
   - id: header
+    size: header_prefix.len_header - header_prefix._sizeof
     type: file_header
   - id: chunks
     type: chunk
     repeat: expr
     repeat-expr: header.num_chunks
 types:
-  file_header:
+  file_header_prefix:
     seq:
       - id: magic
         contents: [0x3a, 0xff, 0x26, 0xed]
       - id: version
         type: version
-      - id: file_header_size
+        doc: internal; access `_root.header.version` instead
+      - id: len_header
         -orig-id: file_hdr_sz
         type: u2
-        doc: size of file header, should be 28
+        doc: internal; access `_root.header.len_header` instead
+  file_header:
+    seq:
       - id: chunk_header_size
         -orig-id: chunk_hdr_sz
         type: u2
@@ -60,6 +67,12 @@ types:
         -orig-id: image_checksum
         type: u4
         doc: CRC32 checksum of the original data
+    instances:
+      version:
+        value: _root.header_prefix.version
+      len_header:
+        value: _root.header_prefix.len_header
+        doc: size of file header, should be 28
   chunk:
     seq:
       - id: header
