@@ -145,6 +145,32 @@ types:
       mask_proc:
         value: value & 0xf0000000 != 0
         doc: "Processor-specific"
+  dt_flag_values:
+    doc-ref:
+      - 'https://refspecs.linuxbase.org/elf/gabi4+/ch5.dynamic.html Figure 5-11: DT_FLAGS values'
+      - https://github.com/golang/go/blob/48dfddbab3/src/debug/elf/elf.go#L1079-L1095
+      - https://docs.oracle.com/cd/E37838_01/html/E36783/chapter6-42444.html#OSLLGchapter7-tbl-5
+    params:
+      - id: value
+        type: u4
+    instances:
+      origin:
+        value: value & 0x00000001 != 0
+        doc: object may reference the $ORIGIN substitution string
+      symbolic:
+        value: value & 0x00000002 != 0
+        doc: symbolic linking
+      textrel:
+        value: value & 0x00000004 != 0
+        doc: relocation entries might request modifications to a non-writable segment
+      bind_now:
+        value: value & 0x00000008 != 0
+        doc: |
+          all relocations for this object must be processed before returning
+          control to the program
+      static_tls:
+        value: value & 0x00000010 != 0
+        doc: object uses static thread-local storage scheme
   dt_flag_1_values:
     params:
       - id: value
@@ -479,6 +505,10 @@ types:
           tag_enum:
             value: tag
             enum: dynamic_array_tags
+          flag_values:
+            type: dt_flag_values(value_or_ptr)
+            if: "tag_enum == dynamic_array_tags::flags"
+            -webide-parse-mode: eager
           flag_1_values:
             type: dt_flag_1_values(value_or_ptr)
             if: "tag_enum == dynamic_array_tags::flags_1"
