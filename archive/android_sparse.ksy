@@ -74,6 +74,7 @@ types:
         value: _root.header_prefix.len_header
         doc: size of file header, should be 28
   chunk:
+    -webide-representation: '{header}'
     seq:
       - id: header
         size: _root.header.len_chunk_header
@@ -82,6 +83,7 @@ types:
         size: header.len_body
     types:
       chunk_header:
+        -webide-representation: '{chunk_type}: {num_body_blocks:dec} blocks'
         seq:
           - id: chunk_type
             type: u2
