@@ -79,7 +79,7 @@ types:
         size: _root.header.len_chunk_header
         type: chunk_header
       - id: body
-        size: header.total_size - _root.header.len_chunk_header
+        size: header.len_body
     types:
       chunk_header:
         seq:
@@ -88,14 +88,31 @@ types:
             enum: chunk_types
           - id: reserved1
             type: u2
-          - id: chunk_size
+          - id: num_body_blocks
             -orig-id: chunk_sz
             type: u4
-            doc: in blocks in output image
-          - id: total_size
+            doc: size of the chunk body in blocks in output image
+          - id: len_chunk
             -orig-id: total_sz
             type: u4
+            valid:
+              eq: 'len_body_expected != -1 ? _root.header.len_chunk_header + len_body_expected : len_chunk'
             doc: in bytes of chunk input file including chunk header and data
+        instances:
+          len_body:
+            value: len_chunk - _root.header.len_chunk_header
+          len_body_expected:
+            value: |
+              chunk_type == chunk_types::raw ? _root.header.block_size * num_body_blocks :
+              chunk_type == chunk_types::fill ? 4 :
+              chunk_type == chunk_types::dont_care ? 0 :
+              chunk_type == chunk_types::crc32 ? 4 :
+              -1
+            doc-ref:
+              - https://android.googlesource.com/platform/system/core/+/7b444f08c1/libsparse/sparse_read.cpp#184  # ::raw
+              - https://android.googlesource.com/platform/system/core/+/7b444f08c1/libsparse/sparse_read.cpp#215  # ::fill
+              - https://android.googlesource.com/platform/system/core/+/7b444f08c1/libsparse/sparse_read.cpp#249  # ::dont_care
+              - https://android.googlesource.com/platform/system/core/+/7b444f08c1/libsparse/sparse_read.cpp#270  # ::crc32
   version:
     seq:
       - id: major
