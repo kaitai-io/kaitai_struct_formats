@@ -18,7 +18,9 @@ doc: |
     <https://android.googlesource.com/platform/system/core/+/7b444f08c1/libsparse> - `img2simg.c`
 
     Note: this is not the same as the Android sparse data image format.
-doc-ref: https://android.googlesource.com/platform/system/core/+/7b444f08c1/libsparse/sparse_format.h
+doc-ref:
+  - https://android.googlesource.com/platform/system/core/+/7b444f08c1/libsparse/sparse_format.h
+  - https://source.android.com/devices/bootloader/images#sparse-image-format
 seq:
   - id: header
     type: file_header
@@ -44,7 +46,9 @@ types:
       - id: block_size
         -orig-id: blk_sz
         type: u4
-        doc: block size in bytes, multiple of 4
+        valid:
+          expr: _ % 4 == 0
+        doc: block size in bytes, must be a multiple of 4
       - id: num_blocks
         -orig-id: total_blks
         type: u4
