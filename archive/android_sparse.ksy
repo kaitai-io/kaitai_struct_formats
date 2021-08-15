@@ -86,12 +86,14 @@ types:
           - id: chunk_type
             type: u2
             enum: chunk_types
-          - id: reserved
+          - id: reserved1
             type: u2
           - id: chunk_size
+            -orig-id: chunk_sz
             type: u4
             doc: in blocks in output image
           - id: total_size
+            -orig-id: total_sz
             type: u4
             doc: in bytes of chunk input file including chunk header and data
   version:
