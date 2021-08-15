@@ -21,8 +21,8 @@ doc-ref: https://android.googlesource.com/platform/system/core/+/7b444f0/libspar
 seq:
   - id: img_header
     type: header
-  - id: img_header_entries
-    type: image_header_entry
+  - id: chunks
+    type: chunk
     repeat: expr
     repeat-expr: img_header.total_chunks
 types:
@@ -55,7 +55,7 @@ types:
          -orig-id: image_checksum
          type: u4
          doc: CRC32 checksum of the original data
-  image_header_entry:
+  chunk:
     seq:
       - id: header
         type: fixed_header
