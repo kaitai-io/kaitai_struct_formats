@@ -6,6 +6,7 @@ meta:
     - archive
     - android
   license: CC0-1.0
+  ks-version: 0.9
   endian: le
 doc: |
     The Android sparse format is a format to more efficiently store files
