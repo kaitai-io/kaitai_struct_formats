@@ -46,7 +46,7 @@ types:
         doc: internal; access `_root.header.len_header` instead
   file_header:
     seq:
-      - id: chunk_header_size
+      - id: len_chunk_header
         -orig-id: chunk_hdr_sz
         type: u2
         doc: size of chunk header, should be 12
@@ -76,9 +76,10 @@ types:
   chunk:
     seq:
       - id: header
+        size: _root.header.len_chunk_header
         type: chunk_header
       - id: body
-        size: header.total_size - header._sizeof
+        size: header.total_size - _root.header.len_chunk_header
     types:
       chunk_header:
         seq:
