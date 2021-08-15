@@ -25,7 +25,7 @@ seq:
   - id: chunks
     type: chunk
     repeat: expr
-    repeat-expr: header.total_chunks
+    repeat-expr: header.num_chunks
 types:
   file_header:
      seq:
@@ -45,11 +45,11 @@ types:
          -orig-id: blk_sz
          type: u4
          doc: block size in bytes, multiple of 4
-       - id: total_blocks
+       - id: num_blocks
          -orig-id: total_blks
          type: u4
          doc: blocks in the original data
-       - id: total_chunks
+       - id: num_chunks
          -orig-id: total_chunks
          type: u4
        - id: checksum
