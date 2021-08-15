@@ -1,6 +1,6 @@
 meta:
   id: android_sparse
-  title: Android Sparse image
+  title: Android sparse image
   file-extension: img
   tags:
     - archive
