@@ -85,7 +85,6 @@ types:
           - id: chunk_type
             type: u2
             enum: chunk_types
-            doc: chunk type
           - id: reserved
             type: u2
           - id: chunk_size
