@@ -28,34 +28,34 @@ seq:
     repeat-expr: header.num_chunks
 types:
   file_header:
-     seq:
-       - id: magic
-         contents: [0x3a, 0xff, 0x26, 0xed]
-       - id: version
-         type: version
-       - id: file_header_size
-         -orig-id: file_hdr_sz
-         type: u2
-         doc: size of file header, should be 28
-       - id: chunk_header_size
-         -orig-id: chunk_hdr_sz
-         type: u2
-         doc: size of chunk header, should be 12
-       - id: block_size
-         -orig-id: blk_sz
-         type: u4
-         doc: block size in bytes, multiple of 4
-       - id: num_blocks
-         -orig-id: total_blks
-         type: u4
-         doc: blocks in the original data
-       - id: num_chunks
-         -orig-id: total_chunks
-         type: u4
-       - id: checksum
-         -orig-id: image_checksum
-         type: u4
-         doc: CRC32 checksum of the original data
+    seq:
+      - id: magic
+        contents: [0x3a, 0xff, 0x26, 0xed]
+      - id: version
+        type: version
+      - id: file_header_size
+        -orig-id: file_hdr_sz
+        type: u2
+        doc: size of file header, should be 28
+      - id: chunk_header_size
+        -orig-id: chunk_hdr_sz
+        type: u2
+        doc: size of chunk header, should be 12
+      - id: block_size
+        -orig-id: blk_sz
+        type: u4
+        doc: block size in bytes, multiple of 4
+      - id: num_blocks
+        -orig-id: total_blks
+        type: u4
+        doc: blocks in the original data
+      - id: num_chunks
+        -orig-id: total_chunks
+        type: u4
+      - id: checksum
+        -orig-id: image_checksum
+        type: u4
+        doc: CRC32 checksum of the original data
   chunk:
     seq:
       - id: header
