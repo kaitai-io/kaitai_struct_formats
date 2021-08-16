@@ -87,6 +87,11 @@ types:
         type: chunk_header
       - id: body
         size: header.len_body
+        type:
+          switch-on: header.chunk_type
+          cases:
+            chunk_types::crc32: u4
+            # byte array for all other chunk types
     types:
       chunk_header:
         -webide-representation: '{chunk_type}: {num_body_blocks:dec} blocks'
