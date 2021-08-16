@@ -15,11 +15,11 @@ doc: |
 
     A tool to create images for testing can be found in the Android source code tree:
 
-    <https://android.googlesource.com/platform/system/core/+/7b444f08c1/libsparse> - `img2simg.c`
+    <https://android.googlesource.com/platform/system/core/+/e8d02c50d7/libsparse> - `img2simg.c`
 
     Note: this is not the same as the Android sparse data image format.
 doc-ref:
-  - https://android.googlesource.com/platform/system/core/+/7b444f08c1/libsparse/sparse_format.h
+  - https://android.googlesource.com/platform/system/core/+/e8d02c50d7/libsparse/sparse_format.h
   - https://source.android.com/devices/bootloader/images#sparse-image-format
 seq:
   - id: header_prefix
@@ -122,10 +122,10 @@ types:
               chunk_type == chunk_types::crc32 ? 4 :
               -1
             doc-ref:
-              - https://android.googlesource.com/platform/system/core/+/7b444f08c1/libsparse/sparse_read.cpp#184  # ::raw
-              - https://android.googlesource.com/platform/system/core/+/7b444f08c1/libsparse/sparse_read.cpp#215  # ::fill
-              - https://android.googlesource.com/platform/system/core/+/7b444f08c1/libsparse/sparse_read.cpp#249  # ::dont_care
-              - https://android.googlesource.com/platform/system/core/+/7b444f08c1/libsparse/sparse_read.cpp#270  # ::crc32
+              - https://android.googlesource.com/platform/system/core/+/e8d02c50d7/libsparse/sparse_read.cpp#184  # ::raw
+              - https://android.googlesource.com/platform/system/core/+/e8d02c50d7/libsparse/sparse_read.cpp#215  # ::fill
+              - https://android.googlesource.com/platform/system/core/+/e8d02c50d7/libsparse/sparse_read.cpp#249  # ::dont_care
+              - https://android.googlesource.com/platform/system/core/+/e8d02c50d7/libsparse/sparse_read.cpp#270  # ::crc32
   version:
     seq:
       - id: major
