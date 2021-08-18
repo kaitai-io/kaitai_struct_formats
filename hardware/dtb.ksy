@@ -95,11 +95,12 @@ types:
       - id: size
         type: u8
         doc: size of a reserved memory region
-  strings:
+  fdt_block:
     seq:
-      - id: strings
-        type: strz
-        repeat: eos
+      - id: fdt_nodes
+        type: fdt_node
+        repeat: until
+        repeat-until: _.type == fdt::end
   fdt_node:
     -webide-representation: '{type} {body}'
     seq:
@@ -112,12 +113,6 @@ types:
           cases:
             fdt::begin_node: fdt_begin_node
             fdt::prop: fdt_prop
-  fdt_block:
-    seq:
-      - id: fdt_nodes
-        type: fdt_node
-        repeat: until
-        repeat-until: _.type == fdt::end
   fdt_begin_node:
     -webide-representation: '{name}'
     seq:
@@ -144,6 +139,11 @@ types:
         pos: ofs_name
         type: strz
         -webide-parse-mode: eager
+  strings:
+    seq:
+      - id: strings
+        type: strz
+        repeat: eos
 enums:
   fdt:
     0x00000001: begin_node
