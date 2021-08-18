@@ -1,5 +1,5 @@
 meta:
-  id: xar_header
+  id: xar
   title: eXtensible ARchiver
   file-extension:
     - pkg
