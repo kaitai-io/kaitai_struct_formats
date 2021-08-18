@@ -118,7 +118,7 @@ types:
     seq:
       - id: name
         type: strz
-      - id: boundary_padding
+      - id: padding
         size: (- _io.pos) % 4
   fdt_prop:
     -webide-representation: '{name}'
@@ -131,7 +131,7 @@ types:
         type: u4
       - id: property
         size: len_property
-      - id: boundary_padding
+      - id: padding
         size: (- _io.pos) % 4
     instances:
       name:
