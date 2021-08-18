@@ -25,16 +25,15 @@ doc: |
   * <https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-firmware-ofw>
 
   The encoding of strings used in the strings block and struct block is
-  actually a subset of ASCII (section "2.2.1 Node Names"):
+  actually a subset of ASCII:
 
-  <https://github.com/devicetree-org/devicetree-specification/releases/download/v0.3/devicetree-specification-v0.3.pdf>
+  <https://devicetree-specification.readthedocs.io/en/v0.3/devicetree-basics.html#node-names>
 
   Example files:
 
   * <https://github.com/qemu/qemu/tree/master/pc-bios>
 doc-ref:
-  - https://github.com/devicetree-org/devicetree-specification/releases/download/v0.3/devicetree-specification-v0.3.pdf
-    Flattened Devicetree (DTB) Format
+  - https://devicetree-specification.readthedocs.io/en/v0.3/flattened-format.html
   - https://elinux.org/images/f/f4/Elc2013_Fernandes.pdf
 seq:
   - id: magic
