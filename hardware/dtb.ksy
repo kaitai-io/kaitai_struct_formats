@@ -15,9 +15,13 @@ meta:
   encoding: ASCII
   endian: be
 doc: |
-  Also referred to as Devicetree Blob (DTB). It is a flat
-  binary encoding of data (primarily devicetree data, although
-  other data is possible as well).
+  Also referred to as Devicetree Blob (DTB). It is a flat binary encoding
+  of data (primarily devicetree data, although other data is possible as well).
+  The data is internally stored as a tree of named nodes and properties. Nodes
+  contain properties and child nodes, while properties are name–value pairs.
+
+  The Devicetree Blobs (`.dtb` files) are compiled from the Devicetree Source
+  files (`.dts`) through the Devicetree compiler (DTC).
 
   On Linux systems that support this, the blobs can be accessed in
   `/sys/firmware/fdt`:
