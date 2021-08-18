@@ -83,7 +83,7 @@ instances:
 types:
   memory_block:
     seq:
-      - id: memory_block_entries
+      - id: entries
         type: memory_block_entry
         repeat: eos
   memory_block_entry:
@@ -96,7 +96,7 @@ types:
         doc: size of a reserved memory region
   fdt_block:
     seq:
-      - id: fdt_nodes
+      - id: nodes
         type: fdt_node
         repeat: until
         repeat-until: _.type == fdt::end
