@@ -19,12 +19,12 @@ doc: |
   binary encoding of data (primarily devicetree data, although
   other data is possible as well).
 
-  On Linux systems that support this the blobs can be accessed in
+  On Linux systems that support this, the blobs can be accessed in
   `/sys/firmware/fdt`:
 
   * <https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-firmware-ofw>
 
-  The encoding of strings used in the strings block and struct block is
+  The encoding of strings used in the `strings_block` and `structure_block` is
   actually a subset of ASCII:
 
   <https://devicetree-specification.readthedocs.io/en/v0.3/devicetree-basics.html#node-names>
