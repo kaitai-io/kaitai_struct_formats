@@ -9,6 +9,7 @@ meta:
     wikidata: Q16960371
   tags:
     - linux
+    - serialization
   license: CC0-1.0
   ks-version: 0.9
   encoding: ASCII
