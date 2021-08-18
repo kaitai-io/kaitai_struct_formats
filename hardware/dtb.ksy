@@ -54,7 +54,7 @@ seq:
     type: u4
   - id: version
     type: u4
-  - id: last_compatible_version
+  - id: min_compatible_version
     -orig-id: last_comp_version
     type: u4
     valid:
