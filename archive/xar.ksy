@@ -6,6 +6,7 @@ meta:
     - xar
     - xip
   xref:
+    justsolve: Xar_(Extensible_Archive)
     mime: application/x-xar
     pronom: fmt/600
     wikidata: Q1093556
