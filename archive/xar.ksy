@@ -1,6 +1,6 @@
 meta:
   id: xar
-  title: eXtensible ARchiver
+  title: XAR (eXtensible ARchive)
   file-extension:
     - pkg
     - xar
