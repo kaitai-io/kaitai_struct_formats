@@ -115,7 +115,7 @@ types:
         type: str
         size-eos: true
 enums:
-  # https://github.com/opensource-apple/cctools/blob/fdb4825/include/xar/xar.h#L63-L67
+  # https://github.com/apple-opensource/xar/blob/03d10ac/xar/include/xar.h.in#L67-L73
   checksum_algorithms_apple:
     0: none
     1: sha1
