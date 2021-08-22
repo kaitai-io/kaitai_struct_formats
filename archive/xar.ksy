@@ -15,16 +15,12 @@ meta:
   encoding: UTF-8
   endian: be
 doc: |
-  From Wikipedia:
+  From [Wikipedia](https://en.wikipedia.org/wiki/Xar_(archiver)):
 
   "XAR (short for eXtensible ARchive format) is an open source file archiver
   and the archiver’s file format. It was created within the OpenDarwin project
   and is used in macOS X 10.5 and up for software installation routines, as
   well as browser extensions in Safari 5.0 and up."
-
-  It should be noted that there is a different version from Apple which uses
-  the same version number as the (unmaintained) version described here and
-  supports additional checksums, but doesn't have `checksum_alg_name`.
 doc-ref: https://github.com/mackyle/xar/wiki/xarformat
 seq:
   - id: header_prefix
