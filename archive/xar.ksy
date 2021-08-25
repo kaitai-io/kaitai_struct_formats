@@ -2,8 +2,8 @@ meta:
   id: xar
   title: XAR (eXtensible ARchive)
   file-extension:
-    - pkg
     - xar
+    - pkg
     - xip
   xref:
     justsolve: Xar_(Extensible_Archive)
