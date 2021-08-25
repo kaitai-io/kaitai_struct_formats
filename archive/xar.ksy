@@ -80,7 +80,7 @@ types:
         doc: |
           If it is not
 
-          * `""` (empty string), indicating an unknown integer value (read
+          * `""` (empty string), indicating an unknown integer value (access
             `checksum_algorithm_int` for debugging purposes to find out
             what that value is), or
           * `"none"`, indicating that the TOC checksum is not provided (in that
