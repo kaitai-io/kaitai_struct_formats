@@ -90,7 +90,8 @@ doc: |
 
   ---
 
-  The `bootloader.img` sample files referenced above come from the page
+  The `bootloader-*.img` samples referenced above originally come from factory
+  images packed in ZIP archives that can be found on the page
   [Factory Images for Nexus and Pixel Devices](https://developers.google.com/android/images)
   on the Google Developers site. Note that the codenames on that page may be
   different than the ones that are written in the list above. That's because
