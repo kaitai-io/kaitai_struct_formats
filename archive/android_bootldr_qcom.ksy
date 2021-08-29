@@ -112,12 +112,13 @@ seq:
   - id: len_img_bodies
     -orig-id: bootldr_size
     type: u4
-  - id: img_info_headers
-    type: img_info_header
+  - id: img_headers
+    -orig-id: img_info
+    type: img_header
     repeat: expr
     repeat-expr: num_images
 types:
-  img_info_header:
+  img_header:
     -webide-representation: '{name}'
     seq:
       - id: name
