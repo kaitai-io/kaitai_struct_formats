@@ -19,6 +19,14 @@ doc: |
   [sample-angler]: https://androidfilehost.com/?fid=11410963190603870158 "bootloader-angler-angler-03.84.img"
   [others-angler]: https://androidfilehost.com/?w=search&s=bootloader-angler&type=files
 
+  All image versions can be found in factory images at
+  <https://developers.google.com/android/images> for the specific device. To
+  avoid having to download an entire ZIP archive when you only need one file
+  from it, install [remotezip](https://github.com/gtsystem/python-remotezip) and
+  use its [command line
+  tool](https://github.com/gtsystem/python-remotezip#command-line-tool) to list
+  members in the archive and then to download only the file you want.
+
 doc-ref: https://android.googlesource.com/device/huawei/angler/+/673cfb9/releasetools.py
 seq:
   - id: meta_header
