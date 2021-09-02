@@ -2,8 +2,8 @@ meta:
   id: wav
   title: Microsoft WAVE audio file
   file-extension:
-    - bwf
     - wav
+    - bwf
   xref:
     justsolve: WAV
     loc:
