@@ -8,9 +8,14 @@ meta:
   license: CC0-1.0
   endian: le
 doc: |
-  Format of boot files found on certain Android devices from Huawei.
+  Format of `bootloader-*.img` files found in factory images of certain Android devices from Huawei:
 
-  Example device: Nexus 6P
+  * Nexus 6P "angler": [sample][sample-angler] ([other samples][others-angler]),
+    [releasetools.py](https://android.googlesource.com/device/huawei/angler/+/cf92cd8/releasetools.py#29)
+
+  [sample-angler]: https://androidfilehost.com/?fid=11410963190603870158 "bootloader-angler-angler-03.84.img"
+  [others-angler]: https://androidfilehost.com/?w=search&s=bootloader-angler&type=files
+
 doc-ref: https://android.googlesource.com/device/huawei/angler/+/673cfb9/releasetools.py
 seq:
   - id: img_header
