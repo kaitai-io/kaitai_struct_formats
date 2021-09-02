@@ -219,9 +219,9 @@ types:
 
   fact_chunk_type:
     seq:
-      - id: sample_length
+      - id: num_samples_per_channel
+        -orig-id: dwSampleLength
         type: u4
-        doc: Number of samples per channel
         doc-ref: http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html
 
   format_chunk_type:
