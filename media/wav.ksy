@@ -137,6 +137,7 @@ types:
         type: strz
 
   bext_chunk_type:
+    doc-ref: https://en.wikipedia.org/wiki/Broadcast_Wave_Format
     seq:
       - id: description
         size: 256
@@ -171,22 +172,21 @@ types:
         type: u2
       - id: max_short_term_loudness
         type: u2
-    doc-ref: https://en.wikipedia.org/wiki/Broadcast_Wave_Format
 
   axml_chunk_type:
+    doc-ref: https://tech.ebu.ch/docs/tech/tech3285s5.pdf
     seq:
       - id: body
         type: str
         size-eos: true
         encoding: UTF-8
-    doc-ref: https://tech.ebu.ch/docs/tech/tech3285s5.pdf
 
   ixml_chunk_type:
+    doc-ref: https://en.wikipedia.org/wiki/IXML
     seq:
       - id: body
         type: strz
         encoding: UTF-8
-    doc-ref: https://en.wikipedia.org/wiki/IXML
 
   cue_chunk_type:
     seq:
@@ -346,13 +346,13 @@ types:
         doc: chunk containing XMP data
         doc-ref: https://wwwimages2.adobe.com/content/dam/acom/en/devnet/xmp/pdfs/XMP%20SDK%20Release%20cc-2016-08/XMPSpecificationPart3.pdf
   afsp_chunk_type:
+    doc-ref: http://www-mmsp.ece.mcgill.ca/Documents/Downloads/AFsp/
     seq:
       - id: afspid
         contents: "AFsp"
       - id: text
         type: strz
         encoding: UTF-8
-    doc-ref: http://www-mmsp.ece.mcgill.ca/Documents/Downloads/AFsp/
 
 enums:
   w_format_tag_type:
