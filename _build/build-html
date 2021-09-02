@@ -359,7 +359,7 @@ class FormatPagesGenerator
     when 'justsolve'
       "http://fileformats.archiveteam.org/wiki/#{value}"
     when 'loc'
-      "http://www.loc.gov/preservation/digital/formats/fdd/#{value}.shtml"
+      "https://www.loc.gov/preservation/digital/formats/fdd/#{value}.shtml"
     when 'mime'
       "https://www.iana.org/assignments/media-types/#{value}"
     when 'pronom'
