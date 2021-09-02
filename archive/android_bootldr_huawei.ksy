@@ -56,14 +56,18 @@ types:
         type: image_hdr_entry
         repeat: eos
   image_hdr_entry:
+    -webide-representation: '{name} - o:{ofs_body}, s:{len_body}'
     seq:
       - id: name
         size: 72
         type: strz
         doc: partition name
-      - id: offset
+      - id: ofs_body
         type: u4
-        doc: partition offset from the beginning of the file
-      - id: size
+      - id: len_body
         type: u4
-        doc: partition size
+    instances:
+      body:
+        io: _root._io
+        pos: ofs_body
+        size: len_body
