@@ -6,6 +6,9 @@ meta:
     - archive
     - android
   license: CC0-1.0
+  # The `releasetools.py` script is written for Python 2, where the default
+  # encoding is ASCII.
+  encoding: ASCII
   endian: le
 doc: |
   A bootloader for Android used on various devices powered by Qualcomm
@@ -163,7 +166,6 @@ types:
       - id: name
         size: 64
         type: strz
-        encoding: UTF-8
       - id: len_body
         type: u4
   img_body:
