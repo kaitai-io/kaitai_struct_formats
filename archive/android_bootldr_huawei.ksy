@@ -18,13 +18,15 @@ doc: |
 
 doc-ref: https://android.googlesource.com/device/huawei/angler/+/673cfb9/releasetools.py
 seq:
-  - id: img_header
-    type: header
-  - id: entries
-    type: entries
-    size: img_header.image_header_size
+  - id: meta_header
+    type: meta_hdr
+  - id: header_ext
+    size: meta_header.len_meta_header - meta_header._sizeof
+  - id: image_header
+    size: meta_header.len_image_header
+    type: image_hdr
 types:
-  header:
+  meta_hdr:
     seq:
       - id: magic
         contents: [0x3c, 0xd6, 0x1a, 0xce]
@@ -32,9 +34,11 @@ types:
         type: version
       - id: image_version
         size: 64
-      - id: meta_header_size
+      - id: len_meta_header
+        -orig-id: meta_hdr_sz
         type: u2
-      - id: image_header_size
+      - id: len_image_header
+        -orig-id: img_hdr_sz
         type: u2
   version:
     seq:
@@ -42,12 +46,12 @@ types:
         type: u2
       - id: minor
         type: u2
-  entries:
+  image_hdr:
     seq:
       - id: entries
-        type: entry
+        type: image_hdr_entry
         repeat: eos
-  entry:
+  image_hdr_entry:
     seq:
       - id: name
         type: strz
