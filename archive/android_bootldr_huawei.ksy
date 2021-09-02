@@ -1,5 +1,5 @@
 meta:
-  id: android_img_huawei
+  id: android_bootldr_huawei
   title: Huawei Bootloader packed image format
   file-extension: img
   tags:
