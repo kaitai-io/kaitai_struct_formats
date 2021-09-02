@@ -11,7 +11,7 @@ doc: |
   Format of boot files found on certain Android devices from Huawei.
 
   Example device: Nexus 6P
-doc-ref: https://android.googlesource.com/device/huawei/angler/+/673cfb95bf3dccabae32b382bb17f2b08435b840/releasetools.py
+doc-ref: https://android.googlesource.com/device/huawei/angler/+/673cfb9/releasetools.py
 seq:
   - id: img_header
     type: header
