@@ -14,8 +14,8 @@ doc: |
   <https://en.wikipedia.org/wiki/Devices_using_Qualcomm_Snapdragon_processors>
 
   Although not all of the Snapdragon based Android devices use this particular
-  bootloader format, it is known that devices with the following chips have
-  used it (example devices are given for each chip):
+  bootloader format, it is known that devices with the following chips have used
+  it (example devices are given for each chip):
 
   * APQ8064 ([devices](https://en.wikipedia.org/wiki/Devices_using_Qualcomm_Snapdragon_processors#Snapdragon_S4_Pro))
     - Nexus 4 "mako": [sample][sample-mako] ([other samples][others-mako]),
@@ -30,18 +30,30 @@ doc: |
       [releasetools.py](https://android.googlesource.com/device/lge/bullhead/+/2994b6b/releasetools.py#126)
 
   * APQ8064-1AA ([devices](https://en.wikipedia.org/wiki/Devices_using_Qualcomm_Snapdragon_processors#Snapdragon_600_(2013)))
-    - Nexus 7 \[2013] (Mobile) "deb": [sample][sample-deb] ([other samples][others-deb]),
+    - Nexus 7 \[2013] (Mobile) "deb" <a href="#doc-note-data-after-img-bodies">(\**)</a>: [sample][sample-deb] ([other samples][others-deb]),
       [releasetools.py](https://android.googlesource.com/device/asus/deb/+/14c1638/releasetools.py#105)
-    - Nexus 7 \[2013] (Wi-Fi) "flo": [sample][sample-flo] ([other samples][others-flo]),
+    - Nexus 7 \[2013] (Wi-Fi) "flo" <a href="#doc-note-data-after-img-bodies">(\**)</a>: [sample][sample-flo] ([other samples][others-flo]),
       [releasetools.py](https://android.googlesource.com/device/asus/flo/+/9d9fee9/releasetools.py#130)
 
   * MSM8996 Pro-AB ([devices](https://en.wikipedia.org/wiki/Devices_using_Qualcomm_Snapdragon_processors#Snapdragon_820_and_821_(2016)))
-    - Pixel "sailfish": [sample][sample-sailfish] ([other samples][others-sailfish])
-    - Pixel XL "marlin": [sample][sample-marlin] ([other samples][others-marlin])
+    - Pixel "sailfish" <a href="#doc-note-bootloader-size">(\*)</a>:
+      [sample][sample-sailfish] ([other samples][others-sailfish])
+    - Pixel XL "marlin" <a href="#doc-note-bootloader-size">(\*)</a>:
+      [sample][sample-marlin] ([other samples][others-marlin])
 
   * MSM8998 ([devices](https://en.wikipedia.org/wiki/Devices_using_Qualcomm_Snapdragon_processors#Snapdragon_835_(2017)))
-    - Pixel 2 "walleye": [sample][sample-walleye] ([other samples][others-walleye])
+    - Pixel 2 "walleye" <a href="#doc-note-bootloader-size">(\*)</a>: [sample][sample-walleye] ([other samples][others-walleye])
     - Pixel 2 XL "taimen": [sample][sample-taimen] ([other samples][others-taimen])
+
+  <small id="doc-note-bootloader-size">(\*)
+  `bootloader_size` is equal to the size of the whole file (not just `img_bodies` as usual).
+  </small>
+
+  <small id="doc-note-data-after-img-bodies">(\**)
+  There are some data after the end of `img_bodies`.
+  </small>
+
+  ---
 
   On the other hand, devices with these chips **do not** use this format:
 
@@ -91,14 +103,14 @@ doc: |
   ---
 
   The `bootloader-*.img` samples referenced above originally come from factory
-  images packed in ZIP archives that can be found on the page
-  [Factory Images for Nexus and Pixel Devices](https://developers.google.com/android/images)
-  on the Google Developers site. Note that the codenames on that page may be
-  different than the ones that are written in the list above. That's because
-  the Google page indicates **ROM codenames** in headings (e.g. "occam" for Nexus 4)
-  but the above list uses **model codenames** (e.g. "mako" for Nexus 4)
-  because that is how the original `bootloader-*.img` files are identified.
-  For most devices, however, these code names are the same.
+  images packed in ZIP archives that can be found on the page [Factory Images
+  for Nexus and Pixel Devices](https://developers.google.com/android/images) on
+  the Google Developers site. Note that the codenames on that page may be
+  different than the ones that are written in the list above. That's because the
+  Google page indicates **ROM codenames** in headings (e.g. "occam" for Nexus 4)
+  but the above list uses **model codenames** (e.g. "mako" for Nexus 4) because
+  that is how the original `bootloader-*.img` files are identified. For most
+  devices, however, these code names are the same.
 
 doc-ref: https://android.googlesource.com/device/lge/hammerhead/+/7618a7d/releasetools.py
 seq:
@@ -109,12 +121,39 @@ seq:
   - id: ofs_img_bodies
     -orig-id: start_offset
     type: u4
-  - id: len_img_bodies
+  - id: bootloader_size
     -orig-id: bootldr_size
     type: u4
+    doc: |
+      According to all available `releasetools.py` versions from AOSP (links are
+      in the top-level `/doc`), this should determine only the size of
+      `img_bodies` - there is [an assertion](
+      https://android.googlesource.com/device/lge/hammerhead/+/7618a7d/releasetools.py#167)
+      for it.
+
+      However, files for certain Pixel devices (see `/doc`) apparently declare
+      the entire file size here (i.e. including also fields from `magic` to
+      `img_headers`). So if you interpreted `bootloader_size` as the size of
+      `img_bodies` substream in these files, you would exceed the end of file.
+      Although you could check that it fits in the file before attempting to
+      create a substream of that size, you wouldn't know if it's meant to
+      specify the size of just `img_bodies` or the size of the entire bootloader
+      payload (whereas there may be additional data after the end of payload)
+      until parsing `img_bodies` (or at least summing sizes from `img_headers`,
+      but that's stupid).
+
+      So this field isn't reliable enough to be used as the size of any
+      substream. If you want to check if it has a reasonable value, do so in
+      your application code.
   - id: img_headers
     -orig-id: img_info
     type: img_header
+    repeat: expr
+    repeat-expr: num_images
+instances:
+  img_bodies:
+    pos: ofs_img_bodies
+    type: img_body(_index)
     repeat: expr
     repeat-expr: num_images
 types:
@@ -127,3 +166,14 @@ types:
         encoding: UTF-8
       - id: len_body
         type: u4
+  img_body:
+    -webide-representation: '{img_header.name}: {img_header.len_body:dec} bytes'
+    params:
+      - id: idx
+        type: s4
+    seq:
+      - id: body
+        size: img_header.len_body
+    instances:
+      img_header:
+        value: _root.img_headers[idx]
