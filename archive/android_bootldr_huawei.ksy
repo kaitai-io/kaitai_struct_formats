@@ -6,6 +6,9 @@ meta:
     - archive
     - android
   license: CC0-1.0
+  # The `releasetools.py` script is written for Python 2, where the default
+  # encoding is ASCII.
+  encoding: ASCII
   endian: le
 doc: |
   Format of `bootloader-*.img` files found in factory images of certain Android devices from Huawei:
@@ -34,6 +37,7 @@ types:
         type: version
       - id: image_version
         size: 64
+        type: strz
       - id: len_meta_header
         -orig-id: meta_hdr_sz
         type: u2
@@ -54,9 +58,8 @@ types:
   image_hdr_entry:
     seq:
       - id: name
-        type: strz
-        encoding: UTF-8
         size: 72
+        type: strz
         doc: partition name
       - id: offset
         type: u4
