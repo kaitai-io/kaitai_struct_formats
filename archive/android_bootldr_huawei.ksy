@@ -25,17 +25,17 @@ seq:
     size: img_header.image_header_size
 types:
   header:
-     seq:
-        - id: magic
-          contents: [0x3c, 0xd6, 0x1a, 0xce]
-        - id: version
-          type: version
-        - id: image_version
-          size: 64
-        - id: meta_header_size
-          type: u2
-        - id: image_header_size
-          type: u2
+    seq:
+      - id: magic
+        contents: [0x3c, 0xd6, 0x1a, 0xce]
+      - id: version
+        type: version
+      - id: image_version
+        size: 64
+      - id: meta_header_size
+        type: u2
+      - id: image_header_size
+        type: u2
   version:
     seq:
       - id: major
