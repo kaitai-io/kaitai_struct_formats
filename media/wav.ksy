@@ -57,7 +57,6 @@ doc: |
 doc-ref:
   - http://soundfile.sapp.org/doc/WaveFormat/
   - https://web.archive.org/web/20101031101749/http://www.ebu.ch/fr/technical/publications/userguides/bwf_user_guide.php
-  - https://www.itu.int/rec/R-REC-BS.2076-2-201910-I/en
 seq:
   - id: chunk
     type: 'riff::chunk'
@@ -643,6 +642,8 @@ enums:
     0x6c6d7861: axml
     0x4c4d5869: ixml
     # Audio definition model
-    0x616e6863: chna
+    0x616e6863:
+      id: chna
+      doc-ref: https://www.itu.int/rec/R-REC-BS.2076-2-201910-I/en
     # AFsp
     0x70736661: afsp
