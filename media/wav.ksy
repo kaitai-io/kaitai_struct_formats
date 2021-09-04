@@ -63,7 +63,7 @@ doc: |
   An extension of the file format is the Broadcast Wave Format (BWF) for radio
   broadcasts. Sample files can be found at:
 
-  https://www.bbc.co.uk/rd/publications/saqas
+  <https://www.bbc.co.uk/rd/publications/saqas>
 
   This Kaitai implementation was written by John Byrd of Gigantic Software
   (jbyrd@giganticsoftware.com), and it is likely to contain bugs.
