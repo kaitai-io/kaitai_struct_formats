@@ -358,6 +358,10 @@ types:
         # defined. Therefore, it seems reasonable to assume ASCII.
         encoding: ASCII
         repeat: eos
+        doc: |
+          An array of AFsp information records, in the `<field_name>: <value>`
+          format (e.g. "`program: CopyAudio`"). The list of existing information
+          record types are available in the `doc-ref` links.
         doc-ref:
           - http://www-mmsp.ece.mcgill.ca/Documents/Software/Packages/AFsp/libtsp/AFsetInfo.html
           - http://www-mmsp.ece.mcgill.ca/Documents/Software/Packages/AFsp/libtsp/AFprintInfoRecs.html
