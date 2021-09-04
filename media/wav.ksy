@@ -650,9 +650,10 @@ enums:
     0x74786562: bext
     0x6c6d7861: axml
     0x4c4d5869: ixml
-    # Audio definition model
     0x616e6863:
       id: chna
+      doc: Audio definition model
       doc-ref: https://www.itu.int/rec/R-REC-BS.2076-2-201910-I/en
-    # AFsp
-    0x70736661: afsp
+    0x70736661:
+      id: afsp
+      doc: AFsp metadata
