@@ -47,7 +47,7 @@ doc: |
   a "fmt " chunk specifying the data format and a "data" chunk containing
   the actual sample data, although other chunks exist and are used.
 
-  An extension of the file format is the Broadcast Wave Format for radio
+  An extension of the file format is the Broadcast Wave Format (BWF) for radio
   broadcasts. Sample files can be found at:
 
   https://www.bbc.co.uk/rd/publications/saqas
