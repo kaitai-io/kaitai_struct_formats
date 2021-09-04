@@ -69,6 +69,7 @@ doc: |
   (jbyrd@giganticsoftware.com), and it is likely to contain bugs.
 doc-ref:
   - http://soundfile.sapp.org/doc/WaveFormat/
+  - http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html
   - https://web.archive.org/web/20101031101749/http://www.ebu.ch/fr/technical/publications/userguides/bwf_user_guide.php
 seq:
   - id: chunk
@@ -231,8 +232,10 @@ types:
         size-eos: true
 
   fact_chunk_type:
-    doc: required for all non-PCM formats (other than `w_format_tag_type::pcm`)
-    doc-ref: http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html
+    doc: |
+      required for all non-PCM formats
+      (`w_format_tag != w_format_tag_type::pcm` or `not is_basic_pcm` in
+      `format_chunk_type` context)
     seq:
       - id: num_samples_per_channel
         -orig-id: dwSampleLength
