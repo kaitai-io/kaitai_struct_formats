@@ -352,7 +352,9 @@ types:
         contents: "AFsp"
       - id: info_records
         type: strz
-        encoding: UTF-8
+        # The AFsp package uses C strings, so the encoding isn't strictly
+        # defined. Therefore, it seems reasonable to assume ASCII.
+        encoding: ASCII
         repeat: eos
         doc-ref:
           - http://www-mmsp.ece.mcgill.ca/Documents/Software/Packages/AFsp/libtsp/AFsetInfo.html
