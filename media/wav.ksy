@@ -638,10 +638,10 @@ enums:
     0x20336469: id3
     0x4b414550: peak
     0x584d505f: pmx
-    0x4c4d5869: ixml
     # BWF chunks
     0x74786562: bext
     0x6c6d7861: axml
+    0x4c4d5869: ixml
     # Audio definition model
     0x616e6863: chna
     # AFsp
