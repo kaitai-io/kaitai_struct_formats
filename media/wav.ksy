@@ -217,11 +217,12 @@ types:
         size-eos: true
 
   fact_chunk_type:
+    doc: required for all non-PCM formats (other than `w_format_tag_type::pcm`)
+    doc-ref: http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html
     seq:
       - id: num_samples_per_channel
         -orig-id: dwSampleLength
         type: u4
-        doc-ref: http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html
 
   format_chunk_type:
     seq:
