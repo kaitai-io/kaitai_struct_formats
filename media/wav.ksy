@@ -349,9 +349,13 @@ types:
     seq:
       - id: magic
         contents: "AFsp"
-      - id: text
+      - id: info_records
         type: strz
         encoding: UTF-8
+        repeat: eos
+        doc-ref:
+          - http://www-mmsp.ece.mcgill.ca/Documents/Software/Packages/AFsp/libtsp/AFsetInfo.html
+          - http://www-mmsp.ece.mcgill.ca/Documents/Software/Packages/AFsp/libtsp/AFprintInfoRecs.html
 
 enums:
   w_format_tag_type:
