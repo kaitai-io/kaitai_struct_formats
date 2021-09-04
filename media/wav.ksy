@@ -176,8 +176,8 @@ types:
     doc-ref: https://tech.ebu.ch/docs/tech/tech3285s5.pdf
     seq:
       - id: body
-        type: str
         size-eos: true
+        type: str
         encoding: UTF-8
 
   ixml_chunk_type:
