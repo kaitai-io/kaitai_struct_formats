@@ -348,7 +348,7 @@ types:
   afsp_chunk_type:
     doc-ref: http://www-mmsp.ece.mcgill.ca/Documents/Downloads/AFsp/
     seq:
-      - id: afspid
+      - id: magic
         contents: "AFsp"
       - id: text
         type: strz
