@@ -1,5 +1,5 @@
 meta:
-  id: android_asus_bootldr
+  id: android_bootldr_asus
   title: ASUS Fugu bootloader.img format (version 2 and later)
   file-extension: img
   tags:
