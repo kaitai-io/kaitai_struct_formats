@@ -278,7 +278,7 @@ types:
           switch-on: is_common_toon
           cases:
             0: sized_index(_root.header.texture_index_size)
-            1: u1
+            1: common_toon_index
       - id: comment
         type: len_string
       - id: face_vertex_count
@@ -620,6 +620,16 @@ types:
             1: u1
             2: u2
             4: u4
+
+  common_toon_index:
+    doc: |
+      Contains the index of one of the built-in common toon textures
+      shipped with MMD.
+      Exists as a wrapper type as a workaround for a bug in Kaitai:
+      https://github.com/kaitai-io/kaitai_struct/issues/416
+    seq:
+      - id: value
+        type: u1
 
   len_string:
     seq:
