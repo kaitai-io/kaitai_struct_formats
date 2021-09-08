@@ -3,7 +3,6 @@ meta:
   title: MMD (MikuMikuDance) model data (newer format)
   application: MikuMikuDance
   file-extension: pmx
-  encoding: UTF-16LE
   endian: le
   license: MIT
   bit-endian: le
@@ -109,13 +108,13 @@ types:
       - id: rigid_body_index_size
         type: u1
       - id: model_name
-        type: len_string
+        type: text
       - id: english_model_name
-        type: len_string
+        type: text
       - id: comment
-        type: len_string
+        type: text
       - id: english_comment
-        type: len_string
+        type: text
 
   vertex:
     seq:
@@ -215,15 +214,15 @@ types:
   texture:
     seq:
       - id: name
-        type: len_string
+        type: text
         doc: Indicates the filename of the texture image
 
   material:
     seq:
       - id: name
-        type: len_string
+        type: text
       - id: english_name
-        type: len_string
+        type: text
       - id: diffuse
         type: vector_types::color4
       - id: specular
@@ -280,16 +279,16 @@ types:
             0: sized_index(_root.header.texture_index_size)
             1: common_toon_index
       - id: comment
-        type: len_string
+        type: text
       - id: face_vertex_count
         type: u4
 
   bone:
     seq:
       - id: name
-        type: len_string
+        type: text
       - id: english_name
-        type: len_string
+        type: text
       - id: position
         type: vector_types::vec3
       - id: parent_index
@@ -410,9 +409,9 @@ types:
   morph:
     seq:
       - id: name
-        type: len_string
+        type: text
       - id: english_name
-        type: len_string
+        type: text
       - id: panel
         type: u1
       - id: type
@@ -511,9 +510,9 @@ types:
   frame:
     seq:
       - id: name
-        type: len_string
+        type: text
       - id: english_name
-        type: len_string
+        type: text
       - id: type
         type: u1
       - id: element_count
@@ -538,9 +537,9 @@ types:
   rigid_body:
     seq:
       - id: name
-        type: len_string
+        type: text
       - id: english_name
-        type: len_string
+        type: text
       - id: bone_index
         type: sized_index(_root.header.bone_index_size)
         doc: index of a related bone
@@ -580,9 +579,9 @@ types:
   joint:
     seq:
       - id: name
-        type: len_string
+        type: text
       - id: english_name
-        type: len_string
+        type: text
       - id: type
         type: u1
         enum: joint_type
@@ -631,13 +630,35 @@ types:
       - id: value
         type: u1
 
-  len_string:
+  text:
+    doc: |
+      A text string. Can be UTF-8 or UTF-16LE depending on the setting
+      in the header.
+    seq:
+      - id: value
+        type:
+          switch-on: _root.header.encoding
+          cases:
+            0: text_utf16
+            1: text_utf8
+
+  text_utf16:
     seq:
       - id: length
         type: u4
       - id: value
         type: str
         size: length
+        encoding: UTF-16LE
+
+  text_utf8:
+    seq:
+      - id: length
+        type: u4
+      - id: value
+        type: str
+        size: length
+        encoding: UTF-8
 
 enums:
 
