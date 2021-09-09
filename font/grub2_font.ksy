@@ -1,7 +1,11 @@
 meta:
   id: grub2_font
-  title: GRUB2 font
+  title: GRUB 2 font
+  application: GRUB 2
   file-extension: pf2
+  xref:
+    justsolve: PFF2
+    wikidata: Q29650337
   tags:
     - font
   license: CC0-1.0
