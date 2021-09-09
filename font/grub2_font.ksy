@@ -33,10 +33,10 @@ types:
       - id: section_name
         size: 4
         type: str
-      - id: len_section
+      - id: len_body
         type: u4
       - id: body
-        size: len_section
+        size: len_body
         type:
           switch-on: section_name
           cases:
