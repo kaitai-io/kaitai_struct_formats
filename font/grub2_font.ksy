@@ -1,5 +1,5 @@
 meta:
-  id: grub2font
+  id: grub2_font
   title: GRUB2 font
   file-extension: pf2
   tags:
