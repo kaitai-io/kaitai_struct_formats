@@ -122,5 +122,15 @@ types:
           - id: bitmap_data
             size: (width * height + 7) / 8 # ceiled integer division
             doc: |
-              Rows of pixels (one bit per pixel), top-down, left-to-right.
-              Padded to be on a byte boundary.
+              A two-dimensional bitmap, one bit per pixel. It is organized as
+              row-major, top-down, left-to-right. The most significant bit of
+              each byte corresponds to the leftmost or uppermost pixel from all
+              bits of the byte. If a bit is set (1, `true`), the pixel is set to
+              the font color, if a bit is clear (0, `false`), the pixel is
+              transparent.
+
+              Rows are **not** padded to byte boundaries (i.e., a
+              single byte may contain bits belonging to multiple rows). The last
+              byte of the bitmap _is_ padded with zero bits at all unused least
+              significant bit positions so that the bitmap ends on a byte
+              boundary.
