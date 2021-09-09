@@ -114,11 +114,11 @@ types:
           - id: height
             type: u2
           - id: x_offset
-            type: u2
+            type: s2
           - id: y_offset
-            type: u2
+            type: s2
           - id: device_width
-            type: u2
+            type: s2
           - id: bitmap_data
             size: (width * height + 7) / 8 # ceiled integer division
             doc: |
