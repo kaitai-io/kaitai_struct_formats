@@ -91,8 +91,7 @@ types:
     seq:
       - id: entries
         type: character
-        repeat: expr
-        repeat-expr: _parent.len_section/sizeof<character>
+        repeat: eos
     types:
       character:
         seq:
