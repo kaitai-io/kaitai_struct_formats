@@ -9,7 +9,7 @@ meta:
   endian: be
 doc: |
   Bitmap font format for the GRUB 2 bootloader.
-doc-ref: http://grub.gibibit.com/New_font_format
+doc-ref: https://grub.gibibit.com/New_font_format
 seq:
   - id: font_header
     contents: ['FILE', 0, 0, 0, 4, 'PFF2']
