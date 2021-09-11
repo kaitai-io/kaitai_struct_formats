@@ -90,7 +90,7 @@ types:
         type: u2
   character_index:
     seq:
-      - id: entries
+      - id: characters
         type: character
         repeat: eos
     types:
@@ -101,12 +101,12 @@ types:
             doc: Unicode code point
           - id: flags
             type: u1
-          - id: ofs_character
+          - id: ofs_definition
             type: u4
         instances:
-          bitmap:
+          definition:
             io: _root._io
-            pos: ofs_character
+            pos: ofs_definition
             type: character_definition
       character_definition:
         seq:
