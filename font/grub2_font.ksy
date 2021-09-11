@@ -35,6 +35,7 @@ types:
         type: str
       - id: len_body
         type: u4
+        doc: Should be set to `0xFFFF_FFFF` for `section_name != "DATA"`
       - id: body
         size: len_body
         type:
