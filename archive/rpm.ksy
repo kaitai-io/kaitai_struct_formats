@@ -112,7 +112,7 @@ types:
             header_types::string: record_type_string
             header_types::bin: record_type_bin(count)
             header_types::string_array: record_type_string_array(count)
-            header_types::i18nstring: record_type_string_array(count)
+            header_types::i18n_string: record_type_string_array(count)
   record_type_int8:
     params:
       - id: count
@@ -206,7 +206,7 @@ types:
             header_types::string: record_type_string
             header_types::bin: record_type_bin(count)
             header_types::string_array: record_type_string_array(count)
-            header_types::i18nstring: record_type_string_array(count)
+            header_types::i18n_string: record_type_string_array(count)
   header_record:
     seq:
       - id: magic
@@ -260,7 +260,7 @@ enums:
       id: header_immutable
       -orig-id: HEADER_IMMUTABLE
     100:
-      id: i18ntable
+      id: i18n_table
       -orig-id: HEADER_I18NTABLE
     # RPMSIGTAG_*
     267:
@@ -313,7 +313,7 @@ enums:
       id: header_immutable
       -orig-id: HEADER_IMMUTABLE
     100:
-      id: i18ntable
+      id: i18n_table
       -orig-id: HEADER_I18NTABLE
     # RPMTAG_*
     1000:
@@ -346,17 +346,17 @@ enums:
         pointed to by this index record contains a full desription of
         the package.
     1006:
-      id: buildtime
+      id: build_time
       -orig-id: RPMTAG_BUILDTIME
       doc: |
         Specifies the time as seconds since the epoch
         at which the package was built.
     1007:
-      id: buildhost
+      id: build_host
       -orig-id: RPMTAG_BUILDHOST
       doc: Specifies the hostname of the system on which the package was built.
     1008:
-      id: installtime # from lib/rpmtag.h
+      id: install_time # from lib/rpmtag.h
       -orig-id: RPMTAG_INSTALLTIME
     1009:
       id: size
@@ -431,7 +431,7 @@ enums:
         Specifies the postuninstall scriptlet. If present, then
         postuninstall_interpreter shall also be present.
     1027:
-      id: old_filenames
+      id: old_file_names
       -orig-id: RPMTAG_OLDFILENAMES
     1028:
       id: file_sizes
@@ -674,10 +674,10 @@ enums:
       id: dir_indexes
       -orig-id: RPMTAG_DIRINDEXES
     1117:
-      id: basenames
+      id: base_names
       -orig-id: RPMTAG_BASENAMES
     1118:
-      id: dirnames
+      id: dir_names
       -orig-id: RPMTAG_DIRNAMES
     1119:
       id: orig_dir_indexes # from lib/rpmtag.h
@@ -689,10 +689,10 @@ enums:
       id: orig_dir_names # from lib/rpmtag.h
       -orig-id: RPMTAG_ORIGDIRNAMES
     1122:
-      id: optflags
+      id: opt_flags
       -orig-id: RPMTAG_OPTFLAGS
     1123:
-      id: disturl
+      id: dist_url
       -orig-id: RPMTAG_DISTURL
     1124:
       id: payload_format
@@ -729,11 +729,13 @@ enums:
       id: class_dict
       -orig-id: RPMTAG_CLASSDICT
     1143:
-      id: file_dependsx
+      id: file_depends_idx
       -orig-id: RPMTAG_FILEDEPENDSX
+      doc: Index into `::depends_dict` denoting start of this file's dependencies.
     1144:
-      id: file_dependsn
+      id: file_depends_num
       -orig-id: RPMTAG_FILEDEPENDSN
+      doc: Number of file dependencies in `::depends_dict`, starting from `::file_depends_idx`
     1145:
       id: depends_dict
       -orig-id: RPMTAG_DEPENDSDICT
@@ -741,25 +743,25 @@ enums:
       id: source_pkgid
       -orig-id: RPMTAG_SOURCEPKGID
     1148:
-      id: fscontexts
+      id: fs_contexts
       -orig-id: RPMTAG_FSCONTEXTS
     1149:
-      id: recontexts
+      id: re_contexts
       -orig-id: RPMTAG_RECONTEXTS
     1150:
       id: policies
       -orig-id: RPMTAG_POLICIES
     1151:
-      id: pretrans
+      id: pre_trans
       -orig-id: RPMTAG_PRETRANS
     1152:
-      id: posttrans
+      id: post_trans
       -orig-id: RPMTAG_POSTTRANS
     1153:
-      id: pretrans_prog
+      id: pre_trans_prog
       -orig-id: RPMTAG_PRETRANSPROG
     1154:
-      id: posttrans_prog
+      id: post_trans_prog
       -orig-id: RPMTAG_POSTTRANSPROG
     1155:
       id: dist_tag
@@ -786,7 +788,7 @@ enums:
       id: trigger_type
       -orig-id: RPMTAG_TRIGGERTYPE
     5007:
-      id: orig_filenames
+      id: orig_file_names
       -orig-id: RPMTAG_ORIGFILENAMES
     5008:
       id: long_file_sizes
@@ -835,7 +837,7 @@ enums:
       id: pre_un_flags
       -orig-id: RPMTAG_PREUNFLAGS
     5023:
-      id: post_unflags
+      id: post_un_flags
       -orig-id: RPMTAG_POSTUNFLAGS
     5024:
       id: pre_trans_flags
@@ -874,7 +876,7 @@ enums:
       id: order_flags
       -orig-id: RPMTAG_ORDERFLAGS
     5040:
-      id: inst_filenames
+      id: inst_file_names
       -orig-id: RPMTAG_INSTFILENAMES
     5041:
       id: require_nevrs
@@ -1031,4 +1033,4 @@ enums:
     6: string # NUL terminated
     7: bin
     8: string_array # NUL terminated strings
-    9: i18nstring # NUL terminated strings
+    9: i18n_string # NUL terminated strings
