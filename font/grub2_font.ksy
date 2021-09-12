@@ -15,31 +15,31 @@ doc: |
   Bitmap font format for the GRUB 2 bootloader.
 doc-ref: https://grub.gibibit.com/New_font_format
 seq:
-  - id: font_header
+  - id: magic
     contents: ["FILE", 0, 0, 0, 4, "PFF2"]
     size: 12
-  - id: font_sections
-    type: font_section
+  - id: sections
+    type: section
     repeat: until
-    repeat-until: _.section_name == "DATA"
+    repeat-until: _.section_type == "DATA"
     doc: |
       The "DATA" section acts as a terminator. The documentation says:
       "A marker that indicates the remainder of the file is data accessed
       via the character index (CHIX) section. When reading this font file,
       the rest of the file can be ignored when scanning the sections."
 types:
-  font_section:
+  section:
     seq:
-      - id: section_name
+      - id: section_type
         size: 4
         type: str
       - id: len_body
         type: u4
-        doc: Should be set to `0xFFFF_FFFF` for `section_name != "DATA"`
+        doc: Should be set to `0xFFFF_FFFF` for `section_type != "DATA"`
       - id: body
         size: len_body
         type:
-          switch-on: section_name
+          switch-on: section_type
           cases:
             '"NAME"': font_name
             '"FAMI"': font_family_name
@@ -51,7 +51,7 @@ types:
             '"ASCE"': ascent_in_pixels
             '"DESC"': descent_in_pixels
             '"CHIX"': character_index
-        if: section_name != "DATA"
+        if: section_type != "DATA"
   font_name:
     seq:
       - id: name
