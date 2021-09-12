@@ -41,54 +41,54 @@ types:
         type:
           switch-on: section_type
           cases:
-            '"NAME"': font_name
-            '"FAMI"': font_family_name
-            '"WEIG"': font_weight
-            '"SLAN"': font_slant
-            '"PTSZ"': font_point_size
-            '"MAXW"': maximum_character_width
-            '"MAXH"': maximum_character_height
-            '"ASCE"': ascent_in_pixels
-            '"DESC"': descent_in_pixels
-            '"CHIX"': character_index
+            '"NAME"': name_section
+            '"FAMI"': fami_section
+            '"WEIG"': weig_section
+            '"SLAN"': slan_section
+            '"PTSZ"': ptsz_section
+            '"MAXW"': maxw_section
+            '"MAXH"': maxh_section
+            '"ASCE"': asce_section
+            '"DESC"': desc_section
+            '"CHIX"': chix_section
         if: section_type != "DATA"
-  font_name:
+  name_section:
     seq:
-      - id: name
+      - id: font_name
         type: strz
-  font_family_name:
+  fami_section:
     seq:
-      - id: name
+      - id: font_family_name
         type: strz
-  font_weight:
+  weig_section:
     seq:
-      - id: name
+      - id: font_weight
         type: strz
-  font_slant:
+  slan_section:
     seq:
-      - id: name
+      - id: font_slant
         type: strz
-  font_point_size:
+  ptsz_section:
     seq:
-      - id: point_size
+      - id: font_point_size
         type: u2
-  maximum_character_width:
+  maxw_section:
     seq:
-      - id: width
+      - id: maximum_character_width
         type: u2
-  maximum_character_height:
+  maxh_section:
     seq:
-      - id: height
+      - id: maximum_character_height
         type: u2
-  ascent_in_pixels:
+  asce_section:
     seq:
-      - id: ascent
+      - id: ascent_in_pixels
         type: u2
-  descent_in_pixels:
+  desc_section:
     seq:
-      - id: descent
+      - id: descent_in_pixels
         type: u2
-  character_index:
+  chix_section:
     seq:
       - id: characters
         type: character
