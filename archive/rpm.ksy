@@ -19,8 +19,8 @@ doc: |
   RPM file format, as well as a currently abandoned fork (rpm5). These formats
   are not covered by this specification.
 doc-ref:
-  - https://github.com/rpm-software-management/rpm/blob/911448/doc/manual/format.md
-  - https://github.com/rpm-software-management/rpm/blob/911448/doc/manual/tags.md
+  - https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/format.md
+  - https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md
   - https://refspecs.linuxbase.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic/pkgformat.html
   - http://ftp.rpm.org/max-rpm/
 seq:
@@ -32,10 +32,11 @@ seq:
     size: (- _io.pos) % 8
   - id: header
     type: header
-  #- id: payload
-    # size: ??
-    # doc: if signature has a SIZE value, then it is:
-    # signature[SIZE][0] - sizeof<header>
+  # - id: payload
+  #   size: ??
+  #   doc: |
+  #     if signature has a SIZE value, then it is:
+  #     signature[SIZE][0] - sizeof<header>
 types:
   dummy: {}
   lead:
@@ -52,9 +53,9 @@ types:
         type: u2
         enum: architectures
       - id: package_name
+        size: 66
         type: strz
         encoding: UTF-8
-        size: 66
       - id: os
         -orig-id: osnum
         type: u2
@@ -83,8 +84,8 @@ types:
         repeat: expr
         repeat-expr: header_record.index_record_count
       - id: storage_section
-        type: dummy
         size: header_record.index_storage_size
+        type: dummy
   signature_index_record:
     -webide-representation: '{tag}'
     seq:
@@ -177,8 +178,8 @@ types:
         repeat: expr
         repeat-expr: header_record.index_record_count
       - id: storage_section
-        type: dummy
         size: header_record.index_storage_size
+        type: dummy
   header_index_record:
     -webide-representation: '{tag}'
     seq:
