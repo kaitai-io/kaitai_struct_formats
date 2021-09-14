@@ -82,9 +82,9 @@ types:
       - id: index_records
         type: signature_index_record
         repeat: expr
-        repeat-expr: header_record.index_record_count
+        repeat-expr: header_record.num_index_records
       - id: storage_section
-        size: header_record.index_storage_size
+        size: header_record.len_storage_section
         type: dummy
   signature_index_record:
     -webide-representation: '{tag}'
@@ -176,9 +176,9 @@ types:
       - id: index_records
         type: header_index_record
         repeat: expr
-        repeat-expr: header_record.index_record_count
+        repeat-expr: header_record.num_index_records
       - id: storage_section
-        size: header_record.index_storage_size
+        size: header_record.len_storage_section
         type: dummy
   header_index_record:
     -webide-representation: '{tag}'
@@ -213,12 +213,12 @@ types:
         contents: [0x8e, 0xad, 0xe8, 0x01]
       - id: reserved
         contents: [0, 0, 0, 0]
-      - id: index_record_count
+      - id: num_index_records
         -orig-id: nindex
         type: u4
         valid:
           min: 1
-      - id: index_storage_size
+      - id: len_storage_section
         -orig-id: hsize
         type: u4
         doc: |
