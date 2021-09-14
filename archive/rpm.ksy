@@ -303,7 +303,7 @@ enums:
       -orig-id: RPMSIGTAG_RESERVEDSPACE
       doc: Space reserved for signatures
   header_tags:
-    # Tags from LSB, some from lib/rpmtag.h
+    # Tags from LSB, some from [lib/rpmtag.h](https://github.com/rpm-software-management/rpm/blob/911448f2/lib/rpmtag.h)
     # This includes all tags, except obsolete, internal and
     # unimplemented tags, except when present in LSB
     62:
