@@ -87,7 +87,7 @@ types:
         size: header_record.len_storage_section
         type: dummy
   signature_index_record:
-    -webide-representation: '{tag}'
+    -webide-representation: '{tag} [{record_type}]'
     seq:
       - id: tag
         type: u4
@@ -181,7 +181,7 @@ types:
         size: header_record.len_storage_section
         type: dummy
   header_index_record:
-    -webide-representation: '{tag}'
+    -webide-representation: '{tag} [{record_type}]'
     seq:
       - id: tag
         type: u4
