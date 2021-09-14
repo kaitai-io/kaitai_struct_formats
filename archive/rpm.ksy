@@ -229,7 +229,7 @@ enums:
     0: binary
     1: source
   architectures:
-    # these come (mostly) from rpmrc.in
+    # these come (mostly) from <https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L159>
     1: x86
     3: sparc
     4: mips
@@ -246,7 +246,7 @@ enums:
     22: riscv
     255: noarch
   operating_systems:
-    # these come from rpmrc.in
+    # these come from <https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L261>
     # in practice it will almost always be 1
     1: linux
     2: irix
