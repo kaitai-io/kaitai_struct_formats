@@ -27,11 +27,11 @@ seq:
   - id: lead
     type: lead
   - id: signature
-    type: signature
+    type: header(true)
   - id: boundary_padding
     size: (- _io.pos) % 8
   - id: header
-    type: header
+    type: header(false)
   # - id: payload
   #   size: ??
   #   doc: |
@@ -72,26 +72,31 @@ types:
         valid: 0x3
       - id: minor
         type: u1
-  # signature, which is almost identical to header
-  # except that some of the tags have a different
-  # meaning in signature and header.
-  signature:
+  # header structure used for both the "header" and "signature",
+  # but that some of the tags have a different meaning in
+  # signature and header (hence they use different enums)
+  header:
+    params:
+      - id: is_signature
+        type: bool
     seq:
       - id: header_record
         type: header_record
       - id: index_records
-        type: signature_index_record
+        type: header_index_record
         repeat: expr
         repeat-expr: header_record.num_index_records
       - id: storage_section
         size: header_record.len_storage_section
         type: dummy
-  signature_index_record:
-    -webide-representation: '{tag} [{record_type}]'
+    instances:
+      is_header:
+        value: not is_signature
+  header_index_record:
+    -webide-representation: '{header_tag} {signature_tag} [{record_type}]'
     seq:
-      - id: tag
+      - id: tag_raw
         type: u4
-        enum: signature_tags
       - id: record_type
         type: u4
         enum: header_types
@@ -100,6 +105,14 @@ types:
       - id: count
         type: u4
     instances:
+      signature_tag:
+        value: tag_raw
+        enum: signature_tags
+        if: _parent.is_signature
+      header_tag:
+        value: tag_raw
+        enum: header_tags
+        if: _parent.is_header
       body:
         io: _parent.storage_section._io
         pos: ofs_record
@@ -166,47 +179,6 @@ types:
         encoding: UTF-8
         repeat: expr
         repeat-expr: count
-  # header, which is almost identical to signature
-  # except that some of the tags have a different
-  # meaning in signature and header.
-  header:
-    seq:
-      - id: header_record
-        type: header_record
-      - id: index_records
-        type: header_index_record
-        repeat: expr
-        repeat-expr: header_record.num_index_records
-      - id: storage_section
-        size: header_record.len_storage_section
-        type: dummy
-  header_index_record:
-    -webide-representation: '{tag} [{record_type}]'
-    seq:
-      - id: tag
-        type: u4
-        enum: header_tags
-      - id: record_type
-        type: u4
-        enum: header_types
-      - id: record_offset
-        type: u4
-      - id: count
-        type: u4
-    instances:
-      body:
-        io: _parent.storage_section._io
-        pos: record_offset
-        type:
-          switch-on: record_type
-          cases:
-            header_types::int8: record_type_int8(count)
-            header_types::int16: record_type_int16(count)
-            header_types::int32: record_type_int32(count)
-            header_types::string: record_type_string
-            header_types::bin: record_type_bin(count)
-            header_types::string_array: record_type_string_array(count)
-            header_types::i18n_string: record_type_string_array(count)
   header_record:
     seq:
       - id: magic
