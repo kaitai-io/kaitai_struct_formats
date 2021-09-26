@@ -202,10 +202,33 @@ enums:
     1: source
   architectures:
     # these come (mostly) from <https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L159>
+    # (see <https://ftp.osuosl.org/pub/rpm/max-rpm/s1-rpm-multi-build-install-detection.html#S3-RPM-MULTI-XXX-CANON>
+    # for `arch_canon` entry explanation)
+    #
+    # See also
+    #   - <https://github.com/eclipse/packager/blob/51ccdd3/rpm/src/main/java/org/eclipse/packager/rpm/Architecture.java>
+    #   - <https://github.com/craigwblake/redline/blob/15afff5/src/main/java/org/redline_rpm/header/Architecture.java>
+    #   - <https://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/RPM_Guide/ch01s03.html>
+    0:
+      id: no_arch_0
+      -orig-id: noarch
+      doc: |
+        can be installed on any architecture
+
+        same meaning as `::no_arch_255`
+      doc-ref:
+        - https://github.com/eclipse/packager/blob/51ccdd3/rpm/src/main/java/org/eclipse/packager/rpm/Architecture.java#L22
+        - https://github.com/craigwblake/redline/blob/15afff5/src/main/java/org/redline_rpm/header/Architecture.java#L5
     1: x86
+    2:
+      id: alpha
+      doc-ref: https://github.com/eclipse/packager/blob/51ccdd3/rpm/src/main/java/org/eclipse/packager/rpm/Architecture.java#L24
     3: sparc
     4: mips
     5: ppc
+    6: m68k
+    7: sgi
+    8: rs6000
     9: ia64
     11: mips64
     12: arm
@@ -215,8 +238,15 @@ enums:
     17: sh
     18: xtensa
     19: aarch64
+    20: mips_r6
+    21: mips64_r6
     22: riscv
-    255: noarch
+    255:
+      id: no_arch_255
+      doc: |
+        can be installed on any architecture
+
+        same meaning as `::no_arch_0`
   operating_systems:
     # these come from <https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L261>
     # in practice it will almost always be 1
