@@ -219,27 +219,56 @@ enums:
       doc-ref:
         - https://github.com/eclipse/packager/blob/51ccdd3/rpm/src/main/java/org/eclipse/packager/rpm/Architecture.java#L22
         - https://github.com/craigwblake/redline/blob/15afff5/src/main/java/org/redline_rpm/header/Architecture.java#L5
-    1: x86
+    1:
+      id: x86
+      doc: x86 or x86_64
     2:
       id: alpha
-      doc-ref: https://github.com/eclipse/packager/blob/51ccdd3/rpm/src/main/java/org/eclipse/packager/rpm/Architecture.java#L24
+      doc: Alpha or Sparc64
+      doc-ref:
+        - https://github.com/eclipse/packager/blob/51ccdd3/rpm/src/main/java/org/eclipse/packager/rpm/Architecture.java#L24
+        - https://github.com/file/file/blob/9b2538d/magic/Magdir/rpm#L14
+        - https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L174-L183
     3: sparc
     4: mips
     5: ppc
     6: m68k
-    7: sgi
+    7:
+      id: sgi
+      -orig-id: IP
+      doc: SGI Inhouse Processors (IP)
+      doc-ref:
+        - https://github.com/file/file/blob/9b2538d/magic/Magdir/rpm#L19
+        - https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L205
     8: rs6000
     9: ia64
+    10:
+      id: sparc64
+      doc-ref:
+        - https://github.com/file/file/blob/9b2538d/magic/Magdir/rpm#L22
+        - https://github.com/craigwblake/redline/blob/15afff5/src/main/java/org/redline_rpm/header/Architecture.java#L15
     11: mips64
     12: arm
+    13:
+      id: m68k_mint
+      -orig-id: m68kmint
+      doc-ref:
+        - https://github.com/craigwblake/redline/blob/15afff5/src/main/java/org/redline_rpm/header/Architecture.java#L18
+        - https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L226-L233
     14: s390
     15: s390x
     16: ppc64
     17: sh
     18: xtensa
     19: aarch64
-    20: mips_r6
-    21: mips64_r6
+    20:
+      id: mips_r6
+      -orig-id: mipsr6
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L252-L253
+    21:
+      id: mips64_r6
+      -orig-id: mips64r6
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L254-L255
     22: riscv
     255:
       id: no_arch_255
