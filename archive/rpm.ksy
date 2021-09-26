@@ -243,6 +243,7 @@ enums:
     22: riscv
     255:
       id: no_arch_255
+      -orig-id: noarch
       doc: |
         can be installed on any architecture
 
