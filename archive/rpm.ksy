@@ -209,16 +209,6 @@ enums:
     #   - <https://github.com/eclipse/packager/blob/51ccdd3/rpm/src/main/java/org/eclipse/packager/rpm/Architecture.java>
     #   - <https://github.com/craigwblake/redline/blob/15afff5/src/main/java/org/redline_rpm/header/Architecture.java>
     #   - <https://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/RPM_Guide/ch01s03.html>
-    0:
-      id: no_arch_0
-      -orig-id: noarch
-      doc: |
-        can be installed on any architecture
-
-        same meaning as `::no_arch_255`
-      doc-ref:
-        - https://github.com/eclipse/packager/blob/51ccdd3/rpm/src/main/java/org/eclipse/packager/rpm/Architecture.java#L22
-        - https://github.com/craigwblake/redline/blob/15afff5/src/main/java/org/redline_rpm/header/Architecture.java#L5
     1:
       id: x86
       doc: x86 or x86_64
@@ -271,12 +261,9 @@ enums:
       doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L254-L255
     22: riscv
     255:
-      id: no_arch_255
+      id: no_arch
       -orig-id: noarch
-      doc: |
-        can be installed on any architecture
-
-        same meaning as `::no_arch_0`
+      doc: can be installed on any architecture
   operating_systems:
     # these come from <https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L261>
     # in practice it will almost always be 1
