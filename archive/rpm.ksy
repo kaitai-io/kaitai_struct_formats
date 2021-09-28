@@ -200,15 +200,16 @@ enums:
   rpm_types:
     0: binary
     1: source
+
+  # these come (mostly) from <https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L159>
+  # (see <https://ftp.osuosl.org/pub/rpm/max-rpm/s1-rpm-multi-build-install-detection.html#S3-RPM-MULTI-XXX-CANON>
+  # for `arch_canon` entry explanation)
+  #
+  # See also
+  #   - <https://github.com/eclipse/packager/blob/51ccdd3/rpm/src/main/java/org/eclipse/packager/rpm/Architecture.java>
+  #   - <https://github.com/craigwblake/redline/blob/15afff5/src/main/java/org/redline_rpm/header/Architecture.java>
+  #   - <https://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/RPM_Guide/ch01s03.html>
   architectures:
-    # these come (mostly) from <https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L159>
-    # (see <https://ftp.osuosl.org/pub/rpm/max-rpm/s1-rpm-multi-build-install-detection.html#S3-RPM-MULTI-XXX-CANON>
-    # for `arch_canon` entry explanation)
-    #
-    # See also
-    #   - <https://github.com/eclipse/packager/blob/51ccdd3/rpm/src/main/java/org/eclipse/packager/rpm/Architecture.java>
-    #   - <https://github.com/craigwblake/redline/blob/15afff5/src/main/java/org/redline_rpm/header/Architecture.java>
-    #   - <https://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/RPM_Guide/ch01s03.html>
     1:
       id: x86
       doc: x86 or x86_64
