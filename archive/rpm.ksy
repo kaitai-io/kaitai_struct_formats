@@ -93,7 +93,7 @@ types:
       is_header:
         value: not is_signature
   header_index_record:
-    -webide-representation: '{header_tag} {signature_tag} [{record_type}]'
+    -webide-representation: '{signature_tag} {header_tag} [{record_type}]'
     seq:
       - id: tag_raw
         type: u4
