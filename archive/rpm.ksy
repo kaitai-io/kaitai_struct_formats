@@ -119,6 +119,7 @@ types:
         type:
           switch-on: record_type
           cases:
+            header_types::char: record_type_int8(count)
             header_types::int8: record_type_int8(count)
             header_types::int16: record_type_int16(count)
             header_types::int32: record_type_int32(count)
@@ -132,7 +133,7 @@ types:
         type: u4
     seq:
       - id: values
-        type: u2
+        type: u1
         repeat: expr
         repeat-expr: count
   record_type_int16:
