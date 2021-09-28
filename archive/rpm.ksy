@@ -265,11 +265,30 @@ enums:
       id: no_arch
       -orig-id: noarch
       doc: can be installed on any architecture
+      doc-ref:
+        - https://github.com/file/file/blob/9b2538d/magic/Magdir/rpm#L31
+        - https://github.com/rpm-software-management/rpm/blob/911448f2/lib/rpmrc.c#L1466
   operating_systems:
     # these come from <https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L261>
     # in practice it will almost always be 1
     1: linux
     2: irix
+    255:
+      id: no_os
+      -orig-id: noos
+      doc: |
+        This value is pretty much a guess, based on that `archnum` and `osnum`
+        values are handled by the same function `getMachineInfo()` (see
+        `doc-ref` link) which uses 255 for an unknown value. Value
+        `architectures::no_arch` can be verified with the magic file of
+        `file(1)` and `.rpm` files that have `noarch` in their name, so it seems
+        reasonable that `no_os` (or "`noos`" originally) follows the same
+        pattern.
+
+        Moreover, this value is actually used in practice, see this sample file:
+        <https://github.com/craigwblake/redline/blob/15afff5/src/test/resources/rpm-3-1.0-1.somearch.rpm>
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/lib/rpmrc.c#L1466
+
   signature_tags:
     # Tags from LSB.
     # the first three are shared with header_tags
