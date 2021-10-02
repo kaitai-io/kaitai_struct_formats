@@ -428,6 +428,7 @@ enums:
       id: group
       -orig-id: RPMTAG_GROUP
       doc: Specifies the administrative group to which this package belongs.
+    # 1017 - internal
     1018:
       id: source # from lib/rpmtag.h
       -orig-id: RPMTAG_SOURCE
@@ -484,6 +485,7 @@ enums:
       id: file_modes
       -orig-id: RPMTAG_FILEMODES
       doc: The mode of each file in the archive.
+    # 1031..1032 - internal
     1033:
       id: device_number
       -orig-id: RPMTAG_FILERDEVS
@@ -511,6 +513,7 @@ enums:
       doc: |
         Specifies the bit(s) to classify and control how files
         are to be installed.
+    # 1038 - internal
     1039:
       id: file_owner
       -orig-id: RPMTAG_FILEUSERNAME
@@ -519,6 +522,7 @@ enums:
       id: file_group
       -orig-id: RPMTAG_FILEGROUPNAME
       doc: Specifies the group of the corresponding file.
+    # 1041..1042 - internal
     1043:
       id: icon # from lib/rpmtag.h
       -orig-id: RPMTAG_ICON
@@ -576,6 +580,7 @@ enums:
       doc: |
         Indicates the versions associated with the
         values found in the conflict_name index.
+    # 1056..1058 - internal
     1059:
       id: exclude_arch # from lib/rpmtag.h
       -orig-id: RPMTAG_EXCLUDEARCH
@@ -585,6 +590,7 @@ enums:
     1061:
       id: exclusive_arch # from lib/rpmtag.h
       -orig-id: RPMTAG_EXCLUSIVEARCH
+    # 1063 - internal
     1062:
       id: exclusive_os # from lib/rpmtag.h
       -orig-id: RPMTAG_EXCLUSIVEOS
@@ -607,6 +613,7 @@ enums:
     1069:
       id: trigger_index # from lib/rpmtag.h
       -orig-id: RPMTAG_TRIGGERINDEX
+    # 1070..1078 - unassigned (missing in lib/rpmtag.h)
     1079:
       id: verify_script # from lib/rpmtag.h
       -orig-id: RPMTAG_VERIFYSCRIPT
@@ -624,6 +631,7 @@ enums:
       id: changelog_text
       -orig-id: RPMTAG_CHANGELOGTEXT
       doc: Specifies the changes asssociated with a changelog entry.
+    # 1083..1084 - internal
     1085:
       id: preinstall_interpreter
       -orig-id: RPMTAG_PREINPROG
@@ -665,6 +673,7 @@ enums:
     1092:
       id: trigger_script_prog # lib/rpmtag.h
       -orig-id: RPMTAG_TRIGGERSCRIPTPROG
+    # 1093 - internal
     1094:
       id: cookie
       -orig-id: RPMTAG_COOKIE
@@ -691,9 +700,11 @@ enums:
     1099:
       id: installation_prefixes # from lib/rpmtag.h
       -orig-id: RPMTAG_INSTPREFIXES
+    # 1100..1105 - internal
     1106:
       id: source_package # from lib/rpmtag.h
       -orig-id: RPMTAG_SOURCEPACKAGE
+    # 1107..1111 - internal
     1112:
       id: provide_flags
       -orig-id: RPMTAG_PROVIDEFLAGS
@@ -752,13 +763,13 @@ enums:
     1129:
       id: remove_tid # from lib/rpmtag.h
       -orig-id: RPMTAG_REMOVETID
-    1131:
-      id: rhn_platform
-      -orig-id: RPMTAG_RHNPLATFORM
+    # 1130..1131 - internal
     1132:
       id: platform
       -orig-id: RPMTAG_PLATFORM
     # below are all from lib/rpmtag.h
+    # 1133..1135 - deprecated
+    # 1136..1139 - internal
     1140:
       id: file_colors
       -orig-id: RPMTAG_FILECOLORS
@@ -782,6 +793,7 @@ enums:
     1146:
       id: source_pkgid
       -orig-id: RPMTAG_SOURCEPKGID
+    # 1147 - obsolete
     1148:
       id: fs_contexts
       -orig-id: RPMTAG_FSCONTEXTS
@@ -806,12 +818,17 @@ enums:
     1155:
       id: dist_tag
       -orig-id: RPMTAG_DISTTAG
+    # 1156..1161 - obsolete
+    # 1162..1170 - unimplemented
+    # 1171 - internal
+    # 1172..1194 - unimplemented
     1195:
       id: db_instance
       -orig-id: RPMTAG_DBINSTANCE
     1196:
       id: nvra
       -orig-id: RPMTAG_NVRA
+    # 1997..4999 - reserved
     5000:
       id: file_names
       -orig-id: RPMTAG_FILENAMES
@@ -821,6 +838,7 @@ enums:
     5002:
       id: file_require
       -orig-id: RPMTAG_FILEREQUIRE
+    # 5003..5004 - unimplemented
     5005:
       id: trigger_conds
       -orig-id: RPMTAG_TRIGGERCONDS
@@ -891,6 +909,8 @@ enums:
     5027:
       id: trigger_script_flags
       -orig-id: RPMTAG_TRIGGERSCRIPTFLAGS
+    # 5028 - unassigned (removed from lib/rpmtag.h in commit <https://github.com/rpm-software-management/rpm/commit/dc2ee980>)
+    # 5029 - unimplemented
     5030:
       id: policy_names
       -orig-id: RPMTAG_POLICYNAMES
@@ -915,6 +935,7 @@ enums:
     5037:
       id: order_flags
       -orig-id: RPMTAG_ORDERFLAGS
+    # 5038..5039 - unimplemented
     5040:
       id: inst_file_names
       -orig-id: RPMTAG_INSTFILENAMES
@@ -984,6 +1005,7 @@ enums:
     5062:
       id: encoding
       -orig-id: RPMTAG_ENCODING
+    # 5063..5065 - internal
     5066:
       id: file_trigger_scripts
       -orig-id: RPMTAG_FILETRIGGERSCRIPTS
@@ -1005,6 +1027,7 @@ enums:
     5072:
       id: file_trigger_flags
       -orig-id: RPMTAG_FILETRIGGERFLAGS
+    # 5073..5075 - internal
     5076:
       id: trans_file_trigger_scripts
       -orig-id: RPMTAG_TRANSFILETRIGGERSCRIPTS
@@ -1026,6 +1049,7 @@ enums:
     5082:
       id: trans_file_trigger_flags
       -orig-id: RPMTAG_TRANSFILETRIGGERFLAGS
+    # 5083 - internal
     5084:
       id: file_trigger_priorities
       -orig-id: RPMTAG_FILETRIGGERPRIORITIES
@@ -1056,6 +1080,7 @@ enums:
     5093:
       id: payload_digest_algo
       -orig-id: RPMTAG_PAYLOADDIGESTALGO
+    # 5094..5095 - unimplemented
     5096:
       id: modularity_label
       -orig-id: RPMTAG_MODULARITYLABEL
