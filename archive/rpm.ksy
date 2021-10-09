@@ -671,7 +671,7 @@ enums:
       id: verify_script_prog # from lib/rpmtag.h
       -orig-id: RPMTAG_VERIFYSCRIPTPROG
     1092:
-      id: trigger_script_prog # lib/rpmtag.h
+      id: trigger_script_prog # from lib/rpmtag.h
       -orig-id: RPMTAG_TRIGGERSCRIPTPROG
     # 1093 - internal
     1094:
