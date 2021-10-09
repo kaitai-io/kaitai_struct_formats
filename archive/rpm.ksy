@@ -452,25 +452,25 @@ enums:
       -orig-id: RPMTAG_PREIN
       doc: |
         Specifies the preinstall scriptlet. If present, then
-        preinstall_interpreter shall also be present.
+        `::pre_install_interpreter` shall also be present.
     1024:
       id: post_install_scriptlet
       -orig-id: RPMTAG_POSTIN
       doc: |
         Specifies the postinstall scriptlet. If present, then
-        postinstall_interpreter shall also be present.
+        `::post_install_interpreter` shall also be present.
     1025:
       id: pre_uninstall_scriptlet
       -orig-id: RPMTAG_PREUN
       doc: |
         Specifies the preuninstall scriptlet. If present, then
-        preuninstall_interpreter shall also be present.
+        `::pre_uninstall_interpreter` shall also be present.
     1026:
       id: post_uninstall_scriptlet
       -orig-id: RPMTAG_POSTUN
       doc: |
         Specifies the postuninstall scriptlet. If present, then
-        postuninstall_interpreter shall also be present.
+        `::post_uninstall_interpreter` shall also be present.
     1027:
       id: old_file_names
       -orig-id: RPMTAG_OLDFILENAMES
@@ -633,33 +633,33 @@ enums:
       doc: Specifies the changes asssociated with a changelog entry.
     # 1083..1084 - internal
     1085:
-      id: preinstall_interpreter
+      id: pre_install_interpreter
       -orig-id: RPMTAG_PREINPROG
       doc: |
         Specifies the name of the interpreter to which the preinstall
         scriptlet will be passed. The interpreter pointed to by this
-        index record shall be /bin/sh.
+        index record shall be `/bin/sh`.
     1086:
-      id: postinstall_interpreter
+      id: post_install_interpreter
       -orig-id: RPMTAG_POSTINPROG
       doc: |
         Specifies the name of the interpreter to which the postinstall
         scriptlet will be passed. The intepreter pointed to by this
-        index record shall be /bin/sh.
+        index record shall be `/bin/sh`.
     1087:
-      id: preuninstall_interpreter
+      id: pre_uninstall_interpreter
       -orig-id: RPMTAG_PREUNPROG
       doc: |
         Specifies the name of the interpreter to which the preuninstall
         scriptlet will be passed. The interpreter pointed to by this index
-        record shall be /bin/sh.
+        record shall be `/bin/sh`.
     1088:
-      id: postuninstall_interpreter
+      id: post_uninstall_interpreter
       -orig-id: RPMTAG_POSTUNPROG
       doc: |
         Specifies the name of the interpreter to which the postuninstall
         scriptlet will be passed. The interpreter pointed to by this index
-        record shall be /bin/sh.
+        record shall be `/bin/sh`.
     1089:
       id: build_archs # from lib/rpmtag.h
       -orig-id: RPMTAG_BUILDARCHS
@@ -886,16 +886,16 @@ enums:
       id: epoch_num
       -orig-id: RPMTAG_EPOCHNUM
     5020:
-      id: pre_in_flags
+      id: pre_install_flags
       -orig-id: RPMTAG_PREINFLAGS
     5021:
-      id: post_in_flags
+      id: post_install_flags
       -orig-id: RPMTAG_POSTINFLAGS
     5022:
-      id: pre_un_flags
+      id: pre_uninstall_flags
       -orig-id: RPMTAG_PREUNFLAGS
     5023:
-      id: post_un_flags
+      id: post_uninstall_flags
       -orig-id: RPMTAG_POSTUNFLAGS
     5024:
       id: pre_trans_flags
