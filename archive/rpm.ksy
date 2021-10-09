@@ -698,7 +698,7 @@ enums:
       id: prefixes # from lib/rpmtag.h
       -orig-id: RPMTAG_PREFIXES
     1099:
-      id: installation_prefixes # from lib/rpmtag.h
+      id: install_prefixes # from lib/rpmtag.h
       -orig-id: RPMTAG_INSTPREFIXES
     # 1100..1105 - internal
     1106:
