@@ -303,6 +303,9 @@ enums:
       id: i18n_table
       -orig-id: HEADER_I18NTABLE
     # RPMSIGTAG_*
+    # 256: RPMTAG_SIG_BASE
+    # 263..265 - obsolete (see lib/rpmtag.h)
+    # 266 - obsolete (see <https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete>)
     267:
       id: dsa
       -orig-id: RPMSIGTAG_DSA
@@ -313,19 +316,36 @@ enums:
       id: sha1
       -orig-id: RPMSIGTAG_SHA1
     270:
-      id: long_sig_size
-      -orig-id: RPMTAG_LONGSIGSIZE
+      id: long_size
+      -orig-id: RPMSIGTAG_LONGSIZE
+    271:
+      id: long_archive_size
+      -orig-id: RPMSIGTAG_LONGARCHIVESIZE
     273:
       id: sha256
       -orig-id: RPMTAG_SHA256HEADER
+    274:
+      id: file_signatures
+      -orig-id: RPMSIGTAG_FILESIGNATURES
+    275:
+      id: file_signature_length
+      -orig-id: RPMSIGTAG_FILESIGNATURELENGTH
+    276:
+      id: verity_signatures
+      -orig-id: RPMTAG_VERITYSIGNATURES
+    277:
+      id: verity_signature_algo
+      -orig-id: RPMTAG_VERITYSIGNATUREALGO
     1000:
       id: size
       -orig-id: RPMSIGTAG_SIZE
       doc: Header + payload size (32bit) in bytes.
+    # 1001 - obsolete
     1002:
       id: pgp
       -orig-id: RPMSIGTAG_PGP
       doc: PGP 2.6.3 signature.
+    # 1003 - obsolete
     1004:
       id: md5
       -orig-id: RPMSIGTAG_MD5
@@ -334,6 +354,7 @@ enums:
       id: gpg
       -orig-id: RPMSIGTAG_GPG
       doc: GnuPG signature
+    # 1006 - obsolete
     1007:
       id: payload_size
       -orig-id: RPMSIGTAG_PAYLOADSIZE
@@ -410,12 +431,7 @@ enums:
       id: vendor
       -orig-id: RPMTAG_VENDOR
       doc: Contains the name of the organization that produced the package.
-    1012:
-      id: gif # from lib/rpmtag.h
-      -orig-id: RPMTAG_GIF
-    1013:
-      id: xpm # from lib/rpmtag.h
-      -orig-id: RPMTAG_XPM
+    # 1012..1013 - obsolete (see <https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete>)
     1014:
       id: license
       -orig-id: RPMTAG_LICENSE
@@ -471,9 +487,7 @@ enums:
       doc: |
         Specifies the postuninstall scriptlet. If present, then
         `::post_uninstall_interpreter` shall also be present.
-    1027:
-      id: old_file_names
-      -orig-id: RPMTAG_OLDFILENAMES
+    # 1027 - obsolete (see <https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete>)
     1028:
       id: file_sizes
       -orig-id: RPMTAG_FILESIZES
@@ -523,9 +537,7 @@ enums:
       -orig-id: RPMTAG_FILEGROUPNAME
       doc: Specifies the group of the corresponding file.
     # 1041..1042 - internal
-    1043:
-      id: icon # from lib/rpmtag.h
-      -orig-id: RPMTAG_ICON
+    # 1043 - obsolete (see <https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete>)
     1044:
       id: source_rpm
       -orig-id: RPMTAG_SOURCERPM
@@ -760,15 +772,13 @@ enums:
     1128:
       id: install_tid # from lib/rpmtag.h
       -orig-id: RPMTAG_INSTALLTID
-    1129:
-      id: remove_tid # from lib/rpmtag.h
-      -orig-id: RPMTAG_REMOVETID
+    # 1129 - obsolete (see <https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete>)
     # 1130..1131 - internal
     1132:
       id: platform
       -orig-id: RPMTAG_PLATFORM
     # below are all from lib/rpmtag.h
-    # 1133..1135 - deprecated
+    # 1133..1135 - obsolete
     # 1136..1139 - internal
     1140:
       id: file_colors
@@ -793,13 +803,7 @@ enums:
     1146:
       id: source_pkgid
       -orig-id: RPMTAG_SOURCEPKGID
-    # 1147 - obsolete
-    1148:
-      id: fs_contexts
-      -orig-id: RPMTAG_FSCONTEXTS
-    1149:
-      id: re_contexts
-      -orig-id: RPMTAG_RECONTEXTS
+    # 1147..1149 - obsolete (see <https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete>)
     1150:
       id: policies
       -orig-id: RPMTAG_POLICIES
