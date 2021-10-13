@@ -40,6 +40,20 @@ seq:
 types:
   dummy: {}
   lead:
+    doc: |
+      Panu Matilainen (a RPM developer) [described this
+      structure](https://github.com/kaitai-io/kaitai_struct_formats/pull/469#discussion_r718288192)
+      as follows:
+
+      > The lead as a structure is 25 years obsolete, the data there is
+      > meaningless. Seriously. Except to check for the magic to detect that
+      > it's an rpm file in the first place, just ignore everything in it.
+      > Literally everything.
+
+      The fields with `valid` constraints are important, because these are the
+      same validations that RPM does (which means that any valid `.rpm` file
+      must pass them), but otherwise you should not make decisions based on the
+      values given here.
     seq:
       - id: magic
         contents: [0xed, 0xab, 0xee, 0xdb]
@@ -69,7 +83,10 @@ types:
     seq:
       - id: major
         type: u1
-        valid: 0x3
+        valid:
+          min: 3
+          max: 4
+        doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/lib/rpmlead.c#L102
       - id: minor
         type: u1
   # header structure used for both the "header" and "signature",
