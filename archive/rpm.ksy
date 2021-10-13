@@ -123,6 +123,7 @@ types:
             header_types::int8: record_type_int8(count)
             header_types::int16: record_type_int16(count)
             header_types::int32: record_type_int32(count)
+            header_types::int64: record_type_int64(count)
             header_types::string: record_type_string
             header_types::bin: record_type_bin(count)
             header_types::string_array: record_type_string_array(count)
@@ -152,6 +153,15 @@ types:
     seq:
       - id: values
         type: u4
+        repeat: expr
+        repeat-expr: count
+  record_type_int64:
+    params:
+      - id: count
+        type: u4
+    seq:
+      - id: values
+        type: u8
         repeat: expr
         repeat-expr: count
   record_type_string:
@@ -1098,7 +1108,7 @@ enums:
     2: int8
     3: int16
     4: int32
-    5: int64 # reserved
+    5: int64
     6: string # NUL terminated
     7: bin
     8: string_array # NUL terminated strings
