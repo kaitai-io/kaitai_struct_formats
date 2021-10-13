@@ -116,7 +116,7 @@ types:
         type: u4
       - id: record_type
         type: u4
-        enum: header_types
+        enum: record_types
       - id: ofs_record
         type: u4
       - id: count
@@ -136,15 +136,15 @@ types:
         type:
           switch-on: record_type
           cases:
-            header_types::char: record_type_int8(count)
-            header_types::int8: record_type_int8(count)
-            header_types::int16: record_type_int16(count)
-            header_types::int32: record_type_int32(count)
-            header_types::int64: record_type_int64(count)
-            header_types::string: record_type_string
-            header_types::bin: record_type_bin(count)
-            header_types::string_array: record_type_string_array(count)
-            header_types::i18n_string: record_type_string_array(count)
+            record_types::char: record_type_int8(count)
+            record_types::int8: record_type_int8(count)
+            record_types::int16: record_type_int16(count)
+            record_types::int32: record_type_int32(count)
+            record_types::int64: record_type_int64(count)
+            record_types::string: record_type_string
+            record_types::bin: record_type_bin(count)
+            record_types::string_array: record_type_string_array(count)
+            record_types::i18n_string: record_type_string_array(count)
   record_type_int8:
     params:
       - id: count
@@ -1118,7 +1118,7 @@ enums:
     5097:
       id: payload_digest_alt
       -orig-id: RPMTAG_PAYLOADDIGESTALT
-  header_types:
+  record_types:
     # from LSB
     0: not_implemented
     1: char
