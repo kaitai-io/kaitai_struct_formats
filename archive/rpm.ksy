@@ -152,7 +152,7 @@ types:
       - id: record_type
         type: u4
         enum: record_types
-      - id: ofs_record
+      - id: ofs_body
         type: u4
       - id: count
         type: u4
@@ -167,7 +167,7 @@ types:
         if: _parent.is_header
       body:
         io: _parent.storage_section._io
-        pos: ofs_record
+        pos: ofs_body
         type:
           switch-on: record_type
           cases:
