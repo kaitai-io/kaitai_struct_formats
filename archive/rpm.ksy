@@ -72,7 +72,7 @@ types:
           prev_size_rec_idx != -1 ? prev_size_rec_idx :
             (_parent.signature.index_records[idx].signature_tag == signature_tags::size
             and _parent.signature.index_records[idx].record_type == record_types::int32
-            and _parent.signature.index_records[idx].count >= 1 ? idx : -1)
+            and _parent.signature.index_records[idx].num_values >= 1 ? idx : -1)
   dummy: {}
   lead:
     doc: |
@@ -156,6 +156,7 @@ types:
         type: u4
       - id: count
         type: u4
+        doc: internal; access `num_values` and `len_value` instead
     instances:
       signature_tag:
         value: tag_raw
@@ -165,57 +166,63 @@ types:
         value: tag_raw
         enum: header_tags
         if: _parent.is_header
+      num_values:
+        value: count
+        if: record_type != record_types::bin
+      len_value:
+        value: count
+        if: record_type == record_types::bin
       body:
         io: _parent.storage_section._io
         pos: ofs_body
         type:
           switch-on: record_type
           cases:
-            record_types::char: record_type_int8(count)
-            record_types::int8: record_type_int8(count)
-            record_types::int16: record_type_int16(count)
-            record_types::int32: record_type_int32(count)
-            record_types::int64: record_type_int64(count)
+            record_types::char: record_type_int8(num_values)
+            record_types::int8: record_type_int8(num_values)
+            record_types::int16: record_type_int16(num_values)
+            record_types::int32: record_type_int32(num_values)
+            record_types::int64: record_type_int64(num_values)
             record_types::string: record_type_string
-            record_types::bin: record_type_bin(count)
-            record_types::string_array: record_type_string_array(count)
-            record_types::i18n_string: record_type_string_array(count)
+            record_types::bin: record_type_bin(len_value)
+            record_types::string_array: record_type_string_array(num_values)
+            record_types::i18n_string: record_type_string_array(num_values)
   record_type_int8:
     params:
-      - id: count
+      - id: num_values
         type: u4
     seq:
       - id: values
         type: u1
         repeat: expr
-        repeat-expr: count
+        repeat-expr: num_values
   record_type_int16:
     params:
-      - id: count
+      - id: num_values
         type: u4
     seq:
       - id: values
         type: u2
         repeat: expr
-        repeat-expr: count
+        repeat-expr: num_values
   record_type_int32:
     params:
-      - id: count
+      - id: num_values
         type: u4
     seq:
       - id: values
         type: u4
         repeat: expr
-        repeat-expr: count
+        repeat-expr: num_values
   record_type_int64:
     params:
-      - id: count
+      - id: num_values
         type: u4
     seq:
       - id: values
         type: u8
         repeat: expr
-        repeat-expr: count
+        repeat-expr: num_values
   record_type_string:
     seq:
       - id: values
@@ -225,23 +232,23 @@ types:
         repeat-expr: 1
   record_type_bin:
     params:
-      - id: count
+      - id: len_value
         type: u4
     seq:
       - id: values
-        size: count
+        size: len_value
         repeat: expr
         repeat-expr: 1
   record_type_string_array:
     params:
-      - id: count
+      - id: num_values
         type: u4
     seq:
       - id: values
         type: strz
         encoding: UTF-8
         repeat: expr
-        repeat-expr: count
+        repeat-expr: num_values
   header_record:
     seq:
       - id: magic
