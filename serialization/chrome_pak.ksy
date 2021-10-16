@@ -58,12 +58,6 @@ types:
         type: u2
       - id: num_aliases
         type: u2
-  alias:
-    seq:
-      - id: id
-        type: u2
-      - id: index
-        type: u2
   resource:
     -webide-representation: 'o:{ofs_body} s:{len_body}'
     params:
@@ -86,6 +80,12 @@ types:
         size: len_body
         if: has_body
         doc: MUST NOT be accessed until the next `resource` is parsed
+  alias:
+    seq:
+      - id: id
+        type: u2
+      - id: index
+        type: u2
 enums:
   encoding:
     0: binary
