@@ -18,43 +18,23 @@ seq:
       any-of: [4, 5]
     doc: only versions 4 and 5 are supported
   - id: header
-    type:
-      switch-on: version
-      cases:
-        4: header4
-        5: header5
+    type: file_header
 types:
-  header4:
+  file_header:
     seq:
-      - id: number_of_resources
+      - id: num_resources_v4
         type: u4
+        if: v == 4
       - id: encoding
         type: u1
         enum: encoding
+      - id: v5_part
+        type: header_v5_part
+        if: v == 5
       - id: resources
         type: resource
         repeat: expr
-        repeat-expr: number_of_resources + 1
-        doc: |
-          The length is calculated by looking at the offset of
-          the next item, so an extra entry is stored with id 0
-          and offset pointing to the end of the resources.
-  header5:
-    seq:
-      - id: encoding
-        type: u1
-        enum: encoding
-      - id: ignore
-        size: 3
-        doc: These three bytes have no meaning in the file
-      - id: number_of_resources
-        type: u2
-      - id: number_of_aliases
-        type: u2
-      - id: resources
-        type: resource
-        repeat: expr
-        repeat-expr: number_of_resources + 1
+        repeat-expr: num_resources + 1
         doc: |
           The length is calculated by looking at the offset of
           the next item, so an extra entry is stored with id 0
@@ -62,7 +42,22 @@ types:
       - id: aliases
         type: alias
         repeat: expr
-        repeat-expr: number_of_aliases
+        repeat-expr: num_aliases
+    instances:
+      v:
+        value: _parent.version
+      num_resources:
+        value: 'v == 5 ? v5_part.num_resources : num_resources_v4'
+      num_aliases:
+        value: 'v == 5 ? v5_part.num_aliases : 0'
+  header_v5_part:
+    seq:
+      - id: encoding_padding
+        size: 3
+      - id: num_resources
+        type: u2
+      - id: num_aliases
+        type: u2
   alias:
     seq:
       - id: id
