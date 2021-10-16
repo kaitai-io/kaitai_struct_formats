@@ -14,7 +14,9 @@ doc-ref:
 seq:
   - id: version
     type: u4
-    doc: Support versions are 4 and 5
+    valid:
+      any-of: [4, 5]
+    doc: only versions 4 and 5 are supported
   - id: header
     type:
       switch-on: version
