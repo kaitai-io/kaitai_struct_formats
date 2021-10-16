@@ -9,8 +9,8 @@ doc: |
   resources such as translated strings, help messages and images.
 doc-ref:
   - http://dev.chromium.org/developers/design-documents/linuxresourcesandlocalizedstrings # version 4
-  - https://chromium.googlesource.com/chromium/src/tools/grit/+/22f7a68bb5ad68fe4192d0f34466049038735b9c/grit/format/data_pack.py # version 4
-  - https://chromium.googlesource.com/chromium/src/tools/grit/+/c1a76d6143016e9b2c292236bab623d1497cd31f/grit/format/data_pack.py # version 5
+  - https://chromium.googlesource.com/chromium/src/tools/grit/+/3c36f27/grit/format/data_pack.py # version 4
+  - https://chromium.googlesource.com/chromium/src/tools/grit/+/8a23eae/grit/format/data_pack.py # version 5
 seq:
   - id: version
     type: u4
