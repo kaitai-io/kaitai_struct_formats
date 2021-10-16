@@ -76,7 +76,7 @@ types:
   dummy: {}
   lead:
     doc: |
-      Panu Matilainen (a RPM developer) [described this
+      In 2021, Panu Matilainen (a RPM developer) [described this
       structure](https://github.com/kaitai-io/kaitai_struct_formats/pull/469#discussion_r718288192)
       as follows:
 
