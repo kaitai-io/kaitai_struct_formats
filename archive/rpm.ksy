@@ -28,7 +28,7 @@ seq:
     type: lead
   - id: signature
     type: header(true)
-  - id: boundary_padding
+  - id: signature_padding
     size: (- _io.pos) % 8
   - size: 0
     if: ofs_header < 0
