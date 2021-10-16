@@ -11,6 +11,7 @@ meta:
     wikidata: Q492650
   license: CC0-1.0
   ks-version: 0.9
+  encoding: UTF-8
   endian: be
 doc: |
   This parser is for the RPM version 3 file format which is the current version
@@ -104,7 +105,6 @@ types:
       - id: package_name
         size: 66
         type: strz
-        encoding: UTF-8
       - id: os
         -orig-id: osnum
         type: u2
@@ -229,7 +229,6 @@ types:
     seq:
       - id: values
         type: strz
-        encoding: UTF-8
         repeat: expr
         repeat-expr: 1
   record_type_bin:
@@ -248,7 +247,6 @@ types:
     seq:
       - id: values
         type: strz
-        encoding: UTF-8
         repeat: expr
         repeat-expr: num_values
   header_record:
