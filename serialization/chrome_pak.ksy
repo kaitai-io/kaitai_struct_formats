@@ -32,7 +32,7 @@ types:
         type: header_v5_part
         if: v == 5
       - id: resources
-        type: resource
+        type: resource(_index, _index < num_resources)
         repeat: expr
         repeat-expr: num_resources + 1
         doc: |
@@ -65,11 +65,27 @@ types:
       - id: index
         type: u2
   resource:
+    -webide-representation: 'o:{ofs_body} s:{len_body}'
+    params:
+      - id: idx
+        type: s4
+      - id: has_body
+        type: bool
     seq:
       - id: id
         type: u2
-      - id: offset
+      - id: ofs_body
         type: u4
+    instances:
+      len_body:
+        value: _parent.resources[idx + 1].ofs_body - ofs_body
+        if: has_body
+        doc: MUST NOT be accessed until the next `resource` is parsed
+      body:
+        pos: ofs_body
+        size: len_body
+        if: has_body
+        doc: MUST NOT be accessed until the next `resource` is parsed
 enums:
   encoding:
     0: binary
