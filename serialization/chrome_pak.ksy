@@ -86,6 +86,8 @@ types:
         type: u2
       - id: resource_idx
         type: u2
+        valid:
+          max: _parent.num_resources - 1
     instances:
       resource:
         value: _parent.resources[resource_idx]
