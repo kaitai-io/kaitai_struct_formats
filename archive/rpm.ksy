@@ -1,12 +1,15 @@
 meta:
   id: rpm
-  title: RPM Package Manager files
+  title: RPM package file
+  application: RPM Package Manager
   file-extension:
     - rpm
     - srpm
     - src.rpm
     - drpm
   xref:
+    justsolve: RPM
+    mime: application/x-rpm
     pronom: fmt/795 # v3
     wikidata: Q492650
   license: CC0-1.0
