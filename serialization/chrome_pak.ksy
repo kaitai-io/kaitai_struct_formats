@@ -84,8 +84,11 @@ types:
     seq:
       - id: id
         type: u2
-      - id: index
+      - id: resource_idx
         type: u2
+    instances:
+      resource:
+        value: _parent.resources[resource_idx]
 enums:
   encoding:
     0: binary
