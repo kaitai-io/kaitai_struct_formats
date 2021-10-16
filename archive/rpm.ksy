@@ -30,14 +30,49 @@ seq:
     type: header(true)
   - id: boundary_padding
     size: (- _io.pos) % 8
+  - size: 0
+    if: ofs_header < 0
   - id: header
     type: header(false)
-  # - id: payload
-  #   size: ??
-  #   doc: |
-  #     if signature has a SIZE value, then it is:
-  #     signature[SIZE][0] - sizeof<header>
+  - size: 0
+    if: ofs_payload < 0
+  - id: signature_tags_steps
+    type: 'signature_tags_step(_index, _index < 1 ? -1 : signature_tags_steps[_index - 1].size_tag_idx)'
+    repeat: expr
+    repeat-expr: signature.header_record.num_index_records
+instances:
+  payload:
+    pos: ofs_payload
+    size: len_payload
+    if: has_signature_size_rec
+  len_payload:
+    value: 'signature_size_rec.body.as<record_type_int32>.values[0] - len_header'
+    if: has_signature_size_rec
+  len_header:
+    value: ofs_payload - ofs_header
+  ofs_header:
+    value: _io.pos
+  ofs_payload:
+    value: _io.pos
+  has_signature_size_rec:
+    value: signature_tags_steps.last.size_tag_idx != -1
+  signature_size_rec:
+    value: signature.index_records[signature_tags_steps.last.size_tag_idx]
+    if: has_signature_size_rec
 types:
+  signature_tags_step:
+    params:
+      - id: idx
+        type: s4
+      - id: prev_size_rec_idx
+        type: s4
+    instances:
+      size_tag_idx:
+        value: |
+          prev_size_rec_idx != -1 ? prev_size_rec_idx :
+            (_parent.signature.index_records[idx].signature_tag == signature_tags::size
+            and _parent.signature.index_records[idx].record_type == record_types::int32
+            and _parent.signature.index_records[idx].count >= 1 ? idx : -1)
   dummy: {}
   lead:
     doc: |
