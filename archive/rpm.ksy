@@ -124,10 +124,11 @@ types:
         doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/lib/rpmlead.c#L102
       - id: minor
         type: u1
-  # header structure used for both the "header" and "signature",
-  # but that some of the tags have a different meaning in
-  # signature and header (hence they use different enums)
   header:
+    doc: |
+      header structure used for both the "header" and "signature", but some tag
+      values have different meanings in signature and header (hence they use
+      different enums)
     params:
       - id: is_signature
         type: bool
@@ -149,6 +150,7 @@ types:
     seq:
       - id: tag_raw
         type: u4
+        doc: prefer to access `signature_tag` and `header_tag` instead
       - id: record_type
         type: u4
         enum: record_types
