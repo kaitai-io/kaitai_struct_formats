@@ -30,7 +30,7 @@ types:
         if: v == 4
       - id: encoding
         type: u1
-        enum: encoding
+        enum: encodings
       - id: v5_part
         type: header_v5_part
         if: v == 5
@@ -95,7 +95,7 @@ types:
       resource:
         value: _parent.resources[resource_idx]
 enums:
-  encoding:
+  encodings:
     0: binary
     1: utf8
     2: utf16
