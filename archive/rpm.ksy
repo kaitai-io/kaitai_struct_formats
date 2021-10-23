@@ -48,32 +48,32 @@ instances:
   payload:
     pos: ofs_payload
     size: len_payload
-    if: has_signature_size_rec
+    if: has_signature_size_tag
   len_payload:
-    value: 'signature_size_rec.body.as<record_type_uint32>.values[0] - len_header'
-    if: has_signature_size_rec
+    value: 'signature_size_tag.body.as<record_type_uint32>.values[0] - len_header'
+    if: has_signature_size_tag
   len_header:
     value: ofs_payload - ofs_header
   ofs_header:
     value: _io.pos
   ofs_payload:
     value: _io.pos
-  has_signature_size_rec:
+  has_signature_size_tag:
     value: signature_tags_steps.last.size_tag_idx != -1
-  signature_size_rec:
+  signature_size_tag:
     value: signature.index_records[signature_tags_steps.last.size_tag_idx]
-    if: has_signature_size_rec
+    if: has_signature_size_tag
 types:
   signature_tags_step:
     params:
       - id: idx
         type: s4
-      - id: prev_size_rec_idx
+      - id: prev_size_tag_idx
         type: s4
     instances:
       size_tag_idx:
         value: |
-          prev_size_rec_idx != -1 ? prev_size_rec_idx :
+          prev_size_tag_idx != -1 ? prev_size_tag_idx :
             (_parent.signature.index_records[idx].signature_tag == signature_tags::size
             and _parent.signature.index_records[idx].record_type == record_types::uint32
             and _parent.signature.index_records[idx].num_values >= 1 ? idx : -1)
