@@ -66,7 +66,7 @@ types:
       - id: num_aliases
         type: u2
   resource:
-    -webide-representation: 'o:{ofs_body} s:{len_body}'
+    -webide-representation: '{id:dec} - o:{ofs_body} s:{len_body}'
     params:
       - id: idx
         type: s4
@@ -88,6 +88,7 @@ types:
         if: has_body
         doc: MUST NOT be accessed until the next `resource` is parsed
   alias:
+    -webide-representation: '{id:dec} -> resources[{resource_idx:dec}] ({resource})'
     seq:
       - id: id
         type: u2
