@@ -31,6 +31,16 @@ types:
       - id: encoding
         type: u1
         enum: encodings
+        doc: |
+          Character encoding of all text resources in the PAK file. Note that
+          the file can **always** contain binary resources, this only applies to
+          those that are supposed to hold text.
+
+          In practice, this will probably always be `encodings::utf8` - I
+          haven't seen any organic file that would state otherwise. `UTF8` is
+          also usually hardcoded in Python scripts in the GRIT repository
+          generating .pak files (see for example
+          [`pak_util.py:79`](https://chromium.googlesource.com/chromium/src/tools/grit/+/8a23eae/pak_util.py#79)).
       - id: v5_part
         type: header_v5_part
         if: v == 5
@@ -96,6 +106,12 @@ types:
         value: _parent.resources[resource_idx]
 enums:
   encodings:
-    0: binary
-    1: utf8
-    2: utf16
+    0:
+      id: binary
+      doc: file is not expected to contain any text resources
+    1:
+      id: utf8
+      doc: all text resources are encoded in UTF-8
+    2:
+      id: utf16
+      doc: all text resources are encoded in UTF-16
