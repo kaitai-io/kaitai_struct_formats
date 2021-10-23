@@ -27,7 +27,10 @@ doc: |
   tool](https://github.com/gtsystem/python-remotezip#command-line-tool) to list
   members in the archive and then to download only the file you want.
 
-doc-ref: https://android.googlesource.com/device/huawei/angler/+/673cfb9/releasetools.py
+doc-ref:
+  - https://android.googlesource.com/device/huawei/angler/+/673cfb9/releasetools.py
+  - https://source.codeaurora.org/quic/la/device/qcom/common/tree/meta_image/meta_format.h?h=LA.UM.6.1.1&id=a68d284aee85
+  - https://source.codeaurora.org/quic/la/device/qcom/common/tree/meta_image/meta_image.c?h=LA.UM.6.1.1&id=a68d284aee85
 seq:
   - id: meta_header
     type: meta_hdr
@@ -63,8 +66,19 @@ types:
       - id: entries
         type: image_hdr_entry
         repeat: eos
+        doc: |
+          The C generator program defines `img_header` as a [fixed size
+          array](https://source.codeaurora.org/quic/la/device/qcom/common/tree/meta_image/meta_image.c?h=LA.UM.6.1.1&id=a68d284aee85#n42)
+          of `img_header_entry_t` structs with length `MAX_IMAGES` (which is
+          defined as `16`).
+
+          This means that technically there will always be 16 `image_hdr`
+          entries, the first *n* entries being used (filled with real values)
+          and the rest left unused with all bytes zero.
+
+          To check if an entry is used, use the `is_used` attribute.
   image_hdr_entry:
-    -webide-representation: '{name} - o:{ofs_body}, s:{len_body}'
+    -webide-representation: '{name} - o:{ofs_body}, s:{len_body} (used: {is_used})'
     seq:
       - id: name
         size: 72
@@ -75,7 +89,11 @@ types:
       - id: len_body
         type: u4
     instances:
+      is_used:
+        value: ofs_body != 0 and len_body != 0
+        doc-ref: https://source.codeaurora.org/quic/la/device/qcom/common/tree/meta_image/meta_image.c?h=LA.UM.6.1.1&id=a68d284aee85#n119
       body:
         io: _root._io
         pos: ofs_body
         size: len_body
+        if: is_used
