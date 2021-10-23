@@ -20,49 +20,43 @@ seq:
     valid:
       any-of: [4, 5]
     doc: only versions 4 and 5 are supported
-  - id: header
-    type: file_header
-types:
-  file_header:
-    seq:
-      - id: num_resources_v4
-        type: u4
-        if: v == 4
-      - id: encoding
-        type: u1
-        enum: encodings
-        doc: |
-          Character encoding of all text resources in the PAK file. Note that
-          the file can **always** contain binary resources, this only applies to
-          those that are supposed to hold text.
+  - id: num_resources_v4
+    type: u4
+    if: version == 4
+  - id: encoding
+    type: u1
+    enum: encodings
+    doc: |
+      Character encoding of all text resources in the PAK file. Note that
+      the file can **always** contain binary resources, this only applies to
+      those that are supposed to hold text.
 
-          In practice, this will probably always be `encodings::utf8` - I
-          haven't seen any organic file that would state otherwise. `UTF8` is
-          also usually hardcoded in Python scripts in the GRIT repository
-          generating .pak files (see for example
-          [`pak_util.py:79`](https://chromium.googlesource.com/chromium/src/tools/grit/+/8a23eae/pak_util.py#79)).
-      - id: v5_part
-        type: header_v5_part
-        if: v == 5
-      - id: resources
-        type: resource(_index, _index < num_resources)
-        repeat: expr
-        repeat-expr: num_resources + 1
-        doc: |
-          The length is calculated by looking at the offset of
-          the next item, so an extra entry is stored with id 0
-          and offset pointing to the end of the resources.
-      - id: aliases
-        type: alias
-        repeat: expr
-        repeat-expr: num_aliases
-    instances:
-      v:
-        value: _parent.version
-      num_resources:
-        value: 'v == 5 ? v5_part.num_resources : num_resources_v4'
-      num_aliases:
-        value: 'v == 5 ? v5_part.num_aliases : 0'
+      In practice, this will probably always be `encodings::utf8` - I
+      haven't seen any organic file that would state otherwise. `UTF8` is
+      also usually hardcoded in Python scripts in the GRIT repository
+      generating .pak files (see for example
+      [`pak_util.py:79`](https://chromium.googlesource.com/chromium/src/tools/grit/+/8a23eae/pak_util.py#79)).
+  - id: v5_part
+    type: header_v5_part
+    if: version == 5
+  - id: resources
+    type: resource(_index, _index < num_resources)
+    repeat: expr
+    repeat-expr: num_resources + 1
+    doc: |
+      The length is calculated by looking at the offset of
+      the next item, so an extra entry is stored with id 0
+      and offset pointing to the end of the resources.
+  - id: aliases
+    type: alias
+    repeat: expr
+    repeat-expr: num_aliases
+instances:
+  num_resources:
+    value: 'version == 5 ? v5_part.num_resources : num_resources_v4'
+  num_aliases:
+    value: 'version == 5 ? v5_part.num_aliases : 0'
+types:
   header_v5_part:
     seq:
       - id: encoding_padding
