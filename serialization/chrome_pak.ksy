@@ -2,6 +2,9 @@ meta:
   id: chrome_pak
   title: Chrome PAK serialization format
   file-extension: pak
+  tags:
+    - archive
+    - serialization
   license: CC0-1.0
   endian: le
 doc: |
