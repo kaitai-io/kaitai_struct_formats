@@ -31,10 +31,10 @@ seq:
       the file can **always** contain binary resources, this only applies to
       those that are supposed to hold text.
 
-      In practice, this will probably always be `encodings::utf8` - I
-      haven't seen any organic file that would state otherwise. `UTF8` is
-      also usually hardcoded in Python scripts in the GRIT repository
-      generating .pak files (see for example
+      In practice, this will probably always be `encodings::utf8` - I haven't
+      seen any organic file that would state otherwise. `UTF8` is also usually
+      hardcoded in Python scripts from the GRIT repository that generate .pak
+      files (for example
       [`pak_util.py:79`](https://chromium.googlesource.com/chromium/src/tools/grit/+/8a23eae/pak_util.py#79)).
   - id: v5_part
     type: header_v5_part
