@@ -50,7 +50,7 @@ instances:
     size: len_payload
     if: has_signature_size_rec
   len_payload:
-    value: 'signature_size_rec.body.as<record_type_int32>.values[0] - len_header'
+    value: 'signature_size_rec.body.as<record_type_uint32>.values[0] - len_header'
     if: has_signature_size_rec
   len_header:
     value: ofs_payload - ofs_header
@@ -75,7 +75,7 @@ types:
         value: |
           prev_size_rec_idx != -1 ? prev_size_rec_idx :
             (_parent.signature.index_records[idx].signature_tag == signature_tags::size
-            and _parent.signature.index_records[idx].record_type == record_types::int32
+            and _parent.signature.index_records[idx].record_type == record_types::uint32
             and _parent.signature.index_records[idx].num_values >= 1 ? idx : -1)
   dummy: {}
   lead:
@@ -183,16 +183,16 @@ types:
         type:
           switch-on: record_type
           cases:
-            record_types::char: record_type_int8(num_values)
-            record_types::int8: record_type_int8(num_values)
-            record_types::int16: record_type_int16(num_values)
-            record_types::int32: record_type_int32(num_values)
-            record_types::int64: record_type_int64(num_values)
+            record_types::char: record_type_uint8(num_values)
+            record_types::uint8: record_type_uint8(num_values)
+            record_types::uint16: record_type_uint16(num_values)
+            record_types::uint32: record_type_uint32(num_values)
+            record_types::uint64: record_type_uint64(num_values)
             record_types::string: record_type_string
             record_types::bin: record_type_bin(len_value)
             record_types::string_array: record_type_string_array(num_values)
             record_types::i18n_string: record_type_string_array(num_values)
-  record_type_int8:
+  record_type_uint8:
     params:
       - id: num_values
         type: u4
@@ -201,7 +201,7 @@ types:
         type: u1
         repeat: expr
         repeat-expr: num_values
-  record_type_int16:
+  record_type_uint16:
     params:
       - id: num_values
         type: u4
@@ -210,7 +210,7 @@ types:
         type: u2
         repeat: expr
         repeat-expr: num_values
-  record_type_int32:
+  record_type_uint32:
     params:
       - id: num_values
         type: u4
@@ -219,7 +219,7 @@ types:
         type: u4
         repeat: expr
         repeat-expr: num_values
-  record_type_int64:
+  record_type_uint64:
     params:
       - id: num_values
         type: u4
@@ -1167,10 +1167,10 @@ enums:
     # from LSB
     0: not_implemented
     1: char
-    2: int8
-    3: int16
-    4: int32
-    5: int64
+    2: uint8
+    3: uint16
+    4: uint32
+    5: uint64
     6: string # NUL terminated
     7: bin
     8: string_array # NUL terminated strings
