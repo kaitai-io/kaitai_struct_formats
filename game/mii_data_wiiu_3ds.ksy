@@ -125,9 +125,9 @@ types:
       - id: unknown_1
         type: b1be
         doc: This bit is currently unknown. It should be set to 0, in most common use cases. Some documentation says only "is DSi Mii?" which doesn't seem right.
-      - id: is_nintendo_mii
+      - id: is_developer_mii
         type: b1be
-        doc: Randomly generated Miis that games create at runtime that only get stored in RAM, or Miis made by Nintendo to only be used in games and applications. If this is set to 1, all other bits in the Mii ID contents should be set to 0.
+        doc: Randomly generated Miis that games create at runtime that only get stored in RAM, or Miis made on a developer unit to only be used in games and applications. If this is set to 1, all other bits in the Mii ID contents should be set to 0.
       - id: is_valid
         type: b1be
         doc: Determines if the Mii is valid. Mii will be considered invalid if this bit is not set to 1.
