@@ -766,7 +766,7 @@ types:
       - id: handlers
         type: encoded_type_addr_pair
         repeat: expr
-        repeat-expr: size.value
+        repeat-expr: 'signed_size < 0 ? -signed_size : signed_size'
         doc: |
           Stream of abs(size) encoded items, one for each caught type, in the
           order that the types should be tested.
@@ -777,6 +777,9 @@ types:
           Bytecode address of the catch-all handler.
 
           This element is only present if size is non-positive.
+    instances:
+      signed_size:
+        value: size.value_signed
   encoded_type_addr_pair:
     doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#encoded-type-addr-pair'
     seq:
