@@ -771,7 +771,7 @@ types:
           Stream of abs(size) encoded items, one for each caught type, in the
           order that the types should be tested.
       - id: catch_all_addr
-        if: size.value < 0
+        if: signed_size < 0
         type: vlq_base128_le
         doc: |
           Bytecode address of the catch-all handler.
