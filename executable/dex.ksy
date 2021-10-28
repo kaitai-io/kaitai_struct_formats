@@ -9,21 +9,23 @@ meta:
     - android
     - executable
   license: Apache-2.0
+  # Portions of this page are reproduced from work created and shared by Google and used
+  # according to terms described in the Creative Commons 3.0 Attribution License.
   imports:
     - /common/vlq_base128_le
   endian: le
 doc: |
-  Android OS applications executables are typically stored in its own
-  format, optimized for more efficient execution in Dalvik virtual
-  machine.
+  Android OS applications executables are typically stored in its own format,
+  optimized for more efficient execution in Dalvik virtual machine.
 
-  This format is loosely similar to Java .class file format and
-  generally holds the similar set of data: i.e. classes, methods,
-  fields, annotations, etc.
-doc-ref: https://source.android.com/devices/tech/dalvik/dex-format
+  This format is loosely similar to Java .class file format and generally holds
+  the similar set of data: i.e. classes, methods, fields, annotations, etc.
+doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format'
 seq:
   - id: header
     type: header_item
+    doc: 'The header'
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#file-layout'
 instances:
   string_ids:
     pos: header.string_ids_off
@@ -31,47 +33,52 @@ instances:
     repeat: expr
     repeat-expr: header.string_ids_size
     doc: |
-      string identifiers list.
+      String identifiers list.
 
       These are identifiers for all the strings used by this file, either for
-      internal naming (e.g., type descriptors) or as constant objects referred to by code.
+      internal naming (e.g., type descriptors) or as constant objects referred
+      to by code.
 
-      This list must be sorted by string contents, using UTF-16 code point values
-      (not in a locale-sensitive manner), and it must not contain any duplicate entries.
+      This list must be sorted by string contents, using UTF-16 code point
+      values (not in a locale-sensitive manner), and it must not contain any
+      duplicate entries.
   type_ids:
     pos: header.type_ids_off
     type: type_id_item
     repeat: expr
     repeat-expr: header.type_ids_size
     doc: |
-      type identifiers list.
+      Type identifiers list.
 
       These are identifiers for all types (classes, arrays, or primitive types)
       referred to by this file, whether defined in the file or not.
 
-      This list must be sorted by string_id index, and it must not contain any duplicate entries.
+      This list must be sorted by string_id index, and it must not contain any
+      duplicate entries.
   proto_ids:
     pos: header.proto_ids_off
     type: proto_id_item
     repeat: expr
     repeat-expr: header.proto_ids_size
     doc: |
-      method prototype identifiers list.
+      Method prototype identifiers list.
 
       These are identifiers for all prototypes referred to by this file.
 
       This list must be sorted in return-type (by type_id index) major order,
       and then by argument list (lexicographic ordering, individual arguments
-      ordered by type_id index). The list must not contain any duplicate entries.
+      ordered by type_id index). The list must not contain any duplicate
+      entries.
   field_ids:
     pos: header.field_ids_off
     type: field_id_item
     repeat: expr
     repeat-expr: header.field_ids_size
     doc: |
-      field identifiers list.
+      Field identifiers list.
 
-      These are identifiers for all fields referred to by this file, whether defined in the file or not.
+      These are identifiers for all fields referred to by this file, whether
+      defined in the file or not.
 
       This list must be sorted, where the defining type (by type_id index)
       is the major order, field name (by string_id index) is the intermediate
@@ -84,7 +91,7 @@ instances:
     repeat: expr
     repeat-expr: header.method_ids_size
     doc: |
-      method identifiers list.
+      Method identifiers list.
 
       These are identifiers for all methods referred to by this file,
       whether defined in the file or not.
@@ -100,32 +107,22 @@ instances:
     repeat: expr
     repeat-expr: header.class_defs_size
     doc: |
-      class definitions list.
+      Class definitions list.
 
       The classes must be ordered such that a given class's superclass and
-      implemented interfaces appear in the list earlier than the referring class.
+      implemented interfaces appear in the list earlier than the referring
+      class.
 
       Furthermore, it is invalid for a definition for the same-named class to
       appear more than once in the list.
-  #call_site_ids:
-  #  pos: header.???
-  #  type: call_site_id_item
-  #  repeat: expr
-  #  repeat-expr: header.???
-  #  doc: |
-  #    call site identifiers list.
-  #
-  #    These are identifiers for all call sites referred to by this file,
-  #    whether defined in the file or not.
-  #
-  #    This list must be sorted in ascending order of call_site_off.
   link_data:
     pos: header.link_off
     size: header.link_size
     doc: |
-      data used in statically linked files.
+      Data used in statically linked files.
 
-      The format of the data in this section is left unspecified by this document.
+      The format of the data in this section is left unspecified by this
+      document.
 
       This section is empty in unlinked files, and runtime implementations may
       use it as they see fit.
@@ -133,7 +130,7 @@ instances:
     pos: header.data_off
     size: header.data_size
     doc: |
-      data area, containing all the support data for the tables listed above.
+      Data area, containing all the support data for the tables listed above.
 
       Different items have different alignment requirements, and padding bytes
       are inserted before each item if necessary to achieve proper alignment.
@@ -142,332 +139,416 @@ instances:
     type: map_list
 types:
   header_item:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#header-item'
     seq:
       - id: magic
-        contents: "dex\n"
+        contents:
+          - 0x64
+          - 0x65
+          - 0x78
+          - 0x0a
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#dex-file-magic'
       - id: version_str
         size: 4
         type: strz
         encoding: ascii
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#dex-file-magic'
       - id: checksum
         type: u4
         doc: |
-          adler32 checksum of the rest of the file (everything but magic and this field);
-          used to detect file corruption
+          Adler32 checksum of the rest of the file (everything but magic and
+          this field).
+
+          Used to detect file corruption.
       - id: signature
         size: 20
         doc: |
-          SHA-1 signature (hash) of the rest of the file (everything but magic, checksum,
-          and this field); used to uniquely identify files
+          SHA-1 signature (hash) of the rest of the file (everything but magic,
+          checksum, and this field).
+
+          Used to uniquely identify files.
       - id: file_size
         type: u4
-        doc: |
-          size of the entire file (including the header), in bytes
+        doc: 'Size of the entire file (including the header), in bytes.'
       - id: header_size
         type: u4
-        # guard: 0x70
         doc: |
-          size of the header (this entire section), in bytes. This allows for at
-          least a limited amount of backwards/forwards compatibility without
-          invalidating the format.
+          Size of the header (this entire section), in bytes. 
+
+          This allows for at least a limited amount of backwards/forwards
+          compatibility without invalidating the format.
       - id: endian_tag
         type: u4
         enum: endian_constant
+        doc: |
+          Endianness tag.
+
+          See discussion under "ENDIAN_CONSTANT and REVERSE_ENDIAN_CONSTANT" for
+          more details.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#endian-constant'
       - id: link_size
         type: u4
         doc: |
-          size of the link section, or 0 if this file isn't statically linked
+          Size of the link section, or 0 if this file isnt statically linked.
       - id: link_off
         type: u4
         doc: |
-          offset from the start of the file to the link section, or 0 if link_size == 0.
-          The offset, if non-zero, should be to an offset into the link_data section.
-          The format of the data pointed at is left unspecified by this document;
-          this header field (and the previous) are left as hooks for use by runtime implementations.
+          Offset from the start of the file to the link section, or 0 if
+          link_size == 0.
+
+          The offset, if non-zero, should be to an offset into the link_data
+          section.
+
+          The format of the data pointed at is left unspecified by this
+          document; this header field (and the previous) are left as hooks for
+          use by runtime implementations.
       - id: map_off
         type: u4
         doc: |
-          offset from the start of the file to the map item.
-          The offset, which must be non-zero, should be to an offset into the data
-          section, and the data should be in the format specified by "map_list" below.
+          Offset from the start of the file to the map item.
+
+          The offset, which must be non-zero, should be to an offset into the
+          data section, and the data should be in the format specified by 
+          "map_list".
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#map-list'
       - id: string_ids_size
         type: u4
-        doc: |
-          count of strings in the string identifiers list
+        doc: 'Count of strings in the string identifiers list.'
       - id: string_ids_off
         type: u4
         doc: |
-          offset from the start of the file to the string identifiers list,
+          Offset from the start of the file to the string identifiers list,
           or 0 if string_ids_size == 0 (admittedly a strange edge case).
-          The offset, if non-zero, should be to the start of the string_ids section.
+
+          The offset, if non-zero, should be to the start of the string_ids
+          section.
       - id: type_ids_size
         type: u4
-        doc: |
-          count of elements in the type identifiers list, at most 65535
+        doc: 'Count of elements in the type identifiers list, at most 65535.'
       - id: type_ids_off
         type: u4
         doc: |
-          offset from the start of the file to the type identifiers list,
+          Offset from the start of the file to the type identifiers list,
           or 0 if type_ids_size == 0 (admittedly a strange edge case).
-          The offset, if non-zero, should be to the start of the type_ids section.
+
+          The offset, if non-zero, should be to the start of the type_ids
+          section.
       - id: proto_ids_size
         type: u4
         doc: |
-          count of elements in the prototype identifiers list, at most 65535
+          Count of elements in the prototype identifiers list, at most 65535.
       - id: proto_ids_off
         type: u4
         doc: |
-          offset from the start of the file to the prototype identifiers list,
+          Offset from the start of the file to the prototype identifiers list,
           or 0 if proto_ids_size == 0 (admittedly a strange edge case).
-          The offset, if non-zero, should be to the start of the proto_ids section.
+
+          The offset, if non-zero, should be to the start of the proto_ids
+          section.
       - id: field_ids_size
         type: u4
-        doc: |
-          count of elements in the field identifiers list
+        doc: 'Count of elements in the field identifiers list.'
       - id: field_ids_off
         type: u4
         doc: |
-          offset from the start of the file to the field identifiers list,
+          Offset from the start of the file to the field identifiers list,
           or 0 if field_ids_size == 0.
-          The offset, if non-zero, should be to the start of the field_ids section.
+
+          The offset, if non-zero, should be to the start of the field_ids
+          section.
       - id: method_ids_size
         type: u4
-        doc: |
-          count of elements in the method identifiers list
+        doc: 'Count of elements in the method identifiers list.'
       - id: method_ids_off
         type: u4
         doc: |
-          offset from the start of the file to the method identifiers list,
+          Offset from the start of the file to the method identifiers list,
           or 0 if method_ids_size == 0.
-          The offset, if non-zero, should be to the start of the method_ids section.
+
+          The offset, if non-zero, should be to the start of the method_ids
+          section.
       - id: class_defs_size
         type: u4
-        doc: |
-          count of elements in the class definitions list
+        doc: 'Count of elements in the class definitions list.'
       - id: class_defs_off
         type: u4
         doc: |
-          offset from the start of the file to the class definitions list,
+          Offset from the start of the file to the class definitions list,
           or 0 if class_defs_size == 0 (admittedly a strange edge case).
-          The offset, if non-zero, should be to the start of the class_defs section.
+
+          The offset, if non-zero, should be to the start of the class_defs
+          section.
       - id: data_size
         type: u4
         doc: |
-          Size of data section in bytes. Must be an even multiple of sizeof(uint).
+          Size of data section in bytes. Must be an even multiple of
+          sizeof(uint).
       - id: data_off
         type: u4
         doc: |
-          offset from the start of the file to the start of the data section.
+          Offset from the start of the file to the start of the data section.
     enums:
       endian_constant:
         0x12345678: endian_constant
         0x78563412: reverse_endian_constant
   string_id_item:
-    -webide-representation: "{value.data} (offs={string_data_off})"
+    -webide-representation: '{value.data} (offs={string_data_off})'
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#string-item'
     seq:
       - id: string_data_off
         type: u4
         doc: |
-          offset from the start of the file to the string data for this item.
+          Offset from the start of the file to the string data for this item.
+
           The offset should be to a location in the data section, and the data
-          should be in the format specified by "string_data_item" below.
+          should be in the format specified by "string_data_item".
+
           There is no alignment requirement for the offset.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#string-data-item'
     types:
       string_data_item:
-        -webide-representation: "{data}"
+        -webide-representation: '{data}'
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#string-data-item'
         seq:
           - id: utf16_size
             type: vlq_base128_le
+            doc: |
+              Size of this string, in UTF-16 code units (which is the
+              "string length" in many systems). That is, this is the decoded
+              length of the string. (The encoded length is implied by the
+              position of the 0 byte.)
           - id: data
             size: utf16_size.value
             type: str
             encoding: ascii
+            doc: |
+              A series of MUTF-8 code units (a.k.a. octets, a.k.a. bytes)
+              followed by a byte of value 0.
+
+              See "MUTF-8 (Modified UTF-8) Encoding" for details and discussion
+              about the data format.
+            doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#mutf-8'
     instances:
       value:
         pos: string_data_off
         type: string_data_item
         -webide-parse-mode: eager
   type_id_item:
-    -webide-representation: "{type_name}"
+    -webide-representation: '{type_name}'
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#type-id-item'
     seq:
       - id: descriptor_idx
         type: u4
         doc: |
-          index into the string_ids list for the descriptor string of this type.
-          The string must conform to the syntax for TypeDescriptor, defined above.
+          Index into the string_ids list for the descriptor string of this type.
+
+          The string must conform to the syntax for TypeDescriptor.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#typedescriptor'
     instances:
       type_name:
         value: _root.string_ids[descriptor_idx].value.data
         -webide-parse-mode: eager
   proto_id_item:
-    -webide-representation: "shorty_idx={shorty_idx} return_type_idx={return_type_idx} parameters_off={parameters_off}"
+    -webide-representation: shorty_idx={shorty_idx} return_type_idx={return_type_idx}
+      parameters_off={parameters_off}
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#proto-id-item'
     seq:
       - id: shorty_idx
         type: u4
         doc: |
-          index into the string_ids list for the short-form descriptor string of this prototype.
-          The string must conform to the syntax for ShortyDescriptor, defined above,
+          Index into the string_ids list for the short-form descriptor string
+          of this prototype.
+
+          The string must conform to the syntax for ShortyDescriptor,
           and must correspond to the return type and parameters of this item.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#shortydescriptor'
       - id: return_type_idx
         type: u4
         doc: |
-          index into the type_ids list for the return type of this prototype
+          Index into the type_ids list for the return type of this prototype.
       - id: parameters_off
         type: u4
         doc: |
-          offset from the start of the file to the list of parameter types for this prototype,
-          or 0 if this prototype has no parameters.
+          Offset from the start of the file to the list of parameter types for
+          this prototype, or 0 if this prototype has no parameters.
+
           This offset, if non-zero, should be in the data section, and the data
-          there should be in the format specified by "type_list" below.
-          Additionally, there should be no reference to the type void in the list.
+          there should be in the format specified by "type_list".
+
+          Additionally, there should be no reference to the type void in the
+          list.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#type-list'
     instances:
       shorty_desc:
         value: _root.string_ids[shorty_idx].value.data
-        doc: short-form descriptor string of this prototype, as pointed to by shorty_idx
+        doc: |
+          Short-form descriptor string of this prototype, as pointed to by
+          shorty_idx.
       params_types:
         io: _root._io
         pos: parameters_off
         type: type_list
         if: parameters_off != 0
-        doc: list of parameter types for this prototype
+        doc: 'List of parameter types for this prototype.'
       return_type:
         value: _root.type_ids[return_type_idx].type_name
-        doc: return type of this prototype
+        doc: 'Return type of this prototype.'
   field_id_item:
-    -webide-representation: "class_idx={class_idx} type_idx={type_idx} name_idx={name_idx}"
+    -webide-representation: class_idx={class_idx} type_idx={type_idx} name_idx={name_idx}
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#field-id-item'
     seq:
       - id: class_idx
         type: u2
         doc: |
-          index into the type_ids list for the definer of this field.
+          Index into the type_ids list for the definer of this field.
+
           This must be a class type, and not an array or primitive type.
       - id: type_idx
         type: u2
-        doc: |
-          index into the type_ids list for the type of this field
+        doc: 'Index into the type_ids list for the type of this field.'
       - id: name_idx
         type: u4
         doc: |
-          index into the string_ids list for the name of this field.
-          The string must conform to the syntax for MemberName, defined above.
+          Index into the string_ids list for the name of this field.
+
+          The string must conform to the syntax for MemberName.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#membername'
     instances:
       class_name:
         value: _root.type_ids[class_idx].type_name
-        doc: the definer of this field
+        doc: 'The definer of this field.'
       type_name:
         value: _root.type_ids[type_idx].type_name
-        doc: the type of this field
+        doc: 'The type of this field.'
       field_name:
         value: _root.string_ids[name_idx].value.data
-        doc: the name of this field
+        doc: 'The name of this field.'
   method_id_item:
-    -webide-representation: "class_idx={class_idx} proto_idx={proto_idx} name_idx={name_idx}"
+    -webide-representation: class_idx={class_idx} proto_idx={proto_idx} name_idx={name_idx}
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#method-id-item'
     seq:
       - id: class_idx
         type: u2
         doc: |
-          index into the type_ids list for the definer of this method.
+          Index into the type_ids list for the definer of this method.
+
           This must be a class or array type, and not a primitive type.
       - id: proto_idx
         type: u2
-        doc: |
-          index into the proto_ids list for the prototype of this method
+        doc: 'Index into the proto_ids list for the prototype of this method.'
       - id: name_idx
         type: u4
         doc: |
-          index into the string_ids list for the name of this method.
-          The string must conform to the syntax for MemberName, defined above.
+          Index into the string_ids list for the name of this method.
+
+          The string must conform to the syntax for MemberName.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#membername'
     instances:
       class_name:
         value: _root.type_ids[class_idx].type_name
-        doc: the definer of this method
+        doc: 'The definer of this method.'
       proto_desc:
         value: _root.proto_ids[proto_idx].shorty_desc
-        doc: the short-form descriptor of the prototype of this method
+        doc: 'The short-form descriptor of the prototype of this method.'
       method_name:
         value: _root.string_ids[name_idx].value.data
-        doc: the name of this method
+        doc: 'The name of this method.'
   class_def_item:
-    -webide-representation: "{access_flags} {type_name}"
+    -webide-representation: '{access_flags} {type_name}'
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#class-def-item'
     seq:
       - id: class_idx
         type: u4
         doc: |
-          index into the type_ids list for this class.
+          Index into the type_ids list for this class.
 
           This must be a class type, and not an array or primitive type.
       - id: access_flags
         type: u4
         enum: class_access_flags
         doc: |
-          access flags for the class (public, final, etc.).
+          Access flags for the class (public, final, etc.).
 
           See "access_flags Definitions" for details.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#access-flags'
       - id: superclass_idx
         type: u4
         doc: |
-          index into the type_ids list for the superclass,
-          or the constant value NO_INDEX if this class has no superclass
-          (i.e., it is a root class such as Object).
+          Index into the type_ids list for the superclass, or the constant value
+          NO_INDEX if this class has no superclass (i.e., it is a root class
+          such as Object).
 
-          If present, this must be a class type, and not an array or primitive type.
+          If present, this must be a class type, and not an array or primitive
+          type.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#no-index'
       - id: interfaces_off
         type: u4
         doc: |
-          offset from the start of the file to the list of interfaces, or 0 if there are none.
+          Offset from the start of the file to the list of interfaces, or 0 if
+          there are none.
 
           This offset should be in the data section, and the data there should
-          be in the format specified by "type_list" below. Each of the elements
-          of the list must be a class type (not an array or primitive type),
-          and there must not be any duplicates.
+          be in the format specified by "type_list". Each of the elements of the
+          list must be a class type (not an array or primitive type), and there
+          must not be any duplicates.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#type-list'
       - id: source_file_idx
         type: u4
         doc: |
-          index into the string_ids list for the name of the file containing
-          the original source for (at least most of) this class, or the
-          special value NO_INDEX to represent a lack of this information.
+          Index into the string_ids list for the name of the file containing the
+          original source for (at least most of) this class, or the special
+          value NO_INDEX to represent a lack of this information.
 
           The debug_info_item of any given method may override this source file,
-          but the expectation is that most classes will only come from one source file.
+          but the expectation is that most classes will only come from one
+          source file.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#no-index'
       - id: annotations_off
         type: u4
         doc: |
-          offset from the start of the file to the annotations structure for
+          Offset from the start of the file to the annotations structure for
           this class, or 0 if there are no annotations on this class.
 
           This offset, if non-zero, should be in the data section, and the data
-          there should be in the format specified by "annotations_directory_item"
-          below,with all items referring to this class as the definer.
+          there should be in the format specified by
+          "annotations_directory_item", with all items referring to this class
+          as the definer.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#annotations-directory'
       - id: class_data_off
         type: u4
         doc: |
-          offset from the start of the file to the associated class data for this
-          item, or 0 if there is no class data for this class.
+          Offset from the start of the file to the associated class data for
+          this item, or 0 if there is no class data for this class.
 
-          (This may be the case, for example, if this class is a marker interface.)
+          (This may be the case, for example, if this class is a marker
+          interface.)
 
           The offset, if non-zero, should be in the data section, and the data
-          there should be in the format specified by "class_data_item" below,
+          there should be in the format specified by "class_data_item",
           with all items referring to this class as the definer.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#referenced-from-class_def_item'
       - id: static_values_off
         type: u4
         doc: |
-          offset from the start of the file to the list of initial values for
+          Offset from the start of the file to the list of initial values for
           static fields, or 0 if there are none (and all static fields are to be
           initialized with 0 or null).
 
           This offset should be in the data section, and the data there should
-          be in the format specified by "encoded_array_item" below.
+          be in the format specified by "encoded_array_item".
 
-          The size of the array must be no larger than the number of static fields
-          declared by this class, and the elements correspond to the static fields
-          in the same order as declared in the corresponding field_list.
+          The size of the array must be no larger than the number of static
+          fields declared by this class, and the elements correspond to the
+          static fields in the same order as declared in the corresponding
+          field_list.
 
           The type of each array element must match the declared type of its
           corresponding field.
 
           If there are fewer elements in the array than there are static fields,
-          then the leftover fields are initialized with a type-appropriate 0 or null.
+          then the leftover fields are initialized with a type-appropriate 0 or
+          null.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#encoded-array-item'
     instances:
       type_name:
         value: _root.type_ids[class_idx].type_name
@@ -481,49 +562,68 @@ types:
         type: encoded_array_item
         if: static_values_off != 0
   encoded_array_item:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#encoded-array-item'
     seq:
       - id: value
         type: encoded_array
+        doc: |
+          Bytes representing the encoded array value, in the format specified by
+          "encoded_array Format" under "encoded_value Encoding".
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#encoding'
   annotation_element:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#annotation-element'
     seq:
       - id: name_idx
         type: vlq_base128_le
         doc: |
-          element name, represented as an index into the string_ids section.
+          Element name, represented as an index into the string_ids section.
 
-          The string must conform to the syntax for MemberName, defined above.
+          The string must conform to the syntax for MemberName.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#membername'
       - id: value
         type: encoded_value
-        doc: |
-          element value
+        doc: 'Element value.'
   encoded_annotation:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#encoded-annotation'
     seq:
       - id: type_idx
         type: vlq_base128_le
         doc: |
-          type of the annotation.
+          Type of the annotation.
 
           This must be a class (not array or primitive) type.
       - id: size
         type: vlq_base128_le
-        doc: |
-          number of name-value mappings in this annotation
+        doc: 'Number of name-value mappings in this annotation.'
       - id: elements
         type: annotation_element
         repeat: expr
         repeat-expr: size.value
         doc: |
-          elements of the annotation, represented directly in-line (not as offsets).
+          Elements of the annotation, represented directly in-line (not as
+          offsets).
 
           Elements must be sorted in increasing order by string_id index.
   encoded_value:
-    -webide-representation: "{value_type}: {value} (arg={value_arg})"
+    -webide-representation: '{value_type}: {value} (arg={value_arg})'
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#encoding'
     seq:
       - id: value_arg
         type: b3
+        doc: |
+          In most cases, value_arg encodes the length of the
+          immediately-subsequent value in bytes, as (size - 1), e.g., 0 means
+          that the value requires one byte, and 7 means it requires eight bytes;
+          however, there are exceptions as noted in "Value formats".
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#value-formats'
       - id: value_type
         type: b5
         enum: value_type_enum
+        doc: |
+          The type of the immediately subsequent value.
+
+          See "Value formats" for the various value definitions.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#value-formats'
       - id: value
         type:
           switch-on: value_type
@@ -545,6 +645,13 @@ types:
             value_type_enum::enum:          u4
             value_type_enum::array:         encoded_array
             value_type_enum::annotation:    encoded_annotation
+        doc: |
+          Bytes representing the value, variable in length and interpreted
+          differently for different value_type bytes, though always
+          little-endian.
+
+          See "Value formats" for details.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#value-formats'
     enums:
       value_type_enum:
         0x00: byte
@@ -566,28 +673,36 @@ types:
         0x1e: "null"
         0x1f: boolean
   encoded_array:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#encoded-array'
     seq:
       - id: size
         type: vlq_base128_le
+        doc: 'Number of elements in the array.'
       - id: values
         type: encoded_value
         repeat: expr
         repeat-expr: size.value
+        doc: |
+          A series of size encoded_value byte sequences in the format specified
+          by this section, concatenated sequentially.
   call_site_id_item:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#call-site-id-item'
     seq:
       - id: call_site_off
         type: u4
         doc: |
-          offset from the start of the file to call site definition.
+          Offset from the start of the file to call site definition.
 
           The offset should be in the data section, and the data there should
-          be in the format specified by "call_site_item" below.
+          be in the format specified by "call_site_item".
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#call-site-item'
   encoded_field:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#encoded-field-format'
     seq:
       - id: field_idx_diff
         type: vlq_base128_le
         doc: |
-          index into the field_ids list for the identity of this field
+          Index into the field_ids list for the identity of this field
           (includes the name and descriptor), represented as a difference
           from the index of previous element in the list.
 
@@ -595,15 +710,17 @@ types:
       - id: access_flags
         type: vlq_base128_le
         doc: |
-          access flags for the field (public, final, etc.).
+          Access flags for the field (public, final, etc.).
 
           See "access_flags Definitions" for details.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#access-flags'
   encoded_method:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#encoded-method'
     seq:
       - id: method_idx_diff
         type: vlq_base128_le
         doc: |
-          index into the method_ids list for the identity of this method
+          Index into the method_ids list for the identity of this method
           (includes the name and descriptor), represented as a difference
           from the index of previous element in the list.
 
@@ -611,42 +728,205 @@ types:
       - id: access_flags
         type: vlq_base128_le
         doc: |
-          access flags for the field (public, final, etc.).
+          Access flags for the field (public, final, etc.).
 
           See "access_flags Definitions" for details.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#access-flags'
       - id: code_off
         type: vlq_base128_le
         doc: |
-          offset from the start of the file to the code structure for this method,
-          or 0 if this method is either abstract or native.
+          Offset from the start of the file to the code structure for this
+          method, or 0 if this method is either abstract or native.
 
           The offset should be to a location in the data section.
 
-          The format of the data is specified by "code_item" below.
+          The format of the data is specified by "code_item".
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#code-item'
+    instances:
+      method_body:
+        io: _root._io
+        pos: code_off.value
+        type: code_item
+  code_item:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#code-item'
+    seq:
+      - id: registers_size
+        type: u2
+        doc: 'The number of registers used by this code.'
+      - id: ins_size
+        type: u2
+        doc: |
+          The number of words of incoming arguments to the method that this
+          code is for.
+      - id: outs_size
+        type: u2
+        doc: |
+          The number of words of outgoing argument space required by this
+          code for method invocation.
+      - id: tries_size
+        type: u2
+        doc: |
+          The number of try_items for this instance.
+
+          If non-zero, then these appear as the tries array just after the
+          insns in this instance.
+      - id: debug_info_off
+        type: u4
+        doc: |
+          Offset from the start of the file to the debug info (line numbers +
+          local variable info) sequence for this code, or 0 if there simply is
+          no information.
+
+          The offset, if non-zero, should be to a location in the data section.
+
+          The format of the data is specified by "debug_info_item".
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#debug-info-item'
+      - id: insns_size
+        type: u4
+        doc: 'Size of the instructions list, in 16-bit code units.'
+      - id: insns
+        size: insns_size * 2
+        doc: |
+          Actual array of bytecode.
+
+          The format of code in an insns array is specified by the companion
+          document "Dalvik bytecode".
+
+          Note that though this is defined as an array of ushort, there are some
+          internal structures that prefer four-byte alignment. Also, if this
+          happens to be in an endian-swapped file, then the swapping is only
+          done on individual ushorts and not on the larger internal structures.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dalvik-bytecode'
+      - id: padding
+        if: tries_size != 0 and insns_size % 2 == 1
+        contents:
+          - 0x00
+          - 0x00
+        doc: |
+          Two bytes of padding to make tries four-byte aligned.
+
+          This element is only present if tries_size is non-zero and insns_size
+          is odd.
+      - id: tries
+        if: tries_size != 0
+        type: try_item
+        repeat: expr
+        repeat-expr: tries_size
+        doc: |
+          Array indicating where in the code exceptions are caught and how to
+          handle them.
+
+          Elements of the array must be non-overlapping in range and in order
+          from low to high address.
+
+          This element is only present if tries_size is non-zero.
+      - id: handlers
+        if: tries_size != 0
+        type: encoded_catch_handler_list
+        doc: |
+          Bytes representing a list of lists of catch types and associated
+          handler addresses.
+
+          Each try_item has a byte-wise offset into this structure.
+
+          This element is only present if tries_size is non-zero.
+  try_item:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#type-item'
+    seq:
+      - id: start_addr
+        type: u4
+        doc: |
+          Start address of the block of code covered by this entry.
+
+          The address is a count of 16-bit code units to the start of the first
+          covered instruction.
+      - id: insn_count
+        type: u2
+        doc: |
+          Number of 16-bit code units covered by this entry.
+
+          The last code unit covered (inclusive) is start_addr + insn_count - 1.
+      - id: handler_off
+        type: u2
+        doc: |
+          Offset in bytes from the start of the associated
+          encoded_catch_hander_list to the encoded_catch_handler for this
+          entry.
+
+          This must be an offset to the start of an encoded_catch_handler.
+  encoded_catch_handler_list:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#encoded-catch-handler'
+    seq:
+      - id: size
+        type: vlq_base128_le
+        doc: 'Size of this list, in entries.'
+      - id: list
+        type: encoded_catch_handler
+        repeat: expr
+        repeat-expr: size.value
+        doc: |
+          Actual list of handler lists, represented directly (not as offsets),
+          and concatenated sequentially.
+  encoded_catch_handler:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#encoded-catch-handler'
+    seq:
+      - id: size
+        type: vlq_base128_le
+        doc: |
+          Number of catch types in this list.
+
+          If non-positive, then this is the negative of the number of catch
+          types, and the catches are followed by a catch-all handler. For
+          example: A size of 0 means that there is a catch-all but no explicitly
+          typed catches. A size of 2 means that there are two explicitly typed
+          catches and no catch-all. And a size of -1 means that there is one
+          typed catch along with a catch-all.
+      - id: handlers
+        type: encoded_type_addr_pair
+        repeat: expr
+        repeat-expr: size.value
+        doc: |
+          Stream of abs(size) encoded items, one for each caught type, in the
+          order that the types should be tested.
+      - id: catch_all_addr
+        if: size.value < 0
+        type: vlq_base128_le
+        doc: |
+          Bytecode address of the catch-all handler.
+
+          This element is only present if size is non-positive.
+  encoded_type_addr_pair:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#encoded-type-addr-pair'
+    seq:
+      - id: type_idx
+        type: vlq_base128_le
+        doc: |
+          Index into the type_ids list for the type of the exception to catch.
+      - id: addr
+        type: vlq_base128_le
+        doc: 'Bytecode address of the associated exception handler.'
   class_data_item:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#class-data-item'
     seq:
       - id: static_fields_size
         type: vlq_base128_le
-        doc: |
-          the number of static fields defined in this item
+        doc: 'The number of static fields defined in this item.'
       - id: instance_fields_size
         type: vlq_base128_le
-        doc: |
-          the number of instance fields defined in this item
+        doc: 'The number of instance fields defined in this item.'
       - id: direct_methods_size
         type: vlq_base128_le
-        doc: |
-          the number of direct methods defined in this item
+        doc: 'The number of direct methods defined in this item.'
       - id: virtual_methods_size
         type: vlq_base128_le
-        doc: |
-          the number of virtual methods defined in this item
+        doc: 'The number of virtual methods defined in this item.'
       - id: static_fields
         type: encoded_field
         repeat: expr
         repeat-expr: static_fields_size.value
         doc: |
-          the defined static fields, represented as a sequence of encoded elements.
+          The defined static fields, represented as a sequence of encoded
+          elements.
 
           The fields must be sorted by field_idx in increasing order.
       - id: instance_fields
@@ -654,7 +934,8 @@ types:
         repeat: expr
         repeat-expr: instance_fields_size.value
         doc: |
-          the defined instance fields, represented as a sequence of encoded elements.
+          The defined instance fields, represented as a sequence of encoded
+          elements.
 
           The fields must be sorted by field_idx in increasing order.
       - id: direct_methods
@@ -662,7 +943,7 @@ types:
         repeat: expr
         repeat-expr: direct_methods_size.value
         doc: |
-          the defined direct (any of static, private, or constructor) methods,
+          The defined direct (any of static, private, or constructor) methods,
           represented as a sequence of encoded elements.
 
           The methods must be sorted by method_idx in increasing order.
@@ -671,7 +952,7 @@ types:
         repeat: expr
         repeat-expr: virtual_methods_size.value
         doc: |
-          the defined virtual (none of static, private, or constructor) methods,
+          The defined virtual (none of static, private, or constructor) methods,
           represented as a sequence of encoded elements.
 
           This list should not include inherited methods unless overridden by
@@ -679,27 +960,29 @@ types:
 
           The methods must be sorted by method_idx in increasing order.
 
-          The method_idx of a virtual method must not be the same as any direct method.
+          The method_idx of a virtual method must not be the same as any direct
+          method.
   map_item:
-    -webide-representation: "{type}: offs={offset}, size={size}"
+    -webide-representation: '{type}: offs={offset}, size={size}'
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#map-item'
     seq:
       - id: type
         type: u2
         enum: map_item_type
         doc: |
-          type of the items; see table below
+          Type of the items.
+
+          See "Type Codes" for details.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#type-codes'
       - id: unused
         type: u2
-        doc: |
-          (unused)
+        doc: '(unused)'
       - id: size
         type: u4
-        doc: |
-          count of the number of items to be found at the indicated offset
+        doc: 'Count of the number of items to be found at the indicated offset.'
       - id: offset
         type: u4
-        doc: |
-          offset from the start of the file to the items in question
+        doc: 'Offset from the start of the file to the items in question.'
     enums:
       map_item_type:
         0x0000: header_item
@@ -723,28 +1006,63 @@ types:
         0x2005: encoded_array_item
         0x2006: annotations_directory_item
   map_list:
+    doc: |
+      This is a list of the entire contents of a file, in order.
+
+      It contains some redundancy with respect to the header_item but is
+      intended to be an easy form to use to iterate over an entire file.
+
+      A given type must appear at most once in a map, but there is no
+      restriction on what order types may appear in, other than the restrictions
+      implied by the rest of the format (e.g., a header section must appear
+      first, followed by a string_ids section, etc.). Additionally, the map
+      entries must be ordered by initial offset and must not overlap.
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#map-list'
     seq:
       - id: size
         type: u4
+        doc: 'Size of the list, in entries.'
       - id: list
         type: map_item
         repeat: expr
         repeat-expr: size
+        doc: 'Elements of the list.'
   type_item:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#type-item-format'
     seq:
       - id: type_idx
         type: u2
+        doc: 'Index into the type_ids list.'
     instances:
       value:
         value: _root.type_ids[type_idx].type_name
   type_list:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#type-list'
     seq:
       - id: size
         type: u4
+        doc: 'Size of the list, in entries.'
       - id: list
         type: type_item
         repeat: expr
         repeat-expr: size
+        doc: 'Elements of the list.'
+  # this doesn't work, sadly:
+  # vlq_base128_le:
+  #   seq:
+  #     - id: val
+  #       type:
+  #         switch-on: _root.header.endian_tag
+  #         cases:
+  #           'proxy_endian_constant::endian_constant': vlq_base128_le
+  #           'proxy_endian_constant::reverse_endian_constant': vlq_base128_be
+  #   enums:
+  #     proxy_endian_constant:
+  #       0x12345678: endian_constant
+  #       0x78563412: reverse_endian_constant
+  #   instances:
+  #     value:
+  #       value: val.value
 enums:
   class_access_flags:
     0x0001: public     # public: visible everywhere
