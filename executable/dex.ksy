@@ -631,7 +631,7 @@ types:
   code_item:
     doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#code-item'
     seq:
-      - id: registers_count
+      - id: register_count
         -orig-id: registers_size
         type: u2
         doc: The number of registers used by this code.
@@ -666,7 +666,8 @@ types:
       - id: insns_size
         type: u4
         doc: Size of the instructions list, in 16-bit code units.
-      - id: insns
+      - id: instructions
+        -orig-id: insns
         size: insns_size * 2
         doc: |
           Actual array of bytecode.
