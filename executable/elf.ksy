@@ -766,11 +766,20 @@ types:
               - id: attributes
                 size: len_attributes - type._sizeof - len_attributes._sizeof
                 type: arm_attributes_wrapper
+                if: type == types::file
             enums:
               types:
-                1: file
-                2: section
-                3: symbol
+                1:
+                  id: file
+                  -orig-id: File
+                2:
+                  id: section_deprecated
+                  -orig-id: Section
+                  doc: deprecated (ABI r2.09)
+                3:
+                  id: symbol_deprecated
+                  -orig-id: Symbol
+                  doc: deprecated (ABI r2.09)
           arm_attributes_wrapper:
             seq:
               - id: attributes
