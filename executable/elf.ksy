@@ -20,6 +20,8 @@ meta:
     - executable
     - linux
   license: CC0-1.0
+  imports:
+    - /common/vlq_base128_le
   ks-version: 0.9
 doc-ref:
   - https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=0f62fe0532
@@ -453,6 +455,7 @@ types:
                 'sh_type::note': note_section
                 'sh_type::rel': relocation_section(false)
                 'sh_type::rela': relocation_section(true)
+                'sh_type::arm_attributes': arm_attributes_section
             if: type != sh_type::nobits
           linked_section:
             value: _root.header.section_headers[linked_section_idx]
@@ -700,6 +703,258 @@ types:
                 'bits::b32': s4
                 'bits::b64': s8
             if: _parent.has_addend
+      arm_attributes_section:
+        doc-ref:
+          - >-
+            https://developer.arm.com/documentation/ihi0044/h/?lang=en
+            "Object Files > Sections > Build Attributes"
+          - >-
+            https://developer.arm.com/documentation/ihi0045/h?lang=en
+            "ADDENDUM: Build Attributes > Representing build attributes in ELF files"
+        seq:
+          - id: version
+            type: u1
+            doc: character 'A' (0x41) for the latest 2019Q1 Arm ABI release
+          - id: sections
+            type: arm_attributes_section_entry
+            repeat: eos
+      arm_attributes_section_entry:
+        seq:
+          - id: len_body
+            type: u4
+          - id: body
+            type: arm_attributes_section_entry_body
+            size: len_body - len_body._sizeof
+      arm_attributes_section_entry_body:
+        seq:
+          - id: vendor_name
+            type: strz
+            encoding: ASCII
+            doc: |
+              See "Object Files > Introduction > **Registered Vendor Names**" in
+              the [ELF for the Arm
+              Architecture](https://developer.arm.com/documentation/ihi0044/h/?lang=en)
+              document.
+
+              Vendor names beginning "Anon" or "anon" are reserved to
+              unregistered private use.
+          - id: vendor_data
+            size-eos: true
+            if: not is_public
+          - id: public_subsection
+            size-eos: true
+            type: arm_attributes_public_subsection
+            if: is_public
+        instances:
+          is_public:
+            value: vendor_name == "aeabi"
+        types:
+          arm_attributes_public_subsection:
+            seq:
+              - id: type
+                type: u1
+                enum: types
+                doc: |
+                  It is not clear from the Arm ABI whether this should be a
+                  single byte or a ULEB128 integer, but it's more likely that it
+                  is meant to be one byte, see the following references:
+
+                  * <https://developer.arm.com/documentation/ihi0045/h?lang=en>\
+                    "ADDENDUM: Build Attributes > Representing build attributes
+                    in ELF files > **Formal syntax of a
+                    public ("aeabi") attributes subsection**":
+
+                    > Byte-size includes the initial tag **byte**, the size
+                    > field itself, [...]
+
+                  * <https://github.com/llvm/llvm-project/blob/014c6b07362c/llvm/lib/Support/ELFAttributeParser.cpp#L139>
+              - id: len_attributes
+                type: u4
+              - id: attributes
+                size: len_attributes - type._sizeof - len_attributes._sizeof
+                type: arm_attributes_wrapper
+            enums:
+              types:
+                1: file
+                2: section
+                3: symbol
+          arm_attributes_wrapper:
+            seq:
+              - id: attributes
+                type: arm_attribute
+                repeat: eos
+          arm_attribute:
+            -webide-representation: '{tag} - s:{value_str} i:{value_int}'
+            seq:
+              - id: tag_raw
+                type: vlq_base128_le
+              - id: value_str
+                type: strz
+                encoding: ASCII
+                if: is_value_str
+              - id: value_int_raw
+                type: vlq_base128_le
+                if: is_value_int
+            instances:
+              value_int:
+                value: value_int_raw.value
+                if: is_value_int
+              tag:
+                value: tag_raw.value
+                enum: tags
+              is_value_str:
+                value: |
+                  tag.to_i < 32 ? (tag == tags::cpu_raw_name or tag == tags::cpu_name)
+                  : tag.to_i % 2 != 0
+                doc-ref: https://github.com/llvm/llvm-project/blob/014c6b07362c/lldb/source/Plugins/ObjectFile/ELF/ObjectFileELF.cpp#L1260-L1276
+              is_value_int:
+                value: not is_value_str
+            enums:
+              # https://github.com/llvm/llvm-project/blob/014c6b07362c/llvm/include/llvm/Support/ARMBuildAttributes.h#L34-L85
+              tags:
+                1:
+                  id: file
+                  -orig-id: File
+                2:
+                  id: section_deprecated
+                  -orig-id: Section
+                  doc: deprecated (ABI r2.09)
+                3:
+                  id: symbol_deprecated
+                  -orig-id: Symbol
+                  doc: deprecated (ABI r2.09)
+                4:
+                  id: cpu_raw_name
+                  -orig-id: CPU_raw_name
+                5:
+                  id: cpu_name
+                  -orig-id: CPU_name
+                6:
+                  id: cpu_arch
+                  -orig-id: CPU_arch
+                7:
+                  id: cpu_arch_profile
+                  -orig-id: CPU_arch_profile
+                8:
+                  id: arm_isa_use
+                  -orig-id: ARM_ISA_use
+                9:
+                  id: thumb_isa_use
+                  -orig-id: THUMB_ISA_use
+                10:
+                  id: fp_arch
+                  -orig-id: FP_arch
+                11:
+                  id: wmmx_arch
+                  -orig-id: WMMX_arch
+                12:
+                  id: advanced_simd_arch
+                  -orig-id: Advanced_SIMD_arch
+                13:
+                  id: pcs_config
+                  -orig-id: PCS_config
+                14:
+                  id: abi_pcs_r9_use
+                  -orig-id: ABI_PCS_R9_use
+                15:
+                  id: abi_pcs_rw_data
+                  -orig-id: ABI_PCS_RW_data
+                16:
+                  id: abi_pcs_ro_data
+                  -orig-id: ABI_PCS_RO_data
+                17:
+                  id: abi_pcs_got_use
+                  -orig-id: ABI_PCS_GOT_use
+                18:
+                  id: abi_pcs_wchar_t
+                  -orig-id: ABI_PCS_wchar_t
+                19:
+                  id: abi_fp_rounding
+                  -orig-id: ABI_FP_rounding
+                20:
+                  id: abi_fp_denormal
+                  -orig-id: ABI_FP_denormal
+                21:
+                  id: abi_fp_exceptions
+                  -orig-id: ABI_FP_exceptions
+                22:
+                  id: abi_fp_user_exceptions
+                  -orig-id: ABI_FP_user_exceptions
+                23:
+                  id: abi_fp_number_model
+                  -orig-id: ABI_FP_number_model
+                24:
+                  id: abi_align_needed
+                  -orig-id: ABI_align_needed
+                  doc: renamed from ABI_align8_needed (ABI r2.09)
+                25:
+                  id: abi_align_preserved
+                  -orig-id: ABI_align_preserved
+                  doc: renamed from ABI_align8_preserved (ABI r2.09)
+                26:
+                  id: abi_enum_size
+                  -orig-id: ABI_enum_size
+                27:
+                  id: abi_hardfp_use
+                  -orig-id: ABI_HardFP_use
+                28:
+                  id: abi_vfp_args
+                  -orig-id: ABI_VFP_args
+                29:
+                  id: abi_wmmx_args
+                  -orig-id: ABI_WMMX_args
+                30:
+                  id: abi_optimization_goals
+                  -orig-id: ABI_optimization_goals
+                31:
+                  id: abi_fp_optimization_goals
+                  -orig-id: ABI_FP_optimization_goals
+                32:
+                  id: compatibility
+                  -orig-id: compatibility
+                34:
+                  id: cpu_unaligned_access
+                  -orig-id: CPU_unaligned_access
+                36:
+                  id: fp_hp_extension
+                  -orig-id: FP_HP_extension
+                38:
+                  id: abi_fp_16bit_format
+                  -orig-id: ABI_FP_16bit_format
+                42:
+                  id: mpextension_use
+                  -orig-id: MPextension_use
+                  doc: recoded from 70 (ABI r2.08)
+                44:
+                  id: div_use
+                  -orig-id: DIV_use
+                46:
+                  id: dsp_extension
+                  -orig-id: DSP_extension
+                48:
+                  id: mve_arch
+                  -orig-id: MVE_arch
+                64:
+                  id: nodefaults_deprecated
+                  -orig-id: nodefaults
+                  doc: deprecated (ABI r2.09)
+                66:
+                  id: t2ee_use_deprecated
+                  -orig-id: T2EE_use
+                  doc: deprecated (ABI r2.09)
+                65:
+                  id: also_compatible_with
+                  -orig-id: also_compatible_with
+                67:
+                  id: conformance
+                  -orig-id: conformance
+                68:
+                  id: virtualization_use
+                  -orig-id: Virtualization_use
+                70:
+                  id: mpextension_use_old
+                  -orig-id: MPextension_use_old
+                  doc: recoded to MPextension_use (ABI r2.08)
     instances:
       program_headers:
         pos: program_header_offset
