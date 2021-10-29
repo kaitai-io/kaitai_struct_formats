@@ -57,12 +57,14 @@ seq:
       Specifies which OS- and ABI-related extensions will be used
       in this ELF file.
   - id: abi_version
+    -orig-id: e_ident[EI_ABIVERSION]
     type: u1
     doc: |
       Version of ABI targeted by this ELF file. Interpretation
       depends on `abi` attribute.
   - id: pad
-    size: 7
+    -orig-id: e_ident[EI_PAD]..e_ident[EI_NIDENT - 1]
+    contents: [0, 0, 0, 0, 0, 0, 0]
   - id: header
     type: endian_elf
 instances:
