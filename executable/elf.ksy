@@ -754,20 +754,13 @@ types:
               - id: type
                 type: u1
                 enum: types
-                doc: |
-                  It is not clear from the Arm ABI whether this should be a
-                  single byte or a ULEB128 integer, but it's more likely that it
-                  is meant to be one byte, see the following references:
-
-                  * <https://developer.arm.com/documentation/ihi0045/h?lang=en>\
+                doc-ref:
+                  - >-
+                    https://developer.arm.com/documentation/ihi0045/h?lang=en
                     "ADDENDUM: Build Attributes > Representing build attributes
-                    in ELF files > **Formal syntax of a
-                    public ("aeabi") attributes subsection**":
-
-                    > Byte-size includes the initial tag **byte**, the size
-                    > field itself, [...]
-
-                  * <https://github.com/llvm/llvm-project/blob/014c6b07362c/llvm/lib/Support/ELFAttributeParser.cpp#L139>
+                    in ELF files > Formal syntax of a public ("aeabi")
+                    attributes subsection"
+                  - https://github.com/llvm/llvm-project/blob/014c6b07362c/llvm/lib/Support/ELFAttributeParser.cpp#L139
               - id: len_attributes
                 type: u4
               - id: attributes
