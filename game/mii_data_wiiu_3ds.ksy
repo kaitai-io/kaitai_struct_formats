@@ -47,7 +47,7 @@ seq:
     doc: Four bytes (theoretically) unique to every Mii.
   - id: console_mac
     size: 6
-    doc: Six bytes representing the full MAC address of the device the Mii was created on. (It's u2 repeated 3 times because I tried u6 and u3(2) but neither of them are valid types, apparently?)
+    doc: Six bytes representing the full MAC address of the device the Mii was created on.
   - id: reserved_02
     type: u2
     doc: These two bytes are reserved. They should be set to 0.
