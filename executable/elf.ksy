@@ -725,30 +725,30 @@ types:
           - id: body
             type: arm_attributes_section_entry_body
             size: len_body - len_body._sizeof
-      arm_attributes_section_entry_body:
-        seq:
-          - id: vendor_name
-            type: strz
-            encoding: ASCII
-            doc: |
-              See "Object Files > Introduction > **Registered Vendor Names**" in
-              the [ELF for the Arm
-              Architecture](https://developer.arm.com/documentation/ihi0044/h/?lang=en)
-              document.
-
-              Vendor names beginning "Anon" or "anon" are reserved to
-              unregistered private use.
-          - id: vendor_data
-            size-eos: true
-            if: not is_public
-          - id: public_subsection
-            size-eos: true
-            type: arm_attributes_public_subsection
-            if: is_public
-        instances:
-          is_public:
-            value: vendor_name == "aeabi"
         types:
+          arm_attributes_section_entry_body:
+            seq:
+              - id: vendor_name
+                type: strz
+                encoding: ASCII
+                doc: |
+                  See "Object Files > Introduction > **Registered Vendor Names**" in
+                  the [ELF for the Arm
+                  Architecture](https://developer.arm.com/documentation/ihi0044/h/?lang=en)
+                  document.
+
+                  Vendor names beginning "Anon" or "anon" are reserved to
+                  unregistered private use.
+              - id: vendor_data
+                size-eos: true
+                if: not is_public
+              - id: public_subsection
+                size-eos: true
+                type: arm_attributes_public_subsection
+                if: is_public
+            instances:
+              is_public:
+                value: vendor_name == "aeabi"
           arm_attributes_public_subsection:
             seq:
               - id: type
