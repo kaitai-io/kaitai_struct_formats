@@ -109,7 +109,7 @@ types:
             'opcode::ext1': u1
             'opcode::ext2': u2
             'opcode::ext4': u4
-            'opcode::global':  stringnl_noescape_pair
+            'opcode::global_opcode':  stringnl_noescape_pair
             'opcode::stack_global': no_arg
             'opcode::reduce': no_arg
             'opcode::build': no_arg
@@ -422,9 +422,14 @@ enums:
       -orig-id: BUILD
       doc: call __setstate__ or __dict__.update()
     0x63: # "c"
-      id: "global"
+      id: "global_opcode"
       -orig-id: GLOBAL
-      doc: push self.find_class(modname, name); 2 string args
+      -affected-by: 90
+      doc: |
+        push self.find_class(modname, name); 2 string args
+
+        As of KSC 0.9, this enum key can't be called `global` because it would
+        cause a syntax error in Python (it is a keyword).
     0x64: # "d"
       id: "dict"
       -orig-id: DICT
