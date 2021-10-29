@@ -474,7 +474,9 @@ types:
           - id: entries
             type: strz
             repeat: eos
-            encoding: ASCII
+            # For an explanation of why UTF-8 instead of ASCII, see the comment
+            # on the `name` attribute in the `dynsym_section_entry` type.
+            encoding: UTF-8
       dynamic_section:
         seq:
           - id: entries
@@ -600,7 +602,15 @@ types:
             io: _parent._parent.linked_section.body.as<strings_struct>._io
             pos: ofs_name
             type: strz
-            encoding: ASCII
+            # UTF-8 is used (instead of ASCII) because Golang binaries may
+            # contain specific Unicode code points in symbol identifiers.
+            #
+            # See
+            # * <https://golang.org/doc/asm#symbols>: "the assembler allows the
+            #   middle dot character U+00B7 and the division slash U+2215 in
+            #   identifiers"
+            # * <https://github.com/kaitai-io/kaitai_struct_formats/issues/520>
+            encoding: UTF-8
             if: ofs_name != 0 and _parent.is_string_table_linked
             -webide-parse-mode: eager
           visibility:
