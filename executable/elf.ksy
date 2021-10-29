@@ -715,7 +715,7 @@ types:
           - id: version
             type: u1
             doc: character 'A' (0x41) for the latest 2019Q1 Arm ABI release
-          - id: sections
+          - id: entries
             type: arm_attributes_section_entry
             repeat: eos
       arm_attributes_section_entry:
