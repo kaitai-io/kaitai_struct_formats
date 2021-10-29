@@ -857,7 +857,7 @@ enums:
       id: arm
       doc: ARM
     41:
-      id: alpha
+      id: old_alpha
       -orig-id: EM_FAKE_ALPHA
       doc: DEC Alpha
     42:
@@ -1423,6 +1423,102 @@ enums:
       doc-ref:
         - https://gitlab.com/gnutools/binutils-gdb/-/blob/4ffb22ec40/include/elf/common.h#L356
         - https://groups.google.com/g/generic-abi/c/n8tLQxj02YY
+    # unofficial values
+    # https://gitlab.com/gnutools/binutils-gdb/-/blob/4ffb22ec40/include/elf/common.h#L358
+    0x1057:
+      id: avr_old
+      -orig-id: EM_AVR_OLD
+    0x1059:
+      id: msp430_old
+      -orig-id: EM_MSP430_OLD
+    0x1223:
+      id: adapteva_epiphany
+      -orig-id: EM_ADAPTEVA_EPIPHANY
+      doc: Adapteva's Epiphany architecture.
+    0x2530:
+      id: mt
+      -orig-id: EM_MT
+      doc: Morpho MT
+    0x3330:
+      id: cygnus_fr30
+      -orig-id: EM_CYGNUS_FR30
+    0x4157:
+      id: webassembly
+      -orig-id: EM_WEBASSEMBLY
+      doc: Unofficial value for Web Assembly binaries, as used by LLVM.
+    0x4688:
+      id: xc16x
+      -orig-id: EM_XC16X
+      doc: Infineon Technologies 16-bit microcontroller with C166-V2 core
+    0x4def:
+      id: s12z
+      -orig-id: EM_S12Z
+      doc: The Freescale toolchain generates elf files with this value.
+    0x5441:
+      id: cygnus_frv
+      -orig-id: EM_CYGNUS_FRV
+    0x5aa5:
+      id: dlx
+      -orig-id: EM_DLX
+      doc: openDLX
+    0x7650:
+      id: cygnus_d10v
+      -orig-id: EM_CYGNUS_D10V
+    0x7676:
+      id: cygnus_d30v
+      -orig-id: EM_CYGNUS_D30V
+    0x8217:
+      id: ip2k_old
+      -orig-id: EM_IP2K_OLD
+    0x9025:
+      id: cygnus_powerpc
+      -orig-id: EM_CYGNUS_POWERPC
+    0x9026:
+      id: alpha
+      -orig-id: EM_ALPHA
+    0x9041:
+      id: cygnus_m32r
+      -orig-id: EM_CYGNUS_M32R
+    0x9080:
+      id: cygnus_v850
+      -orig-id: EM_CYGNUS_V850
+    0xa390:
+      id: s390_old
+      -orig-id: EM_S390_OLD
+    0xabc7:
+      id: xtensa_old
+      -orig-id: EM_XTENSA_OLD
+    0xad45:
+      id: xstormy16
+      -orig-id: EM_XSTORMY16
+    0xbaab:
+      id: microblaze_old
+      -orig-id: EM_MICROBLAZE_OLD
+    0xbeef:
+      id: cygnus_mn10300
+      -orig-id: EM_CYGNUS_MN10300
+    0xdead:
+      id: cygnus_mn10200
+      -orig-id: EM_CYGNUS_MN10200
+    0xfeb0:
+      id: m32c_old
+      -orig-id: EM_M32C_OLD
+      doc: Renesas M32C and M16C
+    0xfeba:
+      id: iq2000
+      -orig-id: EM_IQ2000
+      doc: Vitesse IQ2000
+    0xfebb:
+      id: nios32
+      -orig-id: EM_NIOS32
+    0xf00d:
+      id: cygnus_mep
+      -orig-id: EM_CYGNUS_MEP
+      doc: Toshiba MeP
+    0xfeed:
+      id: moxie_old
+      -orig-id: EM_MOXIE_OLD
+      doc: Old, unofficial value for Moxie
   ph_type:
     0: null_type
     1: load
