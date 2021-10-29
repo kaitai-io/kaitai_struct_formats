@@ -20,9 +20,9 @@ meta:
     - executable
     - linux
   license: CC0-1.0
+  ks-version: 0.9
   imports:
     - /common/vlq_base128_le
-  ks-version: 0.9
 doc-ref:
   - https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=0f62fe0532
   - https://refspecs.linuxfoundation.org/elf/gabi4+/contents.html
