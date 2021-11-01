@@ -2,12 +2,16 @@ meta:
   id: dex
   title: Android Dalvik VM executable (dex)
   file-extension: dex
-  license: Apache 2.0 AND CC-BY-SA-3.0
-  endian: le
-  # Portions of this page are reproduced from work created and shared by Google and used
-  # according to terms described in the Creative Commons 3.0 Attribution License.
+  xref:
+    pronom: fmt/694
+    wikidata: Q29000585
+  tags:
+    - android
+    - executable
+  license: Apache-2.0
   imports:
     - /common/vlq_base128_le
+  endian: le
 doc: |
   Android OS applications executables are typically stored in its own
   format, optimized for more efficient execution in Dalvik virtual
@@ -22,10 +26,10 @@ seq:
     type: header_item
 instances:
   string_ids:
+    pos: header.string_ids_off
     type: string_id_item
     repeat: expr
     repeat-expr: header.string_ids_size
-    pos: header.string_ids_off
     doc: |
       string identifiers list.
 
@@ -35,10 +39,10 @@ instances:
       This list must be sorted by string contents, using UTF-16 code point values
       (not in a locale-sensitive manner), and it must not contain any duplicate entries.
   type_ids:
+    pos: header.type_ids_off
     type: type_id_item
     repeat: expr
     repeat-expr: header.type_ids_size
-    pos: header.type_ids_off
     doc: |
       type identifiers list.
 
@@ -47,10 +51,10 @@ instances:
 
       This list must be sorted by string_id index, and it must not contain any duplicate entries.
   proto_ids:
+    pos: header.proto_ids_off
     type: proto_id_item
     repeat: expr
     repeat-expr: header.proto_ids_size
-    pos: header.proto_ids_off
     doc: |
       method prototype identifiers list.
 
@@ -60,10 +64,10 @@ instances:
       and then by argument list (lexicographic ordering, individual arguments
       ordered by type_id index). The list must not contain any duplicate entries.
   field_ids:
+    pos: header.field_ids_off
     type: field_id_item
     repeat: expr
     repeat-expr: header.field_ids_size
-    pos: header.field_ids_off
     doc: |
       field identifiers list.
 
@@ -75,10 +79,10 @@ instances:
 
       The list must not contain any duplicate entries.
   method_ids:
+    pos: header.method_ids_off
     type: method_id_item
     repeat: expr
     repeat-expr: header.method_ids_size
-    pos: header.method_ids_off
     doc: |
       method identifiers list.
 
@@ -91,10 +95,10 @@ instances:
 
       The list must not contain any duplicate entries.
   class_defs:
+    pos: header.class_defs_off
     type: class_def_item
     repeat: expr
     repeat-expr: header.class_defs_size
-    pos: header.class_defs_off
     doc: |
       class definitions list.
 
@@ -104,10 +108,10 @@ instances:
       Furthermore, it is invalid for a definition for the same-named class to
       appear more than once in the list.
   #call_site_ids:
+  #  pos: header.???
   #  type: call_site_id_item
   #  repeat: expr
   #  repeat-expr: header.???
-  #  pos: header.???
   #  doc: |
   #    call site identifiers list.
   #
@@ -134,17 +138,13 @@ instances:
       Different items have different alignment requirements, and padding bytes
       are inserted before each item if necessary to achieve proper alignment.
   map:
-    type: map_list
     pos: header.map_off
+    type: map_list
 types:
   header_item:
     seq:
       - id: magic
-        contents:
-          - 0x64
-          - 0x65
-          - 0x78
-          - 0x0a
+        contents: "dex\n"
       - id: version_str
         size: 4
         type: strz
@@ -263,6 +263,7 @@ types:
         0x12345678: endian_constant
         0x78563412: reverse_endian_constant
   string_id_item:
+    -webide-representation: "{value.data} (offs={string_data_off})"
     seq:
       - id: string_data_off
         type: u4
@@ -273,6 +274,7 @@ types:
           There is no alignment requirement for the offset.
     types:
       string_data_item:
+        -webide-representation: "{data}"
         seq:
           - id: utf16_size
             type: vlq_base128_le
@@ -280,14 +282,13 @@ types:
             size: utf16_size.value
             type: str
             encoding: ascii
-        -webide-representation: "{data}"
     instances:
       value:
         pos: string_data_off
         type: string_data_item
         -webide-parse-mode: eager
-    -webide-representation: "{value.data} (offs={string_data_off})"
   type_id_item:
+    -webide-representation: "{type_name}"
     seq:
       - id: descriptor_idx
         type: u4
@@ -298,8 +299,8 @@ types:
       type_name:
         value: _root.string_ids[descriptor_idx].value.data
         -webide-parse-mode: eager
-    -webide-representation: "{type_name}"
   proto_id_item:
+    -webide-representation: "shorty_idx={shorty_idx} return_type_idx={return_type_idx} parameters_off={parameters_off}"
     seq:
       - id: shorty_idx
         type: u4
@@ -332,8 +333,8 @@ types:
       return_type:
         value: _root.type_ids[return_type_idx].type_name
         doc: return type of this prototype
-    -webide-representation: "shorty_idx={shorty_idx} return_type_idx={return_type_idx} parameters_off={parameters_off}"
   field_id_item:
+    -webide-representation: "class_idx={class_idx} type_idx={type_idx} name_idx={name_idx}"
     seq:
       - id: class_idx
         type: u2
@@ -359,8 +360,8 @@ types:
       field_name:
         value: _root.string_ids[name_idx].value.data
         doc: the name of this field
-    -webide-representation: "class_idx={class_idx} type_idx={type_idx} name_idx={name_idx}"
   method_id_item:
+    -webide-representation: "class_idx={class_idx} proto_idx={proto_idx} name_idx={name_idx}"
     seq:
       - id: class_idx
         type: u2
@@ -386,8 +387,8 @@ types:
       method_name:
         value: _root.string_ids[name_idx].value.data
         doc: the name of this method
-    -webide-representation: "class_idx={class_idx} proto_idx={proto_idx} name_idx={name_idx}"
   class_def_item:
+    -webide-representation: "{access_flags} {type_name}"
     seq:
       - id: class_idx
         type: u4
@@ -479,7 +480,6 @@ types:
         pos: static_values_off
         type: encoded_array_item
         if: static_values_off != 0
-    -webide-representation: "{access_flags} {type_name}"
   encoded_array_item:
     seq:
       - id: value
@@ -517,6 +517,7 @@ types:
 
           Elements must be sorted in increasing order by string_id index.
   encoded_value:
+    -webide-representation: "{value_type}: {value} (arg={value_arg})"
     seq:
       - id: value_arg
         type: b3
@@ -544,7 +545,6 @@ types:
             value_type_enum::enum:          u4
             value_type_enum::array:         encoded_array
             value_type_enum::annotation:    encoded_annotation
-    -webide-representation: "{value_type}: {value} (arg={value_arg})"
     enums:
       value_type_enum:
         0x00: byte
@@ -631,7 +631,7 @@ types:
   code_item:
     doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#code-item'
     seq:
-      - id: register_count
+      - id: registers_count
         -orig-id: registers_size
         type: u2
         doc: The number of registers used by this code.
@@ -666,8 +666,7 @@ types:
       - id: insns_size
         type: u4
         doc: Size of the instructions list, in 16-bit code units.
-      - id: instructions
-        -orig-id: insns
+      - id: insns
         size: insns_size * 2
         doc: |
           Actual array of bytecode.
@@ -849,6 +848,7 @@ types:
 
           The method_idx of a virtual method must not be the same as any direct method.
   map_item:
+    -webide-representation: "{type}: offs={offset}, size={size}"
     seq:
       - id: type
         type: u2
@@ -867,7 +867,6 @@ types:
         type: u4
         doc: |
           offset from the start of the file to the items in question
-    -webide-representation: "{type}: offs={offset}, size={size}"
     enums:
       map_item_type:
         0x0000: header_item
