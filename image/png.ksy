@@ -61,6 +61,8 @@ types:
         type: str
         size: 4
         encoding: UTF-8
+        valid:
+          expr: type != "\0\0\0\0"
       - id: body
         size: len
         type:
@@ -92,6 +94,14 @@ types:
             '"acTL"': animation_control_chunk
             '"fcTL"': frame_control_chunk
             '"fdAT"': frame_data_chunk
+
+            # Adobe Fireworks chunks
+            '"mkBS"': adobe_fireworks_chunk
+            '"mkTS"': adobe_fireworks_chunk
+            '"prVW"': adobe_fireworks_chunk
+
+            # evernote/skitch chunks
+            '"skRf"': evernote_skrf_chunk
       - id: crc
         size: 4
   ihdr_chunk:
@@ -99,8 +109,12 @@ types:
     seq:
       - id: width
         type: u4
+        valid:
+          min: 1
       - id: height
         type: u4
+        valid:
+          min: 1
       - id: bit_depth
         type: u1
       - id: color_type
@@ -385,6 +399,18 @@ types:
           Frame data for the frame. At least one fdAT chunk is required for
           each frame. The compressed datastream is the concatenation of the
           contents of the data fields of all the fdAT chunks within a frame.
+  adobe_fireworks_chunk:
+    doc-ref: https://stackoverflow.com/questions/4242402/the-fireworks-png-format-any-insight-any-libs/51683285#51683285
+    seq:
+      - id: preview_data
+        process: zlib
+        size-eos: true
+  evernote_skrf_chunk:
+    seq:
+      - id: uuid
+        size: 16
+      - id: data
+        size-eos: true
 enums:
   color_type:
     0: greyscale
