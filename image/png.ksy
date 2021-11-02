@@ -61,6 +61,8 @@ types:
         type: str
         size: 4
         encoding: UTF-8
+        valid:
+          expr: type != "\0\0\0\0"
       - id: body
         size: len
         type:
@@ -99,8 +101,12 @@ types:
     seq:
       - id: width
         type: u4
+        valid:
+          min: 1
       - id: height
         type: u4
+        valid:
+          min: 1
       - id: bit_depth
         type: u1
       - id: color_type
