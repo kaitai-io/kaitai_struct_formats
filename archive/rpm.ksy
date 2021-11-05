@@ -363,7 +363,7 @@ enums:
       doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/lib/rpmrc.c#L1466
 
   signature_tags:
-    # Tags from LSB.
+    # Tags from [lib/rpmtag.h](https://github.com/rpm-software-management/rpm/blob/911448f2/lib/rpmtag.h#L412).
     # the first three are shared with header_tags
     62:
       id: signatures
@@ -376,8 +376,16 @@ enums:
       -orig-id: HEADER_I18NTABLE
     # RPMSIGTAG_*
     # 256: RPMTAG_SIG_BASE
-    # 263..265 - obsolete (see lib/rpmtag.h)
-    # 266 - obsolete (see <https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete>)
+    264:
+      id: bad_sha1_1_obsolete
+      -orig-id: RPMSIGTAG_BADSHA1_1
+    265:
+      id: bad_sha1_2_obsolete
+      -orig-id: RPMSIGTAG_BADSHA1_2
+    # 266:
+    #   id: pubkeys_obsolete
+    #   -orig-id: RPMTAG_PUBKEYS
+    #   doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete
     267:
       id: dsa
       -orig-id: RPMSIGTAG_DSA
@@ -393,6 +401,7 @@ enums:
     271:
       id: long_archive_size
       -orig-id: RPMSIGTAG_LONGARCHIVESIZE
+    # 272 - reserved
     273:
       id: sha256
       -orig-id: RPMTAG_SHA256HEADER
@@ -412,12 +421,18 @@ enums:
       id: size
       -orig-id: RPMSIGTAG_SIZE
       doc: Header + payload size (32bit) in bytes.
-    # 1001 - obsolete
+    1001:
+      id: le_md5_1_obsolete
+      -orig-id: RPMSIGTAG_LEMD5_1
+      doc: MD5 broken on big-endian machines, take 1
     1002:
       id: pgp
       -orig-id: RPMSIGTAG_PGP
       doc: PGP 2.6.3 signature.
-    # 1003 - obsolete
+    1003:
+      id: le_md5_2_obsolete
+      -orig-id: RPMSIGTAG_LEMD5_2
+      doc: MD5 broken on big-endian machines, take 2
     1004:
       id: md5
       -orig-id: RPMSIGTAG_MD5
@@ -426,7 +441,9 @@ enums:
       id: gpg
       -orig-id: RPMSIGTAG_GPG
       doc: GnuPG signature
-    # 1006 - obsolete
+    1006:
+      id: pgp5_obsolete
+      -orig-id: RPMSIGTAG_PGP5
     1007:
       id: payload_size
       -orig-id: RPMSIGTAG_PAYLOADSIZE
@@ -436,9 +453,10 @@ enums:
       -orig-id: RPMSIGTAG_RESERVEDSPACE
       doc: Space reserved for signatures
   header_tags:
-    # Tags from LSB, some from [lib/rpmtag.h](https://github.com/rpm-software-management/rpm/blob/911448f2/lib/rpmtag.h)
-    # This includes all tags, except obsolete, internal and
-    # unimplemented tags, except when present in LSB
+    # Tags from [lib/rpmtag.h](https://github.com/rpm-software-management/rpm/blob/911448f2/lib/rpmtag.h).
+    # This includes (almost) all tags. Some have `_unimplemented`, `_internal`
+    # or `_obsolete` suffix (if more than one applies, the first applicable in
+    # this order is used).
     62:
       id: signatures
       -orig-id: HEADER_SIGNATURES
@@ -503,7 +521,14 @@ enums:
       id: vendor
       -orig-id: RPMTAG_VENDOR
       doc: Contains the name of the organization that produced the package.
-    # 1012..1013 - obsolete (see <https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete>)
+    1012:
+      id: gif_obsolete
+      -orig-id: RPMTAG_GIF
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete
+    1013:
+      id: xpm_obsolete
+      -orig-id: RPMTAG_XPM
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete
     1014:
       id: license
       -orig-id: RPMTAG_LICENSE
@@ -516,7 +541,9 @@ enums:
       id: group
       -orig-id: RPMTAG_GROUP
       doc: Specifies the administrative group to which this package belongs.
-    # 1017 - internal
+    1017:
+      id: changelog_internal
+      -orig-id: RPMTAG_CHANGELOG
     1018:
       id: source # from lib/rpmtag.h
       -orig-id: RPMTAG_SOURCE
@@ -559,7 +586,10 @@ enums:
       doc: |
         Specifies the postuninstall scriptlet. If present, then
         `::post_uninstall_interpreter` shall also be present.
-    # 1027 - obsolete (see <https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete>)
+    1027:
+      id: old_file_names_obsolete
+      -orig-id: RPMTAG_OLDFILENAMES
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete
     1028:
       id: file_sizes
       -orig-id: RPMTAG_FILESIZES
@@ -571,7 +601,12 @@ enums:
       id: file_modes
       -orig-id: RPMTAG_FILEMODES
       doc: The mode of each file in the archive.
-    # 1031..1032 - internal
+    1031:
+      id: file_uids_internal
+      -orig-id: RPMTAG_FILEUIDS
+    1032:
+      id: file_gids_internal
+      -orig-id: RPMTAG_FILEGIDS
     1033:
       id: device_number
       -orig-id: RPMTAG_FILERDEVS
@@ -599,7 +634,9 @@ enums:
       doc: |
         Specifies the bit(s) to classify and control how files
         are to be installed.
-    # 1038 - internal
+    1038:
+      id: root_internal
+      -orig-id: RPMTAG_ROOT
     1039:
       id: file_owner
       -orig-id: RPMTAG_FILEUSERNAME
@@ -608,8 +645,16 @@ enums:
       id: file_group
       -orig-id: RPMTAG_FILEGROUPNAME
       doc: Specifies the group of the corresponding file.
-    # 1041..1042 - internal
-    # 1043 - obsolete (see <https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete>)
+    1041:
+      id: exclude_internal
+      -orig-id: RPMTAG_EXCLUDE
+    1042:
+      id: exclusive_internal
+      -orig-id: RPMTAG_EXCLUSIVE
+    1043:
+      id: icon_obsolete
+      -orig-id: RPMTAG_ICON
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete
     1044:
       id: source_rpm
       -orig-id: RPMTAG_SOURCERPM
@@ -664,7 +709,15 @@ enums:
       doc: |
         Indicates the versions associated with the
         values found in the conflict_name index.
-    # 1056..1058 - internal
+    1056:
+      id: default_prefix_internal
+      -orig-id: RPMTAG_DEFAULTPREFIX
+    1057:
+      id: build_root_internal
+      -orig-id: RPMTAG_BUILDROOT
+    1058:
+      id: install_prefix_internal
+      -orig-id: RPMTAG_INSTALLPREFIX
     1059:
       id: exclude_arch # from lib/rpmtag.h
       -orig-id: RPMTAG_EXCLUDEARCH
@@ -674,7 +727,9 @@ enums:
     1061:
       id: exclusive_arch # from lib/rpmtag.h
       -orig-id: RPMTAG_EXCLUSIVEARCH
-    # 1063 - internal
+    1063:
+      id: autoreqprov_internal
+      -orig-id: RPMTAG_AUTOREQPROV
     1062:
       id: exclusive_os # from lib/rpmtag.h
       -orig-id: RPMTAG_EXCLUSIVEOS
@@ -715,7 +770,12 @@ enums:
       id: changelog_text
       -orig-id: RPMTAG_CHANGELOGTEXT
       doc: Specifies the changes asssociated with a changelog entry.
-    # 1083..1084 - internal
+    1083:
+      id: broken_md5_internal
+      -orig-id: RPMTAG_BROKENMD5
+    1084:
+      id: prereq_internal
+      -orig-id: RPMTAG_PREREQ
     1085:
       id: pre_install_interpreter
       -orig-id: RPMTAG_PREINPROG
@@ -757,7 +817,9 @@ enums:
     1092:
       id: trigger_script_prog # from lib/rpmtag.h
       -orig-id: RPMTAG_TRIGGERSCRIPTPROG
-    # 1093 - internal
+    1093:
+      id: doc_dir_internal
+      -orig-id: RPMTAG_DOCDIR
     1094:
       id: cookie
       -orig-id: RPMTAG_COOKIE
@@ -784,11 +846,42 @@ enums:
     1099:
       id: install_prefixes # from lib/rpmtag.h
       -orig-id: RPMTAG_INSTPREFIXES
-    # 1100..1105 - internal
+    1100:
+      id: trigger_install_internal
+      -orig-id: RPMTAG_TRIGGERIN
+    1101:
+      id: trigger_uninstall_internal
+      -orig-id: RPMTAG_TRIGGERUN
+    1102:
+      id: trigger_post_uninstall_internal
+      -orig-id: RPMTAG_TRIGGERPOSTUN
+    1103:
+      id: autoreq_internal
+      -orig-id: RPMTAG_AUTOREQ
+    1104:
+      id: autoprov_internal
+      -orig-id: RPMTAG_AUTOPROV
+    1105:
+      id: capability_internal
+      -orig-id: RPMTAG_CAPABILITY
     1106:
       id: source_package # from lib/rpmtag.h
       -orig-id: RPMTAG_SOURCEPACKAGE
-    # 1107..1111 - internal
+    1107:
+      id: old_orig_filenames_internal
+      -orig-id: RPMTAG_OLDORIGFILENAMES
+    1108:
+      id: build_prereq_internal
+      -orig-id: RPMTAG_BUILDPREREQ
+    1109:
+      id: build_requires_internal
+      -orig-id: RPMTAG_BUILDREQUIRES
+    1110:
+      id: build_conflicts_internal
+      -orig-id: RPMTAG_BUILDCONFLICTS
+    1111:
+      id: build_macros_internal
+      -orig-id: RPMTAG_BUILDMACROS
     1112:
       id: provide_flags
       -orig-id: RPMTAG_PROVIDEFLAGS
@@ -844,14 +937,41 @@ enums:
     1128:
       id: install_tid # from lib/rpmtag.h
       -orig-id: RPMTAG_INSTALLTID
-    # 1129 - obsolete (see <https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete>)
-    # 1130..1131 - internal
+    1129:
+      id: remove_tid_obsolete
+      -orig-id: RPMTAG_REMOVETID
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete
+    1130:
+      id: sha1_rhn_internal
+      -orig-id: RPMTAG_SHA1RHN
+    1131:
+      id: rhn_platform_internal
+      -orig-id: RPMTAG_RHNPLATFORM
     1132:
       id: platform
       -orig-id: RPMTAG_PLATFORM
     # below are all from lib/rpmtag.h
-    # 1133..1135 - obsolete
-    # 1136..1139 - internal
+    1133:
+      id: patches_name_obsolete
+      -orig-id: RPMTAG_PATCHESNAME
+    1134:
+      id: patches_flags_obsolete
+      -orig-id: RPMTAG_PATCHESFLAGS
+    1135:
+      id: patches_version_obsolete
+      -orig-id: RPMTAG_PATCHESVERSION
+    1136:
+      id: cache_ctime_internal
+      -orig-id: RPMTAG_CACHECTIME
+    1137:
+      id: cache_pkg_path_internal
+      -orig-id: RPMTAG_CACHEPKGPATH
+    1138:
+      id: cache_pkg_size_internal
+      -orig-id: RPMTAG_CACHEPKGSIZE
+    1139:
+      id: cache_pkg_mtime_internal
+      -orig-id: RPMTAG_CACHEPKGMTIME
     1140:
       id: file_colors
       -orig-id: RPMTAG_FILECOLORS
@@ -875,7 +995,18 @@ enums:
     1146:
       id: source_pkgid
       -orig-id: RPMTAG_SOURCEPKGID
-    # 1147..1149 - obsolete (see <https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete>)
+    1147:
+      id: file_contexts_obsolete
+      -orig-id: RPMTAG_FILECONTEXTS
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete
+    1148:
+      id: fs_contexts_obsolete
+      -orig-id: RPMTAG_FSCONTEXTS
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete
+    1149:
+      id: re_contexts_obsolete
+      -orig-id: RPMTAG_RECONTEXTS
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete
     1150:
       id: policies
       -orig-id: RPMTAG_POLICIES
@@ -894,10 +1025,125 @@ enums:
     1155:
       id: dist_tag
       -orig-id: RPMTAG_DISTTAG
-    # 1156..1161 - obsolete
-    # 1162..1170 - unimplemented
-    # 1171 - internal
-    # 1172..1194 - unimplemented
+    1156:
+      id: old_suggests_name_obsolete
+      -orig-id: RPMTAG_OLDSUGGESTSNAME
+    1157:
+      id: old_suggests_version_obsolete
+      -orig-id: RPMTAG_OLDSUGGESTSVERSION
+    1158:
+      id: old_suggests_flags_obsolete
+      -orig-id: RPMTAG_OLDSUGGESTSFLAGS
+    1159:
+      id: old_enhances_name_obsolete
+      -orig-id: RPMTAG_OLDENHANCESNAME
+    1160:
+      id: old_enhances_version_obsolete
+      -orig-id: RPMTAG_OLDENHANCESVERSION
+    1161:
+      id: old_enhances_flags_obsolete
+      -orig-id: RPMTAG_OLDENHANCESFLAGS
+    1162:
+      id: priority_unimplemented
+      -orig-id: RPMTAG_PRIORITY
+    1163:
+      id: cvsid_unimplemented
+      -orig-id:
+        - RPMTAG_CVSID
+        - RPMTAG_SVNID
+    1164:
+      id: blink_pkgid_unimplemented
+      -orig-id: RPMTAG_BLINKPKGID
+    1165:
+      id: blink_hdrid_unimplemented
+      -orig-id: RPMTAG_BLINKHDRID
+    1166:
+      id: blink_nevra_unimplemented
+      -orig-id: RPMTAG_BLINKNEVRA
+    1167:
+      id: flink_pkgid_unimplemented
+      -orig-id: RPMTAG_FLINKPKGID
+    1168:
+      id: flink_hdrid_unimplemented
+      -orig-id: RPMTAG_FLINKHDRID
+    1169:
+      id: flink_nevra_unimplemented
+      -orig-id: RPMTAG_FLINKNEVRA
+    1170:
+      id: package_origin_unimplemented
+      -orig-id: RPMTAG_PACKAGEORIGIN
+    1171:
+      id: trigger_pre_install_internal
+      -orig-id: RPMTAG_TRIGGERPREIN
+    1172:
+      id: build_suggests_unimplemented
+      -orig-id: RPMTAG_BUILDSUGGESTS
+    1173:
+      id: build_enhances_unimplemented
+      -orig-id: RPMTAG_BUILDENHANCES
+    1174:
+      id: script_states_unimplemented
+      -orig-id: RPMTAG_SCRIPTSTATES
+    1175:
+      id: script_metrics_unimplemented
+      -orig-id: RPMTAG_SCRIPTMETRICS
+    1176:
+      id: build_cpu_clock_unimplemented
+      -orig-id: RPMTAG_BUILDCPUCLOCK
+    1177:
+      id: file_digest_algos_unimplemented
+      -orig-id: RPMTAG_FILEDIGESTALGOS
+    1178:
+      id: variants_unimplemented
+      -orig-id: RPMTAG_VARIANTS
+    1179:
+      id: xmajor_unimplemented
+      -orig-id: RPMTAG_XMAJOR
+    1180:
+      id: xminor_unimplemented
+      -orig-id: RPMTAG_XMINOR
+    1181:
+      id: repo_tag_unimplemented
+      -orig-id: RPMTAG_REPOTAG
+    1182:
+      id: keywords_unimplemented
+      -orig-id: RPMTAG_KEYWORDS
+    1183:
+      id: build_platforms_unimplemented
+      -orig-id: RPMTAG_BUILDPLATFORMS
+    1184:
+      id: package_color_unimplemented
+      -orig-id: RPMTAG_PACKAGECOLOR
+    1185:
+      id: package_pref_color_unimplemented
+      -orig-id: RPMTAG_PACKAGEPREFCOLOR
+    1186:
+      id: xattrs_dict_unimplemented
+      -orig-id: RPMTAG_XATTRSDICT
+    1187:
+      id: filex_attrsx_unimplemented
+      -orig-id: RPMTAG_FILEXATTRSX
+    1188:
+      id: dep_attrs_dict_unimplemented
+      -orig-id: RPMTAG_DEPATTRSDICT
+    1189:
+      id: conflict_attrsx_unimplemented
+      -orig-id: RPMTAG_CONFLICTATTRSX
+    1190:
+      id: obsolete_attrsx_unimplemented
+      -orig-id: RPMTAG_OBSOLETEATTRSX
+    1191:
+      id: provide_attrsx_unimplemented
+      -orig-id: RPMTAG_PROVIDEATTRSX
+    1192:
+      id: require_attrsx_unimplemented
+      -orig-id: RPMTAG_REQUIREATTRSX
+    1193:
+      id: build_provides_unimplemented
+      -orig-id: RPMTAG_BUILDPROVIDES
+    1194:
+      id: build_obsoletes_unimplemented
+      -orig-id: RPMTAG_BUILDOBSOLETES
     1195:
       id: db_instance
       -orig-id: RPMTAG_DBINSTANCE
@@ -914,7 +1160,12 @@ enums:
     5002:
       id: file_require
       -orig-id: RPMTAG_FILEREQUIRE
-    # 5003..5004 - unimplemented
+    5003:
+      id: fs_names_unimplemented
+      -orig-id: RPMTAG_FSNAMES
+    5004:
+      id: fs_sizes_unimplemented
+      -orig-id: RPMTAG_FSSIZES
     5005:
       id: trigger_conds
       -orig-id: RPMTAG_TRIGGERCONDS
@@ -986,7 +1237,9 @@ enums:
       id: trigger_script_flags
       -orig-id: RPMTAG_TRIGGERSCRIPTFLAGS
     # 5028 - unassigned (removed from lib/rpmtag.h in commit <https://github.com/rpm-software-management/rpm/commit/dc2ee980>)
-    # 5029 - unimplemented
+    5029:
+      id: collections_unimplemented
+      -orig-id: RPMTAG_COLLECTIONS
     5030:
       id: policy_names
       -orig-id: RPMTAG_POLICYNAMES
@@ -1011,7 +1264,12 @@ enums:
     5037:
       id: order_flags
       -orig-id: RPMTAG_ORDERFLAGS
-    # 5038..5039 - unimplemented
+    5038:
+      id: mssf_manifest_unimplemented
+      -orig-id: RPMTAG_MSSFMANIFEST
+    5039:
+      id: mssf_domain_unimplemented
+      -orig-id: RPMTAG_MSSFDOMAIN
     5040:
       id: inst_file_names
       -orig-id: RPMTAG_INSTFILENAMES
@@ -1081,7 +1339,15 @@ enums:
     5062:
       id: encoding
       -orig-id: RPMTAG_ENCODING
-    # 5063..5065 - internal
+    5063:
+      id: file_trigger_install_internal
+      -orig-id: RPMTAG_FILETRIGGERIN
+    5064:
+      id: file_trigger_uninstall_internal
+      -orig-id: RPMTAG_FILETRIGGERUN
+    5065:
+      id: file_trigger_post_uninstall_internal
+      -orig-id: RPMTAG_FILETRIGGERPOSTUN
     5066:
       id: file_trigger_scripts
       -orig-id: RPMTAG_FILETRIGGERSCRIPTS
@@ -1103,7 +1369,15 @@ enums:
     5072:
       id: file_trigger_flags
       -orig-id: RPMTAG_FILETRIGGERFLAGS
-    # 5073..5075 - internal
+    5073:
+      id: trans_file_trigger_install_internal
+      -orig-id: RPMTAG_TRANSFILETRIGGERIN
+    5074:
+      id: trans_file_trigger_uninstall_internal
+      -orig-id: RPMTAG_TRANSFILETRIGGERUN
+    5075:
+      id: trans_file_trigger_post_uninstall_internal
+      -orig-id: RPMTAG_TRANSFILETRIGGERPOSTUN
     5076:
       id: trans_file_trigger_scripts
       -orig-id: RPMTAG_TRANSFILETRIGGERSCRIPTS
@@ -1125,7 +1399,9 @@ enums:
     5082:
       id: trans_file_trigger_flags
       -orig-id: RPMTAG_TRANSFILETRIGGERFLAGS
-    # 5083 - internal
+    5083:
+      id: remove_path_postfixes_internal
+      -orig-id: RPMTAG_REMOVEPATHPOSTFIXES
     5084:
       id: file_trigger_priorities
       -orig-id: RPMTAG_FILETRIGGERPRIORITIES
@@ -1156,7 +1432,12 @@ enums:
     5093:
       id: payload_digest_algo
       -orig-id: RPMTAG_PAYLOADDIGESTALGO
-    # 5094..5095 - unimplemented
+    5094:
+      id: auto_installed_unimplemented
+      -orig-id: RPMTAG_AUTOINSTALLED
+    5095:
+      id: identity_unimplemented
+      -orig-id: RPMTAG_IDENTITY
     5096:
       id: modularity_label
       -orig-id: RPMTAG_MODULARITYLABEL
