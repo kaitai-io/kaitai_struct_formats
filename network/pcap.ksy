@@ -202,7 +202,7 @@ enums:
     274: ethernet_mpacket
     275: displayport_aux
     276: linux_sll2
-    278: openvisla
+    278: openvizsla
     279: ebhscr
     280: vpp_dispatch
     281: dsa_tag_brcm
