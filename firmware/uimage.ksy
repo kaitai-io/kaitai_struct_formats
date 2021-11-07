@@ -303,7 +303,9 @@ enums:
       id: riscv
       doc: RISC-V
   uimage_comp:
-    0: none
+    0:
+      id: none
+      doc: No Compression Used
     1: gzip
     2: bzip2
     3: lzma
