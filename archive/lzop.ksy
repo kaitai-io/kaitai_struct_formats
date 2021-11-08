@@ -22,8 +22,13 @@ seq:
       min: 0x940
   - id: method
     type: u1
+    enum: lzop_method
     valid:
-      any-of: [1, 2, 3, 128]
+      any-of:
+        - lzop_method::lzo1x_1
+        - lzop_method::lzo1x_1_15
+        - lzop_method::lzo1x_999
+        - lzop_method::zlib
     # other values are possible as well, but are not used in practice
   - id: level
     type: u1
@@ -80,3 +85,9 @@ types:
         doc: CRC-32 or Adler-32
       - id: data
         size: len_compressed
+enums:
+  lzop_method:
+    1: lzo1x_1
+    2: lzo1x_1_15
+    3: lzo1x_999
+    128: zlib
