@@ -631,7 +631,7 @@ types:
   code_item:
     doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#code-item'
     seq:
-      - id: registers_count
+      - id: register_count
         -orig-id: registers_size
         type: u2
         doc: The number of registers used by this code.
@@ -663,11 +663,13 @@ types:
 
           The format of the data is specified by "debug_info_item".
         doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#debug-info-item'
-      - id: insns_size
+      - id: ops_size
+        -orig-id: insns_size
         type: u4
         doc: Size of the instructions list, in 16-bit code units.
-      - id: insns
-        size: insns_size * 2
+      - id: ops
+        -orig-id: insns
+        size: ops_size * 2
         doc: |
           Actual array of bytecode.
 
@@ -680,14 +682,14 @@ types:
           done on individual ushorts and not on the larger internal structures.
         doc-ref: 'https://source.android.com/devices/tech/dalvik/dalvik-bytecode'
       - id: padding
-        if: tries_size != 0 and insns_size % 2 == 1
+        if: tries_size != 0 and ops_size % 2 == 1
         contents:
           - 0x00
           - 0x00
         doc: |
           Two bytes of padding to make tries four-byte aligned.
 
-          This element is only present if tries_size is non-zero and insns_size
+          This element is only present if tries_size is non-zero and ops_size
           is odd.
       - id: tries
         if: tries_size != 0
