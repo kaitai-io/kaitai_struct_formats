@@ -15,6 +15,8 @@ seq:
     type: u2
   - id: version_major
     type: u2
+    valid:
+      min: 43
   - id: constant_pool_count
     type: u2
   - id: constant_pool
