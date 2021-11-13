@@ -372,7 +372,7 @@ types:
         0x0200:
           id: revision_2_0
           doc: Version 2 is the current version of the Win_Certificate structure.
-      certificate_type:
+      certificate_type_enum:
         0x0001:
           id: x509
           doc: |
@@ -402,7 +402,7 @@ types:
       - id: certificate_type
         -orig-id: wCertificateType
         type: u2
-        enum: certificate_type
+        enum: certificate_type_enum
         doc: Specifies the type of content in bCertificate
       - id: certificate_bytes
         -orig-id: bCertificate
