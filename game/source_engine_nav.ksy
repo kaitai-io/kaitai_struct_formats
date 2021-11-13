@@ -94,42 +94,40 @@ seq:
   # Area data.
   - id: area_count
     type: u4
-    doc: Amount of areas stored in the nav mesh.
+    doc: Amount of areas stored in the navigation mesh.
   - id: area_array
     type: nav_area
     repeat: expr
     repeat-expr: area_count
-    doc: Container for stored navigation areas.
   # Ladders
   - id: ladder_count
     type: u4
     if: '_root.version >= 6'
-    doc: Amount of ladders stored in the nav mesh. Added in NAV version 6.
+    doc: Amount of ladders stored in the navigation mesh. Added in NAV version 6.
   - id: ladder_array
     type: nav_ladder
     repeat: expr
     repeat-expr: ladder_count
     if: '_root.version >= 6'
-    doc: Container for ladder areas stored in the nav mesh. Added in NAV version 6.
   - id: custom_data
     size-eos: true
     if: '_root.version >= 10 and _root.subversion != 0'
     doc: Custom data appended by a specialized implementation of the NAV format. Should only be parsed if NAV file has a subversion.
+
 types:
   place_name:
     doc: |
-      A label of a location in a map. They are defined by the map.
+      A label of a location in a map. They are defined by the map (BSP file). Added in NAV Version 5.
 
       Place names are stored as Length-String value pairs.
     seq:
       - id: length
         type: u2
-        doc: Length of the place name.
+        doc: Length of the place name string.
       - id: name
         type: str
         size: length
         encoding: ASCII
-        doc: The place name.
   # Connection Pair
   area_id_array:
     seq:
@@ -179,8 +177,8 @@ types:
         type: b1
         repeat: expr
         repeat-expr: 8
-        doc: The hiding spot attribute flag. Added in NAV version 2.
         if: '_root.version >= 2'
+        doc: The hiding spot attribute flag. Added in NAV version 2.
     enums:
       # Hiding Spot Attributes.
       hide_spot_attribute:
@@ -227,7 +225,7 @@ types:
 
       - id: parametric_distance
         type: u1
-        doc: Parametric distance as an unsigned byte.
+        doc: Parametric distance of the navigation area as an unsigned byte.
   # NavEncounterPath
   encounter_path:
     doc: |
@@ -372,8 +370,8 @@ types:
         repeat: expr
         repeat-expr: 4
         if: '_root.version >= 11'
-        doc: Light Intensities for each corner. Added in NAV version 11.
-      # Vis areas
+        doc: Light Intensities (brightness) for each corner. Added in NAV version 11.
+      # Visibility area-binds.
       - id: area_bind_count
         type: u4
         if: '_root.version >= 16'
