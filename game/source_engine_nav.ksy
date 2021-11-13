@@ -196,10 +196,8 @@ types:
       - id: bound_area_id
         type: u4
         doc: Identifier of the targeted area.
-      - id: attribute_flag
-        type: b1
-        repeat: expr
-        repeat-expr: 8
+      - id: attribute_byte
+        type: u1 # Value is used as a number, NOT as a flag.
         enum: visibility_type
         doc: |
             Determines type of visibility to the bound area.
