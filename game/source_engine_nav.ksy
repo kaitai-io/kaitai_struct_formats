@@ -198,8 +198,10 @@ types:
       - id: bound_area_id
         type: u4
         doc: Identifier of the targeted area.
-      - id: vis_attribute_flag
-        type: u1
+      - id: attribute_flag
+        type: b1
+        repeat: expr
+        repeat-expr: 8
         enum: visibility_type
         doc: |
             Determines type of visibility to the bound area.
