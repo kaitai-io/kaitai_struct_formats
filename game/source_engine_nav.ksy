@@ -169,14 +169,16 @@ types:
         type: u4
         if: '_root.version >= 2'
         doc: Area ID of the hiding spot's parent area. Added in NAV version 2.
-      - id: hide_spot_position
+      - id: position
         type: f4
         repeat: expr
         repeat-expr: 3
         if: '_root.version >= 1'
         doc: The position of the Hiding spot (as a vector). Added in NAV version 1.
       - id: attribute_flag
-        type: u1
+        type: b1
+        repeat: expr
+        repeat-expr: 8
         doc: The hiding spot attribute flag. Added in NAV version 2.
         if: '_root.version >= 2'
     enums:
@@ -316,20 +318,21 @@ types:
         repeat: expr
         repeat-expr: 4
         doc: Container for connections.
-      # Hide spots
+      # Hiding Spots sequence.
       - id: hiding_spot_count
         type: u1
-        doc: Amount of hiding spots.
-      - id: hiding_spot_data
+        doc: Amount of hiding spots stored in the navigation area.
+      - id: hiding_spot_sequence
         type: hiding_spot
         repeat: expr
         repeat-expr: hiding_spot_count
+        doc: Sequence of hiding spots.
       # Approach Spots
       - id: approach_info_count
         type: u1
         if: '_root.version < 15'
         doc: |
-          The amount of approach spots stored in the NAV area. It is clamped to under
+          The amount of approach spots stored in the NAV area.
 
           Removed in NAV version 15 and above.
       - id: approach_info_sequence
@@ -464,5 +467,3 @@ enums:
     1: east
     2: south
     3: west
-    # Amount of directions
-    4: count
