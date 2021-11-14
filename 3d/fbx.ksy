@@ -100,11 +100,11 @@ types:
 
   array:
     params:
-      # Works around lack of ability to parameterise the actual type by passing a fake one through.
-      # https://github.com/kaitai-io/kaitai_struct/issues/135
       - id: pseudo_type
         type: u1
         enum: pseudo_type
+        # Works around lack of ability to parameterise the actual type by passing a fake one through.
+        -affected-by: 135
     seq:
       - id: element_count
         type: u4
@@ -114,7 +114,7 @@ types:
         type: u4
       - id: elements
         # Can't switch for process, so switch for type as a workaround.
-        # https://github.com/kaitai-io/kaitai_struct/issues/374
+        -affected-by: 374
         type:
           switch-on: encoding
           cases:
