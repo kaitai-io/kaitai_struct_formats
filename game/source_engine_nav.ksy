@@ -297,25 +297,7 @@ types:
         type: u4
         doc: Identifier number for the navigation area.
       - id: attribute_flag
-        type:
-          switch-on: _root.version
-          cases: {
-            0: u1,
-            1: u1,
-            2: u1,
-            3: u1,
-            4: u1,
-            5: u1,
-            6: u1,
-            7: u1,
-            8: u2,
-            9: u2,
-            10: u2,
-            11: u2,
-            12: u2,
-            13: u2,
-            _: u4
-          }
+        type: nav_area_attribute_flag(_root.version)
         doc: |
           Area attribute flag. The byte-length of the flag varies across NAV versions.
 
@@ -419,6 +401,21 @@ types:
         if: '_root.version >= 16'
         doc: ID of area to inherit visibility bind information from. Only exists in NAV version 16 and later.
       # Custom data can be appended here.
+    types:
+      nav_area_attribute_field:
+        meta:
+          bit-endian: le
+        doc: |
+          Attribute flag used by navigation areas.
+        params:
+          - id: format_version
+            type: u4
+            doc: Version of the NAV format to save the attribute flag in (determines the size of the bit field).
+        seq:
+          - id: bit_field
+            type: b1
+            repeat: expr
+            repeat-expr: "format_version < 8 ? 8 : format_version < 13 ? 16 : 32"
     enums:
      # Enum in code: NavAttributeType
       nav_attribute_type:
