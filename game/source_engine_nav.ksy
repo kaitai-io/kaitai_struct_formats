@@ -197,19 +197,22 @@ types:
         type: u4
         doc: Identifier of the targeted area.
       - id: attribute_byte
-        type: u1 # Value is used as a number, NOT as a flag.
+        type: u1 # The value is used by the source engine as a number in an unsigned byte, NOT as a bit field!
         enum: visibility_type
         doc: |
-            Determines type of visibility to the bound area.
-            * 0 - No visibility checks; area is always invisible.
-            * 1 - Perform visibility checks.
-            * 2 - No visibility checks; area is always visible.
+            Determines type of visibility to the bound area. See the `visibility_type` enum for the values.
     enums:
       # VisibilityType enum.
       visibility_type:
-        0: not_visible
-        1: potentially_visible
-        2: completely_visible
+        0:
+          id: not_visible
+          doc: No visibility checks; area is always invisible.
+        1: 
+          id: potentially_visible
+          doc: Perform visibility checks to determine if the pointed area is visible (from the bot).
+        2:
+          id: completely_visible
+          doc: No visibility checks; area is always visible.
 
   # NavEncounterSpot
   encounter_spot:
