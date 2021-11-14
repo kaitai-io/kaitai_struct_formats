@@ -174,18 +174,49 @@ types:
         if: '_root.version >= 1'
         doc: The position of the Hiding spot (as a vector). Added in NAV version 1.
       - id: attribute_flag
-        type: b1
-        repeat: expr
-        repeat-expr: 8
+        type: hiding_spot_attribute_flag
         if: '_root.version >= 2'
         doc: The hiding spot attribute flag. Added in NAV version 2.
-    enums:
-      # Hiding Spot Attributes.
-      hide_spot_attribute:
-        1: in_cover
-        2: good_sniper_spot
-        4: ideal_sniper_spot
-        8: exposed
+    types:
+      hiding_spot_attribute_flag:
+        meta:
+          bit-endian: le
+        doc: |
+          Attribute flag used by hiding spots.
+        seq:
+          - id: in_cover
+            type: b1
+            doc: Hiding spot is behind cover.
+          - id: good_sniper_spot
+            type: b1
+            doc: Hiding spot is (ideally) a good spot for snipers.
+          - id: ideal_sniper_spot
+            type: b1
+            doc: Hiding spot is (ideally) an ideal spot for snipers.
+          - id: exposed
+            type: b1
+            doc: Hiding spot is exposed.
+          - id: leftover_bits
+            type: b1
+            repeat: expr
+            repeat-expr: 4
+            doc: Left over bits that are not used in the hiding spot attribute flag.
+        enums:
+          # Hiding Spot Attribute Bits.
+          hide_spot_attribute:
+            1:
+              id: in_cover
+              doc: Hiding spot is behind cover.
+            2:
+              id: good_sniper_spot
+              doc: Hiding spot is (ideally) a good spot for snipers.
+            4:
+              id: ideal_sniper_spot
+              doc: Hiding spot is (ideally) an ideal spot for snipers.
+            8:
+              id: exposed
+              doc: Hiding spot is exposed.
+
   # Class: AreaBindInfo
   area_bind:
     doc: |
@@ -207,7 +238,7 @@ types:
         0:
           id: not_visible
           doc: No visibility checks; area is always invisible.
-        1: 
+        1:
           id: potentially_visible
           doc: Perform visibility checks to determine if the pointed area is visible (from the bot).
         2:
