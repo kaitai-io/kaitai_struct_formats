@@ -297,7 +297,7 @@ types:
         type: u4
         doc: Identifier number for the navigation area.
       - id: attribute_flag
-        type: nav_area_attribute_flag(_root.version)
+        type: nav_area_attribute_field(_root.version)
         doc: |
           Area attribute flag. The byte-length of the flag varies across NAV versions.
 
