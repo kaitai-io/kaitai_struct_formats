@@ -418,7 +418,7 @@ types:
             repeat-expr: "format_version < 8 ? 8 : format_version < 13 ? 16 : 32"
     enums:
      # Enum in code: NavAttributeType
-      nav_attribute_type:
+      nav_area_attribute_bit:
         0: nav_mesh_blank
         0x00000001: nav_mesh_crouch # Must crouch to use this node/area.
         0x00000002: nav_mesh_jump # Must jump to traverse this area (only used during generation).
