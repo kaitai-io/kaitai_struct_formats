@@ -17,9 +17,10 @@ seq:
   - id: header
     type: header
   - id: records
-    type: node_record
-    repeat: until
-    repeat-until: _.end_offset == 0
+    type: node_records(27)
+    size: _io.size - (27 + 168)
+  - id: footer
+    type: footer
 
 types:
 
@@ -35,32 +36,62 @@ types:
       - id: version
         type: u4
 
+  footer:
+    seq:
+      - id: unknown
+        size: 168
+
+  node_records:
+    params:
+      - id: file_offset
+        type: u4
+    seq:
+      - id: records
+        type: node_record(file_offset + _io.pos)
+        repeat: until
+        repeat-until: _.end_offset == 0
+
   node_record:
+    params:
+      - id: file_offset
+        type: u4
     seq:
       - id: end_offset
         type: u4
-      - id: property_count
+      - id: attribute_count
         type: u4
-      - id: property_list_length
+      - id: attribute_list_length
         type: u4
       - id: name_length
         type: u1
       - id: name
         type: str
         size: name_length
-      - id: properties
-        type: property
-        repeat: expr
-        repeat-expr: property_count
-        size: property_list_length
+      - id: attributes
+        size: attribute_list_length
+        type: attributes(attribute_count)
       - id: children
-        size: end_offset - _root._io.pos
-        type: node_record
-        repeat: until
-        repeat-until: _.end_offset == 0
-        if: not _io.eof
+        type: node_records(children_offset)
+        size: end_offset - children_offset
+        if: 'end_offset > children_offset'
+    instances:
+      children_offset:
+        value: file_offset + 13 + name_length + attribute_list_length
+      children_size:
+        value: end_offset - children_offset
+    -webide-representation: 'Node({name})'
 
-  property:
+  attributes:
+    params:
+      - id: attribute_count
+        type: u4
+    seq:
+      - id: attributes
+        type: attribute
+        repeat: expr
+        repeat-expr: attribute_count
+
+  attribute:
     seq:
       - id: type_code
         size: 1
@@ -75,13 +106,14 @@ types:
             '"D"': f8
             '"Y"': s2
             '"C"': u1 # TODO boolean, should probably have a type for it
-            '"i"': array(pseudo_type::s4)
-            '"l"': array(pseudo_type::s8)
-            '"f"': array(pseudo_type::f4)
-            '"d"': array(pseudo_type::f8)
-            '"b"': array(pseudo_type::u1)
+            '"i"': primitive_array(pseudo_type::s4)
+            '"l"': primitive_array(pseudo_type::s8)
+            '"f"': primitive_array(pseudo_type::f4)
+            '"d"': primitive_array(pseudo_type::f8)
+            '"b"': primitive_array(pseudo_type::u1)
             '"S"': string_data
             '"R"': raw_binary_data
+    -webide-representation: '{data}'
 
   string_data:
     seq:
@@ -90,6 +122,7 @@ types:
       - id: value
         type: str
         size: length
+    -webide-representation: '{value}'
   
   raw_binary_data:
     seq:
@@ -98,7 +131,7 @@ types:
       - id: value
         size: length
 
-  array:
+  primitive_array:
     params:
       - id: pseudo_type
         type: u1
@@ -109,7 +142,7 @@ types:
       - id: element_count
         type: u4
       - id: encoding
-        type: u1
+        type: u4
       - id: compressed_size
         type: u4
       - id: elements
