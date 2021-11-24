@@ -79,7 +79,7 @@ types:
         value: file_offset + 13 + name_length + attribute_list_length
       children_size:
         value: end_offset - children_offset
-    -webide-representation: 'Node({name})'
+    -webide-representation: 'Node({name} {attributes})'
 
   attributes:
     params:
@@ -90,6 +90,7 @@ types:
         type: attribute
         repeat: expr
         repeat-expr: attribute_count
+    -webide-representation: '{attributes:toString()}'
 
   attribute:
     seq:
