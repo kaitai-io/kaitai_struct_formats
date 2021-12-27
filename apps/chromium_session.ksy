@@ -1,7 +1,7 @@
 meta:
   id: chromium_session
-  title: Chromium 81 Session File (Current Session / Last Session)
-  application: Chromium 81
+  title: Chromium 96 Session File (Sessions/Session_TIMESTAMP)
+  application: Chromium 96
   file-extension: Session
   endian: le
 
@@ -15,7 +15,7 @@ seq:
   - id: commands
     type: command
     repeat: eos
-    if: version == file_version::not_encrypted
+    if: version == file_version::not_encrypted or version == file_version::not_encrypted_with_marker
 
 types:
   command:
@@ -390,6 +390,8 @@ enums:
   file_version:
     1: not_encrypted # kFileCurrentVersion
     2: encrypted     # kEncryptedFileCurrentVersion
+    3: not_encrypted_with_marker # kFileVersionWithMarker
+    4: encrypted_with_marker     # kEncryptedFileVersionWithMarker
 
   # session_service_commands.cc
   command_type:
@@ -434,3 +436,4 @@ enums:
     28: set_tab_guid
     29: set_tab_user_agent_override2
 
+    255: initial_state_marker_command
