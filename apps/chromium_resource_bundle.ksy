@@ -1,7 +1,7 @@
 meta:
   id: chromium_resource_bundle
-  title: Chromium 81 .pak File
-  application: Chromium 81
+  title: Chromium 96 .pak File
+  application: Chromium 96
   file-extension: pak
   endian: le
 
@@ -49,16 +49,9 @@ types:
       resource_size:
         value: 'i < _parent.header.resource_count - 1 ? _parent.entries[i+1].file_offset - _parent.entries[i].file_offset : _io.size - _parent.entries[i].file_offset'
       body:
-        # io: _root._io
         pos: file_offset
         size: resource_size
-        # type: resource
     -webide-representation: '{resource_id}: {file_offset}'
-
-  # resource_png:
-  #   seq:
-  #     - id: magic
-  #       contents: [137, 80, 78, 71, 13, 10, 26, 10]
 
   alias: # DataPack::Alias
     seq:
@@ -69,7 +62,7 @@ types:
     -webide-representation: '{entry_index} -> {resource_id}'
 
 enums:
-  text_encoding_type:
+  text_encoding_type: # ResourceHandle::TextEncodingType
     0: binary
     1: utf8
     2: utf16
