@@ -3,6 +3,7 @@ meta:
   title: Chromium 96 Session File (Sessions/Session_TIMESTAMP)
   application: Chromium 96
   file-extension: Session
+  license: MIT
   endian: le
 
 seq:

@@ -3,6 +3,7 @@ meta:
   title: Chromium 96 .pak File
   application: Chromium 96
   file-extension: pak
+  license: MIT
   endian: le
 
 seq:

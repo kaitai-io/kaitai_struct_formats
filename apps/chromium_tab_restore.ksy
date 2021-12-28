@@ -3,6 +3,7 @@ meta:
   title: Chromium 96 Tab Restore File (Sessions/Tabs_TIMESTAMP)
   application: Chromium 96
   file-extension: Tabs
+  license: MIT
   endian: le
 
 seq:
