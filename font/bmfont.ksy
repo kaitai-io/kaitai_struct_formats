@@ -3,8 +3,11 @@ meta:
   title: BMFont binary file
   file-extension: fnt
   license: CC0-1.0
+  ks-version: 0.9
   endian: le
   bit-endian: le
+doc: |
+  The BMFont binary file is the de facto standard for bitmap font metrics used in game development. Most bitmap font generators can export fonts in this format (BMFont, Glyph Designer, Hiero, fontbm and others). As well as many game engines can use this format (Cocos 2D-x, Defold, Godot and others).
 doc-ref: https://www.angelcode.com/products/bmfont/doc/file_format.html  
 seq:
   - id: magic
