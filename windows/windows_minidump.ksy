@@ -327,7 +327,7 @@ enums:
     19: token
     20: java_script_data
     21: system_memory_info
-    22: process_vm_vounters
+    22: process_vm_counters
     23: ipt_trace
     24: thread_names
     0x8000: ce_null

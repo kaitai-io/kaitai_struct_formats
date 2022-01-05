@@ -13,7 +13,6 @@ require 'set'
 
 require 'commonmarker'
 require 'pygments'
-Pygments.start 'pygments/'
 
 class FormatPagesGenerator
   CPP_STL_CANONICAL = {id: 'cpp_stl', name: 'C++/STL'}
@@ -36,6 +35,7 @@ class FormatPagesGenerator
   }
 
   CATS = {
+    '3d' => {title: '3D Models', icon: 'cube'},
     'archive' => {title: 'Archive Files', icon: 'archive'},
     'android' => {title: 'Android-specific', icon: 'android'},
     'cad' => {title: 'CAD', icon: 'space-shuttle'},
@@ -221,7 +221,7 @@ class FormatPagesGenerator
 
   def generate_xref
     File.open("#{@html_dir}/xref.html", 'w') { |out|
-      page_title = "File Formats Cross-References for Kaitai Struct"
+      page_title = "File Format Cross-References for Kaitai Struct"
       out.write @erb_header.result(binding)
       out.write @erb_xref.result(binding)
       out.write @erb_footer.result(binding)
@@ -359,7 +359,7 @@ class FormatPagesGenerator
     when 'justsolve'
       "http://fileformats.archiveteam.org/wiki/#{value}"
     when 'loc'
-      "http://www.loc.gov/preservation/digital/formats/fdd/#{value}.shtml"
+      "https://www.loc.gov/preservation/digital/formats/fdd/#{value}.shtml"
     when 'mime'
       "https://www.iana.org/assignments/media-types/#{value}"
     when 'pronom'

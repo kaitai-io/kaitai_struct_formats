@@ -1,7 +1,7 @@
 <nav>
     <div class="container">
     <ol class="breadcrumb">
-        <li><a href="index.html">Format Gallery</a></li>
+        <li><a href="./">Format Gallery</a></li>
         <li class="active">Cross-References</li>
     </ol>
     </div>
@@ -9,6 +9,7 @@
 
 <section id="format-index-header" class="format">
     <div class="container">
+        <h1>Cross-References</h1>
         <p>
             This table provides a summary of all entries in Kaitai
             Struct format gallery and their relevant cross-references.
@@ -31,7 +32,7 @@
                 <th colspan="3">Wikis</th>
             </tr>
             <tr>
-                <th><abbr title="International Electrotechnical Commission">ISO</abbr>/<abbr title="International Electrotechnical Commission">IEC</abbr></th>
+                <th><abbr title="International Organization for Standardization">ISO</abbr>/<abbr title="International Electrotechnical Commission">IEC</abbr></th>
                 <th><abbr title="Request for Comments">RFC</abbr></th>
                 <!--
                 <th><abbr title="Deutsches Institut für Normung">DIN</abbr></th>
@@ -67,7 +68,7 @@
             meta = ksy['meta'] || {}
             xref = meta['xref'] || {} %>
             <tr>
-                <td><a href="<%= id %>/index.html"><%= id %></a></td>
+                <td><a href="<%= id %>/"><%= id %></a></td>
                 <td><%= meta['file-extension'] %></td>
                 <td><%= meta['license'] %></td>
 

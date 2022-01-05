@@ -11,6 +11,8 @@ meta:
       - fmt/693 # Mach-O 64bit
     wikidata: Q2627217
   license: MIT
+  imports:
+    - /serialization/asn1/asn1_der
   endian: le
 seq:
   - id: magic
@@ -1008,7 +1010,8 @@ types:
             'cs_magic::requirement'       : requirement
             'cs_magic::requirements'      : requirements
             'cs_magic::code_directory'    : code_directory
-            'cs_magic::entitlement'       : entitlement
+            'cs_magic::entitlements'      : entitlements
+            'cs_magic::der_entitlements'  : asn1_der
             'cs_magic::blob_wrapper'      : blob_wrapper
             'cs_magic::embedded_signature': super_blob
             'cs_magic::detached_signature': super_blob
@@ -1017,7 +1020,8 @@ types:
         0xfade0c00: requirement        # CSMAGIC_REQUIREMENT
         0xfade0c01: requirements       # CSMAGIC_REQUIREMENTS
         0xfade0c02: code_directory     # CSMAGIC_CODEDIRECTORY
-        0xfade7171: entitlement        # CSMAGIC_ENTITLEMENT
+        0xfade7171: entitlements       # CSMAGIC_EMBEDDED_ENTITLEMENTS
+        0xfade7172: der_entitlements   # CSMAGIC_EMBEDDED_DER_ENTITLEMENTS
         0xfade0b01: blob_wrapper       # CSMAGIC_BLOBWRAPPER
         0xfade0cc0: embedded_signature # CSMAGIC_EMBEDDED_SIGNATURE
         0xfade0cc1: detached_signature # CSMAGIC_DETACHED_SIGNATURE
@@ -1091,6 +1095,7 @@ types:
             3:       resource_dir               # CSSLOT_RESOURCEDIR
             4:       application                # CSSLOT_APPLICATION
             5:       entitlements               # CSSLOT_ENTITLEMENTS
+            7:       der_entitlements           # CSSLOT_DER_ENTITLEMENTS
             0x1000:  alternate_code_directories # CSSLOT_ALTERNATE_CODEDIRECTORIES
             0x10000: signature_slot             # CSSLOT_SIGNATURESLOT
       data:
@@ -1246,7 +1251,7 @@ types:
             type: u4be
           - id: expr
             type: expr
-      entitlement:
+      entitlements:
         -webide-representation: "{data:str}"
         seq:
           - id: data

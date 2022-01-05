@@ -21,11 +21,9 @@ jobs:
       - name: Install deps
         run: |
           sudo apt-get update
-          sudo apt-get install --no-install-recommends -y dirmngr
-          sudo apt-key add <.github/bintray.key
-          #apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv 379CE192D401AB61
-          echo "deb http://dl.bintray.com/kaitai-io/debian jessie main" | sudo tee /etc/apt/sources.list.d/kaitai.list
-          sudo apt-get update
+          curl -fsSL -O https://github.com/kaitai-io/kaitai_struct_compiler/releases/download/0.9/kaitai-struct-compiler_0.9_all.deb
+          sha256sum --check --warn .github/checksums
+          sudo apt-get install ./kaitai-struct-compiler_0.9_all.deb
           sudo apt-get install --no-install-recommends -y \
             git ssh \
             locales \
@@ -45,8 +43,6 @@ jobs:
           echo 'gem: --no-document' | sudo tee /etc/gemrc
           cd _build
           bundle install
-      - name: Install Graphviz lexer for Pygments
-        run: python -m pip install --user git+https://github.com/nikeee/pygments-lexer-graphviz.git@master
       - name: Build targets
         working-directory: _build
         run: ./build-target .. target
@@ -69,7 +65,12 @@ jobs:
           .github/push_artifacts/publish \
             -o kaitai-io \
             -r formats-kaitai-io.github.io \
-            -m "Build results of ${GITHUB_REF#refs/heads/*} $GITHUB_REPOSITORY@$GITHUB_SHA" \
-            -- --exclude=.git --exclude=.travis.yml --exclude=CNAME _build/html/
+            -m "Build results of ${GITHUB_REF#refs/heads/*} $GITHUB_REPOSITORY@$GITHUB_SHA" -- \
+            --exclude=.git \
+            --exclude=.travis.yml \
+            --exclude=CNAME \
+            --exclude=favicon.ico \
+            --exclude=favicon.ico.license \
+            _build/html/
         # NB: trailing slash in '_build/html/' is *very* important for rsync!
         if: github.ref == 'refs/heads/master'

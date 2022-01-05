@@ -1,4 +1,4 @@
-# Kaitai Struct: formats library
+# Kaitai Struct: format library
 
 ## Contributing
 

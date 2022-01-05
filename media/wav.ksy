@@ -1,18 +1,50 @@
 meta:
   id: wav
   title: Microsoft WAVE audio file
-  file-extension: wav
+  file-extension:
+    - wav
+    - bwf
   xref:
-    justsolve: WAV
-    loc: fdd000001
+    justsolve:
+      - WAV
+      - BWF
+    loc:
+      - fdd000001 # WAV
+      - fdd000002 # WAV PCM
+      - fdd000356 # BWF v1
+      - fdd000003 # BWF v1 PCM
+      - fdd000357 # BWF v2
+      - fdd000359 # BWF v2 PCM
     mime:
       - audio/vnd.wave
       - audio/wav
       - audio/wave
       - audio/x-wav
-    pronom: fmt/6
+    pronom:
+      - fmt/6 # WAV
+      - fmt/141 # WAV PCM
+      - fmt/142 # WAV non-PCM but not extensible
+      - fmt/143 # WAV extensible
+
+      # see <http://fileformats.archiveteam.org/wiki/BWF>
+      - fmt/1 # BWF v0
+      - fmt/703 # BWF v0 PCM
+      - fmt/706 # BWF v0 MPEG
+      - fmt/709 # BWF v0 extensible
+
+      - fmt/2 # BWF v1
+      - fmt/704 # BWF v1 PCM
+      - fmt/707 # BWF v1 MPEG
+      - fmt/710 # BWF v1 extensible
+
+      - fmt/527 # BWF v2
+      - fmt/705 # BWF v2 PCM
+      - fmt/708 # BWF v2 MPEG
+      - fmt/711 # BWF v2 extensible
     rfc: 2361
-    wikidata: Q217570
+    wikidata:
+      - Q217570 # WAV
+      - Q922446 # BWF
   tags:
     - windows
   license: BSD-3-Clause-Attribution
@@ -26,11 +58,19 @@ doc: |
   followed by a sequence of data chunks. A WAVE file is often just a RIFF
   file with a single "WAVE" chunk which consists of two sub-chunks --
   a "fmt " chunk specifying the data format and a "data" chunk containing
-  the actual sample data.
+  the actual sample data, although other chunks exist and are used.
+
+  An extension of the file format is the Broadcast Wave Format (BWF) for radio
+  broadcasts. Sample files can be found at:
+
+  <https://www.bbc.co.uk/rd/publications/saqas>
 
   This Kaitai implementation was written by John Byrd of Gigantic Software
   (jbyrd@giganticsoftware.com), and it is likely to contain bugs.
-doc-ref: http://soundfile.sapp.org/doc/WaveFormat/
+doc-ref:
+  - http://soundfile.sapp.org/doc/WaveFormat/
+  - http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html
+  - https://web.archive.org/web/20101031101749/http://www.ebu.ch/fr/technical/publications/userguides/bwf_user_guide.php
 seq:
   - id: chunk
     type: 'riff::chunk'
@@ -72,10 +112,15 @@ types:
           switch-on: chunk_id
           cases:
             'fourcc::fmt': format_chunk_type
-            'fourcc::bext': bext_chunk_type
             'fourcc::cue': cue_chunk_type
             'fourcc::data': data_chunk_type
             'fourcc::list': list_chunk_type
+            'fourcc::fact': fact_chunk_type
+            'fourcc::pmx': pmx_chunk_type
+            'fourcc::ixml': ixml_chunk_type
+            'fourcc::bext': bext_chunk_type
+            'fourcc::axml': axml_chunk_type
+            'fourcc::afsp': afsp_chunk_type
 
   list_chunk_type:
     seq:
@@ -105,6 +150,7 @@ types:
         type: strz
 
   bext_chunk_type:
+    doc-ref: https://en.wikipedia.org/wiki/Broadcast_Wave_Format
     seq:
       - id: description
         size: 256
@@ -140,6 +186,22 @@ types:
       - id: max_short_term_loudness
         type: u2
 
+  axml_chunk_type:
+    doc-ref: https://tech.ebu.ch/docs/tech/tech3285s5.pdf
+    seq:
+      - id: data
+        size-eos: true
+        type: str
+        encoding: UTF-8
+
+  ixml_chunk_type:
+    doc-ref: https://en.wikipedia.org/wiki/IXML
+    seq:
+      - id: data
+        size-eos: true
+        type: str
+        encoding: UTF-8
+
   cue_chunk_type:
     seq:
       - id: dw_cue_points
@@ -168,6 +230,16 @@ types:
     seq:
       - id: data
         size-eos: true
+
+  fact_chunk_type:
+    doc: |
+      required for all non-PCM formats
+      (`w_format_tag != w_format_tag_type::pcm` or `not is_basic_pcm` in
+      `format_chunk_type` context)
+    seq:
+      - id: num_samples_per_channel
+        -orig-id: dwSampleLength
+        type: u4
 
   format_chunk_type:
     seq:
@@ -281,6 +353,34 @@ types:
     seq:
       - id: sample
         type: u2
+
+  pmx_chunk_type:
+    seq:
+      - id: data
+        size-eos: true
+        type: str
+        encoding: UTF-8
+        doc: XMP data
+        doc-ref: https://wwwimages2.adobe.com/content/dam/acom/en/devnet/xmp/pdfs/XMP%20SDK%20Release%20cc-2016-08/XMPSpecificationPart3.pdf
+
+  afsp_chunk_type:
+    doc-ref: http://www-mmsp.ece.mcgill.ca/Documents/Downloads/AFsp/
+    seq:
+      - id: magic
+        contents: "AFsp"
+      - id: info_records
+        type: strz
+        # The AFsp package uses C strings, so the encoding isn't strictly
+        # defined. Therefore, it seems reasonable to assume ASCII.
+        encoding: ASCII
+        repeat: eos
+        doc: |
+          An array of AFsp information records, in the `<field_name>: <value>`
+          format (e.g. "`program: CopyAudio`"). The list of existing information
+          record types are available in the `doc-ref` links.
+        doc-ref:
+          - http://www-mmsp.ece.mcgill.ca/Documents/Software/Packages/AFsp/libtsp/AFsetInfo.html
+          - http://www-mmsp.ece.mcgill.ca/Documents/Software/Packages/AFsp/libtsp/AFprintInfoRecs.html
 
 enums:
   w_format_tag_type:
@@ -544,7 +644,7 @@ enums:
     0xa120: vocord_g723_1
     0xa121: vocord_lbc
     0xa122: nice_g728
-    0xa123: frace_telecom_g729
+    0xa123: france_telecom_g729
     0xa124: codian
     0xf1ac: flac
     0xfffe: extensible
@@ -556,10 +656,24 @@ enums:
     0x45564157: wave
     0x5453494c: list
     0x4f464e49: info
+    0x74636166: fact
     0x20746d66: fmt
-    0x74786562: bext
     0x20657563: cue
     0x61746164: data
     0x64696d75: umid
     0x666e696d: minf
     0x6e676572: regn
+    0x20336469: id3
+    0x4b414550: peak
+    0x584d505f: pmx
+    # BWF chunks
+    0x74786562: bext
+    0x6c6d7861: axml
+    0x4c4d5869: ixml
+    0x616e6863:
+      id: chna
+      doc: Audio definition model
+      doc-ref: https://www.itu.int/rec/R-REC-BS.2076-2-201910-I/en
+    0x70736661:
+      id: afsp
+      doc: AFsp metadata

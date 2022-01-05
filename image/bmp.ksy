@@ -141,7 +141,7 @@ types:
         type: u4
       - id: header
         -orig-id: bmciHeader
-        size: len_header - 4
+        size: len_header - len_header._sizeof
         type: bitmap_header(len_header)
       - id: color_mask
         type: color_mask(header.bitmap_info_ext.compression == compressions::alpha_bitfields)
@@ -602,7 +602,7 @@ enums:
       doc: Maintains contrast. Used for photographs and natural images.
 
   header_type:
-    # https://forums.adobe.com/servlet/JiveServlet/showImage/2-3273299-47801/BMP_Headers.png
+    # https://web.archive.org/web/20190527043845/https://forums.adobe.com/servlet/JiveServlet/showImage/2-3273299-47801/BMP_Headers.png
     12: bitmap_core_header
     40: bitmap_info_header
     52: bitmap_v2_info_header

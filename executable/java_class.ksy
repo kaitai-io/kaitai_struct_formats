@@ -18,7 +18,7 @@ seq:
   - id: constant_pool_count
     type: u2
   - id: constant_pool
-    type: constant_pool_entry
+    type: 'constant_pool_entry(_index != 0 ? constant_pool[_index - 1].is_two_entries : false)'
     repeat: expr
     repeat-expr: constant_pool_count - 1
   - id: access_flags
@@ -54,10 +54,14 @@ seq:
 types:
   constant_pool_entry:
     doc-ref: 'https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4'
+    params:
+      - id: is_prev_two_entries
+        type: bool
     seq:
       - id: tag
         type: u1
         enum: tag_enum
+        if: not is_prev_two_entries
       - id: cp_info
         type:
           switch-on: tag
@@ -76,6 +80,10 @@ types:
             'tag_enum::method_handle': method_handle_cp_info
             'tag_enum::method_type': method_type_cp_info
             'tag_enum::invoke_dynamic': invoke_dynamic_cp_info
+        if: not is_prev_two_entries
+    instances:
+      is_two_entries:
+        value: 'tag == tag_enum::long or tag == tag_enum::double'
     enums:
       tag_enum:
         7: class_type
