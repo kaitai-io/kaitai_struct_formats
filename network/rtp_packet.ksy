@@ -2,7 +2,9 @@ meta:
   id: rtp_packet
   title: RTP (Real-time Transport Protocol)
   xref:
-    rfc: 3550
+    rfc:
+      - 3550
+      - 3551
     wikidata: Q321213
   license: Unlicense
   endian: be
@@ -58,6 +60,7 @@ types:
       - id: length
         type: u2
 enums:
+  # https://datatracker.ietf.org/doc/html/rfc3551#section-6
   payload_type_enum:
     0: pcmu
     1: reserved1
@@ -67,7 +70,7 @@ enums:
     5: dvi4_1
     6: dvi4_2
     7: lpc
-    8: pama
+    8: pcma
     9: g722
     10: l16_1
     11: l16_2
