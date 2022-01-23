@@ -215,3 +215,4 @@ enums:
     288: usb_2_0
     289: atsc_alp
     290: etw
+    292: zboss_ncp
