@@ -26,9 +26,19 @@ types:
         type: u1
         valid: 1
       - id: flags
-        type: u1
+        type: flags
       - id: len_header
         type: u4
+  flags:
+    seq:
+      - id: reserved
+        type: b5
+      - id: audio
+        type: b1
+      - id: reserved2
+        type: b1
+      - id: video
+        type: b1
   tag_and_size:
     seq:
       - id: tag
