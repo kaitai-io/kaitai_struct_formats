@@ -211,7 +211,10 @@ enums:
     284: dsa_tag_dsa
     285: dsa_tag_edsa
     286: elee
-    287: zwave_serial
+    287:
+      id: zwave_serial
+      -orig-id: LINKTYPE_Z_WAVE_SERIAL # `Z_WAVE` instead of `ZWAVE` is a name
+                                       # inconsistency (other labels use `ZWAVE`)
     288: usb_2_0
     289: atsc_alp
     290: etw
