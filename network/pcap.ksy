@@ -142,7 +142,7 @@ enums:
     187: bluetooth_hci_h4
     189: usb_linux
     192: ppi
-    195: ieee802_15_4
+    195: ieee802_15_4_withfcs
     196: sita
     197: erf
     201: bluetooth_hci_h4_with_phdr
