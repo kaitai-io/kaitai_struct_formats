@@ -35,7 +35,7 @@ types:
       - id: version_major
         type: u2
         valid:
-          max: 2
+          eq: 2
       - id: version_minor
         type: u2
       - id: thiszone
