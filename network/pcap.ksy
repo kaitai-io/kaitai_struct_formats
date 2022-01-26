@@ -34,6 +34,8 @@ types:
         contents: [0xd4, 0xc3, 0xb2, 0xa1]
       - id: version_major
         type: u2
+        valid:
+          eq: 2
       - id: version_minor
         type: u2
       - id: thiszone
@@ -136,10 +138,11 @@ enums:
     170: gpf_t
     171: gpf_f
     177: linux_lapd
+    182: mfr
     187: bluetooth_hci_h4
     189: usb_linux
     192: ppi
-    195: ieee802_15_4
+    195: ieee802_15_4_withfcs
     196: sita
     197: erf
     201: bluetooth_hci_h4_with_phdr
@@ -148,7 +151,10 @@ enums:
     204: ppp_with_dir
     205: c_hdlc_with_dir
     206: frelay_with_dir
+    207: lapb_with_dir
     209: ipmb_linux
+    210: flexray
+    212: lin
     215: ieee802_15_4_nonask_phy
     220: usb_linux_mmapped
     224: fc_2
@@ -186,3 +192,30 @@ enums:
     262: zwave_r3
     263: wattstopper_dlm
     264: iso_14443
+    265: rds
+    266: usb_darwin
+    268: sdlc
+    270: loratap
+    271: vsock
+    272: nordic_ble
+    273: docsis31_xra31
+    274: ethernet_mpacket
+    275: displayport_aux
+    276: linux_sll2
+    278: openvizsla
+    279: ebhscr
+    280: vpp_dispatch
+    281: dsa_tag_brcm
+    282: dsa_tag_brcm_prepend
+    283: ieee802_15_4_tap
+    284: dsa_tag_dsa
+    285: dsa_tag_edsa
+    286: elee
+    287:
+      id: zwave_serial
+      -orig-id: LINKTYPE_Z_WAVE_SERIAL # `Z_WAVE` instead of `ZWAVE` is a name
+                                       # inconsistency (other labels use `ZWAVE`)
+    288: usb_2_0
+    289: atsc_alp
+    290: etw
+    292: zboss_ncp
