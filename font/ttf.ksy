@@ -826,9 +826,9 @@ types:
         doc: 'The number of glyphs in the font.'
       - id: version10_body
         type: maxp_version10_body
-        if: version10
+        if: is_version10
     instances:
-      version10:
+      is_version10:
         value: table_version_number.major == 1 and table_version_number.minor == 0
   maxp_version10_body:
     seq:
