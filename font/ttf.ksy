@@ -895,7 +895,7 @@ types:
           - id: glyph_names
             type: pascal_string
             repeat: until
-            repeat-until: _.length == 0
+            repeat-until: _.length == 0 or _io.eof
     seq:
       - id: format
         type: fixed
