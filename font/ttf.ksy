@@ -318,7 +318,19 @@ types:
           signature:
             pos: ofs_signature
             size: len_signature
-            io: _root._io
+            type: signature_block
+      signature_block:
+        seq:
+          - id: reserved1
+            type: u2
+            valid: 0
+          - id: reserved2
+            type: u2
+            valid: 0
+          - id: len_signature
+            type: u4
+          - id: signature
+            size: len_signature
   glyf:
     # https://github.com/fonttools/fonttools/blob/678876325ef26ac33e8c6d13f4fb70c3bef5da8e/Lib/fontTools/ttLib/tables/_g_l_y_f.py
     # TODO: sadly, Kaitai currently cannot parse this structure
