@@ -915,29 +915,29 @@ types:
         doc: 'The descender metric for Windows.'
       - id: code_page_range
         type: code_page_range
-        if: version > 0
+        if: version >= 1
         doc: 'This field is used to specify the code pages encompassed by the font file in the `cmap` subtable for platform 3, encoding ID 1 (Microsoft platform).'
       - id: x_height
         type: u2
-        if: version > 1
+        if: version >= 2
       - id: cap_height
         type: u2
-        if: version > 1
+        if: version >= 2
       - id: default_char
         type: u2
-        if: version > 1
+        if: version >= 2
       - id: break_char
         type: u2
-        if: version > 1
+        if: version >= 2
       - id: max_context
         type: u2
-        if: version > 1
+        if: version >= 2
       - id: lower_optical_point_size
         type: u2
-        if: version > 4
+        if: version >= 5
       - id: upper_optical_point_size
         type: u2
-        if: version > 4
+        if: version >= 5
   prep:
     seq:
       - id: instructions
