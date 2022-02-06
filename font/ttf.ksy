@@ -120,6 +120,7 @@ types:
                 subtable_format::trimmed_array: trimmed_array
                 subtable_format::segmented_coverage: segmented_coverage
                 subtable_format::many_to_one_range_mappings: segmented_coverage
+                subtable_format::unicode_variation_sequences: unicode_variation_sequences
         enums:
           subtable_format:
             0: byte_encoding_table
@@ -282,7 +283,31 @@ types:
                         type: u4
                       - id: start_glyph_id
                         type: u4
-          #unicode_variation_sequences:
+          unicode_variation_sequences:
+            seq:
+              - id: length
+                type: u4
+              - id: body
+                type: body
+                size: length - length._sizeof - _parent.format._sizeof
+            types:
+              body:
+                seq:
+                  - id: num_variation_selector_records
+                    type: u4
+                  - id: variation_selector_records
+                    type: variation_selector_record
+                    repeat: expr
+                    repeat-expr: num_variation_selector_records
+                types:
+                  variation_selector_record:
+                    seq:
+                      - id: var_selector
+                        type: b24
+                      - id: ofs_default_uvs_table
+                        type: u4
+                      - id: ofs_non_default_uvs_table
+                        type: u4
   cvt:
     doc: >
       cvt  - Control Value Table
