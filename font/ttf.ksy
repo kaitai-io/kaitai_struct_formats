@@ -1198,3 +1198,9 @@ types:
         17: preferred_subfamily
         18: compatible_full_name
         19: sample_text
+        20: postscript_cid_findfont_name
+        21: wws_family_name
+        22: wws_subfamily_name
+        23: light_background_palette
+        24: dark_background_palette
+        25: variations_postscript_name_prefix
