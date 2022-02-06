@@ -495,8 +495,10 @@ types:
         type: s2
       - id: caret_slope_run
         type: s2
+      - id: caret_offset
+        type: s2
       - id: reserved
-        contents: [0,0,0,0,0,0,0,0,0,0]
+        contents: [0,0,0,0,0,0,0,0]
       - id: metric_data_format
         type: s2
       - id: number_of_hmetrics
