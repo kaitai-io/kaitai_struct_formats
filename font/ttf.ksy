@@ -11,7 +11,9 @@ meta:
 doc: |
   A TrueType font file contains data, in table format, that comprises
   an outline font.
-doc-ref: https://www.microsoft.com/typography/tt/ttf_spec/ttch02.doc
+doc-ref:
+  - https://www.microsoft.com/typography/tt/ttf_spec/ttch02.doc
+  - https://docs.microsoft.com/en-us/typography/opentype/spec/
 seq:
   - id: offset_table
     type: offset_table
