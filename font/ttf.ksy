@@ -14,6 +14,7 @@ doc: |
 doc-ref:
   - https://www.microsoft.com/typography/tt/ttf_spec/ttch02.doc
   - https://docs.microsoft.com/en-us/typography/opentype/spec/
+  - https://developer.apple.com/fonts/TrueType-Reference-Manual/
 seq:
   - id: offset_table
     type: offset_table
