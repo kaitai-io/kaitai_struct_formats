@@ -62,6 +62,7 @@ types:
           cases:
             "'cmap'": cmap
             "'cvt '": cvt
+            "'DSIG'": dsig
             "'glyf'": glyf
             "'head'": head
             "'hhea'": hhea
@@ -193,6 +194,33 @@ types:
       - id: fwords
         type: s2
         repeat: eos
+  dsig:
+    seq:
+      - id: version
+        type: u4
+        valid: 1
+      - id: num_signatures
+        type: u2
+      - id: flags
+        type: u2
+      - id: signature_records
+        type: signature_record
+        repeat: expr
+        repeat-expr: num_signatures
+    types:
+      signature_record:
+        seq:
+          - id: format
+            type: u4
+          - id: len_signature
+            type: u4
+          - id: ofs_signature
+            type: u4
+        instances:
+          signature:
+            pos: ofs_signature
+            size: len_signature
+            io: _root._io
   glyf:
     # https://github.com/fonttools/fonttools/blob/678876325ef26ac33e8c6d13f4fb70c3bef5da8e/Lib/fontTools/ttLib/tables/_g_l_y_f.py
     # TODO: sadly, Kaitai currently cannot parse this structure
