@@ -109,12 +109,7 @@ types:
           - id: format
             type: u2
             enum: subtable_format
-          - id: length
-            type: u2
-          - id: version
-            type: u2
           - id: value
-            size: length - 6
             type:
               switch-on: format
               cases:
@@ -122,69 +117,172 @@ types:
                 subtable_format::high_byte_mapping_through_table: high_byte_mapping_through_table
                 subtable_format::segment_mapping_to_delta_values: segment_mapping_to_delta_values
                 subtable_format::trimmed_table_mapping: trimmed_table_mapping
+                subtable_format::trimmed_array: trimmed_array
+                subtable_format::segmented_coverage: segmented_coverage
+                subtable_format::many_to_one_range_mappings: segmented_coverage
         enums:
           subtable_format:
             0: byte_encoding_table
             2: high_byte_mapping_through_table
             4: segment_mapping_to_delta_values
             6: trimmed_table_mapping
+            8: mixed_16_bit_and_32_bit_coverage
+            10: trimmed_array
+            12: segmented_coverage
+            13: many_to_one_range_mappings
+            14: unicode_variation_sequences
         types:
           byte_encoding_table:
             seq:
-              - id: glyph_id_array
-                size: 256
+              - id: length
+                type: u2
+              - id: body
+                type: body
+                size: length - length._sizeof - _parent.format._sizeof
+            types:
+              body:
+                seq:
+                  - id: version
+                    type: u2
+                  - id: glyph_id_array
+                    size: 256
           high_byte_mapping_through_table:
             seq:
-              - id: sub_header_keys
+              - id: length
                 type: u2
-                repeat: expr
-                repeat-expr: 256
-              # TODO
+              - id: body
+                type: body
+                size: length - length._sizeof - _parent.format._sizeof
+            types:
+              body:
+                seq:
+                  - id: version
+                    type: u2
+                  - id: sub_header_keys
+                    type: u2
+                    repeat: expr
+                    repeat-expr: 256
+                  # TODO
           segment_mapping_to_delta_values:
             seq:
-              - id: seg_count_x2
+              - id: length
                 type: u2
-              - id: search_range
-                type: u2
-              - id: entry_selector
-                type: u2
-              - id: range_shift
-                type: u2
-              - id: end_count
-                type: u2
-                repeat: expr
-                repeat-expr: seg_count
-              - id: reserved_pad
-                type: u2
-              - id: start_count
-                type: u2
-                repeat: expr
-                repeat-expr: seg_count
-              - id: id_delta
-                type: u2
-                repeat: expr
-                repeat-expr: seg_count
-              - id: id_range_offset
-                type: u2
-                repeat: expr
-                repeat-expr: seg_count
-              - id: glyph_id_array
-                type: u2
-                repeat: eos
-            instances:
-              seg_count:
-                value: seg_count_x2 / 2
-                -webide-parse-mode: eager
+              - id: body
+                type: delta_body
+                size: length - length._sizeof - _parent.format._sizeof
+            types:
+              delta_body:
+                seq:
+                  - id: version
+                    type: u2
+                  - id: seg_count_x2
+                    type: u2
+                  - id: search_range
+                    type: u2
+                  - id: entry_selector
+                    type: u2
+                  - id: range_shift
+                    type: u2
+                  - id: end_count
+                    type: u2
+                    repeat: expr
+                    repeat-expr: seg_count
+                  - id: reserved_pad
+                    type: u2
+                  - id: start_count
+                    type: u2
+                    repeat: expr
+                    repeat-expr: seg_count
+                  - id: id_delta
+                    type: u2
+                    repeat: expr
+                    repeat-expr: seg_count
+                  - id: id_range_offset
+                    type: u2
+                    repeat: expr
+                    repeat-expr: seg_count
+                  - id: glyph_id_array
+                    type: u2
+                    repeat: eos
+                instances:
+                  seg_count:
+                    value: seg_count_x2 / 2
+                    -webide-parse-mode: eager
           trimmed_table_mapping:
             seq:
-              - id: first_code
+              - id: length
                 type: u2
-              - id: entry_count
+              - id: body
+                type: body
+                size: length - length._sizeof - _parent.format._sizeof
+            types:
+              body:
+                seq:
+                  - id: version
+                    type: u2
+                  - id: first_code
+                    type: u2
+                  - id: entry_count
+                    type: u2
+                  - id: glyph_id_array
+                    type: u2
+                    repeat: expr
+                    repeat-expr: entry_count
+          #mixed_16_bit_and_32_bit_coverage:
+          trimmed_array:
+            seq:
+              - id: reserved
                 type: u2
-              - id: glyph_id_array
+                valid: 0
+              - id: length
+                type: u4
+              - id: body
+                type: body
+                size: length - length._sizeof - reserved._sizeof - _parent.format._sizeof
+            types:
+              body:
+                seq:
+                  - id: version
+                    type: u4
+                  - id: start_char_code
+                    type: u4
+                  - id: num_chars
+                    type: u4
+                  - id: glyph_id_array
+                    type: u2
+                    repeat: expr
+                    repeat-expr: num_chars
+          segmented_coverage:
+            seq:
+              - id: reserved
                 type: u2
-                repeat: expr
-                repeat-expr: entry_count
+                valid: 0
+              - id: length
+                type: u4
+              - id: body
+                type: body
+                size: length - length._sizeof - reserved._sizeof - _parent.format._sizeof
+            types:
+              body:
+                seq:
+                  - id: version
+                    type: u4
+                  - id: num_gropus
+                    type: u4
+                  - id: sequential_map_group_records
+                    type: sequential_map_group_record
+                    repeat: expr
+                    repeat-expr: num_gropus
+                types:
+                  sequential_map_group_record:
+                    seq:
+                      - id: start_char_code
+                        type: u4
+                      - id: end_char_code
+                        type: u4
+                      - id: start_glyph_id
+                        type: u4
+          #unicode_variation_sequences:
   cvt:
     doc: >
       cvt  - Control Value Table
