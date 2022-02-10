@@ -204,16 +204,31 @@ enums:
     0x74726566: tref
     0x75647461: udta
     0x766d6864: vmhd
-  # http://www.mp4ra.org/filetype.html
+
+  # https://mp4ra.org/#/brands
+  #
+  # JS code to scrape the enum `brand` (paste into the browser JS console on the above page):
+  # ```javascript
+  # copy(Array.from(document.querySelector('tbody').querySelectorAll('tr')).map(r => {
+  #   const code = r.querySelector('td:nth-child(1)').innerText.replace(/\$20/g, '\x20');
+  #   if (!code.trim()) return null;
+  #   return [
+  #     '0x' + Array.from((new TextEncoder()).encode(code), b => b.toString(16).padStart(2, '0')).join(''),
+  #     (/^\d/.test(code) ? 'x_' : '') + code.trim().toLowerCase(),
+  #   ];
+  # }).filter(entry => !!entry).map(entry => `    ${entry[0]}: ${entry[1]}\n`).join(''));
+  # ```
   brand:
     0x33673261: x_3g2a
     0x33676536: x_3ge6
+    0x33676537: x_3ge7
     0x33676539: x_3ge9
     0x33676639: x_3gf9
     0x33676736: x_3gg6
     0x33676739: x_3gg9
     0x33676839: x_3gh9
     0x33676d39: x_3gm9
+    0x33676d41: x_3gma
     0x33677034: x_3gp4
     0x33677035: x_3gp5
     0x33677036: x_3gp6
@@ -224,14 +239,63 @@ enums:
     0x33677239: x_3gr9
     0x33677336: x_3gs6
     0x33677339: x_3gs9
+    0x33677438: x_3gt8
     0x33677439: x_3gt9
+    0x33677476: x_3gtv
+    0x33677672: x_3gvr
+    0x33767261: x_3vra
+    0x33767262: x_3vrb
+    0x3376726d: x_3vrm
+    0x61647469: adti
+    0x61696433: aid3
     0x41525249: arri
+    0x61763031: av01
     0x61766331: avc1
+    0x61766369: avci
+    0x61766373: avcs
+    0x61766465: avde
+    0x61766966: avif
+    0x6176696f: avio
+    0x61766973: avis
     0x6262786d: bbxm
     0x43414550: caep
-    0x63617176: caqv
-    0x63636666: ccff
     0x43446573: cdes
+    0x6361346d: ca4m
+    0x63613473: ca4s
+    0x63616161: caaa
+    0x63616163: caac
+    0x6361626c: cabl
+    0x63616d61: cama
+    0x63616d63: camc
+    0x63617176: caqv
+    0x63617375: casu
+    0x63636561: ccea
+    0x63636666: ccff
+    0x63646d31: cdm1
+    0x63646d34: cdm4
+    0x63656163: ceac
+    0x63666864: cfhd
+    0x63667364: cfsd
+    0x63686431: chd1
+    0x63686466: chdf
+    0x63686576: chev
+    0x63686864: chhd
+    0x63686831: chh1
+    0x636c6731: clg1
+    0x636d6632: cmf2
+    0x636d6663: cmfc
+    0x636d6666: cmff
+    0x636d666c: cmfl
+    0x636d6673: cmfs
+    0x636d686d: cmhm
+    0x636d6873: cmhs
+    0x636f6d70: comp
+    0x63736831: csh1
+    0x63756431: cud1
+    0x63756438: cud8
+    0x63757664: cuvd
+    0x63766964: cvid
+    0x63777674: cwvt
     0x64613061: da0a
     0x64613062: da0b
     0x64613161: da1a
@@ -244,6 +308,9 @@ enums:
     0x64627931: dby1
     0x646d6231: dmb1
     0x64736d73: dsms
+    0x64747331: dts1
+    0x64747332: dts2
+    0x64747333: dts3
     0x64763161: dv1a
     0x64763162: dv1b
     0x64763261: dv2a
@@ -254,29 +321,88 @@ enums:
     0x64767431: dvt1
     0x64786f20: dxo
     0x656d7367: emsg
+    0x68656963: heic
+    0x6865696d: heim
+    0x68656973: heis
+    0x68656978: heix
+    0x68656f69: heoi
+    0x68657663: hevc
+    0x68657664: hevd
+    0x68657669: hevi
+    0x6865766d: hevm
+    0x68657673: hevs
+    0x68657678: hevx
+    0x68766365: hvce
+    0x68766369: hvci
+    0x68766378: hvcx
+    0x68767469: hvti
+    0x69667364: ifsd
+    0x69666873: ifhs
+    0x69666864: ifhd
+    0x69666878: ifhx
+    0x69666868: ifhh
+    0x69666875: ifhu
+    0x69666872: ifhr
+    0x69666161: ifaa
     0x6966726d: ifrm
+    0x696d3169: im1i
+    0x696d3174: im1t
+    0x696d3269: im2i
+    0x696d3274: im2t
     0x69736332: isc2
     0x69736f32: iso2
     0x69736f33: iso3
     0x69736f34: iso4
     0x69736f35: iso5
     0x69736f36: iso6
+    0x69736f37: iso7
+    0x69736f38: iso8
+    0x69736f39: iso9
+    0x69736f61: isoa
+    0x69736f62: isob
+    0x69736f63: isoc
     0x69736f6d: isom
+    0x6a326b69: j2ki
+    0x6a326b73: j2ks
+    0x6a326973: j2is
     0x4a325030: j2p0
     0x4a325031: j2p1
     0x6a703220: jp2
+    0x6a706567: jpeg
+    0x6a706773: jpgs
     0x6a706d20: jpm
+    0x6a706f69: jpoi
     0x6a707369: jpsi
     0x6a707820: jpx
     0x6a707862: jpxb
+    0x6a786c20: jxl
+    0x6a787320: jxs
+    0x6a787363: jxsc
+    0x6a787369: jxsi
+    0x6a787373: jxss
     0x4c434147: lcag
+    0x6c687465: lhte
+    0x6c687469: lhti
     0x6c6d7367: lmsg
     0x4d344120: m4a
     0x4d344220: m4b
     0x4d345020: m4p
     0x4d345620: m4v
+    0x4d413142: ma1b
+    0x4d413141: ma1a
     0x4d46534d: mfsm
     0x4d475356: mgsv
+    0x4d694142: miab
+    0x4d694143: miac
+    0x6d696166: miaf
+    0x4d69416e: mian
+    0x4d694275: mibu
+    0x4d69436d: micm
+    0x6d696631: mif1
+    0x4d694841: miha
+    0x4d694842: mihb
+    0x4d694845: mihe
+    0x4d695072: mipr
     0x6d6a3273: mj2s
     0x6d6a7032: mjp2
     0x6d703231: mp21
@@ -284,17 +410,29 @@ enums:
     0x6d703432: mp42
     0x6d703731: mp71
     0x4d505049: mppi
+    0x6d707566: mpuf
+    0x6d736631: msf1
     0x6d736468: msdh
     0x6d736978: msix
     0x4d534e56: msnv
     0x6e696b6f: niko
+    0x6e6c736c: nlsl
+    0x6e726173: nras
+    0x6f613264: oa2d
+    0x6f61626c: oabl
     0x6f646366: odcf
+    0x6f6d7070: ompp
     0x6f706632: opf2
     0x6f707832: opx2
+    0x6f766470: ovdp
+    0x6f766c79: ovly
+    0x70616666: paff
     0x70616e61: pana
     0x70696666: piff
+    0x706d6666: pmff
     0x706e7669: pnvi
     0x71742020: qt
+    0x72656c6f: relo
     0x72697378: risx
     0x524f5353: ross
     0x73647620: sdv
@@ -303,6 +441,23 @@ enums:
     0x73656e76: senv
     0x73696d73: sims
     0x73697378: sisx
+    0x73697469: siti
+    0x736c6831: slh1
+    0x736c6832: slh2
+    0x736c6833: slh3
     0x73737373: ssss
+    0x74746d6c: ttml
+    0x74747776: ttwv
+    0x75687669: uhvi
+    0x756e6966: unif
     0x75767675: uvvu
+    0x76777074: vwpt
     0x58415643: xavc
+    0x79743420: yt4
+    0x63686432: chd2
+    0x63696e74: cint
+    0x636c6732: clg2
+    0x63756432: cud2
+    0x63756439: cud9
+    0x6d696632: mif2
+    0x70726564: pred
