@@ -334,6 +334,7 @@ enums:
       -orig-id: mips64r6
       doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L254-L255
     22: riscv
+    23: loongarch64
     255:
       id: no_arch
       -orig-id: noarch
