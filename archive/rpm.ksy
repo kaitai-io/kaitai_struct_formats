@@ -274,7 +274,7 @@ enums:
     0: binary
     1: source
 
-  # these come (mostly) from <https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L159>
+  # these come (mostly) from <https://github.com/rpm-software-management/rpm/blob/07f1d313/rpmrc.in#L164>
   # (see <https://ftp.osuosl.org/pub/rpm/max-rpm/s1-rpm-multi-build-install-detection.html#S3-RPM-MULTI-XXX-CANON>
   # for `arch_canon` entry explanation)
   #
@@ -334,6 +334,7 @@ enums:
       -orig-id: mips64r6
       doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L254-L255
     22: riscv
+    23: loongarch64
     255:
       id: no_arch
       -orig-id: noarch
