@@ -1423,6 +1423,24 @@ enums:
       doc-ref:
         - https://gitlab.com/gnutools/binutils-gdb/-/blob/4ffb22ec40/include/elf/common.h#L356
         - https://groups.google.com/g/generic-abi/c/n8tLQxj02YY
+    260:
+      id: u16_u8core
+      -orig-id: EM_U16_U8CORE
+      doc: LAPIS nX-U16/U8
+      doc-ref:
+        - https://gitlab.com/gnutools/binutils-gdb/-/blob/dfbcbf85ea/include/elf/common.h#L357
+    261:
+      id: tachyum
+      -orig-id: EM_TACHYUM
+      doc: Tachyum
+      doc-ref:
+        - https://gitlab.com/gnutools/binutils-gdb/-/blob/dfbcbf85ea/include/elf/common.h#L358
+    262:
+      id: nxp_56800ef
+      -orig-id: EM_56800EF
+      doc: NXP 56800EF Digital Signal Controller (DSC)
+      doc-ref:
+        - https://gitlab.com/gnutools/binutils-gdb/-/blob/dfbcbf85ea/include/elf/common.h#L359
     # unofficial values
     # https://gitlab.com/gnutools/binutils-gdb/-/blob/4ffb22ec40/include/elf/common.h#L358
     0x1057:
