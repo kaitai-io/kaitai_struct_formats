@@ -41,7 +41,7 @@ seq:
   - id: len_suffix
     type: u1
     valid: 16
-  - id: checksum
+  - id: crc32
     type: u4
 types:
   target:
