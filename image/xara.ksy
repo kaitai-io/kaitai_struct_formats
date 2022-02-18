@@ -6,8 +6,8 @@ meta:
   encoding: ascii
   endian: le
 doc-ref:
- - https://en.wikipedia.org/wiki/Xar_(graphics)
- - http://site.xara.com/support/docs/webformat/spec/XARFormatDocument.pdf
+  - https://en.wikipedia.org/wiki/Xar_(graphics)
+  - http://site.xara.com/support/docs/webformat/spec/XARFormatDocument.pdf
 seq:
   - id: header
     type: header
