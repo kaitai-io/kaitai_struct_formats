@@ -8,6 +8,8 @@ doc: |
   Device Firmware Upgrade files
 
   Test files: <https://micropython.org/download/espruino_pico/>
+
+  USB ids (vendor/product) can be found at <http://www.linux-usb.org/usb.ids>
 doc-ref: https://raw.githubusercontent.com/micropython/micropython/247d7e2/tools/pydfu.py
 seq:
   - id: magic
@@ -30,8 +32,10 @@ seq:
     type: u2
   - id: product
     type: u2
+    doc: USB product ID
   - id: vendor
     type: u2
+    doc: USB vendor ID
   - id: dfu_version
     type: u2
     valid: 0x11a
@@ -70,8 +74,8 @@ types:
     seq:
       - id: address
         type: u4
-      - id: len_element
+      - id: len_data
         -orig-id: size
         type: u4
       - id: data
-        size: len_element
+        size: len_data
