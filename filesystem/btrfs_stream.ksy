@@ -107,7 +107,7 @@ types:
             size: 16
 
 # enum btrfs_send_cmd
-# https://git.kernel.org/pub/scm/linux/kernel/git/kdave/btrfs-progs.git/tree/send.h
+# https://git.kernel.org/pub/scm/linux/kernel/git/kdave/btrfs-progs.git/tree/kernel-shared/send.h?id=979bda6f#n69
 enums:
   command:
     0x00: unspec

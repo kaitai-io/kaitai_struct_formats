@@ -18,7 +18,7 @@ doc:
   created by Truevision. It supports up to 32 bits per pixel (three
   8-bit RGB channels + 8-bit alpha channel), color mapping and
   optional lossless RLE compression.
-doc-ref: http://www.dca.fee.unicamp.br/~martino/disciplinas/ea978/tgaffs.pdf
+doc-ref: https://www.dca.fee.unicamp.br/~martino/disciplinas/ea978/tgaffs.pdf
 seq:
   - id: image_id_len
     type: u1

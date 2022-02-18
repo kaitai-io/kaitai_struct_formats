@@ -11,7 +11,7 @@ meta:
   license: CC0-1.0
   endian: le
 instances:
-  # https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/Documentation/filesystems/ext2.txt#n106
+  # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/filesystems/ext2.rst?id=a9edc03f13db#n116
   bg1:
     pos: 1024
     type: block_group
@@ -29,7 +29,7 @@ types:
         repeat: expr
         repeat-expr: super_block.block_group_count
   # https://www.nongnu.org/ext2-doc/ext2.html#super_block
-  # https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/fs/ext2/ext2.h#n416
+  # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/ext2/ext2.h?id=cd913c76f489#n412
   # https://ext4.wiki.kernel.org/index.php/Ext4_Disk_Layout#The_Super_Block
   super_block_struct:
     seq:

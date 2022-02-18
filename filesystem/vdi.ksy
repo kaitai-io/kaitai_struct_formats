@@ -22,7 +22,6 @@ doc: |
   Images for testing can be downloaded from
    * https://www.osboxes.org/virtualbox-images/
    * https://virtualboxes.org/images/
-   * https://virtualboximages.com/
   or you can convert images of other formats.
 seq:
   - id: header
