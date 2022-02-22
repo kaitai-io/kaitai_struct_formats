@@ -21,7 +21,7 @@ seq:
     size: len_hash
 instances:
   len_hash:
-    value: 20   # SHA1, change to 32 for SHA256
+    value: 20   # SHA-1, change to 32 for SHA-256
 types:
   header:
     seq:
