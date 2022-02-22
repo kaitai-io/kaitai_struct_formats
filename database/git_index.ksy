@@ -5,7 +5,7 @@ meta:
   ks-version: 0.9
   endian: be
   encoding: UTF-8
-doc-ref: https://github.com/git/git/blob/main/Documentation/technical/index-format.txt
+doc-ref: https://github.com/git/git/blob/e6ebfd0e8c/Documentation/technical/index-format.txt
 seq:
   - id: header
     type: header
