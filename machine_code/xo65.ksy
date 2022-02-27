@@ -4,10 +4,10 @@ meta:
   license: CC0-1.0
   encoding: ascii
   endian: le
-doc: xo65 is an object format used by the cc65 compiler: <https://cc65.github.io/>
+doc: xo65 is an object format used by the cc65 compiler <https://cc65.github.io/>
 
   Test files can be found in the binary packages of the cc65 package, for
-  example in Debian: <https://packages.debian.org/sid/cc65>
+  example in Debian <https://packages.debian.org/sid/cc65>
 doc-ref: https://github.com/cc65/cc65/blob/4185caf85/src/common/objdefs.h
 seq:
   - id: object_header
