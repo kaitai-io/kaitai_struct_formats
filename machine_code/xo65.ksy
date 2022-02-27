@@ -79,6 +79,9 @@ types:
       import_list:
         pos: ofs_import_list
         size: len_import_list
+      export_list:
+        pos: ofs_export_list
+        size: len_export_list
       debug_symbols_list:
         pos: ofs_debug_symbols_list
         size: len_debug_symbols_list
@@ -111,4 +114,5 @@ types:
       - id: len_string
         type: u1
       - id: string
+        size: len_string
         type: str
