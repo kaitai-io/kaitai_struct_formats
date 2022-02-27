@@ -105,7 +105,7 @@ types:
     seq:
       - id: num_strings
         type: u2
-      - id: string_pool_entries
+      - id: entries
         type: string_pool_entry
         repeat: expr
         repeat-expr: num_strings - 1
