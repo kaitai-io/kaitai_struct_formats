@@ -4,6 +4,7 @@ meta:
   license: CC0-1.0
   ks-version: 0.9
   endian: be
+  bit-endian: be
   encoding: UTF-8
 doc-ref: https://github.com/git/git/blob/main/Documentation/technical/index-format.txt
 seq:
@@ -81,8 +82,12 @@ types:
         type: b16
       - id: object_type
         type: b4
+        enum: object_type_mode
         valid:
-          any-of: [8, 10, 14]
+          any-of:
+            - object_type_mode::regular
+            - object_type_mode::symbolic_link
+            - object_type_mode::gitlink
       - id: unused1
         type: b3
         valid: 0
@@ -148,3 +153,7 @@ enums:
     0x454f4945: end_of_index_entry  # 'EOIE'
     0x49454f54: index_entry_offset_table  # 'IEOT'
     0x73646972: sparse_directory_entries  # 'sdir'
+  object_type_mode:
+    8: regular
+    10: symbolic_link
+    14: gitlink
