@@ -6,7 +6,7 @@ meta:
   endian: be
   bit-endian: be
   encoding: UTF-8
-doc-ref: https://github.com/git/git/blob/main/Documentation/technical/index-format.txt
+doc-ref: https://github.com/git/git/blob/e6ebfd0e8c/Documentation/technical/index-format.txt
 seq:
   - id: header
     type: header
@@ -22,7 +22,7 @@ seq:
     size: len_hash
 instances:
   len_hash:
-    value: 20   # SHA1, change to 32 for SHA256
+    value: 20   # SHA-1, change to 32 for SHA-256
 types:
   header:
     seq:
