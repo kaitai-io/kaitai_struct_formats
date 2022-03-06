@@ -79,6 +79,7 @@ types:
         type: u4
       - id: creator_os
         type: u4
+        enum: os
       - id: rev_level
         type: u4
       - id: def_resuid
@@ -142,6 +143,12 @@ types:
         1: act_continue
         2: act_ro
         3: act_panic
+      os:
+        0: linux
+        1: hurd
+        2: masix
+        3: freebsd
+        4: lites
   # https://www.nongnu.org/ext2-doc/ext2.html#BLOCK-GROUP-DESCRIPTOR-STRUCTURE
   # https://web.archive.org/web/20160804172310/http://virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1-7.html
   bgd:
