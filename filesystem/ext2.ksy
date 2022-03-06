@@ -130,6 +130,7 @@ types:
         repeat-expr: 4
       - id: def_hash_version
         type: u1
+        enum: hashes
     instances:
       block_size:
         value: 1024 << log_block_size
@@ -149,6 +150,13 @@ types:
         2: masix
         3: freebsd
         4: lites
+      hashes:
+        0: legacy
+        1: half_md4
+        2: tea
+        3: legacy_unsigned
+        4: half_md4_unsigned
+        5: tea
   # https://www.nongnu.org/ext2-doc/ext2.html#BLOCK-GROUP-DESCRIPTOR-STRUCTURE
   # https://web.archive.org/web/20160804172310/http://virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1-7.html
   bgd:
