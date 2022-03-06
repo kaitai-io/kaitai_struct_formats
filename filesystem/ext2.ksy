@@ -156,7 +156,7 @@ types:
         2: tea
         3: legacy_unsigned
         4: half_md4_unsigned
-        5: tea
+        5: tea_unsigned
   # https://www.nongnu.org/ext2-doc/ext2.html#BLOCK-GROUP-DESCRIPTOR-STRUCTURE
   # https://web.archive.org/web/20160804172310/http://virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1-7.html
   bgd:
