@@ -1163,7 +1163,7 @@ types:
               - id: number_of_entries
                 type: u4
               - id: curve_values
-                type: u4
+                type: u2
                 repeat: expr
                 repeat-expr: number_of_entries
                 if: number_of_entries > 1
