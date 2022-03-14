@@ -1202,9 +1202,9 @@ types:
                 repeat: expr
                 repeat-expr: 9
               - id: number_of_input_table_entries
-                type: u4
+                type: u2
               - id: number_of_output_table_entries
-                type: u4
+                type: u2
               - id: input_tables
                 size: 2 * number_of_input_channels * number_of_input_table_entries
               - id: clut_values
