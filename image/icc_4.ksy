@@ -1659,6 +1659,7 @@ types:
             0x76756564: viewing_cond_desc #vued
             0x76696577: viewing_conditions #view
           tag_type_signatures:
+            0x6368726D: chromaticity_type #chrm
             0x636c7274: colorant_table_type #clrt
             0x63757276: curve_type #curv
             0x64617461: data_type #data
