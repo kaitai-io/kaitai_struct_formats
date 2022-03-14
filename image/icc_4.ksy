@@ -1395,7 +1395,7 @@ types:
                   - id: device_coordinates
                     type: u2
                     repeat: expr
-                    repeat-expr: _parent.count_of_named_colours
+                    repeat-expr: _parent.number_of_device_coordinates_for_each_named_colour
                     if: _parent.number_of_device_coordinates_for_each_named_colour > 0
           parametric_curve_type:
             seq:
