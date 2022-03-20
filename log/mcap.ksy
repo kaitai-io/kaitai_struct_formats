@@ -49,22 +49,33 @@ enums:
 types:
   prefixed_str:
     seq:
-      - { id: len, type: u4 }
-      - { id: str, type: str, size: len, encoding: UTF-8 }
+      - id: len
+        type: u4
+      - id: str
+        type: str
+        size: len
+        encoding: UTF-8
 
   tuple_str_str:
     seq:
-      - { id: key, type: prefixed_str }
-      - { id: value, type: prefixed_str }
+      - id: key
+        type: prefixed_str
+      - id: value
+        type: prefixed_str
 
   map_str_str:
     types:
       entries:
         seq:
-          - { id: entry, type: tuple_str_str, repeat: eos }
+          - id: entry
+            type: tuple_str_str
+            repeat: eos
     seq:
-      - { id: len, type: u4 }
-      - { id: entry, size: len, type: entries }
+      - id: len
+        type: u4
+      - id: entry
+        size: len
+        type: entries
 
   records:
     seq:
@@ -75,8 +86,11 @@ types:
 
   record:
     seq:
-      - { id: op, type: u1, enum: opcode }
-      - { id: len, type: u8 }
+      - id: op
+        type: u1
+        enum: opcode
+      - id: len
+        type: u8
       - id: body
         size: len
         type:
@@ -100,14 +114,19 @@ types:
 
   header:
     seq:
-      - { id: profile, type: prefixed_str }
-      - { id: library, type: prefixed_str }
+      - id: profile
+        type: prefixed_str
+      - id: library
+        type: prefixed_str
 
   footer:
     seq:
-      - { id: summary_start, type: u8 }
-      - { id: summary_offset_start, type: u8 }
-      - { id: summary_crc, type: u4 }
+      - id: summary_start
+        type: u8
+      - id: summary_offset_start
+        type: u8
+      - id: summary_crc
+        type: u4
     instances:
       summary_section:
         io: _root._io
@@ -124,40 +143,63 @@ types:
 
   schema:
     seq:
-      - { id: id, type: u2 }
-      - { id: name, type: prefixed_str }
-      - { id: encoding, type: prefixed_str }
-      - { id: len_data, type: u4 }
-      - { id: data, size: len_data }
+      - id: id
+        type: u2
+      - id: name
+        type: prefixed_str
+      - id: encoding
+        type: prefixed_str
+      - id: len_data
+        type: u4
+      - id: data
+        size: len_data
 
   channel:
     seq:
-      - { id: id, type: u2 }
-      - { id: schema_id, type: u2 }
-      - { id: topic, type: prefixed_str }
-      - { id: message_encoding, type: prefixed_str }
-      - { id: metadata, type: map_str_str }
+      - id: id
+        type: u2
+      - id: schema_id
+        type: u2
+      - id: topic
+        type: prefixed_str
+      - id: message_encoding
+        type: prefixed_str
+      - id: metadata
+        type: map_str_str
 
   message:
     seq:
-      - { id: channel_id, type: u2 }
-      - { id: sequence, type: u4 }
-      - { id: log_time, type: u8 }
-      - { id: publish_time, type: u8 }
-      - { id: data, size-eos: true }
+      - id: channel_id
+        type: u2
+      - id: sequence
+        type: u4
+      - id: log_time
+        type: u8
+      - id: publish_time
+        type: u8
+      - id: data
+        size-eos: true
 
   chunk:
     types:
       uncompressed_chunk:
         seq:
-          - { id: records, type: record, repeat: eos }
+          - id: records
+            type: record
+            repeat: eos
     seq:
-      - { id: message_start_time, type: u8 }
-      - { id: message_end_time, type: u8 }
-      - { id: uncompressed_size, type: u8 }
-      - { id: uncompressed_crc, type: u4 }
-      - { id: compression, type: prefixed_str }
-      - { id: len_records, type: u8 }
+      - id: message_start_time
+        type: u8
+      - id: message_end_time
+        type: u8
+      - id: uncompressed_size
+        type: u8
+      - id: uncompressed_crc
+        type: u4
+      - id: compression
+        type: prefixed_str
+      - id: len_records
+        type: u8
       - id: records
         size: len_records
         type:
@@ -169,38 +211,59 @@ types:
     types:
       message_index_entry:
         seq:
-          - { id: log_time, type: u8 }
-          - { id: offset, type: u8 }
+          - id: log_time
+            type: u8
+          - id: offset
+            type: u8
       message_index_entries:
         seq:
-          - { id: entries, type: message_index_entry, repeat: eos }
+          - id: entries
+            type: message_index_entry
+            repeat: eos
     seq:
-      - { id: channel_id, type: u2 }
-      - { id: len_records, type: u4 }
-      - { id: records, size: len_records, type: message_index_entries }
+      - id: channel_id
+        type: u2
+      - id: len_records
+        type: u4
+      - id: records
+        size: len_records
+        type: message_index_entries
 
   chunk_index:
     types:
       message_index_offset:
         seq:
-          - { id: channel_id, type: u2 }
-          - { id: offset, type: u8 }
+          - id: channel_id
+            type: u2
+          - id: offset
+            type: u8
       message_index_offsets:
         seq:
-          - { id: entry, type: message_index_offset, repeat: eos }
+          - id: entry
+            type: message_index_offset
+            repeat: eos
     seq:
-      - { id: message_start_time, type: u8 }
-      - { id: message_end_time, type: u8 }
-      - { id: chunk_start_offset, type: u8 }
-      - { id: chunk_length, type: u8 }
-      - { id: len_message_index_offsets, type: u4 }
+      - id: message_start_time
+        type: u8
+      - id: message_end_time
+        type: u8
+      - id: chunk_start_offset
+        type: u8
+      - id: chunk_length
+        type: u8
+      - id: len_message_index_offsets
+        type: u4
       - id: message_index_offsets
         size: len_message_index_offsets
         type: message_index_offsets
-      - { id: message_index_length, type: u8 }
-      - { id: compression, type: prefixed_str }
-      - { id: compressed_size, type: u8 }
-      - { id: uncompressed_size, type: u8 }
+      - id: message_index_length
+        type: u8
+      - id: compression
+        type: prefixed_str
+      - id: compressed_size
+        type: u8
+      - id: uncompressed_size
+        type: u8
     instances:
       chunk:
         io: _root._io
@@ -210,23 +273,37 @@ types:
 
   attachment:
     seq:
-      - { id: log_time, type: u8 }
-      - { id: create_time, type: u8 }
-      - { id: name, type: prefixed_str }
-      - { id: content_type, type: prefixed_str }
-      - { id: data_size, type: u8 }
-      - { id: data, size: data_size }
-      - { id: crc, type: u4 }
+      - id: log_time
+        type: u8
+      - id: create_time
+        type: u8
+      - id: name
+        type: prefixed_str
+      - id: content_type
+        type: prefixed_str
+      - id: data_size
+        type: u8
+      - id: data
+        size: data_size
+      - id: crc
+        type: u4
 
   attachment_index:
     seq:
-      - { id: offset, type: u8 }
-      - { id: length, type: u8 }
-      - { id: log_time, type: u8 }
-      - { id: create_time, type: u8 }
-      - { id: data_size, type: u8 }
-      - { id: name, type: prefixed_str }
-      - { id: content_type, type: prefixed_str }
+      - id: offset
+        type: u8
+      - id: length
+        type: u8
+      - id: log_time
+        type: u8
+      - id: create_time
+        type: u8
+      - id: data_size
+        type: u8
+      - id: name
+        type: prefixed_str
+      - id: content_type
+        type: prefixed_str
     instances:
       attachment:
         io: _root._io
@@ -243,32 +320,48 @@ types:
             repeat: eos
       channel_message_count:
         seq:
-          - { id: channel_id, type: u2 }
-          - { id: message_count, type: u8 }
+          - id: channel_id
+            type: u2
+          - id: message_count
+            type: u8
     seq:
-      - { id: message_count, type: u8 }
-      - { id: schema_count, type: u2 }
-      - { id: channel_count, type: u4 }
-      - { id: attachment_count, type: u4 }
-      - { id: metadata_count, type: u4 }
-      - { id: chunk_count, type: u4 }
-      - { id: message_start_time, type: u8 }
-      - { id: message_end_time, type: u8 }
-      - { id: channel_message_counts_size, type: u4 }
+      - id: message_count
+        type: u8
+      - id: schema_count
+        type: u2
+      - id: channel_count
+        type: u4
+      - id: attachment_count
+        type: u4
+      - id: metadata_count
+        type: u4
+      - id: chunk_count
+        type: u4
+      - id: message_start_time
+        type: u8
+      - id: message_end_time
+        type: u8
+      - id: channel_message_counts_size
+        type: u4
       - id: channel_message_counts
         size: channel_message_counts_size
         type: channel_message_counts
 
   metadata:
     seq:
-      - { id: name, type: prefixed_str }
-      - { id: metadata, type: map_str_str }
+      - id: name
+        type: prefixed_str
+      - id: metadata
+        type: map_str_str
 
   metadata_index:
     seq:
-      - { id: offset, type: u8 }
-      - { id: length, type: u8 }
-      - { id: name, type: prefixed_str }
+      - id: offset
+        type: u8
+      - id: length
+        type: u8
+      - id: name
+        type: prefixed_str
     instances:
       metadata:
         io: _root._io
@@ -278,9 +371,13 @@ types:
 
   summary_offset:
     seq:
-      - { id: group_opcode, type: u1, enum: opcode }
-      - { id: group_start, type: u8 }
-      - { id: group_length, type: u8 }
+      - id: group_opcode
+        type: u1
+        enum: opcode
+      - id: group_start
+        type: u8
+      - id: group_length
+        type: u8
     instances:
       group:
         io: _root._io
@@ -290,4 +387,5 @@ types:
 
   data_end:
     seq:
-      - { id: data_section_crc, type: u4 }
+      - id: data_section_crc
+        type: u4
