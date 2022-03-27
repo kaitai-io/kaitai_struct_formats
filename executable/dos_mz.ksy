@@ -12,6 +12,7 @@ meta:
     - dos
   license: CC0-1.0
   ks-version: 0.9
+  encoding: ASCII
   endian: le
 doc: |
   DOS MZ file format is a traditional format for executables in MS-DOS
@@ -22,8 +23,7 @@ doc: |
   segment of raw CPU instructions), DOS MZ .exe file format allowed
   more flexible memory management, loading of larger programs and
   added support for relocations.
-doc-ref:
-  - http://www.delorie.com/djgpp/doc/exe/
+doc-ref: http://www.delorie.com/djgpp/doc/exe/
 seq:
   - id: header
     type: exe_header
@@ -47,7 +47,12 @@ types:
   mz_header:
     seq:
       - id: magic
-        contents: 'MZ'
+        size: 2
+        type: str
+        valid:
+          any-of:
+            - '"MZ"'
+            - '"ZM"'
       - id: last_page_extra_bytes
         type: u2
       - id: num_pages
