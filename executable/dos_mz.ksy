@@ -46,7 +46,7 @@ types:
         size: mz.len_header - mz._sizeof
     instances:
       len_body:
-        value: (mz.last_page_extra_bytes == 0 ? mz.num_pages * 512 : (mz.num_pages - 1) * 512 + mz.last_page_extra_bytes) - mz.len_header
+        value: '(mz.last_page_extra_bytes == 0 ? mz.num_pages * 512 : (mz.num_pages - 1) * 512 + mz.last_page_extra_bytes) - mz.len_header'
   mz_header:
     seq:
       - id: magic
