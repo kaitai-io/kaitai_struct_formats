@@ -28,7 +28,7 @@ seq:
   - id: header
     type: exe_header
   - id: body
-    size-eos: true
+    size: header.len_body
 instances:
   relocations:
     pos: header.mz.ofs_relocations
@@ -44,6 +44,9 @@ types:
         type: mz_header
       - id: rest_of_header
         size: mz.len_header - mz._sizeof
+    instances:
+      len_body:
+        value: (mz.last_page_extra_bytes == 0 ? mz.num_pages * 512 : (mz.num_pages - 1) * 512 + mz.last_page_extra_bytes) - mz.len_header
   mz_header:
     seq:
       - id: magic
