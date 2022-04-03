@@ -1,6 +1,6 @@
 meta:
-  id: squashfs_superblock
-  title: SquashFS superblock
+  id: squashfs
+  title: SquashFS
   file-extension:
     - squashfs
     - snap
