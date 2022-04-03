@@ -65,13 +65,13 @@ instances:
   fragment_table:
     io: _root._io
     pos: superblock.fragment_table_start
-    # ceil(frag_count*8/8192)
-    type: "metablock_reference_list((superblock.frag_count%1024 >0) ? 1 : 0 + superblock.frag_count*1024)"
+    # ceil(frag_count*8/16384)
+    type: "metablock_reference_list(((superblock.frag_count%512 >0) ? 1 : 0) + superblock.frag_count/512)"
   export_table:
     io: _root._io
     pos: superblock.export_table_start
     # ceil(inode_count*8/8192)
-    type: "metablock_reference_list((superblock.inode_count%1024 >0) ? 1 : 0 + superblock.inode_count*1024)"
+    type: "metablock_reference_list(((superblock.inode_count%1024 >0) ? 1 : 0) + superblock.inode_count/1024)"
   fragments:
     io: _root.fragment_table.data._io
     type: fragments
@@ -444,7 +444,8 @@ types:
     seq:
       - id: fragments
         type: fragment
-        repeat: eos
+        repeat: expr
+        repeat-expr: _root.superblock.frag_count
   fragment:
     seq:
       - id: start
