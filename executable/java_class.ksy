@@ -83,7 +83,7 @@ types:
         if: not is_prev_two_entries
     instances:
       is_two_entries:
-        value: 'tag == tag_enum::long or tag == tag_enum::double'
+        value: 'is_prev_two_entries ? false : tag == tag_enum::long or tag == tag_enum::double'
     enums:
       tag_enum:
         7: class_type
