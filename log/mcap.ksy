@@ -24,7 +24,7 @@ seq:
 
 instances:
   footer:
-    pos: _io.size - 8 - 20 - 9
+    pos: "_io.size - sizeof<magic> - sizeof<footer> - sizeof<record_prefix>"
     size-eos: true
     type: record
 
@@ -86,8 +86,7 @@ types:
     seq:
       - id: records
         type: record
-        repeat: until
-        repeat-until: "_io.pos + 8 >= _io.size"
+        repeat: eos
 
   record_prefix:
     seq:
@@ -194,12 +193,6 @@ types:
         size-eos: true
 
   chunk:
-    types:
-      uncompressed_chunk:
-        seq:
-          - id: records
-            type: record
-            repeat: eos
     seq:
       - id: message_start_time
         type: u8
@@ -218,7 +211,7 @@ types:
         type:
           switch-on: compression.str
           cases:
-            '""': uncompressed_chunk
+            '""': records
 
   message_index:
     types:
