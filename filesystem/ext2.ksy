@@ -39,12 +39,20 @@ types:
         type: u4
       - id: r_blocks_count
         type: u4
+        valid:
+          max: blocks_count
       - id: free_blocks_count
         type: u4
+        valid:
+          max: blocks_count
       - id: free_inodes_count
         type: u4
+        valid:
+          max: inodes_count
       - id: first_data_block
         type: u4
+        valid:
+          any-of: [0, 1]
       - id: log_block_size
         type: u4
       - id: log_frag_size
@@ -82,6 +90,8 @@ types:
         enum: os
       - id: rev_level
         type: u4
+        valid:
+          any-of: [0, 1]
       - id: def_resuid
         type: u2
       - id: def_resgid
