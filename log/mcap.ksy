@@ -12,7 +12,7 @@ doc: |
 doc-ref: https://github.com/foxglove/mcap
 seq:
   - id: header_magic
-    contents: [0x89, "MCAP0\r\n"]
+    type: magic
 
   - id: records
     type: record
@@ -20,7 +20,7 @@ seq:
     repeat-until: _.op == opcode::footer
 
   - id: footer_magic
-    contents: [0x89, "MCAP0\r\n"]
+    type: magic
 
 instances:
   footer:
@@ -47,6 +47,11 @@ enums:
     0x0f: data_end
 
 types:
+  magic:
+    seq:
+      - id: magic
+        contents: [0x89, "MCAP0\r\n"]
+
   prefixed_str:
     seq:
       - id: len
@@ -83,6 +88,14 @@ types:
         type: record
         repeat: until
         repeat-until: "_io.pos + 8 >= _io.size"
+
+  record_prefix:
+    seq:
+      - id: op
+        type: u1
+        enum: opcode
+      - id: len
+        type: u8
 
   record:
     seq:
@@ -131,13 +144,13 @@ types:
       summary_section:
         io: _root._io
         pos: summary_start
-        size: "(summary_offset_start != 0 ? summary_offset_start : _root._io.size - 8 - 20 - 9) - summary_start"
+        size: "(summary_offset_start != 0 ? summary_offset_start : _root._io.size - sizeof<magic> - sizeof<footer> - sizeof<record_prefix>) - summary_start"
         type: records
         if: summary_start != 0
       summary_offset_section:
         io: _root._io
         pos: summary_offset_start
-        size: "_root._io.size - 8 - 20 - 9 - summary_offset_start"
+        size: "_root._io.size - sizeof<magic> - sizeof<footer> - sizeof<record_prefix> - summary_offset_start"
         type: records
         if: summary_offset_start != 0
 
