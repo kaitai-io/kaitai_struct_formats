@@ -101,6 +101,8 @@ types:
         type: u4
       - id: inode_size
         type: u2
+        valid:
+          max: block_size
       - id: block_group_nr
         type: u2
       - id: feature_compat
