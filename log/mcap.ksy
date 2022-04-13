@@ -214,6 +214,14 @@ types:
             '""': records
 
   message_index:
+    seq:
+      - id: channel_id
+        type: u2
+      - id: len_records
+        type: u4
+      - id: records
+        size: len_records
+        type: message_index_entries
     types:
       message_index_entry:
         seq:
@@ -226,28 +234,8 @@ types:
           - id: entries
             type: message_index_entry
             repeat: eos
-    seq:
-      - id: channel_id
-        type: u2
-      - id: len_records
-        type: u4
-      - id: records
-        size: len_records
-        type: message_index_entries
 
   chunk_index:
-    types:
-      message_index_offset:
-        seq:
-          - id: channel_id
-            type: u2
-          - id: offset
-            type: u8
-      message_index_offsets:
-        seq:
-          - id: entry
-            type: message_index_offset
-            repeat: eos
     seq:
       - id: message_start_time
         type: u8
@@ -276,6 +264,18 @@ types:
         pos: chunk_start_offset
         size: chunk_length
         type: record
+    types:
+      message_index_offset:
+        seq:
+          - id: channel_id
+            type: u2
+          - id: offset
+            type: u8
+      message_index_offsets:
+        seq:
+          - id: entry
+            type: message_index_offset
+            repeat: eos
 
   attachment:
     seq:
@@ -318,18 +318,6 @@ types:
         type: record
 
   statistics:
-    types:
-      channel_message_counts:
-        seq:
-          - id: entry
-            type: channel_message_count
-            repeat: eos
-      channel_message_count:
-        seq:
-          - id: channel_id
-            type: u2
-          - id: message_count
-            type: u8
     seq:
       - id: message_count
         type: u8
@@ -352,6 +340,18 @@ types:
       - id: channel_message_counts
         size: channel_message_counts_size
         type: channel_message_counts
+    types:
+      channel_message_counts:
+        seq:
+          - id: entry
+            type: channel_message_count
+            repeat: eos
+      channel_message_count:
+        seq:
+          - id: channel_id
+            type: u2
+          - id: message_count
+            type: u8
 
   metadata:
     seq:
