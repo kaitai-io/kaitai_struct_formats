@@ -333,7 +333,13 @@ enums:
     14: lzma
     18: ibm_terse
     19: ibm_lz77_z
+    93: zstandard
+    94: mp3
+    95: xz
+    96: jpeg
+    97: wavpack
     98: ppmd
+    99: aex_encryption_marker
   extra_codes:
     # https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt
     0x0001: zip64
@@ -355,5 +361,11 @@ enums:
     0x0066: ibm_s390_comp
     0x4690: poszip_4690
     0x5455: extended_timestamp
+    0x6542: beos
+    0x756e: asi_unix
     0x7855: infozip_unix
     0x7875: infozip_unix_var_size
+    0xa11e: apache_commons_compress
+    0xa220: microsoft_open_packaging_growth_hint
+    0xfd4a: sms_qdos
+    0x9901: aex_encryption
