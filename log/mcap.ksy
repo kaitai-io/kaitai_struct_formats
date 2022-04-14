@@ -1,6 +1,6 @@
 meta:
-  title: MCAP
   id: mcap
+  title: MCAP
   file-extension: mcap
   license: Apache-2.0
   endian: le
