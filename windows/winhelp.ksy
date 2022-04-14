@@ -31,7 +31,7 @@ types:
         type: b_tree
         size: header.len_used_space
       - id: free_space
-        size: header.len_reserved_space - header.len_used_space - header._sizeof
+        size: header.len_reserved_space - header._sizeof - header.len_used_space
   file_header:
     seq:
       - id: len_reserved_space
