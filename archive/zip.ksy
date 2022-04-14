@@ -365,7 +365,7 @@ enums:
     0x756e: asi_unix
     0x7855: infozip_unix
     0x7875: infozip_unix_var_size
-    0xa11e: apache_commons_Compress
+    0xa11e: apache_commons_compress
     0xa220: microsoft_open_packaging_growth_hint
     0xfd4a: sms_qdos
     0x9901: aex_encryption
