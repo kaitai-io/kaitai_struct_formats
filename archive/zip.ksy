@@ -36,7 +36,8 @@ doc-ref:
 seq:
   - id: sections
     type: pk_section
-    repeat: eos
+    repeat: until
+    repeat-until: _.section_type == section_types::end_of_central_dir
 types:
   pk_section:
     seq:
@@ -44,14 +45,15 @@ types:
         contents: 'PK'
       - id: section_type
         type: u2
+        enum: section_types
       - id: body
         type:
           switch-on: section_type
           cases:
-            0x0201: central_dir_entry
-            0x0403: local_file
-            0x0605: end_of_central_dir
-            0x0807: data_descriptor
+            section_types::central_dir_entry: central_dir_entry
+            section_types::local_file: local_file
+            section_types::end_of_central_dir: end_of_central_dir
+            section_types::data_descriptor: data_descriptor
   data_descriptor:
     seq:
       - id: crc32
@@ -369,3 +371,12 @@ enums:
     0xa220: microsoft_open_packaging_growth_hint
     0xfd4a: sms_qdos
     0x9901: aex_encryption
+  section_types:
+    0x0201: central_dir_entry
+    0x0403: local_file
+    0x0505: digital_signature
+    0x0605: end_of_central_dir
+    0x0606: end_of_central_dir_64
+    0x0706: end_of_central_dir_locator_64
+    0x0806: archive_extra_data
+    0x0807: data_descriptor
