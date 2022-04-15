@@ -56,6 +56,8 @@ types:
             section_types::data_descriptor: data_descriptor
             section_types::archive_extra_data: archive_extra_data
             section_types::digital_signature: digital_signature
+            section_types::zip64_end_of_central_dir: zip64_end_of_central_directory
+            section_types::zip64_end_of_central_dir_locator: zip64_end_of_central_directory_locator
   archive_extra_data:
     seq:
       - id: len_extra_field
@@ -236,6 +238,56 @@ types:
         type: str
         size: len_comment
         encoding: UTF-8
+  zip64_end_of_central_directory:
+    seq:
+      - id: len_record
+        type: u8
+        doc: size of zip64 end of central directory record
+      - id: zip64_end_of_central_dir_body
+        type: zip64_end_of_central_dir_body
+        size: len_record
+    types:
+      zip64_end_of_central_dir_body:
+        seq:
+          - id: version_made_by
+            type: u2
+          - id: version_needed_to_extract
+            type: u2
+          - id: this_disk
+            type: u4
+            doc: number of this disk
+          - id: disk_of_start_of_central_dir
+            type: u4
+            doc: number of the disk with the start of the central directory
+          - id: num_central_dir_entries_on_disk
+            type: u8
+            doc: total number of entries in the central directory on this disk
+          - id: num_central_dir_entries_total
+            type: u8
+            doc: total number of entries in the central directory
+          - id: len_central_dir
+            type: u8
+            doc: size of the central directory
+          - id: ofs_central_dir
+            type: u8
+            doc: |
+              offset of start of central directory with respect
+              to the starting disk number
+          - id: extensible_data
+            size-eos: true
+            doc: zip64 extensible data sector
+  zip64_end_of_central_directory_locator:
+    seq:
+      - id: disk_of_start_of_central_dir
+        type: u4
+        doc: |
+          number of the disk with the start of
+          the zip64 end of central directory
+      - id: ofs_zip64_end_of_central_directory
+        type: u8
+        doc: relative offset of the zip64 end of central directory record
+      - id: total_number_of_disks
+        type: u4
   extras:
     params:
       - id: type
@@ -264,6 +316,7 @@ types:
             'extra_codes::aex_encryption': aex_encryption
             'extra_codes::xceed_unicode': xceed_unicode
             'extra_codes::alzip_code_page': alzip_code_page
+            #'extra_codes::zip64': zip64
     types:
       aex_encryption:
         doc-ref: http://www.winzip.com/aes_info.htm
@@ -286,7 +339,20 @@ types:
             1: bit_128
             2: bit_192
             3: bit_256
-
+      zip64:
+        seq:
+          - id: len_original
+            type: u8
+            doc: Original uncompressed file size
+          - id: len_compressed
+            type: u8
+            doc: Size of compressed data
+          - id: ofs_relative_header
+            type: u8
+            doc: Offset of local header record
+          - id: disk_start_number
+            type: u4
+            doc: Number of the disk on which this file starts
       ntfs:
         doc-ref: 'https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt#L191'
         seq:
@@ -452,7 +518,7 @@ enums:
     0x0403: local_file
     0x0505: digital_signature
     0x0605: end_of_central_dir
-    0x0606: end_of_central_dir_64
-    0x0706: end_of_central_dir_locator_64
+    0x0606: zip64_end_of_central_dir
+    0x0706: zip64_end_of_central_dir_locator
     0x0806: archive_extra_data
     0x0807: data_descriptor
