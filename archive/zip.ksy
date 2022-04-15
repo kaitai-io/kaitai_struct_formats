@@ -508,6 +508,8 @@ enums:
     0x9901: aex_encryption
     0xa11e: apache_commons_compress
     0xa220: microsoft_open_packaging_growth_hint
+    # http://hg.openjdk.java.net/jdk7/jdk7/jdk/file/00cd9dc3c2b5/src/share/classes/java/util/jar/JarOutputStream.java#l46
+    0xcafe: java_jar
     0xe57a: alzip_code_page
     0xfd4a: sms_qdos
   section_types:
