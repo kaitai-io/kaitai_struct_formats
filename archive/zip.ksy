@@ -261,6 +261,8 @@ types:
             'extra_codes::extended_timestamp': extended_timestamp
             'extra_codes::infozip_unix_var_size': infozip_unix_var_size
             'extra_codes::aex_encryption': aex_encryption
+            'extra_codes::xceed_unicode': xceed_unicode
+            'extra_codes::alzip_code_page': alzip_code_page
     types:
       aex_encryption:
         doc-ref: http://www.winzip.com/aes_info.htm
@@ -360,6 +362,21 @@ types:
           - id: gid
             size: len_gid
             doc: GID (Group ID) for a file
+      xceed_unicode:
+        seq:
+          - id: magic
+            contents: 'NUCX'
+          - id: num_characters
+            type: u2
+          - id: data
+            size-eos: true
+            type: str
+            encoding: utf-16le
+      alzip_code_page:
+        doc-ref: 'https://github.com/icsharpcode/SharpZipLib/issues/657'
+        seq:
+          - id: code_page
+            type: u4
 enums:
   compression:
     0: none
@@ -404,14 +421,17 @@ enums:
     0x0066: ibm_s390_comp
     0x4690: poszip_4690
     0x5455: extended_timestamp
+    0x554e: xceed_unicode
+    0x5855: infozip_unix_old
     0x6542: beos
     0x756e: asi_unix
     0x7855: infozip_unix
     0x7875: infozip_unix_var_size
+    0x9901: aex_encryption
     0xa11e: apache_commons_compress
     0xa220: microsoft_open_packaging_growth_hint
+    0xe57a: alzip_code_page
     0xfd4a: sms_qdos
-    0x9901: aex_encryption
   section_types:
     0x0201: central_dir_entry
     0x0403: local_file
