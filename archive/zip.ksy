@@ -56,8 +56,8 @@ types:
             section_types::data_descriptor: data_descriptor
             section_types::archive_extra_data: archive_extra_data
             section_types::digital_signature: digital_signature
-            section_types::zip64_end_of_central_dir: zip64_end_of_central_directory
-            section_types::zip64_end_of_central_dir_locator: zip64_end_of_central_directory_locator
+            section_types::zip64_end_of_central_dir: zip64_end_of_central_dir
+            section_types::zip64_end_of_central_dir_locator: zip64_end_of_central_dir_locator
   archive_extra_data:
     seq:
       - id: len_extra_field
@@ -238,7 +238,7 @@ types:
         type: str
         size: len_comment
         encoding: UTF-8
-  zip64_end_of_central_directory:
+  zip64_end_of_central_dir:
     seq:
       - id: len_record
         type: u8
@@ -276,14 +276,14 @@ types:
           - id: extensible_data
             size-eos: true
             doc: zip64 extensible data sector
-  zip64_end_of_central_directory_locator:
+  zip64_end_of_central_dir_locator:
     seq:
       - id: disk_of_start_of_central_dir
         type: u4
         doc: |
           number of the disk with the start of
           the zip64 end of central directory
-      - id: ofs_zip64_end_of_central_directory
+      - id: ofs_zip64_end_of_central_dir
         type: u8
         doc: relative offset of the zip64 end of central directory record
       - id: total_number_of_disks
