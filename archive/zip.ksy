@@ -321,15 +321,12 @@ types:
       aex_encryption:
         doc-ref: http://www.winzip.com/aes_info.htm
         seq:
-          - id: len_data
-            type: u2
-            valid: 7
           - id: version_number
             type: u2
           - id: vendor_id
             size: 2
           - id: encryption_strength
-            type: u2
+            type: u1
             enum: encryption
           - id: compression_method
             type: u2
