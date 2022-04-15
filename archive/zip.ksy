@@ -259,6 +259,7 @@ types:
           cases:
             'extra_codes::ntfs': ntfs
             'extra_codes::extended_timestamp': extended_timestamp
+            'extra_codes::infozip_unicode_path': infozip_unicode_path
             'extra_codes::infozip_unix_var_size': infozip_unix_var_size
             'extra_codes::aex_encryption': aex_encryption
             'extra_codes::xceed_unicode': xceed_unicode
@@ -344,6 +345,19 @@ types:
                 type: b1
               - id: reserved
                 type: b5
+      infozip_unicode_path:
+        seq:
+          - id: version
+            type: u1
+            doc: Version of this extra field, currently 1
+          - id: crc32
+            type: u4
+            doc: File name field CRC32 checksum
+          - id: name
+            size-eos: true
+            type: str
+            encoding: utf-8
+            doc: UTF-8 version of the entry file name
       infozip_unix_var_size:
         doc-ref: 'https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt#L1339'
         seq:
@@ -424,6 +438,7 @@ enums:
     0x554e: xceed_unicode
     0x5855: infozip_unix_old
     0x6542: beos
+    0x7075: infozip_unicode_path
     0x756e: asi_unix
     0x7855: infozip_unix
     0x7875: infozip_unix_var_size
