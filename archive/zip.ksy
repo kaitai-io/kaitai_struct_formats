@@ -54,6 +54,14 @@ types:
             section_types::local_file: local_file
             section_types::end_of_central_dir: end_of_central_dir
             section_types::data_descriptor: data_descriptor
+            section_types::archive_extra_data: archive_extra_data
+            section_types::digital_signature: digital_signature
+  archive_extra_data:
+    seq:
+      - id: len_extra_field
+        type: u4
+      - id: data
+        size: len_extra_field
   data_descriptor:
     seq:
       - id: crc32
@@ -62,6 +70,12 @@ types:
         type: u4
       - id: len_body_uncompressed
         type: u4
+  digital_signature:
+    seq:
+      - id: len_signature
+        type: u2
+      - id: signature
+        size: len_signature
   local_file:
     seq:
       - id: header
@@ -97,7 +111,7 @@ types:
         encoding: UTF-8
       - id: extra
         size: len_extra
-        type: extras
+        type: extras(section_types::local_file)
     types:
       gp_flags:
         -orig-id: general purpose bit flag
@@ -192,7 +206,7 @@ types:
         encoding: UTF-8
       - id: extra
         size: len_extra
-        type: extras
+        type: extras(section_types::central_dir_entry)
       - id: comment
         type: str
         size: len_comment
@@ -223,6 +237,10 @@ types:
         size: len_comment
         encoding: UTF-8
   extras:
+    params:
+      - id: type
+        type: u4
+        enum: section_types
     seq:
       - id: entries
         type: extra_field
@@ -284,11 +302,11 @@ types:
             doc: Unix timestamp
           - id: access_time
             type: u4
-            if: flags.has_access_time
+            if: flags.has_access_time and _parent._parent.type == section_types::local_file
             doc: Unix timestamp
           - id: create_time
             type: u4
-            if: flags.has_create_time
+            if: flags.has_create_time and _parent._parent.type == section_types::local_file
             doc: Unix timestamp
         types:
           info_flags:
