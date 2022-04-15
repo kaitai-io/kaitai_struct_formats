@@ -260,7 +260,30 @@ types:
             'extra_codes::ntfs': ntfs
             'extra_codes::extended_timestamp': extended_timestamp
             'extra_codes::infozip_unix_var_size': infozip_unix_var_size
+            'extra_codes::aex_encryption': aex_encryption
     types:
+      aex_encryption:
+        doc-ref: http://www.winzip.com/aes_info.htm
+        seq:
+          - id: len_data
+            type: u2
+            valid: 7
+          - id: version_number
+            type: u2
+          - id: vendor_id
+            size: 2
+          - id: encryption_strength
+            type: u2
+            enum: encryption
+          - id: compression_method
+            type: u2
+            enum: compression
+        enums:
+          encryption:
+            1: bit_128
+            2: bit_192
+            3: bit_256
+
       ntfs:
         doc-ref: 'https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt#L191'
         seq:
