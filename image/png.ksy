@@ -102,6 +102,9 @@ types:
 
             # evernote/skitch chunks
             '"skRf"': evernote_skrf_chunk
+
+            # pngattach: https://nullprogram.com/blog/2021/12/31/
+            '"atCh"': atch_chunk
       - id: crc
         size: 4
   ihdr_chunk:
@@ -411,6 +414,24 @@ types:
         size: 16
       - id: data
         size-eos: true
+  atch_chunk:
+    seq:
+      - id: name
+        type: strz
+        encoding: utf-8
+      - id: compression
+        type: u1
+        enum: compression_attach_methods
+        valid:
+          any-of:
+            - compression_attach_methods::no_compression
+            - compression_attach_methods::zlib
+      - id: data
+        size-eos: true
+    enums:
+      compression_attach_methods:
+        0: no_compression
+        1: zlib
 enums:
   color_type:
     0: greyscale
