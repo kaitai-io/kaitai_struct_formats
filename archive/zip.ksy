@@ -39,6 +39,7 @@ seq:
     repeat: until
     repeat-until: _.section_type == section_types::end_of_central_dir
 types:
+  empty: {}
   pk_section:
     seq:
       - id: magic
@@ -113,7 +114,14 @@ types:
         encoding: UTF-8
       - id: extra
         size: len_extra
-        type: extras(section_types::local_file)
+        type:
+          switch-on: has_padding
+          cases:
+            false: extras(section_types::local_file)
+            true: empty
+    instances:
+      has_padding:
+        value: len_extra < 4
     types:
       gp_flags:
         -orig-id: general purpose bit flag
