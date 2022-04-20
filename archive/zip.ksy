@@ -121,7 +121,7 @@ types:
             true: empty
     instances:
       has_padding:
-        value: len_extra < 4
+        value: len_extra < 4 and len_extra != 0
     types:
       gp_flags:
         -orig-id: general purpose bit flag
