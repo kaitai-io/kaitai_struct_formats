@@ -510,6 +510,9 @@ enums:
     0xa220: microsoft_open_packaging_growth_hint
     # http://hg.openjdk.java.net/jdk7/jdk7/jdk/file/00cd9dc3c2b5/src/share/classes/java/util/jar/JarOutputStream.java#l46
     0xcafe: java_jar
+    # https://android.googlesource.com/platform/tools/apksig/+/87d6acee83378201b/src/main/java/com/android/apksig/ApkSigner.java#74
+    # https://developer.android.com/studio/command-line/zipalign
+    0xd935: zip_align
     0xe57a: alzip_code_page
     0xfd4a: sms_qdos
   section_types:
