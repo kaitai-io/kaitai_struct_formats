@@ -48,7 +48,7 @@ instances:
     pos: superblock.id_table_start
     type: metablock_reference_list((superblock.bytes_used-superblock.id_table_start)/8)
   xattr_id_table:
-    if: superblock.xattr_id_table_start != 18446744073709551615
+    if: superblock.xattr_id_table_start != 0xffff_ffff_ffff_ffff
     io: _root._io
     pos: superblock.xattr_id_table_start
     type: metablock_list
