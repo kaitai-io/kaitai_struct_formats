@@ -218,9 +218,7 @@ types:
         size: len_extra
         type: extras(section_types::central_dir_entry)
       - id: comment
-        type: str
         size: len_comment
-        encoding: UTF-8
     instances:
       local_header:
         pos: ofs_local_header
@@ -243,9 +241,7 @@ types:
       - id: len_comment
         type: u2
       - id: comment
-        type: str
         size: len_comment
-        encoding: UTF-8
   zip64_end_of_central_dir:
     seq:
       - id: len_record
