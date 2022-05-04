@@ -47,6 +47,8 @@ types:
         doc: header_size >> 2 (currently 4)
       - id: log2_block_size
         type: u1
+        valid:
+          any-of: [15, 16, 17]
       - id: reserved
         contents: [0, 0]
     instances:
