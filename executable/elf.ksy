@@ -1576,6 +1576,7 @@ enums:
     16: preinit_array
     17: group
     18: symtab_shndx
+    19: relr
     # 0x60000000: lo_os
     # 0x6fffffef: lo_sunw
     0x6fffffec:
@@ -1791,6 +1792,10 @@ enums:
     32: preinit_array    # Array with addresses of preinit fct
     33: preinit_arraysz  # Size in bytes of DT_PREINIT_ARRAY
     34: symtab_shndx     # Address of SYMTAB_SHNDX section
+    35: relrsz
+    36: relr
+    37: relrent
+    38: encoding
     # 0x6000000d: lo_os
     0x6000000d: sunw_auxiliary
     0x6000000e:
