@@ -1784,18 +1784,17 @@ enums:
     28: fini_arraysz     # Size in bytes of DT_FINI_ARRAY
     29: runpath          # Library search path
     30: flags            # Flags for the object being loaded
-    # 32: encoding  # special value (marker):
-                    # Values `v >= ::encoding and v < ::lo_os` follow the rules
-                    # for the interpretation of the d_un union as follows:
-                    # even number == 'd_ptr', odd number == 'd_val' or none
-                    # <https://github.com/tianocore/edk2-archive/blob/072289f45c/ArmPlatformPkg/Library/ArmShellCmdRunAxf/elf_common.h#L336-L340>
     32: preinit_array    # Array with addresses of preinit fct
     33: preinit_arraysz  # Size in bytes of DT_PREINIT_ARRAY
     34: symtab_shndx     # Address of SYMTAB_SHNDX section
     35: relrsz
     36: relr
     37: relrent
-    38: encoding
+    # 38: encoding  # special value (marker):
+                    # Values `v >= ::encoding and v < ::lo_os` follow the rules
+                    # for the interpretation of the d_un union as follows:
+                    # even number == 'd_ptr', odd number == 'd_val' or none
+                    # <https://github.com/tianocore/edk2-archive/blob/072289f45c/ArmPlatformPkg/Library/ArmShellCmdRunAxf/elf_common.h#L336-L340>
     # 0x6000000d: lo_os
     0x6000000d: sunw_auxiliary
     0x6000000e:
