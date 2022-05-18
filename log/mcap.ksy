@@ -74,7 +74,7 @@ types:
     types:
       entries:
         seq:
-          - id: entry
+          - id: entries
             type: tuple_str_str
             repeat: eos
     seq:
@@ -281,7 +281,7 @@ types:
             type: u8
       message_index_offsets:
         seq:
-          - id: entry
+          - id: entries
             type: message_index_offset
             repeat: eos
 
@@ -366,7 +366,7 @@ types:
     types:
       channel_message_counts:
         seq:
-          - id: entry
+          - id: entries
             type: channel_message_count
             repeat: eos
       channel_message_count:
