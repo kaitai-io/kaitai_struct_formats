@@ -131,35 +131,37 @@ types:
 
   footer:
     seq:
-      - id: summary_start
+      - id: ofs_summary_section
+        -orig-id: summary_start
         type: u8
-      - id: summary_offset_start
+      - id: ofs_summary_offset_section
+        -orig-id: summary_offset_start
         type: u8
       - id: summary_crc32
         -orig-id: summary_crc
         type: u4
-    instances:
-      summary_section:
-        io: _root._io
-        pos: summary_start
-        size: "(summary_offset_start != 0 ? summary_offset_start : _root.ofs_footer) - summary_start"
-        type: records
-        if: summary_start != 0
-      summary_offset_section:
-        io: _root._io
-        pos: summary_offset_start
-        size: "_root.ofs_footer - summary_offset_start"
-        type: records
-        if: summary_offset_start != 0
-      summary_crc32_input:
-        io: _root._io
-        pos: summary_start
-        size: "_root._io.size - summary_start - sizeof<magic> - summary_crc32._sizeof"
-        if: summary_start != 0
         doc: |
           A CRC32 of all bytes from the start of the Summary section up through and
           including the end of the previous field (summary_offset_start) in the footer
           record. A value of 0 indicates the CRC32 is not available.
+    instances:
+      summary_section:
+        io: _root._io
+        pos: ofs_summary_section
+        size: "(ofs_summary_offset_section != 0 ? ofs_summary_offset_section : _root.ofs_footer) - ofs_summary_section"
+        type: records
+        if: ofs_summary_section != 0
+      summary_offset_section:
+        io: _root._io
+        pos: ofs_summary_offset_section
+        size: "_root.ofs_footer - ofs_summary_offset_section"
+        type: records
+        if: ofs_summary_offset_section != 0
+      summary_crc32_input:
+        io: _root._io
+        pos: ofs_summary_section
+        size: "_root._io.size - ofs_summary_section - sizeof<magic> - summary_crc32._sizeof"
+        if: ofs_summary_section != 0
 
   schema:
     seq:
@@ -253,9 +255,11 @@ types:
         type: u8
       - id: message_end_time
         type: u8
-      - id: chunk_start_offset
+      - id: ofs_chunk
+        -orig-id: chunk_start_offset
         type: u8
-      - id: chunk_length
+      - id: len_chunk
+        -orig-id: chunk_length
         type: u8
       - id: len_message_index_offsets
         type: u4
@@ -273,8 +277,8 @@ types:
     instances:
       chunk:
         io: _root._io
-        pos: chunk_start_offset
-        size: chunk_length
+        pos: ofs_chunk
+        size: len_chunk
         type: record
     types:
       message_index_offset:
@@ -299,10 +303,10 @@ types:
         type: prefixed_str
       - id: content_type
         type: prefixed_str
-      - id: data_size
+      - id: len_data
         type: u8
       - id: data
-        size: data_size
+        size: len_data
       # Trigger _io.pos computation: https://github.com/kaitai-io/kaitai_struct/issues/721#issuecomment-623011059
       - id: invoke_crc32_input_end
         size: 0
@@ -362,10 +366,10 @@ types:
         type: u8
       - id: message_end_time
         type: u8
-      - id: channel_message_counts_size
+      - id: len_channel_message_counts
         type: u4
       - id: channel_message_counts
-        size: channel_message_counts_size
+        size: len_channel_message_counts
         type: channel_message_counts
     types:
       channel_message_counts:
@@ -389,17 +393,19 @@ types:
 
   metadata_index:
     seq:
-      - id: offset
+      - id: ofs_metadata
+        -orig-id: offset
         type: u8
-      - id: length
+      - id: len_metadata
+        -orig-id: length
         type: u8
       - id: name
         type: prefixed_str
     instances:
       metadata:
         io: _root._io
-        pos: offset
-        size: length
+        pos: ofs_metadata
+        size: len_metadata
         type: record
 
   summary_offset:
@@ -407,15 +413,17 @@ types:
       - id: group_opcode
         type: u1
         enum: opcode
-      - id: group_start
+      - id: ofs_group
+        -orig-id: group_start
         type: u8
-      - id: group_length
+      - id: len_group
+        -orig-id: group_length
         type: u8
     instances:
       group:
         io: _root._io
-        pos: group_start
-        size: group_length
+        pos: ofs_group
+        size: len_group
         type: records
 
   data_end:
