@@ -9,6 +9,10 @@ doc: |
   arbitrary message serialization. It is primarily intended for use in robotics
   applications, and works well under various workloads, resource constraints, and
   durability requirements.
+
+  Time values (`log_time`, `publish_time`, `create_time`) are represented in
+  nanoseconds since a user-understood epoch (i.e unix epoch, robot boot time,
+  etc.)
 doc-ref: https://github.com/foxglove/mcap
 seq:
   - id: header_magic
