@@ -71,18 +71,18 @@ types:
         type: prefixed_str
 
   map_str_str:
-    types:
-      entries:
-        seq:
-          - id: entries
-            type: tuple_str_str
-            repeat: eos
     seq:
       - id: len
         type: u4
       - id: entry
         size: len
         type: entries
+    types:
+      entries:
+        seq:
+          - id: entries
+            type: tuple_str_str
+            repeat: eos
 
   records:
     seq:
