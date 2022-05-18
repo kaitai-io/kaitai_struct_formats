@@ -24,9 +24,11 @@ seq:
 
 instances:
   footer:
-    pos: "_io.size - sizeof<magic> - sizeof<footer> - sizeof<record_prefix>"
+    pos: ofs_footer
     size-eos: true
     type: record
+  ofs_footer:
+    value: "_io.size - footer.op._sizeof - footer.len._sizeof - sizeof<footer> - sizeof<magic>"
 
 enums:
   opcode:
@@ -88,14 +90,6 @@ types:
         type: record
         repeat: eos
 
-  record_prefix:
-    seq:
-      - id: op
-        type: u1
-        enum: opcode
-      - id: len
-        type: u8
-
   record:
     seq:
       - id: op
@@ -144,13 +138,13 @@ types:
       summary_section:
         io: _root._io
         pos: summary_start
-        size: "(summary_offset_start != 0 ? summary_offset_start : _root._io.size - sizeof<magic> - sizeof<footer> - sizeof<record_prefix>) - summary_start"
+        size: "(summary_offset_start != 0 ? summary_offset_start : _root.ofs_footer) - summary_start"
         type: records
         if: summary_start != 0
       summary_offset_section:
         io: _root._io
         pos: summary_offset_start
-        size: "_root._io.size - sizeof<magic> - sizeof<footer> - sizeof<record_prefix> - summary_offset_start"
+        size: "_root.ofs_footer - summary_offset_start"
         type: records
         if: summary_offset_start != 0
       summary_crc32_input:
