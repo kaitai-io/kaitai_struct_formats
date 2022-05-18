@@ -78,7 +78,7 @@ types:
     seq:
       - id: len
         type: u4
-      - id: entry
+      - id: entries
         size: len
         type: entries
     types:
