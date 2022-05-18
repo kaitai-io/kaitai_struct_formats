@@ -137,7 +137,8 @@ types:
         type: u8
       - id: summary_offset_start
         type: u8
-      - id: summary_crc
+      - id: summary_crc32
+        -orig-id: summary_crc
         type: u4
     instances:
       summary_section:
@@ -152,6 +153,15 @@ types:
         size: "_root._io.size - sizeof<magic> - sizeof<footer> - sizeof<record_prefix> - summary_offset_start"
         type: records
         if: summary_offset_start != 0
+      summary_crc32_input:
+        io: _root._io
+        pos: summary_start
+        size: "_root._io.size - summary_start - sizeof<magic> - summary_crc32._sizeof"
+        if: summary_start != 0
+        doc: |
+          A CRC32 of all bytes from the start of the Summary section up through and
+          including the end of the previous field (summary_offset_start) in the footer
+          record. A value of 0 indicates the CRC32 is not available.
 
   schema:
     seq:
@@ -200,8 +210,12 @@ types:
         type: u8
       - id: uncompressed_size
         type: u8
-      - id: uncompressed_crc
+      - id: uncompressed_crc32
+        -orig-id: uncompressed_crc
         type: u4
+        doc: |
+          CRC32 checksum of uncompressed `records` field. A value of zero indicates that
+          CRC validation should not be performed.
       - id: compression
         type: prefixed_str
       - id: len_records
@@ -291,8 +305,23 @@ types:
         type: u8
       - id: data
         size: data_size
-      - id: crc
+      # Trigger _io.pos computation: https://github.com/kaitai-io/kaitai_struct/issues/721#issuecomment-623011059
+      - id: invoke_crc32_input_end
+        size: 0
+        if: crc32_input_end >= 0
+      - id: crc32
+        -orig-id: crc
         type: u4
+        doc: |
+          CRC32 checksum of preceding fields in the record. A value of zero indicates that
+          CRC validation should not be performed.
+
+    instances:
+      crc32_input_end:
+        value: _io.pos
+      crc32_input:
+        pos: 0
+        size: crc32_input_end
 
   attachment_index:
     seq:
@@ -393,5 +422,9 @@ types:
 
   data_end:
     seq:
-      - id: data_section_crc
+      - id: data_section_crc32
+        -orig-id: data_section_crc
         type: u4
+        doc: |
+          CRC32 of all bytes in the data section. A value of 0 indicates the CRC32 is not
+          available.
