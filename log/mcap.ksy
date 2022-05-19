@@ -32,7 +32,7 @@ instances:
     size-eos: true
     type: record
   ofs_footer:
-    value: "_io.size - footer.op._sizeof - footer.len._sizeof - sizeof<footer> - sizeof<magic>"
+    value: "_io.size - footer.op._sizeof - footer.len_body._sizeof - sizeof<footer> - sizeof<magic>"
 
 enums:
   opcode:
@@ -60,11 +60,11 @@ types:
 
   prefixed_str:
     seq:
-      - id: len
+      - id: len_str
         type: u4
       - id: str
         type: str
-        size: len
+        size: len_str
         encoding: UTF-8
 
   tuple_str_str:
@@ -76,10 +76,10 @@ types:
 
   map_str_str:
     seq:
-      - id: len
+      - id: len_entries
         type: u4
       - id: entries
-        size: len
+        size: len_entries
         type: entries
     types:
       entries:
@@ -99,10 +99,10 @@ types:
       - id: op
         type: u1
         enum: opcode
-      - id: len
+      - id: len_body
         type: u8
       - id: body
-        size: len
+        size: len_body
         type:
           switch-on: op
           cases:
@@ -328,9 +328,11 @@ types:
 
   attachment_index:
     seq:
-      - id: offset
+      - id: ofs_attachment
+        -orig-id: offset
         type: u8
-      - id: length
+      - id: len_attachment
+        -orig-id: length
         type: u8
       - id: log_time
         type: u8
@@ -345,8 +347,8 @@ types:
     instances:
       attachment:
         io: _root._io
-        pos: offset
-        size: length
+        pos: ofs_attachment
+        size: len_attachment
         type: record
 
   statistics:
