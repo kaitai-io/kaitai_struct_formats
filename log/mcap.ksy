@@ -157,11 +157,12 @@ types:
         size: "_root.ofs_footer - ofs_summary_offset_section"
         type: records
         if: ofs_summary_offset_section != 0
+      ofs_summary_crc32_input:
+        value: "ofs_summary_section != 0 ? ofs_summary_section : _root.ofs_footer"
       summary_crc32_input:
         io: _root._io
-        pos: ofs_summary_section
-        size: "_root._io.size - ofs_summary_section - sizeof<magic> - summary_crc32._sizeof"
-        if: ofs_summary_section != 0
+        pos: ofs_summary_crc32_input
+        size: "_root._io.size - ofs_summary_crc32_input - sizeof<magic> - summary_crc32._sizeof"
 
   schema:
     seq:
