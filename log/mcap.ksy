@@ -11,7 +11,7 @@ doc: |
   durability requirements.
 
   Time values (`log_time`, `publish_time`, `create_time`) are represented in
-  nanoseconds since a user-understood epoch (i.e unix epoch, robot boot time,
+  nanoseconds since a user-understood epoch (i.e. Unix epoch, robot boot time,
   etc.)
 doc-ref: https://github.com/foxglove/mcap
 seq:
@@ -141,9 +141,9 @@ types:
         -orig-id: summary_crc
         type: u4
         doc: |
-          A CRC32 of all bytes from the start of the Summary section up through and
+          A CRC-32 of all bytes from the start of the Summary section up through and
           including the end of the previous field (summary_offset_start) in the footer
-          record. A value of 0 indicates the CRC32 is not available.
+          record. A value of 0 indicates the CRC-32 is not available.
     instances:
       summary_section:
         io: _root._io
@@ -215,7 +215,7 @@ types:
         -orig-id: uncompressed_crc
         type: u4
         doc: |
-          CRC32 checksum of uncompressed `records` field. A value of zero indicates that
+          CRC-32 checksum of uncompressed `records` field. A value of zero indicates that
           CRC validation should not be performed.
       - id: compression
         type: prefixed_str
@@ -316,7 +316,7 @@ types:
         -orig-id: crc
         type: u4
         doc: |
-          CRC32 checksum of preceding fields in the record. A value of zero indicates that
+          CRC-32 checksum of preceding fields in the record. A value of zero indicates that
           CRC validation should not be performed.
 
     instances:
@@ -435,5 +435,5 @@ types:
         -orig-id: data_section_crc
         type: u4
         doc: |
-          CRC32 of all bytes in the data section. A value of 0 indicates the CRC32 is not
+          CRC-32 of all bytes in the data section. A value of 0 indicates the CRC-32 is not
           available.
