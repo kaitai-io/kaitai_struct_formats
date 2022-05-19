@@ -13,7 +13,7 @@ doc: |
   Time values (`log_time`, `publish_time`, `create_time`) are represented in
   nanoseconds since a user-understood epoch (i.e. Unix epoch, robot boot time,
   etc.)
-doc-ref: https://github.com/foxglove/mcap
+doc-ref: https://github.com/foxglove/mcap/tree/c1cc51d/docs/specification#readme
 seq:
   - id: header_magic
     type: magic
