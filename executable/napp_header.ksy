@@ -6,7 +6,7 @@ meta:
   ks-version: 0.9
   endian: le
   encoding: UTF-8
-doc-ref: https://android.googlesource.com/platform/system/chre/+/a7ff61b94d6658597c63ae0a15bdee3cdfbaa8c7/build/build_template.mk#130
+doc-ref: https://android.googlesource.com/platform/system/chre/+/a7ff61b9/build/build_template.mk#130
 seq:
   - id: header_version
     type: u4
