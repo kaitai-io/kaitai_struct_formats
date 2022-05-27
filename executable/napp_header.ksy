@@ -29,8 +29,8 @@ seq:
     contents: [0, 0, 0, 0, 0, 0]
 instances:
   is_signed:
-    value: flags & 0x1 == 0x1
+    value: flags & 0x1 != 0
   is_encrypted:
-    value: flags & 0x2 == 0x2
+    value: flags & 0x2 != 0
   is_tcm_capable:
-    value: flags & 0x4 == 0x4
+    value: flags & 0x4 != 0
