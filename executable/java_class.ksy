@@ -16,6 +16,7 @@ seq:
   - id: version_major
     type: u2
     valid:
+      # https://github.com/file/file/blob/905ca555/magic/Magdir/cafebabe#L11-L12
       min: 43
   - id: constant_pool_count
     type: u2
