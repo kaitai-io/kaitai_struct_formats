@@ -17,8 +17,8 @@ doc: |
 doc-ref: https://web.archive.org/web/20200612093441/https://dev.lovelyhq.com/libburnia/web/-/wikis/zisofs
 seq:
   - id: header
-    type: header
     size: 16
+    type: header
   - id: block_pointers
     type: u4
     repeat: expr
@@ -65,6 +65,6 @@ types:
       len_block:
         value: 'index < _parent.block_pointers.size - 1 ? _parent.block_pointers[index+1] - _parent.block_pointers[index] : _parent.final_block_pointer - _parent.block_pointers[index]'
       data:
-        pos: _parent.block_pointers[index]
         io: _root._io
+        pos: _parent.block_pointers[index]
         size: len_block
