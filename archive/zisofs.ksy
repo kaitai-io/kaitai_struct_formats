@@ -1,6 +1,9 @@
 meta:
   id: zisofs
   title: zisofs
+  xref:
+    justsolve: Zisofs
+    wikidata: Q105854284
   license: CC0-1.0
   endian: le
 doc: |
