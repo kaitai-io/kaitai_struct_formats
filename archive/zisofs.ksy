@@ -30,7 +30,7 @@ seq:
       also the end of the file data.
 instances:
   blocks:
-    type: block_pointer(_index)
+    type: 'block(block_pointers[_index], _index < header.num_block_pointers - 1 ? block_pointers[_index + 1] : final_block_pointer)'
     repeat: expr
     repeat-expr: header.num_block_pointers
 types:
@@ -57,17 +57,14 @@ types:
       num_block_pointers:
         value: '(uncompressed_size / block_size) + (uncompressed_size % block_size != 0 ? 1 : 0)'
         doc: ceil(uncompressed_size / block_size)
-  block_pointer:
+  block:
     params:
-      - id: index
+      - id: ofs_start
+        type: u4
+      - id: ofs_end
         type: u4
     instances:
-      len_block:
-        value: |
-          (index < _parent.block_pointers.size - 1
-            ? _parent.block_pointers[index + 1]
-            : _parent.final_block_pointer) - _parent.block_pointers[index]
       data:
         io: _root._io
-        pos: _parent.block_pointers[index]
-        size: len_block
+        pos: ofs_start
+        size: ofs_end - ofs_start
