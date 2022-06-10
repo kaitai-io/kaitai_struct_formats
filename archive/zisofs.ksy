@@ -61,13 +61,16 @@ types:
         value: '(uncompressed_size / block_size) + (uncompressed_size % block_size != 0 ? 1 : 0)'
         doc: ceil(uncompressed_size / block_size)
   block:
+    -webide-representation: '[{ofs_start}, {ofs_end}): {len_data:dec} bytes'
     params:
       - id: ofs_start
         type: u4
       - id: ofs_end
         type: u4
     instances:
+      len_data:
+        value: ofs_end - ofs_start
       data:
         io: _root._io
         pos: ofs_start
-        size: ofs_end - ofs_start
+        size: len_data
