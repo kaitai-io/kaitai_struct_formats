@@ -4,6 +4,9 @@ meta:
   xref:
     justsolve: Zisofs
     wikidata: Q105854284
+  tags:
+    - archive
+    - filesystem
   license: CC0-1.0
   endian: le
 doc: |
