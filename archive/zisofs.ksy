@@ -53,9 +53,9 @@ types:
         contents: [0, 0]
     instances:
       block_size:
-        value: 2 << (log2_block_size - 1)
+        value: 1 << log2_block_size
       num_block_pointers:
-        value: 'uncompressed_size % block_size == 0 ? (uncompressed_size / block_size) : (uncompressed_size / block_size) + 1'
+        value: '(uncompressed_size / block_size) + (uncompressed_size % block_size != 0 ? 1 : 0)'
         doc: ceil(uncompressed_size / block_size)
   block_pointer:
     params:
@@ -63,7 +63,10 @@ types:
         type: u4
     instances:
       len_block:
-        value: 'index < _parent.block_pointers.size - 1 ? _parent.block_pointers[index+1] - _parent.block_pointers[index] : _parent.final_block_pointer - _parent.block_pointers[index]'
+        value: |
+          (index < _parent.block_pointers.size - 1
+            ? _parent.block_pointers[index + 1]
+            : _parent.final_block_pointer) - _parent.block_pointers[index]
       data:
         io: _root._io
         pos: _parent.block_pointers[index]
