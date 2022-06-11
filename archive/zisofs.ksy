@@ -19,7 +19,7 @@ doc: |
   The specification here describes the structure of a file that has been
   preprocessed by mkzftree, not of a full ISO9660 ziso. Data is not
   decompressed, as blocks with length 0 have a special meaning. Decompressing
-  and deconstruction this data should be done outside of Kaitai Struct.
+  and deconstruction of this data should be done outside of Kaitai Struct.
 doc-ref: https://web.archive.org/web/20200612093441/https://dev.lovelyhq.com/libburnia/web/-/wikis/zisofs
 seq:
   - id: header
