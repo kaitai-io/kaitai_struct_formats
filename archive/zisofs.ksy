@@ -49,7 +49,7 @@ types:
         type: u1
         valid: 4
         doc: header_size >> 2 (currently 4)
-      - id: log2_block_size
+      - id: block_size_log2
         type: u1
         valid:
           any-of: [15, 16, 17]
@@ -57,7 +57,7 @@ types:
         contents: [0, 0]
     instances:
       block_size:
-        value: 1 << log2_block_size
+        value: 1 << block_size_log2
       num_blocks:
         value: '(uncompressed_size / block_size) + (uncompressed_size % block_size != 0 ? 1 : 0)'
         doc: ceil(uncompressed_size / block_size)
