@@ -28,17 +28,15 @@ seq:
   - id: block_pointers
     type: u4
     repeat: expr
-    repeat-expr: header.num_block_pointers
-  - id: final_block_pointer
-    type: u4
+    repeat-expr: header.num_blocks + 1
     doc: |
-      Final pointer indicating the first invalid byte. Typically this is
-      also the end of the file data.
+      The final pointer (`block_pointers[header.num_blocks]`) indicates the end
+      of the last block. Typically this is also the end of the file data.
 instances:
   blocks:
-    type: 'block(block_pointers[_index], _index < header.num_block_pointers - 1 ? block_pointers[_index + 1] : final_block_pointer)'
+    type: 'block(block_pointers[_index], block_pointers[_index + 1])'
     repeat: expr
-    repeat-expr: header.num_block_pointers
+    repeat-expr: header.num_blocks
 types:
   header:
     seq:
@@ -60,7 +58,7 @@ types:
     instances:
       block_size:
         value: 1 << log2_block_size
-      num_block_pointers:
+      num_blocks:
         value: '(uncompressed_size / block_size) + (uncompressed_size % block_size != 0 ? 1 : 0)'
         doc: ceil(uncompressed_size / block_size)
   block:
