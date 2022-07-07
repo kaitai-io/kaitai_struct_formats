@@ -1163,7 +1163,7 @@ types:
               - id: number_of_entries
                 type: u4
               - id: curve_values
-                type: u4
+                type: u2
                 repeat: expr
                 repeat-expr: number_of_entries
                 if: number_of_entries > 1
@@ -1202,9 +1202,9 @@ types:
                 repeat: expr
                 repeat-expr: 9
               - id: number_of_input_table_entries
-                type: u4
+                type: u2
               - id: number_of_output_table_entries
-                type: u4
+                type: u2
               - id: input_tables
                 size: 2 * number_of_input_channels * number_of_input_table_entries
               - id: clut_values
@@ -1395,7 +1395,7 @@ types:
                   - id: device_coordinates
                     type: u2
                     repeat: expr
-                    repeat-expr: _parent.count_of_named_colours
+                    repeat-expr: _parent.number_of_device_coordinates_for_each_named_colour
                     if: _parent.number_of_device_coordinates_for_each_named_colour > 0
           parametric_curve_type:
             seq:
@@ -1659,6 +1659,8 @@ types:
             0x76756564: viewing_cond_desc #vued
             0x76696577: viewing_conditions #view
           tag_type_signatures:
+            0x6368726D: chromaticity_type #chrm
+            0x636C726F: colorant_order_type #clro
             0x636c7274: colorant_table_type #clrt
             0x63757276: curve_type #curv
             0x64617461: data_type #data
