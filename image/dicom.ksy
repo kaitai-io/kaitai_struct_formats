@@ -335,7 +335,7 @@ enums:
     0x0008119A: other_failures_sequence
     0x00081200: studies_containing_other_referenced_instances_sequence
     0x00081250: related_series_sequence
-    0x00082110: lossy_image_compression
+    0x00082110: lossy_image_compression_retired
     0x00082111: derivation_description
     0x00082112: source_image_sequence
     0x00082120: stage_name

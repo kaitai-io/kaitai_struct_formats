@@ -127,12 +127,12 @@ enums:
     # official values
     0x02: passive_computer
     0x03: nobody
-    0x04: computer
+    0x04: computer4
     0x05: human
     0x06: rescue_passive
     0x07: rescue_active
     # also supported by game engine
-    0x01: computer
+    0x01: computer1
     # everything else is "passive_computer"
   terrain_type:
     0x00: forest
