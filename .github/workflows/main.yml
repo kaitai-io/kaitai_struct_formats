@@ -21,9 +21,9 @@ jobs:
       - name: Install deps
         run: |
           sudo apt-get update
-          curl -fsSL -O https://github.com/kaitai-io/kaitai_struct_compiler/releases/download/0.9/kaitai-struct-compiler_0.9_all.deb
+          curl -fsSL -O https://github.com/kaitai-io/kaitai_struct_compiler/releases/download/0.10/kaitai-struct-compiler_0.10_all.deb
           sha256sum --check --warn .github/checksums
-          sudo apt-get install ./kaitai-struct-compiler_0.9_all.deb
+          sudo apt-get install ./kaitai-struct-compiler_0.10_all.deb
           sudo apt-get install --no-install-recommends -y \
             git ssh \
             locales \
