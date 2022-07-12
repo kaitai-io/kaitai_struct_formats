@@ -122,6 +122,9 @@ enums:
     0x5ee21072:
       id: stm32f1
       doc: "ST STM32F103"
+    0x621e937a:
+      id: nrf52833
+      doc: "Nordic NRF52833"
     0x647824b6:
       id: stm32f0
       doc: "ST STM32F0xx"
@@ -161,9 +164,18 @@ enums:
     0xd42ba06c:
       id: esp32c3
       doc: "ESP32-C3"
+    0x2b88d29c:
+      id: esp32c2
+      doc: "ESP32-C2"
+    0x332726f6:
+      id: esp32h2
+      doc: "ESP32-H2"
     0xe48bff56:
       id: rp2040
       doc: "Raspberry Pi RP2040"
     0x00ff6919:
       id: stm32l4
       doc: "ST STM32L4xx"
+    0x9af03e33:
+      id: gd32vf103
+      doc: "GigaDevice GD32VF103"
