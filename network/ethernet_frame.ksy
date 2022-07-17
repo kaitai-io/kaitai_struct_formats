@@ -32,8 +32,10 @@ seq:
     type: u2be
     enum: ether_type_enum
     if: ether_type_1 == ether_type_enum::ieee_802_1q_tpid
-  - id: body_and_checksum
-    size-eos: true
+  - id: body
+    size: (_io.size - _io.pos) - crc32._sizeof
+  - id: crc32
+    size: 4
 
 instances:
   ether_type:
@@ -44,19 +46,6 @@ instances:
       first location bears special marker (0x8100), then it is not the
       real ether frame yet, an additional payload (`tci`) is expected
       and real ether type is upcoming next.
-  body:
-    io: _root._io
-    pos: _root._io.size - body_and_checksum.length
-    size: body_and_checksum.length - 4
-    type:
-      switch-on: ether_type
-      cases:
-        'ether_type_enum::ipv4': ipv4_packet
-        'ether_type_enum::ipv6': ipv6_packet
-  checksum:
-    io: _root._io
-    pos: _root._io.size - 4
-    size: 4
       
 types:
   tag_control_info:
