@@ -159,6 +159,7 @@ types:
       - id: name
         size: 16
         type: str
+        terminator: 0
         encoding: ascii
       - id: vertices
         type: vertex
