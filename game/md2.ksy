@@ -6,17 +6,19 @@ meta:
   license: CC0-1.0
   endian: le
 doc: |
-  Model consists of named `frames`, each with the same number of `vertices`
+  The MD2 format is used for 3D animated models in id Sofware's Quake II.
+
+  A model consists of named `frames`, each with the same number of `vertices`
   (`vertices_per_frame`). Each such vertex has a `position` in model space,
   and a `normal_index` which you must look up to get its normal. Each vertex
-  in each frame has the same "meaning" in terms of triangle and texture info,
-  but may vary in position and normal.
+  has the same topological "meaning" across frames, in terms of triangle and
+  texture info; it just varies in position and normal for animation purposes.
 
   How the vertices form triangles is defined via disjoint `triangles` or via
   `gl_cmds` (which allows strip and fan topology.) Each triangle contains three
   `vertex_indices` into frame vertices, and three `tex_point_indices` into
   global `tex_coords`. Each texture point has pixel coords `u_px` and `v_px`
-  ranging from 0 to `skin_{width,height}_px` respecively, and also
+  ranging from 0 to `skin_{width,height}_px` respectively, along with
   `{u,v}_normalized` ranging from 0 to 1 for your convenience.
 
   A GL command has a `primitive` type (`TRIANGLE_FAN` or `TRIANGLE_STRIP`) along
