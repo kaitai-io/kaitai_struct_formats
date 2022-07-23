@@ -88,7 +88,7 @@ types:
             - uimage_comp::lzma
             - uimage_comp::lzo
             - uimage_comp::lz4
-            - uimage_comp::lzstd
+            - uimage_comp::zstd
       - id: name_or_asus_info
         size: 32
         type: name_or_asus_info
