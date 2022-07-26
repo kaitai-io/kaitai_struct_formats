@@ -46,7 +46,8 @@ instances:
   id_table:
     io: _root._io
     pos: superblock.id_table_start
-    type: metablock_reference_list((superblock.bytes_used-superblock.id_table_start)/8)
+    # ceil(id_count/2048)
+    type: "metablock_reference_list(((superblock.id_count%2048 >0) ? 1 : 0) + superblock.id_count/2048)"
   xattr_id_table:
     if: superblock.xattr_id_table_start != 0xffff_ffff_ffff_ffff
     io: _root._io
@@ -75,6 +76,9 @@ instances:
   fragments:
     io: _root.fragment_table.data._io
     type: fragments
+  uid_gid_entries:
+    io: _root.id_table.data._io
+    type: uid_gid_entries
 types:
   flags:
     seq:
@@ -220,13 +224,13 @@ types:
         repeat: eos
   metablock_reference_list:
     params:
-      - id: count
+      - id: num_metablock_reference
         type: u8
     seq:
       - id: metablock_reference
         type: metablock_reference(_index)
         repeat: expr
-        repeat-expr: count
+        repeat-expr: num_metablock_reference
       - id: data
         # we want to concatenate the data of all metablocks, so we fake a 0-sized entry here. the decode method will be called with an empty array, but the constructor has the needed netablocks
         size: 0
@@ -248,13 +252,13 @@ types:
     instances:
       compression:
         value: (compression_and_len&0x8000)==0
-      size:
+      len_data:
         value: compression_and_len&0x7FFF
     seq:
       - id: compression_and_len
         type: u2
       - id: data
-        size: size
+        size: len_data
         type: uncompressed_data(compression, 8192, false)
   uncompressed_data:
     params:
@@ -333,6 +337,7 @@ types:
             'inode_type::basic_directory': inode_header_basic_directory
             'inode_type::extended_directory': inode_header_extended_directory
             'inode_type::basic_file': inode_header_basic_file
+            'inode_type::extended_file': inode_header_extended_file
   inode_header_basic_directory:
     instances:
       directory_table:
@@ -377,7 +382,7 @@ types:
         type: u4
       - id: parent_inode_number
         type: u4
-      - id: index_count
+      - id: num_index
         type: u2
       - id: block_offset
         type: u2
@@ -386,7 +391,7 @@ types:
       - id: index
         type: directory_index
         repeat: expr
-        repeat-expr: index_count
+        repeat-expr: num_index
   directory_index:
     seq:
       - id: index
@@ -416,10 +421,47 @@ types:
       - id: block_sizes
         type: u4
         repeat: expr
-        repeat-expr: "file_size / _root.superblock.block_size + (frag_index==0xFFFFFFFF ? 1 : 0)"
+        doc: |
+          A list of block sizes. If this file ends in a fragment, the size of this list is the number of full data
+          blocks needed to store file_size bytes. If this file does not have a fragment, the size of the list is the 
+          number of blocks needed to store file_size bytes, rounded up.
+        repeat-expr: "file_size / _root.superblock.block_size + (frag_index==0xFFFFFFFF and (file_size.as<f4> / _root.superblock.block_size.as<f4>) > file_size / _root.superblock.block_size ? 1 : 0)"
       - id: blocks
         size: 0
-        type: data_block(_index==0?blocks_start:blocks[_index-1].start+blocks[_index-1].size, block_sizes[_index], _index!=block_sizes.size-1)
+        type: data_block(_index==0?blocks_start:blocks[_index-1].start+blocks[_index-1].len_data, block_sizes[_index], _index!=block_sizes.size-1)
+        repeat: expr
+        repeat-expr: block_sizes.size
+  inode_header_extended_file:
+    instances:
+      fragment:
+        value: _root.fragments.fragments[frag_index]
+        if: frag_index!=0xFFFFFFFF
+    seq:
+      - id: blocks_start
+        type: u8
+      - id: file_size
+        type: u8
+      - id: sparse
+        type: u8
+      - id: hardlink_count
+        type: u4
+      - id: frag_index
+        type: u4
+      - id: block_offset
+        type: u4
+      - id: xattr_idx
+        type: u4
+      - id: block_sizes
+        type: u4
+        repeat: expr
+        doc: |
+          A list of block sizes. If this file ends in a fragment, the size of this list is the number of full data
+          blocks needed to store file_size bytes. If this file does not have a fragment, the size of the list is the 
+          number of blocks needed to store file_size bytes, rounded up.
+        repeat-expr: "file_size / _root.superblock.block_size + (frag_index==0xFFFFFFFF and (file_size.as<f4> / _root.superblock.block_size.as<f4>) > file_size / _root.superblock.block_size ? 1 : 0)"
+      - id: blocks
+        size: 0
+        type: data_block(_index==0?blocks_start:blocks[_index-1].start+blocks[_index-1].len_data, block_sizes[_index], _index!=block_sizes.size-1)
         repeat: expr
         repeat-expr: block_sizes.size
   data_block:
@@ -433,12 +475,12 @@ types:
     instances:
       compression:
         value: (compression_and_len&0x1000000)==0
-      size:
+      len_data:
         value: compression_and_len&0xFFFFFF
       data:
         io: _root._io
         pos: start
-        size: size
+        size: len_data
         type: uncompressed_data(compression, _root.superblock.block_size, padded)
   fragments:
     seq:
@@ -457,3 +499,13 @@ types:
       - id: block
         size: 0
         type: data_block(start, compression_and_len, false)
+  uid_gid_entries:
+    seq:
+      - id: uid_gid_entries
+        type: uid_gid_entry
+        repeat: expr
+        repeat-expr: _root.superblock.id_count
+  uid_gid_entry:
+    seq:
+      - id: uid_gid
+        type: u4
