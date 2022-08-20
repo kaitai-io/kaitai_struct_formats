@@ -3,9 +3,35 @@ meta:
   title: Quake 1 (idtech2) model format (MDL version 6)
   application: Quake 1 (idtech2)
   file-extension: mdl
+  tags:
+    - 3d
+    - game
   license: CC0-1.0
   ks-version: 0.7
   endian: le
+doc: |
+  Quake 1 model format is used to store 3D models completely with
+  textures and animations used in the game. Quake 1 engine
+  (retroactively named "idtech2") is a popular 3D engine first used
+  for Quake game by id Software in 1996.
+
+  Model is constructed traditionally from vertices in 3D space, faces
+  which connect vertices, textures ("skins", i.e. 2D bitmaps) and
+  texture UV mapping information. As opposed to more modern,
+  bones-based animation formats, Quake model was animated by changing
+  locations of all vertices it included in 3D space, frame by frame.
+
+  File format stores:
+
+  * "Skins" — effectively 2D bitmaps which will be used as a
+    texture. Every model can have multiple skins — e.g. these can be
+    switched to depict various levels of damage to the monsters.
+  * "Texture coordinates" — UV coordinates, mapping 3D vertices to
+    skin coordinates.
+  * "Triangles" — triangular faces connecting 3D vertices.
+  * "Frames" — locations of vertices in 3D space; can include more
+    than one frame, thus allowing representation of different frames
+    for animation purposes.
 seq:
   - id: header
     type: mdl_header
