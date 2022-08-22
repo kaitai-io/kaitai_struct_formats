@@ -28,8 +28,10 @@ seq:
   - id: header1
     type: header1
   - id: header2
-    size: header1.len_header - 12
+    size: header1.len_header - 13
     type: header2
+  - id: header_terminator
+    contents: [0x0D]
   - id: records
     size: header1.len_record
     repeat: expr
@@ -65,8 +67,7 @@ types:
         type: header_dbase_7
       - id: fields
         type: field
-        repeat: expr
-        repeat-expr: 11
+        repeat: eos
   header_dbase_3:
     seq:
       - id: reserved1
