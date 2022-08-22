@@ -33,6 +33,7 @@ seq:
   - id: header_terminator
     contents: [0x0D]
   - id: records
+    type: record
     size: header1.len_record
     repeat: expr
     repeat-expr: header1.num_records
@@ -120,3 +121,17 @@ types:
         type: u1
       - id: reserved3
         size: 8
+  record:
+    seq:
+      - id: deleted
+        type: u1
+        enum: delete_state
+      - id: record_fields
+        type: str
+        encoding: ASCII
+        size: _root.header2.fields[_index].length
+        repeat: eos
+enums:
+  delete_state:
+    0x2a: true
+    0x20: false
