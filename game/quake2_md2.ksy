@@ -34,34 +34,35 @@ doc: |
   for different animations. Each frame has a standard `name` for humans, but the
   client just uses their index and the name can be arbitrary. The frames are:
 
-   INDEX     NAME SUFFIX NOTES
-    0-39    stand 01-40  Idle animation
-   40-45      run 1-6    Full run cycle
-   46-53   attack 1-8    Shoot, reload; some weapons just repeat 1st few frames
-   54-57    pain1 01-04
-   58-61    pain2 01-04
-   62-65    pain3 01-04
-   66-71     jump 1-6    Starts at height and lands on feet
-   72-83     flip 01-12  Flipoff, i.e. middle finger
-   84-94   salute 01-11
-   95-111   taunt 01-17
-  112-122    wave 01-11  Q2Pro plays this backwards for a handgrenade toss
-  123-134   point 01-12
-  135-153  crstnd 01-19  Idle while crouching
-  154-159  crwalk 1-6
-  160-168 crattak 1-9
-  169-172  crpain 1-4
-  173-177 crdeath 1-5
-  178-183  death1 01-06
-  184-189  death2 01-06
-  190-197  death3 01-08
+  |   INDEX  |    NAME | SUFFIX | NOTES          |
+  |:--------:|--------:|:-------|:---------------|
+  |    0-39  |   stand | 01-40  | Idle animation |
+  |   40-45  |     run | 1-6    | Full run cycle |
+  |   46-53  |  attack | 1-8    | Shoot, reload; some weapons just repeat 1st few frames |
+  |   54-57  |   pain1 | 01-04  | |
+  |   58-61  |   pain2 | 01-04  | |
+  |   62-65  |   pain3 | 01-04  | |
+  |   66-71  |    jump | 1-6    | Starts at height and lands on feet |
+  |   72-83  |    flip | 01-12  | Flipoff, i.e. middle finger |
+  |   84-94  |  salute | 01-11  | |
+  |   95-111 |   taunt | 01-17  | |
+  |  112-122 |    wave | 01-11  | Q2Pro plays this backwards for a handgrenade toss |
+  |  123-134 |   point | 01-12  | |
+  |  135-153 |  crstnd | 01-19  | Idle while crouching |
+  |  154-159 |  crwalk | 1-6    | |
+  |  160-168 | crattak | 1-9    | |
+  |  169-172 |  crpain | 1-4    | |
+  |  173-177 | crdeath | 1-5    | |
+  |  178-183 |  death1 | 01-06  | |
+  |  184-189 |  death2 | 01-06  | |
+  |  190-197 |  death3 | 01-08  | |
 
   The above are filled in for player models; for the separate weapon models,
   the final frame is 173 "g_view" (unknown purpose) since weapons aren't shown
   during death animations. `a_grenades.md2`, the handgrenade weapon model, is
   the same except that the `wave` frames are blank (according to the default
   female model files.) This is likely due to its dual use as a grenade throw
-  animation where this model must leave the player's.
+  animation where this model must leave the player's model.
 doc-ref:
   - https://icculus.org/~phaethon/q3a/formats/md2-schoenblum.html
   - http://tfc.duke.free.fr/coding/md2-specs-en.html
