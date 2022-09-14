@@ -130,7 +130,8 @@ types:
         type: str
         encoding: ASCII
         size: _root.header2.fields[_index].length
-        repeat: eos
+        repeat: expr
+        repeat-expr: _root.header2.fields.size
 enums:
   delete_state:
     0x2a: true
