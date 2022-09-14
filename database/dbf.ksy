@@ -28,7 +28,7 @@ seq:
   - id: header1
     type: header1
   - id: header2
-    size: header1.len_header - 13
+    size: header1.len_header - header1._sizeof - header_terminator._sizeof
     type: header2
   - id: header_terminator
     contents: [0x0D]
