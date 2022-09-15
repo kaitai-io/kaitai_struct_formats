@@ -121,22 +121,13 @@ types:
         type: u1
       - id: reserved3
         size: 8
-  record_data:
-    params:
-      - id: len
-        type: u2
-    seq:
-      - id: bytes
-        type: u1
-        repeat: expr
-        repeat-expr: len
   record:
     seq:
       - id: deleted
         type: u1
         enum: delete_state
       - id: record_fields
-        type: record_data(_root.header2.fields[_index].length)
+        size: _root.header2.fields[_index].length
         repeat: expr
         repeat-expr: _root.header2.fields.size
 enums:
