@@ -226,3 +226,24 @@ enums:
   gl_primitive:
     0: triangle_strip
     1: triangle_fan
+  anim_start_index:
+    0: stand
+    40: run
+    46: attack
+    54: pain1
+    58: pain2
+    62: pain3
+    66: jump
+    72: flip
+    84: salute
+    95: taunt
+    112: wave
+    123: point
+    135: crstnd
+    154: crwalk
+    160: crattak
+    169: crpain
+    173: crdeath
+    178: death1
+    184: death2
+    190: death3
