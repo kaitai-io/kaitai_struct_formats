@@ -4,6 +4,7 @@ meta:
   application: 4x4 Evolution
   license: CC0-1.0
   endian: le
+  encoding: utf-8
 doc-ref: 'https://www.watto.org/specs.html?specs=Archive_POD'
 seq:
   - id: header
@@ -19,18 +20,14 @@ types:
         type: u4
         doc: The number of files in the archive
       - id: description
-        type: str
+        type: strz
         size: 80
-        terminator: 0
-        encoding: UTF-8
         doc: A description for the archive
   details_directory:
     seq:
-      - id: filename
-        type: str
+      - id: file_name
+        type: strz
         size: 32
-        terminator: 0
-        encoding: UTF-8
       - id: length
         type: u4
         doc: The length of the file data
