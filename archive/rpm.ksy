@@ -1458,7 +1458,7 @@ enums:
       id: upstream_releases
       -orig-id: RPMTAG_UPSTREAMRELEASES
     5102:
-      id: source_license
+      id: source_license_internal
       -orig-id: RPMTAG_SOURCELICENSE
   record_types:
     # from LSB
