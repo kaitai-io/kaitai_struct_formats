@@ -454,7 +454,7 @@ enums:
       -orig-id: RPMSIGTAG_RESERVEDSPACE
       doc: Space reserved for signatures
   header_tags:
-    # Tags from [lib/rpmtag.h](https://github.com/rpm-software-management/rpm/blob/650ba79f/include/rpm/rpmtag.h).
+    # Tags from [lib/rpmtag.h](https://github.com/rpm-software-management/rpm/blob/9ed9d3fc/include/rpm/rpmtag.h).
     # This includes (almost) all tags. Some have `_unimplemented`, `_internal`
     # or `_obsolete` suffix (if more than one applies, the first applicable in
     # this order is used).
@@ -1448,6 +1448,18 @@ enums:
     5098:
       id: arch_suffix
       -orig-id: RPMTAG_ARCHSUFFIX
+    5099:
+      id: spec
+      -orig-id: RPMTAG_SPEC
+    5100:
+      id: translation_url
+      -orig-id: RPMTAG_TRANSLATIONURL
+    5101:
+      id: upstream_releases
+      -orig-id: RPMTAG_UPSTREAMRELEASES
+    5102:
+      id: source_license_internal
+      -orig-id: RPMTAG_SOURCELICENSE
   record_types:
     # from LSB
     0: not_implemented
