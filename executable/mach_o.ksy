@@ -26,12 +26,13 @@ seq:
     repeat-expr: header.ncmds
 enums:
   magic_type:
+    # Note that for multiarch (a.k.a. fat) Mach-O files, which are the primary
+    # kind you find on macOS today, you should instead use mach_o_fat.ksy, which
+    # parses the fat header and embeds mach_o.ksy to parse each arch.
     0xFEEDFACE: macho_be_x86 # MH_MAGIC:    mach-o, big-endian,    x86
     0xCEFAEDFE: macho_le_x86 # MH_CIGAM:    mach-o, little-endian, x86
     0xFEEDFACF: macho_be_x64 # MH_MAGIC_64: mach-o, big-endian,    x64
     0xCFFAEDFE: macho_le_x64 # MH_CIGAM_64: mach-o, little-endian, x64
-    0xCAFEBABE: fat_be       # FAT_MAGIC:   fat,    big-endian
-    0xBEBAFECA: fat_le       # FAT_CIGAM:   fat,    little-endian
   cpu_type:
     0xffffffff: any
     1:          vax
