@@ -101,6 +101,8 @@ types:
         0xebc: ebc
         0x14c: i386
         0x200: ia64
+        0x6232: loongarch32
+        0x6264: loongarch64
         0x9041: m32r
         0x266: mips16
         0x366: mipsfpu
