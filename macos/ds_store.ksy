@@ -167,7 +167,7 @@ types:
         instances:
           block:
             io: _root._io
-            pos: _root.buddy_allocator_body.block_addresses[block_id].offset
+            pos: _root.buddy_allocator_body.block_addresses[block_id.as<u4>].offset
             type: block
             if: mode > 0
         types:
