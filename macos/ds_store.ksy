@@ -81,7 +81,7 @@ types:
           offset:
             value: (address_raw & ~_root.block_address_mask) + 4
           size:
-            value: 1 << address_raw & _root.block_address_mask
+            value: 1 << (address_raw & _root.block_address_mask)
       directory_entry:
         seq:
           - id: len_name
