@@ -9,13 +9,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
         with:
           submodules: true
-      - uses: actions/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '2.x'
-      - uses: actions/setup-python@v1
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.x'
       - name: Install deps
@@ -47,7 +47,7 @@ jobs:
         working-directory: _build
         run: ./build-target .. target
       - name: Upload build targets log
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: log.json
           path: _build/target/log.json
