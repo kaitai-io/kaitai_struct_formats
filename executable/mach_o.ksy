@@ -11,10 +11,10 @@ meta:
     - /serialization/asn1/asn1_der
   endian: le
 doc-ref:
-  - http://www.stonedcoder.org/~kd/lib/MachORuntime.pdf
+  - https://www.stonedcoder.org/~kd/lib/MachORuntime.pdf
   - https://opensource.apple.com/source/python_modules/python_modules-43/Modules/macholib-1.5.1/macholib-1.5.1.tar.gz
-  - https://github.com/comex/cs/blob/master/macho_cs.py
-  - https://opensource.apple.com/source/Security/Security-55471/libsecurity_codesigning/requirements.grammar.auto.htm
+  - https://github.com/comex/cs/blob/07a88f9/macho_cs.py
+  - https://opensource.apple.com/source/Security/Security-55471/libsecurity_codesigning/requirements.grammar.auto.html
   - https://github.com/apple/darwin-xnu/blob/xnu-2782.40.9/bsd/sys/codesign.h
   - https://opensource.apple.com/source/dyld/dyld-852/src/ImageLoaderMachO.cpp.auto.html
   - https://opensource.apple.com/source/dyld/dyld-852/src/ImageLoaderMachOCompressed.cpp.auto.html
