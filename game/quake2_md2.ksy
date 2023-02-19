@@ -32,7 +32,10 @@ doc: |
 
   There are 198 `frames` in total, partitioned into a fixed set of ranges used
   for different animations. Each frame has a standard `name` for humans, but the
-  client just uses their index and the name can be arbitrary. The frames are:
+  client just uses their index and the name can be arbitrary. The name, start
+  frame index and frame count of each animation can be looked up in the arrays
+  `anim_names`, `anim_start_indexes`, and `anim_num_frames` respectively. This
+  information is summarized in the following table:
 
   ```
   |   INDEX  |    NAME | SUFFIX | NOTES                                                  |
@@ -134,6 +137,18 @@ instances:
     type: gl_cmd
     repeat: until
     repeat-until: _.cmd_num_vertices == 0
+  anim_names:
+    value: |
+      ['stand', 'run', 'attack', 'pain1', 'pain2', 'pain3', 'jump', 'flip',
+      'salute', 'taunt', 'wave', 'point', 'crstnd', 'crwalk', 'crattak',
+      'crpain', 'crdeath', 'death1', 'death2', 'death3']
+  anim_start_indexes:
+    value: |
+      [0, 40, 46, 54, 58, 62, 66, 72, 84, 95, 112,
+      123, 135, 154, 160, 169, 173, 178, 184, 190]
+  anim_num_frames:
+    value: |
+      [40, 6, 8, 4, 4, 4, 6, 12, 11, 17, 11, 12, 19, 6, 9, 4, 5, 6, 6, 8]
 types:
   tex_point:
     seq:
@@ -228,24 +243,3 @@ enums:
   gl_primitive:
     0: triangle_strip
     1: triangle_fan
-  anim_start_index:
-    0: stand
-    40: run
-    46: attack
-    54: pain1
-    58: pain2
-    62: pain3
-    66: jump
-    72: flip
-    84: salute
-    95: taunt
-    112: wave
-    123: point
-    135: crstnd
-    154: crwalk
-    160: crattak
-    169: crpain
-    173: crdeath
-    178: death1
-    184: death2
-    190: death3
