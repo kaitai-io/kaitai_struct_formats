@@ -15,7 +15,7 @@ doc: |
   texture info; it just varies in position and normal for animation purposes.
 
   How the vertices form triangles is defined via disjoint `triangles` or via
-  `gl_cmds` (which allows strip and fan topology.) Each triangle contains three
+  `gl_cmds` (which allows strip and fan topology). Each triangle contains three
   `vertex_indices` into frame vertices, and three `tex_point_indices` into
   global `tex_coords`. Each texture point has pixel coords `u_px` and `v_px`
   ranging from 0 to `skin_{width,height}_px` respectively, along with
@@ -78,7 +78,7 @@ seq:
     contents: IDP2
   - id: version
     type: u4
-    doc: Always 8, apparently.
+    valid: 8
   - id: skin_width_px
     type: u4
   - id: skin_height_px
@@ -144,11 +144,14 @@ instances:
       'crpain', 'crdeath', 'death1', 'death2', 'death3']
   anim_start_indexes:
     value: |
-      [0, 40, 46, 54, 58, 62, 66, 72, 84, 95, 112,
-      123, 135, 154, 160, 169, 173, 178, 184, 190]
+      [0, 40, 46, 54, 58, 62, 66, 72,
+      84, 95, 112, 123, 135, 154, 160,
+      169, 173, 178, 184, 190]
   anim_num_frames:
     value: |
-      [40, 6, 8, 4, 4, 4, 6, 12, 11, 17, 11, 12, 19, 6, 9, 4, 5, 6, 6, 8]
+      [40, 6, 8, 4, 4, 4, 6, 12,
+      11, 17, 11, 12, 19, 6, 9,
+      4, 5, 6, 6, 8]
 types:
   tex_point:
     seq:
@@ -200,9 +203,10 @@ types:
         type: compressed_vec
       - id: normal_index
         type: u1
-        doc: `normal = bytedirs[normal_index]`
+        doc: |
+          `normal = bytedirs[normal_index]`
         doc-ref: |
-          https://github.com/skullernet/q2pro/blob/master/src/common/math.c#L80
+          https://github.com/skullernet/q2pro/blob/f4faabd/src/common/math.c#L80
           from Quake anorms.h
   frame:
     seq:
