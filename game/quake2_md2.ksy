@@ -28,7 +28,7 @@ doc: |
   A model may also contain `skins`, which are just file paths to PCX images.
   However, this is empty for many models, in which case it is up to the client
   (e.g. Q2PRO) to offer skins some other way (e.g. by similar filename in the
-  current directory.)
+  current directory).
 
   There are 198 `frames` in total, partitioned into a fixed set of ranges used
   for different animations. Each frame has a standard `name` for humans, but the
@@ -66,7 +66,7 @@ doc: |
   the final frame is 173 "g_view" (unknown purpose) since weapons aren't shown
   during death animations. `a_grenades.md2`, the handgrenade weapon model, is
   the same except that the `wave` frames are blank (according to the default
-  female model files.) This is likely due to its dual use as a grenade throw
+  female model files). This is likely due to its dual use as a grenade throw
   animation where this model must leave the player's model.
 doc-ref:
   - https://icculus.org/~phaethon/q3a/formats/md2-schoenblum.html
