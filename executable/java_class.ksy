@@ -8,7 +8,7 @@ meta:
   license: CC0-1.0
   endian: be
 doc-ref:
-  - https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html
+  - https://docs.oracle.com/javase/specs/jvms/se19/html/jvms-4.html
   - https://docs.oracle.com/javase/specs/jls/se6/jls3.pdf
   - https://github.com/openjdk/jdk/blob/72de24e59a80a38ea4ea6a8a3f966f555987ac86/src/jdk.hotspot.agent/share/classes/sun/jvm/hotspot/runtime/ClassConstants.java
   - https://github.com/openjdk/jdk/blob/72de24e59a80a38ea4ea6a8a3f966f555987ac86/src/java.base/share/native/include/classfile_constants.h.template
@@ -88,6 +88,8 @@ types:
             tag_enum::method_handle: method_handle_cp_info
             tag_enum::method_type: method_type_cp_info
             tag_enum::invoke_dynamic: invoke_dynamic_cp_info
+            tag_enum::module: module_package_cp_info
+            tag_enum::package: module_package_cp_info
         if: not is_prev_two_entries
     instances:
       is_two_entries:
@@ -136,6 +138,12 @@ types:
         18:
           id: invoke_dynamic
           -orig-id: CONSTANT_InvokeDynamic
+        19:
+          id: module
+          -orig-id: CONSTANT_Module
+        20:
+          id: package
+          -orig-id: CONSTANT_Package
 
   version_guard:
     doc: |
@@ -299,6 +307,25 @@ types:
         type: u2
       - id: name_and_type_index
         type: u2
+  module_package_cp_info:
+    doc: |
+      Project Jigsaw modules introduced in Java 9
+    doc-ref:
+      - https://docs.oracle.com/javase/specs/jvms/se19/html/jvms-3.html#jvms-3.16
+      - https://docs.oracle.com/javase/specs/jvms/se19/html/jvms-4.html#jvms-4.4.11
+      - https://docs.oracle.com/javase/specs/jvms/se19/html/jvms-4.html#jvms-4.4.12
+    -orig-id:
+      - CONSTANT_Module_info
+      - CONSTANT_Package_info
+    seq:
+      - type: version_guard(53)
+      - id: name_index
+        type: u2
+    instances:
+      name_as_info:
+        value: _root.constant_pool[name_index - 1].cp_info.as<utf8_cp_info>
+      name_as_str:
+        value: name_as_info.value
   field_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.5
     -orig-id: field_info
