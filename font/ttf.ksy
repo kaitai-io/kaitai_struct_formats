@@ -11,7 +11,10 @@ meta:
 doc: |
   A TrueType font file contains data, in table format, that comprises
   an outline font.
-doc-ref: https://www.microsoft.com/typography/tt/ttf_spec/ttch02.doc
+doc-ref:
+  - https://www.microsoft.com/typography/tt/ttf_spec/ttch02.doc
+  - https://docs.microsoft.com/en-us/typography/opentype/spec/
+  - https://developer.apple.com/fonts/TrueType-Reference-Manual/
 seq:
   - id: offset_table
     type: offset_table
@@ -62,6 +65,7 @@ types:
           cases:
             "'cmap'": cmap
             "'cvt '": cvt
+            "'DSIG'": dsig
             "'glyf'": glyf
             "'head'": head
             "'hhea'": hhea
@@ -108,12 +112,7 @@ types:
           - id: format
             type: u2
             enum: subtable_format
-          - id: length
-            type: u2
-          - id: version
-            type: u2
           - id: value
-            size: length - 6
             type:
               switch-on: format
               cases:
@@ -121,69 +120,197 @@ types:
                 subtable_format::high_byte_mapping_through_table: high_byte_mapping_through_table
                 subtable_format::segment_mapping_to_delta_values: segment_mapping_to_delta_values
                 subtable_format::trimmed_table_mapping: trimmed_table_mapping
+                subtable_format::trimmed_array: trimmed_array
+                subtable_format::segmented_coverage: segmented_coverage
+                subtable_format::many_to_one_range_mappings: segmented_coverage
+                subtable_format::unicode_variation_sequences: unicode_variation_sequences
         enums:
           subtable_format:
             0: byte_encoding_table
             2: high_byte_mapping_through_table
             4: segment_mapping_to_delta_values
             6: trimmed_table_mapping
+            8: mixed_16_bit_and_32_bit_coverage
+            10: trimmed_array
+            12: segmented_coverage
+            13: many_to_one_range_mappings
+            14: unicode_variation_sequences
         types:
           byte_encoding_table:
             seq:
-              - id: glyph_id_array
-                size: 256
+              - id: length
+                type: u2
+              - id: body
+                type: body
+                size: length - length._sizeof - _parent.format._sizeof
+            types:
+              body:
+                seq:
+                  - id: version
+                    type: u2
+                  - id: glyph_id_array
+                    size: 256
           high_byte_mapping_through_table:
             seq:
-              - id: sub_header_keys
+              - id: length
                 type: u2
-                repeat: expr
-                repeat-expr: 256
-              # TODO
+              - id: body
+                type: body
+                size: length - length._sizeof - _parent.format._sizeof
+            types:
+              body:
+                seq:
+                  - id: version
+                    type: u2
+                  - id: sub_header_keys
+                    type: u2
+                    repeat: expr
+                    repeat-expr: 256
+                  # TODO
           segment_mapping_to_delta_values:
             seq:
-              - id: seg_count_x2
+              - id: length
                 type: u2
-              - id: search_range
-                type: u2
-              - id: entry_selector
-                type: u2
-              - id: range_shift
-                type: u2
-              - id: end_count
-                type: u2
-                repeat: expr
-                repeat-expr: seg_count
-              - id: reserved_pad
-                type: u2
-              - id: start_count
-                type: u2
-                repeat: expr
-                repeat-expr: seg_count
-              - id: id_delta
-                type: u2
-                repeat: expr
-                repeat-expr: seg_count
-              - id: id_range_offset
-                type: u2
-                repeat: expr
-                repeat-expr: seg_count
-              - id: glyph_id_array
-                type: u2
-                repeat: eos
-            instances:
-              seg_count:
-                value: seg_count_x2 / 2
-                -webide-parse-mode: eager
+              - id: body
+                type: delta_body
+                size: length - length._sizeof - _parent.format._sizeof
+            types:
+              delta_body:
+                seq:
+                  - id: version
+                    type: u2
+                  - id: seg_count_x2
+                    type: u2
+                  - id: search_range
+                    type: u2
+                  - id: entry_selector
+                    type: u2
+                  - id: range_shift
+                    type: u2
+                  - id: end_count
+                    type: u2
+                    repeat: expr
+                    repeat-expr: seg_count
+                  - id: reserved_pad
+                    type: u2
+                  - id: start_count
+                    type: u2
+                    repeat: expr
+                    repeat-expr: seg_count
+                  - id: id_delta
+                    type: u2
+                    repeat: expr
+                    repeat-expr: seg_count
+                  - id: id_range_offset
+                    type: u2
+                    repeat: expr
+                    repeat-expr: seg_count
+                  - id: glyph_id_array
+                    type: u2
+                    repeat: eos
+                instances:
+                  seg_count:
+                    value: seg_count_x2 / 2
+                    -webide-parse-mode: eager
           trimmed_table_mapping:
             seq:
-              - id: first_code
+              - id: length
                 type: u2
-              - id: entry_count
+              - id: body
+                type: body
+                size: length - length._sizeof - _parent.format._sizeof
+            types:
+              body:
+                seq:
+                  - id: version
+                    type: u2
+                  - id: first_code
+                    type: u2
+                  - id: entry_count
+                    type: u2
+                  - id: glyph_id_array
+                    type: u2
+                    repeat: expr
+                    repeat-expr: entry_count
+          #mixed_16_bit_and_32_bit_coverage:
+          trimmed_array:
+            seq:
+              - id: reserved
                 type: u2
-              - id: glyph_id_array
+                valid: 0
+              - id: length
+                type: u4
+              - id: body
+                type: body
+                size: length - length._sizeof - reserved._sizeof - _parent.format._sizeof
+            types:
+              body:
+                seq:
+                  - id: version
+                    type: u4
+                  - id: start_char_code
+                    type: u4
+                  - id: num_chars
+                    type: u4
+                  - id: glyph_id_array
+                    type: u2
+                    repeat: expr
+                    repeat-expr: num_chars
+          segmented_coverage:
+            seq:
+              - id: reserved
                 type: u2
-                repeat: expr
-                repeat-expr: entry_count
+                valid: 0
+              - id: length
+                type: u4
+              - id: body
+                type: body
+                size: length - length._sizeof - reserved._sizeof - _parent.format._sizeof
+            types:
+              body:
+                seq:
+                  - id: version
+                    type: u4
+                  - id: num_gropus
+                    type: u4
+                  - id: sequential_map_group_records
+                    type: sequential_map_group_record
+                    repeat: expr
+                    repeat-expr: num_gropus
+                types:
+                  sequential_map_group_record:
+                    seq:
+                      - id: start_char_code
+                        type: u4
+                      - id: end_char_code
+                        type: u4
+                      - id: start_glyph_id
+                        type: u4
+          unicode_variation_sequences:
+            seq:
+              - id: length
+                type: u4
+              - id: body
+                type: body
+                size: length - length._sizeof - _parent.format._sizeof
+            types:
+              body:
+                seq:
+                  - id: num_variation_selector_records
+                    type: u4
+                  - id: variation_selector_records
+                    type: variation_selector_record
+                    repeat: expr
+                    repeat-expr: num_variation_selector_records
+                types:
+                  variation_selector_record:
+                    seq:
+                      - id: var_selector
+                        type: b24
+                      - id: ofs_default_uvs_table
+                        type: u4
+                      - id: ofs_non_default_uvs_table
+                        type: u4
   cvt:
     doc: >
       cvt  - Control Value Table
@@ -193,6 +320,45 @@ types:
       - id: fwords
         type: s2
         repeat: eos
+  dsig:
+    seq:
+      - id: version
+        type: u4
+        valid: 1
+      - id: num_signatures
+        type: u2
+      - id: flags
+        type: u2
+      - id: signature_records
+        type: signature_record
+        repeat: expr
+        repeat-expr: num_signatures
+    types:
+      signature_record:
+        seq:
+          - id: format
+            type: u4
+          - id: len_signature
+            type: u4
+          - id: ofs_signature
+            type: u4
+        instances:
+          signature:
+            pos: ofs_signature
+            size: len_signature
+            type: signature_block
+      signature_block:
+        seq:
+          - id: reserved1
+            type: u2
+            valid: 0
+          - id: reserved2
+            type: u2
+            valid: 0
+          - id: len_signature
+            type: u4
+          - id: signature
+            size: len_signature
   glyf:
     # https://github.com/fonttools/fonttools/blob/678876325ef26ac33e8c6d13f4fb70c3bef5da8e/Lib/fontTools/ttLib/tables/_g_l_y_f.py
     # TODO: sadly, Kaitai currently cannot parse this structure
@@ -329,8 +495,10 @@ types:
         type: s2
       - id: caret_slope_run
         type: s2
+      - id: caret_offset
+        type: s2
       - id: reserved
-        contents: [0,0,0,0,0,0,0,0,0,0]
+        contents: [0,0,0,0,0,0,0,0]
       - id: metric_data_format
         type: s2
       - id: number_of_hmetrics
@@ -750,7 +918,29 @@ types:
         doc: 'The descender metric for Windows.'
       - id: code_page_range
         type: code_page_range
+        if: version >= 1
         doc: 'This field is used to specify the code pages encompassed by the font file in the `cmap` subtable for platform 3, encoding ID 1 (Microsoft platform).'
+      - id: x_height
+        type: u2
+        if: version >= 2
+      - id: cap_height
+        type: u2
+        if: version >= 2
+      - id: default_char
+        type: u2
+        if: version >= 2
+      - id: break_char
+        type: u2
+        if: version >= 2
+      - id: max_context
+        type: u2
+        if: version >= 2
+      - id: lower_optical_point_size
+        type: u2
+        if: version >= 5
+      - id: upper_optical_point_size
+        type: u2
+        if: version >= 5
   prep:
     seq:
       - id: instructions
@@ -1010,3 +1200,9 @@ types:
         17: preferred_subfamily
         18: compatible_full_name
         19: sample_text
+        20: postscript_cid_findfont_name
+        21: wws_family_name
+        22: wws_subfamily_name
+        23: light_background_palette
+        24: dark_background_palette
+        25: variations_postscript_name_prefix
