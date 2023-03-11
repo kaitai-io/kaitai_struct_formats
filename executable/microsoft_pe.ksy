@@ -16,7 +16,7 @@ meta:
   license: CC0-1.0
   ks-version: 0.7
   endian: le
-doc-ref: https://docs.microsoft.com/en-us/windows/win32/debug/pe-format
+doc-ref: https://learn.microsoft.com/en-us/windows/win32/debug/pe-format
 seq:
   - id: mz
     type: mz_placeholder
@@ -363,7 +363,7 @@ types:
         type: certificate_entry
         repeat: eos
   certificate_entry:
-    doc-ref: 'https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format#the-attribute-certificate-table-image-only'
+    doc-ref: 'https://learn.microsoft.com/en-us/windows/desktop/debug/pe-format#the-attribute-certificate-table-image-only'
     enums:
       certificate_revision:
         0x0100:

@@ -76,7 +76,7 @@ doc: |
 
   ## Specs
    * [Bitmap Storage (Windows Dev Center)](
-       https://docs.microsoft.com/en-us/windows/win32/gdi/bitmap-storage
+       https://learn.microsoft.com/en-us/windows/win32/gdi/bitmap-storage
      )
       * BITMAPFILEHEADER
       * BITMAPINFOHEADER
@@ -114,7 +114,7 @@ types:
       There is a proposal for adding bitmap data type to Kaitai Struct: https://github.com/kaitai-io/kaitai_struct/issues/188
   file_header:
     -orig-id: BITMAPFILEHEADER
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapfileheader
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapfileheader
     seq:
       - id: file_type
         -orig-id: bfType
@@ -135,7 +135,7 @@ types:
         doc: Offset to actual raw pixel data of the image
   bitmap_info:
     -orig-id: BITMAPINFO
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapinfo
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapinfo
     seq:
       - id: len_header
         type: u4
@@ -208,7 +208,7 @@ types:
       - BITMAPCOREHEADER
       - OS21XBITMAPHEADER
     doc-ref:
-      - https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapcoreheader
+      - https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapcoreheader
       - https://www.fileformat.info/format/os2bmp/egff.htm#OS2BMP-DMYID.3.1
     params:
       - id: len_header
@@ -278,7 +278,7 @@ types:
           and not (extends_bitmap_info and not extends_os2_2x_bitmap and (bitmap_info_ext.compression == compressions::jpeg or bitmap_info_ext.compression == compressions::png))
   bitmap_info_extension:
     -orig-id: BITMAPINFOHEADER
-    doc-ref: https://docs.microsoft.com/en-us/previous-versions/dd183376(v=vs.85)
+    doc-ref: https://learn.microsoft.com/en-us/previous-versions/dd183376(v=vs.85)
     seq:
       - id: compression
         -orig-id: biCompression
@@ -352,7 +352,7 @@ types:
 
   bitmap_v4_extension:
     -orig-id: BITMAPV4HEADER
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapv4header
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapv4header
     seq:
       - id: color_space_type
         -orig-id: bV4CSType
@@ -376,7 +376,7 @@ types:
 
   cie_xyz:
     -orig-id: CIEXYZ
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-ciexyz
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-ciexyz
     seq:
       - id: x
         type: fixed_point_2_dot_30
@@ -389,7 +389,7 @@ types:
     meta:
       encoding: windows-1252 # for the file name of linked profile (see profile_data below)
     -orig-id: BITMAPV5HEADER
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapv5header
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapv5header
     seq:
       - id: intent
         -orig-id: bV5Intent
@@ -419,7 +419,7 @@ types:
           cases:
             true: strz
         if: has_profile
-        doc-ref: https://docs.microsoft.com/en-us/windows/win32/wcs/using-structures-in-wcs-1-0 "If the profile is embedded,
+        doc-ref: https://learn.microsoft.com/en-us/windows/win32/wcs/using-structures-in-wcs-1-0 "If the profile is embedded,
           profile data is the actual profile, and if it is linked, the profile data is the
           null-terminated file name of the profile. This cannot be a Unicode string. It must be composed exclusively
           of characters from the Windows character set (code page 1252)."
@@ -495,7 +495,7 @@ types:
     -webide-representation: "{value}"
 enums:
   compressions:
-    # https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapv5header (search for bV5Compression)
+    # https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapv5header (search for bV5Compression)
     0:
       id: rgb
       -orig-id: BI_RGB
@@ -552,7 +552,7 @@ enums:
       id: super_circle
 
   color_space:
-    # https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapv5header#members
+    # https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapv5header#members
   # For BITMAPV4HEADER:
     0:
       id: calibrated_rgb
@@ -583,7 +583,7 @@ enums:
         This value indicates that bV5ProfileData points to a memory buffer that contains
         the profile to be used (gamma and endpoints values are ignored).
   intent:
-    # https://docs.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapv5header#members
+    # https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapv5header#members
     8:
       id: abs_colorimetric
       -orig-id: LCS_GM_ABS_COLORIMETRIC
