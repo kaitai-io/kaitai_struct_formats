@@ -88,6 +88,7 @@ types:
             tag_enum::method_handle: method_handle_cp_info
             tag_enum::method_type: method_type_cp_info
             tag_enum::invoke_dynamic: invoke_dynamic_cp_info
+            tag_enum::dynamic: invoke_dynamic_cp_info
             tag_enum::module: module_package_cp_info
             tag_enum::package: module_package_cp_info
         if: not is_prev_two_entries
@@ -135,6 +136,9 @@ types:
         16:
           id: method_type
           -orig-id: CONSTANT_MethodType
+        17:
+          id: dynamic
+          -orig-id: CONSTANT_Dynamic
         18:
           id: invoke_dynamic
           -orig-id: CONSTANT_InvokeDynamic
