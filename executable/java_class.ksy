@@ -89,22 +89,51 @@ types:
         value: 'is_prev_two_entries ? false : tag == tag_enum::long or tag == tag_enum::double'
     enums:
       tag_enum:
-        7: class_type
-        9: field_ref
-        10: method_ref
-        11: interface_method_ref
-        8: string
-        3: integer
-        4: float
-        5: long
-        6: double
-        12: name_and_type
-        1: utf8
-        15: method_handle
-        16: method_type
-        18: invoke_dynamic
+        1:
+          id: utf8
+          -orig-id: CONSTANT_Utf8
+        3:
+          id: integer
+          -orig-id: CONSTANT_Integer
+        4:
+          id: float
+          -orig-id: CONSTANT_Float
+        5:
+          id: long
+          -orig-id: CONSTANT_Long
+        6:
+          id: double
+          -orig-id: CONSTANT_Double
+        7:
+          id: class_type
+          -orig-id: CONSTANT_Class
+        8:
+          id: string
+          -orig-id: CONSTANT_String
+        9:
+          id: field_ref
+          -orig-id: CONSTANT_Fieldref
+        10:
+          id: method_ref
+          -orig-id: CONSTANT_Methodref
+        11:
+          id: interface_method_ref
+          -orig-id: CONSTANT_InterfaceMethodref
+        12:
+          id: name_and_type
+          -orig-id: CONSTANT_NameAndType
+        15:
+          id: method_handle
+          -orig-id: CONSTANT_MethodHandle
+        16:
+          id: method_type
+          -orig-id: CONSTANT_MethodType
+        18:
+          id: invoke_dynamic
+          -orig-id: CONSTANT_InvokeDynamic
   class_cp_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.1
+    -orig-id: CONSTANT_Class_info
     seq:
       - id: name_index
         type: u2
@@ -115,6 +144,7 @@ types:
         value: name_as_info.value
   field_ref_cp_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.2
+    -orig-id: CONSTANT_Fieldref_info
     seq:
       - id: class_index
         type: u2
@@ -127,6 +157,7 @@ types:
         value: _root.constant_pool[name_and_type_index - 1].cp_info.as<name_and_type_cp_info>
   method_ref_cp_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.2
+    -orig-id: CONSTANT_Methodref_info
     seq:
       - id: class_index
         type: u2
@@ -139,6 +170,7 @@ types:
         value: _root.constant_pool[name_and_type_index - 1].cp_info.as<name_and_type_cp_info>
   interface_method_ref_cp_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.2
+    -orig-id: CONSTANT_InterfaceMethodref_info
     seq:
       - id: class_index
         type: u2
@@ -151,31 +183,37 @@ types:
         value: _root.constant_pool[name_and_type_index - 1].cp_info.as<name_and_type_cp_info>
   string_cp_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.3
+    -orig-id: CONSTANT_String_info
     seq:
       - id: string_index
         type: u2
   integer_cp_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.4
+    -orig-id: CONSTANT_Integer_info
     seq:
       - id: value
         type: u4
   float_cp_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.5
+    -orig-id: CONSTANT_Float_info
     seq:
       - id: value
         type: f4
   long_cp_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.5
+    -orig-id: CONSTANT_Long_info
     seq:
       - id: value
         type: u8
   double_cp_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.6
+    -orig-id: CONSTANT_Double_info
     seq:
       - id: value
         type: f8
   name_and_type_cp_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.6
+    -orig-id: CONSTANT_NameAndType_info
     seq:
       - id: name_index
         type: u2
@@ -192,6 +230,7 @@ types:
         value: descriptor_as_info.value
   utf8_cp_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.7
+    -orig-id: CONSTANT_Utf8_info
     seq:
       - id: str_len
         type: u2
@@ -201,6 +240,7 @@ types:
         encoding: UTF-8
   method_handle_cp_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.8
+    -orig-id: CONSTANT_MethodHandle_info
     seq:
       - id: reference_kind
         type: u1
@@ -220,11 +260,15 @@ types:
         9: invoke_interface
   method_type_cp_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.9
+    -orig-id: CONSTANT_MethodType_info
     seq:
       - id: descriptor_index
         type: u2
   invoke_dynamic_cp_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.10
+    -orig-id:
+      - CONSTANT_Dynamic_info
+      - CONSTANT_InvokeDynamic_info
     seq:
       - id: bootstrap_method_attr_index
         type: u2
@@ -232,6 +276,7 @@ types:
         type: u2
   field_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.5
+    -orig-id: field_info
     seq:
       - id: access_flags
         type: u2
@@ -250,6 +295,7 @@ types:
         value: _root.constant_pool[name_index - 1].cp_info.as<utf8_cp_info>.value
   attribute_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7
+    -orig-id: attribute_info
     seq:
       - id: name_index
         type: u2
@@ -363,6 +409,7 @@ types:
                 type: u2
   method_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.6
+    -orig-id: method_info
     seq:
       - id: access_flags
         type: u2
