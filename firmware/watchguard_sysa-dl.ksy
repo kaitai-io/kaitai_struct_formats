@@ -135,5 +135,5 @@ types:
 
 enums:
     magic:
-        0x12611920: type1
-        0x15611928: type2
+        0x1261_1920: type1
+        0x1561_1928: type2
