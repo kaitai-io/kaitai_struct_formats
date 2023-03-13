@@ -12,7 +12,7 @@ seq:
 
   - id: sections
     type: sections
-    size: _io.size - 24
+    size: fwheader.file_size
 
 
 types:
