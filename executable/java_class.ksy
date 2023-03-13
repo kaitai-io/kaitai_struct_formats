@@ -136,6 +136,22 @@ types:
         18:
           id: invoke_dynamic
           -orig-id: CONSTANT_InvokeDynamic
+
+  version_guard:
+    doc: |
+      `class` file format version 45.3 (appeared in the very first publicly known release of Java SE AND JDK 1.0.2, released 23th January 1996) is so ancient that it's taken for granted. Earlier formats seem to be undocumented. Changes of `version_minor` don't change `class` format.
+      Earlier `version_major`s likely belong to Oak programming language, the proprietary predecessor of Java.
+    doc-ref:
+      - "James Gosling, Bill Joy and Guy Steele. The Java Language Specification. English. Ed. by Lisa Friendly. Addison-Wesley, Aug. 1996, p. 825. ISBN: 0-201-63451-1."
+      - "Frank Yellin and Tim Lindholm. The Java Virtual Machine Specification. English. Ed. by Lisa Friendly. Addison-Wesley, Sept. 1996, p. 475. ISBN: 0-201-63452-X."
+    params:
+      - id: major
+        type: u2
+    seq:
+      - size: 0
+        valid:
+          expr: _root.version_major >= major
+
   class_cp_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.1
     -orig-id: CONSTANT_Class_info
@@ -247,6 +263,7 @@ types:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.8
     -orig-id: CONSTANT_MethodHandle_info
     seq:
+      - type: version_guard(51)
       - id: reference_kind
         type: u1
         enum: reference_kind_enum
@@ -267,6 +284,7 @@ types:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.9
     -orig-id: CONSTANT_MethodType_info
     seq:
+      - type: version_guard(51)
       - id: descriptor_index
         type: u2
   invoke_dynamic_cp_info:
@@ -275,6 +293,8 @@ types:
       - CONSTANT_Dynamic_info
       - CONSTANT_InvokeDynamic_info
     seq:
+      # Java 11 for CONSTANT_Dynamic_info
+      - type: version_guard(51)
       - id: bootstrap_method_attr_index
         type: u2
       - id: name_and_type_index
