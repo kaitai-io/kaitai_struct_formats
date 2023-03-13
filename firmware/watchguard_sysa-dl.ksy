@@ -57,7 +57,7 @@ types:
 
         - id: content
           type: strz
-          size: "is_type2? 0xf: 0x10"
+          size: 'is_type2 ? 0xf : 0x10'
           encoding: ASCII
 
       instances:
