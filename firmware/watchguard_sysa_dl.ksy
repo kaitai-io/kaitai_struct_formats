@@ -4,7 +4,6 @@ meta:
   title: Watchguard Fireware web update (Sysa-dl) file format
   license: MIT
 
-
 seq:
   - id: fwheader
     type: fwheader
@@ -13,7 +12,6 @@ seq:
   - id: sections
     type: sections
     size: fwheader.file_size
-
 
 types:
   fwheader:
@@ -24,7 +22,7 @@ types:
       - id: file_size
         type: u4
 
-      - id: magic_sign
+      - id: magic
         type: u4
         enum: magic
 
@@ -40,6 +38,7 @@ types:
         type: head
 
       - id: data
+        size: head.data_size
         type:
           switch-on: head.name.content
           cases:
@@ -47,7 +46,7 @@ types:
             '"info"': infodata
             '"HMAC"': hmacdata
             '"WGPKG"': wgpkgdata
-        size: head.data_size
+
 
   name:
     seq:
@@ -74,17 +73,16 @@ types:
         type: name
         size: 0x10
 
-      - id: unk
+      - id: unknown_data
         size: 24
         if: name.is_type2
 
       - id: data_size
         type: u4
 
-      - id: data_md5
+      - id: md5sum
         size: 0x10
         if: name.is_type2
-
 
   rebootdata:
     seq:
@@ -94,9 +92,9 @@ types:
 
   encoded_perm:
     seq:
-      - id: dw0
+      - id: unknown_dword0
         type: u4
-      - id: dw1
+      - id: unknown_dword1
         type: u4
 
   infodata:
@@ -121,10 +119,10 @@ types:
       - id: magic
         contents: "WGPKG\0"
 
-      - id: unk
+      - id: unknown_word
         size: 2
 
-      - id: unkdw1
+      - id: unknown_dword2
         type: u4
       - id: data_size
         type: u4
