@@ -88,7 +88,7 @@ types:
             tag_enum::method_handle: method_handle_cp_info
             tag_enum::method_type: method_type_cp_info
             tag_enum::invoke_dynamic: invoke_dynamic_cp_info
-            tag_enum::dynamic: invoke_dynamic_cp_info
+            tag_enum::dynamic: dynamic_cp_info
             tag_enum::module: module_package_cp_info
             tag_enum::package: module_package_cp_info
         if: not is_prev_two_entries
@@ -299,13 +299,19 @@ types:
       - type: version_guard(51)
       - id: descriptor_index
         type: u2
+  dynamic_cp_info:
+    doc-ref: https://docs.oracle.com/javase/specs/jvms/se19/html/jvms-4.html#jvms-4.4.10
+    -orig-id: CONSTANT_Dynamic_info
+    seq:
+      - type: version_guard(55)
+      - id: bootstrap_method_attr_index
+        type: u2
+      - id: name_and_type_index
+        type: u2
   invoke_dynamic_cp_info:
     doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.10
-    -orig-id:
-      - CONSTANT_Dynamic_info
-      - CONSTANT_InvokeDynamic_info
+    -orig-id: CONSTANT_InvokeDynamic_info
     seq:
-      # Java 11 for CONSTANT_Dynamic_info
       - type: version_guard(51)
       - id: bootstrap_method_attr_index
         type: u2
