@@ -5,16 +5,16 @@ meta:
   license: MIT
 
 seq:
-  - id: fwheader
-    type: fwheader
+  - id: fw_header
+    type: fw_header
     size: 24
 
   - id: sections
     type: sections
-    size: fwheader.file_size
+    size: fw_header.file_size
 
 types:
-  fwheader:
+  fw_header:
     seq:
       - id: md5sum
         size: 0x10
@@ -42,10 +42,10 @@ types:
         type:
           switch-on: head.name.content
           cases:
-            '"REBOOT"': rebootdata
-            '"info"': infodata
-            '"HMAC"': hmacdata
-            '"WGPKG"': wgpkgdata
+            '"REBOOT"': reboot_data
+            '"info"': info_data
+            '"HMAC"': hmac_data
+            '"WGPKG"': wgpkg_data
 
 
   name:
@@ -84,7 +84,7 @@ types:
         size: 0x10
         if: name.is_type2
 
-  rebootdata:
+  reboot_data:
     seq:
       - id: perm
         type: encoded_perm
@@ -97,19 +97,19 @@ types:
       - id: unknown_dword1
         type: u4
 
-  infodata:
+  info_data:
     seq:
       - id: info
         type: strz
         encoding: ASCII
         size-eos: true
 
-  hmacdata:
+  hmac_data:
     seq:
       - id: sha1_sign #key: etaonrishdlcupfm
         size: 20
 
-  wgpkgdata:
+  wgpkg_data:
     seq:
       - id: meta_info
         type: strz
