@@ -7,7 +7,12 @@ meta:
     wikidata: Q2193155
   license: CC0-1.0
   endian: be
-doc-ref: https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.1
+doc-ref:
+  - https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html
+  - https://docs.oracle.com/javase/specs/jls/se6/jls3.pdf
+  - https://github.com/openjdk/jdk/blob/72de24e59a80a38ea4ea6a8a3f966f555987ac86/src/jdk.hotspot.agent/share/classes/sun/jvm/hotspot/runtime/ClassConstants.java
+  - https://github.com/openjdk/jdk/blob/72de24e59a80a38ea4ea6a8a3f966f555987ac86/src/java.base/share/native/include/classfile_constants.h.template
+  - https://github.com/openjdk/jdk/blob/72de24e59a80a38ea4ea6a8a3f966f555987ac86/src/hotspot/share/classfile/classFileParser.cpp
 seq:
   - id: magic
     contents: [0xca, 0xfe, 0xba, 0xbe]
