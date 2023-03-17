@@ -87,7 +87,7 @@ types:
         encoding: ASCII # actually a subset of ASCII
   body_object_id:
     -webide-representation: '{first:dec}.{second:dec}.{rest}'
-    doc-ref: https://learn.microsoft.com/en-us/windows/desktop/SecCertEnroll/about-object-identifier
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/seccertenroll/about-object-identifier
     seq:
       - id: first_and_second
         type: u1

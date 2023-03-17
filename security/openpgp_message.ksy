@@ -13,7 +13,7 @@ meta:
   encoding: UTF-8
   endian: be
 doc: The OpenPGP Message Format is a format to store encryption and signature keys for emails.
-doc-ref: https://tools.ietf.org/html/rfc4880
+doc-ref: https://www.rfc-editor.org/rfc/rfc4880
 seq:
   - id: packets
     type: packet

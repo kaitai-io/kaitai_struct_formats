@@ -363,7 +363,7 @@ types:
         type: certificate_entry
         repeat: eos
   certificate_entry:
-    doc-ref: 'https://learn.microsoft.com/en-us/windows/desktop/debug/pe-format#the-attribute-certificate-table-image-only'
+    doc-ref: 'https://learn.microsoft.com/en-us/windows/win32/debug/pe-format#the-attribute-certificate-table-image-only'
     enums:
       certificate_revision:
         0x0100:

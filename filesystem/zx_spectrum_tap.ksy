@@ -15,7 +15,7 @@ doc: |
   for ZX Spectrum. Contents of this file can be viewed as a very
   simple linear filesystem, storing named files with some basic
   metainformation prepended as a header.
-doc-ref: https://faqwiki.zxnet.co.uk/wiki/TAP_format
+doc-ref: https://sinclair.wiki.zxnet.co.uk/wiki/TAP_format
 seq:
   - id: blocks
     type: block

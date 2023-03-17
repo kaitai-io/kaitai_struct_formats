@@ -24,7 +24,7 @@ meta:
 doc-ref:
   - https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=0f62fe0532
   - https://refspecs.linuxfoundation.org/elf/gabi4+/contents.html
-  - https://docs.oracle.com/cd/E37838_01/html/E36783/glcfv.html
+  - https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/elf-application-binary-interface.html
 seq:
   - id: magic
     -orig-id: e_ident[EI_MAG0]..e_ident[EI_MAG3]
@@ -151,7 +151,7 @@ types:
     doc-ref:
       - 'https://refspecs.linuxbase.org/elf/gabi4+/ch5.dynamic.html Figure 5-11: DT_FLAGS values'
       - https://github.com/golang/go/blob/48dfddbab3/src/debug/elf/elf.go#L1079-L1095
-      - https://docs.oracle.com/cd/E37838_01/html/E36783/chapter6-42444.html#OSLLGchapter7-tbl-5
+      - https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/dynamic-section.html#GUID-4336A69A-D905-4FCE-A398-80375A9E6464__CHAPTER7-TBL-5
     params:
       - id: value
         type: u4
@@ -489,7 +489,7 @@ types:
             value: _parent.linked_section.type == sh_type::strtab
       dynamic_section_entry:
         doc-ref:
-          - https://docs.oracle.com/cd/E37838_01/html/E36783/chapter6-42444.html
+          - https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/dynamic-section.html
           - https://refspecs.linuxfoundation.org/elf/gabi4+/ch5.dynamic.html#dynamic_section
         -webide-representation: "{tag_enum}: {value_or_ptr} {value_str} {flag_1_values:flags}"
         seq:
@@ -552,7 +552,7 @@ types:
           - Elf32_Sym
           - Elf64_Sym
         doc-ref:
-          - https://docs.oracle.com/cd/E37838_01/html/E36783/man-sts.html
+          - https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/symbol-table-section.html
           - https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.symtab.html
         -webide-representation: 'v:{value} s:{size:dec} t:{type} b:{bind} vis:{visibility} i:{sh_idx:dec}[={sh_idx_special}] n:{name}'
         seq:
@@ -608,7 +608,7 @@ types:
             # contain specific Unicode code points in symbol identifiers.
             #
             # See
-            # * <https://golang.org/doc/asm#symbols>: "the assembler allows the
+            # * <https://go.dev/doc/asm#symbols>: "the assembler allows the
             #   middle dot character U+00B7 and the division slash U+2215 in
             #   identifiers"
             # * <https://github.com/kaitai-io/kaitai_struct_formats/issues/520>
@@ -640,7 +640,7 @@ types:
             repeat: eos
       note_section_entry:
         doc-ref:
-          - https://docs.oracle.com/cd/E37838_01/html/E36783/chapter6-18048.html
+          - https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/note-section.html
           # The following source claims that note's `name` and `descriptor` should be padded
           # to 8 bytes in 64-bit ELFs, not always to 4 - although this seems to be an idea of
           # the original spec, it did not catch on in the real world and most implementations
@@ -670,7 +670,7 @@ types:
             size: -len_descriptor % 4
       relocation_section:
         doc-ref:
-          - https://docs.oracle.com/cd/E37838_01/html/E36783/chapter6-54839.html
+          - https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/relocation-sections.html
           - https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.reloc.html
         params:
           - id: has_addend
@@ -763,7 +763,7 @@ enums:
     3: shared
     # ET_CORE
     4: core
-  # http://www.sco.com/developers/gabi/latest/ch4.eheader.html
+  # https://www.sco.com/developers/gabi/latest/ch4.eheader.html
   # https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=0f62fe0532
   # https://github.com/NationalSecurityAgency/ghidra/blob/f5615aa240/Ghidra/Features/Base/src/main/java/ghidra/app/util/bin/format/elf/ElfConstants.java#L158-L510
   # https://github.com/llvm/llvm-project/blob/f6928cf45516/llvm/include/llvm/BinaryFormat/ELF.h#L130
@@ -1556,7 +1556,7 @@ enums:
     0x6474e551: gnu_stack
     0x6474e552: gnu_relro
     0x6474e553: gnu_property
-  # https://docs.oracle.com/cd/E37838_01/html/E36783/man-s.html#OSLLGchapter6-73445
+  # https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/section-headers.html#GUID-2CBE4879-2E76-426E-BB7F-CF0CB1D87C52__CHAPTER6-73445
   # https://github.com/illumos/illumos-gate/blob/1d806c5f41/usr/src/boot/sys/sys/elf_common.h#L377-L462
   sh_type:
     0: null_type
@@ -1581,13 +1581,13 @@ enums:
     # 0x6fffffef: lo_sunw
     0x6fffffec:
       id: sunw_symnsort
-      doc-ref: https://docs.oracle.com/cd/E37838_01/html/E36783/man-s.html#OSLLGchapter6-73445
+      doc-ref: https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/section-headers.html#GUID-2CBE4879-2E76-426E-BB7F-CF0CB1D87C52__CHAPTER6-73445
     0x6fffffed:
       id: sunw_phname
-      doc-ref: https://docs.oracle.com/cd/E37838_01/html/E36783/man-s.html#OSLLGchapter6-73445
+      doc-ref: https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/section-headers.html#GUID-2CBE4879-2E76-426E-BB7F-CF0CB1D87C52__CHAPTER6-73445
     0x6fffffee:
       id: sunw_ancillary
-      doc-ref: https://docs.oracle.com/cd/E37838_01/html/E36783/man-s.html#OSLLGchapter6-73445
+      doc-ref: https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/section-headers.html#GUID-2CBE4879-2E76-426E-BB7F-CF0CB1D87C52__CHAPTER6-73445
     0x6fffffef: sunw_capchain
     0x6ffffff0: sunw_capinfo
     0x6ffffff1: sunw_symsort
@@ -1628,7 +1628,7 @@ enums:
     # 0x7fffffff: hi_proc
     # 0x80000000: lo_user
     # 0xffffffff: hi_user
-  # https://docs.oracle.com/cd/E37838_01/html/E36783/man-sts.html#OSLLGchapter7-27
+  # https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/symbol-table-section.html#GUID-DBDD92CB-D58A-4CB5-861F-8868D8CB4552__CHAPTER7-27
   symbol_visibility:
     0: default
     1: internal
@@ -1637,7 +1637,7 @@ enums:
     4: exported
     5: singleton
     6: eliminate
-  # https://docs.oracle.com/cd/E37838_01/html/E36783/man-sts.html#OSLLGchapter6-tbl-21
+  # https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/symbol-table-section.html#GUID-DBDD92CB-D58A-4CB5-861F-8868D8CB4552__CHAPTER6-TBL-21
   symbol_binding:
     0:
       id: local
@@ -1675,7 +1675,7 @@ enums:
       id: proc15
       doc: reserved for processor-specific semantics
     # 15: hi_proc
-  # https://docs.oracle.com/cd/E37838_01/html/E36783/man-sts.html#OSLLGchapter6-tbl-22
+  # https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/symbol-table-section.html#GUID-DBDD92CB-D58A-4CB5-861F-8868D8CB4552__CHAPTER6-TBL-22
   symbol_type:
     0: no_type
     1:
@@ -1729,7 +1729,7 @@ enums:
       id: proc15
       doc: reserved for processor-specific semantics
     # 15: hi_proc
-  # https://docs.oracle.com/cd/E23824_01/html/819-0690/chapter6-94076.html#chapter6-tbl-16
+  # https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/section-headers.html#GUID-2CBE4879-2E76-426E-BB7F-CF0CB1D87C52__CHAPTER6-TBL-16
   # see also `_root.sh_idx_*` instances
   section_header_idx_special:
     0:
@@ -1750,7 +1750,7 @@ enums:
     0xfff2: common
     0xffff: xindex
     # 0xffff: hi_reserve
-  # https://docs.oracle.com/cd/E37838_01/html/E36783/chapter6-42444.html#OSLLGchapter6-tbl-52
+  # https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/dynamic-section.html#GUID-4336A69A-D905-4FCE-A398-80375A9E6464__CHAPTER6-TBL-52
   # https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=0f62fe0532#l853
   dynamic_array_tags:
     0: "null"            # Marks end of dynamic section
@@ -1805,7 +1805,7 @@ enums:
     0x6000000f:
       id: sunw_filter
       doc: |
-        Note: <https://docs.oracle.com/cd/E37838_01/html/E36783/chapter6-42444.html#OSLLGchapter6-tbl-52>
+        Note: <https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/dynamic-section.html#GUID-4336A69A-D905-4FCE-A398-80375A9E6464__CHAPTER6-TBL-52>
         states that `DT_SUNW_FILTER` has the value `0x6000000e`, but this is
         apparently only a human error - that would make the value collide with
         the previous one (`DT_SUNW_RTLDINF`) and there is not even a single

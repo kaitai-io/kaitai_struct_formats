@@ -9,7 +9,7 @@ meta:
 
 doc: RTCP is the Real-Time Control Protocol
 
-doc-ref: https://tools.ietf.org/html/rfc3550
+doc-ref: https://www.rfc-editor.org/rfc/rfc3550
 
 seq:
   - id: rtcp_packets

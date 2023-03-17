@@ -20,8 +20,8 @@ doc: |
   * Raptor: Call of the Shadows
 doc-ref:
   - http://www.fit.vutbr.cz/~arnost/muslib/op2_form.zip
-  - http://doom.wikia.com/wiki/GENMIDI
-  - http://www.shikadi.net/moddingwiki/OP2_Bank_Format
+  - https://doom.fandom.com/wiki/GENMIDI
+  - https://moddingwiki.shikadi.net/wiki/OP2_Bank_Format
 seq:
   - id: magic
     contents: "#OPL_II#"

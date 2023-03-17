@@ -7,15 +7,15 @@ meta:
     pronom: fmt/394
     wikidata: Q307271
   license: MIT
-  ks-version: 0.8
+  ks-version: 0.9
   encoding: UTF-8
   endian: be
 doc: |
   Apple macOS '.DS_Store' file format.
-doc-ref: |
-  https://en.wikipedia.org/wiki/.DS_Store
-  https://metacpan.org/pod/distribution/Mac-Finder-DSStore/DSStoreFormat.pod
-  https://0day.work/parsing-the-ds_store-file-format
+doc-ref:
+  - https://en.wikipedia.org/wiki/.DS_Store
+  - https://metacpan.org/dist/Mac-Finder-DSStore/view/DSStoreFormat.pod
+  - https://0day.work/parsing-the-ds_store-file-format/
 seq:
   - id: alignment_header
     contents: [0x00, 0x00, 0x00, 0x01]

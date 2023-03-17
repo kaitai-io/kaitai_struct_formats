@@ -8,7 +8,7 @@ meta:
     wikidata: Q2658179
   license: CC0-1.0
   endian: le
-doc-ref: 'https://github.com/libyal/libvmdk/blob/master/documentation/VMWare%20Virtual%20Disk%20Format%20(VMDK).asciidoc#41-file-header'
+doc-ref: 'https://github.com/libyal/libvmdk/blob/main/documentation/VMWare%20Virtual%20Disk%20Format%20(VMDK).asciidoc#41-file-header'
 seq:
   - id: magic
     contents: "KDMV"
@@ -63,7 +63,7 @@ instances:
     size: size_grain * _root.len_sector
 types:
   header_flags:
-    doc-ref: 'https://github.com/libyal/libvmdk/blob/master/documentation/VMWare%20Virtual%20Disk%20Format%20(VMDK).asciidoc#411-flags'
+    doc-ref: 'https://github.com/libyal/libvmdk/blob/main/documentation/VMWare%20Virtual%20Disk%20Format%20(VMDK).asciidoc#411-flags'
     seq:
       - id: reserved1
         type: b5

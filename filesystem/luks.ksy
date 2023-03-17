@@ -13,7 +13,7 @@ meta:
 doc: |
   Linux Unified Key Setup (LUKS) is a format specification for storing disk
   encryption parameters and up to 8 user keys (which can unlock the master key).
-doc-ref: https://gitlab.com/cryptsetup/cryptsetup/wikis/LUKS-standard/on-disk-format.pdf
+doc-ref: https://gitlab.com/cryptsetup/cryptsetup/-/wikis/LUKS-standard/on-disk-format.pdf
 seq:
   - id: partition_header
     type: partition_header

@@ -33,10 +33,10 @@ doc: |
     * <https://philip.html5.org/tests/apng/tests.html>
     * <http://littlesvr.ca/apng/>
 seq:
-  # https://www.w3.org/TR/PNG/#5PNG-file-signature
+  # https://www.w3.org/TR/png/#5PNG-file-signature
   - id: magic
     contents: [137, 80, 78, 71, 13, 10, 26, 10]
-  # https://www.w3.org/TR/PNG/#11IHDR
+  # https://www.w3.org/TR/png/#11IHDR
   # Always appears first, stores values referenced by other chunks
   - id: ihdr_len
     type: u4
@@ -95,7 +95,7 @@ types:
       - id: crc
         size: 4
   ihdr_chunk:
-    doc-ref: https://www.w3.org/TR/PNG/#11IHDR
+    doc-ref: https://www.w3.org/TR/png/#11IHDR
     seq:
       - id: width
         type: u4
@@ -113,7 +113,7 @@ types:
       - id: interlace_method
         type: u1
   plte_chunk:
-    doc-ref: https://www.w3.org/TR/PNG/#11PLTE
+    doc-ref: https://www.w3.org/TR/png/#11PLTE
     seq:
       - id: entries
         type: rgb
@@ -127,7 +127,7 @@ types:
       - id: b
         type: u1
   chrm_chunk:
-    doc-ref: https://www.w3.org/TR/PNG/#11cHRM
+    doc-ref: https://www.w3.org/TR/png/#11cHRM
     seq:
       - id: white_point
         type: point
@@ -149,7 +149,7 @@ types:
       y:
         value: y_int / 100000.0
   gama_chunk:
-    doc-ref: https://www.w3.org/TR/PNG/#11gAMA
+    doc-ref: https://www.w3.org/TR/png/#11gAMA
     seq:
       - id: gamma_int
         type: u4
@@ -157,7 +157,7 @@ types:
       gamma_ratio:
         value: 100000.0 / gamma_int
   srgb_chunk:
-    doc-ref: https://www.w3.org/TR/PNG/#11sRGB
+    doc-ref: https://www.w3.org/TR/png/#11sRGB
     seq:
       - id: render_intent
         type: u1
@@ -172,7 +172,7 @@ types:
     doc: |
       Background chunk stores default background color to display this
       image against. Contents depend on `color_type` of the image.
-    doc-ref: https://www.w3.org/TR/PNG/#11bKGD
+    doc-ref: https://www.w3.org/TR/png/#11bKGD
     seq:
       - id: bkgd
         type:
@@ -206,7 +206,7 @@ types:
     doc: |
       "Physical size" chunk stores data that allows to translate
       logical pixels into physical units (meters, etc) and vice-versa.
-    doc-ref: https://www.w3.org/TR/PNG/#11pHYs
+    doc-ref: https://www.w3.org/TR/png/#11pHYs
     seq:
       - id: pixels_per_unit_x
         type: u4
@@ -225,7 +225,7 @@ types:
     doc: |
       Time chunk stores time stamp of last modification of this image,
       up to 1 second precision in UTC timezone.
-    doc-ref: https://www.w3.org/TR/PNG/#11tIME
+    doc-ref: https://www.w3.org/TR/png/#11tIME
     seq:
       - id: year
         type: u2
@@ -245,7 +245,7 @@ types:
       PNG container. Both "key" (keyword) and "value" (text) parts are
       given in pre-defined subset of iso8859-1 without control
       characters.
-    doc-ref: https://www.w3.org/TR/PNG/#11iTXt
+    doc-ref: https://www.w3.org/TR/png/#11iTXt
     seq:
       - id: keyword
         type: strz
@@ -286,7 +286,7 @@ types:
       PNG container. Both "key" (keyword) and "value" (text) parts are
       given in pre-defined subset of iso8859-1 without control
       characters.
-    doc-ref: https://www.w3.org/TR/PNG/#11tEXt
+    doc-ref: https://www.w3.org/TR/png/#11tEXt
     seq:
       - id: keyword
         type: strz
@@ -301,7 +301,7 @@ types:
       Compressed text chunk effectively allows to store key-value
       string pairs in PNG container, compressing "value" part (which
       can be quite lengthy) with zlib compression.
-    doc-ref: https://www.w3.org/TR/PNG/#11zTXt
+    doc-ref: https://www.w3.org/TR/png/#11zTXt
     seq:
       - id: keyword
         type: strz

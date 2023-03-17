@@ -18,7 +18,7 @@ doc: |
   As of 2019, there is actually only one working solution for
   compression algorithms, so it's typically raw DEFLATE stream
   (without zlib header) in all gzipped files.
-doc-ref: https://tools.ietf.org/html/rfc1952
+doc-ref: https://www.rfc-editor.org/rfc/rfc1952
 seq:
   - id: magic
     -orig-id: ID1, ID2

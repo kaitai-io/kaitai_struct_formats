@@ -9,7 +9,7 @@ meta:
     wikidata: Q81095
   license: MIT
   endian: le
-doc-ref: 'http://dicom.nema.org/medical/dicom/current/output/html/part10.html#chapter_7'
+doc-ref: 'https://dicom.nema.org/medical/dicom/current/output/html/part10.html#chapter_7'
 doc: |
   DICOM (Digital Imaging and Communications in Medicine), AKA NEMA
   PS3, AKA ISO 12052:2006, is a file format and network protocol
@@ -35,7 +35,7 @@ types:
       - id: magic
         contents: 'DICM'
   t_data_element_explicit:
-    doc-ref: 'http://dicom.nema.org/medical/dicom/current/output/html/part05.html#sect_7.1.2'
+    doc-ref: 'https://dicom.nema.org/medical/dicom/current/output/html/part05.html#sect_7.1.2'
     seq:
       - id: tag_group
         type: u2
@@ -85,7 +85,7 @@ types:
           vr == 'UN'
 #      p_is_transfer_syntax_change_non_implicit:
 #        # '1.2.840.10008.1.2.1\0' (Explicit VR Little Endian)
-#        # See http://www.dicomlibrary.com/dicom/transfer-syntax/
+#        # See https://www.dicomlibrary.com/dicom/transfer-syntax/
 #        value: value != [49, 46, 50, 46, 56, 52, 48, 46, 49, 48, 48, 48, 56, 46, 49, 46, 50, 46, 49, 0]
       is_transfer_syntax_change_implicit:
         value: false
@@ -93,7 +93,7 @@ types:
         value: 'tag_group << 16 | tag_elem'
         enum: tags
   t_data_element_implicit:
-    doc-ref: 'http://dicom.nema.org/medical/dicom/current/output/html/part05.html#sect_7.1.2'
+    doc-ref: 'https://dicom.nema.org/medical/dicom/current/output/html/part05.html#sect_7.1.2'
     seq:
       - id: tag_group
         type: u2
@@ -146,7 +146,7 @@ types:
         enum: tags
       p_is_transfer_syntax_change_explicit:
         # '1.2.840.10008.1.2.1\0' (Explicit VR Little Endian)
-        # See http://www.dicomlibrary.com/dicom/transfer-syntax/
+        # See https://www.dicomlibrary.com/dicom/transfer-syntax/
         value: value == [49, 46, 50, 46, 56, 52, 48, 46, 49, 48, 48, 48, 56, 46, 49, 46, 50, 46, 49, 0]
       is_transfer_syntax_change_explicit:
         value: p_is_transfer_syntax_change_explicit

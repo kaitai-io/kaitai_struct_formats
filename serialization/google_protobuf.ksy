@@ -36,7 +36,7 @@ doc: |
     required, which fields may be repeated or constitute a map, what
     restrictions are placed on fields usage in a single message, what
     are the fields' default values, etc, etc.
-doc-ref: https://developers.google.com/protocol-buffers/docs/encoding
+doc-ref: https://protobuf.dev/programming-guides/encoding/
 seq:
   - id: pairs
     type: pair

@@ -12,7 +12,7 @@ doc: |
   communication protocol which supports remoteprocedure calls, event notifications
   and the underlying serialization/wire format.
 
-doc-ref: https://www.autosar.org/fileadmin/user_upload/standards/foundation/19-11/AUTOSAR_PRS_SOMEIPProtocol.pdf
+doc-ref: https://www.autosar.org/fileadmin/standards/foundation/19-11/AUTOSAR_PRS_SOMEIPProtocol.pdf
 
 seq:
   - id: header

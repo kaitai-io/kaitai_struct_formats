@@ -4,7 +4,7 @@ meta:
   file-extension: nes
   license: WTFPL
   encoding: ASCII
-doc-ref: https://wiki.nesdev.com/w/index.php/INES
+doc-ref: https://www.nesdev.org/wiki/INES
 seq:
   - id: header
     size: 16
@@ -53,13 +53,13 @@ types:
       - id: reserved
         contents: [0, 0, 0, 0, 0]
     instances:
-      # TODO: Add an enum for mapper. https://wiki.nesdev.com/w/index.php/List_of_mappers
+      # TODO: Add an enum for mapper. https://www.nesdev.org/wiki/List_of_mappers
       mapper:
         value: f6.lower_mapper | (f7.upper_mapper << 4)
-        doc-ref: https://wiki.nesdev.com/w/index.php/Mapper
+        doc-ref: https://www.nesdev.org/wiki/Mapper
     types:
       f6:
-        doc-ref: https://wiki.nesdev.com/w/index.php/INES#Flags_6
+        doc-ref: https://www.nesdev.org/wiki/INES#Flags_6
         seq:
           - id: lower_mapper
             type: b4
@@ -82,7 +82,7 @@ types:
             0: horizontal
             1: vertical
       f7:
-        doc-ref: https://wiki.nesdev.com/w/index.php/INES#Flags_7
+        doc-ref: https://www.nesdev.org/wiki/INES#Flags_7
         seq:
           - id: upper_mapper
             type: b4
@@ -97,7 +97,7 @@ types:
             type: b1
             doc: Determines if it is made for a Nintendo VS Unisystem or not
       f9:
-        doc-ref: https://wiki.nesdev.com/w/index.php/INES#Flags_9
+        doc-ref: https://www.nesdev.org/wiki/INES#Flags_9
         seq:
           # TODO: enforce zero (similarly to "contents", but on bit level)
           - id: reserved
@@ -111,7 +111,7 @@ types:
             0: ntsc
             1: pal
       f10:
-        doc-ref: https://wiki.nesdev.com/w/index.php/INES#Flags_10
+        doc-ref: https://www.nesdev.org/wiki/INES#Flags_10
         seq:
           # TODO: enforce zero (similarly to "contents", but on bit level)
           - id: reserved1
@@ -137,7 +137,7 @@ types:
             2: pal
             3: dual2
   playchoice10:
-    doc-ref: http://wiki.nesdev.com/w/index.php/PC10_ROM-Images
+    doc-ref: https://www.nesdev.org/wiki/PC10_ROM-Images
     seq:
       - id: inst_rom
         size: 8192

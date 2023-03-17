@@ -19,7 +19,7 @@ doc: |
   network traffic grabbed by network sniffers. It is typically
   produced by tools like [tcpdump](https://www.tcpdump.org/) or
   [Wireshark](https://www.wireshark.org/).
-doc-ref: http://wiki.wireshark.org/Development/LibpcapFileFormat
+doc-ref: https://wiki.wireshark.org/Development/LibpcapFileFormat
 seq:
   - id: hdr
     type: header

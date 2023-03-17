@@ -10,7 +10,7 @@ doc: |
   This includes forinstance the information how a service instance is
   reachable (IP-Address, TransportProtocol, Port Number).
 doc-ref: |
-  https://www.autosar.org/fileadmin/user_upload/standards/foundation/19-11/AUTOSAR_PRS_SOMEIPServiceDiscoveryProtocol.pdf
+  https://www.autosar.org/fileadmin/standards/foundation/19-11/AUTOSAR_PRS_SOMEIPServiceDiscoveryProtocol.pdf
   - section 4.1.2.4 Options Format
 
 seq:

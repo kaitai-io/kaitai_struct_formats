@@ -72,7 +72,7 @@ types:
       - id: significand_lo
         type: u8
   object_id:
-    doc: "https://docs.mongodb.com/manual/reference/method/ObjectId/"
+    doc-ref: https://www.mongodb.com/docs/manual/reference/method/ObjectId/
     seq:
       - id: epoch_time
         type: u4

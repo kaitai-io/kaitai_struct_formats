@@ -30,12 +30,12 @@ doc: |
   * Protocol 0: ASCII clean, no explicit version, fields are '\n' terminated.
   * Protocol 1: Binary, no explicit version, first length prefixed types.
   * Protocol 2: Python 2.3+. Explicit versioning, more length prefixed types.
-    https://www.python.org/dev/peps/pep-0307/
+    https://peps.python.org/pep-0307/
   * Protocol 3: Python 3.0+. Dedicated opcodes for `bytes` objects.
   * Protocol 4: Python 3.4+. Opcodes for 64 bit strings, framing, `set`.
-    https://www.python.org/dev/peps/pep-3154/
+    https://peps.python.org/pep-3154/
   * Protocol 5: Python 3.8+: Opcodes for `bytearray` and out of band data
-    https://www.python.org/dev/peps/pep-0574/
+    https://peps.python.org/pep-0574/
 doc-ref: https://github.com/python/cpython/blob/v3.8.1/Lib/pickletools.py
 seq:
   # TODO is there a way to declare PROTO is optional, but only valid at position 0?

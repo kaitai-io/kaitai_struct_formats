@@ -8,7 +8,7 @@ meta:
 doc: |
   This spec can be used to parse sudo time stamp files located in directories
   such as /run/sudo/ts/$USER or /var/lib/sudo/ts/$USER.
-doc-ref: https://www.sudo.ws/man/1.8.27/sudoers_timestamp.man.html
+doc-ref: https://www.sudo.ws/docs/man/1.8.27/sudoers_timestamp.man/
 seq:
   - id: records
     type: record

@@ -211,7 +211,7 @@ types:
         4: info
         5: warning
   cursor_record_body:
-    doc-ref: 'http://www.forensicswiki.xyz/page/Windows_Event_Log_(EVT)#Cursor_Record'
+    doc-ref: 'https://forensics.wiki/windows_event_log_(evt)/#cursor-record'
     seq:
       - id: magic
         contents: [0x22, 0x22, 0x22, 0x22, 0x33, 0x33, 0x33, 0x33, 0x44, 0x44, 0x44, 0x44]

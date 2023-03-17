@@ -20,7 +20,7 @@ doc: |
     Note: this is not the same as the Android sparse data image format.
 doc-ref:
   - https://android.googlesource.com/platform/system/core/+/e8d02c50d7/libsparse/sparse_format.h
-  - https://source.android.com/devices/bootloader/images#sparse-image-format
+  - https://web.archive.org/web/20220322054458/https://source.android.com/devices/bootloader/images#sparse-image-format
 seq:
   - id: header_prefix
     type: file_header_prefix

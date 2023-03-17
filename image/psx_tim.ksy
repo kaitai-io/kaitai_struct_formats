@@ -10,7 +10,7 @@ meta:
   endian: le
 doc-ref:
   - http://fileformats.archiveteam.org/wiki/TIM_(PlayStation_graphics)
-  - http://mrclick.zophar.net/TilEd/download/timgfx.txt
+  - https://mrclick.zophar.net/TilEd/download/timgfx.txt
   - https://www.romhacking.net/documents/31/
 seq:
   - id: magic

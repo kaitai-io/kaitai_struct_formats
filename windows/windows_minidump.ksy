@@ -13,7 +13,7 @@ doc: |
   The file itself is a container, which contains a number of typed
   "streams", which contain some data according to its type attribute.
 doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_header
-# https://github.com/libyal/libmdmp/blob/master/documentation/Minidump%20(MDMP)%20format.asciidoc
+# https://github.com/libyal/libmdmp/blob/main/documentation/Minidump%20(MDMP)%20format.asciidoc
 seq:
   - id: magic1
     -orig-id: Signature

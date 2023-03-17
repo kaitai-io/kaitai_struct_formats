@@ -11,9 +11,9 @@ doc: |
   This particular encoding is specified and used in:
 
   * DWARF debug file format, where it's dubbed "unsigned LEB128" or "ULEB128".
-    http://dwarfstd.org/doc/dwarf-2.0.0.pdf - page 139
+    https://dwarfstd.org/doc/dwarf-2.0.0.pdf - page 139
   * Google Protocol Buffers, where it's called "Base 128 Varints".
-    https://developers.google.com/protocol-buffers/docs/encoding?csw=1#varints
+    https://protobuf.dev/programming-guides/encoding/#varints
   * Apache Lucene, where it's called "VInt"
     https://lucene.apache.org/core/3_5_0/fileformats.html#VInt
   * Apache Avro uses this as a basis for integer encoding, adding ZigZag on
