@@ -127,7 +127,6 @@ types:
         type: u4
 
       - id: compressed_wpkg #bz2
-        #size-eos: true
         size: data_size
 
 enums:
