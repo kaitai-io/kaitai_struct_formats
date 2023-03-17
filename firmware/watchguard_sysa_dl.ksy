@@ -114,7 +114,6 @@ types:
       - id: meta_info
         type: strz
         encoding: ASCII
-        terminator: 0
 
       - id: magic
         contents: "WGPKG\0"
