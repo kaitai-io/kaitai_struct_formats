@@ -23,7 +23,7 @@ doc: |
   && gunzip scanner_withoptions.dump.gz`
 doc-ref:
   - https://tools.ietf.org/html/draft-nielsen-dime-02
-  - https://docs.microsoft.com/en-us/archive/msdn-magazine/2002/december/sending-files-attachments-and-soap-messages-via-dime
+  - https://learn.microsoft.com/en-us/archive/msdn-magazine/2002/december/sending-files-attachments-and-soap-messages-via-dime
   - http://imrannazar.com/Parsing-the-DIME-Message-Format
 seq:
   - id: records
