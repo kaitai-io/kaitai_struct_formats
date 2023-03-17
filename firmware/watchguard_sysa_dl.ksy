@@ -1,8 +1,10 @@
 meta:
   id: watchguard_sysa_dl
-  endian: be
   title: Watchguard Fireware web update (Sysa-dl) file format
   license: MIT
+  endian: be
+
+  
 
 seq:
   - id: fw_header
@@ -133,3 +135,4 @@ enums:
   magic:
     0x1261_1920: type1
     0x1561_1928: type2
+
