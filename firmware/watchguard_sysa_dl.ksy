@@ -19,6 +19,7 @@ types:
     seq:
       - id: md5sum
         size: 0x10
+        doc: MD5 sum of whole sections block
 
       - id: file_size
         type: u4
@@ -107,7 +108,7 @@ types:
 
   hmac_data:
     seq:
-      - id: sha1_sign #key: etaonrishdlcupfm
+      - id: hmac_sha1_value
         size: 20
 
   wgpkg_data:
@@ -127,8 +128,9 @@ types:
       - id: data_size
         type: u4
 
-      - id: compressed_wpkg #bz2
+      - id: compressed_wpkg
         size: data_size
+        doc: compressed_wpkg is bz2 compresed
 
 enums:
   magic:
