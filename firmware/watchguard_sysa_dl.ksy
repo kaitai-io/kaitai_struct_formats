@@ -32,7 +32,7 @@ types:
 
   sections:
     seq:
-      - id: section
+      - id: sections
         type: section
         repeat: eos
 
