@@ -7,12 +7,14 @@ meta:
 
 seq:
   - id: fw_header
-    type: fw_header
     size: 24
+    type: fw_header
+
 
   - id: sections
-    type: sections
     size: fw_header.file_size
+    type: sections
+
 
 types:
   fw_header:
@@ -72,8 +74,8 @@ types:
   head:
     seq:
       - id: name
-        type: name
         size: 0x10
+        type: name
 
       - id: unknown_data
         size: 24
@@ -89,8 +91,8 @@ types:
   reboot_data:
     seq:
       - id: perm
-        type: encoded_perm
         size: 0x8
+        type: encoded_perm
 
   encoded_perm:
     seq:
@@ -102,9 +104,10 @@ types:
   info_data:
     seq:
       - id: info
+        size-eos: true
         type: strz
         encoding: ASCII
-        size-eos: true
+
 
   hmac_data:
     seq:
@@ -136,4 +139,3 @@ enums:
   magic:
     0x1261_1920: type1
     0x1561_1928: type2
-
