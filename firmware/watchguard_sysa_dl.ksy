@@ -130,7 +130,7 @@ types:
 
       - id: compressed_wpkg
         size: data_size
-        doc: compressed_wpkg is bz2 compresed
+        doc: compressed_wpkg is bzip2 compresed
 
 enums:
   magic:
