@@ -10,7 +10,6 @@ seq:
     size: 24
     type: fw_header
 
-
   - id: sections
     size: fw_header.file_size
     type: sections
