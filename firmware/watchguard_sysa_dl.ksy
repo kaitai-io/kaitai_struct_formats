@@ -15,7 +15,6 @@ seq:
     size: fw_header.file_size
     type: sections
 
-
 types:
   fw_header:
     seq:
@@ -50,7 +49,6 @@ types:
             '"info"': info_data
             '"HMAC"': hmac_data
             '"WGPKG"': wgpkg_data
-
 
   name:
     seq:
@@ -107,7 +105,6 @@ types:
         size-eos: true
         type: strz
         encoding: ASCII
-
 
   hmac_data:
     seq:
