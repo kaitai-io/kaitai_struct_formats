@@ -146,10 +146,17 @@ types:
         value: format & 0x00000080 != 0
       is_native:
         value: format & 0x01000000 != 0
-      uv_layer_count_raw:
-        value: (format >> 16) & 0xff
-      uv_layer_count:
-        value: 'uv_layer_count_raw == 0 ? is_textured ? 1 : is_textured2 ? 2 : 0 : uv_layer_count_raw'
+      num_uv_layers_raw:
+        value: (format & 0x00ff_0000) >> 16
+      num_uv_layers:
+        value: |
+          num_uv_layers_raw == 0
+            ? is_textured
+              ? 1
+              : is_textured2
+                ? 2
+                : 0
+            : num_uv_layers_raw
   surface_properties:
     doc-ref: https://gtamods.com/wiki/RpGeometry
     seq:
@@ -169,7 +176,7 @@ types:
       - id: uv_layers
         type: uv_layer(_parent.num_vertices)
         repeat: expr
-        repeat-expr: _parent.uv_layer_count
+        repeat-expr: _parent.num_uv_layers
       - id: triangles
         type: triangle
         repeat: expr
