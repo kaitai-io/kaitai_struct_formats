@@ -3,7 +3,7 @@ meta:
   title: Portable Image Format
   file-extension: pif
   license: LGPL-2.1
-  ks-version: 0.10
+  ks-version: 0.9
   endian: le
 doc-ref: https://github.com/gfcwfzkm/PIF-Image-Format/blob/cc256d5/Specification/PIF%20Format%20Specification.pdf
 seq:
