@@ -18,7 +18,7 @@ seq:
 types:
   header:
     seq:
-      - id: signature
+      - id: magic
         contents: ["PIF", 0x00]
       - id: len_file
         type: u4
