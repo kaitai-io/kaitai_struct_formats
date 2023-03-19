@@ -5,7 +5,7 @@ meta:
   license: LGPL-2.1
   ks-version: 0.10
   endian: le
-doc-ref: https://raw.githubusercontent.com/gfcwfzkm/PIF-Image-Format/main/Specification/PIF%20Format%20Specification.pdf
+doc-ref: https://github.com/gfcwfzkm/PIF-Image-Format/blob/cc256d5/Specification/PIF%20Format%20Specification.pdf
 seq:
   - id: header
     type: header
