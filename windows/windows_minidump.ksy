@@ -8,6 +8,7 @@ meta:
   endian: le
   imports:
     - /windows/windows_processor_architecture
+    - /windows/windows_processor_revision
 doc: |
   Windows MiniDump (MDMP) file provides a concise way to store process
   core dumps, which is useful for debugging. Given its small size,
@@ -93,7 +94,7 @@ types:
         type: u2
       - id: cpu_revision
         -orig-id: ProcessorRevision
-        type: u2
+        type: windows_processor_revision(cpu_arch, cpu_level)
       - id: num_cpus
         -orig-id: NumberOfProcessors
         type: u1
