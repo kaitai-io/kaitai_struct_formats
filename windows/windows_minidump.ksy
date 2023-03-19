@@ -6,6 +6,8 @@ meta:
     - mdmp
   license: CC0-1.0
   endian: le
+  imports:
+    - /windows/windows_processor_architecture
 doc: |
   Windows MiniDump (MDMP) file provides a concise way to store process
   core dumps, which is useful for debugging. Given its small size,
@@ -84,8 +86,8 @@ types:
     seq:
       - id: cpu_arch
         -orig-id: ProcessorArchitecture
-        type: u2
-        enum: cpu_archs
+        size: 2
+        type: windows_processor_architecture
       - id: cpu_level
         -orig-id: ProcessorLevel
         type: u2
@@ -124,13 +126,6 @@ types:
         pos: ofs_service_pack
         type: minidump_string
         if: ofs_service_pack > 0
-    enums:
-      cpu_archs:
-        0: intel
-        5: arm
-        6: ia64
-        9: amd64
-        0xffff: unknown
   misc_info:
     doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_misc_info
     # https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_misc_info_2
