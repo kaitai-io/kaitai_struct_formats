@@ -19,7 +19,7 @@ types:
     seq:
       - id: md5sum
         size: 0x10
-        doc: MD5 sum of whole sections block
+        doc: MD5 sum of whole "sections" block
 
       - id: file_size
         type: u4
