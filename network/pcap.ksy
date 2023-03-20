@@ -295,3 +295,4 @@ enums:
     296: auerswald_log
     297: zwave_tap
     298: silabs_debug_channel
+    299: fira_uci
