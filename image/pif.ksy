@@ -14,7 +14,7 @@ seq:
   - id: color_table
     size: information_header.len_color_table
   - id: data
-    size: header.len_image
+    size: information_header.len_image
 types:
   header:
     seq:
