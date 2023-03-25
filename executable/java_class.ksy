@@ -151,8 +151,12 @@ types:
 
   version_guard:
     doc: |
-      `class` file format version 45.3 (appeared in the very first publicly known release of Java SE AND JDK 1.0.2, released 23th January 1996) is so ancient that it's taken for granted. Earlier formats seem to be undocumented. Changes of `version_minor` don't change `class` format.
-      Earlier `version_major`s likely belong to Oak programming language, the proprietary predecessor of Java.
+      `class` file format version 45.3 (appeared in the very first publicly
+      known release of Java SE AND JDK 1.0.2, released 23th January 1996) is so
+      ancient that it's taken for granted. Earlier formats seem to be
+      undocumented. Changes of `version_minor` don't change `class` format.
+      Earlier `version_major`s likely belong to Oak programming language, the
+      proprietary predecessor of Java.
     doc-ref:
       - "James Gosling, Bill Joy and Guy Steele. The Java Language Specification. English. Ed. by Lisa Friendly. Addison-Wesley, Aug. 1996, p. 825. ISBN: 0-201-63451-1."
       - "Frank Yellin and Tim Lindholm. The Java Virtual Machine Specification. English. Ed. by Lisa Friendly. Addison-Wesley, Sept. 1996, p. 475. ISBN: 0-201-63452-X."
