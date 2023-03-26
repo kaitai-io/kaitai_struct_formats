@@ -7,16 +7,16 @@ meta:
   endian: le
 doc-ref: https://github.com/gfcwfzkm/PIF-Image-Format/blob/cc256d5/Specification/PIF%20Format%20Specification.pdf
 seq:
-  - id: header
-    type: header
-  - id: information_header
+  - id: file_header
+    type: pif_header
+  - id: info_header
     type: information_header
   - id: color_table
-    size: information_header.len_color_table
+    size: info_header.len_color_table
   - id: image_data
-    size: information_header.len_image_data
+    size: info_header.len_image_data
 types:
-  header:
+  pif_header:
     seq:
       - id: magic
         contents: ["PIF", 0x00]
