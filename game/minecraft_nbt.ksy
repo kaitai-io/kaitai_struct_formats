@@ -143,7 +143,7 @@ types:
     seq:
       - id: len_data
         type: u2
-        doc: unsigned according to https://wiki.vg/NBT#Specification
+        doc: unsigned according to <https://wiki.vg/NBT#Specification>
       - id: data
         size: len_data
         type: str
@@ -213,8 +213,8 @@ enums:
       id: end
       -affected-by: 90
       doc: |
-        As of KSC 0.9, this enum key causes a syntax error in Lua.
-        See https://github.com/kaitai-io/kaitai_struct/issues/90#issuecomment-766440975
+        As of KSC 0.9, this enum key causes a syntax error in Lua. See
+        <https://github.com/kaitai-io/kaitai_struct/issues/90#issuecomment-766440975>
         for more info.
     1: byte
     2: short

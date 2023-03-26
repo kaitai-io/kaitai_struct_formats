@@ -108,10 +108,12 @@ seq:
 types:
   bitmap:
     doc: |
-      Replace with an opaque type if you care about the pixels.
-      You can look at an example of a JavaScript implementation: https://github.com/generalmimon/bmptool/blob/master/src/Bitmap.js
+      Replace with an opaque type if you care about the pixels. You can look at
+      an example of a JavaScript implementation:
+      <https://github.com/generalmimon/bmptool/blob/master/src/Bitmap.js>
 
-      There is a proposal for adding bitmap data type to Kaitai Struct: https://github.com/kaitai-io/kaitai_struct/issues/188
+      There is a proposal for adding bitmap data type to Kaitai Struct:
+      <https://github.com/kaitai-io/kaitai_struct/issues/188>
   file_header:
     -orig-id: BITMAPFILEHEADER
     doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/wingdi/ns-wingdi-bitmapfileheader
