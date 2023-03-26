@@ -57,6 +57,6 @@ enums:
     0x1e53: rgb332
     0xb895: rgb16c
     0x7daa: black_white
-    0x4952: indexed_24
-    0x4947: indexed_16
-    0x4942: indexed_8
+    0x4952: indexed_rgb888
+    0x4947: indexed_rgb565
+    0x4942: indexed_rgb332
