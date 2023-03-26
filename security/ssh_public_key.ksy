@@ -13,7 +13,7 @@ doc: |
   This format spec deals with this internal binary format (called "blob" in
   openssh sources) only. Buffer is expected to be raw binary and not base64-d.
   Implementation closely follows code in OpenSSH.
-doc-ref: 'https://github.com/openssh/openssh-portable/blob/master/sshkey.c#L1970'
+doc-ref: 'https://github.com/openssh/openssh-portable/blob/b4d4eda6/sshkey.c#L1970'
 seq:
   - id: key_name
     type: cstring
@@ -27,7 +27,7 @@ seq:
         '"ssh-dss"': key_dsa
 types:
   key_rsa:
-    doc-ref: 'https://github.com/openssh/openssh-portable/blob/master/sshkey.c#L2011-L2028'
+    doc-ref: 'https://github.com/openssh/openssh-portable/blob/b4d4eda6/sshkey.c#L2011-L2028'
     seq:
       - id: rsa_e
         type: bignum2
@@ -43,14 +43,14 @@ types:
         value: rsa_n.length_in_bits
         doc: Key length in bits
   key_ecdsa:
-    doc-ref: 'https://github.com/openssh/openssh-portable/blob/master/sshkey.c#L2060-L2103'
+    doc-ref: 'https://github.com/openssh/openssh-portable/blob/b4d4eda6/sshkey.c#L2060-L2103'
     seq:
       - id: curve_name
         type: cstring
       - id: ec
         type: elliptic_curve
   key_ed25519:
-    doc-ref: 'https://github.com/openssh/openssh-portable/blob/master/sshkey.c#L2111-L2124'
+    doc-ref: 'https://github.com/openssh/openssh-portable/blob/b4d4eda6/sshkey.c#L2111-L2124'
     seq:
       - id: len_pk
         type: u4
@@ -58,7 +58,7 @@ types:
       - id: pk
         size: len_pk
   key_dsa:
-    doc-ref: 'https://github.com/openssh/openssh-portable/blob/master/sshkey.c#L2036-L2051'
+    doc-ref: 'https://github.com/openssh/openssh-portable/blob/b4d4eda6/sshkey.c#L2036-L2051'
     seq:
       - id: dsa_p
         type: bignum2
@@ -73,7 +73,7 @@ types:
       A integer-prefixed string designed to be read using `sshbuf_get_cstring`
       and written by `sshbuf_put_cstring` routines in ssh sources. Name is an
       obscure misnomer, as typically "C string" means a null-terminated string.
-    doc-ref: 'https://github.com/openssh/openssh-portable/blob/master/sshbuf-getput-basic.c#L181'
+    doc-ref: 'https://github.com/openssh/openssh-portable/blob/b4d4eda6/sshbuf-getput-basic.c#L181'
     -webide-representation: '{value}'
     seq:
       - id: len
@@ -92,8 +92,8 @@ types:
       * sshbuf_put_bignum2
       * sshbuf_get_bignum2_bytes_direct
     doc-ref: |
-      https://github.com/openssh/openssh-portable/blob/master/sshbuf-getput-crypto.c#L35
-      https://github.com/openssh/openssh-portable/blob/master/sshbuf-getput-basic.c#L431
+      https://github.com/openssh/openssh-portable/blob/b4d4eda6/sshbuf-getput-crypto.c#L35
+      https://github.com/openssh/openssh-portable/blob/b4d4eda6/sshbuf-getput-basic.c#L431
     seq:
       - id: len
         type: u4
@@ -113,8 +113,8 @@ types:
       * sshbuf_get_ec
       * get_ec
     doc-ref: |
-      https://github.com/openssh/openssh-portable/blob/master/sshbuf-getput-crypto.c#L90
-      https://github.com/openssh/openssh-portable/blob/master/sshbuf-getput-crypto.c#L76
+      https://github.com/openssh/openssh-portable/blob/b4d4eda6/sshbuf-getput-crypto.c#L90
+      https://github.com/openssh/openssh-portable/blob/b4d4eda6/sshbuf-getput-crypto.c#L76
     seq:
       - id: len
         type: u4
