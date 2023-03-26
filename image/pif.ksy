@@ -5,6 +5,7 @@ meta:
   license: LGPL-2.1
   ks-version: 0.9
   endian: le
+  bit-endian: le
 doc-ref: https://github.com/gfcwfzkm/PIF-Image-Format/blob/cc256d5/Specification/PIF%20Format%20Specification.pdf
 seq:
   - id: file_header
@@ -13,6 +14,8 @@ seq:
     type: information_header
   - id: color_table
     size: info_header.len_color_table
+    type: color_table_data
+    if: info_header.uses_indexed_mode
   - id: image_data
     size: info_header.len_image_data
 types:
@@ -29,8 +32,33 @@ types:
       - id: image_type
         type: u2
         enum: image_type
+        valid:
+          any-of:
+            - image_type::rgb888
+            - image_type::rgb565
+            - image_type::rgb332
+            - image_type::rgb16c
+            - image_type::black_white
+            - image_type::indexed_rgb888
+            - image_type::indexed_rgb565
+            - image_type::indexed_rgb332
       - id: bits_per_pixel
         type: u2
+        valid:
+          expr: |
+            image_type == image_type::rgb888 ? _ == 24 :
+            image_type == image_type::rgb565 ? _ == 16 :
+            image_type == image_type::rgb332 ? _ == 8 :
+            image_type == image_type::rgb16c ? _ == 4 :
+            image_type == image_type::black_white ? _ == 1 :
+            uses_indexed_mode ? _ <= 8 :
+            true
+          # ^ shouldn't get there (all cases have been covered before)
+        doc: |
+          See <https://github.com/gfcwfzkm/PIF-Image-Format/blob/cc256d5/Specification/PIF%20Format%20Specification.pdf>:
+
+          > Bits per Pixel: Bit size that each Pixel occupies. Bit size for an
+          > Indexed Image cannot go beyond 8 bits.
       - id: width
         type: u2
       - id: height
@@ -39,6 +67,21 @@ types:
         type: u4
       - id: len_color_table
         type: u2
+        valid:
+          min: 'uses_indexed_mode ? len_color_table_entry * 1 : 0'
+          max: 'uses_indexed_mode ? len_color_table_entry * (1 << bits_per_pixel) : 0'
+        doc: |
+          See <https://github.com/gfcwfzkm/PIF-Image-Format/blob/cc256d5/Specification/PIF%20Format%20Specification.pdf>:
+
+          > Color Table Size: (...), only used in Indexed mode, otherwise zero.
+          ---
+          > **Note**: The presence of the Color Table is mandatory when Bits per
+          > Pixel <= 8, unless Image Type states RGB332, RGB16C or B/W
+          ---
+          > **Color Table** (semi-optional)
+          >
+          > (...) The amount of Colors has to be same or less than [Bits per
+          > Pixel] allow, otherwise the image is invalid.
       - id: compression
         type: u2
         enum: compression_type
@@ -46,6 +89,29 @@ types:
           any-of:
             - compression_type::none
             - compression_type::rle
+    instances:
+      len_color_table_entry:
+        value: |
+          image_type == image_type::indexed_rgb888 ? 3 :
+          image_type == image_type::indexed_rgb565 ? 2 :
+          image_type == image_type::indexed_rgb332 ? 1 :
+          0
+      uses_indexed_mode:
+        value: len_color_table_entry != 0
+      num_color_table_entries:
+        value: len_color_table / len_color_table_entry
+        if: uses_indexed_mode
+  color_table_data:
+    seq:
+      - id: entries
+        type:
+          switch-on: _root.info_header.image_type
+          cases:
+            image_type::indexed_rgb888: b24
+            image_type::indexed_rgb565: b16
+            image_type::indexed_rgb332: b8
+        repeat: expr
+        repeat-expr: _root.info_header.num_color_table_entries
 enums:
   image_type:
     0x433c: rgb888
