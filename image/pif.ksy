@@ -13,8 +13,8 @@ seq:
     type: information_header
   - id: color_table
     size: information_header.len_color_table
-  - id: data
-    size: information_header.len_image
+  - id: image_data
+    size: information_header.len_image_data
 types:
   header:
     seq:
@@ -22,7 +22,7 @@ types:
         contents: ["PIF", 0x00]
       - id: len_file
         type: u4
-      - id: ofs_pixel_array
+      - id: ofs_image_data
         type: u4
   information_header:
     seq:
@@ -35,7 +35,7 @@ types:
         type: u2
       - id: height
         type: u2
-      - id: len_image
+      - id: len_image_data
         type: u4
       - id: len_color_table
         type: u2
