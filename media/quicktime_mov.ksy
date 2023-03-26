@@ -295,6 +295,7 @@ enums:
     0x63756438: cud8
     0x63757664: cuvd
     0x63766964: cvid
+    0x63767663: cvvc
     0x63777674: cwvt
     0x64613061: da0a
     0x64613062: da0b
@@ -344,6 +345,11 @@ enums:
     0x69666875: ifhu
     0x69666872: ifhr
     0x69666161: ifaa
+    0x69666173: ifas
+    0x69666168: ifah
+    0x69666169: ifai
+    0x69666175: ifau
+    0x69666176: ifav
     0x6966726d: ifrm
     0x696d3169: im1i
     0x696d3174: im1t
@@ -442,6 +448,7 @@ enums:
     0x73696d73: sims
     0x73697378: sisx
     0x73697469: siti
+    0x73697476: sitv
     0x736c6831: slh1
     0x736c6832: slh2
     0x736c6833: slh3
@@ -451,6 +458,12 @@ enums:
     0x75687669: uhvi
     0x756e6966: unif
     0x75767675: uvvu
+    0x76336d70: v3mp
+    0x76336d74: v3mt
+    0x76336e74: v3nt
+    0x76337374: v3st
+    0x76766369: vvci
+    0x76766f69: vvoi
     0x76777074: vwpt
     0x58415643: xavc
     0x79743420: yt4
