@@ -39,13 +39,17 @@ types:
         type: u4
       - id: len_color_table
         type: u2
-      - id: compressed
+      - id: compression
         type: u2
+        enum: compression_type
         valid:
-          any-of: [0, 0x7dde]
-    instances:
-      is_compressed:
-        value: compressed == 0x7dde
+          any-of:
+            - compression_type::none
+            - compression_type::rle
+    enums:
+      compression_type:
+        0: none
+        0x7dde: rle
 enums:
   image_type:
     0x433c: rgb888
