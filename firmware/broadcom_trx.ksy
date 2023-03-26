@@ -38,7 +38,7 @@ doc: |
   trx files not necessarily contain all these headers.
 
 doc-ref:
-  - https://github.com/openwrt/openwrt/blob/3f5619f/tools/firmware-utils/src/trx.c
+  - https://github.com/openwrt/firmware-utils/blob/a2c80c5/src/trx.c
   - https://web.archive.org/web/20190127154419/https://openwrt.org/docs/techref/header
   - https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/mtd/partitions/brcm,trx.txt
 

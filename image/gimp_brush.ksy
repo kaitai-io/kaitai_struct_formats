@@ -21,7 +21,7 @@ doc: |
   into GIMP for use in the paint tools by copying them into one of the Brush Folders -
   select **Edit** > **Preferences** in the menu bar, expand the **Folders** section
   and choose **Brushes** to see the recognized Brush Folders or to add new ones.
-doc-ref: https://gitlab.gnome.org/GNOME/gimp/-/raw/4416313/devel-docs/gbr.txt
+doc-ref: https://github.com/GNOME/gimp/blob/441631322b/devel-docs/gbr.txt
 seq:
   - id: len_header
     type: u4
@@ -40,16 +40,16 @@ types:
           min: 1
           max: 10000
         doc-ref:
-          - https://github.com/GNOME/gimp/blob/9b6d59f/app/core/gimpbrush-load.c#L170 # valid/min
-          - https://github.com/GNOME/gimp/blob/9b6d59f/app/core/gimpbrush-header.h#L24 # valid/max
+          - https://github.com/GNOME/gimp/blob/441631322b/app/core/gimpbrush-load.c#L170 # valid/min
+          - https://github.com/GNOME/gimp/blob/441631322b/app/core/gimpbrush-header.h#L24 # valid/max
       - id: height
         type: u4
         valid:
           min: 1
           max: 10000
         doc-ref:
-          - https://github.com/GNOME/gimp/blob/9b6d59f/app/core/gimpbrush-load.c#L177 # valid/min
-          - https://github.com/GNOME/gimp/blob/9b6d59f/app/core/gimpbrush-header.h#L24 # valid/max
+          - https://github.com/GNOME/gimp/blob/441631322b/app/core/gimpbrush-load.c#L177 # valid/min
+          - https://github.com/GNOME/gimp/blob/441631322b/app/core/gimpbrush-header.h#L24 # valid/max
       - id: bytes_per_pixel
         type: u4
         enum: color_depth

@@ -227,7 +227,7 @@ types:
 
       - `pickle.Unpickler` objects default to ASCII, which can be overriden
       - `pickletools.dis` uses latin1, and cannot be overriden
-    doc-ref: https://github.com/python/cpython/blob/bb8071a4/Lib/pickle.py#L486-L495
+    doc-ref: https://github.com/python/cpython/blob/bb8071a4cae/Lib/pickle.py#L486-L495
     seq:
       - id: len
         type: u1
@@ -243,7 +243,7 @@ types:
       during unpickling.
 
       See the documentation for `string1` for further detail about encodings.
-    doc-ref: https://github.com/python/cpython/blob/bb8071a4/Lib/pickle.py#L486-L495
+    doc-ref: https://github.com/python/cpython/blob/bb8071a4cae/Lib/pickle.py#L486-L495
     seq:
       - id: len
         # Not a typo, the length really is a signed integer
