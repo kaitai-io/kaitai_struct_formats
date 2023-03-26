@@ -46,10 +46,6 @@ types:
           any-of:
             - compression_type::none
             - compression_type::rle
-    enums:
-      compression_type:
-        0: none
-        0x7dde: rle
 enums:
   image_type:
     0x433c: rgb888
@@ -60,3 +56,6 @@ enums:
     0x4952: indexed_rgb888
     0x4947: indexed_rgb565
     0x4942: indexed_rgb332
+  compression_type:
+    0x0000: none
+    0x7dde: rle
