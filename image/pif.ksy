@@ -16,7 +16,9 @@ seq:
     size: info_header.len_color_table
     type: color_table_data
     if: info_header.uses_indexed_mode
-  - id: image_data
+instances:
+  image_data:
+    pos: file_header.ofs_image_data
     size: info_header.len_image_data
 types:
   pif_header:
@@ -27,6 +29,12 @@ types:
         type: u4
       - id: ofs_image_data
         type: u4
+        valid:
+          min: ofs_image_data_min
+          max: len_file
+    instances:
+      ofs_image_data_min:
+        value: _root.file_header._sizeof + _root.info_header._sizeof
   information_header:
     seq:
       - id: image_type
@@ -65,11 +73,18 @@ types:
         type: u2
       - id: len_image_data
         type: u4
+        valid:
+          max: _root.file_header.len_file - _root.file_header.ofs_image_data
       - id: len_color_table
         type: u2
         valid:
           min: 'uses_indexed_mode ? len_color_table_entry * 1 : 0'
-          max: 'uses_indexed_mode ? len_color_table_entry * (1 << bits_per_pixel) : 0'
+          max: |
+            uses_indexed_mode ? (
+              len_color_table_max < len_color_table_full
+                ? len_color_table_max
+                : len_color_table_full
+            ) : 0
         doc: |
           See <https://github.com/gfcwfzkm/PIF-Image-Format/blob/cc256d5/Specification/PIF%20Format%20Specification.pdf>:
 
@@ -96,6 +111,10 @@ types:
           image_type == image_type::indexed_rgb565 ? 2 :
           image_type == image_type::indexed_rgb332 ? 1 :
           0
+      len_color_table_full:
+        value: len_color_table_entry * (1 << bits_per_pixel)
+      len_color_table_max:
+        value: _root.file_header.ofs_image_data - _root.file_header.ofs_image_data_min
       uses_indexed_mode:
         value: len_color_table_entry != 0
       num_color_table_entries:
