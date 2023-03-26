@@ -51,8 +51,23 @@ enums:
     0x433c: rgb888
     0xe5c5: rgb565
     0x1e53: rgb332
-    0xb895: rgb16c
-    0x7daa: black_white
+    0xb895:
+      id: rgb16c
+      doc: |
+        Formula to convert the 4-bit color value in RGB16C mode to RGB values
+        (each in the range from 0 to 255):
+
+        ```
+        red   = 170 * ((color_value & 0b0100) >> 2) + 85 * ((color_value & 0b1000) >> 3)
+        green = 170 * ((color_value & 0b0010) >> 1) + 85 * ((color_value & 0b1000) >> 3)
+        blue  = 170 * ((color_value & 0b0001) >> 0) + 85 * ((color_value & 0b1000) >> 3)
+        ```
+
+        See also <https://en.wikipedia.org/wiki/Color_Graphics_Adapter#Color_palette>
+    0x7daa:
+      id: black_white
+      doc: '0: black, 1: white'
+      doc-ref: https://github.com/gfcwfzkm/PIF-Image-Format/blob/cc256d5/C%20Library/pifdec.c#L233
     0x4952: indexed_rgb888
     0x4947: indexed_rgb565
     0x4942: indexed_rgb332
