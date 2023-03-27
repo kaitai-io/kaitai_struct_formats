@@ -2,11 +2,21 @@ meta:
   id: pif
   title: Portable Image Format
   file-extension: pif
+  xref:
+    justsolve: PIF_(Portable_Image_Format)
   license: LGPL-2.1
   ks-version: 0.9
   endian: le
   bit-endian: le
-doc-ref: https://github.com/gfcwfzkm/PIF-Image-Format/blob/cc256d5/Specification/PIF%20Format%20Specification.pdf
+doc: |
+  The Portable Image Format (PIF) is a basic, bitmap-like image format with the
+  focus on ease of use (implementation) and small size for embedded
+  applications.
+
+  See <https://github.com/gfcwfzkm/PIF-Image-Format> for more info.
+doc-ref:
+  - https://github.com/gfcwfzkm/PIF-Image-Format/blob/cc256d5/Specification/PIF%20Format%20Specification.pdf
+  - https://github.com/gfcwfzkm/PIF-Image-Format/blob/cc256d5/C%20Library/pifdec.c#L300
 seq:
   - id: file_header
     type: pif_header
