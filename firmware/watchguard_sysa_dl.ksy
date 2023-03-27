@@ -102,7 +102,7 @@ types:
     seq:
       - id: info
         size-eos: true
-        type: strz
+        type: str
         encoding: ASCII
 
   hmac_data:
@@ -124,12 +124,12 @@ types:
 
       - id: unknown_dword
         type: u4
-      - id: data_size
+      - id: len_compressed_wpkg
         type: u4
 
       - id: compressed_wpkg
-        size: data_size
-        doc: compressed_wpkg is bzip2 compresed
+        size: len_compressed_wpkg
+        doc: compressed_wpkg is tar.bz2 compresed
 
 enums:
   magic:
