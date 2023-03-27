@@ -37,6 +37,8 @@ types:
         contents: ["PIF", 0x00]
       - id: len_file
         type: u4
+        valid:
+          min: ofs_image_data_min
       - id: ofs_image_data
         type: u4
         valid:
