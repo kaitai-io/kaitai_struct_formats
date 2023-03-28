@@ -5,7 +5,7 @@ meta:
   encoding: UTF-8
   endian: le
 doc: |
-  Resources file found in CPB firmware archives, mostly used on older CoolPad
+  Resource file found in CPB firmware archives, mostly used on older CoolPad
   phones and/or tablets. The only observed files are called "ResPack.cfg".
 seq:
   - id: header
