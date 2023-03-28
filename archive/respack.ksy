@@ -12,7 +12,7 @@ seq:
     type: header
   - id: json
     size: header.len_json
-    type: strz
+    type: str
 types:
   header:
     seq:
