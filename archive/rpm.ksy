@@ -23,8 +23,8 @@ doc: |
   RPM file format, as well as a currently abandoned fork (rpm5). These formats
   are not covered by this specification.
 doc-ref:
-  - https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/format.md
-  - https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md
+  - https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/format.md
+  - https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md
   - https://refspecs.linuxbase.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic/pkgformat.html
   - http://ftp.rpm.org/max-rpm/
 seq:
@@ -124,7 +124,7 @@ types:
         valid:
           min: 3
           max: 4
-        doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/lib/rpmlead.c#L102
+        doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/lib/rpmlead.c#L102
       - id: minor
         type: u1
   header:
@@ -274,7 +274,7 @@ enums:
     0: binary
     1: source
 
-  # these come (mostly) from <https://github.com/rpm-software-management/rpm/blob/07f1d313/rpmrc.in#L164>
+  # these come (mostly) from <https://github.com/rpm-software-management/rpm/blob/afad3167/rpmrc.in#L170>
   # (see <https://ftp.osuosl.org/pub/rpm/max-rpm/s1-rpm-multi-build-install-detection.html#S3-RPM-MULTI-XXX-CANON>
   # for `arch_canon` entry explanation)
   #
@@ -292,7 +292,7 @@ enums:
       doc-ref:
         - https://github.com/eclipse/packager/blob/51ccdd3/rpm/src/main/java/org/eclipse/packager/rpm/Architecture.java#L24
         - https://github.com/file/file/blob/9b2538d/magic/Magdir/rpm#L14
-        - https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L174-L183
+        - https://github.com/rpm-software-management/rpm/blob/afad3167/rpmrc.in#L188-L197
     3: sparc
     4: mips
     5: ppc
@@ -303,7 +303,7 @@ enums:
       doc: SGI Inhouse Processors (IP)
       doc-ref:
         - https://github.com/file/file/blob/9b2538d/magic/Magdir/rpm#L19
-        - https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L205
+        - https://github.com/rpm-software-management/rpm/blob/afad3167/rpmrc.in#L219
     8: rs6000
     9: ia64
     10:
@@ -318,7 +318,7 @@ enums:
       -orig-id: m68kmint
       doc-ref:
         - https://github.com/craigwblake/redline/blob/15afff5/src/main/java/org/redline_rpm/header/Architecture.java#L18
-        - https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L226-L233
+        - https://github.com/rpm-software-management/rpm/blob/afad3167/rpmrc.in#L240-L247
     14: s390
     15: s390x
     16: ppc64
@@ -328,11 +328,11 @@ enums:
     20:
       id: mips_r6
       -orig-id: mipsr6
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L252-L253
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/rpmrc.in#L266-L267
     21:
       id: mips64_r6
       -orig-id: mips64r6
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L254-L255
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/rpmrc.in#L268-L269
     22: riscv
     23: loongarch64
     255:
@@ -341,9 +341,9 @@ enums:
       doc: can be installed on any architecture
       doc-ref:
         - https://github.com/file/file/blob/9b2538d/magic/Magdir/rpm#L31
-        - https://github.com/rpm-software-management/rpm/blob/911448f2/lib/rpmrc.c#L1466
+        - https://github.com/rpm-software-management/rpm/blob/afad3167/lib/rpmrc.c#L1548
   operating_systems:
-    # these come from <https://github.com/rpm-software-management/rpm/blob/911448f2/rpmrc.in#L261>
+    # these come from <https://github.com/rpm-software-management/rpm/blob/afad3167/rpmrc.in#L277>
     # in practice it will almost always be 1
     1: linux
     2: irix
@@ -361,10 +361,10 @@ enums:
 
         Moreover, this value is actually used in practice, see this sample file:
         <https://github.com/craigwblake/redline/blob/15afff5/src/test/resources/rpm-3-1.0-1.somearch.rpm>
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/lib/rpmrc.c#L1466
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/lib/rpmrc.c#L1548
 
   signature_tags:
-    # Tags from [lib/rpmtag.h](https://github.com/rpm-software-management/rpm/blob/911448f2/lib/rpmtag.h#L412).
+    # Tags from [lib/rpmtag.h](https://github.com/rpm-software-management/rpm/blob/afad3167/include/rpm/rpmtag.h#L423).
     # the first three are shared with header_tags
     62:
       id: signatures
@@ -384,9 +384,9 @@ enums:
       id: bad_sha1_2_obsolete
       -orig-id: RPMSIGTAG_BADSHA1_2
     # 266:
-    #   id: pubkeys_obsolete
+    #   id: pubkeys_internal
     #   -orig-id: RPMTAG_PUBKEYS
-    #   doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete
+    #   doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md#internal--special
     267:
       id: dsa
       -orig-id: RPMSIGTAG_DSA
@@ -454,7 +454,7 @@ enums:
       -orig-id: RPMSIGTAG_RESERVEDSPACE
       doc: Space reserved for signatures
   header_tags:
-    # Tags from [lib/rpmtag.h](https://github.com/rpm-software-management/rpm/blob/afad3167/include/rpm/rpmtag.h).
+    # Tags from [include/rpm/rpmtag.h](https://github.com/rpm-software-management/rpm/blob/afad3167/include/rpm/rpmtag.h).
     # This includes (almost) all tags. Some have `_unimplemented`, `_internal`
     # or `_obsolete` suffix (if more than one applies, the first applicable in
     # this order is used).
@@ -525,11 +525,11 @@ enums:
     1012:
       id: gif_obsolete
       -orig-id: RPMTAG_GIF
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md#deprecated--obsolete
     1013:
       id: xpm_obsolete
       -orig-id: RPMTAG_XPM
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md#deprecated--obsolete
     1014:
       id: license
       -orig-id: RPMTAG_LICENSE
@@ -590,7 +590,7 @@ enums:
     1027:
       id: old_file_names_obsolete
       -orig-id: RPMTAG_OLDFILENAMES
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md#deprecated--obsolete
     1028:
       id: file_sizes
       -orig-id: RPMTAG_FILESIZES
@@ -655,7 +655,7 @@ enums:
     1043:
       id: icon_obsolete
       -orig-id: RPMTAG_ICON
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md#deprecated--obsolete
     1044:
       id: source_rpm
       -orig-id: RPMTAG_SOURCERPM
@@ -941,7 +941,7 @@ enums:
     1129:
       id: remove_tid_obsolete
       -orig-id: RPMTAG_REMOVETID
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md#deprecated--obsolete
     1130:
       id: sha1_rhn_internal
       -orig-id: RPMTAG_SHA1RHN
@@ -999,15 +999,15 @@ enums:
     1147:
       id: file_contexts_obsolete
       -orig-id: RPMTAG_FILECONTEXTS
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md#deprecated--obsolete
     1148:
       id: fs_contexts_obsolete
       -orig-id: RPMTAG_FSCONTEXTS
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md#deprecated--obsolete
     1149:
       id: re_contexts_obsolete
       -orig-id: RPMTAG_RECONTEXTS
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/911448f2/doc/manual/tags.md#deprecated--obsolete
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md#deprecated--obsolete
     1150:
       id: policies
       -orig-id: RPMTAG_POLICIES
