@@ -230,6 +230,7 @@ types:
         type: str
         size: serial_type.len_content
         encoding: UTF-8
+        if: serial_type.is_string
 #        if: _root.text_encoding == encodings::utf_8 and serial_type.is_string
     instances:
       serial_type:
