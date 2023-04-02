@@ -114,7 +114,7 @@ types:
       - id: schema_format
         type: u4
         doc: The schema format number. Supported schema formats are 1, 2, 3, and 4.
-      - id: def_page_cache_size
+      - id: default_page_cache_size
         type: u4
         doc: Default page cache size.
       - id: largest_root_page
