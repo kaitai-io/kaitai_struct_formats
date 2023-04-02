@@ -141,13 +141,13 @@ types:
         doc: The "usable size" of a database page
       overflow_min_payload_size:
         value: ((usable_size-12)*32/255)-23
-        doc: The minimum amount of inline b-tree cell payload
+        doc: The minimum amount of payload that must be stored on the btree page before spilling is allowed
       table_max_overflow_payload_size:
         value: usable_size - 35
-        doc: The maximum amount of inline table b-tree cell payload
+        doc: The maximum amount of payload that can be stored directly on the b-tree page without spilling onto an overflow page. Value for table page
       index_max_overflow_payload_size:
         value: ((usable_size-12)*64/255)-23
-        doc: The maximum amount of inline index b-tree cell payload
+        doc: The maximum amount of payload that can be stored directly on the b-tree page without spilling onto an overflow page. Value for index page
       idx_lock_byte_page:
         value: '1073741824 / page_size'
       num_ptrmap_entries_max:
