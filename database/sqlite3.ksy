@@ -152,7 +152,7 @@ types:
         value: '1073741824 / page_size'
       num_ptrmap_entries_max:
         value: usable_size/5
-        doc: The number of ptrmap entries per ptrmap page
+        doc: The maximum number of ptrmap entries per ptrmap page
       idx_first_ptrmap_page:
         value: 'largest_root_page > 0 ? 1 : 0'
         doc: The index (0-based) of the first ptrmap page
