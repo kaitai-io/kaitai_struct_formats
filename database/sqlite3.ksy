@@ -333,7 +333,7 @@ types:
         # 15: string_utf16_be
         value: 'raw_value.value >= 12 ? ((raw_value.value % 2 == 0) ? 12 : 13 + _root.header.text_encoding - 1) : raw_value.value'
         enum: serial
-      variable_size:
+      len_blob_string:
         value: '(raw_value.value % 2 == 0) ? (raw_value.value - 12) / 2 : (raw_value.value - 13) / 2'
         if: raw_value.value >= 12
   value:
@@ -355,11 +355,11 @@ types:
             serial::ieee754_64: f8
             serial::integer_0: int_0
             serial::integer_1: int_1
-            serial::blob: blob(serial_type.variable_size)
+            serial::blob: blob(serial_type.len_blob_string)
             # Workaround for string encoding:
-            serial::string_utf8: string_utf8(serial_type.variable_size)
-            serial::string_utf16_le: string_utf16_le(serial_type.variable_size)
-            serial::string_utf16_be: string_utf16_be(serial_type.variable_size)
+            serial::string_utf8: string_utf8(serial_type.len_blob_string)
+            serial::string_utf16_le: string_utf16_le(serial_type.len_blob_string)
+            serial::string_utf16_be: string_utf16_be(serial_type.len_blob_string)
   null_value:
     -webide-representation: "NULL"
     seq: []
