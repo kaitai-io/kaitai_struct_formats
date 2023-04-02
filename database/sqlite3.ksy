@@ -327,7 +327,7 @@ types:
         value: 'raw_value.value >= 12 ? ((raw_value.value % 2 == 0) ? 12 : 13 + _root.header.text_encoding - 1) : raw_value.value'
         enum: serial
       variable_size:
-        value: (raw_value.value - 12) / 2
+        value: '(raw_value.value % 2 == 0) ? (raw_value.value - 12) / 2 : (raw_value.value - 13) / 2'
         if: raw_value.value >= 12
   value:
     params:
