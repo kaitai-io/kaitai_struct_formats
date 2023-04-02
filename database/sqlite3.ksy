@@ -54,7 +54,7 @@ types:
         pos: ofs_body
         size: _root.header.page_size
         type:
-          switch-on: '(page_index == _root.header.idx_lock_byte_page ? 0 : page_index >= _root.header.idx_first_ptrmap_page and page_index <= _root.header.last_ptrmap_page_index ? 1 : 2)'
+          switch-on: '(page_index == _root.header.idx_lock_byte_page ? 0 : page_index >= _root.header.idx_first_ptrmap_page and page_index <= _root.header.idx_last_ptrmap_page ? 1 : 2)'
           cases:
             0: lock_byte_page(page_number)
             1: ptrmap_page(page_number)
@@ -159,7 +159,7 @@ types:
       num_ptrmap_pages:
         value: 'idx_first_ptrmap_page > 0 ? (num_pages / num_ptrmap_entries_max) + 1 : 0'
         doc: The number of ptrmap pages in the database
-      last_ptrmap_page_index:
+      idx_last_ptrmap_page:
         value: 'idx_first_ptrmap_page + num_ptrmap_pages - (idx_first_ptrmap_page + num_ptrmap_pages >= idx_lock_byte_page ? 0 : 1)'
         doc: The index (0-based) of the last ptrmap page (inclusive)
   lock_byte_page:
