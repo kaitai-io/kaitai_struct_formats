@@ -511,3 +511,20 @@ enums:
     13: string_utf8
     14: string_utf16_le
     15: string_utf16_be
+  serial_type_size:
+    0: 0
+    1: 1
+    2: 2
+    3: 3
+    4: 4
+    5: 6
+    6: 8
+    7: 8
+    8: 0
+    9: 0
+    # -1 means variable size
+    10: -1 # internal
+    11: -1 # internal
+    # blob and string: size is stored in serial_type.len_blob_string
+    12: -1 # blob
+    13: -1 # string
