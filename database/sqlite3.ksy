@@ -50,6 +50,12 @@ instances:
     size: header.page_size
     repeat: expr
     repeat-expr: header.num_pages
+    doc: |
+      "if false" is a workaround for lazy parsing of db.pages.
+      the main parser will parse only the first page as db.header
+      and the user is responsible to parse any further pages.
+      TODO how exactly? add example code
+    if: false
 types:
   database_header:
     seq:
