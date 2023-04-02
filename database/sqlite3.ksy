@@ -150,14 +150,14 @@ types:
         doc: The maximum amount of inline index b-tree cell payload
       lock_byte_page_index:
         value: '1073741824 / page_size'
-      ptrmap_max_num_entries:
+      num_ptrmap_entries_max:
         value: usable_size/5
         doc: The number of ptrmap entries per ptrmap page
       first_ptrmap_page_index:
         value: 'largest_root_page > 0 ? 1 : 0'
         doc: The index (0-based) of the first ptrmap page
       num_ptrmap_pages:
-        value: 'first_ptrmap_page_index > 0 ? (num_pages / ptrmap_max_num_entries) + 1 : 0'
+        value: 'first_ptrmap_page_index > 0 ? (num_pages / num_ptrmap_entries_max) + 1 : 0'
         doc: The number of ptrmap pages in the database
       last_ptrmap_page_index:
         value: 'first_ptrmap_page_index + num_ptrmap_pages - (first_ptrmap_page_index + num_ptrmap_pages >= lock_byte_page_index ? 0 : 1)'
@@ -185,9 +185,9 @@ types:
         repeat-expr: num_entries
     instances:
       first_page:
-        value: '3 + (_root.header.ptrmap_max_num_entries * (page_number - 2))'
+        value: '3 + (_root.header.num_ptrmap_entries_max * (page_number - 2))'
       last_page:
-        value: 'first_page + _root.header.ptrmap_max_num_entries - 1'
+        value: 'first_page + _root.header.num_ptrmap_entries_max - 1'
       num_entries:
         value: '(last_page > _root.header.num_pages ? _root.header.num_pages : last_page) - first_page + 1'
   ptrmap_entry:
