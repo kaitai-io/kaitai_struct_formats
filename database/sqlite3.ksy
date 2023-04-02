@@ -54,7 +54,7 @@ types:
         pos: ofs_body
         size: _root.header.page_size
         type:
-          switch-on: '(page_index == _root.header.lock_byte_page_index ? 0 : page_index >= _root.header.idx_first_ptrmap_page and page_index <= _root.header.last_ptrmap_page_index ? 1 : 2)'
+          switch-on: '(page_index == _root.header.idx_lock_byte_page ? 0 : page_index >= _root.header.idx_first_ptrmap_page and page_index <= _root.header.last_ptrmap_page_index ? 1 : 2)'
           cases:
             0: lock_byte_page(page_number)
             1: ptrmap_page(page_number)
@@ -148,7 +148,7 @@ types:
       index_max_overflow_payload_size:
         value: ((usable_size-12)*64/255)-23
         doc: The maximum amount of inline index b-tree cell payload
-      lock_byte_page_index:
+      idx_lock_byte_page:
         value: '1073741824 / page_size'
       num_ptrmap_entries_max:
         value: usable_size/5
@@ -160,7 +160,7 @@ types:
         value: 'idx_first_ptrmap_page > 0 ? (num_pages / num_ptrmap_entries_max) + 1 : 0'
         doc: The number of ptrmap pages in the database
       last_ptrmap_page_index:
-        value: 'idx_first_ptrmap_page + num_ptrmap_pages - (idx_first_ptrmap_page + num_ptrmap_pages >= lock_byte_page_index ? 0 : 1)'
+        value: 'idx_first_ptrmap_page + num_ptrmap_pages - (idx_first_ptrmap_page + num_ptrmap_pages >= idx_lock_byte_page ? 0 : 1)'
         doc: The index (0-based) of the last ptrmap page (inclusive)
   lock_byte_page:
     params:
