@@ -37,31 +37,20 @@ seq:
     type: database_header
 instances:
   pages:
-    type: page(_index + 1, header.page_size * _index)
+    type:
+      switch-on: '(_index == header.lock_byte_page_index ? 0 : _index >= header.first_ptrmap_page_index and _index <= header.last_ptrmap_page_index ? 1 : 2)'
+      cases:
+        0: lock_byte_page(_index + 1)
+        1: ptrmap_page(_index + 1)
+        # TODO: Free pages and cell overflow pages are incorrectly interpreted as btree pages
+        # This is unfortunate, but unavoidable since there's no way to recognize these types at
+        # this point in the parser.
+        2: btree_page(_index + 1)
+    pos: 0
+    size: header.page_size
     repeat: expr
     repeat-expr: header.num_pages
 types:
-  page:
-    params:
-      - id: page_number
-        type: s4
-      - id: ofs_body
-        type: s4
-    instances:
-      page_index:
-        value: 'page_number - 1'
-      body:
-        pos: ofs_body
-        size: _root.header.page_size
-        type:
-          switch-on: '(page_index == _root.header.idx_lock_byte_page ? 0 : page_index >= _root.header.idx_first_ptrmap_page and page_index <= _root.header.idx_last_ptrmap_page ? 1 : 2)'
-          cases:
-            0: lock_byte_page(page_number)
-            1: ptrmap_page(page_number)
-            # TODO: Free pages and cell overflow pages are incorrectly interpreted as btree pages
-            # This is unfortunate, but unavoidable since there's no way to recognize these types at
-            # this point in the parser.
-            2: btree_page(page_number)
   database_header:
     seq:
       - id: magic
