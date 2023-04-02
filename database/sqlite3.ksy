@@ -38,7 +38,7 @@ seq:
 instances:
   pages:
     type:
-      switch-on: '(_index == header.idx_lock_byte_page ? 0 : _index >= header.idx_first_ptrmap_page and _index <= header.last_ptrmap_page_index ? 1 : 2)'
+      switch-on: '(_index == header.idx_lock_byte_page ? 0 : _index >= header.idx_first_ptrmap_page and _index <= header.idx_last_ptrmap_page ? 1 : 2)'
       cases:
         0: lock_byte_page(_index + 1)
         1: ptrmap_page(_index + 1)
