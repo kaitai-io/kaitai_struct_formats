@@ -267,14 +267,22 @@ types:
     seq:
       - id: payload_size
         type: vlq_base128_be
+        doc: |
+          total number of bytes of payload,
+          including any overflow
       - id: row_id
         type: vlq_base128_be
+        doc: |
+          integer key, a.k.a. "rowid"
       - id: payload
         type:
           switch-on: '(payload_size.value > _root.header.table_max_overflow_payload_size ? 1 : 0)'
           cases:
             0: record
             1: overflow_record(payload_size.value, _root.header.table_max_overflow_payload_size)
+        doc: |
+          The initial portion of the payload
+          that does not spill to overflow pages.
   table_interior_cell:
     doc-ref: 'https://www.sqlite.org/fileformat2.html#b_tree_pages'
     seq:
@@ -420,6 +428,9 @@ types:
         size: '(inline_payload_size <= overflow_payload_size_max ? inline_payload_size : _root.header.overflow_min_payload_size)'
       - id: overflow_page_number
         type: overflow_page_pointer
+        doc: |
+          page number for the first page
+          of the overflow page list
     instances:
       inline_payload_size:
         value: _root.header.overflow_min_payload_size+((payload_size-_root.header.overflow_min_payload_size)%(_root.header.usable_size-4))
