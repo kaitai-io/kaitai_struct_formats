@@ -31,7 +31,7 @@ doc: |
   and generally, they would be reached via the links starting from the
   first page. The first page is always a btree page for the implicitly
   defined `sqlite_schema` table.
-doc-ref: https://www.sqlite.org/fileformat.html
+doc-ref: https://www.sqlite.org/fileformat2.html
 seq:
   - id: header
     type: database_header
@@ -263,7 +263,7 @@ types:
             btree_page_type::index_leaf: index_leaf_cell
             btree_page_type::index_interior: index_interior_cell
   table_leaf_cell:
-    doc-ref: 'https://www.sqlite.org/fileformat.html#b_tree_pages'
+    doc-ref: 'https://www.sqlite.org/fileformat2.html#b_tree_pages'
     seq:
       - id: payload_size
         type: vlq_base128_be
@@ -276,14 +276,14 @@ types:
             0: record
             1: overflow_record(payload_size.value, _root.header.table_max_overflow_payload_size)
   table_interior_cell:
-    doc-ref: 'https://www.sqlite.org/fileformat.html#b_tree_pages'
+    doc-ref: 'https://www.sqlite.org/fileformat2.html#b_tree_pages'
     seq:
       - id: left_child_page
         type: btree_page_pointer
       - id: row_id
         type: vlq_base128_be
   index_leaf_cell:
-    doc-ref: 'https://www.sqlite.org/fileformat.html#b_tree_pages'
+    doc-ref: 'https://www.sqlite.org/fileformat2.html#b_tree_pages'
     seq:
       - id: payload_size
         type: vlq_base128_be
@@ -294,7 +294,7 @@ types:
             0: record
             1: overflow_record(payload_size.value, _root.header.index_max_overflow_payload_size)
   index_interior_cell:
-    doc-ref: 'https://www.sqlite.org/fileformat.html#b_tree_pages'
+    doc-ref: 'https://www.sqlite.org/fileformat2.html#b_tree_pages'
     seq:
       - id: left_child_page
         type: btree_page_pointer
