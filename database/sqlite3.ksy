@@ -291,7 +291,7 @@ types:
         doc: The number of fragmented free bytes within the cell content area.
       - id: right_ptr
         type: btree_page_pointer
-        if: page_type == btree_page_type::index_interior or page_type == btree_page_type::table_interior
+        if: page_type == btree_page_type::index_interior_page or page_type == btree_page_type::table_interior_page
         doc: |
           The right-most pointer. This value appears in the header of interior
           b-tree pages only and is omitted from all other pages.
@@ -319,10 +319,10 @@ types:
         type:
           switch-on: _parent.page_type
           cases:
-            btree_page_type::table_leaf: table_leaf_cell
-            btree_page_type::table_interior: table_interior_cell
-            btree_page_type::index_leaf: index_leaf_cell
-            btree_page_type::index_interior: index_interior_cell
+            btree_page_type::table_leaf_page: table_leaf_cell
+            btree_page_type::table_interior_page: table_interior_cell
+            btree_page_type::index_leaf_page: index_leaf_cell
+            btree_page_type::index_interior_page: index_interior_cell
   table_leaf_cell:
     doc-ref: 'https://www.sqlite.org/fileformat2.html#b_tree_pages'
     seq:
@@ -538,10 +538,10 @@ enums:
     1: legacy
     2: wal
   btree_page_type:
-    0x02: index_interior
-    0x05: table_interior
-    0x0a: index_leaf
-    0x0d: table_leaf
+    0x02: index_interior_page
+    0x05: table_interior_page
+    0x0a: index_leaf_page
+    0x0d: table_leaf_page
   ptrmap_page_type:
     1: root_page
     2: free_page
