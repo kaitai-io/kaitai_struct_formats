@@ -31,6 +31,20 @@ doc: |
   and generally, they would be reached via the links starting from the
   first page. The first page is always a btree page for the implicitly
   defined `sqlite_schema` table.
+
+  This works well when parsing small database files. To parse large
+  database files, see the documentation for /instances/pages.
+
+  Further documentation:
+
+  - https://www.sqlite.org/arch.html
+  - https://medium.com/the-polyglot-programmer/what-would-sqlite-look-like-if-written-in-rust-part-3-edd2eefda473
+  - https://cstack.github.io/db_tutorial/parts/part7.html
+
+  Original sources:
+
+  - https://github.com/sqlite/sqlite/blob/master/src/btree.h
+  - https://github.com/sqlite/sqlite/blob/master/src/btree.c
 doc-ref: https://www.sqlite.org/fileformat2.html
 seq:
   - id: header
@@ -51,11 +65,58 @@ instances:
     repeat: expr
     repeat-expr: header.num_pages
     doc: |
-      "if false" is a workaround for lazy parsing of db.pages.
-      the main parser will parse only the first page as db.header
-      and the user is responsible for parsing further pages.
-      TODO how exactly? add example code
-    if: false
+      This works well when parsing small database files.
+
+      problem:
+      the first access to db.pages
+      for example `db.pages[0]`
+      will loop and parse **all** pages.
+
+      To parse large database files,
+      the user should set
+      the internal cache attribute `db._m_pages`
+      so that any access to `db.pages`
+      will use the cached value in `db._m_pages`.
+
+      # import sqlite3.py generated from sqlite3.ksy
+      import parser.sqlite3 as parser_sqlite3
+      # create a lazy list class
+      # accessing db.pages[i] will call pages_list.__getitem__(i)
+      class PagesList:
+          def __init__(self, db):
+              self.db = db
+          def __len__(self):
+              return self.db.header.num_pages
+          def __getitem__(self, i):  # i is 0-based
+              db = self.db
+              header = db.header
+              if i < 0:  # -1 means last page, etc
+                  i = header.num_pages + i
+              assert (
+                  0 <= i and i < header.num_pages
+              ), f"page index is out of range: {i} is not in (0, {header.num_pages - 1})"
+              # todo: maybe cache page
+              # equality test: page_a.page_number == page_b.page_number
+              _pos = db._io.pos()
+              db._io.seek(i * header.page_size)
+              if i == header.idx_lock_byte_page:
+                  page = parser_sqlite3.Sqlite3.LockBytePage((i + 1), db._io, db, db._root)
+              elif (
+                  i >= header.idx_first_ptrmap_page and
+                  i <= header.idx_last_ptrmap_page
+              ):
+                  page = parser_sqlite3.Sqlite3.PtrmapPage((i + 1), db._io, db, db._root)
+              else:
+                  page = parser_sqlite3.Sqlite3.BtreePage((i + 1), db._io, db, db._root)
+              db._io.seek(_pos)
+              return page
+      # create a database parser
+      database = "test.db"
+      db = parser_sqlite3.Sqlite3.from_file(database)
+      # patch the internal cache attribute of db.pages
+      db._m_pages = PagesList(db)
+      # now, this will parse **only** the first page
+      page = db.pages[0]
 types:
   database_header:
     seq:
