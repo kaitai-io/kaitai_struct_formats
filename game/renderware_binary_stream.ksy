@@ -5,6 +5,7 @@ meta:
   xref:
     wikidata: Q29960668
   endian: le
+  bit-endian: le
 doc-ref: https://gtamods.com/wiki/RenderWare_binary_stream_file
 seq:
   - id: code
@@ -69,8 +70,12 @@ types:
         type: u4
       - id: geometry_index
         type: u4
-      - id: flags
-        type: u4
+      - id: flag_render
+        type: b1
+      - type: b1
+      - id: flag_collision_test
+        type: b1
+      - type: b24
       - id: unused
         type: u4
   struct_texture_dictionary:
