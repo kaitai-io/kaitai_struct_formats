@@ -78,8 +78,11 @@ types:
 
             # Ancillary chunks
             '"cHRM"': chrm_chunk
+            '"cICP"': cicp_chunk
+            '"cLLi"': clli_chunk
             '"gAMA"': gama_chunk
             # iCCP
+            '"mDCv"': mdcv_chunk
             # sBIT
             '"sRGB"': srgb_chunk
             '"bKGD"': bkgd_chunk
@@ -148,6 +151,24 @@ types:
         type: u1
       - id: b
         type: u1
+  cicp_chunk:
+    doc-ref: https://w3c.github.io/PNG-spec/#cICP-chunk
+    seq:
+      - id: colour_primaries
+        type: u1
+      - id: transfer_function
+        type: u1
+      - id: matrix_coefficients
+        type: u1
+      - id: video_full_range_flag
+        type: u1
+  clli_chunk:
+    doc-ref: https://w3c.github.io/PNG-spec/#cLLi-chunk
+    seq:
+      - id: maximum_content_light_level
+        type: u4
+      - id: maximum_frame_average_light_level
+        type: u4
   chrm_chunk:
     doc-ref: https://www.w3.org/TR/png/#11cHRM
     seq:
@@ -178,6 +199,17 @@ types:
     instances:
       gamma_ratio:
         value: 100000.0 / gamma_int
+  mdcv_chunk:
+    doc-ref: https://w3c.github.io/PNG-spec/#mDCv-chunk
+    seq:
+      - id: colour_primaries
+        size: 12
+      - id: white_point_chromaticity
+        type: u4
+      - id: maximum_luminance
+        type: u4
+      - id: minimum_luminance
+        type: u4
   srgb_chunk:
     doc-ref: https://www.w3.org/TR/png/#11sRGB
     seq:
