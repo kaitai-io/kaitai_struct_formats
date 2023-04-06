@@ -5,6 +5,7 @@ meta:
   xref:
     wikidata: Q29960668
   endian: le
+  bit-endian: le
 doc-ref: https://gtamods.com/wiki/RenderWare_binary_stream_file
 seq:
   - id: code
@@ -25,6 +26,7 @@ seq:
         sections::geometry_list: list_with_header
         sections::texture_dictionary: list_with_header
         sections::texture_native: list_with_header
+        sections::atomic: list_with_header
 instances:
   version:
     value: 'library_id_stamp & 0xFFFF0000 != 0 ? (library_id_stamp >> 14 & 0x3FF00) + 0x30000 | (library_id_stamp >> 16 & 0x3F) : library_id_stamp << 8'
@@ -54,12 +56,28 @@ types:
             sections::geometry: struct_geometry
             sections::geometry_list: struct_geometry_list
             sections::texture_dictionary: struct_texture_dictionary
+            sections::atomic: struct_atomic
       - id: entries
         type: renderware_binary_stream
         repeat: eos
     instances:
       version:
         value: 'library_id_stamp & 0xFFFF0000 != 0 ? (library_id_stamp >> 14 & 0x3FF00) + 0x30000 | (library_id_stamp >> 16 & 0x3F) : library_id_stamp << 8'
+  struct_atomic:
+    doc-ref: https://gtamods.com/wiki/Atomic_(RW_Section)#Structure
+    seq:
+      - id: frame_index
+        type: u4
+      - id: geometry_index
+        type: u4
+      - id: flag_render
+        type: b1
+      - type: b1
+      - id: flag_collision_test
+        type: b1
+      - type: b29
+      - id: unused
+        type: u4
   struct_texture_dictionary:
     seq:
       - id: num_textures
