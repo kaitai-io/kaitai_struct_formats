@@ -75,7 +75,7 @@ types:
       - type: b1
       - id: flag_collision_test
         type: b1
-      - type: b24
+      - type: b29
       - id: unused
         type: u4
   struct_texture_dictionary:
