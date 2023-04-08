@@ -151,10 +151,10 @@ types:
       num_uv_layers:
         value: |
           num_uv_layers_raw == 0
-            ? is_textured
-              ? 1
-              : is_textured2
-                ? 2
+            ? is_textured2
+              ? 2
+              : is_textured
+                ? 1
                 : 0
             : num_uv_layers_raw
   surface_properties:
