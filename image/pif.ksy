@@ -15,8 +15,8 @@ doc: |
 
   See <https://github.com/gfcwfzkm/PIF-Image-Format> for more info.
 doc-ref:
-  - https://github.com/gfcwfzkm/PIF-Image-Format/blob/cc256d5/Specification/PIF%20Format%20Specification.pdf
-  - https://github.com/gfcwfzkm/PIF-Image-Format/blob/cc256d5/C%20Library/pifdec.c#L300
+  - https://github.com/gfcwfzkm/PIF-Image-Format/blob/4ec261b/Specification/PIF%20Format%20Specification.pdf
+  - https://github.com/gfcwfzkm/PIF-Image-Format/blob/4ec261b/C%20Library/pifdec.c#L300
 seq:
   - id: file_header
     type: pif_header
@@ -75,7 +75,7 @@ types:
             true
           # ^ shouldn't get there (all cases have been covered before)
         doc: |
-          See <https://github.com/gfcwfzkm/PIF-Image-Format/blob/cc256d5/Specification/PIF%20Format%20Specification.pdf>:
+          See <https://github.com/gfcwfzkm/PIF-Image-Format/blob/4ec261b/Specification/PIF%20Format%20Specification.pdf>:
 
           > Bits per Pixel: Bit size that each Pixel occupies. Bit size for an
           > Indexed Image cannot go beyond 8 bits.
@@ -98,7 +98,7 @@ types:
                 : len_color_table_full
             ) : 0
         doc: |
-          See <https://github.com/gfcwfzkm/PIF-Image-Format/blob/cc256d5/Specification/PIF%20Format%20Specification.pdf>:
+          See <https://github.com/gfcwfzkm/PIF-Image-Format/blob/4ec261b/Specification/PIF%20Format%20Specification.pdf>:
 
           > Color Table Size: (...), only used in Indexed mode, otherwise zero.
           ---
@@ -160,7 +160,7 @@ enums:
     0x7daa:
       id: black_white
       doc: '0: black, 1: white'
-      doc-ref: https://github.com/gfcwfzkm/PIF-Image-Format/blob/cc256d5/C%20Library/pifdec.c#L233
+      doc-ref: https://github.com/gfcwfzkm/PIF-Image-Format/blob/4ec261b/C%20Library/pifdec.c#L233
     0x4952: indexed_rgb888
     0x4947: indexed_rgb565
     0x4942: indexed_rgb332
