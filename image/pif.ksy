@@ -129,9 +129,6 @@ types:
         value: _root.file_header.ofs_image_data - _root.file_header.ofs_image_data_min
       uses_indexed_mode:
         value: len_color_table_entry != 0
-      num_color_table_entries:
-        value: len_color_table / len_color_table_entry
-        if: uses_indexed_mode
   color_table_data:
     seq:
       - id: entries
@@ -141,8 +138,7 @@ types:
             image_type::indexed_rgb888: b24
             image_type::indexed_rgb565: b16
             image_type::indexed_rgb332: b8
-        repeat: expr
-        repeat-expr: _root.info_header.num_color_table_entries
+        repeat: eos
 enums:
   image_type:
     0x433c: rgb888
