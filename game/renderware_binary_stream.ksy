@@ -157,13 +157,13 @@ types:
         repeat-expr: num_morph_targets
     instances:
       is_textured:
-        value: format & 0x00000004 != 0
+        value: format & 0x0000_0004 != 0
       is_prelit:
-        value: format & 0x00000008 != 0
+        value: format & 0x0000_0008 != 0
       is_textured2:
-        value: format & 0x00000080 != 0
+        value: format & 0x0000_0080 != 0
       is_native:
-        value: format & 0x01000000 != 0
+        value: format & 0x0100_0000 != 0
       num_uv_layers_raw:
         value: (format & 0x00ff_0000) >> 16
       num_uv_layers:
@@ -412,22 +412,22 @@ enums:
     0x01bf: dictionary_tk
     0x01c0: uv_animation_linear
     0x01c1: uv_animation_parameter
-    0x0253f200: atomic_visibility_distance
-    0x0253f201: clump_visibility_distance
-    0x0253f202: frame_visibility_distance
-    0x0253f2f3: pipeline_set
-    0x0253f2f4: unused_5
-    0x0253f2f5: texdictionary_link
-    0x0253f2f6: specular_material
-    0x0253f2f7: unused_8
-    0x0253f2f8: effect_2d
-    0x0253f2f9: extra_vert_colour
-    0x0253f2fa: collision_model
-    0x0253f2fb: gta_hanim
-    0x0253f2fc: reflection_material
-    0x0253f2fd: breakable
-    0x0253f2fe: frame
-    0x0253f2ff: unused_16
+    0x0253_f200: atomic_visibility_distance
+    0x0253_f201: clump_visibility_distance
+    0x0253_f202: frame_visibility_distance
+    0x0253_f2f3: pipeline_set
+    0x0253_f2f4: unused_5
+    0x0253_f2f5: texdictionary_link
+    0x0253_f2f6: specular_material
+    0x0253_f2f7: unused_8
+    0x0253_f2f8: effect_2d
+    0x0253_f2f9: extra_vert_colour
+    0x0253_f2fa: collision_model
+    0x0253_f2fb: gta_hanim
+    0x0253_f2fc: reflection_material
+    0x0253_f2fd: breakable
+    0x0253_f2fe: frame
+    0x0253_f2ff: unused_16
     0x050e: bin_mesh_plg
     0x0510: native_data_plg
     0xf21e: zmodeler_lock
