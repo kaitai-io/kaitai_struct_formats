@@ -315,7 +315,8 @@ types:
         type: u2
     instances:
       content:
-        pos: ofs_content
+        # ofs_content is relative to page
+        pos: ((_parent.page_number - 1) * _root.header.page_size) + ofs_content
         type:
           switch-on: _parent.page_type
           cases:
