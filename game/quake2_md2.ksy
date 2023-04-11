@@ -161,19 +161,21 @@ types:
         type: u2
     instances:
       u_normalized:
-        value: u_px.as<f4> / _root.skin_width_px
+        value: (u_px + 0.0) / _root.skin_width_px
       v_normalized:
-        value: v_px.as<f4> / _root.skin_height_px
+        value: (v_px + 0.0) / _root.skin_height_px
   triangle:
     seq:
       - id: vertex_indices
         type: u2
         repeat: expr
         repeat-expr: 3
+        doc: indices to `_root.frames[i].vertices` (for each frame with index `i`)
       - id: tex_point_indices
         type: u2
         repeat: expr
         repeat-expr: 3
+        doc: indices to `_root.tex_coords`
   vec3f:
     seq:
       - id: x
@@ -234,7 +236,7 @@ types:
       num_vertices:
         value: 'cmd_num_vertices < 0 ? -cmd_num_vertices : cmd_num_vertices'
       primitive:
-        value: 'cmd_num_vertices > 0 ? gl_primitive::triangle_strip : gl_primitive::triangle_fan'
+        value: 'cmd_num_vertices < 0 ? gl_primitive::triangle_fan : gl_primitive::triangle_strip'
   gl_vertex:
     seq:
       - id: tex_coords_normalized
@@ -243,6 +245,7 @@ types:
         repeat-expr: 2
       - id: vertex_index
         type: u4
+        doc: index to `_root.frames[i].vertices` (for each frame with index `i`)
 enums:
   gl_primitive:
     0: triangle_strip
