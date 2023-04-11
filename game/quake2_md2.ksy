@@ -159,6 +159,9 @@ instances:
       11, 17, 11, 12, 19, 6, 9,
       4, 5, 6, 6, 8]
   anorms_table:
+    doc-ref: |
+      https://github.com/skullernet/q2pro/blob/f4faabd/src/common/math.c#L80
+      from Quake anorms.h
     value: |
       [ [-0.525731, 0.000000, 0.850651], 
         [-0.442863, 0.238856, 0.864188], 
@@ -377,9 +380,6 @@ types:
         type: u1
         doc: |
           `normal = anorms_table[normal_index]`
-        doc-ref: |
-          https://github.com/skullernet/q2pro/blob/f4faabd/src/common/math.c#L80
-          from Quake anorms.h
   frame:
     seq:
       - id: scale
