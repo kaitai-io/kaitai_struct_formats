@@ -3,6 +3,11 @@ meta:
   title: Quake II player model (version 8)
   application: Quake II
   file-extension: md2
+  xref:
+    justsolve: MD2
+  tags:
+    - 3d
+    - game
   license: CC0-1.0
   endian: le
 doc: |
@@ -134,9 +139,10 @@ instances:
     repeat-expr: num_frames
   gl_cmds:
     pos: ofs_gl_cmds
-    type: gl_cmd
-    repeat: until
-    repeat-until: _.cmd_num_vertices == 0
+    # in http://tfc.duke.free.fr/coding/src/md2.c initially read as `int *`
+    # (a pool of `int`s) => hence `s4`
+    size: 4 * num_gl_cmds # FIXME: replace `4` with `sizeof<s4>` once `sizeof` is implemented for GraphViz
+    type: gl_cmds_list
   anim_names:
     value: |
       ['stand', 'run', 'attack', 'pain1', 'pain2', 'pain3', 'jump', 'flip',
@@ -206,7 +212,7 @@ types:
       - id: normal_index
         type: u1
         doc: |
-          `normal = bytedirs[normal_index]`
+          `normal = anorms_table[normal_index]`
         doc-ref: |
           https://github.com/skullernet/q2pro/blob/f4faabd/src/common/math.c#L80
           from Quake anorms.h
@@ -224,6 +230,13 @@ types:
         type: vertex
         repeat: expr
         repeat-expr: _root.vertices_per_frame
+  gl_cmds_list:
+    seq:
+      - id: items
+        type: gl_cmd
+        repeat: until
+        repeat-until: _.cmd_num_vertices == 0
+        if: not _io.eof
   gl_cmd:
     seq:
       - id: cmd_num_vertices
