@@ -55,7 +55,7 @@ types:
         type: u1
         if: is_type2
 
-      - id: content
+      - id: value
         type: strz
         size: 'is_type2 ? 0xf : 0x10'
         encoding: ASCII
@@ -77,7 +77,7 @@ types:
       - size: 24
         if: name.is_type2
 
-      - id: data_size
+      - id: len_data
         type: u4
 
       - id: md5sum
