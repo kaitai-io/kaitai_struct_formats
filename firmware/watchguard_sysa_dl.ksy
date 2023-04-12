@@ -17,7 +17,7 @@ seq:
 types:
   fw_header:
     seq:
-      - id: md5sum
+      - id: sections_md5
         size: 0x10
         doc: MD5 sum of whole "sections" block
 
