@@ -40,7 +40,7 @@ types:
         type: head
 
       - id: data
-        size: head.data_size
+        size: head.len_data
         type:
           switch-on: head.name.content
           cases:
