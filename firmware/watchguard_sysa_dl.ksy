@@ -106,8 +106,13 @@ types:
 
   hmac_data:
     seq:
-      - id: hmac_sha1_value
+      - id: prev_sections_hmac_sha1
         size: 20
+        doc: |
+          HMAC-SHA1 hash (key is the string `etaonrishdlcupfm`) of all sections
+          before the "HMAC" section. In practice, "HMAC" is the last section in
+          `sections` (if "HMAC" is present at all) and the hash is derived from
+          all but the last section.
 
   wgpkg_data:
     seq:
