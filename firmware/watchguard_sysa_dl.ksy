@@ -74,8 +74,7 @@ types:
         size: 0x10
         type: name
 
-      - id: unknown_data
-        size: 24
+      - size: 24
         if: name.is_type2
 
       - id: data_size
