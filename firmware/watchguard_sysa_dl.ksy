@@ -11,7 +11,7 @@ seq:
     type: fw_header
 
   - id: sections
-    size: fw_header.file_size
+    size: fw_header.len_sections
     type: sections
 
 types:
@@ -21,7 +21,7 @@ types:
         size: 0x10
         doc: MD5 sum of whole "sections" block
 
-      - id: file_size
+      - id: len_sections
         type: u4
 
       - id: magic
