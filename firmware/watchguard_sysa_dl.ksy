@@ -4,6 +4,7 @@ meta:
   file-extension: sysa-dl
   license: MIT
   endian: be
+  encoding: ASCII
 
 seq:
   - id: fw_header
@@ -58,7 +59,6 @@ types:
       - id: value
         type: strz
         size: 'is_type2 ? 0xf : 0x10'
-        encoding: ASCII
 
     instances:
       type2_indicator:
@@ -101,7 +101,6 @@ types:
       - id: info
         size-eos: true
         type: str
-        encoding: ASCII
 
   hmac_data:
     seq:
@@ -117,7 +116,6 @@ types:
     seq:
       - id: meta_info
         type: strz
-        encoding: ASCII
 
       - id: magic
         contents: "WGPKG\0"
