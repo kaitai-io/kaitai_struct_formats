@@ -94,10 +94,8 @@ types:
 
   encoded_perm:
     seq:
-      - id: unknown_dword1
-        type: u4
-      - id: unknown_dword2
-        type: u4
+      - type: u4
+      - type: u4
 
   info_data:
     seq:
