@@ -55,7 +55,7 @@ instances:
       switch-on: '(_index == header.idx_lock_byte_page ? 0 : _index >= header.idx_first_ptrmap_page and _index <= header.idx_last_ptrmap_page ? 1 : 2)'
       cases:
         0: lock_byte_page(_index + 1)
-        1: ptrmap_page(_index + 1)
+        1: pointer_map_page(_index + 1)
         # TODO: Free pages and cell overflow pages are incorrectly interpreted as btree pages
         # This is unfortunate, but unavoidable since there's no way to recognize these types at
         # this point in the parser.
@@ -230,23 +230,95 @@ types:
       lock-byte page.
       The lock-byte page is set aside for use by the operating-system specific VFS implementation in implementing
       the database file locking primitives. SQLite does not use the lock-byte page.
-  ptrmap_page:
+  pointer_map_page:
     params:
-      - id: page_number
+      - id: pointer_map_page_number
         type: u4
     seq:
       - id: entries
-        type: ptrmap_entry
+        type: pointer_map_entry
         repeat: expr
         repeat-expr: num_entries
     instances:
-      first_page:
-        value: '3 + (_root.header.num_ptrmap_entries_max * (page_number - 2))'
-      last_page:
-        value: 'first_page + _root.header.num_ptrmap_entries_max - 1'
+      first_linked_page_number:
+        value: pointer_map_page_number + 1
+      last_linked_page_number_max:
+        value: pointer_map_page_number + _root.header.pointer_map_page_entries_max
+      last_linked_page_number:
+        value: |
+          last_linked_page_number_max <= _root.header.num_pages
+          ? last_linked_page_number_max
+          : _root.header.num_pages
       num_entries:
-        value: '(last_page > _root.header.num_pages ? _root.header.num_pages : last_page) - first_page + 1'
-  ptrmap_entry:
+        value: last_linked_page_number - first_linked_page_number + 1
+    doc: |
+      A ptrmap page contains back-links from child to parent.
+      See also: /types/pointer_map_entry.
+
+      Pointer map pages (or "ptrmap pages")
+      are extra pages inserted into the database
+      to make the operation of auto_vacuum and
+      incremental_vacuum modes more efficient.
+
+      Ptrmap pages must exist in any database file
+      which has a non-zero largest root b-tree page value
+      in db.header.largest_root_page.
+
+      If db.header.largest_root_page is zero,
+      then the database must not contain ptrmap pages.
+
+      The first ptrmap page (on page 2)
+      will contain back pointer information
+      for pages 3 through J+2, inclusive.
+
+      The second pointer map page will be on page J+3
+      and that ptrmap page will provide back pointer information
+      for pages J+4 through 2*J+3 inclusive.
+
+      And so forth for the entire database file.
+
+      ```py
+      page_size = 512
+      page_reserved_space_size = 0
+      U = usable_size = page_size - page_reserved_space_size # 512
+      J = pointer_map_page_entries_max = usable_size // 5 # 102
+
+      # pointer map 1
+      X = 1
+      N = pointer_map_page_number_raw = ((X - 1) * J) + 1 + X # 2
+      A = first_linked_page_number = N + 1 # 3
+      Z = last_linked_page_number = N + J # 104 = J + 2
+
+      # pointer map 2
+      X = 2
+      N = pointer_map_page_number = ((X - 1) * J) + 1 + X # 105 = J + 3
+      A = first_linked_page_number = N + 1 # 106 = J + 4
+      Z = last_linked_page_number = N + J # 207 = (2 * J) + 3
+
+      # pointer map 3
+      X = 3
+      N = pointer_map_page_number = ((X - 1) * J) + 1 + X # 208
+      A = first_linked_page_number = N + 1 # 209
+      Z = last_linked_page_number = N + J # 310
+
+      # pointer map 4
+      X = 4
+      N = pointer_map_page_number = ((X - 1) * J) + 1 + X # 311
+      A = first_linked_page_number = N + 1 # 312
+      Z = last_linked_page_number = N + J # 413
+      ```
+
+      actual pointer_map_page_number:
+
+      ```py
+      NR = pointer_map_page_number_raw = ((X - 1) * J) + 1 + X # 2
+      N = pointer_map_page_number = (
+        pointer_map_page_number_raw
+        if (pointer_map_page_number_raw != lock_byte_page_number)
+        else (pointer_map_page_number_raw + 1)
+      )
+      ```
+    doc-ref: https://www.sqlite.org/fileformat2.html#pointer_map_or_ptrmap_pages
     seq:
       - id: type
         type: u1
