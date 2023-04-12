@@ -120,11 +120,8 @@ types:
       - id: magic
         contents: "WGPKG\0"
 
-      - id: unknown_word
-        size: 2
-
-      - id: unknown_dword
-        type: u4
+      - size: 2
+      - type: u4
       - id: len_compressed_wpkg
         type: u4
 
