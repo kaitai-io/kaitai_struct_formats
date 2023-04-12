@@ -124,12 +124,12 @@ types:
 
       - size: 2
       - type: u4
-      - id: len_compressed_wpkg
+      - id: len_wgpkg_tar_bz2
         type: u4
 
-      - id: compressed_wpkg
-        size: len_compressed_wpkg
-        doc: compressed_wpkg is tar.bz2 compresed
+      - id: wgpkg_tar_bz2
+        size: len_wgpkg_tar_bz2
+        doc: wgpkg_tar_bz2 is tar.bz2 compresed
 
 enums:
   magic:
