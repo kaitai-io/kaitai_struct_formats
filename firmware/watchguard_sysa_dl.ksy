@@ -90,6 +90,7 @@ types:
       - id: perm
         size: 0x8
         type: encoded_perm
+        if: not _io.eof
 
   encoded_perm:
     seq:
