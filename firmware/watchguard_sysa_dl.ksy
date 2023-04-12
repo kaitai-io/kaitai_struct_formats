@@ -61,12 +61,12 @@ types:
         encoding: ASCII
 
     instances:
-      type2:
+      type2_indicator:
         pos: 0
         type: u1
 
       is_type2:
-        value: type2 == 0x7f
+        value: type2_indicator == 0x7f
 
   head:
     seq:
