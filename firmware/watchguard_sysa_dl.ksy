@@ -42,7 +42,7 @@ types:
       - id: data
         size: head.len_data
         type:
-          switch-on: head.name.content
+          switch-on: head.name.value
           cases:
             '"REBOOT"': reboot_data
             '"info"': info_data
