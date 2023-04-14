@@ -14,17 +14,17 @@ doc: |
   The MD2 format is used for 3D animated models in id Sofware's Quake II.
 
   A model consists of named `frames`, each with the same number of `vertices`
-  (`vertices_per_frame`). Each such vertex has a `position` in model space,
-  and a `normal_index` which you must look up to get its normal. Each vertex
-  has the same topological "meaning" across frames, in terms of triangle and
-  texture info; it just varies in position and normal for animation purposes.
+  (`vertices_per_frame`). Each such vertex has a `position` and `normal` in
+  model space. Each vertex has the same topological "meaning" across frames, in
+  terms of triangle and texture info; it just varies in position and normal for
+  animation purposes.
 
   How the vertices form triangles is defined via disjoint `triangles` or via
   `gl_cmds` (which allows strip and fan topology). Each triangle contains three
   `vertex_indices` into frame vertices, and three `tex_point_indices` into
-  global `tex_coords`. Each texture point has pixel coords `u_px` and `v_px`
+  global `tex_coords`. Each texture point has pixel coords `s_px` and `t_px`
   ranging from 0 to `skin_{width,height}_px` respectively, along with
-  `{u,v}_normalized` ranging from 0 to 1 for your convenience.
+  `{s,t}_normalized` ranging from 0 to 1 for your convenience.
 
   A GL command has a `primitive` type (`TRIANGLE_FAN` or `TRIANGLE_STRIP`) along
   with some `vertices`. Each GL vertex contains `tex_coords_normalized` from 0
@@ -329,15 +329,15 @@ instances:
 types:
   tex_point:
     seq:
-      - id: u_px
+      - id: s_px
         type: u2
-      - id: v_px
+      - id: t_px
         type: u2
     instances:
-      u_normalized:
-        value: (u_px + 0.0) / _root.skin_width_px
-      v_normalized:
-        value: (v_px + 0.0) / _root.skin_height_px
+      s_normalized:
+        value: (s_px + 0.0) / _root.skin_width_px
+      t_normalized:
+        value: (t_px + 0.0) / _root.skin_height_px
   triangle:
     seq:
       - id: vertex_indices
