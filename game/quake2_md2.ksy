@@ -39,7 +39,7 @@ doc: |
   for different animations. Each frame has a standard `name` for humans, but the
   client just uses their index and the name can be arbitrary. The name, start
   frame index and frame count of each animation can be looked up in the arrays
-  `anim_names`, `anim_start_indexes`, and `anim_num_frames` respectively. This
+  `anim_names`, `anim_start_indices`, and `anim_num_frames` respectively. This
   information is summarized in the following table:
 
   ```
