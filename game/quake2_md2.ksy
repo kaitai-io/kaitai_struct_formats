@@ -134,6 +134,7 @@ instances:
     repeat-expr: num_triangles
   frames:
     pos: ofs_frames
+    size: bytes_per_frame
     type: frame
     repeat: expr
     repeat-expr: num_frames
@@ -148,7 +149,7 @@ instances:
       ['stand', 'run', 'attack', 'pain1', 'pain2', 'pain3', 'jump', 'flip',
       'salute', 'taunt', 'wave', 'point', 'crstnd', 'crwalk', 'crattak',
       'crpain', 'crdeath', 'death1', 'death2', 'death3']
-  anim_start_indexes:
+  anim_start_indices:
     value: |
       [0, 40, 46, 54, 58, 62, 66, 72,
       84, 95, 112, 123, 135, 154, 160,
@@ -378,8 +379,9 @@ types:
         type: compressed_vec
       - id: normal_index
         type: u1
-        doc: |
-          `normal = anorms_table[normal_index]`
+    instances:
+      normal:
+        value: _root.anorms_table[normal_index]
   frame:
     seq:
       - id: scale
