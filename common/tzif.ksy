@@ -149,20 +149,16 @@ types:
             false: s4
             true: s8
         repeat: expr
-        repeat-expr: num_transitions + 0
-        # Appending '+ 0' to suppress a warning "use `num_transition_times`
-        # instead of `num_transitions` [...]".  We want the same parameter
-        # value to be the repeat count for two different arrays.
+        repeat-expr: num_transitions
+        # Note: `num_transitions` also as repeat count for `transition_types`.
         doc: |
           Array of POSIX time values sorted in ascending order. Each is used as
           a transition time at which the rules for computing local time change.
       - id: transition_types
         type: u1
         repeat: expr
-        repeat-expr: num_transitions + 0
-        # Appending '+ 0' to suppress a warning (see `transition_times`
-        # attribute above). This array has the same number of elements as
-        # `transition_times` above.
+        repeat-expr: num_transitions
+        # Note: `num_transitions` also as repeat count for `transition_times`.
         doc: |
           Array of transition type numbers. All but the last one map transition
           times in the `transition_times` array to local time type records in
