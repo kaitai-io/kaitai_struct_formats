@@ -1,5 +1,5 @@
 meta:
-  id: rkel
+  id: rockchip_rkel
   title: Rockchip RKEL
   license: CC0
   endian: le
