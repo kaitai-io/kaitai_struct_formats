@@ -54,13 +54,13 @@ types:
         type: u2
       - id: width
         type: u2
-      - id: unknown_3
+      - id: unknown_2
         type: u4
       - id: ofs_image_data
         type: u4
       - id: len_image_data
         type: u4
-      - id: unknown_4
+      - id: unknown_3
         size: 8
     instances:
       image_data:
