@@ -22,7 +22,7 @@ instances:
     pos: header._sizeof
     type: section
   num_sections:
-    value: (first_section.ofs_section - header._sizeof ) / (64 + 76)
+    value: (first_section.ofs_section - header._sizeof) / (sizeof<section> + sizeof<partition>)
 types:
   header:
     seq:
