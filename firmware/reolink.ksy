@@ -1,7 +1,7 @@
 meta:
   id: reolink
   title: Reolink firmware update
-  license: GPL-3.0
+  license: GPL-3.0-only
   endian: le
   encoding: UTF-8
 doc-ref:
@@ -28,7 +28,7 @@ types:
     seq:
       - id: magic
         contents: [0x13, 0x59, 0x72, 0x32]
-      - id: crc
+      - id: crc32
         size: 4
       - id: board
         size: 4
