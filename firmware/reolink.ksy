@@ -1,6 +1,7 @@
 meta:
-  id: reolink
+  id: reolink_pak
   title: Reolink firmware update
+  file-extension: pak
   license: MIT
   endian: le
   encoding: UTF-8
