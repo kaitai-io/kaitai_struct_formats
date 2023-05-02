@@ -1,11 +1,11 @@
 meta:
   id: reolink
   title: Reolink firmware update
-  license: GPL-3.0-only
+  license: MIT
   endian: le
   encoding: UTF-8
 doc-ref:
-  - https://github.com/hn/reolink-camera/blob/master/unpack-novatek-firmware.pl
+  - https://github.com/vmallet/pakler/blob/acbf084b/pakler/__init__.py
 seq:
   - id: header
     type:
@@ -103,10 +103,10 @@ types:
         type: strz
       - id: ofs_partition
         type: u4
-      - id: destination
+      - id: mtd
         size: 32
         type: strz
-      - id: unknown
+      - id: start_address
         size: 4
       - id: len_partition
         type: u4
