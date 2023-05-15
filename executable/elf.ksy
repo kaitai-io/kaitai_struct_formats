@@ -305,6 +305,12 @@ types:
         value: value & 0x04000000 != 0
       pie:
         value: value & 0x08000000 != 0
+      kmod:
+        value: value & 0x10000000 != 0
+      weakfilter:
+        value: value & 0x20000000 != 0
+      nocommon:
+        value: value & 0x40000000 != 0
   endian_elf:
     meta:
       endian:
