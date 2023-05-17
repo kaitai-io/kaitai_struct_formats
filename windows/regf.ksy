@@ -23,14 +23,15 @@ doc: |
 
   Note that one typically can't access files directly on a mounted
   filesystem with a running Windows OS.
-doc-ref: 'https://github.com/libyal/libregf/blob/main/documentation/Windows%20NT%20Registry%20File%20(REGF)%20format.asciidoc'
+doc-ref: 'https://github.com/msuhanov/regf/blob/master/Windows%20registry%20file%20format%20specification.md'
+doc-ref: 'https://github.com/libyal/libregf/blob/master/documentation/Windows%20NT%20Registry%20File%20(REGF)%20format.asciidoc'
 seq:
   - id: header
+    size: 4096
     type: file_header
   - id: hive_bins
-    type: hive_bin
-    size: 4096
-    repeat: eos
+    size: header.hive_bins_data_size
+    type: hive_bins
 types:
   file_header:
     seq:
@@ -101,26 +102,13 @@ types:
         type: u4
         doc: Contains number of bytes
   hive_bin_cell:
-    -webide-representation: "{identifier}"
     seq:
       - id: cell_size_raw
         type: s4
-      - id: identifier
-        type: str
-        size: 2
-        encoding: ascii
-      - id: data
-        size: cell_size - 2 - 4
-        type:
-          switch-on: identifier
-          cases:
-            "'nk'": named_key
-            "'lh'": sub_key_list_lh_lf
-            "'lf'": sub_key_list_lh_lf
-            "'li'": sub_key_list_li
-            "'ri'": sub_key_list_ri
-            "'vk'": sub_key_list_vk
-            "'sk'": sub_key_list_sk
+      - id: cell_data
+        size: cell_size - 4
+        type: cell_data
+      
     instances:
       cell_size:
         value: "(cell_size_raw < 0 ? -1 : +1) * cell_size_raw"
@@ -129,8 +117,32 @@ types:
         value: "cell_size_raw < 0"
         -webide-parse-mode: eager
     types:
+      cell_data:
+        -webide-representation: "{identifier}"
+        seq:
+          - id: cell_type
+            type:
+              switch-on: identifier
+              cases:
+                "'nk'": named_key
+                "'lh'": sub_key_list_lh_lf
+                "'lf'": sub_key_list_lh_lf
+                "'li'": sub_key_list_li
+                "'ri'": sub_key_list_ri
+                "'vk'": sub_key_list_vk
+                "'sk'": sub_key_list_sk
+                _     : key_value_list
+        instances:
+          identifier:
+            type: str
+            encoding: ascii
+            size: 2
+            pos: 0
+            -webide-parse-mode: eager
       named_key:
         seq:
+          - id: signature
+            contents: 'nk'
           - id: flags
             type: u2
             enum: nk_flags
@@ -190,6 +202,10 @@ types:
             0x4000: unknown2
       sub_key_list_lh_lf:
         seq:
+          - id: signature
+            type: str
+            size: 2
+            encoding: ascii
           - id: count
             type: u2
           - id: items
@@ -205,6 +221,8 @@ types:
                 type: u4
       sub_key_list_li:
         seq:
+          - id: signature
+            contents: 'li'
           - id: count
             type: u2
           - id: items
@@ -218,6 +236,8 @@ types:
                 type: u4
       sub_key_list_ri:
         seq:
+          - id: signature
+            contents: 'ri'
           - id: count
             type: u2
           - id: items
@@ -231,6 +251,8 @@ types:
                 type: u4
       sub_key_list_vk:
         seq:
+          - id: signature
+            contents: 'vk'
           - id: value_name_size # If the value name size is 0 the value name is "(default)"
             type: u2
           - id: data_size
@@ -268,6 +290,8 @@ types:
             0x0001: value_comp_name # Name is an ASCII string / Otherwise the name is an Unicode (UTF-16 little-endian) string
       sub_key_list_sk:
         seq:
+          - id: signature
+            contents: 'sk'
           - id: unknown1
             type: u2
           - id: previous_security_key_offset
@@ -276,12 +300,27 @@ types:
             type: u4
           - id: reference_count
             type: u4
+      key_value_list:
+        seq:
+          - id: elements
+            type: u4
+            repeat: eos
+  hive_bin_cells:
+    seq:
+      - id: cells
+        type: hive_bin_cell
+        repeat: eos
   hive_bin:
     seq:
       - id: header
         type: hive_bin_header
       - id: cells
-        type: hive_bin_cell
+        type: hive_bin_cells
+        size: header.size - 32
+  hive_bins:
+    seq:
+      - id: hive_bins
+        type: hive_bin
         repeat: eos
   filetime:
     seq:
