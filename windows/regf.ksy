@@ -23,8 +23,9 @@ doc: |
 
   Note that one typically can't access files directly on a mounted
   filesystem with a running Windows OS.
-doc-ref: 'https://github.com/msuhanov/regf/blob/master/Windows%20registry%20file%20format%20specification.md'
-doc-ref: 'https://github.com/libyal/libregf/blob/master/documentation/Windows%20NT%20Registry%20File%20(REGF)%20format.asciidoc'
+doc-ref:
+  - 'https://github.com/msuhanov/regf/blob/master/Windows%20registry%20file%20format%20specification.md'
+  - 'https://github.com/libyal/libregf/blob/master/documentation/Windows%20NT%20Registry%20File%20(REGF)%20format.asciidoc'
 seq:
   - id: header
     size: 4096
