@@ -12,7 +12,7 @@ for instructions how to add it into your project with the build tool that you us
 <% class_name = ucc(file_id) %>
 
 <%= code cur_lang, <<-CODE
-#{ class_name } data = #{ class_name }.fromFile("path/to/local/file.#{ meta['file-extension'] || format_name }");
+#{ class_name } data = #{ class_name }.fromFile("path/to/local/file.#{sample_ext}");
 CODE
 %>
 

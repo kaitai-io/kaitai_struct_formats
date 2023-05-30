@@ -21,7 +21,7 @@ and build them along with your project.</p>
 <%= code cur_lang, <<-CODE
 #include <fstream>
 
-std::ifstream is("path/to/local/file.#{meta['file-extension'] || meta['id']}", std::ifstream::binary);
+std::ifstream is("path/to/local/file.#{sample_ext}", std::ifstream::binary);
 CODE
 %>
             </div>

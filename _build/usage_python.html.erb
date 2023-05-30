@@ -10,7 +10,7 @@
 <% class_name = ucc(file_id) %>
 
 <%= code cur_lang, <<-CODE
-data = #{ class_name }.from_file("path/to/local/file.#{ meta['file-extension'] || format_name }")
+data = #{ class_name }.from_file("path/to/local/file.#{sample_ext}")
 CODE
 %>
 

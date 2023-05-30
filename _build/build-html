@@ -178,6 +178,7 @@ class FormatPagesGenerator
     puts "  * generating #{cur_lang} page for #{file_id}"
     File.open("#{out_dir}/#{cur_lang}.html", 'w') { |out|
       meta = yaml['meta']
+      sample_ext = sample_file_ext(meta['file-extension'])
       format_name = get_format_name(meta)
       page_title = "#{format_name}: " + (if cur_lang == 'graphviz'
         "GraphViz block diagram (.dot) source: Kaitai Struct"
@@ -339,6 +340,24 @@ class FormatPagesGenerator
            end
     name << " file format"
     name
+  end
+
+  # Resolve a single file extension based on the `/meta/file-extension` object given, which may be:
+  #
+  # * a string if there's only one file extension
+  # * a list of strings if there are multiple extensions
+  # * `nil` if the `/meta/file-extension` section isn't present (in which case the .bin
+  #   extension is returned as a fallback)
+  #
+  # Used in the example code snippet on format pages that shows how to parse a local file with KS.
+  def sample_file_ext(ext)
+    if ext.is_a?(Array)
+      ext[0]
+    elsif ext
+      ext
+    else
+      'bin'
+    end
   end
 
   def ucc(name)
