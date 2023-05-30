@@ -11,6 +11,7 @@ meta:
     - ntf.r4
     - ntf.r5
   xref:
+    justsolve: National_Imagery_Transmission_Format
     pronom: fmt/366 # NITF 2.1
     wikidata: Q1961044
   license: MIT

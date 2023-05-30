@@ -1,9 +1,11 @@
 meta:
   id: quicktime_mov
   application: QuickTime, MP4 ISO 14496-14 media
+  file-extension: mov
   xref:
     justsolve: QuickTime
     loc: fdd000052
+    mime: video/quicktime
     pronom: x-fmt/384
     wikidata: Q942350
   license: CC0-1.0

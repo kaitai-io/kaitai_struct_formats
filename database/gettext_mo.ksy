@@ -5,6 +5,11 @@ meta:
     - GNU gettext
     - libintl
   file-extension: mo
+  xref:
+    justsolve: Gettext_MO_(Machine_Object)_file
+    wikidata:
+      - Q105856977 # little-endian
+      - Q105857131 # big-endian
   tags:
     - database
     - linux

@@ -2,7 +2,11 @@ meta:
   id: renderware_binary_stream
   title: RenderWare binary stream
   application: Games based on RenderWare engine (Grand Theft Auto 3D series)
+  file-extension:
+    - dff
+    - txd
   xref:
+    justsolve: RenderWare_binary_stream_file
     wikidata: Q29960668
   endian: le
   bit-endian: le

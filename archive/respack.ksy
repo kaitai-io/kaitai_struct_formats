@@ -1,6 +1,7 @@
 meta:
   id: respack
   title: ResPack
+  file-extension: cfg
   license: CC0-1.0
   encoding: UTF-8
   endian: le

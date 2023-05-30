@@ -3,6 +3,7 @@ meta:
   title: Linux Unified Key Setup
   xref:
     forensicswiki: Linux_Unified_Key_Setup_(LUKS)
+    justsolve: LUKS
     wikidata: Q29000504
   tags:
     - filesystem

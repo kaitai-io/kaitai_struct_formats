@@ -2,7 +2,9 @@ meta:
   id: xwd
   title: xwd (X Window Dump) bitmap image
   application: xwd
+  file-extension: xwd
   xref:
+    justsolve: XWD
     pronom: fmt/401
   license: CC0-1.0
   endian: be

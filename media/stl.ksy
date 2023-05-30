@@ -3,6 +3,7 @@ meta:
   application: 3D Systems Stereolithography
   file-extension: stl
   xref:
+    justsolve: STL
     loc: fdd000505
     pronom: fmt/865
     wikidata: Q1238229

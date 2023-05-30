@@ -1,6 +1,7 @@
 meta:
   id: fallout2_dat
   application: Fallout 2
+  file-extension: dat
   xref:
     wikidata: Q32097899
   license: CC0-1.0

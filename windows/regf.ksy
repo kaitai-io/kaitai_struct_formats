@@ -3,6 +3,7 @@ meta:
   title: Windows registry database
   application: Windows NT and later
   xref:
+    justsolve: Windows_Registry
     forensicswiki: Windows_NT_Registry_File_(REGF)
     wikidata: Q463244
   license: CC0-1.0

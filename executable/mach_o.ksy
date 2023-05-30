@@ -1,6 +1,7 @@
 meta:
   id: mach_o
   xref:
+    justsolve: Mach-O
     pronom:
       - fmt/692 # Mach-O 32bit
       - fmt/693 # Mach-O 64bit

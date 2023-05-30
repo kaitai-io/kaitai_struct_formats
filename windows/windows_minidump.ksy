@@ -1,6 +1,9 @@
 meta:
   id: windows_minidump
   title: Windows MiniDump
+  file-extension:
+    - dmp
+    - mdmp
   license: CC0-1.0
   endian: le
 doc: |
