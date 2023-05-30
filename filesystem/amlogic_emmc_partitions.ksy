@@ -3,9 +3,9 @@ meta:
   title: Amlogic proprietary eMMC partition table
   license: CC0-1.0
   ks-version: 0.9
-  bit-endian: le
   encoding: UTF-8
   endian: le
+  bit-endian: le
 
 doc: |
   This is an unnamed and undocumented partition table format implemented by
@@ -63,8 +63,8 @@ types:
         doc: |
           The start of the partition relative to the start of the eMMC, in bytes
       - id: flags
-        type: part_flags
         size: 4
+        type: part_flags
       - id: padding
         size: 4
 
