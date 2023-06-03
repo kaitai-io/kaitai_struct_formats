@@ -23,6 +23,7 @@ meta:
   imports:
     - exif
   endian: be
+  ks-version: 0.9
 doc: |
   JPEG File Interchange Format, or JFIF, or, more colloquially known
   as just "JPEG" or "JPG", is a popular 2D bitmap image file format,
@@ -158,8 +159,8 @@ types:
         type: u1
       - id: components
         type: component
-        repeat: expr
-        repeat-expr: num_components
+        repeat:
+          expr: num_components
     types:
       component:
         seq:
@@ -183,8 +184,8 @@ types:
         doc: Number of components in scan
       - id: components
         type: component
-        repeat: expr
-        repeat-expr: num_components
+        repeat:
+          expr: num_components
         doc: Scan components specification
       - id: start_spectral_selection
         type: u1

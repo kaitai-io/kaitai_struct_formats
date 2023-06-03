@@ -4,6 +4,7 @@ meta:
   imports:
     - /network/ethernet_frame
   endian: le
+  ks-version: 0.9
 doc: |
   PPI is a standard for link layer packet encapsulation, proposed as
   generic extensible container to store both captured in-band data and
@@ -125,13 +126,13 @@ types:
       - id: rssi_ant_ctl
         type: u1
         doc: RSSI (Received Signal Strength Indication) for antennas 0-3, control channel
-        repeat: expr
-        repeat-expr: 4
+        repeat:
+          expr: 4
       - id: rssi_ant_ext
         type: u1
         doc: RSSI (Received Signal Strength Indication) for antennas 0-3, extension channel
-        repeat: expr
-        repeat-expr: 4
+        repeat:
+          expr: 4
       - id: ext_channel_freq
         type: u2
         doc: Extension channel frequency (MHz)
@@ -140,13 +141,13 @@ types:
         doc: Extension channel flags
       - id: rf_signal_noise
         type: signal_noise
-        repeat: expr
-        repeat-expr: 4
+        repeat:
+          expr: 4
         doc: Signal + noise values for antennas 0-3
       - id: evm
         type: u4
-        repeat: expr
-        repeat-expr: 4
+        repeat:
+          expr: 4
         doc: EVM (Error Vector Magnitude) for chains 0-3
     types:
       channel_flags:

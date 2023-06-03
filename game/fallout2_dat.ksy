@@ -6,6 +6,7 @@ meta:
     wikidata: Q32097899
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 types:
   pstr:
     seq:
@@ -27,8 +28,8 @@ types:
         type: u4
       - id: files
         type: file
-        repeat: expr
-        repeat-expr: file_count
+        repeat:
+          expr: file_count
   file:
     seq:
       - id: name

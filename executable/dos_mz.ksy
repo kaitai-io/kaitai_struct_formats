@@ -14,6 +14,7 @@ meta:
   ks-version: 0.9
   encoding: ASCII
   endian: le
+  ks-version: 0.9
 doc: |
   DOS MZ file format is a traditional format for executables in MS-DOS
   environment. Many modern formats (i.e. Windows PE) still maintain
@@ -34,8 +35,8 @@ instances:
     pos: header.mz.ofs_relocations
     io: header._io
     type: relocation
-    repeat: expr
-    repeat-expr: header.mz.num_relocations
+    repeat:
+      expr: header.mz.num_relocations
     if: header.mz.ofs_relocations != 0
 types:
   exe_header:

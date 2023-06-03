@@ -2,7 +2,7 @@ meta:
   id: vlq_base128_le
   title: Variable length quantity, unsigned/signed integer, base128, little-endian
   license: CC0-1.0
-  ks-version: 0.7
+  ks-version: '0.9'
 doc: |
   A variable-length unsigned/signed integer using base128 encoding. 1-byte groups
   consist of 1-bit flag of continuation and 7-bit value chunk, and are ordered
@@ -27,8 +27,8 @@ doc: |
 seq:
   - id: groups
     type: group
-    repeat: until
-    repeat-until: not _.has_next
+    repeat:
+      until: not _.has_next
 types:
   group:
     -webide-representation: '{value}'

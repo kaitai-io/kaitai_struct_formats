@@ -4,14 +4,15 @@ meta:
   file-extension: dat
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 seq:
   - id: num_files
     type: u4
     doc: Number of files in the archive
   - id: files
     type: file
-    repeat: expr
-    repeat-expr: num_files
+    repeat:
+      expr: num_files
 types:
   file:
     seq:

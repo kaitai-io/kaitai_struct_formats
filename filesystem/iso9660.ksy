@@ -8,6 +8,7 @@ meta:
     pronom: fmt/468
     wikidata: Q815645
   license: CC0-1.0
+  ks-version: '0.9'
 doc: |
   ISO9660 is standard filesystem used on read-only optical discs
   (mostly CD-ROM). The standard was based on earlier High Sierra
@@ -132,8 +133,8 @@ types:
     seq:
       - id: entries
         type: dir_entry
-        repeat: until
-        repeat-until: _.len == 0
+        repeat:
+          until: _.len == 0
   dir_entry:
     seq:
       - id: len

@@ -57,21 +57,21 @@ types:
         doc: Unknown field which appears to always be 0.
       - id: block_addresses
         type: block_descriptor
-        repeat: expr
-        repeat-expr: num_block_addresses
+        repeat:
+          expr: num_block_addresses
         doc: Addresses of the different blocks.
       - id: num_directories
         type: u4
         doc: Indicates the number of directory entries.
       - id: directory_entries
         type: directory_entry
-        repeat: expr
-        repeat-expr: num_directories
+        repeat:
+          expr: num_directories
         doc: Each directory is an independent B-tree.
       - id: free_lists
         type: free_list
-        repeat: expr
-        repeat-expr: num_free_lists
+        repeat:
+          expr: num_free_lists
     types:
       block_descriptor:
         seq:
@@ -97,8 +97,8 @@ types:
             type: u4
           - id: offsets
             type: u4
-            repeat: expr
-            repeat-expr: counter
+            repeat:
+              expr: counter
     instances:
       num_block_addresses:
         value: 256
@@ -107,8 +107,8 @@ types:
       directories:
         io: _root._io
         type: master_block_ref(_index)
-        repeat: expr
-        repeat-expr: num_directories
+        repeat:
+          expr: num_directories
         doc: Master blocks of the different B-trees.
   master_block_ref:
     params:
@@ -151,8 +151,8 @@ types:
         doc: Number of records or number of block id + record pairs.
       - id: data
         type: block_data(mode)
-        repeat: expr
-        repeat-expr: counter
+        repeat:
+          expr: counter
     types:
       block_data:
         params:

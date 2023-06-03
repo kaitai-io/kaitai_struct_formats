@@ -52,6 +52,7 @@ meta:
     - /common/riff
   encoding: ASCII
   endian: le
+  ks-version: 0.9
 doc: |
   The WAVE file format is a subset of Microsoft's RIFF specification for the
   storage of multimedia files. A RIFF file starts out with a file header
@@ -208,9 +209,8 @@ types:
         type: u4
       - id: cue_points
         type: cue_point_type
-        repeat: expr
-        repeat-expr: dw_cue_points
-
+        repeat:
+          expr: dw_cue_points
   cue_point_type:
     seq:
       - id: dw_name

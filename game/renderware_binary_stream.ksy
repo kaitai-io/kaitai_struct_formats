@@ -104,8 +104,8 @@ types:
         type: u4
       - id: frames
         type: frame
-        repeat: expr
-        repeat-expr: num_frames
+        repeat:
+          expr: num_frames
   frame:
     doc-ref: 'https://gtamods.com/wiki/Frame_List_(RW_Section)#Structure'
     seq:
@@ -122,8 +122,8 @@ types:
     seq:
       - id: entries
         type: vector_3d
-        repeat: expr
-        repeat-expr: 3
+        repeat:
+          expr: 3
   vector_3d:
     doc-ref: 'https://gtamods.com/wiki/Frame_List_(RW_Section)#Structure'
     seq:
@@ -157,8 +157,8 @@ types:
         if: not is_native
       - id: morph_targets
         type: morph_target
-        repeat: expr
-        repeat-expr: num_morph_targets
+        repeat:
+          expr: num_morph_targets
     instances:
       is_textured:
         value: format & 0x0000_0004 != 0
@@ -192,17 +192,17 @@ types:
     seq:
       - id: prelit_colors
         type: rgba
-        repeat: expr
-        repeat-expr: _parent.num_vertices
+        repeat:
+          expr: _parent.num_vertices
         if: _parent.is_prelit
       - id: uv_layers
         type: uv_layer(_parent.num_vertices)
-        repeat: expr
-        repeat-expr: _parent.num_uv_layers
+        repeat:
+          expr: _parent.num_uv_layers
       - id: triangles
         type: triangle
-        repeat: expr
-        repeat-expr: _parent.num_triangles
+        repeat:
+          expr: _parent.num_triangles
   uv_layer:
     params:
       - id: num_vertices
@@ -247,13 +247,13 @@ types:
       - id: has_normals
         type: u4
       - id: vertices
-        repeat: expr
-        repeat-expr: _parent.num_vertices
+        repeat:
+          expr: _parent.num_vertices
         type: vector_3d
         if: has_vertices != 0
       - id: normals
-        repeat: expr
-        repeat-expr: _parent.num_vertices
+        repeat:
+          expr: _parent.num_vertices
         type: vector_3d
         if: has_normals != 0
   sphere:

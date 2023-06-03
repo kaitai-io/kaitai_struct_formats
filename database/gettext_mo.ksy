@@ -144,20 +144,20 @@ types:
         io: _root._io
         pos: ofs_originals
         type: descriptor
-        repeat: expr
-        repeat-expr: num_translations
+        repeat:
+          expr: num_translations
       translations:
         io: _root._io
         pos: ofs_translations
         type: descriptor
-        repeat: expr
-        repeat-expr: num_translations
+        repeat:
+          expr: num_translations
       hashtable_items:
         io: _root._io
         pos: ofs_hashtable_items
         type: hashtable_item
-        repeat: expr
-        repeat-expr: num_hashtable_items
+        repeat:
+          expr: num_hashtable_items
         if: ofs_hashtable_items != 0
     types:
       version:

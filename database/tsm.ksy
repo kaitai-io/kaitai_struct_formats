@@ -7,6 +7,7 @@ meta:
     wikidata: Q29168491
   license: MIT
   endian: be
+  ks-version: '0.9'
 doc: |
   InfluxDB is a scalable database optimized for storage of time
   series, real-time application metrics, operations monitoring events,
@@ -38,8 +39,8 @@ types:
       entries:
         pos: offset
         type: index_header
-        repeat: until
-        repeat-until: _io.pos == _io.size - 8
+        repeat:
+          until: _io.pos == _io.size - 8
     types:
       index_header:
         seq:
@@ -56,9 +57,8 @@ types:
 
           - id: index_entries
             type: index_entry
-            repeat: expr
-            repeat-expr: entry_count
-
+            repeat:
+              expr: entry_count
         types:
           index_entry:
             seq:

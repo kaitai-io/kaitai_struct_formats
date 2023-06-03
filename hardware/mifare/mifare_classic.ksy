@@ -65,12 +65,12 @@ types:
             seq:
               - id: valuez
                 type: u4
-                repeat: expr
-                repeat-expr: 3
+                repeat:
+                  expr: 3
               - id: addrz
                 type: u1
-                repeat: expr
-                repeat-expr: 4
+                repeat:
+                  expr: 4
             instances:
               value_valid:
                 value: 'valuez[0]==~valuez[1] and valuez[0]==valuez[2]'
@@ -137,29 +137,29 @@ types:
         seq:
           - id: raw_chunks
             type: b4 # _parent.acs_in_sector
-            repeat: expr
-            repeat-expr: _parent.ac_count_of_chunks
+            repeat:
+              expr: _parent.ac_count_of_chunks
         instances:
           remaps:
             pos: 0
-            repeat: expr
-            repeat-expr: _parent.ac_bits
+            repeat:
+              expr: _parent.ac_bits
             type: chunk_bit_remap(_index)
           chunks:
             pos: 0
             type: valid_chunk(raw_chunks[remaps[_index].inv_chunk_no], raw_chunks[remaps[_index].chunk_no])
-            repeat: expr
-            repeat-expr: _parent.ac_bits
+            repeat:
+              expr: _parent.ac_bits
           acs_raw:
             pos: 0
             type: ac(_index)
-            repeat: expr
-            repeat-expr: _parent.acs_in_sector
+            repeat:
+              expr: _parent.acs_in_sector
           data_acs:
             pos: 0
             type: data_ac(acs_raw[_index])
-            repeat: expr
-            repeat-expr: _parent.acs_in_sector-1
+            repeat:
+              expr: _parent.acs_in_sector-1
           trailer_ac:
             pos: 0
             type: trailer_ac(acs_raw[_parent.acs_in_sector-1])
@@ -192,8 +192,8 @@ types:
             instances:
               bits:
                 pos: 0
-                repeat: expr
-                repeat-expr: _parent._parent.ac_bits
+                repeat:
+                  expr: _parent._parent.ac_bits
                 type: ac_bit(index, _parent.chunks[_index].chunk)
 
               val:

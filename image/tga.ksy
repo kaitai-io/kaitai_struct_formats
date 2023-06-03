@@ -14,6 +14,7 @@ meta:
   license: CC0-1.0
   encoding: ASCII
   endian: le
+  ks-version: 0.9
 doc:
   TGA (AKA Truevision TGA, AKA TARGA), is a raster image file format
   created by Truevision. It supports up to 32 bits per pixel (three
@@ -57,8 +58,8 @@ seq:
       Arbitrary application-specific information that is used to
       identify image. May contain text or some binary data.
   - id: color_map
-    repeat: expr
-    repeat-expr: num_color_map
+    repeat:
+      expr: num_color_map
     size: (color_map_depth + 7) / 8
     if: color_map_type == color_map_enum::has_color_map
     doc: Color map
@@ -105,8 +106,8 @@ types:
         type: str
         size: 41
       - id: comments
-        repeat: expr
-        repeat-expr: 4
+        repeat:
+          expr: 4
         type: str
         size: 81
         doc: Comments, organized as four lines, each consisting of 80 characters plus a NULL

@@ -41,18 +41,16 @@ types:
       - id: primary_metadata
         size: primary_geometry.metadata_max_size
         type: metadata
-        repeat: expr
-        repeat-expr: primary_geometry.metadata_slot_count
-
+        repeat:
+          expr: primary_geometry.metadata_slot_count
       - id: backup_metadata
         # These attributes are intentionally taken from primary_geometry, even
         # for backup_metadata. The first non-corrupt geometry specifier dictates
         # the layout of both primary and backup metadata.
         size: primary_geometry.metadata_max_size
         type: metadata
-        repeat: expr
-        repeat-expr: primary_geometry.metadata_slot_count
-
+        repeat:
+          expr: primary_geometry.metadata_slot_count
   geometry:
     seq:
       - id: magic
@@ -134,8 +132,8 @@ types:
                 'table_kind::extents': extent
                 'table_kind::groups': group
                 'table_kind::block_devices': block_device
-            repeat: expr
-            repeat-expr: num_entries
+            repeat:
+              expr: num_entries
 
       partition:
         seq:

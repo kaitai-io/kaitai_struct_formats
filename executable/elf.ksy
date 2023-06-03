@@ -705,14 +705,14 @@ types:
         pos: program_header_offset
         size: program_header_entry_size
         type: program_header
-        repeat: expr
-        repeat-expr: qty_program_header
+        repeat:
+          expr: qty_program_header
       section_headers:
         pos: section_header_offset
         size: section_header_entry_size
         type: section_header
-        repeat: expr
-        repeat-expr: qty_section_header
+        repeat:
+          expr: qty_section_header
       section_names:
         pos: section_headers[section_names_idx].ofs_body
         size: section_headers[section_names_idx].len_body

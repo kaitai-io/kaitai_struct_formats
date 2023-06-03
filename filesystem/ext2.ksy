@@ -10,6 +10,7 @@ meta:
     - linux
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 instances:
   # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/filesystems/ext2.rst?id=a9edc03f13db#n116
   bg1:
@@ -125,8 +126,8 @@ types:
 #    -- Directory Indexing Support --
       - id: hash_seed
         type: u4
-        repeat: expr
-        repeat-expr: 4
+        repeat:
+          expr: 4
       - id: def_hash_version
         type: u1
     instances:
@@ -172,8 +173,8 @@ types:
       inodes:
         pos: inode_table_block * _root.bg1.super_block.block_size
         type: inode
-        repeat: expr
-        repeat-expr: _root.bg1.super_block.inodes_per_group
+        repeat:
+          expr: _root.bg1.super_block.inodes_per_group
   inode:
     seq:
       - id: mode
@@ -202,8 +203,8 @@ types:
         type: u4
       - id: block
         type: block_ptr
-        repeat: expr
-        repeat-expr: 15
+        repeat:
+          expr: 15
       - id: generation
         type: u4
       - id: file_acl

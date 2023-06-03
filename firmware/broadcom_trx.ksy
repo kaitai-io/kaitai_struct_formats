@@ -1,6 +1,6 @@
 meta:
-  id: broadcom_trx
-  title: Broadcom devices .trx firmware packaging
+  id: asus_trx
+  title: ASUS routers .trx official firmware packaging
   file-extension: trx
   license: GPL-2.0-or-later
   ks-version: 0.9
@@ -79,8 +79,8 @@ types:
         size: 12
       - id: comp_hw
         type: hw_comp_info
-        repeat: expr
-        repeat-expr: 4
+        repeat:
+          expr: 4
         doc: "0.02 - 2.99"
       - id: reserved
         size: 32
@@ -109,8 +109,8 @@ types:
       - id: partitions
         type: partition(_index)
         doc: "Offsets of partitions from start of header"
-        repeat: until
-        repeat-until: _index >= 4 or not _.is_present
+        repeat:
+          until: _index >= 4 or not _.is_present
 
     types:
       partition:
@@ -138,5 +138,5 @@ types:
         seq:
           - id: flags
             type: b1
-            repeat: expr
-            repeat-expr: 16
+            repeat:
+              expr: 16

@@ -8,6 +8,7 @@ meta:
     pronom: fmt/401
   license: CC0-1.0
   endian: be
+  ks-version: 0.9
 doc: |
   xwd is a file format written by eponymous X11 screen capture
   application (xwd stands for "X Window Dump"). Typically, an average
@@ -28,8 +29,8 @@ seq:
   - id: color_map
     size: 12
     type: color_map_entry
-    repeat: expr
-    repeat-expr: hdr.color_map_entries
+    repeat:
+      expr: hdr.color_map_entries
 types:
   header:
     seq:

@@ -17,6 +17,7 @@ meta:
   imports:
     - /common/vlq_base128_be
   endian: be
+  ks-version: 0.9
 doc: |
   Standard MIDI file, typically known just as "MID", is a standard way
   to serialize series of MIDI events, which is a protocol used in many
@@ -37,8 +38,8 @@ seq:
     type: header
   - id: tracks
     type: track
-    repeat: expr
-    repeat-expr: hdr.num_tracks
+    repeat:
+      expr: hdr.num_tracks
 types:
   header:
     seq:

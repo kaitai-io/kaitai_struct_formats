@@ -12,6 +12,7 @@ meta:
   imports:
     - /common/vlq_base128_le
   endian: le
+  ks-version: 0.9
 doc: |
   Android OS applications executables are typically stored in its own
   format, optimized for more efficient execution in Dalvik virtual
@@ -28,8 +29,8 @@ instances:
   string_ids:
     pos: header.string_ids_off
     type: string_id_item
-    repeat: expr
-    repeat-expr: header.string_ids_size
+    repeat:
+      expr: header.string_ids_size
     doc: |
       string identifiers list.
 
@@ -41,8 +42,8 @@ instances:
   type_ids:
     pos: header.type_ids_off
     type: type_id_item
-    repeat: expr
-    repeat-expr: header.type_ids_size
+    repeat:
+      expr: header.type_ids_size
     doc: |
       type identifiers list.
 
@@ -53,8 +54,8 @@ instances:
   proto_ids:
     pos: header.proto_ids_off
     type: proto_id_item
-    repeat: expr
-    repeat-expr: header.proto_ids_size
+    repeat:
+      expr: header.proto_ids_size
     doc: |
       method prototype identifiers list.
 
@@ -66,8 +67,8 @@ instances:
   field_ids:
     pos: header.field_ids_off
     type: field_id_item
-    repeat: expr
-    repeat-expr: header.field_ids_size
+    repeat:
+      expr: header.field_ids_size
     doc: |
       field identifiers list.
 
@@ -81,8 +82,8 @@ instances:
   method_ids:
     pos: header.method_ids_off
     type: method_id_item
-    repeat: expr
-    repeat-expr: header.method_ids_size
+    repeat:
+      expr: header.method_ids_size
     doc: |
       method identifiers list.
 
@@ -97,8 +98,8 @@ instances:
   class_defs:
     pos: header.class_defs_off
     type: class_def_item
-    repeat: expr
-    repeat-expr: header.class_defs_size
+    repeat:
+      expr: header.class_defs_size
     doc: |
       class definitions list.
 
@@ -510,8 +511,8 @@ types:
           number of name-value mappings in this annotation
       - id: elements
         type: annotation_element
-        repeat: expr
-        repeat-expr: size.value
+        repeat:
+          expr: size.value
         doc: |
           elements of the annotation, represented directly in-line (not as offsets).
 
@@ -571,8 +572,8 @@ types:
         type: vlq_base128_le
       - id: values
         type: encoded_value
-        repeat: expr
-        repeat-expr: size.value
+        repeat:
+          expr: size.value
   call_site_id_item:
     seq:
       - id: call_site_off
@@ -643,24 +644,24 @@ types:
           the number of virtual methods defined in this item
       - id: static_fields
         type: encoded_field
-        repeat: expr
-        repeat-expr: static_fields_size.value
+        repeat:
+          expr: static_fields_size.value
         doc: |
           the defined static fields, represented as a sequence of encoded elements.
 
           The fields must be sorted by field_idx in increasing order.
       - id: instance_fields
         type: encoded_field
-        repeat: expr
-        repeat-expr: instance_fields_size.value
+        repeat:
+          expr: instance_fields_size.value
         doc: |
           the defined instance fields, represented as a sequence of encoded elements.
 
           The fields must be sorted by field_idx in increasing order.
       - id: direct_methods
         type: encoded_method
-        repeat: expr
-        repeat-expr: direct_methods_size.value
+        repeat:
+          expr: direct_methods_size.value
         doc: |
           the defined direct (any of static, private, or constructor) methods,
           represented as a sequence of encoded elements.
@@ -668,8 +669,8 @@ types:
           The methods must be sorted by method_idx in increasing order.
       - id: virtual_methods
         type: encoded_method
-        repeat: expr
-        repeat-expr: virtual_methods_size.value
+        repeat:
+          expr: virtual_methods_size.value
         doc: |
           the defined virtual (none of static, private, or constructor) methods,
           represented as a sequence of encoded elements.
@@ -728,8 +729,8 @@ types:
         type: u4
       - id: list
         type: map_item
-        repeat: expr
-        repeat-expr: size
+        repeat:
+          expr: size
   type_item:
     seq:
       - id: type_idx
@@ -743,8 +744,8 @@ types:
         type: u4
       - id: list
         type: type_item
-        repeat: expr
-        repeat-expr: size
+        repeat:
+          expr: size
 enums:
   class_access_flags:
     0x0001: public     # public: visible everywhere

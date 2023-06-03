@@ -14,6 +14,7 @@ meta:
     wikidata: Q28009469
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 doc: |
   Python interpreter runs .py files in 2 step process: first, it
   produces bytecode, which it then executes. Translation of .py source
@@ -271,8 +272,8 @@ types:
             type: u4
           - id: items
             type: py_object
-            repeat: expr
-            repeat-expr: count
+            repeat:
+              expr: count
       py_none:
         -webide-representation: "None"
       py_true:

@@ -318,8 +318,8 @@ types:
                   i. e. `-1` truncated to a 16-bit unsigned integer.
               - id: entries
                 type: type_list_entry
-                repeat: expr
-                repeat-expr: num_types
+                repeat:
+                  expr: num_types
                 doc: Entries in the resource type list.
             instances:
               num_types:
@@ -386,8 +386,8 @@ types:
             seq:
               - id: references
                 type: reference
-                repeat: expr
-                repeat-expr: num_references
+                repeat:
+                  expr: num_references
                 doc: The resource references in this reference list.
             types:
               reference:

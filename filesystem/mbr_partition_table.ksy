@@ -9,6 +9,7 @@ meta:
     - dos
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 doc: |
   MBR (Master Boot Record) partition table is a traditional way of
   MS-DOS to partition larger hard disc drives into distinct
@@ -24,8 +25,8 @@ seq:
     size: 0x1be
   - id: partitions
     type: partition_entry
-    repeat: expr
-    repeat-expr: 4
+    repeat:
+      expr: 4
   - id: boot_signature
     contents: [0x55, 0xaa]
 types:

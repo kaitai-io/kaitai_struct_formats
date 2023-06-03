@@ -16,6 +16,7 @@ meta:
   imports:
     - /common/vlq_base128_be
   endian: be
+  ks-version: 0.9
 doc: |
   SQLite3 is a popular serverless SQL engine, implemented as a library
   to be used within other applications. It keeps its databases as
@@ -122,8 +123,8 @@ types:
         if: page_type == 2 or page_type == 5
       - id: cells
         type: ref_cell
-        repeat: expr
-        repeat-expr: num_cells
+        repeat:
+          expr: num_cells
   ref_cell:
     seq:
       - id: ofs_body
@@ -184,8 +185,8 @@ types:
         size: len_header_and_len.value - 1
         type: serials
       - id: column_contents
-        repeat: expr
-        repeat-expr: column_serials.entries.size
+        repeat:
+          expr: column_serials.entries.size
         type: column_content(column_serials.entries[_index])
   serials:
     seq:

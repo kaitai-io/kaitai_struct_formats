@@ -17,6 +17,7 @@ meta:
     wikidata: Q16545707
   license: CC0-1.0
   endian: le
+  ks-version: 0.9
 doc: |
   .dbf is a relational database format introduced in DOS database
   management system dBASE in 1982.
@@ -35,8 +36,8 @@ seq:
   - id: records
     type: record
     size: header1.len_record
-    repeat: expr
-    repeat-expr: header1.num_records
+    repeat:
+      expr: header1.num_records
 types:
   header1:
     doc-ref: http://www.dbase.com/Knowledgebase/INT/db7_file_fmt.htm - section 1.1

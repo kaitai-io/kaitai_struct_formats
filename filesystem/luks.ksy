@@ -11,6 +11,7 @@ meta:
   license: CC0-1.0
   encoding: ASCII
   endian: be
+  ks-version: 0.9
 doc: |
   Linux Unified Key Setup (LUKS) is a format specification for storing disk
   encryption parameters and up to 8 user keys (which can unlock the master key).
@@ -49,8 +50,8 @@ types:
         size: 40
       - id: key_slots
         type: key_slot
-        repeat: expr
-        repeat-expr: 8
+        repeat:
+          expr: 8
     types:
       key_slot:
         seq:

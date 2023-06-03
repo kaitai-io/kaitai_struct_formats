@@ -6,6 +6,7 @@ meta:
   license: MIT
   endian: be
 
+  ks-version: 0.9
 seq:
   - id: version
     type: version
@@ -58,9 +59,8 @@ types:
 
       - id: cipher_suites
         type: u2
-        repeat: expr
-        repeat-expr: len/2
-
+        repeat:
+          expr: len/2
   compression_methods:
     seq:
       - id: len

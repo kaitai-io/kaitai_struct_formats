@@ -27,15 +27,15 @@ seq:
     contents: "#OPL_II#"
   - id: instruments
     type: instrument_entry
-    repeat: expr
-    repeat-expr: 175
+    repeat:
+      expr: 175
   - id: instrument_names
     type: str
     size: 32
     pad-right: 0
     terminator: 0
-    repeat: expr
-    repeat-expr: 175
+    repeat:
+      expr: 175
 types:
   instrument_entry:
     seq:
@@ -47,8 +47,8 @@ types:
         type: u1
         doc: MIDI note for fixed instruments, 0 otherwise
       - id: instruments
-        repeat: expr
-        repeat-expr: 2
+        repeat:
+          expr: 2
         type: instrument
   instrument:
     seq:

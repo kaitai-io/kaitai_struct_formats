@@ -238,8 +238,8 @@ types:
         contents: '{'
       - id: entries
         type: mapping_entry
-        repeat: expr
-        repeat-expr: num_entries
+        repeat:
+          expr: num_entries
         doc: The key-value pairs contained in the mapping.
       - id: closing_brace
         contents: '}'

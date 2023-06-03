@@ -10,6 +10,7 @@ meta:
   license: CC0-1.0
   endian: be
 
+  ks-version: '0.9'
 doc-ref:
   - http://id3.org/id3v2.4.0-structure
   - http://id3.org/id3v2.4.0-frames
@@ -29,8 +30,8 @@ types:
         if: header.flags.flag_headerex
       - id: frames
         type: frame
-        repeat: until
-        repeat-until: _io.pos + _.size.value > header.size.value or _.is_invalid
+        repeat:
+          until: _io.pos + _.size.value > header.size.value or _.is_invalid
       - id: padding
         type: padding
         if: not header.flags.flag_footer

@@ -11,6 +11,7 @@ meta:
     - windows
   license: CC0-1.0
   endian: le
+  ks-version: '0.9'
 doc: |
   WMF (Windows Metafile) is a relatively early vector image format
   introduced for Microsoft Windows in 1990.
@@ -27,8 +28,8 @@ seq:
     type: header
   - id: records
     type: record
-    repeat: until
-    repeat-until: _.function == func::eof
+    repeat:
+      until: _.function == func::eof
 types:
   special_header:
     seq:
@@ -99,8 +100,8 @@ types:
       - id: num_points
         type: s2
       - id: points
-        repeat: expr
-        repeat-expr: num_points
+        repeat:
+          expr: num_points
         type: point_s
   params_polygon:
     doc-ref: section 2.3.3.15 = params_polyline
@@ -108,8 +109,8 @@ types:
       - id: num_points
         type: s2
       - id: points
-        repeat: expr
-        repeat-expr: num_points
+        repeat:
+          expr: num_points
         type: point_s
   # section 2.3.5.14
   #params_setbkcolor:

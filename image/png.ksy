@@ -50,8 +50,8 @@ seq:
   # The rest of the chunks
   - id: chunks
     type: chunk
-    repeat: until
-    repeat-until: _.type == "IEND" or _io.eof
+    repeat:
+      until: _.type == "IEND" or _io.eof
 types:
   chunk:
     seq:

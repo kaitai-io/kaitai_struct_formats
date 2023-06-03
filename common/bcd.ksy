@@ -5,7 +5,7 @@ meta:
     justsolve: Binary-coded_decimal
     wikidata: Q276582
   license: CC0-1.0
-  ks-version: 0.8
+  ks-version: 0.9
 doc: |
   BCD (Binary Coded Decimals) is a common way to encode integer
   numbers in a way that makes human-readable output somewhat
@@ -51,8 +51,8 @@ seq:
       cases:
         4: b4
         8: u1
-    repeat: expr
-    repeat-expr: num_digits
+    repeat:
+      expr: num_digits
 instances:
   as_int:
     value: 'is_le ? as_int_le : as_int_be'
