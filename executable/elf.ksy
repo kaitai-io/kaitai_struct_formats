@@ -299,16 +299,16 @@ types:
       - id: e_ehsize
         type: u2
       # e_phentsize
-      - id: program_header_entry_size
+      - id: len_program_headers
         type: u2
       # e_phnum
-      - id: qty_program_header
+      - id: num_program_headers
         type: u2
       # e_shentsize
-      - id: section_header_entry_size
+      - id: len_section_headers
         type: u2
       # e_shnum
-      - id: qty_section_header
+      - id: num_section_headers
         type: u2
       # e_shstrndx
       - id: section_names_idx
@@ -458,7 +458,7 @@ types:
             value: _root.header.section_headers[linked_section_idx]
             if: |
               linked_section_idx != section_header_idx_special::undefined.to_i
-              and linked_section_idx < _root.header.qty_section_header
+              and linked_section_idx < _root.header.num_section_headers
             doc: may reference a later section header, so don't try to access too early (use only lazy `instances`)
             doc-ref: https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.sheader.html#sh_link
           name:
@@ -703,23 +703,23 @@ types:
     instances:
       program_headers:
         pos: program_header_offset
-        size: program_header_entry_size
+        size: len_program_headers
         type: program_header
         repeat: expr
-        repeat-expr: qty_program_header
+        repeat-expr: num_program_headers
       section_headers:
         pos: section_header_offset
-        size: section_header_entry_size
+        size: len_section_headers
         type: section_header
         repeat: expr
-        repeat-expr: qty_section_header
+        repeat-expr: num_section_headers
       section_names:
         pos: section_headers[section_names_idx].ofs_body
         size: section_headers[section_names_idx].len_body
         type: strings_struct
         if: |
           section_names_idx != section_header_idx_special::undefined.to_i
-          and section_names_idx < _root.header.qty_section_header
+          and section_names_idx < _root.header.num_section_headers
 enums:
   # EI_CLASS
   bits:
