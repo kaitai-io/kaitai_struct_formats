@@ -67,3 +67,4 @@ enums:
     1: static
     2: critter
     4: font
+    8: facade
