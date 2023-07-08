@@ -17,17 +17,17 @@ seq:
   - id: frame_headers
     type: art_frame_header
     repeat: expr
-    repeat-expr: (art_header.flags.to_i & 1>0?1:art_header.direction_count)*art_header.frame_count
+    repeat-expr: (art_header.flags.static?1:art_header.direction_count)*art_header.frame_count
   - id: frame_data
     size: frame_headers[_index].size
     repeat: expr
-    repeat-expr: (art_header.flags.to_i & 1>0?1:art_header.direction_count)*art_header.frame_count
+    repeat-expr: (art_header.flags.static?1:art_header.direction_count)*art_header.frame_count
 types:
   art_header:
     seq:
       - id: flags
-        type: u4
-        enum: art_flags
+        size: 4
+        type: art_flags
       - id: frame_rate
         type: u4
       - id: direction_count
@@ -83,10 +83,14 @@ types:
         type: u1
       - id: align
         type: u1
-enums:
   art_flags:
-    1: static
-    2: critter
-    4: font
-    8: facade
-      
+    seq:
+      - id: static
+        type: b1 # 0x01
+      - id: critter
+        type: b1 # 0x02
+      - id: font
+        type: b1 # 0x04
+      - id: facade
+        type: b1 # 0x08
+        
