@@ -54,7 +54,7 @@ types:
         repeat-expr: 8
   art_pal:
     seq:
-      - type: art_rgb
+      - type: art_bgr
         repeat: expr
         repeat-expr: 256
   art_frame_header:
@@ -73,13 +73,13 @@ types:
         type: s4
       - id: delta_y
         type: s4
-  art_rgb:
+  art_bgr:
     seq:
-      - id: r
+      - id: b
         type: u1
       - id: g
         type: u1
-      - id: b
+      - id: r
         type: u1
       - id: align
         type: u1
