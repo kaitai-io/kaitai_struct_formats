@@ -18,11 +18,11 @@ seq:
   - id: frame_headers
     type: art_frame_header
     repeat: expr
-    repeat-expr: (art_header.flags.static?1:art_header.direction_count)*art_header.frame_count
+    repeat-expr: '(art_header.flags.static ? 1 : art_header.direction_count) * art_header.frame_count'
   - id: frame_data
     size: frame_headers[_index].size
     repeat: expr
-    repeat-expr: (art_header.flags.static?1:art_header.direction_count)*art_header.frame_count
+    repeat-expr: '(art_header.flags.static ? 1 : art_header.direction_count) * art_header.frame_count'
 types:
   art_header:
     seq:
