@@ -44,7 +44,8 @@ enums:
 
 
 types:
-  header: # policydb_read
+  header:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L4225 policydb_read
     seq:
       - id: magic
         type: u4
@@ -157,7 +158,8 @@ types:
         encoding: ascii
         size: version_length
 
-  extensible_bitmap: # ebitmap_read
+  extensible_bitmap:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/ebitmap.c#L539 ebitmap_read
     seq:
       - id: mapsize
         type: u4
@@ -222,7 +224,6 @@ types:
         type: common
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   classes:
     seq:
@@ -236,7 +237,6 @@ types:
         type: class
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   roles:
     seq:
@@ -250,7 +250,6 @@ types:
         type: role
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   types:
     seq:
@@ -264,7 +263,6 @@ types:
         type: type
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   users:
     seq:
@@ -278,9 +276,9 @@ types:
         type: user
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
-  bools: # cond_read_bools
+  bools:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/conditional.c#L567 cond_read_bool
     seq:
       - id: primary_names_count
         -orig-id: nprim
@@ -292,9 +290,9 @@ types:
         type: bool
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
-  levels: # sens_read
+  levels:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L3414 sens_read
     seq:
       - id: primary_names_count
         -orig-id: nprim
@@ -306,9 +304,9 @@ types:
         type: level
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
-  cats: # cat_read
+  cats:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L3460 cat_read
     seq:
       - id: primary_names_count
         -orig-id: nprim
@@ -320,9 +318,9 @@ types:
         type: cat
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
-  common: # common_read
+  common:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L2093 common_read
     seq:
       - id: length
         -orig-id: len
@@ -347,13 +345,13 @@ types:
         type: permission
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
-  permission: # perm_read
+  permission:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L2057 perm_read
     seq:
       - id: length
         -orig-id: len
-        type: u4 # validity not verified
+        type: u4
       - id: value
         type: u4
       - id: key
@@ -361,7 +359,8 @@ types:
         encoding: ASCII
         size: length
 
-  class: # class_read
+  class:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L2241 class_read
     seq:
       - id: key_length
         -orig-id: len
@@ -459,7 +458,8 @@ types:
         type: type_set
         if: 'type == expression_types::names and ((_root.type == policy_types::kernel and _root.version >= 29) or (_root.type != policy_types::kernel))'
 
-  mls_range: # mls_read_range_helper
+  mls_range:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L1850 mls_read_range_helper
     seq:
       - id: items
         type: u4
@@ -478,7 +478,8 @@ types:
         type: extensible_bitmap
         if: items > 1
   
-  context: # context_read_and_validate
+  context:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#2018 context_read_and_validate
     seq:
       - id: user
         type: u4
@@ -490,7 +491,8 @@ types:
         type: mls_range
         if: '(_root.type == policy_types::kernel and _root.version >= 19) or (_root.type == policy_types::base and _root.version >= 5)'
 
-  role: # role_read
+  role:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L2352 role_read
     seq:
       - id: length
         -orig-id: len
@@ -519,7 +521,8 @@ types:
         type: extensible_bitmap
         if: '(_root.type != policy_types::kernel and _root.version >= 13)'
 
-  type: # type_read
+  type:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#2431 type_read
     seq:
     # 3: kern <= 23
     # 4: kern >= 24 or !kern <= 7 or !kern == 9
@@ -561,7 +564,8 @@ types:
       - id: flag
         type: u4
 
-  user: # user_read
+  user:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L3327 user_read
     seq:
       - id: length
         -orig-id: len
@@ -594,14 +598,16 @@ types:
         type: mls_semantic_range
         if: '(_root.type == policy_types::module or _root.type == policy_types::base) and (_root.version >= 6)'
 
-  role_set: # role_set_read
+  role_set:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L1813 role_set_read
     seq:
       - id: roles
         type: extensible_bitmap
       - id: flags
         type: u4
 
-  mls_level: # mls_read_level
+  mls_level:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L3303 mls_read_level
     seq:
       - id: sensitivity
         -orig-id: sens
@@ -610,14 +616,16 @@ types:
         -orig-id: cat
         type: extensible_bitmap
 
-  mls_semantic_range: # mls_read_semantic_range_helper
+  mls_semantic_range:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L1955 mls_read_semantic_range_helper
     seq:
       - id: level0
         type: mls_semantic_level
       - id: level1
         type: mls_semantic_level
 
-  mls_semantic_level: # mls_read_semantic_level_helper
+  mls_semantic_level:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L1907 mls_read_semantic_level_helper
     seq:
       - id: sensitivity
         -orig-id: sens
@@ -638,7 +646,8 @@ types:
       - id: high
         type: u4
 
-  bool: # cond_read_bool
+  bool:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L567 cond_read_bool
     seq:
       - id: value
         type: u4
@@ -656,7 +665,8 @@ types:
         if: '(_root.type != policy_types::kernel and _root.version >= 14)' 
 
 
-  level: # sens_read
+  level:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L3414 sens_read
     seq:
       - id: length
         -orig-id: len
@@ -672,7 +682,8 @@ types:
       - id: level
         type: mls_level
 
-  cat: # cat_read
+  cat:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L3460 cat_read
     seq:
       - id: length
         -orig-id: len
@@ -688,7 +699,8 @@ types:
         encoding: ascii
         size: length
 
-  access_vector_table: # avtab_read
+  access_vector_table:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/avtab.c#L591 avtab_read
     seq:
       - id: elements_count
         -orig-id: nel
@@ -705,7 +717,8 @@ types:
         if: elements_count > 0 and _root.version >= 20
 
 
-  access_vector_old: # avtab_read_item
+  access_vector_old:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/avtab.c#L434 avtab_read_item
     seq:
       - id: total
         -orig-id: items2
@@ -727,7 +740,8 @@ types:
         repeat: expr
         repeat-expr: 8
 
-  access_vector: # avtab_read_item
+  access_vector:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/avtab.c#L572 avtab_read_item
     seq:
       - id: source_type
         type: u2
@@ -752,7 +766,8 @@ types:
         type: u4
         if: '(specified & 0x700) == 0'
     
-  conditional_list: # cond_read_list
+  conditional_list:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/conditional.c#L821 cond_read_list
     seq:
       - id: length
         -orig-id: len
@@ -762,7 +777,8 @@ types:
         repeat: expr
         repeat-expr: length
 
-  conditional_node: # cond_read_node
+  conditional_node:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/conditional.c#L747 cond_read_node
     seq:
       - id: current_state
         -orig-id: cur_state
@@ -797,7 +813,8 @@ types:
       - id: boolean
         type: u4
 
-  cond_av_list: # cond_read_av_list
+  cond_av_list:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/conditional.c#L696 cond_read_av_list
     seq:
       - id: length
         -orig-id: len
@@ -813,7 +830,8 @@ types:
         repeat-expr: length
         if: length > 0 and _root.version >= 20
 
-  avrule_list: # avrule_read_list
+  avrule_list:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L3716 avrule_read_list
     seq:
       - id: length
         -orig-id: len
@@ -824,7 +842,8 @@ types:
         repeat-expr: length
         if: length > 0
   
-  avrule: # avrule_read
+  avrule:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L3510 avrule_read
     seq:
       - id: specified
         type: u4
@@ -846,7 +865,8 @@ types:
         type: avrule_specified
         if: '(specified & (0x0100 | 0x0200 | 0x0400 | 0x0800)) != 0'
 
-  avrule_item: # avrule_read
+  avrule_item:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L3510 avrule_read
     seq:
       - id: tclass
         type: u4
@@ -867,7 +887,8 @@ types:
         repeat: expr
         repeat-expr: elements_count
   
-  role_trans: # role_trans_read
+  role_trans:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L3716 role_trans_read
     seq:
       - id: elements_count
         -orig-id: nel
@@ -876,7 +897,6 @@ types:
         type: role_trans_item
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   role_trans_item:
     seq:
@@ -890,7 +910,8 @@ types:
         type: u4
         if: '(_root.type == policy_types::kernel and _root.version >= 26)'
 
-  role_allow: # role_allow_read
+  role_allow:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L2567 role_allow_read
     seq:
       - id: elements_count
         -orig-id: nel
@@ -899,7 +920,6 @@ types:
         type: role_allow_item
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   role_allow_item:
     seq:
@@ -908,7 +928,8 @@ types:
       - id: new_role
         type: u4
 
-  filename_trans: # filename_trans_read
+  filename_trans:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L2845 filename_trans_read
     seq:
       - id: elements_count
         -orig-id: nel
@@ -924,7 +945,8 @@ types:
         repeat-expr: elements_count
         if: '(elements_count > 0) and (_root.version >= 33)'
 
-  filename_trans_item_old: # filename_trans_read_one_compat
+  filename_trans_item_old:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L2674 filename_trans_read_one_compat
     seq:
       - id: length
         -orig-id: len
@@ -943,7 +965,8 @@ types:
         type: u4
 
 
-  filename_trans_item: # filename_trans_read_one
+  filename_trans_item:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L2756 filename_trans_read_one
     seq:
       - id: length
         -orig-id: len
@@ -973,7 +996,8 @@ types:
       - id: otype
         type: u4
 
-  avrule_block: # avrule_block_read
+  avrule_block:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L4030 avrule_block_read
     seq:
       - id: count
         -orig-id: num_blocks
@@ -993,7 +1017,8 @@ types:
         repeat-expr: num_decls
         if: num_decls > 0
   
-  avrule_decl: # avrule_decl_read
+  avrule_decl:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L3980 avrule_decl_read
     seq:
       - id: decl_id
         type: u4
@@ -1021,7 +1046,8 @@ types:
       - id: symbols
         type: symbols
 
-  role_trans_rule: # role_trans_rule_read
+  role_trans_rule:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L3749 role_trans_rule_read
     seq:
       - id: elements_count
         -orig-id: nel
@@ -1030,7 +1056,6 @@ types:
         type: role_trans_rule_item
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   role_trans_rule_item:
     seq:
@@ -1044,7 +1069,8 @@ types:
       - id: new_role
         type: u4
 
-  role_allow_rule: # role_allow_rule_read
+  role_allow_rule:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L3801 role_allow_rule_read
     seq:
       - id: elements_count
         -orig-id: nel
@@ -1053,7 +1079,6 @@ types:
         type: common
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   role_allow_rule_item:
     seq:
@@ -1062,7 +1087,8 @@ types:
     - id: new_roles
       type: role_set
 
-  filename_trans_rule: # filename_trans_rule_read
+  filename_trans_rule:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L3837 filename_trans_rule_read
     seq:
       - id: count
         type: u4
@@ -1095,7 +1121,8 @@ types:
         if: _root.version >= 21
 
 
-  range_trans_rule: # range_trans_rule_read
+  range_trans_rule:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L3903 range_trans_rule_read
     seq:
       - id: count
         -orig-id: nel
@@ -1116,7 +1143,8 @@ types:
       - id: trange
         type: mls_semantic_range
 
-  scope_index: # scope_index_read
+  scope_index:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L3945 scope_index_read
     seq:
       - id: scope
         type: extensible_bitmap
@@ -1140,9 +1168,9 @@ types:
         type: scope
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
-  scope: # scope_read
+  scope:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L4108 scope_read
     seq:
       - id: length
         -orig-id: len
@@ -1164,7 +1192,8 @@ types:
         repeat: expr
         repeat-expr: decl_ids_len
 
-  ocontext_selinux: # ocontext_read_selinux
+  ocontext_selinux:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L2983 ocontext_read_selinux
     seq:
       - id: initial_sids
         type: initial_sids
@@ -1203,7 +1232,6 @@ types:
         type: initial_sid
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   initial_sid:
     seq:
@@ -1221,7 +1249,6 @@ types:
         type: filesystem
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   filesystem:
     seq:
@@ -1248,7 +1275,6 @@ types:
         type: port
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   port:
     seq:
@@ -1270,7 +1296,6 @@ types:
         type: node
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   node:
     seq:
@@ -1290,7 +1315,6 @@ types:
         type: fsuse
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   fsuse:
     seq:
@@ -1317,7 +1341,6 @@ types:
         type: node6
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   node6:
     seq:
@@ -1341,7 +1364,6 @@ types:
         type: ibpkey
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   ibpkey:
     seq:
@@ -1361,7 +1383,6 @@ types:
         type: ibpendport
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   ibpendport:
     seq:
@@ -1380,7 +1401,8 @@ types:
         type: context
 
 
-  ocontext_xen: # ocontext_read_xen
+  ocontext_xen:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L2872 ocontext_read_xen
     seq:
       - id: xen_isids
         type: xen_isids
@@ -1410,7 +1432,6 @@ types:
         type: xen_isid
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   xen_isid:
     seq:
@@ -1428,7 +1449,6 @@ types:
         type: xen_pirq
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   xen_pirq:
     seq:
@@ -1446,7 +1466,6 @@ types:
         type: xen_ioport
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   xen_ioport:
     seq:
@@ -1466,7 +1485,6 @@ types:
         type: xen_iomem
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   xen_iomem:
     seq:
@@ -1494,7 +1512,6 @@ types:
         type: xen_pcidevice
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   xen_pcidevice:
     seq:
@@ -1513,7 +1530,6 @@ types:
         type: xen_devicetree
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   xen_devicetree:
     seq:
@@ -1529,7 +1545,8 @@ types:
       - id: context0
         type: context
 
-  genfs: # genfs_read
+  genfs:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.c#L3180 genfs_read
     seq:
       - id: elements_count
         -orig-id: nel
@@ -1538,7 +1555,6 @@ types:
         type: genfs_item
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   genfs_item:
     seq:
@@ -1558,7 +1574,6 @@ types:
         type: genfs2_item
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   genfs2_item:
     seq:
@@ -1576,7 +1591,8 @@ types:
       - id: context0
         type: context
 
-  range: # range_read
+  range:
+    doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019e/libsepol/src/policydb.#L3620 range_read
     seq:
       - id: elements_count
         -orig-id: nel
@@ -1585,7 +1601,6 @@ types:
         type: range_item
         repeat: expr
         repeat-expr: elements_count
-        if: elements_count > 0
 
   range_item:
     seq:
