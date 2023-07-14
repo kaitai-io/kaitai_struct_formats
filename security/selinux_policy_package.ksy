@@ -5,6 +5,9 @@ meta:
   license: CC0-1.0
   encoding: ASCII
   endian: le
+doc: |
+  This format is used to store together various policies files as sections.
+  This format has no specification. The source of truth is the code of its library.
 doc-ref: https://github.com/SELinuxProject/selinux/blob/820f019ed9e3b9a9e3e62ae378f99282990976a2/libsepol/src/module.c
 seq:
   - id: magic
@@ -22,9 +25,9 @@ seq:
 types:
   section:
     seq:
-    - id: offset
-      -orig-id: off
-      type: u4
+      - id: offset
+        -orig-id: off
+        type: u4
     instances:
       section_magic:
         io: _root._io

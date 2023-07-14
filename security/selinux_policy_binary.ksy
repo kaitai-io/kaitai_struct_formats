@@ -5,6 +5,13 @@ meta:
   license: CC0-1.0
   encoding: ASCII
   endian: le
+doc: |
+  This format is the result of compiled policies.
+  This format has no specification.
+  The source of truth is the code of its library: one reader and one writer.
+  The same parser handles together 3 file types: kernel, module and base,
+    with 2 ranges of versions: 15-33 for kernel, and 4-21 for base or module files, and 2 systems: Linux or Xen.
+
 doc-ref:
   - https://github.com/SELinuxProject/selinux/blob/820f019ed9e3b9a9e3e62ae378f99282990976a2/libsepol/src/policydb.c
   - https://github.com/SELinuxProject/selinux/blob/820f019ed9e3b9a9e3e62ae378f99282990976a2/libsepol/src/write.c
