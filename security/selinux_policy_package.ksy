@@ -14,24 +14,24 @@ seq:
     contents: [0x8f, 0xff, 0x7c, 0xf9]
   - id: version  # module_package_read_offsets
     type: u4
-  - id: sections_count
+  - id: num_sections
     -orig-id: nsec
     type: u4
-  - id: section
+  - id: sections
     type: section
     repeat: expr
-    repeat-expr: sections_count
+    repeat-expr: num_sections
 
 types:
   section:
     seq:
-      - id: offset
+      - id: ofs_section
         -orig-id: off
         type: u4
     instances:
       section_magic:
         io: _root._io
-        pos: offset
+        pos: ofs_section
         type: u4
         enum: section_magics
 
