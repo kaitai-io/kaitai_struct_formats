@@ -66,34 +66,110 @@ types:
       - id: data_dirs
         type: header_data_dirs
     enums:
+      # Don't forget to update the `machine_type` enum in `executable/microsoft_pe.ksy` when
+      # you modify this one.
+      #
+      # https://learn.microsoft.com/en-us/windows/win32/debug/pe-format#machine-types
       machine_type:
-        0x0: unknown
-        0x1d3: am33
-        0x8664: amd64
-        0x1c0: arm
-        0xaa64: arm64
-        0x1c4: armnt
-        0xebc: ebc
-        0x14c: i386
-        0x200: ia64
-        0x9041: m32r
-        0x266: mips16
-        0x366: mipsfpu
-        0x466: mipsfpu16
-        0x1f0: powerpc
-        0x1f1: powerpcfp
-        0x166: r4000
-        0x5032: riscv32
-        0x5064: riscv64
-        0x5128: riscv128
-        0x1a2: sh3
-        0x1a3: sh3dsp
-        0x1a6: sh4
-        0x1a8: sh5
-        0x1c2: thumb
-        0x169: wcemipsv2
-        # Not mentioned in Microsoft documentation, but widely regarded
-        0x184: alpha
+        0x0:
+          id: unknown
+          doc: The content of this field is assumed to be applicable to any machine type
+        0x184:
+          id: alpha
+          doc: Alpha AXP, 32-bit address space
+        0x284:
+          id: alpha64_or_axp64
+          -orig-id:
+            - IMAGE_FILE_MACHINE_ALPHA64
+            - IMAGE_FILE_MACHINE_AXP64
+          doc: |
+            > Alpha 64, 64-bit address space
+            or
+            > AXP 64 (Same as Alpha 64)
+        0x1d3:
+          id: am33
+          doc: Matsushita AM33
+        0x8664:
+          id: amd64
+          doc: x64
+        0x1c0:
+          id: arm
+          doc: ARM little endian
+        0xaa64:
+          id: arm64
+          doc: ARM64 little endian
+        0x1c4:
+          id: arm_nt
+          -orig-id: IMAGE_FILE_MACHINE_ARMNT
+          doc: ARM Thumb-2 little endian
+        0xebc:
+          id: ebc
+          doc: EFI byte code
+        0x14c:
+          id: i386
+          doc: Intel 386 or later processors and compatible processors
+        0x200:
+          id: ia64
+          doc: Intel Itanium processor family
+        0x6232:
+          id: loongarch32
+          doc: LoongArch 32-bit processor family
+        0x6264:
+          id: loongarch64
+          doc: LoongArch 64-bit processor family
+        0x9041:
+          id: m32r
+          doc: Mitsubishi M32R little endian
+        0x266:
+          id: mips16
+          doc: MIPS16
+        0x366:
+          id: mips_fpu
+          -orig-id: IMAGE_FILE_MACHINE_MIPSFPU
+          doc: MIPS with FPU
+        0x466:
+          id: mips16_fpu
+          -orig-id: IMAGE_FILE_MACHINE_MIPSFPU16
+          doc: MIPS16 with FPU
+        0x1f0:
+          id: powerpc
+          doc: Power PC little endian
+        0x1f1:
+          id: powerpc_fp
+          -orig-id: IMAGE_FILE_MACHINE_POWERPCFP
+          doc: Power PC with floating point support
+        0x166:
+          id: r4000
+          doc: MIPS little endian
+        0x5032:
+          id: riscv32
+          doc: RISC-V 32-bit address space
+        0x5064:
+          id: riscv64
+          doc: RISC-V 64-bit address space
+        0x5128:
+          id: riscv128
+          doc: RISC-V 128-bit address space
+        0x1a2:
+          id: sh3
+          doc: Hitachi SH3
+        0x1a3:
+          id: sh3_dsp
+          -orig-id: IMAGE_FILE_MACHINE_SH3DSP
+          doc: Hitachi SH3 DSP
+        0x1a6:
+          id: sh4
+          doc: Hitachi SH4
+        0x1a8:
+          id: sh5
+          doc: Hitachi SH5
+        0x1c2:
+          id: thumb
+          doc: Thumb
+        0x169:
+          id: wce_mips_v2
+          -orig-id: IMAGE_FILE_MACHINE_WCEMIPSV2
+          doc: MIPS little-endian WCE v2
       subsystem_enum:
         0: unknown
         1: native
