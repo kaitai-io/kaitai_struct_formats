@@ -58,6 +58,19 @@ types:
         size: optional_hdr.data_dirs.certificate_table.size
         type: certificate_table
         if: optional_hdr.data_dirs.certificate_table.virtual_address != 0
+      dotnet_structure:
+        type: dotnet_structure
+        if: optional_hdr.data_dirs.clr_runtime_header.virtual_address != 0
+      dotnet_header:
+        pos: dotnet_structure.linked_sections[0].pointer_to_raw_data
+        size: _root.pe.optional_hdr.data_dirs.clr_runtime_header.size
+        type: dotnet_header
+        if: optional_hdr.data_dirs.clr_runtime_header.virtual_address != 0
+      dotnet_metadata_header:
+        pos: dotnet_header.meta_data.pointer_to_raw_data
+        size: dotnet_header.meta_data.size
+        type: dotnet_metadata_header
+        if: optional_hdr.data_dirs.clr_runtime_header.virtual_address != 0 and dotnet_header.meta_data.size != 0
   coff_header:
     doc-ref: 3.3. COFF File Header (Object and Image)
     seq:
@@ -402,6 +415,8 @@ types:
         type: u4
   section:
     -webide-representation: "{name}"
+    to-string: |
+      'Section <Name: ' + name + ', VirtualSize: ' + virtual_size.to_s + ', VirtualAddr: ' + virtual_address.to_s + ', PointerToRawData: ' + pointer_to_raw_data.to_s + '>'
     seq:
       - id: name
         type: str
@@ -483,3 +498,132 @@ types:
         -orig-id: bCertificate
         size: length - 8
         doc: Contains a certificate, such as an Authenticode signature.
+  linked_section:
+    params:
+      - id: current_virtual_address
+        type: u4
+      - id: section_idx
+        type: u4
+      - id: virtual_address
+        type: u4
+      - id: section_pointer_to_raw_data
+        type: u4
+    instances:
+      pointer_to_raw_data:
+        value: section_pointer_to_raw_data + (current_virtual_address - virtual_address)
+
+  dotnet_structure:
+    doc-ref: https://www.ntcore.com/files/dotnetformat.htm
+    seq:
+      - id: linked_sections
+        type: 'linked_section(_root.pe.optional_hdr.data_dirs.clr_runtime_header.virtual_address, _index, _root.pe.sections[_index].virtual_address, _root.pe.sections[_index].pointer_to_raw_data)'
+        repeat: until
+        repeat-until: '_root.pe.optional_hdr.data_dirs.clr_runtime_header.virtual_address >= _root.pe.sections[_index].virtual_address and _root.pe.optional_hdr.data_dirs.clr_runtime_header.virtual_address <= _root.pe.sections[_index].virtual_address + _root.pe.sections[_index].size_of_raw_data'
+    instances:
+      pointer_to_raw_data:
+        value: '_root.pe.optional_hdr.data_dirs.clr_runtime_header.virtual_address != 0 ? linked_sections[0].pointer_to_raw_data : 0'
+
+  data_dir_raw:
+    to-string: |
+      'Data dir <Virtual addr: ' + virtual_address.to_s + ', Size: ' + size.to_s + ', PointerToRawData: ' + pointer_to_raw_data.to_s + '>'
+    seq:
+      - id: virtual_address
+        type: u4
+      - id: size
+        type: u4
+      - id: linked_sections
+        type: 'linked_section(virtual_address, _index, _root.pe.sections[_index].virtual_address, _root.pe.sections[_index].pointer_to_raw_data)'
+        repeat: until
+        repeat-until: 'virtual_address >= _root.pe.sections[_index].virtual_address and virtual_address <= _root.pe.sections[_index].virtual_address + _root.pe.sections[_index].size_of_raw_data'
+        if: |
+          virtual_address != 0
+    instances:
+      pointer_to_raw_data:
+        value: 'virtual_address != 0 ? linked_sections[0].pointer_to_raw_data : 0'
+
+  dotnet_header:
+    to-string: |
+      '.NET Header'
+    seq:
+      - id: cb
+        type: u4
+      - id: major_runtime_version
+        type: u2
+      - id: minor_runtime_version
+        type: u2
+      - id: meta_data
+        type: data_dir_raw
+      - id: flags
+        type: u4
+        enum: flag_enum
+      - id: entry_point_token
+        type: u4
+      - id: entry_point_virtual_address
+        type: u4
+      - id: resources
+        type: data_dir_raw
+      - id: strong_name_signature
+        type: data_dir_raw
+      - id: code_manager_table
+        type: data_dir_raw
+      - id: export_address_table_jumps
+        type: data_dir_raw
+      - id: managed_native_header
+        type: data_dir_raw
+    enums:
+      flag_enum:
+        0: unknown
+        0x00000001: il_only
+        0x00000002: required_32bit
+        0x00000004: il_library
+        0x00000008: strongnamesigned
+        0x00000010: native_entrypoint
+        0x00010000: trackdebugdata
+
+  dotnet_metadata_header:
+    doc-ref: https://www.ntcore.com/files/dotnetformat.htm
+    to-string: |
+      'Metadata Header <.NET Version ' + version_string + ', NumberOfStreams: ' + number_of_streams.to_s + '>'
+    seq:
+      - id: signature
+        type: u4
+      - id: major_version
+        type: u2
+      - id: minor_version
+        type: u2
+      - id: reserved
+        type: u4
+      - id: version_length
+        type: u4
+      - id: version_string
+        type: str
+        encoding: UTF-8
+        size: version_length
+        pad-right: 0
+      - id: flags
+        type: u2
+      - id: number_of_streams
+        type: u2
+      - id: streams
+        repeat: expr
+        repeat-expr: number_of_streams
+        type: dotnet_stream
+  dotnet_stream:
+    -webide-representation: '{name}'
+    to-string: |
+      'Stream <Name: ' + name + ', Offset: ' + offset.to_s + ', Size: ' + size.to_s + ', PointerToRawData: ' + pointer_to_raw_data.to_s + '>'
+    seq:
+      - id: offset
+        type: u4
+      - id: size
+        type: u4
+      - id: name
+        type: strz
+        terminator: 0
+        eos-error: false
+        encoding: ascii
+      - id: padding
+        size: (4 - _io.pos) % 4
+    instances:
+      pointer_to_raw_data:
+        value: _root.pe.dotnet_header.meta_data.pointer_to_raw_data + offset
