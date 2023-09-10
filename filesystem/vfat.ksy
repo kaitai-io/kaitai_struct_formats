@@ -2,7 +2,7 @@ meta:
   id: vfat
   # actually FAT12
   xref:
-    forensicswiki: FAT
+    forensicswiki: fat
     justsolve: FAT
     wikidata: Q190167
   tags:

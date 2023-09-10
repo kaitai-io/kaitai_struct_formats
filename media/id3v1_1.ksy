@@ -3,7 +3,7 @@ meta:
   title: ID3v1.1 tag for .mp3 files
   file-extension: mp3
   xref:
-    forensicswiki: ID3
+    forensicswiki: id3
     justsolve: ID3
     loc: fdd000107 # ID3v1
     wikidata: Q1054220

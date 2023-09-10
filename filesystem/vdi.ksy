@@ -8,7 +8,7 @@ meta:
   file-extension: vdi
   xref:
     justsolve: VDI
-    forensicswiki: Virtual_Disk_Image_(VDI)
+    forensicswiki: virtual_disk_image_(vdi)
     pronom: fmt/726
     wikidata: Q29209126
   license: GPL-3.0-or-later

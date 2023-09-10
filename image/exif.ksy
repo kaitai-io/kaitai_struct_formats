@@ -1,7 +1,7 @@
 meta:
   id: exif
   xref:
-    forensicswiki: Exif
+    forensicswiki: exif
     justsolve: Exif
     loc: fdd000146
     pronom:

@@ -7,7 +7,7 @@ meta:
     - db3
     - sqlite3
   xref:
-    forensicswiki: SQLite_database_format
+    forensicswiki: sqlite_database_format
     justsolve: SQLite
     loc: fdd000461
     pronom: fmt/729

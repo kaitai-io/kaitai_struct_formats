@@ -5,7 +5,7 @@ meta:
     - png
     - apng
   xref:
-    forensicswiki: Portable_Network_Graphics_(PNG)
+    forensicswiki: portable_network_graphics_(png)
     iso: 15948:2004
     justsolve:
       - PNG
