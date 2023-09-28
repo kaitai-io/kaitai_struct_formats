@@ -19,11 +19,11 @@ doc: |
   in the uncompressed data and the size of the uncompressed file.
 seq:
   - id: header
-    type: header
     size: 32
+    type: header
   - id: filenames
-    type: filenames
     size: header.len_filenames
+    type: filenames
   - id: inodes
     type: 'inode(_index != 0 ? inodes[_index - 1].cur_max_lzma_blob : 0)'
     repeat: expr
@@ -38,10 +38,10 @@ seq:
     type: dummy
 instances:
   lzma_blobs:
+    io: _root.lzma_blobs_area._io
     type: lzma_blob(_index)
     repeat: expr
     repeat-expr: _root.inodes.last.cur_max_lzma_blob + 1
-    io: _root.lzma_blobs_area._io
 types:
   dummy: {}
   lzma_blob:
@@ -88,13 +88,13 @@ types:
       cur_max_lzma_blob:
         value: 'lzma_blob > prev_max_lzma_blob ? lzma_blob : prev_max_lzma_blob'
       filename:
+        io: _root.filenames._io
         pos: ofs_name
         type: strz
-        io: _root.filenames._io
       directory_name:
+        io: _root.filenames._io
         pos: ofs_directory
         type: strz
-        io: _root.filenames._io
   lzma_meta:
     params:
       - id: prev_max_lzma_blob_len
