@@ -4,7 +4,7 @@ meta:
     - pcap
     - pcapdump
   xref:
-    forensicswiki: PCAP
+    forensicswiki: pcap
     justsolve: PCAP
     pronom: fmt/779
     wikidata: Q28009435

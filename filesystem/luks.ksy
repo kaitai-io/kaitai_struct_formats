@@ -2,7 +2,7 @@ meta:
   id: luks
   title: Linux Unified Key Setup
   xref:
-    forensicswiki: Linux_Unified_Key_Setup_(LUKS)
+    forensicswiki: linux_unified_key_setup_(luks)
     justsolve: LUKS
     wikidata: Q29000504
   tags:

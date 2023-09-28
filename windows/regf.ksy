@@ -4,7 +4,7 @@ meta:
   application: Windows NT and later
   xref:
     justsolve: Windows_Registry
-    forensicswiki: Windows_NT_Registry_File_(REGF)
+    forensicswiki: windows_nt_registry_file_(regf)
     wikidata: Q463244
   license: CC0-1.0
   endian: le

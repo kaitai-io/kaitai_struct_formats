@@ -2,7 +2,7 @@ meta:
   id: apm_partition_table
   title: APM (Apple Partition Map) partition table
   xref:
-    forensicswiki: APM
+    forensicswiki: apm
     justsolve: Apple_Partition_Map
     wikidata: Q375944
   tags:

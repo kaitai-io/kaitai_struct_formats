@@ -3,7 +3,7 @@ meta:
   title: systemd journal file
   file-extension: journal
   xref:
-    forensicswiki: Systemd
+    forensicswiki: systemd
   tags:
     - linux
     - log

@@ -93,7 +93,7 @@ class FormatPagesGenerator
     LANGS.each_key { |lang|
       lang_prim = LANGS[lang].fetch(:canonical, {})[:id] || lang
       fn = "usage_#{lang_prim}"
-      @erb_usage[lang] = erb(fn) if FileTest.exists?("#{fn}.html.erb")
+      @erb_usage[lang] = erb(fn) if FileTest.exist?("#{fn}.html.erb")
     }
 
     @base_url = '//kaitai.io/'
@@ -374,7 +374,7 @@ class FormatPagesGenerator
     when 'iso'
       nil
     when 'forensicswiki'
-      "https://forensicswiki.xyz/page/#{value}"
+      "https://forensics.wiki/#{value}/"
     when 'justsolve'
       "http://fileformats.archiveteam.org/wiki/#{value}"
     when 'loc'

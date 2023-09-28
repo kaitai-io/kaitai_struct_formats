@@ -3,7 +3,7 @@ meta:
   title: ZIP archive file
   file-extension: zip
   xref:
-    forensicswiki: ZIP
+    forensicswiki: zip
     iso: 21320-1
     justsolve: ZIP
     loc:

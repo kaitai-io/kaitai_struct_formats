@@ -2,7 +2,7 @@ meta:
   id: bmp
   file-extension: bmp
   xref:
-    forensicswiki: BMP
+    forensicswiki: bmp
     justsolve: BMP
     loc: fdd000189
     mime: image/bmp

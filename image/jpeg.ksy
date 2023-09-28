@@ -10,7 +10,7 @@ meta:
     - jfi
   xref:
     ecma: TR/98
-    forensicswiki: JPEG
+    forensicswiki: jpeg
     justsolve: JFIF
     loc: fdd000017
     mime: image/jpeg

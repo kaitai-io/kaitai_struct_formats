@@ -3,7 +3,7 @@ meta:
   title: VMWare Virtual Disk
   file-extension: vmdk
   xref:
-    forensicswiki: VMWare_Virtual_Disk_Format_(VMDK)
+    forensicswiki: vmware_virtual_disk_format_(vmdk)
     justsolve: VMDK
     wikidata: Q2658179
   license: CC0-1.0

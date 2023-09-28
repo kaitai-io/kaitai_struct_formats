@@ -7,7 +7,7 @@ meta:
     - lvm tools
     - libvslvm
   xref:
-    forensicswiki: Linux_Logical_Volume_Manager_(LVM)
+    forensicswiki: linux_logical_volume_manager_(lvm)
     wikidata: Q6667482 # software, not format
   tags:
     - filesystem

@@ -3,7 +3,7 @@ meta:
   title: GIF (Graphics Interchange Format) image file
   file-extension: gif
   xref:
-    forensicswiki: GIF
+    forensicswiki: gif
     justsolve: GIF
     loc: fdd000133 # GIF 89a
     mime: image/gif
