@@ -1,6 +1,6 @@
 meta:
-  id: minifs
-  title: MINIFS
+  id: tplink_minifs
+  title: TP-Link MINIFS
   license: CC0-1.0
   endian: be
   encoding: ASCII
