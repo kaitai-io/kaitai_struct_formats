@@ -29,12 +29,12 @@ seq:
     repeat: expr
     repeat-expr: header.num_files
   - id: lzma_metas
-    type: 'lzma_meta(_index != 0 ? lzma_metas[_index - 1].cur_max_lzma_blob_len : 0)'
+    type: 'lzma_meta(_index != 0 ? lzma_metas[_index - 1].ofs_end : 0)'
     repeat: expr
     repeat-expr: inodes.last.cur_max_lzma_blob + 1
     doc: Count starts at 0, so there is one more blob than the highest blob number
   - id: lzma_blobs_area
-    size: lzma_metas.last.cur_max_lzma_blob_len
+    size: lzma_metas.last.ofs_end
     type: dummy
 instances:
   lzma_blobs:
@@ -97,16 +97,16 @@ types:
         type: strz
   lzma_meta:
     params:
-      - id: prev_max_lzma_blob_len
+      - id: prev_ofs_end
         type: u4
     seq:
       - id: ofs_blob
         type: u4
-        valid: prev_max_lzma_blob_len
+        valid: prev_ofs_end
       - id: len_blob
         type: u4
       - id: len_blob_uncompressed
         type: u4
     instances:
-      cur_max_lzma_blob_len:
-        value: 'ofs_blob + len_blob > prev_max_lzma_blob_len ? ofs_blob + len_blob : prev_max_lzma_blob_len'
+      ofs_end:
+        value: ofs_blob + len_blob
