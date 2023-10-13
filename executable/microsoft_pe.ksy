@@ -566,10 +566,13 @@ types:
         repeat: expr
         repeat-expr: number_of_named_entries + number_of_id_entries
         type: resource_directory_entry
+    instances:
+      has_entries:
+        value: (number_of_named_entries + number_of_id_entries) > 0
 
   resource_directory_entry:
     to-string: |
-      'Res entry <Type: ' + name_type.to_i.to_s + ', Name Addr: ' + name_address.to_s + ', Dir Addr: ' + directory_address.to_s + ', PointerToRawData: ' + pointer_to_raw_data.to_s + ', Data Size: ' + data_size.to_s + '>'
+      'Res entry <Type: ' + name_type.to_i.to_s + ', Name Addr: ' + name_address.to_s + ', Dir Addr: ' + directory_address.to_s + ', PointerToRawData: ' + pointer_to_raw_data.to_s + ', Data Offset: ' + data_offset.to_s + ', Data Size: ' + data_size.to_s + '>'
     seq:
       - id: name_offset
         type: u4
@@ -591,19 +594,30 @@ types:
         enum: directory_entry_type
         value: >
            is_name_string ? directory_entry_type::undefined : name_address
-      pointer_to_raw_data:
-        value: >
-          is_data_entry ?
-          _root.pe.optional_hdr.data_dirs.resource_table.sections_lookup.section.pointer_to_raw_data + offset_to_data :
-          _root.pe.optional_hdr.data_dirs.resource_table.sections_lookup.section.pointer_to_raw_data + directory_address
       directory_table:
         pos: directory_address
         type: resource_directory_table
         if: is_directory
-      data_size:
+      data_offset:
         pos: directory_address
         type: u4
         if: is_data_entry
+      data_size:
+        pos: directory_address + 4
+        type: u4
+        if: is_data_entry
+      name_string:
+        pos: name_address
+        type: strz
+        terminator: 0
+        eos-error: false
+        encoding: ascii
+        if: is_name_string
+      pointer_to_raw_data:
+        value: >
+          is_data_entry ?
+          data_offset :
+          _root.pe.optional_hdr.data_dirs.resource_table.sections_lookup.section.pointer_to_raw_data + directory_address
 
     enums:
       directory_entry_type:
