@@ -76,7 +76,7 @@ class FormatPagesGenerator
   def initialize(ksy_dir, target_dir, html_dir)
     @ksy_dir = File.realpath(ksy_dir)
     @target_dir = File.realpath(target_dir)
-    FileUtils::mkdir_p(html_dir)
+    FileUtils.mkdir_p(html_dir)
     @html_dir = File.realpath(html_dir)
 
     File.write("#{@html_dir}/pygments-default.css", Pygments.css('.highlight'))
@@ -110,7 +110,7 @@ class FormatPagesGenerator
         yaml = YAML.load(yaml_str)
         file_id = yaml['meta']['id']
         file_dir = "#{@html_dir}/#{file_id}"
-        cat_id = File::dirname(ksy).gsub(/\/.*$/, '')
+        cat_id = File.dirname(ksy).gsub(/\/.*$/, '')
 
         file_tags = Set.new(yaml['meta']['tags']) || Set.new
         file_tags << cat_id
@@ -119,7 +119,7 @@ class FormatPagesGenerator
         puts "## #{file_id}"
         puts
 
-        FileUtils::mkdir_p(file_dir)
+        FileUtils.mkdir_p(file_dir)
 
         good_langs = ['index']
         LANGS.each_key { |lang|
@@ -278,14 +278,14 @@ class FormatPagesGenerator
 
   def copy_target_to_html(file_id, out_dir, lang)
     tgt_dir = "#{out_dir}/#{lang}"
-    FileUtils::mkdir_p(tgt_dir)
+    FileUtils.mkdir_p(tgt_dir)
 
     files = source_file_gen_names(file_id, lang)
 
     files.each { |tgt_file|
       puts "  * copying #{@target_dir}/#{lang}/#{tgt_file} => #{tgt_dir}/#{File.basename(tgt_file)}"
       begin
-        FileUtils::cp("#{@target_dir}/#{lang}/#{tgt_file}", "#{tgt_dir}/#{File.basename(tgt_file)}")
+        FileUtils.cp("#{@target_dir}/#{lang}/#{tgt_file}", "#{tgt_dir}/#{File.basename(tgt_file)}")
       rescue Errno::ENOENT
         $stderr.puts "#{@target_dir}/#{lang}/#{tgt_file}: file not found"
         return false
