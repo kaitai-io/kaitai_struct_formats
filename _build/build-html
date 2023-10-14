@@ -70,7 +70,7 @@ class FormatPagesGenerator
   ])
 
   def code(lang, src)
-    Pygments.highlight(src, :lexer => LANGS[lang][:lexer] || lang)
+    Pygments.highlight(src, lexer: LANGS[lang][:lexer] || lang)
   end
 
   def initialize(ksy_dir, target_dir, html_dir)
@@ -135,8 +135,8 @@ class FormatPagesGenerator
 
         @all[file_id] = yaml
         by_cat_record = {
-          :id => file_id,
-          :ksy => ksy,
+          id: file_id,
+          ksy: ksy,
         }
 
         file_tags.each { |tag|
@@ -196,9 +196,9 @@ class FormatPagesGenerator
           src = nil
         end
         {
-          :filename => fn,
-          :path => path,
-          :src => src,
+          filename: fn,
+          path: path,
+          src: src,
         }
       }.reject { |x| x[:src].nil? }
 
@@ -271,8 +271,8 @@ class FormatPagesGenerator
 
   def usage_attr(name, attr)
     {
-      :name => name,
-      :doc => attr['doc'] || "get #{name.gsub(/_/, ' ')}",
+      name: name,
+      doc: attr['doc'] || "get #{name.gsub(/_/, ' ')}",
     }
   end
 
