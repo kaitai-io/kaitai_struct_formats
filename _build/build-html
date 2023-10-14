@@ -456,8 +456,7 @@ class FormatPagesGenerator
   end
 
   def erb(name)
-    bin_dir = File.expand_path(File.dirname(__FILE__))
-    ERB.new(File.read("#{bin_dir}/#{name}.html.erb"), eoutvar: "_erbout_#{name}")
+    ERB.new(File.read(File.join(__dir__, "#{name}.html.erb")), eoutvar: "_erbout_#{name}")
   end
 end
 
