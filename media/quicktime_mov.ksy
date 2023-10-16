@@ -10,7 +10,7 @@ meta:
     wikidata: Q942350
   license: CC0-1.0
   endian: be
-doc-ref: 'https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/QTFFChap1/qtff1.html#//apple_ref/doc/uid/TP40000939-CH203-BBCGDDDF'
+doc-ref: 'https://developer.apple.com/documentation/quicktime-file-format'
 seq:
   - id: atoms
     type: atom_list
@@ -49,33 +49,63 @@ types:
             'atom_type::ftyp': ftyp_body
             'atom_type::tkhd': tkhd_body
             'atom_type::mvhd': mvhd_body
+            'atom_type::mdhd': mdhd_body
+            'atom_type::hdlr': hdlr_body
     instances:
       len:
         value: 'len32 == 0 ? (_io.size - 8) : (len32 == 1 ? len64 - 16 : len32 - 8)'
   ftyp_body:
-    doc-ref: 'https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/QTFFChap1/qtff1.html#//apple_ref/doc/uid/TP40000939-CH203-CJBCBIFF'
+    doc: |
+      The file type compatibility atom, also called the file type atom,
+      allows the reader to determine whether this is a type of file
+      that the reader understands. Specifically, the file type atom
+      identifies the file type specifications with which the file is
+      compatible. This allows the reader to distinguish among closely
+      related file types, such as QuickTime movie files, MPEG-4, and
+      JPEG-2000 files (all of which may contain file type atoms,
+      movie atoms, and movie data atoms).
+    doc-ref: 'https://developer.apple.com/documentation/quicktime-file-format/file_type_compatibility_atom'
     seq:
       - id: major_brand
         type: u4
         enum: brand
+        doc: File format code.
       - id: minor_version
         size: 4
+        doc: File format specification version.
       - id: compatible_brands
         type: u4
         enum: brand
         repeat: eos
+        doc: Compatible file formats.
   mvhd_body:
-    doc-ref: 'https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/QTFFChap2/qtff2.html#//apple_ref/doc/uid/TP40000939-CH204-BBCGFGJG'
+    doc: |
+      You use the movie header atom to specify the characteristics of
+      an entire QuickTime movie. The data contained in this atom defines
+      characteristics of the entire QuickTime movie, such as time scale
+      and duration.
+    doc-ref: 'https://developer.apple.com/documentation/quicktime-file-format/movie_header_atom'
     seq:
       - id: version
         type: u1
-        doc: Version of this movie header atom
+        doc: Version of this movie header atom.
       - id: flags
         size: 3
+        doc: Future movie header flags.
       - id: creation_time
         type: u4
+        doc: |
+          The creation calendar date and time for the movie atom.
+          Represent the calendar date and time in seconds since
+          midnight, January 1, 1904, preferably using coordinated
+          universal time (UTC).
       - id: modification_time
         type: u4
+        doc: |
+          The calendar date and time of the last change to the movie
+          atom. Represent the calendar date and time in seconds
+          since midnight, January 1, 1904, preferably using
+          coordinated universal time (UTC).
       - id: time_scale
         type: u4
         doc: |
@@ -93,15 +123,21 @@ types:
           the duration of the longest track in the movie.
       - id: preferred_rate
         type: fixed32
-        doc: The rate at which to play this movie. A value of 1.0 indicates normal rate.
+        doc: |
+          The rate at which to play this movie. A value of 1.0
+          indicates normal rate.
       - id: preferred_volume
         type: fixed16
-        doc: How loud to play this movie's sound. A value of 1.0 indicates full volume.
+        doc: |
+          How loud to play this movie's sound. A value of 1.0
+          indicates full volume.
       - id: reserved1
         size: 10
       - id: matrix
-        size: 36
-        doc: A matrix shows how to map points from one coordinate space into another.
+        type: matrix
+        doc: |
+          A matrix shows how to map points from one coordinate
+          space into another.
       - id: preview_time
         type: u4
         doc: The time value in the movie at which the preview begins.
@@ -126,40 +162,174 @@ types:
           Indicates a value to use for the track ID number of the next
           track added to this movie. Note that 0 is not a valid track
           ID value.
+    instances:
+      duration_in_sec:
+        value: '(1.0 * duration) / time_scale'
   tkhd_body:
-    doc-ref: 'https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/QTFFChap2/qtff2.html#//apple_ref/doc/uid/TP40000939-CH204-25550'
+    doc: |
+      The track header atom specifies the characteristics of
+      a single track within a movie.
+    doc-ref: 'https://developer.apple.com/documentation/quicktime-file-format/track_header_atom'
     seq:
       - id: version
         type: u1
+        doc: The version of this track header.
       - id: flags
         size: 3
+        doc: Future movie header flags.
       - id: creation_time
         type: u4
+        doc: |
+          The creation calendar date and time for the track header.
+          Represent the calendar date and time in seconds since midnight,
+          January 1, 1904, preferably using coordinated universal time (UTC).
       - id: modification_time
         type: u4
+        doc: |
+          The last change date for the track header. Represent the calendar
+          date and time in seconds since midnight, January 1, 1904,
+          preferably using coordinated universal time (UTC).
       - id: track_id
         type: u4
-        doc: Integer that uniquely identifies the track. The value 0 cannot be used.
+        doc: |
+          Integer that uniquely identifies the track.
+          The value 0 cannot be used.
       - id: reserved1
         size: 4
       - id: duration
         type: u4
+        doc: |
+          The duration of this track, in the movie’s time coordinate system.
+          Note that this property is derived from the track’s edits. The
+          value of this field is equal to the sum of the durations of all
+          of the track’s edits. If there is no edit list, then the duration
+          is the sum of the sample durations, converted into the movie
+          timescale.
       - id: reserved2
         size: 8
       - id: layer
         type: u2
+        doc: |
+          This track’s spatial priority in its movie. The QuickTime Movie
+          Toolbox uses this value to determine how tracks overlay one
+          another. Tracks with lower layer values are displayed in front
+          of tracks with higher layer values.
       - id: alternative_group
         type: u2
+        doc: |
+          Identifies a collection of movie tracks that contain alternate
+          data for one another. This same identifier appears in each
+          `tkhd` atom of the other tracks in the group. QuickTime chooses
+          one track from the group to be used when the movie is played.
+          The choice may be based on such considerations as playback quality,
+          language, or the capabilities of the computer. A value of zero
+          indicates that the track is not in an alternate track group.
       - id: volume
         type: u2
+        doc: |
+          How loudly to play this track’s sound. A value of 1.0
+          indicates normal volume.
       - id: reserved3
         type: u2
       - id: matrix
-        size: 36
+        type: matrix
       - id: width
         type: fixed32
+        doc: The width of this track in pixels.
       - id: height
         type: fixed32
+        doc: The height of this track in pixels.
+  mdhd_body:
+    doc: |
+      The media header atom specifies the characteristics
+      of a media, including time scale and duration.
+    doc-ref: 'https://developer.apple.com/documentation/quicktime-file-format/media_header_atom'
+    seq:
+      - id: version
+        type: u1
+        doc: Version of this media header atom.
+      - id: flags
+        size: 3
+        doc: Media header flags. Set this field to 0.
+      - id: creation_time
+        type: u4
+        doc: |
+          The creation date for the media atom. Represent the calendar date
+          and time in seconds since midnight, January 1, 1904, preferably
+          using coordinated universal time (UTC).
+      - id: modification_time
+        type: u4
+        doc: |
+          The last modification date for the media atom.  Represent the
+          calendar date and time in seconds since midnight, January 1, 1904,
+          preferably using coordinated universal time (UTC).
+      - id: time_scale
+        type: u4
+        doc: |
+          A time value that indicates the time scale for this media.
+          The number of time units that pass per second in its time
+          coordinate system.
+      - id: duration
+        type: u4
+        doc: The duration of this media in units of its time scale.
+      - id: language
+        type: u2
+        doc: |
+          Specifies the language code for this media. See Language code
+          values in Apple's documentation for valid language codes.
+      - id: quality
+        type: u2
+        doc: Media’s playback quality.
+    instances:
+      duration_in_sec:
+        value: '(1.0 * duration) / time_scale'
+  hdlr_body:
+    doc: |
+      Declares the process by which the media data in the stream may
+      be presented, and thus, the nature of the media in a stream.
+      For example, a video handler would handle a video track.
+    doc-ref: 'https://developer.apple.com/documentation/quicktime-file-format/handler_reference_atom'
+    seq:
+      - id: version
+        type: u1
+        doc: Version of this handler information.
+      - id: flags
+        size: 3
+        doc: A 3-byte space for handler information flags.
+      - id: component_type
+        size: 4
+        doc: |
+          A four-character code that identifies the type of the handler.
+          Only two values are valid for this field - `mhlr` for media
+          handlers, and `dhlr` for data handlers.
+      - id: component_subtype
+        type: str
+        encoding: ascii
+        size: 4
+        doc: |
+          A four-character code that identifies the type of the media
+          handler or data handler. For media handlers, this field defines
+          the type of data — for example, `vide` for video data, `soun`
+          for sound data or `subt` for subtitles. For data handlers, this
+          field defines the data reference type; for example, a component
+          subtype value of `alis` identifies a file alias.
+      - id: component_manufacturer
+        size: 4
+        doc: Reserved. Set to 0.
+      - id: component_flags
+        size: 4
+        doc: Reserved. Set to 0.
+      - id: component_flags_mask
+        size: 4
+        doc: Reserved. Set to 0.
+      - id: component_name
+        size-eos: true
+        type: str
+        encoding: ascii
+        doc: |
+          A counted string that specifies the name of the component — that
+          is, the media handler used when this media was created. This
+          field may contain a zero-length (empty) string.
   fixed32:
     doc: Fixed-point 32-bit number.
     seq:
@@ -167,6 +337,13 @@ types:
         type: s2
       - id: frac_part
         type: u2
+  fixed32int2:
+    doc: Fixed point number where the integer part has 2 bits
+    seq:
+      - id: int_part
+        type: b2
+      - id: frac_part
+        type: b30
   fixed16:
     doc: Fixed-point 16-bit number.
     seq:
@@ -174,6 +351,28 @@ types:
         type: s1
       - id: frac_part
         type: u1
+  matrix:
+    doc: A 3x3 matrix
+    doc-ref: 'https://developer.apple.com/documentation/quicktime-file-format/matrices'
+    seq:
+      - id: m_00
+        type: fixed32
+      - id: m_01
+        type: fixed32
+      - id: m_02
+        type: fixed32int2
+      - id: m_10
+        type: fixed32
+      - id: m_11
+        type: fixed32
+      - id: m_12
+        type: fixed32int2
+      - id: m_20
+        type: fixed32
+      - id: m_21
+        type: fixed32
+      - id: m_22
+        type: fixed32int2
 enums:
   atom_type:
     0x58747261: xtra
