@@ -273,94 +273,56 @@ types:
         type: u2
         doc: |
           Pixel Clock / 10,000
-      - id: horiz_active_pixels_8lsbits
+      - id: horiz_active_pixels_lo
         type: u1
-        doc: |
-          Horizontal Addressable Video in pixels --- contains lower 8 bits
-      - id: horiz_blanking_8lsbits
+      - id: horiz_blanking_lo
         type: u1
-        doc: |
-          Horizontal Blanking in pixels --- contains lower 8 bits
-      - id: horiz_active_pixels_4msbits
+      - id: horiz_active_pixels_hi
         type: b4
-        doc: |
-          Horizontal Addressable Video in pixels --- contains upper 4 bits
-      - id: horiz_blanking_4msbits
+      - id: horiz_blanking_hi
         type: b4
-        doc: |
-          Horizontal Blanking in pixels --- contains upper 4 bits
-      - id: vert_active_lines_8lsbits
+      - id: vert_active_lines_lo
         type: u1
-        doc: |
-          Vertical Addressable Video in lines --- contains lower 8 bits
-      - id: vert_blanking_8lsbits
+      - id: vert_blanking_lo
         type: u1
-        doc: |
-          Vertical Blanking in pixels --- contains lower 8 bits
-      - id: vert_active_lines_4msbits
+      - id: vert_active_lines_hi
         type: b4
-        doc: |
-          Vertical Addressable Video in pixels --- contains upper 4 bits
-      - id: vert_blanking_4msbits
+      - id: vert_blanking_hi
         type: b4
-        doc: |
-          Vertical Blanking in pixels --- contains upper 4 bits
-      - id: horiz_front_porch_8lsbits
+      - id: horiz_front_porch_lo
         type: u1
-        doc: |
-          Horizontal Front Porch in pixels --- contains lower 8 bits
-      - id: horiz_sync_pulse_8lsbits
+      - id: horiz_sync_pulse_lo
         type: u1
-        doc: |
-          Horizontal Sync Pulse Width in pixels --- contains lower 8 bits
-      - id: vert_front_porch_4lsbits
+      - id: vert_front_porch_lo
         type: b4
-        doc: |
-          Vertical Front Porch in pixels --- contains lower 4 bits
-      - id: vert_sync_pulse_4lsbits
+      - id: vert_sync_pulse_lo
         type: b4
-        doc: |
-          Vertical Sync Pulse Width in pixels --- contains lower 4 bits
-      - id: horiz_front_porch_2msbits
+      - id: horiz_front_porch_hi
         type: b2
-        doc: |
-          Horizontal Front Porch in pixels --- contains upper 2 bits
-      - id: horiz_sync_pulse_2msbits
+      - id: horiz_sync_pulse_hi
         type: b2
-        doc: |
-          Horizontal Sync Pulse Width in pixels --- contains upper 2 bits
-      - id: vert_front_porch_2msbits
+      - id: vert_front_porch_hi
         type: b2
-        doc: |
-          Vertical Front Porch in pixels --- contains upper 2 bits
-      - id: vert_sync_pulse_2msbits
+      - id: vert_sync_pulse_hi
         type: b2
-        doc: |
-          Vertical Sync Pulse Width in pixels --- contains upper 2 bits
-      - id: horiz_image_size_8lsbits
+      - id: horiz_image_size_lo
         type: u1
-        doc: |
-          Horizontal Image Size in mm --- contains lower 8 bits
-      - id: vert_image_size_8lsbits
+      - id: vert_image_size_lo
         type: u1
-        doc: |
-          Vertical Image Size in mm --- contains lower 8 bits
-      - id: horiz_image_size_4msbits
+      - id: horiz_image_size_hi
         type: b4
-        doc: |
-          Horizontal Image Size in mm --- contains upper 4 bits
-      - id: vert_image_size_4msbits
+      - id: vert_image_size_hi
         type: b4
-        doc: |
-          Vertical Image Size in mm --- contains upper 4 bits
       - id: horiz_border_pixels
         type: u1
         doc: |
-          Right Horizontal Border or Left Horizontal Border in pixels
+          Right Horizontal Border or Left Horizontal Border
+        -unit: px
       - id: vert_border_lines
         type: u1
         doc: |
-          Top Vertical Border or Bottom Vertical Border in Lines
+          Top Vertical Border or Bottom Vertical Border
+        -unit: lines
       - id: dtd_features
         type: dtd_features_bitmap
     instances:
@@ -372,47 +334,58 @@ types:
       pixel_clock:
         value: pixel_clock_mod * 10000
         if: is_dtd
-        doc: Pixel Clock in Hz.
+        doc: Pixel clock
+        -unit: Hz
       horiz_active_pixels:
-        value: horiz_active_pixels_8lsbits | (horiz_active_pixels_4msbits << 8)
+        value: horiz_active_pixels_lo | (horiz_active_pixels_hi << 8)
         if: is_dtd
-        doc: Horizontal active pixels.
+        doc: Horizontal active pixels
+        -unit: px
       horiz_blanking:
-        value: horiz_blanking_8lsbits | (horiz_blanking_4msbits << 8)
+        value: horiz_blanking_lo | (horiz_blanking_hi << 8)
         if: is_dtd
-        doc: Horizontal Blanking.
+        doc: Horizontal blanking
+        -unit: px
       vert_active_lines:
-        value: vert_active_lines_8lsbits | (vert_active_lines_4msbits << 8)
+        value: vert_active_lines_lo | (vert_active_lines_hi << 8)
         if: is_dtd
-        doc: Vertical active pixels.
+        doc: Vertical active pixels
+        -unit: px
       vert_blanking:
-        value: vert_blanking_8lsbits | (vert_blanking_4msbits << 8)
+        value: vert_blanking_lo | (vert_blanking_hi << 8)
         if: is_dtd
-        doc: Vertical Blanking.
+        doc: Vertical blanking
+        -unit: px
       horiz_front_porch:
-        value: horiz_front_porch_8lsbits | (horiz_front_porch_2msbits << 8)
+        value: horiz_front_porch_lo | (horiz_front_porch_hi << 8)
         if: is_dtd
-        doc: Horizontal Front Porch in pixels.
+        doc: Horizontal front porch
+        -unit: px
       horiz_sync_pulse:
-        value: horiz_sync_pulse_8lsbits | (horiz_sync_pulse_2msbits << 8)
+        value: horiz_sync_pulse_lo | (horiz_sync_pulse_hi << 8)
         if: is_dtd
-        doc: Horizontal Sync Pulse Width in pixels.
+        doc: Horizontal sync pulse width
+        -unit: px
       vert_front_porch:
-        value: vert_front_porch_4lsbits | (vert_front_porch_2msbits << 4)
+        value: vert_front_porch_lo | (vert_front_porch_hi << 4)
         if: is_dtd
-        doc: Vertical Front Porch in pixels.
+        doc: Vertical front porch
+        -unit: px
       vert_sync_pulse:
-        value: vert_sync_pulse_4lsbits | (vert_sync_pulse_2msbits << 4)
+        value: vert_sync_pulse_lo | (vert_sync_pulse_hi << 4)
         if: is_dtd
-        doc: Vertical Sync Pulse Width in pixels.
+        doc: Vertical sync pulse width
+        -unit: px
       horiz_image_size:
-        value: horiz_image_size_8lsbits | (horiz_image_size_4msbits << 8)
+        value: horiz_image_size_lo | (horiz_image_size_hi << 8)
         if: is_dtd
-        doc: Horizontal Image Size in mm.
+        doc: Horizontal image size
+        -unit: mm
       vert_image_size:
-        value: vert_image_size_8lsbits | (vert_image_size_4msbits << 8)
+        value: vert_image_size_lo | (vert_image_size_hi << 8)
         if: is_dtd
-        doc: Vertical Image Size in mm.
+        doc: Vertical image size
+        -unit: mm
   dtd_features_bitmap:
     seq:
       - id: is_interlaced
