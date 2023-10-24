@@ -463,8 +463,10 @@ instances:
     value: '(mfg_bytes & 0b0000001111100000) >> 5'
   mfg_id_ch3:
     value: '(mfg_bytes & 0b0000000000011111)'
-  mfg_str:
-    value: '[mfg_id_ch1 + 0x40, mfg_id_ch2 + 0x40, mfg_id_ch3 + 0x40].as<bytes>.to_s("ASCII")'
+# commented out until C++ and GraphViz target generators
+# correctly handle this
+#  mfg_str:
+#    value: '[mfg_id_ch1 + 0x40, mfg_id_ch2 + 0x40, mfg_id_ch3 + 0x40].as<bytes>.to_s("ASCII")'
   mfg_year:
     value: mfg_year_mod + 1990
   gamma:
