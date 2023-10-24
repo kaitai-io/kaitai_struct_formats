@@ -271,47 +271,45 @@ types:
     seq:
       - id: pixel_clock_mod
         type: u2
-        doc: |
-          Pixel Clock / 10,000
-      - id: horiz_active_pixels_lo
+      - id: horiz_active_pixels_lo_b8
         type: u1
-      - id: horiz_blanking_lo
+      - id: horiz_blanking_lo_b8
         type: u1
-      - id: horiz_active_pixels_hi
+      - id: horiz_active_pixels_hi_b4
         type: b4
-      - id: horiz_blanking_hi
+      - id: horiz_blanking_hi_b4
         type: b4
-      - id: vert_active_lines_lo
+      - id: vert_active_lines_lo_b8
         type: u1
-      - id: vert_blanking_lo
+      - id: vert_blanking_lo_b8
         type: u1
-      - id: vert_active_lines_hi
+      - id: vert_active_lines_hi_b4
         type: b4
-      - id: vert_blanking_hi
+      - id: vert_blanking_hi_b4
         type: b4
-      - id: horiz_front_porch_lo
+      - id: horiz_front_porch_lo_b8
         type: u1
-      - id: horiz_sync_pulse_lo
+      - id: horiz_sync_pulse_lo_b8
         type: u1
-      - id: vert_front_porch_lo
+      - id: vert_front_porch_lo_b4
         type: b4
-      - id: vert_sync_pulse_lo
+      - id: vert_sync_pulse_lo_b4
         type: b4
-      - id: horiz_front_porch_hi
+      - id: horiz_front_porch_hi_b2
         type: b2
-      - id: horiz_sync_pulse_hi
+      - id: horiz_sync_pulse_hi_b2
         type: b2
-      - id: vert_front_porch_hi
+      - id: vert_front_porch_hi_b2
         type: b2
-      - id: vert_sync_pulse_hi
+      - id: vert_sync_pulse_hi_b2
         type: b2
-      - id: horiz_image_size_lo
+      - id: horiz_image_size_lo_b8
         type: u1
-      - id: vert_image_size_lo
+      - id: vert_image_size_lo_b8
         type: u1
-      - id: horiz_image_size_hi
+      - id: horiz_image_size_hi_b4
         type: b4
-      - id: vert_image_size_hi
+      - id: vert_image_size_hi_b4
         type: b4
       - id: horiz_border_pixels
         type: u1
@@ -337,52 +335,52 @@ types:
         doc: Pixel clock
         -unit: Hz
       horiz_active_pixels:
-        value: horiz_active_pixels_lo | (horiz_active_pixels_hi << 8)
+        value: (horiz_active_pixels_hi_b4 << 8) | horiz_active_pixels_lo_b8
         if: is_dtd
         doc: Horizontal active pixels
         -unit: px
       horiz_blanking:
-        value: horiz_blanking_lo | (horiz_blanking_hi << 8)
+        value: (horiz_blanking_hi_b4 << 8) | horiz_blanking_lo_b8
         if: is_dtd
         doc: Horizontal blanking
         -unit: px
       vert_active_lines:
-        value: vert_active_lines_lo | (vert_active_lines_hi << 8)
+        value: (vert_active_lines_hi_b4 << 8) | vert_active_lines_lo_b8
         if: is_dtd
         doc: Vertical active pixels
         -unit: px
       vert_blanking:
-        value: vert_blanking_lo | (vert_blanking_hi << 8)
+        value: (vert_blanking_hi_b4 << 8) | vert_blanking_lo_b8
         if: is_dtd
         doc: Vertical blanking
         -unit: px
       horiz_front_porch:
-        value: horiz_front_porch_lo | (horiz_front_porch_hi << 8)
+        value: (horiz_front_porch_hi_b2 << 8) | horiz_front_porch_lo_b8
         if: is_dtd
         doc: Horizontal front porch
         -unit: px
       horiz_sync_pulse:
-        value: horiz_sync_pulse_lo | (horiz_sync_pulse_hi << 8)
+        value: (horiz_sync_pulse_hi_b2 << 8) | horiz_sync_pulse_lo_b8
         if: is_dtd
         doc: Horizontal sync pulse width
         -unit: px
       vert_front_porch:
-        value: vert_front_porch_lo | (vert_front_porch_hi << 4)
+        value: (vert_front_porch_hi_b2 << 4) | vert_front_porch_lo_b4
         if: is_dtd
         doc: Vertical front porch
         -unit: px
       vert_sync_pulse:
-        value: vert_sync_pulse_lo | (vert_sync_pulse_hi << 4)
+        value: (vert_sync_pulse_hi_b2 << 4)| vert_sync_pulse_lo_b4
         if: is_dtd
         doc: Vertical sync pulse width
         -unit: px
       horiz_image_size:
-        value: horiz_image_size_lo | (horiz_image_size_hi << 8)
+        value: (horiz_image_size_hi_b4 << 8) | horiz_image_size_lo_b8
         if: is_dtd
         doc: Horizontal image size
         -unit: mm
       vert_image_size:
-        value: vert_image_size_lo | (vert_image_size_hi << 8)
+        value: (vert_image_size_hi_b4 << 8) | vert_image_size_lo_b8
         if: is_dtd
         doc: Vertical image size
         -unit: mm
