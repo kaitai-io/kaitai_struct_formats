@@ -56,22 +56,22 @@ seq:
   - id: std_timings
     size: 2
     type: std_timing
+    repeat: expr
+    repeat-expr: 8
     doc: |
       Array of descriptions of so called "standard timings", which are
       used to specify up to 8 additional timings not included in
       "established timings".
-    repeat: expr
-    repeat-expr: 8
   - id: eighteen_byte_descriptors
     size: 18
     type: dtd_timing
+    repeat: expr
+    repeat-expr: 4
     doc: |
       Array of 18 byte descriptors, which the first of them shall be
       Detailed Timing Descriptor reflecting Preferred Timing Mode and
       each of the rest is either a Detailed Timing Descriptor or
       a Display Descriptor.
-    repeat: expr
-    repeat-expr: 4
 types:
   chromacity_info:
     doc: |
