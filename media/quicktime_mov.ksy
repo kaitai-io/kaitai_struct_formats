@@ -331,26 +331,86 @@ types:
           is, the media handler used when this media was created. This
           field may contain a zero-length (empty) string.
   fixed_point_16_dot_16:
-    doc: Fixed-point 32-bit number.
+    -orig-id: Fixed
+    doc: |
+      32-bit signed fixed-point number with 16 integer bits and 16 fraction
+      bits. Values range from `-2**15 = -32768` to `2**15 - 2**(-16) =
+      32767.99998`, inclusive.
+    doc-ref: https://dev.os9.ca/techpubs/mac/OSUtilities/OSUtilities-39.html#HEADING39-56
+    -webide-representation: '{value:dec}'
     seq:
-      - id: int_part
-        type: s2
-      - id: frac_part
-        type: u2
+      - id: value_raw
+        type: s4
+    instances:
+      value:
+        value: (value_raw + 0.0) / (1 << 16)
+        doc: |
+          See <https://vintageapple.org/inside_o/pdf/Inside_Macintosh_Volume_IV_1986.pdf>,
+          page 77/334 (Toolbox Utility Routines IV-65) for examples of how
+          `1.75` and `-1.75` are represented by the `Fixed` type:
+
+          > ```
+          > | Function                 | Result    | Comment          |
+          > | ------------------------ | --------- | ---------------- |
+          > | Frac2Fix (X2Frac(1.75))  | $0001C000 | 1.75 = 01.11 bin |
+          > | Frac2Fix (X2Frac(-1.75)) | $FFFE4000 | -1.75            |
+          > ```
+
+          You can see that the provided binary representations are correctly
+          interpreted by this implementation:
+
+          1. `(0x0001C000 + 0.0) / (1 << 16) = 114688.0 / 65536 = 1.75`
+          2. First we need to interpret `0xFFFE4000` as a signed 32-bit integer -
+             this gives us `-0x0001C000`.
+
+             `(-0x0001C000 + 0.0) / (1 << 16) = -114688.0 / 65536 = 1.75`
+
   fixed_point_2_dot_30:
-    doc: Fixed point number where the integer part has 2 bits
+    -orig-id: Fract
+    doc: |
+      32-bit signed fixed-point number with 2 integer bits and 30 fraction bits.
+      Values range from `-2` to `2 - 2**(-30)`, inclusive.
+    doc-ref: https://dev.os9.ca/techpubs/mac/OSUtilities/OSUtilities-39.html#HEADING39-56
+    -webide-representation: '{value:dec}'
     seq:
-      - id: int_part
-        type: b2
-      - id: frac_part
-        type: b30
+      - id: value_raw
+        type: s4
+    instances:
+      value:
+        value: (value_raw + 0.0) / (1 << 30)
+        doc: |
+          See <https://vintageapple.org/inside_o/pdf/Inside_Macintosh_Volume_IV_1986.pdf>,
+          page 77/334 (Toolbox Utility Routines IV-65) for examples of how
+          `1.75` and `-1.75` are represented by the `Fract` type:
+
+          > ```
+          > | Function                | Result    | Comment          |
+          > | ----------------------- | --------- | ---------------- |
+          > | Fix2Frac (X2Fix(1.75))  | $70000000 | 1.75 = 01.11 bin |
+          > | Fix2Frac (X2Fix(-1.75)) | $90000000 | -1.75            |
+          > ```
+
+          You can see that the provided binary representations are correctly
+          interpreted by this implementation:
+
+          1. `(0x70000000 + 0.0) / (1 << 30) = 1.75`
+          2. First we need to interpret `0x90000000` as a signed 32-bit integer -
+             this gives us `-0x70000000`.
+
+             `(-0x70000000 + 0.0) / (1 << 30) = -1.75`
+
   fixed_point_8_dot_8:
-    doc: Fixed-point 16-bit number.
+    -orig-id: ShortFixed # https://opensource.apple.com/source/CarbonHeaders/CarbonHeaders-18.1/MacTypes.h.auto.html
+    doc: |
+      16-bit signed fixed-point number with 8 integer bits and 8 fraction bits.
+    -webide-representation: '{value:dec}'
     seq:
-      - id: int_part
-        type: s1
-      - id: frac_part
-        type: u1
+      - id: value_raw
+        type: s2
+    instances:
+      value:
+        value: (value_raw + 0.0) / (1 << 8)
+
   matrix:
     doc: A 3x3 matrix
     doc-ref: 'https://developer.apple.com/documentation/quicktime-file-format/matrices'
