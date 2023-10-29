@@ -122,12 +122,12 @@ types:
           the movie's tracks. The value of this field corresponds to
           the duration of the longest track in the movie.
       - id: preferred_rate
-        type: fixed32
+        type: fixed_point_16_dot_16
         doc: |
           The rate at which to play this movie. A value of 1.0
           indicates normal rate.
       - id: preferred_volume
-        type: fixed16
+        type: fixed_point_8_dot_8
         doc: |
           How loud to play this movie's sound. A value of 1.0
           indicates full volume.
@@ -234,10 +234,10 @@ types:
       - id: matrix
         type: matrix
       - id: width
-        type: fixed32
+        type: fixed_point_16_dot_16
         doc: The width of this track in pixels.
       - id: height
-        type: fixed32
+        type: fixed_point_16_dot_16
         doc: The height of this track in pixels.
   mdhd_body:
     doc: |
@@ -330,21 +330,21 @@ types:
           A counted string that specifies the name of the component - that
           is, the media handler used when this media was created. This
           field may contain a zero-length (empty) string.
-  fixed32:
+  fixed_point_16_dot_16:
     doc: Fixed-point 32-bit number.
     seq:
       - id: int_part
         type: s2
       - id: frac_part
         type: u2
-  fixed32int2:
+  fixed_point_2_dot_30:
     doc: Fixed point number where the integer part has 2 bits
     seq:
       - id: int_part
         type: b2
       - id: frac_part
         type: b30
-  fixed16:
+  fixed_point_8_dot_8:
     doc: Fixed-point 16-bit number.
     seq:
       - id: int_part
@@ -356,23 +356,23 @@ types:
     doc-ref: 'https://developer.apple.com/documentation/quicktime-file-format/matrices'
     seq:
       - id: m_00
-        type: fixed32
+        type: fixed_point_16_dot_16
       - id: m_01
-        type: fixed32
+        type: fixed_point_16_dot_16
       - id: m_02
-        type: fixed32int2
+        type: fixed_point_2_dot_30
       - id: m_10
-        type: fixed32
+        type: fixed_point_16_dot_16
       - id: m_11
-        type: fixed32
+        type: fixed_point_16_dot_16
       - id: m_12
-        type: fixed32int2
+        type: fixed_point_2_dot_30
       - id: m_20
-        type: fixed32
+        type: fixed_point_16_dot_16
       - id: m_21
-        type: fixed32
+        type: fixed_point_16_dot_16
       - id: m_22
-        type: fixed32int2
+        type: fixed_point_2_dot_30
 enums:
   atom_type:
     0x58747261: xtra
