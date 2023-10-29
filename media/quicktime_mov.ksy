@@ -199,10 +199,10 @@ types:
       - id: duration
         type: u4
         doc: |
-          The duration of this track, in the movie’s time coordinate system.
-          Note that this property is derived from the track’s edits. The
+          The duration of this track, in the movie's time coordinate system.
+          Note that this property is derived from the track's edits. The
           value of this field is equal to the sum of the durations of all
-          of the track’s edits. If there is no edit list, then the duration
+          of the track's edits. If there is no edit list, then the duration
           is the sum of the sample durations, converted into the movie
           timescale.
       - id: reserved2
@@ -210,7 +210,7 @@ types:
       - id: layer
         type: u2
         doc: |
-          This track’s spatial priority in its movie. The QuickTime Movie
+          This track's spatial priority in its movie. The QuickTime Movie
           Toolbox uses this value to determine how tracks overlay one
           another. Tracks with lower layer values are displayed in front
           of tracks with higher layer values.
@@ -227,7 +227,7 @@ types:
       - id: volume
         type: u2
         doc: |
-          How loudly to play this track’s sound. A value of 1.0
+          How loudly to play this track's sound. A value of 1.0
           indicates normal volume.
       - id: reserved3
         type: u2
@@ -279,7 +279,7 @@ types:
           values in Apple's documentation for valid language codes.
       - id: quality
         type: u2
-        doc: Media’s playback quality.
+        doc: Media's playback quality.
     instances:
       duration_in_sec:
         value: '(1.0 * duration) / time_scale'
@@ -309,7 +309,7 @@ types:
         doc: |
           A four-character code that identifies the type of the media
           handler or data handler. For media handlers, this field defines
-          the type of data — for example, `vide` for video data, `soun`
+          the type of data - for example, `vide` for video data, `soun`
           for sound data or `subt` for subtitles. For data handlers, this
           field defines the data reference type; for example, a component
           subtype value of `alis` identifies a file alias.
@@ -327,7 +327,7 @@ types:
         type: str
         encoding: ascii
         doc: |
-          A counted string that specifies the name of the component — that
+          A counted string that specifies the name of the component - that
           is, the media handler used when this media was created. This
           field may contain a zero-length (empty) string.
   fixed32:
