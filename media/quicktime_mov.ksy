@@ -412,27 +412,81 @@ types:
         value: (value_raw + 0.0) / (1 << 8)
 
   matrix:
-    doc: A 3x3 matrix
+    doc: |
+      A 3-by-3 affine transformation matrix.
+
+      See <https://developer.apple.com/library/archive/documentation/QuickTime/RM/MovieBasics/MTEditing/K-Chapter/11MatrixFunctions.html>:
+
+      > **Figure 10-1**  A point transformed by a 3-by-3 matrix
+      >
+      > ```
+      >             +-           -+
+      >             | a    b    u |
+      > [x  y  1] * | c    d    v | = [x'  y'  1]
+      >             | t_x  t_y  w |
+      >             +-           -+
+      > ```
+      >
+      > During display operations, the contents of a 3-by-3 matrix transform a
+      > point (x,y) into a point (x',y') by means of the following equations:
+      >
+      > ```
+      > x' = a*x + c*y + t_x
+      > y' = b*x + d*y + t_y
+      > ```
+
+      > Note that QuickTime assumes that the values of the matrix elements `u`
+      > and `v` are always 0.0, and the value of matrix element `w` is always
+      > 1.0.
     doc-ref: 'https://developer.apple.com/documentation/quicktime-file-format/matrices'
+    # Descriptions of matrix elements taken from
+    # https://learn.microsoft.com/en-us/windows/win32/api/gdiplusmatrix/nf-gdiplusmatrix-matrix-matrix(real_real_real_real_real_real)
     seq:
-      - id: m_00
+      - id: a
         type: fixed_point_16_dot_16
-      - id: m_01
+        doc: |
+          Element in the 1st row, 1st column (horizontal scaling component or
+          cosine of rotation angle).
+      - id: b
         type: fixed_point_16_dot_16
-      - id: m_02
+        doc: |
+          Element in the 1st row, 2nd column (horizontal shear component or
+          sine of rotation angle).
+      - id: u
         type: fixed_point_2_dot_30
-      - id: m_10
+        doc: |
+          Element in the 1st row, 3rd column; QuickTime assumes the value is
+          always 0.0.
+
+      - id: c
         type: fixed_point_16_dot_16
-      - id: m_11
+        doc: |
+          Element in the 2nd row, 1st column (vertical shear component or
+          negative sine of rotation angle).
+      - id: d
         type: fixed_point_16_dot_16
-      - id: m_12
+        doc: |
+          Element in the 2nd row, 2nd column (vertical scaling component or
+          cosine of rotation angle).
+      - id: v
         type: fixed_point_2_dot_30
-      - id: m_20
+        doc: |
+          Element in the 2nd row, 3rd column; QuickTime assumes the value is
+          always 0.0.
+
+      - id: t_x
         type: fixed_point_16_dot_16
-      - id: m_21
+        doc: |
+          Element in the 3rd row, 1st column (horizontal translation component).
+      - id: t_y
         type: fixed_point_16_dot_16
-      - id: m_22
+        doc: |
+          Element in the 3rd row, 2nd column (vertical translation component).
+      - id: w
         type: fixed_point_2_dot_30
+        doc: |
+          Element in the 3rd row, 3rd column; QuickTime assumes the value is
+          always 1.0.
 enums:
   atom_type:
     0x58747261: xtra
