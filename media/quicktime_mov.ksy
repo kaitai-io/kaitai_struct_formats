@@ -10,6 +10,7 @@ meta:
     wikidata: Q942350
   license: CC0-1.0
   endian: be
+  bit-endian: be
 doc-ref: 'https://developer.apple.com/documentation/quicktime-file-format'
 seq:
   - id: atoms
@@ -103,7 +104,7 @@ types:
         type: u4
         doc: |
           The calendar date and time of the last change to the movie
-          atom. Represent the calendar date and time in seconds
+          atom. Represents the calendar date and time in seconds
           since midnight, January 1, 1904, preferably using
           coordinated universal time (UTC).
       - id: time_scale
@@ -158,6 +159,8 @@ types:
         doc: The time value for current time position within the movie.
       - id: next_track_id
         type: u4
+        valid:
+          expr: _ != 0
         doc: |
           Indicates a value to use for the track ID number of the next
           track added to this movie. Note that 0 is not a valid track
@@ -176,21 +179,24 @@ types:
         doc: The version of this track header.
       - id: flags
         size: 3
-        doc: Future movie header flags.
+        type: tkhd_flags
+        doc: Track header flags.
       - id: creation_time
         type: u4
         doc: |
           The creation calendar date and time for the track header.
-          Represent the calendar date and time in seconds since midnight,
+          Represents the calendar date and time in seconds since midnight,
           January 1, 1904, preferably using coordinated universal time (UTC).
       - id: modification_time
         type: u4
         doc: |
-          The last change date for the track header. Represent the calendar
+          The last change date for the track header. Represents the calendar
           date and time in seconds since midnight, January 1, 1904,
           preferably using coordinated universal time (UTC).
       - id: track_id
         type: u4
+        valid:
+          expr: _ != 0
         doc: |
           Integer that uniquely identifies the track.
           The value 0 cannot be used.
@@ -239,6 +245,22 @@ types:
       - id: height
         type: fixed_point_16_dot_16
         doc: The height of this track in pixels.
+  tkhd_flags:
+    doc: |
+      Track header flags. These flags indicate how the track is used
+      in the movie.
+    doc-ref: 'https://developer.apple.com/documentation/quicktime-file-format/track_header_atom/flags'
+    seq:
+      - id: unused
+        type: b20
+      - id: is_in_poster   # 0x0008
+        type: b1
+      - id: is_in_preview  # 0x0004
+        type: b1
+      - id: is_in_movie    # 0x0002
+        type: b1
+      - id: is_enabled     # 0x0001
+        type: b1
   mdhd_body:
     doc: |
       The media header atom specifies the characteristics
@@ -254,13 +276,13 @@ types:
       - id: creation_time
         type: u4
         doc: |
-          The creation date for the media atom. Represent the calendar date
+          The creation date for the media atom. Represents the calendar date
           and time in seconds since midnight, January 1, 1904, preferably
           using coordinated universal time (UTC).
       - id: modification_time
         type: u4
         doc: |
-          The last modification date for the media atom. Represent the
+          The last modification date for the media atom. Represents the
           calendar date and time in seconds since midnight, January 1, 1904,
           preferably using coordinated universal time (UTC).
       - id: time_scale
@@ -298,15 +320,15 @@ types:
         size: 3
         doc: Handler information flags.
       - id: component_type
-        size: 4
+        type: u4
+        enum: component_type
         doc: |
           A four-character code that identifies the type of the handler.
           Only two values are valid for this field - `mhlr` for media
           handlers, and `dhlr` for data handlers.
       - id: component_subtype
-        type: str
-        encoding: ascii
-        size: 4
+        type: u4
+        enum: component_subtype
         doc: |
           A four-character code that identifies the type of the media handler or
           data handler.
@@ -327,12 +349,14 @@ types:
         doc: Reserved. Set to 0.
       - id: component_name
         size-eos: true
-        type: str
-        encoding: ascii
         doc: |
-          A counted string that specifies the name of the component - that
+          A string that specifies the name of the component - that
           is, the media handler used when this media was created. This
-          field may contain a zero-length (empty) string.
+          field may contain an empty string.
+
+          This field is either a length-prefixed string (Pascal string),
+          or a null terminated string. It depends on the flavor of the
+          file (MOV or MP4). The string need not be ASCII.
   fixed_point_16_dot_16:
     -orig-id: Fixed
     doc: |
@@ -792,3 +816,65 @@ enums:
     0x63756439: cud9
     0x6d696632: mif2
     0x70726564: pred
+
+# https://developer.apple.com/documentation/quicktime-file-format/handler_reference_atom/component_type
+  component_type:
+    0x6d686c72: mhlr
+    0x64686c72: dhlr
+
+# https://developer.apple.com/documentation/quicktime-file-format/handler_reference_atom/component_subtype
+# Both "media data types" and "data reference types" are together in this enum.
+# The list was taken from here (and is likely incomplete):
+# https://developer.apple.com/documentation/quicktime-file-format/media_data_atom_types
+  component_subtype:
+    0x76696465:
+      id: vide
+      doc: Video media
+      doc-ref: https://developer.apple.com/documentation/quicktime-file-format/video_media
+    0x736f756e:
+      id: soun
+      doc: Sound media
+      doc-ref: https://developer.apple.com/documentation/quicktime-file-format/sound_media
+    0x6d757369:
+      id: musi
+      doc: Music media
+      doc-ref: https://developer.apple.com/documentation/quicktime-file-format/music_media
+    0x4d504547:
+      id: mpeg
+      doc: MPEG 1 media
+      doc-ref: https://developer.apple.com/documentation/quicktime-file-format/mpeg-1_media
+    0x6d657461:
+      id: meta
+      doc: Timed metadata media
+      doc-ref: https://developer.apple.com/documentation/quicktime-file-format/timed_metadata_media
+    0x746d6364:
+      id: tmcd
+      doc: Timecode media
+      doc-ref: https://developer.apple.com/documentation/quicktime-file-format/timecode_media
+    0x74657874:
+      id: text
+      doc: Text media
+      doc-ref: https://developer.apple.com/documentation/quicktime-file-format/text_media
+    0x636c6370:
+      id: clcp
+      doc: Closed captioning media
+      doc-ref: https://developer.apple.com/documentation/quicktime-file-format/closed_captioning_media
+    0x7362746c:
+      id: sbtl
+      doc: Subtitle media
+      doc-ref: https://developer.apple.com/documentation/quicktime-file-format/subtitle_media
+    0x63686170:
+      id: chap
+      doc: Chapter lists
+      doc-ref: https://developer.apple.com/documentation/quicktime-file-format/chapter_lists
+    0x7374726d:
+      id: strm
+      doc: Streaming media
+      doc-ref: https://developer.apple.com/documentation/quicktime-file-format/streaming_media
+    0x68696e74:
+      id: hint
+      doc: Hint media
+      doc-ref: https://developer.apple.com/documentation/quicktime-file-format/hint_media
+    0x616c6973:
+      id: alis
+      doc: File alias
