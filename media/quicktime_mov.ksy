@@ -96,7 +96,7 @@ types:
         type: u4
         doc: |
           The creation calendar date and time for the movie atom.
-          Represent the calendar date and time in seconds since
+          Represents the calendar date and time in seconds since
           midnight, January 1, 1904, preferably using coordinated
           universal time (UTC).
       - id: modification_time
@@ -164,7 +164,7 @@ types:
           ID value.
     instances:
       duration_in_sec:
-        value: '(1.0 * duration) / time_scale'
+        value: '(duration + 0.0) / time_scale'
   tkhd_body:
     doc: |
       The track header atom specifies the characteristics of
@@ -214,7 +214,7 @@ types:
           Toolbox uses this value to determine how tracks overlay one
           another. Tracks with lower layer values are displayed in front
           of tracks with higher layer values.
-      - id: alternative_group
+      - id: alternate_group
         type: u2
         doc: |
           Identifies a collection of movie tracks that contain alternate
@@ -260,7 +260,7 @@ types:
       - id: modification_time
         type: u4
         doc: |
-          The last modification date for the media atom.  Represent the
+          The last modification date for the media atom. Represent the
           calendar date and time in seconds since midnight, January 1, 1904,
           preferably using coordinated universal time (UTC).
       - id: time_scale
@@ -275,14 +275,15 @@ types:
       - id: language
         type: u2
         doc: |
-          Specifies the language code for this media. See Language code
-          values in Apple's documentation for valid language codes.
+          Specifies the language code for this media. See [Language code
+          values](https://developer.apple.com/documentation/quicktime-file-format/language_code_values)
+          for valid language codes.
       - id: quality
         type: u2
         doc: Media's playback quality.
     instances:
       duration_in_sec:
-        value: '(1.0 * duration) / time_scale'
+        value: '(duration+ 0.0) / time_scale'
   hdlr_body:
     doc: |
       Declares the process by which the media data in the stream may
@@ -295,7 +296,7 @@ types:
         doc: Version of this handler information.
       - id: flags
         size: 3
-        doc: A 3-byte space for handler information flags.
+        doc: Handler information flags.
       - id: component_type
         size: 4
         doc: |
@@ -307,12 +308,14 @@ types:
         encoding: ascii
         size: 4
         doc: |
-          A four-character code that identifies the type of the media
-          handler or data handler. For media handlers, this field defines
-          the type of data - for example, `vide` for video data, `soun`
-          for sound data or `subt` for subtitles. For data handlers, this
-          field defines the data reference type; for example, a component
-          subtype value of `alis` identifies a file alias.
+          A four-character code that identifies the type of the media handler or
+          data handler.
+
+          For media handlers, this field defines the type of data - for example,
+          `vide` for video data, `soun` for sound data or `subt` for subtitles.
+
+          For data handlers, this field defines the data reference type; for
+          example, a component subtype value of `alis` identifies a file alias.
       - id: component_manufacturer
         size: 4
         doc: Reserved. Set to 0.
