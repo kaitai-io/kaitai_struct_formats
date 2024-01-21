@@ -28,7 +28,7 @@ seq:
     repeat: eos
 types:
   header:
-    doc-ref: 'https://wiki.wireshark.org/Development/LibpcapFileFormat#Global_Header'
+    doc-ref: https://wiki.wireshark.org/Development/LibpcapFileFormat#Global_Header
     seq:
       - id: magic_number
         contents: [0xd4, 0xc3, 0xb2, 0xa1]
@@ -61,7 +61,7 @@ types:
           Link-layer header type, specifying the type of headers at
           the beginning of the packet.
   packet:
-    doc-ref: 'https://wiki.wireshark.org/Development/LibpcapFileFormat#Record_.28Packet.29_Header'
+    doc-ref: https://wiki.wireshark.org/Development/LibpcapFileFormat#Record_.28Packet.29_Header
     seq:
       - id: ts_sec
         type: u4
@@ -78,9 +78,9 @@ types:
         type:
           switch-on: _root.hdr.network
           cases:
-            'linktype::ppi': packet_ppi
-            'linktype::ethernet': ethernet_frame
-        doc-ref: 'https://wiki.wireshark.org/Development/LibpcapFileFormat#Packet_Data'
+            linktype::ppi: packet_ppi
+            linktype::ethernet: ethernet_frame
+        doc-ref: https://wiki.wireshark.org/Development/LibpcapFileFormat#Packet_Data
 enums:
   linktype:
     # https://www.tcpdump.org/linktypes.html

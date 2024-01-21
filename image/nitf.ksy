@@ -58,7 +58,7 @@ types:
     seq:
       - id: file_profile_name
         -orig-id: fhdr
-        contents: 'NITF'
+        contents: NITF
       - id: file_version
         -orig-id: fver
         contents: '02.10'
@@ -67,8 +67,8 @@ types:
         size: 2
       - id: standard_type
         -orig-id: stype
-        contents: 'BF01'
-        doc: 'Value of BF01 indicates the file is formatted using ISO/IEC IS 12087-5.'
+        contents: BF01
+        doc: Value of BF01 indicates the file is formatted using ISO/IEC IS 12087-5.
       - id: originating_station_id
         -orig-id: ostaid
         type: str
@@ -306,7 +306,7 @@ types:
     seq:
       - id: file_part_type
         -orig-id: im
-        contents: 'IM'
+        contents: IM
       - id: image_id_1
         -orig-id: iid1
         type: str
@@ -336,7 +336,7 @@ types:
         -orig-id: nrows
         type: str
         size: 8
-        doc: 'Total number of rows of significant pixels in the image; only rows indexed 0 to (NROWS - 1) of the image contain significant data.'
+        doc: Total number of rows of significant pixels in the image; only rows indexed 0 to (NROWS - 1) of the image contain significant data.
       - id: num_sig_cols
         -orig-id: ncols
         type: str
@@ -349,12 +349,12 @@ types:
         -orig-id: irep
         type: str
         size: 8
-        doc: 'MONO, RGB, RGB/LUT, MULTI, NODISPLY, NVECTOR, POLAR, VPH, YCbCr601'
+        doc: MONO, RGB, RGB/LUT, MULTI, NODISPLY, NVECTOR, POLAR, VPH, YCbCr601
       - id: image_category
         -orig-id: icat
         type: str
         size: 8
-        doc: 'VIS, SL, TI, FL, RD, EO, OP, HR, HS,CP, BP, SAR, SARIQ, IR, MAP, MS, FP, MRI, XRAY, CAT, VD, PAT, LEG, DTEM, MATR, LOCG, BARO, CURRENT, DEPTH, WIND'
+        doc: VIS, SL, TI, FL, RD, EO, OP, HR, HS,CP, BP, SAR, SARIQ, IR, MAP, MS, FP, MRI, XRAY, CAT, VD, PAT, LEG, DTEM, MATR, LOCG, BARO, CURRENT, DEPTH, WIND
       - id: actual_bits_per_pixel_per_band
         -orig-id: abpp
         type: str
@@ -405,12 +405,12 @@ types:
         -orig-id: isync
         type: str
         size: 1
-        doc: 'Reserved for future use.'
+        doc: Reserved for future use.
       - id: img_mode
         -orig-id: imode
         type: str
         size: 1
-        doc: 'B = Band Interleaved by Block, P = Band Interleaved by Pixel, R = Band Interleaved by Row, S = Band Sequential'
+        doc: B = Band Interleaved by Block, P = Band Interleaved by Pixel, R = Band Interleaved by Row, S = Band Sequential
       - id: num_blocks_per_row
         -orig-id: nbpr
         type: str
@@ -470,19 +470,19 @@ types:
         -orig-id: irepband
         type: str
         size: 2
-        doc: 'Indicates processing required to display the nth band of image w.r.t. the general image type recorded by IREP field'
+        doc: Indicates processing required to display the nth band of image w.r.t. the general image type recorded by IREP field
       - id: subcategory
         -orig-id: isubcat
         type: str
         size: 6
       - id: img_filter_condition
         -orig-id: ifc
-        contents: 'N'
+        contents: N
       - id: img_filter_code
         -orig-id: imflt
         type: str
         size: 3
-        doc: 'Reserved'
+        doc: Reserved
       - id: num_luts
         -orig-id: nluts
         type: str
@@ -492,7 +492,7 @@ types:
         type: str
         size: 5
         if: num_luts.to_i != 0
-        doc: 'Number of entries in each of the LUTs for the nth image band'
+        doc: Number of entries in each of the LUTs for the nth image band
       - id: luts
         -orig-id: lutd
         size: num_lut_entries.to_i
@@ -530,28 +530,28 @@ types:
         type: u4
       - id: bmrlnth
         type: u2
-        doc: 'Block Mask Record Length'
+        doc: Block Mask Record Length
       - id: tmrlnth
         type: u2
-        doc: 'Pad Pixel Mask Record Length'
+        doc: Pad Pixel Mask Record Length
       - id: tpxcdlnth
         type: u2
-        doc: 'Pad Output Pixel Code Length'
+        doc: Pad Output Pixel Code Length
       - id: tpxcd
         size: tpxcd_size
-        doc: 'Pad Output Pixel Code'
+        doc: Pad Output Pixel Code
       - id: bmrbnd
         type: u4
         repeat: expr
         repeat-expr: bmrtmr_count
         if: has_bmr
-        doc: 'Block n, Band m Offset'
+        doc: Block n, Band m Offset
       - id: tmrbnd
         type: u4
         repeat: expr
         repeat-expr: bmrtmr_count
         if: has_tmr
-        doc: 'Pad Pixel n, Band m'
+        doc: Pad Pixel n, Band m
   graphics_segment:
     params:
       - id: idx
@@ -565,7 +565,7 @@ types:
     seq:
       - id: file_part_type_sy
         -orig-id: sy
-        contents: 'SY'
+        contents: SY
       - id: graphic_id
         -orig-id: sid
         type: str
@@ -582,12 +582,12 @@ types:
         type: encrypt
       - id: graphic_type
         -orig-id: sfmt
-        contents: 'C'
+        contents: C
       - id: reserved1
         -orig-id: sstruct
         type: str
         size: 13
-        doc: 'Reserved'
+        doc: Reserved
       - id: graphic_display_level
         -orig-id: sdlvl
         type: str
@@ -616,7 +616,7 @@ types:
         -orig-id: sres2
         type: str
         size: 2
-        doc: 'Reserved'
+        doc: Reserved
       - id: graphics_extended_sub_header
         type: tre_header
   tre_header:
@@ -663,7 +663,7 @@ types:
         -orig-id: txtfmt
         type: str
         size: 3
-        doc: 'MTF (USMTF see MIL-STD-6040), STA (indicates BCS), UT1 (indicates ECS), U8S'
+        doc: MTF (USMTF see MIL-STD-6040), STA (indicates BCS), UT1 (indicates ECS), U8S
       - id: text_extended_sub_header
         type: tre_header
   data_extension_segment:
@@ -680,8 +680,8 @@ types:
     seq:
       - id: file_part_type_de
         -orig-id: de
-        contents: 'DE'
-        doc: 'File Part Type desigantor for Data Extension'
+        contents: DE
+        doc: File Part Type desigantor for Data Extension
       - id: desid
         type: str
         size: 25
@@ -742,7 +742,7 @@ types:
         type: str
         size: des_defined_subheader_fields_len.to_i
   data_sub_header_streaming:
-    doc: 'Streaming file Header Data Extension Segment Subheader'
+    doc: Streaming file Header Data Extension Segment Subheader
     seq:
       - id: des_base
         type: data_sub_header_base
@@ -756,18 +756,18 @@ types:
         doc: 'SFH Length 1: number of bytes in sfh_dr field'
       - id: sfh_delim1
         type: u4
-        doc: 'Shall contain the value 0x0A6E1D97.'
+        doc: Shall contain the value 0x0A6E1D97.
       - id: sfh_dr
         type: u1
         repeat: expr
         repeat-expr: sfh_l1.to_i
       - id: sfh_delim2
         type: u4
-        doc: 'Shall contain the value 0x0ECA14BF.'
+        doc: Shall contain the value 0x0ECA14BF.
       - id: sfh_l2
         type: str
         size: 7
-        doc: 'A repeat of sfh_l1.'
+        doc: A repeat of sfh_l1.
   reserved_extension_segment:
     params:
       - id: idx
@@ -782,7 +782,7 @@ types:
     seq:
       - id: file_part_type_re
         -orig-id: re
-        contents: 'RE'
+        contents: RE
       - id: res_type_id
         -orig-id: resid
         type: str
@@ -811,13 +811,13 @@ types:
         -orig-id: etag
         type: str
         size: 6
-        doc: 'RETAG or CETAG'
+        doc: RETAG or CETAG
       - id: edata_length
         -orig-id: el
         type: str
         size: 5
-        doc: 'REL or CEL'
+        doc: REL or CEL
       - id: edata
         type: str
         size: edata_length.to_i
-        doc: 'REDATA or CEDATA'
+        doc: REDATA or CEDATA

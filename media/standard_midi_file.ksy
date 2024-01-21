@@ -43,7 +43,7 @@ types:
   header:
     seq:
       - id: magic
-        contents: "MThd"
+        contents: MThd
       - id: len_header
         type: u4
       - id: format
@@ -55,7 +55,7 @@ types:
   track:
     seq:
       - id: magic
-        contents: "MTrk"
+        contents: MTrk
       - id: len_events
         type: u4
       - id: events

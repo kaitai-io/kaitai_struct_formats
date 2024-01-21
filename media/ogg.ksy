@@ -35,7 +35,7 @@ types:
       it's around 4-8 KB, with a maximum size of 65307 bytes.
     seq:
       - id: sync_code
-        contents: "OggS"
+        contents: OggS
       - id: version
         contents: [0]
         doc: Version of the Ogg bitstream format. Currently must be 0.

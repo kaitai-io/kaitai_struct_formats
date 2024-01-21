@@ -134,7 +134,7 @@ types:
         type: u8
         if: not _io.eof
   journal_object:
-    doc-ref: 'https://www.freedesktop.org/wiki/Software/systemd/journal-files/#objects'
+    doc-ref: https://www.freedesktop.org/wiki/Software/systemd/journal-files/#objects
     seq:
       - id: padding
         size: (8 - _io.pos) % 8
@@ -152,7 +152,7 @@ types:
         type:
           switch-on: object_type
           cases:
-            'object_types::data': data_object
+            object_types::data: data_object
     enums:
       object_types:
         0: unused
@@ -167,7 +167,7 @@ types:
     doc: |
       Data objects are designed to carry log payload, typically in
       form of a "key=value" string in `payload` attribute.
-    doc-ref: 'https://www.freedesktop.org/wiki/Software/systemd/journal-files/#dataobjects'
+    doc-ref: https://www.freedesktop.org/wiki/Software/systemd/journal-files/#dataobjects
     seq:
       - id: hash
         type: u8

@@ -39,7 +39,7 @@ types:
       - id: properties
         type: property
         repeat: until
-        repeat-until: 'not _.is_valid'
+        repeat-until: not _.is_valid
       - id: len_compressed
         type: s4
       - id: len_uncompressed
@@ -73,7 +73,7 @@ types:
         if: is_valid
     instances:
       is_valid:
-        value: 'magic == "prop"'
+        value: magic == "prop"
   dat_bitmap:
     seq:
       - id: bits_per_pixel
