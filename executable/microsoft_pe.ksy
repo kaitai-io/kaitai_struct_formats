@@ -58,6 +58,21 @@ types:
         size: optional_hdr.data_dirs.certificate_table.size
         type: certificate_table
         if: optional_hdr.data_dirs.certificate_table.virtual_address != 0
+      resources_table:
+        pos: optional_hdr.data_dirs.resource_table.pointer_to_raw_data
+        size: optional_hdr.data_dirs.resource_table.size
+        type: resource_directory_table
+        if: optional_hdr.data_dirs.resource_table.size > 0
+      dotnet_header:
+        pos: optional_hdr.data_dirs.clr_runtime_header.pointer_to_raw_data
+        size: optional_hdr.data_dirs.clr_runtime_header.size
+        type: dotnet_header
+        if: optional_hdr.data_dirs.clr_runtime_header.virtual_address != 0
+      dotnet_metadata_header:
+        pos: dotnet_header.meta_data.pointer_to_raw_data
+        size: dotnet_header.meta_data.size
+        type: dotnet_metadata_header
+        if: optional_hdr.data_dirs.clr_runtime_header.virtual_address != 0 and dotnet_header.meta_data.size != 0
   coff_header:
     doc-ref: 3.3. COFF File Header (Object and Image)
     seq:
@@ -395,13 +410,25 @@ types:
       - id: clr_runtime_header
         type: data_dir
   data_dir:
+    to-string: |
+      'Data Directory <VirtualAddr: ' + virtual_address.to_s + ', Size: ' + size.to_s + ', PointerToRawData: ' + pointer_to_raw_data.to_s + '>'
     seq:
       - id: virtual_address
         type: u4
       - id: size
         type: u4
+    instances:
+      sections_lookup:
+        type: sections_lookup(virtual_address)
+      pointer_to_raw_data:
+        value: >
+          (sections_lookup.has_section ?
+          (sections_lookup.section.pointer_to_raw_data + (virtual_address - sections_lookup.section.virtual_address)) :
+          0)
   section:
     -webide-representation: "{name}"
+    to-string: |
+      'Section <Name: ' + name + ', VirtualSize: ' + virtual_size.to_s + ', VirtualAddr: ' + virtual_address.to_s + ', PointerToRawData: ' + pointer_to_raw_data.to_s + '>'
     seq:
       - id: name
         type: str
@@ -430,6 +457,41 @@ types:
       body:
         pos: pointer_to_raw_data
         size: size_of_raw_data
+
+  # Recursive lookup inside of sections to return pointer_to_raw data of dat_dir
+  lookup_iteration:
+    params:
+      - id: idx
+        type: u4
+      - id: virtual_address
+        type: u4
+    instances:
+      section:
+        value: _root.pe.sections[idx]
+      found:
+        value: "virtual_address >= section.virtual_address and virtual_address <= section.virtual_address + section.size_of_raw_data"
+      next_idx:
+        value: "idx + (idx < _root.pe.coff_hdr.number_of_sections ? 1 : 0)"
+      has_next:
+        value: next_idx > idx
+  sections_lookup:
+    to-string: |
+      'Session lockup <VirtualAddr: ' + virtual_address.to_s + ', Sections: ' + tmp_sections.size.to_s + '>'
+    params:
+      - id: virtual_address
+        type: u4
+    seq:
+      - id: tmp_sections
+        type: "lookup_iteration(_index, virtual_address)"
+        repeat: until
+        repeat-until: _.found or not _.has_next
+    instances:
+      section:
+        value: tmp_sections.last.section
+        if: tmp_sections.size > 0
+      has_section:
+        value: tmp_sections.size > 0 and tmp_sections.last.found
+
   certificate_table:
     seq:
       - id: items
@@ -483,3 +545,190 @@ types:
         -orig-id: bCertificate
         size: length - 8
         doc: Contains a certificate, such as an Authenticode signature.
+
+  resource_directory_table:
+    to-string: |
+      'Res dir table <Named entries: ' + number_of_named_entries.to_s + ', ID entries: ' + number_of_id_entries.to_s + '>'
+    seq:
+      - id: characteristics
+        type: u4
+      - id: time_date_stamp
+        type: u4
+      - id: major_version
+        type: u2
+      - id: minor_version
+        type: u2
+      - id: number_of_named_entries
+        type: u2
+      - id: number_of_id_entries
+        type: u2
+      - id: items
+        repeat: expr
+        repeat-expr: number_of_named_entries + number_of_id_entries
+        type: resource_directory_entry
+    instances:
+      has_entries:
+        value: (number_of_named_entries + number_of_id_entries) > 0
+
+  resource_directory_entry:
+    to-string: |
+      'Res entry <Type: ' + name_type.to_i.to_s + ', Name Addr: ' + name_address.to_s + ', Dir Addr: ' + directory_address.to_s + ', PointerToRawData: ' + pointer_to_raw_data.to_s + ', Data Offset: ' + data_offset.to_s + ', Data Size: ' + data_size.to_s + '>'
+    seq:
+      - id: name_offset
+        type: u4
+      - id: offset_to_data
+        type: u4
+
+    instances:
+      is_name_string:
+        value: (name_offset & 0x80000000) > 0
+      is_directory:
+        value: (offset_to_data & 0x80000000) > 0
+      is_data_entry:
+        value: not is_name_string and not is_directory
+      name_address:
+        value: (name_offset & 0x7FFFFFFF)
+      directory_address:
+        value: (offset_to_data & 0x7FFFFFFF)
+      name_type:
+        enum: directory_entry_type
+        value: >
+           is_name_string ? directory_entry_type::undefined : name_address
+      directory_table:
+        pos: directory_address
+        type: resource_directory_table
+        if: is_directory
+      data_offset:
+        pos: directory_address
+        type: u4
+        if: is_data_entry
+      data_size:
+        pos: directory_address + 4
+        type: u4
+        if: is_data_entry
+      name_string:
+        pos: name_address
+        type: strz
+        terminator: 0
+        eos-error: false
+        encoding: ascii
+        if: is_name_string
+      pointer_to_raw_data:
+        value: >
+          is_data_entry ?
+          data_offset :
+          _root.pe.optional_hdr.data_dirs.resource_table.sections_lookup.section.pointer_to_raw_data + directory_address
+
+    enums:
+      directory_entry_type:
+        0x00: undefined
+        0x01: cursor
+        0x02: bitmap
+        0x03: icon
+        0x04: menu
+        0x05: dialog
+        0x06: string
+        0x07: fontdir
+        0x08: font
+        0x09: accelerator
+        0x0a: rcdata
+        0x0b: messagetable
+        0x0c: group_cursor2
+        0x0e: group_cursor4
+        0x10: version
+        0x11: dlginclude
+        0x13: plugplay
+        0x14: vxd
+        0x15: anicursor
+        0x16: aniicon
+        0x17: html
+        0x18: manifest
+        0xfc: dlginit
+        0xf1: toolbar
+
+  dotnet_header:
+    to-string: |
+      '.NET Header'
+    seq:
+      - id: cb
+        type: u4
+      - id: major_runtime_version
+        type: u2
+      - id: minor_runtime_version
+        type: u2
+      - id: meta_data
+        type: data_dir
+      - id: flags
+        type: u4
+        enum: flag_enum
+      - id: entry_point_token
+        type: u4
+      - id: entry_point_virtual_address
+        type: u4
+      - id: resources
+        type: data_dir
+      - id: strong_name_signature
+        type: data_dir
+      - id: code_manager_table
+        type: data_dir
+      - id: export_address_table_jumps
+        type: data_dir
+      - id: managed_native_header
+        type: data_dir
+    enums:
+      flag_enum:
+        0: unknown
+        0x00000001: il_only
+        0x00000002: required_32bit
+        0x00000004: il_library
+        0x00000008: strongnamesigned
+        0x00000010: native_entrypoint
+        0x00010000: trackdebugdata
+
+  dotnet_metadata_header:
+    doc-ref: https://www.ntcore.com/files/dotnetformat.htm
+    to-string: |
+      'Metadata Header <.NET Version ' + version_string + ', NumberOfStreams: ' + number_of_streams.to_s + '>'
+    seq:
+      - id: signature
+        type: u4
+      - id: major_version
+        type: u2
+      - id: minor_version
+        type: u2
+      - id: reserved
+        type: u4
+      - id: version_length
+        type: u4
+      - id: version_string
+        type: str
+        encoding: UTF-8
+        size: version_length
+        pad-right: 0
+      - id: flags
+        type: u2
+      - id: number_of_streams
+        type: u2
+      - id: streams
+        repeat: expr
+        repeat-expr: number_of_streams
+        type: dotnet_stream
+  dotnet_stream:
+    -webide-representation: '{name}'
+    to-string: |
+      'Stream <Name: ' + name + ', Offset: ' + offset.to_s + ', Size: ' + size.to_s + ', PointerToRawData: ' + pointer_to_raw_data.to_s + '>'
+    seq:
+      - id: offset
+        type: u4
+      - id: size
+        type: u4
+      - id: name
+        type: strz
+        terminator: 0
+        eos-error: false
+        encoding: ascii
+      - id: padding
+        size: (4 - _io.pos) % 4
+    instances:
+      pointer_to_raw_data:
+        value: _root.pe.dotnet_header.meta_data.pointer_to_raw_data + offset
