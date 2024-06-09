@@ -1,8 +1,11 @@
 meta:
   id: fallout_dat
-  endian: be
   application: Fallout
+  file-extension: dat
+  xref:
+    wikidata: Q32097740
   license: CC0-1.0
+  endian: be
 seq:
   - id: folder_count
     type: u4

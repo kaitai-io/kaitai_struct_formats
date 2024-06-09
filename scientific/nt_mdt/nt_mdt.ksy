@@ -8,7 +8,7 @@ meta:
     - Gwyddion
     - Callisto
   file-extension: mdt
-  license: GPL-3.0+
+  license: GPL-3.0-or-later
   endian: le
 doc: |
   A native file format of NT-MDT scientific software. Usually contains
@@ -20,8 +20,8 @@ doc: |
 
   Some examples of mdt files can be downloaded at:
 
-  * http://www.ntmdt-si.ru/scan-gallery
-  * http://callistosoft.narod.ru/Resources/Mdt.zip
+  * <https://www.ntmdt-si.ru/resources/scan-gallery>
+  * <http://callistosoft.narod.ru/Resources/Mdt.zip>
 doc-ref: https://svn.code.sf.net/p/gwyddion/code/trunk/gwyddion/modules/file/nt-mdt.c
 seq:
   - id: signature

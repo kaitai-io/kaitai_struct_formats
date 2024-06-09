@@ -2,6 +2,10 @@ meta:
   id: doom_wad
   application: id Tech 1
   file-extension: wad
+  xref:
+    justsolve: Doom_WAD
+    mime: application/x-doom
+    wikidata: Q1936828
   license: CC0-1.0
   endian: le
 seq:
@@ -216,7 +220,7 @@ types:
       provides a very simple form of image compression, allowing
       certain elements ("patches") to be reused / recombined on
       different textures for more variety in the game.
-    doc-ref: http://doom.wikia.com/wiki/TEXTURE1
+    doc-ref: https://doom.fandom.com/wiki/TEXTURE1_and_TEXTURE2
     seq:
       - id: num_textures
         type: s4
@@ -276,7 +280,7 @@ types:
           - id: colormap
             type: u2
   pnames:
-    doc-ref: http://doom.wikia.com/wiki/PNAMES
+    doc-ref: https://doom.fandom.com/wiki/PNAMES
     seq:
       - id: num_patches
         type: u4

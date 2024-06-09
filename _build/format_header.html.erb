@@ -1,7 +1,7 @@
 <nav>
     <div class="container">
     <ol class="breadcrumb">
-        <li><a href="../index.html">Format Gallery</a></li>
+        <li><a href="../">Format Gallery</a></li>
         <li><%= (CATS[cat_id] || {})[:title] || cat_id %></li>
         <li class="active"><%= format_name %></li>
     </ol>
@@ -22,7 +22,7 @@
 
         <div class="row">
             <div class="col-md-8">
-                <p><%= CommonMarker.render_html(yaml['doc']) if yaml['doc'] %></p>
+                <p><%= Commonmarker.to_html(yaml['doc'], options: {render: {hardbreaks: false}}) if yaml['doc'] %></p>
             </div>
             <div class="col-md-4">
                 <div class="panel panel-info">
@@ -64,12 +64,9 @@
                     </div>
                     <div class="panel-body">
                         <ul>
-                        <% if xref['rfc'] %>
-                        <li><a href="https://tools.ietf.org/html/rfc<%= xref['rfc'] %>">RFC <%= xref['rfc'] %></a></li>
-                        <% end %>
-                        <% if xref['wikidata'] %>
-                        <li><a href="https://www.wikidata.org/wiki/<%= xref['wikidata'] %>">Wikidata <%= xref['wikidata'] %></a></li>
-                        <% end %>
+                            <% ['iso', 'rfc', 'loc', 'pronom', 'wikidata', 'forensicswiki', 'justsolve'].each { |k| %>
+                            <%= xref_li(k, xref[k]) %>
+                            <% } %>
                         </ul>
                     </div>
                     <% end %>
@@ -81,7 +78,7 @@
             <div class="col-md-12">
             <p>
             This page hosts a formal specification of <%= format_name %>
-            using <a href="http://kaitai.io">Kaitai Struct</a>. This
+            using <a href="//kaitai.io">Kaitai Struct</a>. This
             specification can be automatically translated into a
             variety of programming languages to get a parsing library.
             </p>

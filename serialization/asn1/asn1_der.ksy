@@ -1,6 +1,10 @@
 meta:
   id: asn1_der
   title: ASN.1 DER (Abstract Syntax Notation One, Distinguished Encoding Rules)
+  file-extension: der
+  xref:
+    justsolve: DER
+    wikidata: Q28600469
   license: CC0-1.0
 doc: |
   ASN.1 (Abstract Syntax Notation One) DER (Distinguished Encoding
@@ -23,10 +27,10 @@ doc: |
   so typically it's simpler to use a pre-compiled list of them, such
   as:
 
-  * https://www.cs.auckland.ac.nz/~pgut001/dumpasn1.cfg
-  * http://oid-info.com/
-  * https://www.alvestrand.no/objectid/top.html
-doc-ref: https://www.itu.int/rec/T-REC-X.690-201508-I/en
+  * <https://www.cs.auckland.ac.nz/~pgut001/dumpasn1.cfg>
+  * <http://oid-info.com/>
+  * <https://www.alvestrand.no/objectid/top.html>
+doc-ref: https://www.itu.int/itu-t/recommendations/rec.aspx?rec=12483&lang=en
 -webide-representation: 't={type_tag}, b={body}'
 seq:
   - id: type_tag
@@ -54,9 +58,12 @@ types:
       - id: int2
         type: u2be
         if: b1 == 0x82
+      - id: int1
+        type: u1
+        if: b1 == 0x81
     instances:
       result:
-        value: '(b1 & 0x80 == 0) ? b1 : int2'
+        value: '(b1 == 0x81) ? int1 : ((b1 == 0x82) ? int2 : b1)'
         -webide-parse-mode: eager
   body_sequence:
     -webide-representation: '[...]'
@@ -80,7 +87,7 @@ types:
         encoding: ASCII # actually a subset of ASCII
   body_object_id:
     -webide-representation: '{first:dec}.{second:dec}.{rest}'
-    doc-ref: https://docs.microsoft.com/en-us/windows/desktop/SecCertEnroll/about-object-identifier
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/seccertenroll/about-object-identifier
     seq:
       - id: first_and_second
         type: u1

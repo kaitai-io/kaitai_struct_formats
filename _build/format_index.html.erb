@@ -10,7 +10,7 @@
     <div class="container">
         <h1>Format Gallery</h1>
 
-        <p>All formats in this gallery have formal specifications in <a href="http://kaitai.io">Kaitai Struct</a> language. They can be used:</p>
+        <p>All formats in this gallery have formal specifications in <a href="//kaitai.io">Kaitai Struct</a> language. They can be used:</p>
 
         <ul>
             <li>as is — as a concise text reference,</li>
@@ -18,6 +18,8 @@
             <li>to explore hex dump in detail (with a visualizer),</li>
             <li>as a ready-made library in any of supported target programming languages (after compiling it with Kaitai Struct compiler).</li>
         </ul>
+
+        <p>For a summary of all entries with associated metadata, see <a href="xref.html">File Format Cross-References</a>.</p>
     </div>
 </section>
 
@@ -35,7 +37,7 @@
                         <h4><%= cat_desc[:title] || cat_name %></h4>
                         <% cat.sort { |a, b| a[:id] <=> b[:id] }.each_with_index { |fmt, i| %>
                         <% if i > 0 %>, <% end %>
-                        <a href="<%= fmt[:id] %>/index.html"><%= fmt[:id] %></a>
+                        <a href="<%= fmt[:id] %>/"><%= fmt[:id] %></a>
                         <% } %>
                     </div>
                 </div>

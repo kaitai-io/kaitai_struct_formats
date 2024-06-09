@@ -1,11 +1,17 @@
 meta:
   id: ttf
-  file-extension: ttf
-  endian: be
-  license: MIT
   title: TrueType Font File
-  #doc-ref: https://www.microsoft.com/typography/tt/ttf_spec/ttch02.doc
-  #doc: 'A TrueType font file contains data, in table format, that comprises an outline font.'
+  file-extension: ttf
+  xref:
+    justsolve: TrueType
+    pronom: x-fmt/453
+    wikidata: Q751800
+  license: MIT
+  endian: be
+doc: |
+  A TrueType font file contains data, in table format, that comprises
+  an outline font.
+doc-ref: https://web.archive.org/web/20160410081432/https://www.microsoft.com/typography/tt/ttf_spec/ttch02.doc
 seq:
   - id: offset_table
     type: offset_table
@@ -15,12 +21,12 @@ seq:
     repeat-expr: offset_table.num_tables
 types:
   fixed:
+    -webide-representation: '{major:dec}.{minor:dec}'
     seq:
       - id: major
         type: u2
       - id: minor
         type: u2
-    -webide-representation: '{major:dec}.{minor:dec}'
   offset_table:
     seq:
       - id: sfnt_version
@@ -34,6 +40,7 @@ types:
       - id: range_shift
         type: u2
   dir_table_entry:
+    -webide-representation: '{tag} [{length:dec}b]: {value}'
     seq:
       - id: tag
         type: str
@@ -47,9 +54,9 @@ types:
         type: u4
     instances:
       value:
-        size: length
         io: _root._io
         pos: offset
+        size: length
         type:
           switch-on: tag
           cases:
@@ -66,11 +73,11 @@ types:
             "'post'": post
             "'name'": name
         -webide-parse-mode: eager
-    -webide-representation: '{tag} [{length:dec}b]: {value}'
   cmap:
     doc: >
       cmap - Character To Glyph Index Mapping Table
       This table defines the mapping of character codes to the glyph index values used in the font.
+    -webide-represetation: "hello"
     seq:
       - id: version_number
         type: u2
@@ -80,9 +87,9 @@ types:
         type: subtable_header
         repeat: expr
         repeat-expr: number_of_encoding_tables
-    -webide-represetation: "hello"
     types:
       subtable_header:
+        -webide-representation: "p:{platform_id:dec}, e:{encoding_id:dec}"
         seq:
           - id: platform_id
             type: u2
@@ -90,7 +97,6 @@ types:
             type: u2
           - id: subtable_offset
             type: u4
-        -webide-representation: "p:{platform_id:dec}, e:{encoding_id:dec}"
         instances:
           table:
             type: subtable
@@ -627,7 +633,7 @@ types:
         2: restricted_license_embedding
         # Preview & Print embedding: When this bit is set, the font may be embedded,
         # and temporarily loaded on the remote system. Documents containing Preview
-        # & Print fonts must be opened “read-only;” no edits can be applied to the document.
+        # & Print fonts must be opened "read-only;" no edits can be applied to the document.
         4: preview_and_print_embedding
         # Editable embedding: When this bit is set, the font may be embedded and
         # temporarily loaded on other systems. Documents containing Editable fonts
@@ -760,6 +766,7 @@ types:
           format0:
             types:
               kerning_pair:
+                -webide-representation: '{left:dec}+{right:dec}: {value:dec}'
                 seq:
                   - id: left
                     type: u2
@@ -767,7 +774,6 @@ types:
                     type: u2
                   - id: value
                     type: s2
-                -webide-representation: '{left:dec}+{right:dec}: {value:dec}'
             seq:
               - id: pair_count
                 type: u2
@@ -818,6 +824,14 @@ types:
       - id: num_glyphs
         type: u2
         doc: 'The number of glyphs in the font.'
+      - id: version10_body
+        type: maxp_version10_body
+        if: is_version10
+    instances:
+      is_version10:
+        value: table_version_number.major == 1 and table_version_number.minor == 0
+  maxp_version10_body:
+    seq:
       - id: max_points
         type: u2
         doc: 'Maximum points in a non-composite glyph.'
@@ -862,6 +876,7 @@ types:
       format20:
         types:
           pascal_string:
+            -webide-representation: "{value}"
             seq:
               - id: length
                 type: u1
@@ -870,7 +885,6 @@ types:
                 size: length
                 encoding: ascii
                 if: length != 0
-            -webide-representation: "{value}"
         seq:
           - id: number_of_glyphs
             type: u2
@@ -881,7 +895,7 @@ types:
           - id: glyph_names
             type: pascal_string
             repeat: until
-            repeat-until: _.length == 0
+            repeat-until: _.length == 0 or _io.eof
     seq:
       - id: format
         type: fixed
@@ -915,6 +929,7 @@ types:
     doc-ref: https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6name.html
     types:
       name_record:
+        -webide-representation: "{ascii_value}"
         seq:
           - id: platform_id
             -orig-id: platformID
@@ -953,7 +968,6 @@ types:
             pos: _parent.ofs_strings + ofs_str
             #if: encoding_id == 1
             -webide-parse-mode: eager
-        -webide-representation: "{ascii_value}"
     seq:
       - id: format_selector
         -orig-id: format

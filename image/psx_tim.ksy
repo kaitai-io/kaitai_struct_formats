@@ -1,12 +1,17 @@
-# http://fileformats.archiveteam.org/wiki/TIM_(PlayStation_graphics)
-# http://mrclick.zophar.net/TilEd/download/timgfx.txt
-# http://www.romhacking.net/documents/31/
 meta:
   id: psx_tim
   application: Sony PlayStation (PSX) typical image format
   file-extension: tim
+  xref:
+    justsolve: TIM_(PlayStation_graphics)
+    wikidata: Q28207389
   license: CC0-1.0
+  ks-version: 0.9
   endian: le
+doc-ref:
+  - http://fileformats.archiveteam.org/wiki/TIM_(PlayStation_graphics)
+  - https://mrclick.zophar.net/TilEd/download/timgfx.txt
+  - https://www.romhacking.net/documents/31/
 seq:
   - id: magic
     contents: [0x10, 0, 0, 0]
@@ -16,7 +21,7 @@ seq:
   - id: clut
     type: bitmap
     if: has_clut
-    doc: CLUT (Color LookUp Table), one or several palettes for indexed color image, represented as a 
+    doc: CLUT (Color LookUp Table), one or several palettes for indexed color image, represented as a
   - id: img
     type: bitmap
 types:

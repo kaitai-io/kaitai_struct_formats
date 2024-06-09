@@ -8,6 +8,10 @@ meta:
     - libmodplug
     - Mikmod
   file-extension: xm
+  xref:
+    justsolve: Extended_Module
+    pronom: fmt/323
+    wikidata: Q376852
   license: Unlicense
   endian: le
   encoding: utf-8
@@ -205,28 +209,28 @@ types:
             type: u1
           - id: num_panning_points
             type: u1
-          
+
           - id: volume_sustain_point
             type: u1
           - id: volume_loop_start_point
             type: u1
           - id: volume_loop_end_point
             type: u1
-          
+
           - id: panning_sustain_point
             type: u1
           - id: panning_loop_start_point
             type: u1
           - id: panning_loop_end_point
             type: u1
-          
+
           - id: volume_type
             type: u1
             enum: type
           - id: panning_type
             type: u1
             enum: type
-          
+
           - id: vibrato_type
             type: u1
           - id: vibrato_sweep
@@ -283,7 +287,7 @@ types:
             type: u4
           - id: sample_loop_length
             type: u4
-          
+
           - id: volume
             type: u1
           - id: fine_tune

@@ -1,10 +1,13 @@
 meta:
   id: creative_voice_file
   title: Creative Voice File
-  file-extension:
-    - voc
-  endian: le
+  file-extension: voc
+  xref:
+    justsolve: Creative_Voice_File
+    mime: audio/x-voc
+    wikidata: Q27967410
   license: CC0-1.0
+  endian: le
 doc: |
   Creative Voice File is a container file format for digital audio
   wave data. Initial revisions were able to support only unsigned
@@ -17,11 +20,11 @@ doc: |
   software due to simplicity and availability of Creative's recording
   / editing tools.
 doc-ref: 'https://wiki.multimedia.cx/index.php?title=Creative_Voice'
-# http://fabiensanglard.net/reverse_engineering_strike_commander/docs/Creative%20Voice%20(VOC)%20file%20format.txt
+# https://fabiensanglard.net/reverse_engineering_strike_commander/docs/Creative%20Voice%20(VOC)%20file%20format.txt
 seq:
   - id: magic
     contents:
-      - Creative Voice File
+      - 'Creative Voice File'
       - 0x1a
   - id: header_size
     type: u2

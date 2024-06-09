@@ -2,6 +2,10 @@ meta:
   id: mifare_classic
   title: Mifare Classic RFID tag dump
   file-extension: mfd
+  xref:
+    wikidata:
+      - Q29000512 # MIFARE Classic 1k
+      - Q29000513 # MIFARE Classic 4k
   license: BSD-2-Clause
   ks-version: 0.9
   endian: le
@@ -9,7 +13,8 @@ doc-ref: |
   https://github.com/nfc-tools/libnfc
   https://www.nxp.com/docs/en/data-sheet/MF1S70YYX_V1.pdf
 doc: |
-  You can get a dump for testing by the link: https://github.com/zhovner/mfdread/raw/master/dump.mfd
+  You can get a dump for testing from this link:
+  <https://github.com/zhovner/mfdread/raw/master/dump.mfd>
 seq:
   - id: sectors
     size: ((_index >= 32)?4:1)*4*16 #sorry for this doubling of `block_size` (16), but we need `sector` be self-sufficient so we cannot use _root there
@@ -28,7 +33,7 @@ types:
       - id: manufacturer
         type: manufacturer
         if: has_manufacturer
-      
+
       - id: data_filler
         -orig-id: abtData
         size: _io.size - _io.pos - 16 # sizeof(trailer)
@@ -126,7 +131,7 @@ types:
         value: 4
       ac_count_of_chunks:
         value: ac_bits*2 #6
-    
+
     types:
       access_conditions:
         seq:
@@ -196,7 +201,7 @@ types:
                 doc: "c3 c2 c1"
               inv_shift_val:
                 value: (bits[0].n << 2) | (bits[1].n << 1) | bits[2].n
-              
+
             types:
               ac_bit:
                 params:
@@ -209,7 +214,7 @@ types:
                     value: (chunk >> i) & 1
                   b:
                     value: n == 1
-                    
+
           trailer_ac:
             params:
               - id: ac
@@ -235,7 +240,7 @@ types:
                 value: ac.val <= 0b110
               write_key_a_required:
                 value: ac.val == 0
-              
+
 
               write_key_b_required:
                 value: (not read_key_a_required or read_key_b_required) and not ac.bits[0].b

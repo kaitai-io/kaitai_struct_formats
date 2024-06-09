@@ -2,11 +2,17 @@ meta:
   id: windows_lnk_file
   title: Windows shell link file
   file-extension: lnk
+  xref:
+    forensicswiki: lnk
+    justsolve: Windows_Shortcut
+    mime: application/x-ms-shortcut
+    pronom: x-fmt/428
+    wikidata: Q29000599
   license: CC0-1.0
-  endian: le
-  encoding: cp437
   imports:
     - windows_shell_items
+  encoding: cp437
+  endian: le
 doc: |
   Windows .lnk files (AKA "shell link" file) are most frequently used
   in Windows shell to create "shortcuts" to another files, usually for
@@ -44,8 +50,8 @@ seq:
     if: header.flags.has_icon_location
 types:
   file_header:
-    doc-ref: 'https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.1'
     -orig-id: ShellLinkHeader
+    doc-ref: 'https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.1'
     seq:
       - id: len_header
         -orig-id: HeaderSize
@@ -132,7 +138,7 @@ types:
     doc-ref: 'https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.2'
     seq:
       - id: len_id_list
-        -orig-id: IDListSize          
+        -orig-id: IDListSize
         type: u2
       - id: id_list
         -orig-id: IDList

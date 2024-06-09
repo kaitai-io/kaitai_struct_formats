@@ -3,6 +3,9 @@ meta:
   title: ISO9660 CD filesystem
   file-extension: iso
   xref:
+    justsolve: ISO_9660
+    loc: fdd000348
+    pronom: fmt/468
     wikidata: Q815645
   license: CC0-1.0
 doc: |
@@ -41,7 +44,7 @@ types:
         size: 32
         encoding: UTF-8
   vol_desc_primary:
-    doc-ref: 'http://wiki.osdev.org/ISO_9660#The_Primary_Volume_Descriptor'
+    doc-ref: 'https://wiki.osdev.org/ISO_9660#The_Primary_Volume_Descriptor'
     seq:
       - id: unused1
         contents: [0]
@@ -182,7 +185,7 @@ types:
         if: file_flags & 2 == 0
   ## AKA "Path Table Entry"
   path_table_le:
-    doc-ref: 'http://wiki.osdev.org/ISO_9660#The_Path_Table'
+    doc-ref: 'https://wiki.osdev.org/ISO_9660#The_Path_Table'
     seq:
       - id: entries
         type: path_table_entry_le
@@ -221,7 +224,7 @@ types:
       - id: timezone
         type: u1
   dec_datetime:
-    doc-ref: 'http://wiki.osdev.org/ISO_9660#Date.2Ftime_format'
+    doc-ref: 'https://wiki.osdev.org/ISO_9660#Date.2Ftime_format'
     seq:
       - id: year
         type: str
@@ -269,5 +272,5 @@ instances:
   sector_size:
     value: 2048
   primary_vol_desc:
-    type: vol_desc
     pos: 0x010 * sector_size
+    type: vol_desc

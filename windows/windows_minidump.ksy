@@ -1,6 +1,9 @@
 meta:
   id: windows_minidump
   title: Windows MiniDump
+  file-extension:
+    - dmp
+    - mdmp
   license: CC0-1.0
   endian: le
 doc: |
@@ -12,8 +15,8 @@ doc: |
 
   The file itself is a container, which contains a number of typed
   "streams", which contain some data according to its type attribute.
-doc-ref: https://msdn.microsoft.com/en-us/library/ms680378(VS.85).aspx
-# https://github.com/libyal/libmdmp/blob/master/documentation/Minidump%20(MDMP)%20format.asciidoc
+doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_header
+# https://github.com/libyal/libmdmp/blob/main/documentation/Minidump%20(MDMP)%20format.asciidoc
 seq:
   - id: magic1
     -orig-id: Signature
@@ -47,7 +50,7 @@ instances:
 types:
   dir:
     -orig-id: MINIDUMP_DIRECTORY
-    doc-ref: https://msdn.microsoft.com/en-us/library/ms680365(v=vs.85).aspx
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_directory
     seq:
       - id: stream_type
         -orig-id: StreamType
@@ -56,7 +59,7 @@ types:
       - id: len_data
         -orig-id: DataSize
         type: u4
-        doc-ref: https://msdn.microsoft.com/en-us/library/ms680383(v=vs.85).aspx
+        doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_location_descriptor
       - id: ofs_data
         type: u4
         -orig-id: Rva
@@ -77,7 +80,7 @@ types:
     doc: |
       "System info" stream provides basic information about the
       hardware and operating system which produces this dump.
-    doc-ref: https://msdn.microsoft.com/en-us/library/ms680396(v=vs.85).aspx
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_system_info
     seq:
       - id: cpu_arch
         -orig-id: ProcessorArchitecture
@@ -129,8 +132,8 @@ types:
         9: amd64
         0xffff: unknown
   misc_info:
-    doc-ref: https://msdn.microsoft.com/en-us/library/ms680389(v=vs.85).aspx
-    # https://msdn.microsoft.com/en-us/library/ms680388(v=vs.85).aspx
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_misc_info
+    # https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_misc_info_2
     seq:
       - id: len_info
         -orig-id: SizeOfInfo
@@ -167,7 +170,7 @@ types:
         type: u4
   thread_list:
     -orig-id: MINIDUMP_THREAD_LIST
-    doc-ref: https://msdn.microsoft.com/en-us/library/ms680515(v=vs.85).aspx
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_thread_list
     seq:
       - id: num_threads
         -orig-id: NumberOfThreads
@@ -179,7 +182,7 @@ types:
         repeat-expr: num_threads
   thread:
     -orig-id: MINIDUMP_THREAD
-    doc-ref: https://msdn.microsoft.com/en-us/library/ms680517(v=vs.85).aspx
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_thread
     seq:
       - id: thread_id
         -orig-id: ThreadId
@@ -205,7 +208,7 @@ types:
         type: location_descriptor
   memory_list:
     -orig-id: MINIDUMP_MEMORY_LIST
-    doc-ref: https://msdn.microsoft.com/en-us/library/ms680387(v=vs.85).aspx
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_memory64_list
     seq:
       - id: num_mem_ranges
         type: u4
@@ -215,7 +218,7 @@ types:
         repeat-expr: num_mem_ranges
   exception_stream:
     -orig-id: MINIDUMP_EXCEPTION_STREAM
-    doc-ref: https://msdn.microsoft.com/en-us/library/ms680368(v=vs.85).aspx
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_exception_stream
     seq:
       - id: thread_id
         -orig-id: ThreadId
@@ -231,7 +234,7 @@ types:
         type: location_descriptor
   exception_record:
     -orig-id: MINIDUMP_EXCEPTION
-    doc-ref: https://msdn.microsoft.com/en-us/library/ms680367(v=vs.85).aspx
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_exception
     seq:
       - id: code
         -orig-id: ExceptionCode
@@ -266,7 +269,7 @@ types:
           15), but in reality only first `num_params` would be used.
   memory_descriptor:
     -orig-id: MINIDUMP_MEMORY_DESCRIPTOR
-    doc-ref: https://msdn.microsoft.com/en-us/library/ms680384(v=vs.85).aspx
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_memory_descriptor
     seq:
       - id: addr_memory_range
         -orig-id: StartOfMemoryRange
@@ -275,7 +278,7 @@ types:
         type: location_descriptor
   location_descriptor:
     -orig-id: MINIDUMP_LOCATION_DESCRIPTOR
-    doc-ref: https://msdn.microsoft.com/en-us/library/ms680383(v=vs.85).aspx
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_location_descriptor
     seq:
       - id: len_data
         -orig-id: DataSize
@@ -292,7 +295,7 @@ types:
     doc: |
       Specific string serialization scheme used in MiniDump format is
       actually a simple 32-bit length-prefixed UTF-16 string.
-    doc-ref: https://msdn.microsoft.com/en-us/library/ms680395(v=vs.85).aspx
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_string
     seq:
       - id: len_str
         -orig-id: Length
@@ -304,7 +307,7 @@ types:
         encoding: UTF-16LE
 enums:
   stream_types:
-    # https://msdn.microsoft.com/en-us/library/ms680394(v=vs.85).aspx
+    # https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ne-minidumpapiset-minidump_stream_type
     0: unused
     1: reserved_0
     2: reserved_1
@@ -324,3 +327,35 @@ enums:
     16: memory_info_list
     17: thread_info_list
     18: handle_operation_list
+    19: token
+    20: java_script_data
+    21: system_memory_info
+    22: process_vm_counters
+    23: ipt_trace
+    24: thread_names
+    0x8000: ce_null
+    0x8001: ce_system_info
+    0x8002: ce_exception
+    0x8003: ce_module_list
+    0x8004: ce_process_list
+    0x8005: ce_thread_list
+    0x8006: ce_thread_context_list
+    0x8007: ce_thread_call_stack_list
+    0x8008: ce_memory_virtual_list
+    0x8009: ce_memory_physical_list
+    0x800A: ce_bucket_parameters
+    0x800B: ce_process_module_map
+    0x800C: ce_diagnosis_list
+    # Breakpad extensions; see Breakpad's src/google_breakpad/common/minidump_format.h
+    0x47670001: md_raw_breakpad_info
+    0x47670002: md_raw_assertion_info
+    0x47670003: md_linux_cpu_info      # /proc/cpuinfo
+    0x47670004: md_linux_proc_status   # /proc/$x/status
+    0x47670005: md_linux_lsb_release   # /etc/lsb-release
+    0x47670006: md_linux_cmd_line      # /proc/$x/cmdline
+    0x47670007: md_linux_environ       # /proc/$x/environ
+    0x47670008: md_linux_auxv          # /proc/$x/auxv
+    0x47670009: md_linux_maps          # /proc/$x/maps
+    0x4767000a: md_linux_dso_debug
+    # Crashpad extension; See Crashpad's minidump/minidump_extensions.h
+    0x43500001: md_crashpad_info_stream

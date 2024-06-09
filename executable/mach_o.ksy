@@ -1,11 +1,24 @@
-# http://www.stonedcoder.org/~kd/lib/MachORuntime.pdf
-# https://opensource.apple.com/source/python_modules/python_modules-43/Modules/macholib-1.5.1/macholib-1.5.1.tar.gz
-# https://github.com/comex/cs/blob/master/macho_cs.py
-# https://opensource.apple.com/source/Security/Security-55471/libsecurity_codesigning/requirements.grammar.auto.html
-# https://github.com/opensource-apple/xnu/blob/10.11/bsd/sys/codesign.h
 meta:
   id: mach_o
+  xref:
+    justsolve: Mach-O
+    pronom:
+      - fmt/692 # Mach-O 32bit
+      - fmt/693 # Mach-O 64bit
+    wikidata: Q2627217
+  license: MIT
+  ks-version: 0.9
+  imports:
+    - /serialization/asn1/asn1_der
   endian: le
+doc-ref:
+  - https://www.stonedcoder.org/~kd/lib/MachORuntime.pdf
+  - https://opensource.apple.com/source/python_modules/python_modules-43/Modules/macholib-1.5.1/macholib-1.5.1.tar.gz
+  - https://github.com/comex/cs/blob/07a88f9/macho_cs.py
+  - https://opensource.apple.com/source/Security/Security-55471/libsecurity_codesigning/requirements.grammar.auto.html
+  - https://github.com/apple/darwin-xnu/blob/xnu-2782.40.9/bsd/sys/codesign.h
+  - https://opensource.apple.com/source/dyld/dyld-852/src/ImageLoaderMachO.cpp.auto.html
+  - https://opensource.apple.com/source/dyld/dyld-852/src/ImageLoaderMachOCompressed.cpp.auto.html
 seq:
   - id: magic
     type: u4be
@@ -18,12 +31,13 @@ seq:
     repeat-expr: header.ncmds
 enums:
   magic_type:
+    # Note that for multiarch (a.k.a. fat) Mach-O files, which are the primary
+    # kind you find on macOS today, you should instead use mach_o_fat.ksy, which
+    # parses the fat header and embeds mach_o.ksy to parse each arch.
     0xFEEDFACE: macho_be_x86 # MH_MAGIC:    mach-o, big-endian,    x86
     0xCEFAEDFE: macho_le_x86 # MH_CIGAM:    mach-o, little-endian, x86
     0xFEEDFACF: macho_be_x64 # MH_MAGIC_64: mach-o, big-endian,    x64
     0xCFFAEDFE: macho_le_x64 # MH_CIGAM_64: mach-o, little-endian, x64
-    0xCAFEBABE: fat_be       # FAT_MAGIC:   fat,    big-endian
-    0xBEBAFECA: fat_le       # FAT_CIGAM:   fat,    little-endian
   cpu_type:
     0xffffffff: any
     1:          vax
@@ -46,7 +60,7 @@ enums:
     0x1000012:  powerpc64 # abi64 | powerpc
     0x100000c:  arm64     # abi64 | arm
   file_type:
-    # http://opensource.apple.com//source/xnu/xnu-1456.1.26/EXTERNAL_HEADERS/mach-o/loader.h
+    # https://opensource.apple.com/source/xnu/xnu-1456.1.26/EXTERNAL_HEADERS/mach-o/loader.h
     0x1: object      # relocatable object file
     0x2: execute     # demand paged executable file
     0x3: fvmlib      # fixed VM shared library file
@@ -57,9 +71,9 @@ enums:
     0x8: bundle      # dynamically bound bundle file
     0x9: dylib_stub  # shared library stub for static linking only, no section contents
     0xa: dsym        # companion file with only debug sections
-    0xb: kext_bundle # x86_64 kexts    
+    0xb: kext_bundle # x86_64 kexts
   load_command_type:
-    # http://opensource.apple.com//source/xnu/xnu-1456.1.26/EXTERNAL_HEADERS/mach-o/loader.h
+    # https://opensource.apple.com/source/xnu/xnu-1456.1.26/EXTERNAL_HEADERS/mach-o/loader.h
     0x80000000: req_dyld
     0x1       : segment        # segment of this file to be mapped
     0x2       : symtab         # link-edit stab symbol table info
@@ -111,8 +125,10 @@ enums:
     0x2E      : linker_optimization_hint
     0x2F      : version_min_tvos
     0x30      : version_min_watchos
+    0x32      : build_version # LC_BUILD_VERSION
 types:
   macho_flags:
+    -webide-representation: "{this:flags}"
     params:
       - id: value
         type: u4
@@ -191,7 +207,6 @@ types:
         value: value & 0x1000000 != 0
       app_extension_safe:
         value: value & 0x2000000 != 0
-    -webide-representation: "{this:flags}"
   mach_header:
     seq:
       - id: cputype
@@ -216,6 +231,7 @@ types:
         type: macho_flags(flags)
         -webide-parse-mode: eager
   load_command:
+    -webide-representation: '{type}: {body}'
     seq:
       - id: type
         type: u4
@@ -266,7 +282,8 @@ types:
             'load_command_type::sub_library'             : sub_command
             'load_command_type::routines_64'             : routines_command_64
             'load_command_type::routines'                : routines_command
-    -webide-representation: '{type}: {body}'
+            'load_command_type::build_version'           : build_version_command
+            'load_command_type::segment'                 : segment_command
   vm_prot:
     seq:
       - id: strip_read
@@ -304,6 +321,7 @@ types:
         type: b24
         doc: Reserved (unused) bits.
   uleb128:
+    -webide-representation: "{value:dec}"
     seq:
       - id: b1
         type: u1
@@ -348,8 +366,8 @@ types:
           ((b9  % 128) << 56) + ((b8 & 0x80 == 0) ? 0 :
           ((b10 % 128) << 63))))))))))
         -webide-parse-mode: eager
-    -webide-representation: "{value:dec}"  
   segment_command_64:
+    -webide-representation: '{segname} ({initprot}): offs={fileoff}, size={filesize}'
     seq:
       - id: segname
         type: str
@@ -378,6 +396,7 @@ types:
         repeat-expr: nsects
     types:
       section_64:
+        -webide-representation: '{sect_name}: offs={offset}, size={size}'
         seq:
           - id: sect_name
             -orig-id: sectname
@@ -444,6 +463,7 @@ types:
                 type: eh_frame_item
                 repeat: eos
           eh_frame_item:
+            -webide-representation: '{body}'
             seq:
               - id: length
                 type: u4
@@ -459,7 +479,6 @@ types:
                   switch-on: id
                   cases:
                     0: cie
-            -webide-representation: '{body}'
             types:
               char_chain:
                 seq:
@@ -469,6 +488,7 @@ types:
                     type: char_chain
                     if: chr != 0
               cie:
+                -webide-representation: 'v:{version:dec} aug:{augmentation_string} code:{code_alignment_factor} data:{data_alignment_factor} returnReg:{return_address_register}'
                 seq:
                   - id: version
                     type: u1
@@ -489,7 +509,6 @@ types:
                   - id: augmentation
                     type: augmentation_entry
                     if: 'aug_str.chr == 122'
-                -webide-representation: 'v:{version:dec} aug:{augmentation_string} code:{code_alignment_factor} data:{data_alignment_factor} returnReg:{return_address_register}'
               augmentation_entry:
                 seq:
                   - id: length
@@ -509,6 +528,7 @@ types:
                 type: u8
                 repeat: eos
           cf_string:
+            -webide-representation: "isa={isa}, info={info}, data={data}, length={length}"
             seq:
               - id: isa
                 type: u8
@@ -518,15 +538,13 @@ types:
                 type: u8
               - id: length
                 type: u8
-            -webide-representation: "isa={isa}, info={info}, data={data}, length={length}"
           cf_string_list:
             seq:
               - id: items
                 type: cf_string
                 repeat: eos
-        -webide-representation: '{sect_name}: offs={offset}, size={size}'
-    -webide-representation: '{segname} ({initprot}): offs={fileoff}, size={filesize}'
   dyld_info_command:
+    -webide-representation: 'rebase={rebase_off}, bind={bind_off}, weakBind={weak_bind_off}, lazyBind={lazy_bind_off}, export={export_off}'
     seq:
       - id: rebase_off
         type: u4
@@ -548,28 +566,37 @@ types:
         type: u4
       - id: export_size
         type: u4
-    -webide-representation: 'rebase={rebase_off}, bind={bind_off}, weakBind={weak_bind_off}, lazyBind={lazy_bind_off}, export={export_off}'
     instances:
       rebase:
         io: _root._io
         pos: rebase_off
         size: rebase_size
         type: rebase_data
+        if: rebase_size != 0
       bind:
         io: _root._io
         pos: bind_off
         size: bind_size
         type: bind_data
+        if: bind_size != 0
+      weak_bind:
+        io: _root._io
+        pos: weak_bind_off
+        size: weak_bind_size
+        type: bind_data
+        if: weak_bind_size != 0
       lazy_bind:
         io: _root._io
         pos: lazy_bind_off
         size: lazy_bind_size
-        type: lazy_bind_data
+        type: bind_data
+        if: lazy_bind_size != 0
       exports:
         io: _root._io
         pos: export_off
         size: export_size
         type: export_node
+        if: export_size != 0
     types:
       rebase_data:
         seq:
@@ -579,6 +606,7 @@ types:
             repeat-until: _.opcode == opcode::done
         types:
           rebase_item:
+            -webide-representation: "{opcode}, imm:{immediate}, uleb:{uleb}, skip:{skip}"
             seq:
               - id: opcode_and_immediate
                 type: u1
@@ -601,7 +629,6 @@ types:
               immediate:
                 value: "opcode_and_immediate & 0x0f"
                 -webide-parse-mode: eager
-            -webide-representation: "{opcode}, imm:{immediate}, uleb:{uleb}, skip:{skip}"
         enums:
           opcode:
             0x00: done
@@ -614,6 +641,7 @@ types:
             0x70: do_rebase_add_address_uleb
             0x80: do_rebase_uleb_times_skipping_uleb
       bind_item:
+        -webide-representation: "{opcode}, imm:{immediate}, uleb:{uleb}, skip:{skip}, symbol:{symbol}"
         seq:
           - id: opcode_and_immediate
             type: u1
@@ -641,19 +669,13 @@ types:
           immediate:
             value: "opcode_and_immediate & 0x0f"
             -webide-parse-mode: eager
-        -webide-representation: "{opcode}, imm:{immediate}, uleb:{uleb}, skip:{skip}, symbol:{symbol}"
       bind_data:
-        seq:
-          - id: items
-            type: bind_item
-            repeat: until
-            repeat-until: _.opcode == bind_opcode::done
-      lazy_bind_data:
         seq:
           - id: items
             type: bind_item
             repeat: eos
       export_node:
+        -webide-representation: "{children_count} children, term_size={terminal_size.value}"
         seq:
           - id: terminal_size
             type: uleb128
@@ -665,9 +687,9 @@ types:
             repeat-expr: children_count
           - id: terminal
             size: terminal_size.value
-        -webide-representation: "{children_count} children, term_size={terminal_size.value}"
         types:
           child:
+            -webide-representation: "{name}: {node_offset}"
             seq:
               - id: name
                 type: strz
@@ -678,7 +700,6 @@ types:
               value:
                 pos: node_offset.value
                 type: export_node
-            -webide-representation: "{name}: {node_offset}"
     enums:
       bind_opcode:
         0x00: done
@@ -695,6 +716,7 @@ types:
         0xb0: do_bind_add_address_immediate_scaled
         0xc0: do_bind_uleb_times_skipping_uleb
   symtab_command:
+    -webide-representation: "symbols: {n_syms:dec}, strtab: {str_off}"
     seq:
       - id: sym_off
         -orig-id: symoff
@@ -712,26 +734,34 @@ types:
       symbols:
         io: _root._io
         pos: sym_off
-        type: nlist_64
+        type:
+          switch-on: _root.magic
+          cases:
+            magic_type::macho_le_x64 : nlist_64
+            magic_type::macho_be_x64 : nlist_64
+            magic_type::macho_le_x86 : nlist
+            magic_type::macho_be_x86 : nlist
         repeat: expr
         repeat-expr: n_syms
       strs:
         io: _root._io
         pos: str_off
-        type: str_table
         size: str_size
-    -webide-representation: "symbols: {n_syms:dec}, strtab: {str_off}"
+        type: str_table
     types:
       str_table:
         seq:
+            # NOTE:  This may not always be a u4, I've also seen " " (0x20 0x00)
           - id: unknown
             type: u4
           - id: items
             type: strz
-            encoding: ascii
+            encoding: utf-8
             repeat: until
             repeat-until: _ == ""
+            eos-error: false
       nlist_64:
+        -webide-representation: "un={un} type={type} sect={sect} desc={desc} value={value}"
         seq:
           - id: un
             type: u4
@@ -743,7 +773,31 @@ types:
             type: u2
           - id: value
             type: u8
+        instances:
+          name:
+            pos: _parent.str_off + un
+            type: strz
+            encoding: utf-8
+            if: un != 0
+      nlist:
         -webide-representation: "un={un} type={type} sect={sect} desc={desc} value={value}"
+        seq:
+          - id: un
+            type: u4
+          - id: type
+            type: u1
+          - id: sect
+            type: u1
+          - id: desc
+            type: u2
+          - id: value
+            type: u4
+        instances:
+          name:
+            pos: _parent.str_off + un
+            type: strz
+            encoding: utf-8
+            if: un != 0
   dysymtab_command:
     seq:
       - id: i_local_sym
@@ -808,6 +862,7 @@ types:
         repeat: expr
         repeat-expr: n_indirect_syms
   lc_str:
+    -webide-representation: '{value}'
     seq:
       - id: length
         -orig-id: offset
@@ -816,18 +871,18 @@ types:
         -orig-id: ptr
         type: strz
         encoding: UTF-8
-    -webide-representation: '{value}'
   dylinker_command:
+    -webide-representation: '{name}'
     seq:
       - id: name
         type: lc_str
-    -webide-representation: '{name}'
   uuid_command:
+    -webide-representation: 'uuid={uuid}'
     seq:
       - id: uuid
         size: 16
-    -webide-representation: 'uuid={uuid}'
   version:
+    -webide-representation: '{major:dec}.{minor:dec}'
     seq:
       - id: p1
         type: u1
@@ -837,7 +892,6 @@ types:
         type: u1
       - id: release
         type: u1
-    -webide-representation: '{major:dec}.{minor:dec}'
   encryption_info_command:
     seq:
       - id: cryptoff
@@ -872,33 +926,34 @@ types:
         type: lc_str
   routines_command_64:
     seq:
-        - id: init_address
-          type: u8
-        - id: init_module
-          type: u8
-        - id: reserved
-          size: 48 # u8 * 6
+      - id: init_address
+        type: u8
+      - id: init_module
+        type: u8
+      - id: reserved
+        size: 48 # u8 * 6
   routines_command:
     seq:
-        - id: init_address
-          type: u4
-        - id: init_module
-          type: u4
-        - id: reserved
-          size: 24 # u4 * 6
+      - id: init_address
+        type: u4
+      - id: init_module
+        type: u4
+      - id: reserved
+        size: 24 # u4 * 6
   version_min_command:
+    -webide-representation: 'v:{version}, r:{reserved}'
     seq:
       - id: version
         type: version
       - id: sdk
         type: version
-    -webide-representation: 'v:{version}, r:{reserved}'
   source_version_command:
+    -webide-representation: 'v:{version:dec}'
     seq:
       - id: version
         type: u8
-    -webide-representation: 'v:{version:dec}'
   entry_point_command:
+    -webide-representation: 'entry_off={entry_off}, stack_size={stack_size}'
     seq:
       - id: entry_off
         -orig-id: entryoff
@@ -906,8 +961,8 @@ types:
       - id: stack_size
         -orig-id: stacksize
         type: u8
-    -webide-representation: 'entry_off={entry_off}, stack_size={stack_size}'
   dylib_command:
+    -webide-representation: '{name}'
     seq:
       - id: name_offset
         type: u4
@@ -920,16 +975,16 @@ types:
       - id: name
         type: strz
         encoding: utf-8
-    -webide-representation: '{name}'
   rpath_command:
+    -webide-representation: '{path}'
     seq:
       - id: path_offset
         type: u4
       - id: path
         type: strz
         encoding: utf-8
-    -webide-representation: '{path}'
   linkedit_data_command:
+    -webide-representation: 'offs={data_off}, size={data_size}'
     seq:
       - id: data_off
         -orig-id: dataoff
@@ -937,8 +992,8 @@ types:
       - id: data_size
         -orig-id: datasize
         type: u4
-    -webide-representation: 'offs={data_off}, size={data_size}'
   code_signature_command:
+    -webide-representation: 'offs={data_off}, size={data_size}'
     seq:
       - id: data_off
         type: u4
@@ -948,9 +1003,8 @@ types:
       code_signature:
         io: _root._io
         pos: data_off
-        type: cs_blob
         size: data_size
-    -webide-representation: 'offs={data_off}, size={data_size}'        
+        type: cs_blob
   cs_blob:
     seq:
       - id: magic
@@ -966,7 +1020,8 @@ types:
             'cs_magic::requirement'       : requirement
             'cs_magic::requirements'      : requirements
             'cs_magic::code_directory'    : code_directory
-            'cs_magic::entitlement'       : entitlement
+            'cs_magic::entitlements'      : entitlements
+            'cs_magic::der_entitlements'  : asn1_der
             'cs_magic::blob_wrapper'      : blob_wrapper
             'cs_magic::embedded_signature': super_blob
             'cs_magic::detached_signature': super_blob
@@ -975,7 +1030,8 @@ types:
         0xfade0c00: requirement        # CSMAGIC_REQUIREMENT
         0xfade0c01: requirements       # CSMAGIC_REQUIREMENTS
         0xfade0c02: code_directory     # CSMAGIC_CODEDIRECTORY
-        0xfade7171: entitlement        # CSMAGIC_ENTITLEMENT
+        0xfade7171: entitlements       # CSMAGIC_EMBEDDED_ENTITLEMENTS
+        0xfade7172: der_entitlements   # CSMAGIC_EMBEDDED_DER_ENTITLEMENTS
         0xfade0b01: blob_wrapper       # CSMAGIC_BLOBWRAPPER
         0xfade0cc0: embedded_signature # CSMAGIC_EMBEDDED_SIGNATURE
         0xfade0cc1: detached_signature # CSMAGIC_DETACHED_SIGNATURE
@@ -1025,9 +1081,9 @@ types:
             -webide-parse-mode: eager
           hashes:
             pos: hash_offset - 8 - hash_size * n_special_slots
+            size: hash_size
             repeat: expr
             repeat-expr: n_special_slots + n_code_slots
-            size: hash_size
       blob_index:
         seq:
           - id: type
@@ -1037,8 +1093,8 @@ types:
             type: u4be
         instances:
           blob:
-            pos: offset - 8
             io: _parent._io
+            pos: offset - 8
             size-eos: true
             type: cs_blob
         enums:
@@ -1049,18 +1105,20 @@ types:
             3:       resource_dir               # CSSLOT_RESOURCEDIR
             4:       application                # CSSLOT_APPLICATION
             5:       entitlements               # CSSLOT_ENTITLEMENTS
+            7:       der_entitlements           # CSSLOT_DER_ENTITLEMENTS
             0x1000:  alternate_code_directories # CSSLOT_ALTERNATE_CODEDIRECTORIES
             0x10000: signature_slot             # CSSLOT_SIGNATURESLOT
       data:
+        -webide-representation: "{value}"
         seq:
           - id: length
             type: u4be
           - id: value
             size: length
           - id: padding
-            size: 4 - (length & 3)
-        -webide-representation: "{value}"
+            size: -length % 4
       match:
+        -webide-representation: "{match_op} {data.value:str}"
         seq:
           - id: match_op
             type: u4be
@@ -1079,8 +1137,8 @@ types:
             6: greater_than
             7: less_equal
             8: greater_equal
-        -webide-representation: "{match_op} {data.value:str}"
       expr:
+        -webide-representation: '{data}'
         seq:
           - id: op
             type: u4be
@@ -1130,34 +1188,34 @@ types:
             0: left_cert
         types:
           ident_expr:
+            -webide-representation: "identifier {identifier.value:str}"
             seq:
               - id: identifier
                 type: data
-            -webide-representation: "identifier {identifier.value:str}"
           apple_generic_anchor_expr:
+            -webide-representation: "anchor apple generic"
             instances:
               value:
                 value: '"anchor apple generic"'
-            -webide-representation: "anchor apple generic"
           cert_slot_expr:
             seq:
               - id: value
                 type: u4be
                 enum: cert_slot
           and_expr:
-            seq:
-              - id: left
-                type: expr
-              - id: right
-                type: expr
             -webide-representation: "({left}) AND ({right})"
-          or_expr:
             seq:
               - id: left
                 type: expr
               - id: right
                 type: expr
+          or_expr:
             -webide-representation: "({left}) OR ({right})"
+            seq:
+              - id: left
+                type: expr
+              - id: right
+                type: expr
           anchor_hash_expr:
             seq:
               - id: cert_slot
@@ -1178,16 +1236,7 @@ types:
               - id: match
                 type: match
           cert_field_expr:
-            seq:
-              - id: cert_slot
-                type: u4be
-                enum: cert_slot
-              - id: data
-                type: data
-              - id: match
-                type: match
             -webide-representation: "{cert_slot}[{data.value:str}] {match}"
-          cert_generic_expr:
             seq:
               - id: cert_slot
                 type: u4be
@@ -1196,19 +1245,27 @@ types:
                 type: data
               - id: match
                 type: match
+          cert_generic_expr:
             -webide-representation: "{cert_slot}[{data.value:hex}] {match}"
-        -webide-representation: '{data}'
+            seq:
+              - id: cert_slot
+                type: u4be
+                enum: cert_slot
+              - id: data
+                type: data
+              - id: match
+                type: match
       requirement:
         seq:
           - id: kind
             type: u4be
           - id: expr
             type: expr
-      entitlement:
+      entitlements:
+        -webide-representation: "{data:str}"
         seq:
           - id: data
             size-eos: true
-        -webide-representation: "{data:str}"
       requirements_blob_index:
         seq:
           - id: type
@@ -1218,8 +1275,8 @@ types:
             type: u4be
         instances:
           value:
-            type: cs_blob
             pos: offset - 8
+            type: cs_blob
         enums:
           requirement_type:
             1: host        # kSecHostRequirementType
@@ -1246,3 +1303,89 @@ types:
             type: blob_index
             repeat: expr
             repeat-expr: count
+  build_version_command:
+    seq:
+      - id: platform
+        type: u4
+      - id: minos
+        type: u4
+      - id: sdk
+        type: u4
+      - id: ntools
+        type: u4
+      - id: tools
+        type: build_tool_version
+        repeat: expr
+        repeat-expr: ntools
+    types:
+      build_tool_version:
+        seq:
+          - id: tool
+            type: u4
+          - id: version
+            type: u4
+  segment_command:
+    seq:
+      - id: segname
+        type: str
+        size: 16
+        pad-right: 0
+        encoding: ascii
+      - id: vmaddr
+        type: u4
+      - id: vmsize
+        type: u4
+      - id: fileoff
+        type: u4
+      - id: filesize
+        type: u4
+      - id: maxprot
+        type: vm_prot
+      - id: initprot
+        type: vm_prot
+      - id: nsects
+        type: u4
+      - id: flags
+        type: u4
+      - id: sections
+        type: section
+        repeat: expr
+        repeat-expr: nsects
+    types:
+      section:
+        seq:
+          - id: sect_name
+            -orig-id: sectname
+            size: 16
+            type: str
+            pad-right: 0
+            encoding: ascii
+          - id: seg_name
+            -orig-id: segname
+            size: 16
+            type: str
+            pad-right: 0
+            encoding: ascii
+          - id: addr
+            type: u4
+          - id: size
+            type: u4
+          - id: offset
+            type: u4
+          - id: align
+            type: u4
+          - id: reloff
+            type: u4
+          - id: nreloc
+            type: u4
+          - id: flags
+            type: u4
+          - id: reserved1
+            type: u4
+          - id: reserved2
+            type: u4
+        instances:
+          data:
+            io: _root._io
+            pos: offset
+            size: size

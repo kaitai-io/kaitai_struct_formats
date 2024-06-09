@@ -3,13 +3,14 @@ meta:
   title: EDID (VESA Enhanced Extended Display Identification Data)
   xref:
     repo: https://github.com/kaitai-io/edid.ksy.git
+    wikidata: Q1376385
   license: CC0-1.0
   endian: le
 seq:
   - id: magic
     contents: [0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00]
   - id: mfg_bytes
-    type: u2
+    type: u2be
   - id: product_code
     type: u2
     doc: Manufacturer product code
@@ -21,7 +22,7 @@ seq:
     doc: Week of manufacture. Week numbering is not consistent between manufacturers.
   - id: mfg_year_mod
     type: u1
-    doc: Year of manufacture, less 1990. (1990–2245). If week=255, it is the model year instead.
+    doc: Year of manufacture, less 1990. (1990-2245). If week=255, it is the model year instead.
   - id: edid_version_major
     type: u1
     doc: EDID version, usually 1 (for 1.3)
@@ -38,7 +39,7 @@ seq:
     doc: Maximum vertical image size, in centimetres. If either byte is 0, undefined (e.g. projector)
   - id: gamma_mod
     type: u1
-    doc: Display gamma, datavalue = (gamma*100)-100 (range 1.00–3.54)
+    doc: Display gamma, datavalue = (gamma*100)-100 (range 1.00-3.54)
   - id: features_flags
     type: u1
   - id: chromacity
@@ -53,6 +54,7 @@ seq:
       DMT (Discrete Monitor Timings) modes.
     doc-ref: Standard, section 3.8
   - id: std_timings
+    size: 2
     type: std_timing
     doc: |
       Array of descriptions of so called "standard timings", which are
@@ -161,57 +163,57 @@ types:
   est_timings_info:
     seq:
       # Byte 0: "Established Timing I"
-      - id: can_720_400_70
+      - id: can_720x400px_70hz
         type: b1
         doc: Supports 720 x 400 @ 70Hz
-      - id: can_720_400_88
+      - id: can_720x400px_88hz
         type: b1
         doc: Supports 720 x 400 @ 88Hz
-      - id: can_640_480_60
+      - id: can_640x480px_60hz
         type: b1
         doc: Supports 640 x 480 @ 60Hz
-      - id: can_640_480_67
+      - id: can_640x480px_67hz
         type: b1
         doc: Supports 640 x 480 @ 67Hz
-      - id: can_640_480_72
+      - id: can_640x480px_72hz
         type: b1
         doc: Supports 640 x 480 @ 72Hz
-      - id: can_640_480_75
+      - id: can_640x480px_75hz
         type: b1
         doc: Supports 640 x 480 @ 75Hz
-      - id: can_800_600_56
+      - id: can_800x600px_56hz
         type: b1
         doc: Supports 800 x 600 @ 56Hz
-      - id: can_800_600_60
+      - id: can_800x600px_60hz
         type: b1
         doc: Supports 800 x 600 @ 60Hz
       # Byte 1: "Established Timing II"
-      - id: can_800_600_72
+      - id: can_800x600px_72hz
         type: b1
         doc: Supports 800 x 600 @ 72Hz
-      - id: can_800_600_75
+      - id: can_800x600px_75hz
         type: b1
         doc: Supports 800 x 600 @ 75Hz
-      - id: can_832_624_75
+      - id: can_832x624px_75hz
         type: b1
         doc: Supports 832 x 624 @ 75Hz
-      - id: can_1024_768_87_i
+      - id: can_1024x768px_87hz_i
         type: b1
         doc: Supports 1024 x 768 @ 87Hz(I)
-      - id: can_1024_768_60
+      - id: can_1024x768px_60hz
         type: b1
         doc: Supports 1024 x 768 @ 60Hz
-      - id: can_1024_768_70
+      - id: can_1024x768px_70hz
         type: b1
         doc: Supports 1024 x 768 @ 70Hz
-      - id: can_1024_768_75
+      - id: can_1024x768px_75hz
         type: b1
         doc: Supports 1024 x 768 @ 75Hz
-      - id: can_1280_1024_75
+      - id: can_1280x1024px_75hz
         type: b1
         doc: Supports 1280 x 1024 @ 75Hz
       # Byte 2: "Manufacturer's Timings"
-      - id: can_1152_870_75
+      - id: can_1152x870px_75hz
         type: b1
         doc: Supports 1152 x 870 @ 75Hz
       - id: reserved
@@ -231,16 +233,23 @@ types:
           Aspect ratio of the image. Can be used to calculate number
           of vertical pixels.
       - id: refresh_rate_mod
-        type: b5
+        type: b6
         doc: |
           Refresh rate in Hz, written in modified form: `refresh_rate
           - 60`. This yields an effective range of 60..123 Hz.
     instances:
+      bytes_lookahead:
+        pos: 0
+        size: 2
+      is_used:
+        value: bytes_lookahead != [0x01, 0x01]
       horiz_active_pixels:
         value: (horiz_active_pixels_mod + 31) * 8
+        if: is_used
         doc: Range of horizontal active pixels.
       refresh_rate:
         value: refresh_rate_mod + 60
+        if: is_used
         doc: Vertical refresh rate, Hz.
     enums:
       aspect_ratios:
@@ -255,8 +264,8 @@ instances:
     value: '(mfg_bytes & 0b0000001111100000) >> 5'
   mfg_id_ch3:
     value: '(mfg_bytes & 0b0000000000011111)'
-#  mfg_str:
-#    value: '[mfg_id_ch1 + 0x40, mfg_id_ch2 + 0x40, mfg_id_ch3 + 0x40].to_s("ASCII")'
+  mfg_str:
+    value: '[mfg_id_ch1 + 0x40, mfg_id_ch2 + 0x40, mfg_id_ch3 + 0x40].as<bytes>.to_s("ASCII")'
   mfg_year:
     value: mfg_year_mod + 1990
   gamma:

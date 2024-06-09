@@ -1,8 +1,10 @@
 meta:
   id: msgpack
   title: MessagePack (msgpack) serialization format
-  endian: be
+  xref:
+    wikidata: Q6821738
   license: CC0-1.0
+  endian: be
 doc: |
   MessagePack (msgpack) is a system to serialize arbitrary structured
   data into a compact binary stream.
@@ -87,7 +89,7 @@ instances:
   is_bool:
     value: b1 == 0xc2 or b1 == 0xc3
   bool_value:
-    value: b1 == 0xc2
+    value: b1 == 0xc3
     if: is_bool
     doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-bool'
   # ========================================================================

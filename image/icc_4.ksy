@@ -1,6 +1,13 @@
 meta:
   id: icc_4
   title: ICC profile, version 4
+  file-extension:
+    - icc
+    - icm
+  xref:
+    justsolve: ICC_profile
+    mime: application/vnd.iccprofile
+    wikidata: Q29206892
   license: CC0-1.0
   encoding: ASCII
   endian: be
@@ -31,7 +38,7 @@ types:
       - id: creation_date_time
         type: date_time_number
       - id: file_signature
-        contents: [0x61, 0x63, 0x73, 0x70]
+        contents: 'acsp'
       - id: primary_platform
         type: u4
         enum: primary_platforms
@@ -90,14 +97,18 @@ types:
         0x44676f53: logosync_cmm #LgoS
         0x48444d20: heidelberg_cmm #HDM
         0x6C636d73: little_cms_cmm #lcms
-        0x4b434d53: kodak_cmm #kcms
+        0x52494d58: reficcmax_cmm #RIMX
+        0x44494d58: demoiccmax_cmm #DIMX
+        0x4b434d53: kodak_cmm #KCMS
         0x4d434d44: konica_minolta_cmm #MCML
         0x57435320: windows_color_system_cmm #WCS
         0x5349474E: mutoh_cmm #SIGN
+        0x4f4e5958: onyx_graphics_cmm #ONYX
         0x52474d53: device_link_cmm #RGMS
         0x53494343: sample_icc_cmm #SICC
         0x54434d4d: toshiba_cmm #TCMM
         0x33324254: the_imaging_factory_cmm #32BT
+        0x7669766f: vivo_cmm #vivo
         0x57544720: ware_to_go_cmm #WTG
         0x7a633030: zoran_cmm #zc00
       profile_classes:
@@ -158,16 +169,16 @@ types:
         0x41435449: actix_sytems_inc #ACTI
         0x41444152: adara_technology_inc #ADAR
         0x41444245: adobe_systems_incorporated #ADBE
-        0x41444920: adi_systems_inc #ADI 
+        0x41444920: adi_systems_inc #ADI
         0x41474641: agfa_graphics_nv #AGFA
         0x414C4D44: alps_electric_usa_inc #ALMD
         0x414C5053: alps_electric_usa_inc_2 #ALPS
         0x414C574E: alwan_color_expertise #ALWN
         0x414D5449: amiable_technologies_inc #AMTI
-        0x414F4320: aoc_international_usa_ltd #AOC 
+        0x414F4320: aoc_international_usa_ltd #AOC
         0x41504147: apago #APAG
         0x4150504C: apple_computer_inc #APPL
-        0x41535420: ast #AST 
+        0x41535420: ast #AST
         0x41542654: atandt_computer_systems #AT&T
         0x4241454C: barbieri_electronic #BAEL
         0x62657267: bergdesign_incorporated #berg
@@ -176,18 +187,18 @@ types:
         0x42524B50: breakpoint_pty_limited #BRKP
         0x42524F54: brother_industries_ltd #BROT
         0x42554C4C: bull #BULL
-        0x42555320: bus_computer_systems #BUS 
+        0x42555320: bus_computer_systems #BUS
         0x432D4954: c_itoh #C-IT
         0x43414D52: intel_corporation #CAMR
         0x43414E4F: canon_inc_canon_development_americas_inc #CANO
         0x43415252: carroll_touch #CARR
         0x43415349: casio_computer_co_ltd #CASI
         0x43425553: colorbus_pl #CBUS
-        0x43454C20: crossfield #CEL 
+        0x43454C20: crossfield #CEL
         0x43454C78: crossfield_2 #CELx
         0x63657964: integrated_color_solutions_inc #ceyd
-        0x43475320: cgs_publishing_technologies_international_gmbh #CGS 
-        0x43484D20: rochester_robotics #CHM 
+        0x43475320: cgs_publishing_technologies_international_gmbh #CGS
+        0x43484D20: rochester_robotics #CHM
         0x4349474C: colour_imaging_group_london #CIGL
         0x43495449: citizen #CITI
         0x434C3030: candela_ltd #CL00
@@ -200,24 +211,24 @@ types:
         0x434F4D70: compeq_usa_focus_technology #COMp
         0x434F4E52: conrac_display_products #CONR
         0x434F5244: cordata_technologies_inc #CORD
-        0x43505120: compaq_computer_corporation_2 #CPQ 
+        0x43505120: compaq_computer_corporation_2 #CPQ
         0x4350524F: colorpro #CPRO
-        0x43524E20: cornerstone #CRN 
-        0x43545820: ctx_international_inc #CTX 
+        0x43524E20: cornerstone #CRN
+        0x43545820: ctx_international_inc #CTX
         0x43564953: colorvision #CVIS
-        0x43574320: fujitsu_laboratories_ltd #CWC 
+        0x43574320: fujitsu_laboratories_ltd #CWC
         0x44415249: darius_technology_ltd #DARI
         0x44415441: dataproducts #DATA
-        0x44435020: dry_creek_photo #DCP 
+        0x44435020: dry_creek_photo #DCP
         0x44435243: digital_contents_resource_center_chung_ang_university #DCRC
         0x44454C4C: dell_computer_corporation #DELL
-        0x44494320: dainippon_ink_and_chemicals #DIC 
+        0x44494320: dainippon_ink_and_chemicals #DIC
         0x4449434F: diconix #DICO
         0x44494749: digital #DIGI
         0x444C2643: digital_light_and_color #DL&C
         0x44504C47: doppelganger_llc #DPLG
-        0x44532020: dainippon_screen #DS  
-        0x64732020: dainippon_screen_2 #ds  
+        0x44532020: dainippon_screen #DS
+        0x64732020: dainippon_screen_2 #ds
         0x44534F4C: doosol #DSOL
         0x4455504E: dupont #DUPN
         0x6475706E: dupont_2 #dupn
@@ -228,61 +239,61 @@ types:
         0x45564552: everex_systems_inc #EVER
         0x45584143: exactcode_gmbh #EXAC
         0x46414C43: falco_data_products_inc #FALC
-        0x46462020: fuji_photo_film_coltd #FF  
+        0x46462020: fuji_photo_film_coltd #FF
         0x46464549: fujifilm_electronic_imaging_ltd #FFEI
         0x66666569: fujifilm_electronic_imaging_ltd_2 #ffei
         0x666C7578: fluxdata_corporation #flux
         0x464E5244: fnord_software #FNRD
         0x464F5241: fora_inc #FORA
         0x464F5245: forefront_technology_corporation #FORE
-        0x46502A2A: fujitsu #FP  
-        0x46504120: waytech_development_inc #FPA 
+        0x46502A2A: fujitsu #FP
+        0x46504120: waytech_development_inc #FPA
         0x46554A49: fujitsu_2 #FUJI
-        0x46582020: fuji_xerox_co_ltd #FX  
-        0x47434320: gcc_technologies_inc #GCC 
+        0x46582020: fuji_xerox_co_ltd #FX
+        0x47434320: gcc_technologies_inc #GCC
         0x4747534C: global_graphics_software_limited #GGSL
-        0x474D4220: gretagmacbeth #GMB 
-        0x474D4720: gmg_gmbh_and_co_kg #GMG 
+        0x474D4220: gretagmacbeth #GMB
+        0x474D4720: gmg_gmbh_and_co_kg #GMG
         0x474F4C44: goldstar_technology_inc #GOLD
         0x47505254: giantprint_pty_ltd #GPRT
         0x47544D42: gretagmacbeth_2 #GTMB
-        0x47564320: waytech_development_inc_2 #GVC 
+        0x47564320: waytech_development_inc_2 #GVC
         0x4757324B: sony_corporation #GW2K
-        0x48434920: hci #HCI 
-        0x48444D20: heidelberger_druckmaschinen_ag #HDM 
+        0x48434920: hci #HCI
+        0x48444D20: heidelberger_druckmaschinen_ag #HDM
         0x4845524D: hermes #HERM
         0x48495441: hitachi_america_ltd #HITA
         0x48695469: hiti_digital_inc #HiTi
-        0x48502020: hewlett_packard #HP  
-        0x48544320: hitachi_ltd #HTC 
-        0x49424D20: ibm_corporation #IBM 
+        0x48502020: hewlett_packard #HP
+        0x48544320: hitachi_ltd #HTC
+        0x49424D20: ibm_corporation #IBM
         0x49444E54: scitex_corporation_ltd #IDNT
         0x49646E74: scitex_corporation_ltd_2 #Idnt
-        0x49454320: hewlett_packard_2 #IEC 
+        0x49454320: hewlett_packard_2 #IEC
         0x49495941: iiyama_north_america_inc #IIYA
         0x494B4547: ikegami_electronics_inc #IKEG
         0x494D4147: image_systems_corporation #IMAG
-        0x494D4920: ingram_micro_inc #IMI 
+        0x494D4920: ingram_micro_inc #IMI
         0x496E6361: inca_digital_printers_ltd #Inca
         0x494E5443: intel_corporation_2 #INTC
         0x494E544C: intl #INTL
         0x494E5452: intra_electronics_usa_inc #INTR
         0x494F434F: iocomm_international_technology_corporation #IOCO
-        0x49505320: infoprint_solutions_company #IPS 
+        0x49505320: infoprint_solutions_company #IPS
         0x49524953: scitex_corporation_ltd_3 #IRIS
         0x49726973: scitex_corporation_ltd_4 #Iris
         0x69726973: scitex_corporation_ltd_5 #iris
-        0x49534C20: ichikawa_soft_laboratory #ISL 
+        0x49534C20: ichikawa_soft_laboratory #ISL
         0x49544E4C: itnl #ITNL
-        0x49564d20: ivm #IVM 
+        0x49564d20: ivm #IVM
         0x49574154: iwatsu_electric_co_ltd #IWAT
         0x4A534654: jetsoft_development #JSFT
-        0x4A564320: jvc_information_products_co #JVC 
+        0x4A564320: jvc_information_products_co #JVC
         0x4B415254: scitex_corporation_ltd_6 #KART
         0x4B617274: scitex_corporation_ltd_7 #Kart
         0x6B617274: scitex_corporation_ltd_8 #kart
-        0x4B464320: kfc_computek_components_corporation #KFC 
-        0x4B4C4820: klh_computers #KLH 
+        0x4B464320: kfc_computek_components_corporation #KFC
+        0x4B4C4820: klh_computers #KLH
         0x4B4D4844: konica_minolta_holdings_inc #KMHD
         0x4B4E4341: konica_corporation #KNCA
         0x4B4F4441: kodak #KODA
@@ -314,15 +325,15 @@ types:
         0x4D534654: microsoft_corporation #MSFT
         0x4D55544F: mutoh_industries_ltd #MUTO
         0x4E414E41: nanao_usa_corporation #NANA
-        0x4E454320: nec_corporation #NEC 
+        0x4E454320: nec_corporation #NEC
         0x4E455850: nexpress_solutions_llc #NEXP
         0x4E495353: nissei_sangyo_america_ltd #NISS
         0x4E4B4F4E: nikon_corporation #NKON
         0x6F623464: erdt_systems_gmbh_and_co_kg_2 #ob4d
         0x6F626963: medigraph_gmbh #obic
-        0x4F434520: oce_technologies_bv #OCE 
+        0x4F434520: oce_technologies_bv #OCE
         0x4F434543: ocecolor #OCEC
-        0x4F4B4920: oki #OKI 
+        0x4F4B4920: oki #OKI
         0x4F4B4944: okidata #OKID
         0x4F4B4950: okidata_2 #OKIP
         0x4F4C4956: olivetti #OLIV
@@ -332,8 +343,8 @@ types:
         0x5041434B: packard_bell #PACK
         0x50414E41: matsushita_electric_industrial_co_ltd #PANA
         0x50414E54: pantone_inc #PANT
-        0x50424E20: packard_bell_2 #PBN 
-        0x50465520: pfu_limited #PFU 
+        0x50424E20: packard_bell_2 #PBN
+        0x50465520: pfu_limited #PFU
         0x5048494C: philips_consumer_electronics_co #PHIL
         0x504E5458: hoya_corporation_pentax_imaging_systems_division #PNTX
         0x504F6E65: phase_one_a_s #POne
@@ -341,22 +352,22 @@ types:
         0x5052494E: princeton_graphic_systems #PRIN
         0x50524950: princeton_publishing_labs #PRIP
         0x514C5558: qlux #QLUX
-        0x514D5320: qms_inc #QMS 
+        0x514D5320: qms_inc #QMS
         0x51504344: qpcard_ab #QPCD
         0x51554144: quadlaser #QUAD
         0x71756279: qubyx_sarl #quby
         0x51554D45: qume_corporation #QUME
         0x52414449: radius_inc #RADI
         0x52444478: integrated_color_solutions_inc_2 #RDDx
-        0x52444720: roland_dg_corporation #RDG 
+        0x52444720: roland_dg_corporation #RDG
         0x5245444D: redms_group_inc #REDM
         0x52454C49: relisys #RELI
         0x52474D53: rolf_gierling_multitools #RGMS
         0x5249434F: ricoh_corporation #RICO
         0x524E4C44: edmund_ronald #RNLD
         0x524F5941: royal #ROYA
-        0x52504320: ricoh_printing_systemsltd #RPC 
-        0x52544C20: royal_information_electronics_co_ltd #RTL 
+        0x52504320: ricoh_printing_systemsltd #RPC
+        0x52544C20: royal_information_electronics_co_ltd #RTL
         0x53414D50: sampo_corporation_of_america #SAMP
         0x53414D53: samsung_inc #SAMS
         0x53414E54: jaime_santana_pomares #SANT
@@ -365,10 +376,10 @@ types:
         0x73636974: scitex_corporation_ltd_11 #scit
         0x5343524E: dainippon_screen_3 #SCRN
         0x7363726E: dainippon_screen_4 #scrn
-        0x53445020: scitex_corporation_ltd_12 #SDP 
-        0x53647020: scitex_corporation_ltd_13 #Sdp 
-        0x73647020: scitex_corporation_ltd_14 #sdp 
-        0x53454320: samsung_electronics_coltd #SEC 
+        0x53445020: scitex_corporation_ltd_12 #SDP
+        0x53647020: scitex_corporation_ltd_13 #Sdp
+        0x73647020: scitex_corporation_ltd_14 #sdp
+        0x53454320: samsung_electronics_coltd #SEC
         0x5345494B: seiko_instruments_usa_inc #SEIK
         0x5345496B: seikosha #SEIk
         0x53475559: scanguycom #SGUY
@@ -379,25 +390,25 @@ types:
         0x536F6E79: sony_corporation_3 #Sony
         0x5350434C: spectracal #SPCL
         0x53544152: star #STAR
-        0x53544320: sampo_technology_corporation #STC 
+        0x53544320: sampo_technology_corporation #STC
         0x54414C4F: talon_technology_corporation #TALO
         0x54414E44: tandy #TAND
         0x54415455: tatung_co_of_america_inc #TATU
         0x54415841: taxan_america_inc #TAXA
-        0x54445320: tokyo_denshi_sekei_kk #TDS 
+        0x54445320: tokyo_denshi_sekei_kk #TDS
         0x5445434F: teco_information_systems_inc #TECO
         0x54454752: tegra #TEGR
         0x54454B54: tektronix_inc #TEKT
-        0x54492020: texas_instruments #TI  
+        0x54492020: texas_instruments #TI
         0x544D4B52: typemaker_ltd #TMKR
         0x544F5342: toshiba_corp #TOSB
         0x544F5348: toshiba_inc #TOSH
         0x544F544B: totoku_electric_co_ltd #TOTK
         0x54524955: triumph #TRIU
         0x54534254: toshiba_tec_corporation #TSBT
-        0x54545820: ttx_computer_products_inc #TTX 
-        0x54564D20: tvm_professional_monitor_corporation #TVM 
-        0x54572020: tw_casper_corporation #TW  
+        0x54545820: ttx_computer_products_inc #TTX
+        0x54564D20: tvm_professional_monitor_corporation #TVM
+        0x54572020: tw_casper_corporation #TW
         0x554C5358: ulead_systems #ULSX
         0x554E4953: unisys #UNIS
         0x55545A46: utz_fehlau_and_sohn #UTZF
@@ -1152,7 +1163,7 @@ types:
               - id: number_of_entries
                 type: u4
               - id: curve_values
-                type: u4
+                type: u2
                 repeat: expr
                 repeat-expr: number_of_entries
                 if: number_of_entries > 1
@@ -1191,9 +1202,9 @@ types:
                 repeat: expr
                 repeat-expr: 9
               - id: number_of_input_table_entries
-                type: u4
+                type: u2
               - id: number_of_output_table_entries
-                type: u4
+                type: u2
               - id: input_tables
                 size: 2 * number_of_input_channels * number_of_input_table_entries
               - id: clut_values
@@ -1384,7 +1395,7 @@ types:
                   - id: device_coordinates
                     type: u2
                     repeat: expr
-                    repeat-expr: _parent.count_of_named_colours
+                    repeat-expr: _parent.number_of_device_coordinates_for_each_named_colour
                     if: _parent.number_of_device_coordinates_for_each_named_colour > 0
           parametric_curve_type:
             seq:
@@ -1648,6 +1659,8 @@ types:
             0x76756564: viewing_cond_desc #vued
             0x76696577: viewing_conditions #view
           tag_type_signatures:
+            0x6368726D: chromaticity_type #chrm
+            0x636C726F: colorant_order_type #clro
             0x636c7274: colorant_table_type #clrt
             0x63757276: curve_type #curv
             0x64617461: data_type #data

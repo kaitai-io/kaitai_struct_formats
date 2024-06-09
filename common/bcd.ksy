@@ -1,6 +1,9 @@
 meta:
   id: bcd
   title: BCD (Binary Coded Decimals)
+  xref:
+    justsolve: Binary-coded_decimal
+    wikidata: Q276582
   license: CC0-1.0
   ks-version: 0.8
 doc: |

@@ -1,14 +1,36 @@
+<p>The Java runtime library is published
+<a href="https://search.maven.org/artifact/io.kaitai/kaitai-struct-runtime"
+    target="_blank" rel="noopener">in the Maven Central Repository</a>. Refer to the
+<a href="https://search.maven.org/artifact/io.kaitai/kaitai-struct-runtime/0.10/jar"
+    target="_blank" rel="noopener">artifact page</a>
+for instructions how to add it into your project with the build tool that you use.</p>
+
+<h3>Code</h3>
+
 <p>Parse a local file and get structure in memory:</p>
 
 <% class_name = ucc(file_id) %>
 
-<pre><code class="java"><%= class_name %> data = <%= class_name %>.fromFile("path/to/local/file.<%= meta['file-extension'] || format_name %>");</code></pre>
+<%= code cur_lang, <<-CODE
+#{ class_name } data = #{ class_name }.fromFile("path/to/local/file.#{sample_ext}");
+CODE
+%>
 
 <p>Or parse structure from a byte array:</p>
 
-<pre><code class="java">byte[] someArray = new byte[] { ... };
-<%= class_name %> data = new <%= class_name %>(new KaitaiStream(someArray));</code></pre>
+<%= code cur_lang, <<-CODE
+byte[] someArray = new byte[] { ... };
+#{ class_name } data = new #{ class_name }(new ByteBufferKaitaiStream(someArray));
+CODE
+%>
 
 <p>After that, one can get various attributes from the structure by invoking getter methods like:</p>
 
-<pre><code class="java"><% usage_attrs.each { |attr| %>data.<%= lcc(attr[:name]) %>() // => <%= attr[:doc] %><% } %></code></pre>
+<% src_usage_attrs = ""
+usage_attrs.each { |attr|
+    src_usage_attrs += <<-CODE
+data.#{ lcc(attr[:name]) }() // => #{ attr[:doc] }
+    CODE
+}
+%>
+<%= code cur_lang, src_usage_attrs %>

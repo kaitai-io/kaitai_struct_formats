@@ -6,6 +6,7 @@ meta:
   ks-version: 0.8
   encoding: ASCII
   endian: le
+doc-ref: https://moddingwiki.shikadi.net/wiki/PAK_Format_(Westwood)
 seq:
   - id: dir
     size: dir_size

@@ -1,6 +1,11 @@
 meta:
   id: tga
   title: TGA (AKA Truevision TGA, AKA TARGA) raster image file format
+  xref:
+    justsolve: TGA
+    loc: fdd000180 # TGA 2.0
+    pronom: fmt/402 # TGA 2.0
+    wikidata: Q1063976
   file-extension:
     - tga
     - icb
@@ -14,7 +19,7 @@ doc:
   created by Truevision. It supports up to 32 bits per pixel (three
   8-bit RGB channels + 8-bit alpha channel), color mapping and
   optional lossless RLE compression.
-doc-ref: http://www.dca.fee.unicamp.br/~martino/disciplinas/ea978/tgaffs.pdf
+doc-ref: https://www.dca.fee.unicamp.br/~martino/disciplinas/ea978/tgaffs.pdf
 seq:
   - id: image_id_len
     type: u1

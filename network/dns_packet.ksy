@@ -3,7 +3,9 @@ meta:
   title: DNS (Domain Name Service) packet
   xref:
     rfc: 1035
+    wikidata: Q8767
   license: CC0-1.0
+  encoding: utf-8
   endian: be
 doc: |
   (No support for Auth-Name + Add-Name for simplicity)
@@ -15,27 +17,43 @@ seq:
     type: packet_flags
   - id: qdcount
     doc: "How many questions are there"
+    if: flags.is_opcode_valid
     type: u2
   - id: ancount
     doc: "Number of resource records answering the question"
+    if: flags.is_opcode_valid
     type: u2
   - id: nscount
     doc: "Number of resource records pointing toward an authority"
+    if: flags.is_opcode_valid
     type: u2
   - id: arcount
     doc: "Number of resource records holding additional information"
+    if: flags.is_opcode_valid
     type: u2
   - id: queries
+    if: flags.is_opcode_valid
     type: query
     repeat: expr
     repeat-expr: qdcount
   - id: answers
+    if: flags.is_opcode_valid
     type: answer
     repeat: expr
     repeat-expr: ancount
+  - id: authorities
+    if: flags.is_opcode_valid
+    type: answer
+    repeat: expr
+    repeat-expr: nscount
+  - id: additionals
+    if: flags.is_opcode_valid
+    type: answer
+    repeat: expr
+    repeat-expr: arcount
 types:
   query:
-    seq: 
+    seq:
       - id: name
         type: domain_name
       - id: type
@@ -60,19 +78,27 @@ types:
       - id: rdlength
         doc: "Length in octets of the following payload"
         type: u2
-      - id: ptrdname
-        type: domain_name
-        if: "type == type_type::ptr"
-      - id: address
-        type: address
-        if: "type == type_type::a"
+      - id: payload
+        size: rdlength
+        type:
+          switch-on: type
+          cases:
+            "type_type::ptr": domain_name
+            "type_type::a": address
+            "type_type::aaaa": address_v6
+            "type_type::cname": domain_name
+            "type_type::soa": authority_info
+            "type_type::mx": mx_info
+            "type_type::ns": domain_name
+            "type_type::srv": service
+            "type_type::txt": txt_body
   domain_name:
     seq:
       - id: name
         type: label
         repeat: until
         doc: "Repeat until the length is 0 or it is a pointer (bit-hack to get around lack of OR operator)"
-        repeat-until: "_.length == 0 or _.length == 0b1100_0000"
+        repeat-until: "_.length == 0 or _.length >= 192"
   label:
     seq:
       - id: length
@@ -85,11 +111,10 @@ types:
         if: "not is_pointer"
         doc: "Otherwise its a string the length of the length value"
         type: str
-        encoding: "ASCII"
         size: length
     instances:
       is_pointer:
-        value: length == 0b1100_0000
+        value: length >= 192
   pointer_struct:
     seq:
       - id: value
@@ -98,14 +123,16 @@ types:
     instances:
       contents:
         io: _root._io
-        pos: value
+        pos: value + ((_parent.length - 192) << 8)
         type: domain_name
   address:
     seq:
       - id: ip
-        type: u1
-        repeat: expr
-        repeat-expr: 4
+        size: 4
+  address_v6:
+    seq:
+      - id: ip_v6
+        size: 16
   packet_flags:
     seq:
       - id: flag
@@ -131,7 +158,52 @@ types:
         value: (flag & 0b0000_0000_0001_0000) >> 4
       rcode:
         value: (flag & 0b0000_0000_0000_1111) >> 0
-        
+      is_opcode_valid:
+        value: opcode == 0 or opcode == 1 or opcode == 2
+  service:
+    seq:
+      - id: priority
+        type: u2
+      - id: weight
+        type: u2
+      - id: port
+        type: u2
+      - id: target
+        type: domain_name
+  txt:
+    seq:
+      - id: length
+        type: u1
+      - id: text
+        type: str
+        size: length
+  txt_body:
+    seq:
+      - id: data
+        type: txt
+        repeat: eos
+  authority_info:
+    seq:
+      - id: primary_ns
+        type: domain_name
+      - id: resoponsible_mailbox
+        type: domain_name
+      - id: serial
+        type: u4
+      - id: refresh_interval
+        type: u4
+      - id: retry_interval
+        type: u4
+      - id: expire_limit
+        type: u4
+      - id: min_ttl
+        type: u4
+  mx_info:
+    seq:
+      - id: preference
+        type: u2
+      - id: mx
+        type: domain_name
 enums:
   class_type:
     1: in_class
@@ -144,7 +216,7 @@ enums:
     3: md
     4: mf
     5: cname
-    6: soe
+    6: soa
     7: mb
     8: mg
     9: mr
@@ -155,3 +227,5 @@ enums:
     14: minfo
     15: mx
     16: txt
+    28: aaaa
+    33: srv

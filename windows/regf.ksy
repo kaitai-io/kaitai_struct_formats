@@ -2,6 +2,11 @@ meta:
   id: regf
   title: Windows registry database
   application: Windows NT and later
+  xref:
+    justsolve: Windows_Registry
+    forensicswiki: windows_nt_registry_file_(regf)
+    wikidata: Q463244
+  license: CC0-1.0
   endian: le
 doc: |
   This spec allows to parse files used by Microsoft Windows family of
@@ -19,7 +24,7 @@ doc: |
 
   Note that one typically can't access files directly on a mounted
   filesystem with a running Windows OS.
-doc-ref: 'https://github.com/libyal/libregf/blob/master/documentation/Windows%20NT%20Registry%20File%20(REGF)%20format.asciidoc'
+doc-ref: 'https://github.com/libyal/libregf/blob/main/documentation/Windows%20NT%20Registry%20File%20(REGF)%20format.asciidoc'
 seq:
   - id: header
     type: file_header
@@ -97,6 +102,7 @@ types:
         type: u4
         doc: Contains number of bytes
   hive_bin_cell:
+    -webide-representation: "{identifier}"
     seq:
       - id: cell_size_raw
         type: s4
@@ -116,7 +122,6 @@ types:
             "'ri'": sub_key_list_ri
             "'vk'": sub_key_list_vk
             "'sk'": sub_key_list_sk
-    -webide-representation: "{identifier}"
     instances:
       cell_size:
         value: "(cell_size_raw < 0 ? -1 : +1) * cell_size_raw"

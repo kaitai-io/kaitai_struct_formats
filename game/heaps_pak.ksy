@@ -1,10 +1,10 @@
 meta:
   id: heaps_pak
-  file-extension: pak
   application: Games based on Haxe Game Framework "Heaps" (e.g. Dead Cells)
-  endian: le
+  file-extension: pak
   license: MIT
   encoding: UTF-8
+  endian: le
 doc-ref: 'https://github.com/HeapsIO/heaps/blob/2bbc2b386952dfd8856c04a854bb706a52cb4b58/hxd/fmt/pak/Reader.hx'
 seq:
   - id: header

@@ -2,9 +2,12 @@ meta:
   id: allegro_dat
   title: Allegro data file
   application: Allegro library (v2.2-v4.4)
+  file-extension: dat
+  xref:
+    justsolve: Allegro_packfile
   license: CC0-1.0
-  endian: be
   encoding: UTF-8
+  endian: be
 doc: |
   Allegro library for C (mostly used for game and multimedia apps
   programming) used its own container file format.

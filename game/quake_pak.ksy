@@ -1,7 +1,10 @@
 meta:
   id: quake_pak
-  file-extension: pak
   application: Quake game engine
+  file-extension: pak
+  xref:
+    justsolve: Quake_PAK
+    wikidata: Q105854676
   license: CC0-1.0
   endian: le
 doc-ref: 'https://quakewiki.org/wiki/.pak#Format_specification'
@@ -37,6 +40,6 @@ types:
         type: u4
     instances:
       body:
+        io: _root._io
         pos: ofs
         size: size
-        io: _root._io

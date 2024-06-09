@@ -1,0 +1,76 @@
+name: formats.kaitai.io
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install deps
+        run: |
+          sudo apt-get update
+          curl -fsSL -O https://github.com/kaitai-io/kaitai_struct_compiler/releases/download/0.10/kaitai-struct-compiler_0.10_all.deb
+          sha256sum --check --warn .github/checksums
+          sudo apt-get install ./kaitai-struct-compiler_0.10_all.deb
+          sudo apt-get install --no-install-recommends -y \
+            git ssh \
+            locales \
+            default-jre-headless \
+            make gcc libc6-dev \
+            graphviz \
+            rsync
+          ksc --version
+      - name: Fix locales
+        run: |
+          echo 'en_US.UTF-8 UTF-8' | sudo tee /etc/locale.gen
+          echo 'LANG="en_US.UTF-8"' | sudo tee /etc/default/locale
+          sudo dpkg-reconfigure --frontend=noninteractive locales
+          locale
+      - name: Install Ruby deps
+        run: |
+          echo 'gem: --no-document' | sudo tee /etc/gemrc
+          cd _build
+          bundle install
+      - name: Build targets
+        working-directory: _build
+        run: ./build-target .. target
+      - name: Upload build targets log
+        uses: actions/upload-artifact@v3
+        with:
+          name: log.json
+          path: _build/target/log.json
+      - name: Build diagrams
+        working-directory: _build
+        run: ./build-diagrams target html
+      - name: Build HTML
+        working-directory: _build
+        run: ./build-html .. target html
+      - name: Deploy
+        env:
+          BOT_SSH_KEY: ${{secrets.BOT_SSH_KEY}}
+        run: |
+          .github/push_artifacts/git_config_kaitai_bot
+          .github/push_artifacts/publish \
+            -o kaitai-io \
+            -r formats-kaitai-io.github.io \
+            -m "Build results of ${GITHUB_REF#refs/heads/*} $GITHUB_REPOSITORY@$GITHUB_SHA" -- \
+            --exclude=.git \
+            --exclude=.travis.yml \
+            --exclude=CNAME \
+            --exclude=favicon.ico \
+            --exclude=favicon.ico.license \
+            _build/html/
+        # NB: trailing slash in '_build/html/' is *very* important for rsync!
+        if: github.ref == 'refs/heads/master'

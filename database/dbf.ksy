@@ -1,16 +1,39 @@
 meta:
   id: dbf
-  file-extension: dbf
   application: dBASE
+  file-extension: dbf
+  xref:
+    justsolve: DBF
+    loc: fdd000325
+    mime:
+      - application/dbf
+      - application/dbase
+    pronom:
+      - x-fmt/8 # dBASE Database II
+      - x-fmt/9 # dBASE Database III
+      - x-fmt/271 # dBASE Database III+
+      - x-fmt/10 # dBASE Database IV
+      - x-fmt/272 # dBASE Database V
+    wikidata: Q16545707
   license: CC0-1.0
   endian: le
+doc: |
+  .dbf is a relational database format introduced in DOS database
+  management system dBASE in 1982.
+
+  One .dbf file corresponds to one table and contains a series of headers,
+  specification of fields, and a number of fixed-size records.
+doc-ref: http://www.dbase.com/Knowledgebase/INT/db7_file_fmt.htm
 seq:
   - id: header1
     type: header1
   - id: header2
-    size: header1.len_header - 12
+    size: header1.len_header - header1._sizeof - header_terminator._sizeof
     type: header2
+  - id: header_terminator
+    contents: [0x0D]
   - id: records
+    type: record
     size: header1.len_record
     repeat: expr
     repeat-expr: header1.num_records
@@ -45,8 +68,7 @@ types:
         type: header_dbase_7
       - id: fields
         type: field
-        repeat: expr
-        repeat-expr: 11
+        repeat: eos
   header_dbase_3:
     seq:
       - id: reserved1
@@ -78,7 +100,7 @@ types:
   field:
     seq:
       - id: name
-        type: str
+        type: strz
         encoding: ASCII
         size: 11
       - id: datatype
@@ -99,3 +121,16 @@ types:
         type: u1
       - id: reserved3
         size: 8
+  record:
+    seq:
+      - id: deleted
+        type: u1
+        enum: delete_state
+      - id: record_fields
+        size: _root.header2.fields[_index].length
+        repeat: expr
+        repeat-expr: _root.header2.fields.size
+enums:
+  delete_state:
+    0x2a: true
+    0x20: false

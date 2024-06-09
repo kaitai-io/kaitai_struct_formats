@@ -4,7 +4,7 @@ meta:
   file-extension: agg
   license: CC0-1.0
   endian: le
-doc-ref: http://rewiki.regengedanken.de/wiki/.AGG_(Heroes_of_Might_and_Magic)
+doc-ref: https://web.archive.org/web/20170215190034/http://rewiki.regengedanken.de/wiki/.AGG_(Heroes_of_Might_and_Magic)
 seq:
   - id: num_files
     type: u2
@@ -35,7 +35,7 @@ types:
 instances:
   filenames:
     pos: entries.last.offset + entries.last.size
-    type: filename
     size: 15
+    type: filename
     repeat: expr
     repeat-expr: num_files
