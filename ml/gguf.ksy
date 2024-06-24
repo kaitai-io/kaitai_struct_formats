@@ -44,7 +44,7 @@ seq:
     
 types:
   gguf_value:
-    -webide-representation: '{value:dec}'
+    -webide-representation: '{value}'
     params:
       - id: type
         type: u4
@@ -54,19 +54,19 @@ types:
         type:
           switch-on: type
           cases:
-            'gguf_type::gguf_type_uint8': u1
-            'gguf_type::gguf_type_int8': s1
-            'gguf_type::gguf_type_uint16': u2
-            'gguf_type::gguf_type_int16': s2
-            'gguf_type::gguf_type_uint32': u4
-            'gguf_type::gguf_type_int32': s4
-            'gguf_type::gguf_type_float32': f4
-            'gguf_type::gguf_type_bool': b1
+            'gguf_type::gguf_type_uint8': gguf_uint8
+            'gguf_type::gguf_type_int8': gguf_int8
+            'gguf_type::gguf_type_uint16': gguf_uint16
+            'gguf_type::gguf_type_int16': gguf_int16
+            'gguf_type::gguf_type_uint32': gguf_uint32
+            'gguf_type::gguf_type_int32': gguf_int32
+            'gguf_type::gguf_type_float32': gguf_float32
+            'gguf_type::gguf_type_bool': gguf_bool
             'gguf_type::gguf_type_string': gguf_str
             'gguf_type::gguf_type_array': gguf_array
-            'gguf_type::gguf_type_uint64': u8
-            'gguf_type::gguf_type_int64': s8
-            'gguf_type::gguf_type_float64': f8
+            'gguf_type::gguf_type_uint64': gguf_uint64
+            'gguf_type::gguf_type_int64': gguf_int64
+            'gguf_type::gguf_type_float64': gguf_float64
         
   gguf_kv:
     -webide-representation: '{key}: {value}'
@@ -104,24 +104,93 @@ types:
         type: gguf_value(type) # Allows for nested arrays
         repeat: expr
         repeat-expr: num_elems
+
+  gguf_bool:
+    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    -webide-representation: '{value}'
+    seq:
+      - id: value
+        type: b1
+
+  gguf_uint8:
+    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    -webide-representation: '{value:dec}'
+    seq:
+      - id: value
+        type: u1
+
+  gguf_int8:
+    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    -webide-representation: '{value:dec}'
+    seq:
+      - id: value
+        type: s1
+        
+  gguf_uint16:
+    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    -webide-representation: '{value:dec}'
+    seq:
+      - id: value
+        type: u2
+
+  gguf_int16:
+    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    -webide-representation: '{value:dec}'
+    seq:
+      - id: value
+        type: s2
+
+  gguf_uint32:
+    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    -webide-representation: '{value:dec}'
+    seq:
+      - id: value
+        type: u4
+
+  gguf_int32:
+    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    -webide-representation: '{value:dec}'
+    seq:
+      - id: value
+        type: s4
   
-  u8_dec:
-    # This type is ony used to provide a nicer webide
-    # representation of `gguf_tensor_info` structures.
+  gguf_uint64:
+    # This type is used as a work-around for languages (like C++) that do not support variant types.
     -webide-representation: '{value:dec}'
     seq:
       - id: value
         type: u8
 
+  gguf_int64:
+    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    -webide-representation: '{value:dec}'
+    seq:
+      - id: value
+        type: s8
+
+  gguf_float32:
+    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    -webide-representation: '{value}'
+    seq:
+      - id: value
+        type: f4
+
+  gguf_float64:
+    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    -webide-representation: '{value}'
+    seq:
+      - id: value
+        type: f8
+    
   gguf_tensor_info:
-    -webide-representation: '{type}[{ne}] {name}'
+    -webide-representation: '{type}[{dims}] {name}'
     seq:
       - id: name
         type: gguf_str
       - id: num_dims
         type: u4
       - id: dims
-        type: u8_dec
+        type: gguf_uint64
         repeat: expr
         repeat-expr: num_dims
       - id: type
