@@ -7,13 +7,12 @@ meta:
   endian: le
   bit-endian: le
 doc: |
-  GGUF is a file format for storing models for inference with GGML and 
-  executors based on GGML. GGUF is a binary format that is designed for
-  fast loading and saving of models, and for ease of reading. Models 
-  are traditionally developed using PyTorch or another framework, and 
-  then converted to GGUF for use in GGML.
+  GGUF is a file format for storing machine learning models for inference with
+  the GGML library, or executors based on GGML. Models are typically developed
+  using PyTorch or some other framework, and then converted to GGUF for use in
+  GGML.
 
-  It is a successor file format to GGML, GGMF and GGJT, and is designed 
+  GGUF is a successor file format to GGML, GGMF and GGJT, and is designed 
   to be unambiguous by containing all the information needed to load a 
   model. It is also designed to be extensible, so that new information 
   can be added to models without breaking compatibility.
@@ -22,25 +21,29 @@ doc-ref:
 seq:
   - id: magic
     contents: GGUF
+    doc: GGUF file magic
   - id: version
     type: u4
+    doc: File format version
   - id: num_infos
     type: u8
     doc: The number of tensors in the file
   - id: num_kv
     type: u8
-    doc: The number of header key-value pairs
+    doc: The number of key-value pairs in the file header
   - id: kv
     type: gguf_kv
     repeat: expr
     repeat-expr: num_kv
+    doc: Key-value pairs
   - id: infos
     type: gguf_tensor_info
     repeat: expr
     repeat-expr: num_infos
+    doc: Tensor metadata
   - id: data
     type: gguf_tensor_data(_io.pos)
-    
+    doc: Tensor data
     
 types:
   gguf_value:
@@ -79,7 +82,6 @@ types:
       - id: value
         type: gguf_value(type)
          
-
   gguf_str:
     -webide-representation: '"{data}"'
     seq:
@@ -106,77 +108,88 @@ types:
         repeat-expr: num_elems
 
   gguf_bool:
-    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    # This type is used as a work-around for languages (like C++)
+    # that do not support variant types.
     -webide-representation: '{value}'
     seq:
       - id: value
         type: b1
 
   gguf_uint8:
-    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    # This type is used as a work-around for languages (like C++) 
+    # that do not support variant types.
     -webide-representation: '{value:dec}'
     seq:
       - id: value
         type: u1
 
   gguf_int8:
-    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    # This type is used as a work-around for languages (like C++) 
+    # that do not support variant types.
     -webide-representation: '{value:dec}'
     seq:
       - id: value
         type: s1
         
   gguf_uint16:
-    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    # This type is used as a work-around for languages (like C++) 
+    # that do not support variant types.
     -webide-representation: '{value:dec}'
     seq:
       - id: value
         type: u2
 
   gguf_int16:
-    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    # This type is used as a work-around for languages (like C++) 
+    # that do not support variant types.
     -webide-representation: '{value:dec}'
     seq:
       - id: value
         type: s2
 
   gguf_uint32:
-    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    # This type is used as a work-around for languages (like C++) 
+    # that do not support variant types.
     -webide-representation: '{value:dec}'
     seq:
       - id: value
         type: u4
 
   gguf_int32:
-    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    # This type is used as a work-around for languages (like C++) 
+    # that do not support variant types.
     -webide-representation: '{value:dec}'
     seq:
       - id: value
         type: s4
   
   gguf_uint64:
-    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    # This type is used as a work-around for languages (like C++) 
+    # that do not support variant types.
     -webide-representation: '{value:dec}'
     seq:
       - id: value
         type: u8
 
   gguf_int64:
-    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    # This type is used as a work-around for languages (like C++) 
+    # that do not support variant types.
     -webide-representation: '{value:dec}'
     seq:
       - id: value
         type: s8
 
   gguf_float32:
-    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    # This type is used as a work-around for languages (like C++) 
+    # that do not support variant types.
     -webide-representation: '{value}'
     seq:
       - id: value
         type: f4
 
   gguf_float64:
-    # This type is used as a work-around for languages (like C++) that do not support variant types.
+    # This type is used as a work-around for languages (like C++) 
+    # that do not support variant types.
     -webide-representation: '{value}'
     seq:
       - id: value
