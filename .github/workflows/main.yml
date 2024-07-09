@@ -47,7 +47,7 @@ jobs:
         working-directory: _build
         run: ./build-target .. target
       - name: Upload build targets log
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: log.json
           path: _build/target/log.json
