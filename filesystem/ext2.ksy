@@ -216,7 +216,7 @@ types:
         size: 12
     instances:
       as_dir:
-        io: 'block[0].body._io'
+        io: block[0].body._io
         pos: 0
         type: dir
   block_ptr:
@@ -257,7 +257,7 @@ types:
         size: rec_len - name_len - 8
     instances:
       inode:
-        value: '_root.bg1.block_groups[(inode_ptr - 1) / _root.bg1.super_block.inodes_per_group].inodes[(inode_ptr - 1) % _root.bg1.super_block.inodes_per_group]'
+        value: _root.bg1.block_groups[(inode_ptr - 1) / _root.bg1.super_block.inodes_per_group].inodes[(inode_ptr - 1) % _root.bg1.super_block.inodes_per_group]
     enums:
       # https://www.nongnu.org/ext2-doc/ext2.html#IFDIR-FILE-TYPE
       file_type_enum:

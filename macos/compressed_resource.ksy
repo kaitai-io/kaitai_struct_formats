@@ -27,9 +27,9 @@ doc: |
   The header of the compressed data indicates the ID of the `'dcmp'` resource used to decompress the data,
   along with some parameters for the decompressor.
 doc-ref:
-  - 'http://www.alysis.us/arctechnology.htm'
-  - 'http://preserve.mactech.com/articles/mactech/Vol.09/09.01/ResCompression/index.html'
-  - 'https://github.com/dgelessus/python-rsrcfork/tree/f891a6e/src/rsrcfork/compress'
+  - http://www.alysis.us/arctechnology.htm
+  - http://preserve.mactech.com/articles/mactech/Vol.09/09.01/ResCompression/index.html
+  - https://github.com/dgelessus/python-rsrcfork/tree/f891a6e/src/rsrcfork/compress
 seq:
   - id: header
     type: header

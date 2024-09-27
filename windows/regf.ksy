@@ -24,7 +24,7 @@ doc: |
 
   Note that one typically can't access files directly on a mounted
   filesystem with a running Windows OS.
-doc-ref: 'https://github.com/libyal/libregf/blob/main/documentation/Windows%20NT%20Registry%20File%20(REGF)%20format.asciidoc'
+doc-ref: https://github.com/libyal/libregf/blob/main/documentation/Windows%20NT%20Registry%20File%20(REGF)%20format.asciidoc
 seq:
   - id: header
     type: file_header
@@ -36,7 +36,7 @@ types:
   file_header:
     seq:
       - id: signature
-        contents: "regf"
+        contents: regf
       - id: primary_sequence_number # Matches the secondary sequence number if the hive was properly synchronized
         type: u4
       - id: secondary_sequence_number # Matches the primary sequence number if the hive was properly synchronized
@@ -80,7 +80,7 @@ types:
   hive_bin_header:
     seq:
       - id: signature
-        contents: "hbin"
+        contents: hbin
       - id: offset
         type: u4
         doc: |
@@ -102,7 +102,7 @@ types:
         type: u4
         doc: Contains number of bytes
   hive_bin_cell:
-    -webide-representation: "{identifier}"
+    -webide-representation: '{identifier}'
     seq:
       - id: cell_size_raw
         type: s4
@@ -127,7 +127,7 @@ types:
         value: "(cell_size_raw < 0 ? -1 : +1) * cell_size_raw"
         -webide-parse-mode: eager
       is_allocated:
-        value: "cell_size_raw < 0"
+        value: cell_size_raw < 0
         -webide-parse-mode: eager
     types:
       named_key:
@@ -250,7 +250,7 @@ types:
             size: value_name_size
             type: str
             encoding: ascii
-            if: "flags == vk_flags::value_comp_name"
+            if: flags == vk_flags::value_comp_name
         enums:
           data_type_enum:
             0x00000000: reg_none # Undefined type

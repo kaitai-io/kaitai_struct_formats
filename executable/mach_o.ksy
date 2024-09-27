@@ -135,70 +135,70 @@ types:
     instances:
       no_undefs:
         value: value & 0x1 != 0
-        doc: "the object file has no undefined references"
+        doc: the object file has no undefined references
       incr_link:
         value: value & 0x2 != 0
-        doc: "the object file is the output of an incremental link against a base file and can't be link edited again"
+        doc: the object file is the output of an incremental link against a base file and can't be link edited again
       dyld_link:
         value: value & 0x4 != 0
-        doc: "the object file is input for the dynamic linker and can't be staticly link edited again"
+        doc: the object file is input for the dynamic linker and can't be staticly link edited again
       bind_at_load:
         value: value & 0x8 != 0
-        doc: "the object file's undefined references are bound by the dynamic linker when loaded."
+        doc: the object file's undefined references are bound by the dynamic linker when loaded.
       prebound:
         value: value & 0x10 != 0
-        doc: "the file has its dynamic undefined references prebound."
+        doc: the file has its dynamic undefined references prebound.
       split_segs:
         value: value & 0x20 != 0
-        doc: "the file has its read-only and read-write segments split"
+        doc: the file has its read-only and read-write segments split
       lazy_init:
         value: value & 0x40 != 0
-        doc: "the shared library init routine is to be run lazily via catching memory faults to its writeable segments (obsolete)"
+        doc: the shared library init routine is to be run lazily via catching memory faults to its writeable segments (obsolete)
       two_level:
         value: value & 0x80 != 0
-        doc: "the image is using two-level name space bindings"
+        doc: the image is using two-level name space bindings
       force_flat:
         value: value & 0x100 != 0
-        doc: "the executable is forcing all images to use flat name space bindings"
+        doc: the executable is forcing all images to use flat name space bindings
       no_multi_defs:
         value: value & 0x200 != 0
-        doc: "this umbrella guarantees no multiple defintions of symbols in its sub-images so the two-level namespace hints can always be used."
+        doc: this umbrella guarantees no multiple defintions of symbols in its sub-images so the two-level namespace hints can always be used.
       no_fix_prebinding:
         value: value & 0x400 != 0
-        doc: "do not have dyld notify the prebinding agent about this executable"
+        doc: do not have dyld notify the prebinding agent about this executable
       prebindable:
         value: value & 0x800 != 0
-        doc: "the binary is not prebound but can have its prebinding redone. only used when MH_PREBOUND is not set."
+        doc: the binary is not prebound but can have its prebinding redone. only used when MH_PREBOUND is not set.
       all_mods_bound:
         value: value & 0x1000 != 0
-        doc: "indicates that this binary binds to all two-level namespace modules of its dependent libraries. only used when MH_PREBINDABLE and MH_TWOLEVEL are both set."
+        doc: indicates that this binary binds to all two-level namespace modules of its dependent libraries. only used when MH_PREBINDABLE and MH_TWOLEVEL are both set.
       subsections_via_symbols:
         value: value & 0x2000 != 0
-        doc: "safe to divide up the sections into sub-sections via symbols for dead code stripping"
+        doc: safe to divide up the sections into sub-sections via symbols for dead code stripping
       canonical:
         value: value & 0x4000 != 0
-        doc: "the binary has been canonicalized via the unprebind operation"
+        doc: the binary has been canonicalized via the unprebind operation
       weak_defines:
         value: value & 0x8000 != 0
-        doc: "the final linked image contains external weak symbols"
+        doc: the final linked image contains external weak symbols
       binds_to_weak:
         value: value & 0x10000 != 0
-        doc: "the final linked image uses weak symbols"
+        doc: the final linked image uses weak symbols
       allow_stack_execution:
         value: value & 0x20000 != 0
-        doc: "When this bit is set, all stacks in the task will be given stack execution privilege.  Only used in MH_EXECUTE filetypes."
+        doc: When this bit is set, all stacks in the task will be given stack execution privilege.  Only used in MH_EXECUTE filetypes.
       root_safe:
         value: value & 0x40000 != 0
-        doc: "When this bit is set, the binary declares it is safe for use in processes with uid zero"
+        doc: When this bit is set, the binary declares it is safe for use in processes with uid zero
       setuid_safe:
         value: value & 0x80000 != 0
-        doc: "When this bit is set, the binary declares it is safe for use in processes when issetugid() is true"
+        doc: When this bit is set, the binary declares it is safe for use in processes when issetugid() is true
       no_reexported_dylibs:
         value: value & 0x100000 != 0
-        doc: "When this bit is set on a dylib, the static linker does not need to examine dependent dylibs to see if any are re-exported"
+        doc: When this bit is set on a dylib, the static linker does not need to examine dependent dylibs to see if any are re-exported
       pie:
         value: value & 0x200000 != 0
-        doc: "When this bit is set, the OS will load the main executable at a random address. Only used in MH_EXECUTE filetypes."
+        doc: When this bit is set, the OS will load the main executable at a random address. Only used in MH_EXECUTE filetypes.
       dead_strippable_dylib:
         value: value & 0x400000 != 0
       has_tlv_descriptors:
@@ -327,31 +327,31 @@ types:
         type: u1
       - id: b2
         type: u1
-        if: "b1 & 0x80 != 0"
+        if: b1 & 0x80 != 0
       - id: b3
         type: u1
-        if: "b2 & 0x80 != 0"
+        if: b2 & 0x80 != 0
       - id: b4
         type: u1
-        if: "b3 & 0x80 != 0"
+        if: b3 & 0x80 != 0
       - id: b5
         type: u1
-        if: "b4 & 0x80 != 0"
+        if: b4 & 0x80 != 0
       - id: b6
         type: u1
-        if: "b5 & 0x80 != 0"
+        if: b5 & 0x80 != 0
       - id: b7
         type: u1
-        if: "b6 & 0x80 != 0"
+        if: b6 & 0x80 != 0
       - id: b8
         type: u1
-        if: "b7 & 0x80 != 0"
+        if: b7 & 0x80 != 0
       - id: b9
         type: u1
-        if: "b8 & 0x80 != 0"
+        if: b8 & 0x80 != 0
       - id: b10
         type: u1
-        if: "b9 & 0x80 != 0"
+        if: b9 & 0x80 != 0
     instances:
       value:
         value: >
@@ -488,7 +488,7 @@ types:
                     type: char_chain
                     if: chr != 0
               cie:
-                -webide-representation: 'v:{version:dec} aug:{augmentation_string} code:{code_alignment_factor} data:{data_alignment_factor} returnReg:{return_address_register}'
+                -webide-representation: v:{version:dec} aug:{augmentation_string} code:{code_alignment_factor} data:{data_alignment_factor} returnReg:{return_address_register}
                 seq:
                   - id: version
                     type: u1
@@ -508,7 +508,7 @@ types:
                     type: u1
                   - id: augmentation
                     type: augmentation_entry
-                    if: 'aug_str.chr == 122'
+                    if: aug_str.chr == 122
               augmentation_entry:
                 seq:
                   - id: length
@@ -528,7 +528,7 @@ types:
                 type: u8
                 repeat: eos
           cf_string:
-            -webide-representation: "isa={isa}, info={info}, data={data}, length={length}"
+            -webide-representation: isa={isa}, info={info}, data={data}, length={length}
             seq:
               - id: isa
                 type: u8
@@ -544,7 +544,7 @@ types:
                 type: cf_string
                 repeat: eos
   dyld_info_command:
-    -webide-representation: 'rebase={rebase_off}, bind={bind_off}, weakBind={weak_bind_off}, lazyBind={lazy_bind_off}, export={export_off}'
+    -webide-representation: rebase={rebase_off}, bind={bind_off}, weakBind={weak_bind_off}, lazyBind={lazy_bind_off}, export={export_off}
     seq:
       - id: rebase_off
         type: u4
@@ -620,14 +620,14 @@ types:
                   opcode == opcode::do_rebase_uleb_times_skipping_uleb
               - id: skip
                 type: uleb128
-                if: "opcode == opcode::do_rebase_uleb_times_skipping_uleb"
+                if: opcode == opcode::do_rebase_uleb_times_skipping_uleb
             instances:
               opcode:
-                value: "opcode_and_immediate & 0xf0"
+                value: opcode_and_immediate & 0xf0
                 enum: opcode
                 -webide-parse-mode: eager
               immediate:
-                value: "opcode_and_immediate & 0x0f"
+                value: opcode_and_immediate & 0x0f
                 -webide-parse-mode: eager
         enums:
           opcode:
@@ -656,18 +656,18 @@ types:
               opcode == bind_opcode::do_bind_uleb_times_skipping_uleb
           - id: skip
             type: uleb128
-            if: "opcode == bind_opcode::do_bind_uleb_times_skipping_uleb"
+            if: opcode == bind_opcode::do_bind_uleb_times_skipping_uleb
           - id: symbol
             type: strz
-            if: "opcode == bind_opcode::set_symbol_trailing_flags_immediate"
+            if: opcode == bind_opcode::set_symbol_trailing_flags_immediate
             encoding: ascii
         instances:
           opcode:
-            value: "opcode_and_immediate & 0xf0"
+            value: opcode_and_immediate & 0xf0
             enum: bind_opcode
             -webide-parse-mode: eager
           immediate:
-            value: "opcode_and_immediate & 0x0f"
+            value: opcode_and_immediate & 0x0f
             -webide-parse-mode: eager
       bind_data:
         seq:
@@ -675,7 +675,7 @@ types:
             type: bind_item
             repeat: eos
       export_node:
-        -webide-representation: "{children_count} children, term_size={terminal_size.value}"
+        -webide-representation: '{children_count} children, term_size={terminal_size.value}'
         seq:
           - id: terminal_size
             type: uleb128
@@ -761,7 +761,7 @@ types:
             repeat-until: _ == ""
             eos-error: false
       nlist_64:
-        -webide-representation: "un={un} type={type} sect={sect} desc={desc} value={value}"
+        -webide-representation: un={un} type={type} sect={sect} desc={desc} value={value}
         seq:
           - id: un
             type: u4
@@ -780,7 +780,7 @@ types:
             encoding: utf-8
             if: un != 0
       nlist:
-        -webide-representation: "un={un} type={type} sect={sect} desc={desc} value={value}"
+        -webide-representation: un={un} type={type} sect={sect} desc={desc} value={value}
         seq:
           - id: un
             type: u4
@@ -877,7 +877,7 @@ types:
       - id: name
         type: lc_str
   uuid_command:
-    -webide-representation: 'uuid={uuid}'
+    -webide-representation: uuid={uuid}
     seq:
       - id: uuid
         size: 16
@@ -941,19 +941,19 @@ types:
       - id: reserved
         size: 24 # u4 * 6
   version_min_command:
-    -webide-representation: 'v:{version}, r:{reserved}'
+    -webide-representation: v:{version}, r:{reserved}
     seq:
       - id: version
         type: version
       - id: sdk
         type: version
   source_version_command:
-    -webide-representation: 'v:{version:dec}'
+    -webide-representation: v:{version:dec}
     seq:
       - id: version
         type: u8
   entry_point_command:
-    -webide-representation: 'entry_off={entry_off}, stack_size={stack_size}'
+    -webide-representation: entry_off={entry_off}, stack_size={stack_size}
     seq:
       - id: entry_off
         -orig-id: entryoff
@@ -984,7 +984,7 @@ types:
         type: strz
         encoding: utf-8
   linkedit_data_command:
-    -webide-representation: 'offs={data_off}, size={data_size}'
+    -webide-representation: offs={data_off}, size={data_size}
     seq:
       - id: data_off
         -orig-id: dataoff
@@ -993,7 +993,7 @@ types:
         -orig-id: datasize
         type: u4
   code_signature_command:
-    -webide-representation: 'offs={data_off}, size={data_size}'
+    -webide-representation: offs={data_off}, size={data_size}
     seq:
       - id: data_off
         type: u4
@@ -1017,14 +1017,14 @@ types:
         type:
           switch-on: magic
           cases:
-            'cs_magic::requirement'       : requirement
-            'cs_magic::requirements'      : requirements
-            'cs_magic::code_directory'    : code_directory
-            'cs_magic::entitlements'      : entitlements
-            'cs_magic::der_entitlements'  : asn1_der
-            'cs_magic::blob_wrapper'      : blob_wrapper
-            'cs_magic::embedded_signature': super_blob
-            'cs_magic::detached_signature': super_blob
+            cs_magic::requirement       : requirement
+            cs_magic::requirements      : requirements
+            cs_magic::code_directory    : code_directory
+            cs_magic::entitlements      : entitlements
+            cs_magic::der_entitlements  : asn1_der
+            cs_magic::blob_wrapper      : blob_wrapper
+            cs_magic::embedded_signature: super_blob
+            cs_magic::detached_signature: super_blob
     enums:
       cs_magic:
         0xfade0c00: requirement        # CSMAGIC_REQUIREMENT
@@ -1125,7 +1125,7 @@ types:
             enum: op
           - id: data
             type: data
-            if: 'match_op != op::exists'
+            if: match_op != op::exists
         enums:
           op:
             0: exists
@@ -1147,23 +1147,23 @@ types:
             type:
               switch-on: op
               cases:
-                #'op_enum::false'               : 'false'
-                #'op_enum::true'                : 'true'
-                'op_enum::ident'               : ident_expr
-                #'op_enum::apple_anchor'        : 'anchor apple'
-                'op_enum::anchor_hash'         : anchor_hash_expr
-                'op_enum::info_key_value'      : data
-                'op_enum::and_op'              : and_expr
-                'op_enum::or_op'               : or_expr
-                'op_enum::cd_hash'             : data
-                'op_enum::not_op'              : expr
-                'op_enum::info_key_field'      : info_key_field_expr
-                'op_enum::cert_field'          : cert_field_expr
-                'op_enum::trusted_cert'        : cert_slot_expr
-                #'op_enum::trusted_certs'       : 'anchor trusted'
-                'op_enum::cert_generic'        : cert_generic_expr
-                'op_enum::apple_generic_anchor': apple_generic_anchor_expr
-                'op_enum::entitlement_field'   : entitlement_field_expr
+                #op_enum::false               : 'false'
+                #op_enum::true                : 'true'
+                op_enum::ident               : ident_expr
+                #op_enum::apple_anchor        : 'anchor apple'
+                op_enum::anchor_hash         : anchor_hash_expr
+                op_enum::info_key_value      : data
+                op_enum::and_op              : and_expr
+                op_enum::or_op               : or_expr
+                op_enum::cd_hash             : data
+                op_enum::not_op              : expr
+                op_enum::info_key_field      : info_key_field_expr
+                op_enum::cert_field          : cert_field_expr
+                op_enum::trusted_cert        : cert_slot_expr
+                #op_enum::trusted_certs       : 'anchor trusted'
+                op_enum::cert_generic        : cert_generic_expr
+                op_enum::apple_generic_anchor: apple_generic_anchor_expr
+                op_enum::entitlement_field   : entitlement_field_expr
         enums:
           op_enum:
             0: 'false'               # unconditionally false
@@ -1188,12 +1188,12 @@ types:
             0: left_cert
         types:
           ident_expr:
-            -webide-representation: "identifier {identifier.value:str}"
+            -webide-representation: identifier {identifier.value:str}
             seq:
               - id: identifier
                 type: data
           apple_generic_anchor_expr:
-            -webide-representation: "anchor apple generic"
+            -webide-representation: anchor apple generic
             instances:
               value:
                 value: '"anchor apple generic"'
@@ -1203,14 +1203,14 @@ types:
                 type: u4be
                 enum: cert_slot
           and_expr:
-            -webide-representation: "({left}) AND ({right})"
+            -webide-representation: ({left}) AND ({right})
             seq:
               - id: left
                 type: expr
               - id: right
                 type: expr
           or_expr:
-            -webide-representation: "({left}) OR ({right})"
+            -webide-representation: ({left}) OR ({right})
             seq:
               - id: left
                 type: expr

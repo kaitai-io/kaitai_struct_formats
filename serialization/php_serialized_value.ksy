@@ -26,11 +26,11 @@ doc: |
   PHP version can be unserialized on any newer PHP version.
   This spec supports serialized values from PHP 7.3 or any earlier version.
 doc-ref:
-  - 'https://www.php.net/manual/en/function.serialize.php'
-  - 'https://www.php.net/manual/en/function.serialize.php#66147'
-  - 'https://www.php.net/manual/en/function.unserialize.php'
-  - 'https://github.com/php/php-src/blob/php-7.3.5/ext/standard/var_unserializer.re'
-  - 'https://github.com/php/php-src/blob/php-7.3.5/ext/standard/var.c#L822'
+  - https://www.php.net/manual/en/function.serialize.php
+  - https://www.php.net/manual/en/function.serialize.php#66147
+  - https://www.php.net/manual/en/function.unserialize.php
+  - https://github.com/php/php-src/blob/php-7.3.5/ext/standard/var_unserializer.re
+  - https://github.com/php/php-src/blob/php-7.3.5/ext/standard/var.c#L822
 seq:
   - id: type
     type: u1
@@ -40,19 +40,18 @@ seq:
     type:
       switch-on: type
       cases:
-        'value_type::null': null_contents
-        'value_type::bool': bool_contents
-        'value_type::int': int_contents
-        'value_type::float': float_contents
-        'value_type::string': string_contents
-        'value_type::php_6_string': string_contents
-        'value_type::array': array_contents
-        'value_type::php_3_object': php_3_object_contents
-        'value_type::object': object_contents
-        'value_type::custom_serialized_object':
-          custom_serialized_object_contents
-        'value_type::variable_reference': int_contents
-        'value_type::object_reference': int_contents
+        value_type::null: null_contents
+        value_type::bool: bool_contents
+        value_type::int: int_contents
+        value_type::float: float_contents
+        value_type::string: string_contents
+        value_type::php_6_string: string_contents
+        value_type::array: array_contents
+        value_type::php_3_object: php_3_object_contents
+        value_type::object: object_contents
+        value_type::custom_serialized_object: custom_serialized_object_contents
+        value_type::variable_reference: int_contents
+        value_type::object_reference: int_contents
     doc: |
       The contents of the serialized value, which vary depending on the type.
 enums:
@@ -123,7 +122,7 @@ types:
       contains no actual data, since there is only a single `NULL` value.
     seq:
       - id: semicolon
-        contents: ';'
+        contents: ;
   bool_contents:
     doc: The contents of a boolean value (`value_type::bool`).
     seq:
@@ -135,10 +134,10 @@ types:
         doc: |
           The value of the `bool`: `0` for `false` or `1` for `true`.
       - id: semicolon
-        contents: ';'
+        contents: ;
     instances:
       value:
-        value: 'value_dec == bool_value::true'
+        value: value_dec == bool_value::true
         doc: The value of the `bool`, parsed as a boolean.
   int_contents:
     doc: |
@@ -213,7 +212,7 @@ types:
       - id: string
         type: length_prefixed_quoted_string
       - id: semicolon
-        contents: ';'
+        contents: ;
     instances:
       value:
         value: string.data

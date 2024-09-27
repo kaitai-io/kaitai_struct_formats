@@ -37,8 +37,8 @@ seq:
     type:
       switch-on: ether_type
       cases:
-        'ether_type_enum::ipv4': ipv4_packet
-        'ether_type_enum::ipv6': ipv6_packet
+        ether_type_enum::ipv4: ipv4_packet
+        ether_type_enum::ipv6: ipv6_packet
 instances:
   ether_type:
     value: |

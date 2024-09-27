@@ -57,74 +57,74 @@ types:
         type:
           switch-on: code
           cases:
-            'opcode::int': decimalnl_short
-            'opcode::binint': s4
-            'opcode::binint1': u1
-            'opcode::binint2': u2
-            'opcode::long': decimalnl_long
-            'opcode::long1': long1
-            'opcode::long4': long4
-            'opcode::string': stringnl
-            'opcode::binstring': string4
-            'opcode::short_binstring': string1
-            'opcode::binbytes': bytes4
-            'opcode::short_binbytes': bytes1
-            'opcode::binbytes8': bytes8
-            'opcode::none': no_arg
-            'opcode::newtrue': no_arg
-            'opcode::newfalse': no_arg
-            'opcode::unicode': unicodestringnl
-            'opcode::short_binunicode': unicodestring1
-            'opcode::binunicode': unicodestring4
-            'opcode::binunicode8': unicodestring8
-            'opcode::float': floatnl
-            'opcode::binfloat': f8be
-            'opcode::empty_list': no_arg
-            'opcode::append': no_arg
-            'opcode::appends': no_arg
-            'opcode::list': no_arg
-            'opcode::empty_tuple': no_arg
-            'opcode::tuple': no_arg
-            'opcode::tuple1': no_arg
-            'opcode::tuple2': no_arg
-            'opcode::tuple3': no_arg
-            'opcode::empty_dict': no_arg
-            'opcode::dict': no_arg
-            'opcode::setitem': no_arg
-            'opcode::setitems': no_arg
-            'opcode::empty_set': no_arg
-            'opcode::additems': no_arg
-            'opcode::frozenset': no_arg
-            'opcode::pop': no_arg
-            'opcode::dup': no_arg
-            'opcode::mark': no_arg
-            'opcode::pop_mark': no_arg
-            'opcode::get': decimalnl_short
-            'opcode::binget': u1
-            'opcode::long_binget': u4
-            'opcode::put': decimalnl_short
-            'opcode::binput': u1
-            'opcode::long_binput': u4
-            'opcode::memoize': no_arg
-            'opcode::ext1': u1
-            'opcode::ext2': u2
-            'opcode::ext4': u4
-            'opcode::global_opcode':  stringnl_noescape_pair
-            'opcode::stack_global': no_arg
-            'opcode::reduce': no_arg
-            'opcode::build': no_arg
-            'opcode::inst': stringnl_noescape_pair
-            'opcode::obj': no_arg
-            'opcode::newobj': no_arg
-            'opcode::newobj_ex': no_arg
-            'opcode::proto': u1
-            'opcode::stop': no_arg
-            'opcode::frame': u8
-            'opcode::persid': stringnl_noescape
-            'opcode::binpersid': no_arg
-            'opcode::bytearray8': bytearray8
-            'opcode::next_buffer': no_arg
-            'opcode::readonly_buffer': no_arg
+            opcode::int: decimalnl_short
+            opcode::binint: s4
+            opcode::binint1: u1
+            opcode::binint2: u2
+            opcode::long: decimalnl_long
+            opcode::long1: long1
+            opcode::long4: long4
+            opcode::string: stringnl
+            opcode::binstring: string4
+            opcode::short_binstring: string1
+            opcode::binbytes: bytes4
+            opcode::short_binbytes: bytes1
+            opcode::binbytes8: bytes8
+            opcode::none: no_arg
+            opcode::newtrue: no_arg
+            opcode::newfalse: no_arg
+            opcode::unicode: unicodestringnl
+            opcode::short_binunicode: unicodestring1
+            opcode::binunicode: unicodestring4
+            opcode::binunicode8: unicodestring8
+            opcode::float: floatnl
+            opcode::binfloat: f8be
+            opcode::empty_list: no_arg
+            opcode::append: no_arg
+            opcode::appends: no_arg
+            opcode::list: no_arg
+            opcode::empty_tuple: no_arg
+            opcode::tuple: no_arg
+            opcode::tuple1: no_arg
+            opcode::tuple2: no_arg
+            opcode::tuple3: no_arg
+            opcode::empty_dict: no_arg
+            opcode::dict: no_arg
+            opcode::setitem: no_arg
+            opcode::setitems: no_arg
+            opcode::empty_set: no_arg
+            opcode::additems: no_arg
+            opcode::frozenset: no_arg
+            opcode::pop: no_arg
+            opcode::dup: no_arg
+            opcode::mark: no_arg
+            opcode::pop_mark: no_arg
+            opcode::get: decimalnl_short
+            opcode::binget: u1
+            opcode::long_binget: u4
+            opcode::put: decimalnl_short
+            opcode::binput: u1
+            opcode::long_binput: u4
+            opcode::memoize: no_arg
+            opcode::ext1: u1
+            opcode::ext2: u2
+            opcode::ext4: u4
+            opcode::global_opcode:  stringnl_noescape_pair
+            opcode::stack_global: no_arg
+            opcode::reduce: no_arg
+            opcode::build: no_arg
+            opcode::inst: stringnl_noescape_pair
+            opcode::obj: no_arg
+            opcode::newobj: no_arg
+            opcode::newobj_ex: no_arg
+            opcode::proto: u1
+            opcode::stop: no_arg
+            opcode::frame: u8
+            opcode::persid: stringnl_noescape
+            opcode::binpersid: no_arg
+            opcode::bytearray8: bytearray8
+            opcode::next_buffer: no_arg
+            opcode::readonly_buffer: no_arg
         doc: |
           Optional argument for the operation. Data type and length
           are determined by the value of the opcode.
@@ -334,95 +334,95 @@ types:
 enums:
   opcode:
     0x28: # "("
-      id: "mark"
+      id: mark
       -orig-id: MARK
       doc: push special markobject on stack
     0x2e: # "."
-      id: "stop"
+      id: stop
       -orig-id: STOP
       doc: every pickle ends with STOP
     0x30: # "0"
-      id: "pop"
+      id: pop
       -orig-id: POP
       doc: discard topmost stack item
     0x31: # "1"
-      id: "pop_mark"
+      id: pop_mark
       -orig-id: POP_MARK
       doc: discard stack top through topmost markobject
     0x32: # "2"
-      id: "dup"
+      id: dup
       -orig-id: DUP
       doc: duplicate top stack item
     0x46: # "F"
-      id: "float"
+      id: float
       -orig-id: FLOAT
       doc: push float object; decimal string argument
     0x49: # "I"
-      id: "int"
+      id: int
       -orig-id: INT
       doc: push integer or bool; decimal string argument
     0x4a: # "J"
-      id: "binint"
+      id: binint
       -orig-id: BININT
       doc: push four-byte signed int
     0x4b: # "K"
-      id: "binint1"
+      id: binint1
       -orig-id: BININT1
       doc: push 1-byte unsigned int
     0x4c: # "L"
-      id: "long"
+      id: long
       -orig-id: LONG
       doc: push long; decimal string argument
     0x4d: # "M"
-      id: "binint2"
+      id: binint2
       -orig-id: BININT2
       doc: push 2-byte unsigned int
     0x4e: # "N"
-      id: "none"
+      id: none
       -orig-id: NONE
       doc: push None
     0x50: # "P"
-      id: "persid"
+      id: persid
       -orig-id: PERSID
       doc: push persistent object; id is taken from string arg
     0x51: # "Q"
-      id: "binpersid"
+      id: binpersid
       -orig-id: BINPERSID
       doc: push persistent object; id is taken from stack
     0x52: # "R"
-      id: "reduce"
+      id: reduce
       -orig-id: REDUCE
       doc: apply callable to argtuple, both on stack
     0x53: # "S"
-      id: "string"
+      id: string
       -orig-id: STRING
       doc: push string; NL-terminated string argument
     0x54: # "T"
-      id: "binstring"
+      id: binstring
       -orig-id: BINSTRING
       doc: push string; counted binary string argument
     0x55: # "U"
-      id: "short_binstring"
+      id: short_binstring
       -orig-id: SHORT_BINSTRING
       doc: push string; counted binary string argument 256 bytes
     0x56: # "V"
-      id: "unicode"
+      id: unicode
       -orig-id: UNICODE
       doc: push Unicode string; raw-unicode-escaped argument
     0x58: # "X"
-      id: "binunicode"
+      id: binunicode
       -orig-id: BINUNICODE
       doc: push Unicode string; counted UTF-8 string argument
     0x61: # "a"
-      id: "append"
+      id: append
       -orig-id: APPEND
       doc: append stack top to list below it
     0x62: # "b"
-      id: "build"
+      id: build
       -orig-id: BUILD
       doc: call __setstate__ or __dict__.update()
     0x63: # "c"
-      id: "global_opcode"
+      id: global_opcode
       -orig-id: GLOBAL
       -affected-by: 90
       doc: |
@@ -431,190 +431,190 @@ enums:
         As of KSC 0.9, this enum key can't be called `global` because it would
         cause a syntax error in Python (it is a keyword).
     0x64: # "d"
-      id: "dict"
+      id: dict
       -orig-id: DICT
       doc: build a dict from stack items
     0x7d: # "}"
-      id: "empty_dict"
+      id: empty_dict
       -orig-id: EMPTY_DICT
       doc: push empty dict
     0x65: # "e"
-      id: "appends"
+      id: appends
       -orig-id: APPENDS
       doc: extend list on stack by topmost stack slice
     0x67: # "g"
-      id: "get"
+      id: get
       -orig-id: GET
       doc: push item from memo on stack; index is string arg
     0x68: # "h"
-      id: "binget"
+      id: binget
       -orig-id: BINGET
       doc: push item from memo on stack; index is 1-byte arg
     0x69: # "i"
-      id: "inst"
+      id: inst
       -orig-id: INST
       doc: build & push class instance
     0x6a: # "j"
-      id: "long_binget"
+      id: long_binget
       -orig-id: LONG_BINGET
       doc: push item from memo on stack; index is 4-byte arg
     0x6c: # "l"
-      id: "list"
+      id: list
       -orig-id: LIST
       doc: build list from topmost stack items
     0x5d: # "]"
-      id: "empty_list"
+      id: empty_list
       -orig-id: EMPTY_LIST
       doc: push empty list
     0x6f: # "o"
-      id: "obj"
+      id: obj
       -orig-id: OBJ
       doc: build & push class instance
     0x70: # "p"
-      id: "put"
+      id: put
       -orig-id: PUT
       doc: store stack top in memo; index is string arg
     0x71: # "q"
-      id: "binput"
+      id: binput
       -orig-id: BINPUT
       doc: store stack top in memo; index is 1-byte arg
     0x72: # "r"
-      id: "long_binput"
+      id: long_binput
       -orig-id: LONG_BINPUT
       doc: store stack top in memo; index is 4-byte arg
     0x73: # "s"
-      id: "setitem"
+      id: setitem
       -orig-id: SETITEM
       doc: add key+value pair to dict
     0x74: # "t"
-      id: "tuple"
+      id: tuple
       -orig-id: TUPLE
       doc: build tuple from topmost stack items
     0x29: # ")"
-      id: "empty_tuple"
+      id: empty_tuple
       -orig-id: EMPTY_TUPLE
       doc: push empty tuple
     0x75: # "u"
-      id: "setitems"
+      id: setitems
       -orig-id: SETITEMS
       doc: modify dict by adding topmost key+value pairs
     0x47: # "G"
-      id: "binfloat"
+      id: binfloat
       -orig-id: BINFLOAT
       doc: push float; arg is 8-byte float encoding
 
     # Protocol 2
     0x80:
-      id: "proto"
+      id: proto
       -orig-id: PROTO
       doc: identify pickle protocol
     0x81:
-      id: "newobj"
+      id: newobj
       -orig-id: NEWOBJ
       doc: build object by applying cls.__new__ to argtuple
     0x82:
-      id: "ext1"
+      id: ext1
       -orig-id: EXT1
       doc: push object from extension registry; 1-byte index
     0x83:
-      id: "ext2"
+      id: ext2
       -orig-id: EXT2
       doc: ditto, but 2-byte index
     0x84:
-      id: "ext4"
+      id: ext4
       -orig-id: EXT4
       doc: ditto, but 4-byte index
     0x85:
-      id: "tuple1"
+      id: tuple1
       -orig-id: TUPLE1
       doc: build 1-tuple from stack top
     0x86:
-      id: "tuple2"
+      id: tuple2
       -orig-id: TUPLE2
       doc: build 2-tuple from two topmost stack items
     0x87:
-      id: "tuple3"
+      id: tuple3
       -orig-id: TUPLE3
       doc: build 3-tuple from three topmost stack items
     0x88:
-      id: "newtrue"
+      id: newtrue
       -orig-id: NEWTRUE
       doc: push True
     0x89:
-      id: "newfalse"
+      id: newfalse
       -orig-id: NEWFALSE
       doc: push False
     0x8a:
-      id: "long1"
+      id: long1
       -orig-id: LONG1
       doc: push long from < 256 bytes
     0x8b:
-      id: "long4"
+      id: long4
       -orig-id: LONG4
       doc: push really big long
 
     # Protocol 3 (Python 3.x)
     0x42: # "B"
-      id: "binbytes"
+      id: binbytes
       -orig-id: BINBYTES
       doc: push bytes; counted binary string argument
     0x43: # "C"
-      id: "short_binbytes"
+      id: short_binbytes
       -orig-id: SHORT_BINBYTES
       doc: push bytes; counted binary string argument < 256 bytes
 
     # Protocol 4
     0x8c:
-      id: "short_binunicode"
+      id: short_binunicode
       -orig-id: SHORT_BINUNICODE
       doc: push short string; UTF-8 length < 256 bytes
     0x8d:
-      id: "binunicode8"
+      id: binunicode8
       -orig-id: BINUNICODE8
       doc: push very long string
     0x8e:
-      id: "binbytes8"
+      id: binbytes8
       -orig-id: BINBYTES8
       doc: push very long bytes string
     0x8f:
-      id: "empty_set"
+      id: empty_set
       -orig-id: EMPTY_SET
       doc: push empty set on the stack
     0x90:
-      id: "additems"
+      id: additems
       -orig-id: ADDITEMS
       doc: modify set by adding topmost stack items
     0x91:
-      id: "frozenset"
+      id: frozenset
       -orig-id: FROZENSET
       doc: build frozenset from topmost stack items
     0x92:
-      id: "newobj_ex"
+      id: newobj_ex
       -orig-id: NEWOBJ_EX
       doc: like NEWOBJ but work with keyword only arguments
     0x93:
-      id: "stack_global"
+      id: stack_global
       -orig-id: STACK_GLOBAL
       doc: same as GLOBAL but using names on the stacks
     0x94:
-      id: "memoize"
+      id: memoize
       -orig-id: MEMOIZE
       doc: store top of the stack in memo
     0x95:
-      id: "frame"
+      id: frame
       -orig-id: FRAME
       doc: indicate the beginning of a new frame
 
     # Protocol 5
     0x96:
-      id: "bytearray8"
-      -orig-id: "BYTEARRAY8"
+      id: bytearray8
+      -orig-id: BYTEARRAY8
       doc: push bytearray
     0x97:
-      id: "next_buffer"
-      -orig-id: "NEXT_BUFFER"
+      id: next_buffer
+      -orig-id: NEXT_BUFFER
       doc: push next out-of-band buffer
     0x98:
-      id: "readonly_buffer"
-      -orig-id: "READONLY_BUFFER"
+      id: readonly_buffer
+      -orig-id: READONLY_BUFFER
       doc: make top of stack readonly
