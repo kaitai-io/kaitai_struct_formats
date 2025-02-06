@@ -14,6 +14,7 @@ doc-ref: https://docs.fdsn.org/projects/miniseed3
 seq:
   - id: data_record
     type: data_record
+    repeat: eos
 types:
   data_record: 
     doc-ref: https://docs.fdsn.org/projects/miniseed3/en/latest/definition.html#description-of-record-fields
@@ -100,33 +101,38 @@ types:
     seq:
       - id: data
         type: u1
-        repeat: eos
+        repeat: expr
+        repeat-expr: _parent.length_of_data_payload
   miniseed_data_encoding_text: 
     seq:
       - id: data
         type: str
-        size-eos: true
+        size: _parent.length_of_data_payload
         encoding: UTF-8
   miniseed_data_encoding_16_bit_integer:
     seq:
       - id: data
         type: s2
-        repeat: eos
+        repeat: expr
+        repeat-expr: _parent.number_of_samples
   miniseed_data_encoding_32_bit_integer:
     seq:
       - id: data
         type: s4
-        repeat: eos
+        repeat: expr
+        repeat-expr: _parent.number_of_samples
   miniseed_data_encoding_32_bit_float:
     seq:
       - id: data
         type: f4
-        repeat: eos
+        repeat: expr
+        repeat-expr: _parent.number_of_samples
   miniseed_data_encoding_64_bit_float:
     seq:
       - id: data
         type: f8
-        repeat: eos
+        repeat: expr
+        repeat-expr: _parent.number_of_samples
 enums:
   miniseed_data_encoding:
     0: encoding_text
