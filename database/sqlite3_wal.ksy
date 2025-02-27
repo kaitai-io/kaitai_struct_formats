@@ -33,7 +33,7 @@ types:
           any-of: [0x377f0682, 0x377f0683]
       - id: file_format_version
         type: u4
-      - id: database_page_size
+      - id: len_database_page
         type: u4
       - id: checkpoint_sequence_number
         type: u4
@@ -50,7 +50,7 @@ types:
       - id: frame_header
         type: frame_header
       - id: page_data
-        size: _root.header.database_page_size
+        size: _root.header.len_database_page
   frame_header:
     seq:
       - id: page_number

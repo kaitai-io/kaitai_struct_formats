@@ -38,7 +38,7 @@ types:
     seq:
       - id: version
         type: b32
-      - id: unused
+      - id: reserved
         type: b32
       - id: change
         type: b32
