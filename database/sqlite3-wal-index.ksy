@@ -5,6 +5,7 @@ meta:
     - db-shm
     - db3-shm
     - sqlite3-shm
+  license: CC0-1.0
 doc: |
   SQLite3 is a popular serverless SQL engine, implemented as a library
   to be used within other applications. It keeps its databases as
@@ -15,7 +16,8 @@ doc: |
   journal.
 
   The WAL Index is a shared memory object that allows faster lookup of
-  pages stored in the WAL journal.
+  pages stored in the WAL journal. Endianness of the stored values is
+  platform-dependent.
 doc-ref:
   - https://www.sqlite.org/wal.html
   - https://sqlite.org/src/file?name=src/wal.c&ci=trunk
@@ -31,7 +33,6 @@ seq:
   - id: index_blocks
     type: index_block
     repeat: eos
-
 types:
   header:
     seq:
