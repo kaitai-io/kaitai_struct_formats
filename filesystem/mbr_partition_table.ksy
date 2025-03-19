@@ -53,6 +53,6 @@ types:
         type: u1
     instances:
       sector:
-        value: 'b2 & 0b111111'
+        value: b2 & 0b111111
       cylinder:
-        value: 'b3 + ((b2 & 0b11000000) << 2)'
+        value: b3 + ((b2 & 0b11000000) << 2)

@@ -43,9 +43,9 @@ types:
         type:
           switch-on: four_cc
           cases:
-            'chunk_type::list': list_body
-            'chunk_type::avih': avih_body
-            'chunk_type::strh': strh_body
+            chunk_type::list: list_body
+            chunk_type::avih: avih_body
+            chunk_type::strh: strh_body
   list_body:
     seq:
       - id: list_type

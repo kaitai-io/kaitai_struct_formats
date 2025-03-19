@@ -38,7 +38,7 @@ types:
       - id: creation_date_time
         type: date_time_number
       - id: file_signature
-        contents: 'acsp'
+        contents: acsp
       - id: primary_platform
         type: u4
         enum: primary_platforms
@@ -92,25 +92,25 @@ types:
         0x45464920: efi_cmm #EFI
         0x46462020: fuji_film_cmm #FF
         0x45584143: exact_scan_cmm #EXAC
-        0x48434d4D: harlequin_rip_cmm #HCMM
+        0x48434D4D: harlequin_rip_cmm #HCMM
         0x6172676C: argyll_cms_cmm #argl
-        0x44676f53: logosync_cmm #LgoS
-        0x48444d20: heidelberg_cmm #HDM
-        0x6C636d73: little_cms_cmm #lcms
-        0x52494d58: reficcmax_cmm #RIMX
-        0x44494d58: demoiccmax_cmm #DIMX
-        0x4b434d53: kodak_cmm #KCMS
-        0x4d434d44: konica_minolta_cmm #MCML
+        0x44676F53: logosync_cmm #LgoS
+        0x48444D20: heidelberg_cmm #HDM
+        0x6C636D73: little_cms_cmm #lcms
+        0x52494D58: reficcmax_cmm #RIMX
+        0x44494D58: demoiccmax_cmm #DIMX
+        0x4B434D53: kodak_cmm #KCMS
+        0x4D434D44: konica_minolta_cmm #MCML
         0x57435320: windows_color_system_cmm #WCS
         0x5349474E: mutoh_cmm #SIGN
-        0x4f4e5958: onyx_graphics_cmm #ONYX
-        0x52474d53: device_link_cmm #RGMS
+        0x4F4E5958: onyx_graphics_cmm #ONYX
+        0x52474D53: device_link_cmm #RGMS
         0x53494343: sample_icc_cmm #SICC
-        0x54434d4d: toshiba_cmm #TCMM
+        0x54434D4D: toshiba_cmm #TCMM
         0x33324254: the_imaging_factory_cmm #32BT
-        0x7669766f: vivo_cmm #vivo
+        0x7669766F: vivo_cmm #vivo
         0x57544720: ware_to_go_cmm #WTG
-        0x7a633030: zoran_cmm #zc00
+        0x7A633030: zoran_cmm #zc00
       profile_classes:
         0x73636E72: input_device_profile #scnr
         0x6D6E7472: display_device_profile #mntr
@@ -285,7 +285,7 @@ types:
         0x69726973: scitex_corporation_ltd_5 #iris
         0x49534C20: ichikawa_soft_laboratory #ISL
         0x49544E4C: itnl #ITNL
-        0x49564d20: ivm #IVM
+        0x49564D20: ivm #IVM
         0x49574154: iwatsu_electric_co_ltd #IWAT
         0x4A534654: jetsoft_development #JSFT
         0x4A564320: jvc_information_products_co #JVC
@@ -1661,7 +1661,7 @@ types:
           tag_type_signatures:
             0x6368726D: chromaticity_type #chrm
             0x636C726F: colorant_order_type #clro
-            0x636c7274: colorant_table_type #clrt
+            0x636C7274: colorant_table_type #clrt
             0x63757276: curve_type #curv
             0x64617461: data_type #data
             0x6474696D: date_time_type #dtim

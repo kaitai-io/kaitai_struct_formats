@@ -85,7 +85,7 @@ types:
       - 'https://www.gamers.org/dEngine/quake/spec/quake-spec34/qkspec_5.htm#MD0'
     seq:
       - id: ident
-        contents: 'IDPO'
+        contents: IDPO
         doc: |
           Magic signature bytes that every Quake model must
           have. "IDPO" is short for "IDPOLYHEADER".

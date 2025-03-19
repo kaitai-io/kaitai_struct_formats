@@ -26,8 +26,8 @@ seq:
     type:
       switch-on: header.pph_dlt
       cases:
-        'linktype::ppi': packet_ppi
-        'linktype::ethernet': ethernet_frame
+        linktype::ppi: packet_ppi
+        linktype::ethernet: ethernet_frame
 types:
   packet_ppi_header:
     doc-ref: >-
@@ -63,9 +63,9 @@ types:
         type:
           switch-on: pfh_type
           cases:
-            'pfh_type::radio_802_11_common': radio_802_11_common_body
-            'pfh_type::radio_802_11n_mac_ext': radio_802_11n_mac_ext_body
-            'pfh_type::radio_802_11n_mac_phy_ext': radio_802_11n_mac_phy_ext_body
+            pfh_type::radio_802_11_common: radio_802_11_common_body
+            pfh_type::radio_802_11n_mac_ext: radio_802_11n_mac_ext_body
+            pfh_type::radio_802_11n_mac_phy_ext: radio_802_11n_mac_phy_ext_body
   radio_802_11_common_body:
     doc-ref: >-
       https://web.archive.org/web/20090206112419/https://www.cacetech.com/documents/PPI_Header_format_1.0.1.pdf

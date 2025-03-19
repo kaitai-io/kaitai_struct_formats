@@ -120,7 +120,7 @@ types:
     seq:
       - id: file_type
         -orig-id: bfType
-        contents: "BM"
+        contents: BM
       - id: len_file
         -orig-id: bfSize
         type: u4
@@ -476,7 +476,7 @@ types:
       - id: reserved
         type: u1
         if: has_reserved_field
-    -webide-representation: "rgb({red:dec}, {green:dec}, {blue:dec})"
+    -webide-representation: rgb({red:dec}, {green:dec}, {blue:dec})
 # Common types
   fixed_point_2_dot_30:
     -orig-id: FXPT2DOT30

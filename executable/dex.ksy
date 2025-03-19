@@ -300,7 +300,7 @@ types:
         value: _root.string_ids[descriptor_idx].value.data
         -webide-parse-mode: eager
   proto_id_item:
-    -webide-representation: "shorty_idx={shorty_idx} return_type_idx={return_type_idx} parameters_off={parameters_off}"
+    -webide-representation: shorty_idx={shorty_idx} return_type_idx={return_type_idx} parameters_off={parameters_off}
     seq:
       - id: shorty_idx
         type: u4
@@ -334,7 +334,7 @@ types:
         value: _root.type_ids[return_type_idx].type_name
         doc: return type of this prototype
   field_id_item:
-    -webide-representation: "class_idx={class_idx} type_idx={type_idx} name_idx={name_idx}"
+    -webide-representation: class_idx={class_idx} type_idx={type_idx} name_idx={name_idx}
     seq:
       - id: class_idx
         type: u2
@@ -361,7 +361,7 @@ types:
         value: _root.string_ids[name_idx].value.data
         doc: the name of this field
   method_id_item:
-    -webide-representation: "class_idx={class_idx} proto_idx={proto_idx} name_idx={name_idx}"
+    -webide-representation: class_idx={class_idx} proto_idx={proto_idx} name_idx={name_idx}
     seq:
       - id: class_idx
         type: u2

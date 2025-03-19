@@ -33,7 +33,7 @@ doc: |
 doc-ref: https://www.sqlite.org/fileformat.html
 seq:
   - id: magic
-    contents: ["SQLite format 3", 0]
+    contents: [SQLite format 3, 0x00]
   - id: len_page_mod
     type: u2
     doc: |
@@ -139,7 +139,7 @@ types:
             0x0a: cell_index_leaf
             0x02: cell_index_interior
   cell_table_leaf:
-    doc-ref: 'https://www.sqlite.org/fileformat.html#b_tree_pages'
+    doc-ref: https://www.sqlite.org/fileformat.html#b_tree_pages
     seq:
       - id: len_payload
         type: vlq_base128_be
@@ -150,14 +150,14 @@ types:
         type: cell_payload
       # TODO: overflow
   cell_table_interior:
-    doc-ref: 'https://www.sqlite.org/fileformat.html#b_tree_pages'
+    doc-ref: https://www.sqlite.org/fileformat.html#b_tree_pages
     seq:
       - id: left_child_page
         type: u4
       - id: row_id
         type: vlq_base128_be
   cell_index_leaf:
-    doc-ref: 'https://www.sqlite.org/fileformat.html#b_tree_pages'
+    doc-ref: https://www.sqlite.org/fileformat.html#b_tree_pages
     seq:
       - id: len_payload
         type: vlq_base128_be
@@ -166,7 +166,7 @@ types:
         type: cell_payload
       # TODO: overflow
   cell_index_interior:
-    doc-ref: 'https://www.sqlite.org/fileformat.html#b_tree_pages'
+    doc-ref: https://www.sqlite.org/fileformat.html#b_tree_pages
     seq:
       - id: left_child_page
         type: u4
@@ -176,7 +176,7 @@ types:
         size: len_payload.value
         type: cell_payload
   cell_payload:
-    doc-ref: 'https://sqlite.org/fileformat2.html#record_format'
+    doc-ref: https://sqlite.org/fileformat2.html#record_format
     seq:
       - id: len_header_and_len
         type: vlq_base128_be
@@ -198,9 +198,9 @@ types:
         type: vlq_base128_be
     instances:
       is_blob:
-        value: 'code.value >= 12 and (code.value % 2 == 0)'
+        value: code.value >= 12 and (code.value % 2 == 0)
       is_string:
-        value: 'code.value >= 13 and (code.value % 2 == 1)'
+        value: code.value >= 13 and (code.value % 2 == 1)
       len_content:
         value: (code.value - 12) / 2
         if: code.value >= 12

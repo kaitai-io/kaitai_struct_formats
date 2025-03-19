@@ -109,7 +109,7 @@ types:
         type:
           switch-on: _root.mac_type
           cases:
-            'linktype::ethernet': ethernet_frame
+            linktype::ethernet: ethernet_frame
 # Duplicate from pcap.ksy - should disappear from here as soon as
 # we'll get shared enums working
 enums:
