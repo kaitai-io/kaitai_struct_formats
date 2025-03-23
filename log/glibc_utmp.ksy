@@ -60,7 +60,7 @@ types:
   timeval:
     seq:
       - id: sec
-        type: s4
+        type: u4
         doc: Seconds
       - id: usec
         type: s4
