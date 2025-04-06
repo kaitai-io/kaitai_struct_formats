@@ -21,7 +21,7 @@ types:
         doc: Type of login
         enum: entry_type
       - id: pid
-        type: u4
+        type: s4
         doc: Process ID of login process
       - id: line
         type: str
