@@ -111,6 +111,10 @@ types:
 
             # pngattach
             '"atCh"': atch_chunk
+
+            # https://exiftool.org/TagNames/XMP.html#SEAL
+            # https://github.com/hackerfactor/SEAL/blob/master/FORMATS.md#png
+            # seAl
       - id: crc
         size: 4
   ihdr_chunk:
