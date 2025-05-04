@@ -60,10 +60,10 @@ types:
         type:
           switch-on: header_type
           cases:
-            'header_type_enum::program': program_params
-            'header_type_enum::num_array': array_params
-            'header_type_enum::char_array': array_params
-            'header_type_enum::bytes': bytes_params
+            header_type_enum::program: program_params
+            header_type_enum::num_array: array_params
+            header_type_enum::char_array: array_params
+            header_type_enum::bytes: bytes_params
       - id: checksum
         type: u1
         doc: Bitwise XOR of all bytes including the flag byte

@@ -43,7 +43,7 @@ seq:
     type:
       switch-on: compression_method
       cases:
-        'compression_methods::deflate': extra_flags_deflate
+        compression_methods::deflate: extra_flags_deflate
     doc: Extra flags, specific to compression method chosen.
   - id: os
     -orig-id: OS

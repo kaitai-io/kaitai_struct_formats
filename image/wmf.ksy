@@ -84,15 +84,15 @@ types:
         type:
           switch-on: function
           cases:
-            'func::polyline': params_polyline
-            'func::polygon': params_polygon
-            'func::setbkcolor': color_ref
-            'func::setbkmode': params_setbkmode
-            'func::setpolyfillmode': params_setpolyfillmode
-            #'func::params_setrelabs': reserved
-            'func::setrop2': params_setrop2
-            'func::setwindowext': params_setwindowext
-            'func::setwindoworg': params_setwindoworg
+            func::polyline: params_polyline
+            func::polygon: params_polygon
+            func::setbkcolor: color_ref
+            func::setbkmode: params_setbkmode
+            func::setpolyfillmode: params_setpolyfillmode
+            #func::params_setrelabs: reserved
+            func::setrop2: params_setrop2
+            func::setwindowext: params_setwindowext
+            func::setwindoworg: params_setwindoworg
   params_polyline:
     doc-ref: section 2.3.3.14
     seq:

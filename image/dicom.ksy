@@ -9,7 +9,7 @@ meta:
     wikidata: Q81095
   license: MIT
   endian: le
-doc-ref: 'https://dicom.nema.org/medical/dicom/current/output/html/part10.html#chapter_7'
+doc-ref: https://dicom.nema.org/medical/dicom/current/output/html/part10.html#chapter_7
 doc: |
   DICOM (Digital Imaging and Communications in Medicine), AKA NEMA
   PS3, AKA ISO 12052:2006, is a file format and network protocol
@@ -33,9 +33,9 @@ types:
       - id: preamble
         size: 128
       - id: magic
-        contents: 'DICM'
+        contents: DICM
   t_data_element_explicit:
-    doc-ref: 'https://dicom.nema.org/medical/dicom/current/output/html/part05.html#sect_7.1.2'
+    doc-ref: https://dicom.nema.org/medical/dicom/current/output/html/part05.html#sect_7.1.2
     seq:
       - id: tag_group
         type: u2
@@ -90,10 +90,10 @@ types:
       is_transfer_syntax_change_implicit:
         value: false
       tag:
-        value: 'tag_group << 16 | tag_elem'
+        value: tag_group << 16 | tag_elem
         enum: tags
   t_data_element_implicit:
-    doc-ref: 'https://dicom.nema.org/medical/dicom/current/output/html/part05.html#sect_7.1.2'
+    doc-ref: https://dicom.nema.org/medical/dicom/current/output/html/part05.html#sect_7.1.2
     seq:
       - id: tag_group
         type: u2
@@ -142,7 +142,7 @@ types:
           vr == 'UT' or
           vr == 'UN')
       tag:
-        value: 'tag_group << 16 | tag_elem'
+        value: tag_group << 16 | tag_elem
         enum: tags
       p_is_transfer_syntax_change_explicit:
         # '1.2.840.10008.1.2.1\0' (Explicit VR Little Endian)

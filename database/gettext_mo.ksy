@@ -109,15 +109,15 @@ types:
             return h
     instances:
       collision_step:
-        value: "hash % (_root.mo.num_hashtable_items - 2) + 1"
+        value: hash % (_root.mo.num_hashtable_items - 2) + 1
       idx:
-        value: "hash % _root.mo.num_hashtable_items"
+        value: hash % _root.mo.num_hashtable_items
       hash_lookup_iteration:
         pos: 0
-        type: "hash_lookup_iteration(_root.mo.hashtable_items[idx].val, collision_step)"
+        type: hash_lookup_iteration(_root.mo.hashtable_items[idx].val, collision_step)
       entry:
         pos: 0
-        type: "lookup_iteration(hash_lookup_iteration, query)"
+        type: lookup_iteration(hash_lookup_iteration, query)
 
   mo:
     meta:

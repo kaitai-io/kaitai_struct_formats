@@ -17,7 +17,7 @@ doc: >
 seq:
   - id: len
     type: s4
-    doc: "Total number of bytes comprising the document."
+    doc: Total number of bytes comprising the document.
   - id: fields
     type: elements_list
     size: len - 5
@@ -32,7 +32,7 @@ types:
         type: string
       - id: scope
         type: bson
-        doc: "mapping from identifiers to values, representing the scope in which the string should be evaluated."
+        doc: mapping from identifiers to values, representing the scope in which the string should be evaluated.
   elements_list:
     seq:
       - id: elements
@@ -59,9 +59,9 @@ types:
       - id: str
         type: strz
         encoding: UTF-8
-        doc: "MUST NOT contain '\\x00', hence it is not full UTF-8."
+        doc: MUST NOT contain '\x00', hence it is not full UTF-8.
   f16:
-    doc: "128-bit IEEE 754-2008 decimal floating point"
+    doc: 128-bit IEEE 754-2008 decimal floating point
     seq:
       - id: str
         type: b1
@@ -76,14 +76,14 @@ types:
     seq:
       - id: epoch_time
         type: u4
-        doc: "seconds since the Unix epoch"
+        doc: seconds since the Unix epoch
       - id: machine_id
         type: u3
       - id: process_id
         type: u2
       - id: counter
         type: u3
-        doc: "counter, starting with a random value."
+        doc: counter, starting with a random value.
   db_pointer:
     seq:
       - id: namespace
@@ -91,14 +91,14 @@ types:
       - id: id
         type: object_id
   timestamp:
-    doc: "Special internal type used by MongoDB replication and sharding. First 4 bytes are an increment, second 4 are a timestamp."
+    doc: Special internal type used by MongoDB replication and sharding. First 4 bytes are an increment, second 4 are a timestamp.
     seq:
       - id: increment
         type: u4
       - id: timestamp
         type: u4
   bin_data:
-    doc: "The BSON \"binary\" or \"BinData\" datatype is used to represent arrays of bytes. It is somewhat analogous to the Java notion of a ByteArray. BSON binary values have a subtype. This is used to indicate what kind of data is in the byte array. Subtypes from zero to 127 are predefined or reserved. Subtypes from 128-255 are user-defined."
+    doc: The BSON "binary" or "BinData" datatype is used to represent arrays of bytes. It is somewhat analogous to the Java notion of a ByteArray. BSON binary values have a subtype. This is used to indicate what kind of data is in the byte array. Subtypes from zero to 127 are predefined or reserved. Subtypes from 128-255 are user-defined.
     seq:
       - id: len
         type: s4
@@ -110,10 +110,10 @@ types:
         type:
           switch-on: subtype
           cases:
-            'subtype::byte_array_deprecated': byte_array_deprecated
+            subtype::byte_array_deprecated: byte_array_deprecated
     types:
       byte_array_deprecated:
-        doc: "The BSON \"binary\" or \"BinData\" datatype is used to represent arrays of bytes. It is somewhat analogous to the Java notion of a ByteArray. BSON binary values have a subtype. This is used to indicate what kind of data is in the byte array. Subtypes from zero to 127 are predefined or reserved. Subtypes from 128-255 are user-defined."
+        doc: The BSON "binary" or "BinData" datatype is used to represent arrays of bytes. It is somewhat analogous to the Java notion of a ByteArray. BSON binary values have a subtype. This is used to indicate what kind of data is in the byte array. Subtypes from zero to 127 are predefined or reserved. Subtypes from 128-255 are user-defined.
         seq:
           - id: len
             type: s4
@@ -140,23 +140,23 @@ types:
         type:
           switch-on: type_byte
           cases:
-            'bson_type::number_double': f8
-            'bson_type::string': string
-            'bson_type::document': bson
-            'bson_type::array': bson
-            'bson_type::bin_data': bin_data
-            'bson_type::object_id': object_id
-            'bson_type::boolean': u1
-            'bson_type::utc_datetime': s8 #The int64 is UTC milliseconds since the Unix epoch.
-            'bson_type::reg_ex': reg_ex
-            'bson_type::db_pointer': db_pointer
-            'bson_type::javascript': string
-            'bson_type::symbol': string # a programming language (e.g., Python) symbol
-            'bson_type::code_with_scope': code_with_scope
-            'bson_type::number_int': s4
-            'bson_type::timestamp': timestamp
-            'bson_type::number_long': s8
-            'bson_type::number_decimal': f16
+            bson_type::number_double: f8
+            bson_type::string: string
+            bson_type::document: bson
+            bson_type::array: bson
+            bson_type::bin_data: bin_data
+            bson_type::object_id: object_id
+            bson_type::boolean: u1
+            bson_type::utc_datetime: s8 #The int64 is UTC milliseconds since the Unix epoch.
+            bson_type::reg_ex: reg_ex
+            bson_type::db_pointer: db_pointer
+            bson_type::javascript: string
+            bson_type::symbol: string # a programming language (e.g., Python) symbol
+            bson_type::code_with_scope: code_with_scope
+            bson_type::number_int: s4
+            bson_type::timestamp: timestamp
+            bson_type::number_long: s8
+            bson_type::number_decimal: f16
     enums:
       bson_type:
         0x00: end_of_object
@@ -193,4 +193,4 @@ types:
         type: u1
     instances:
       value:
-        value: 'b1 | (b2 << 8) | (b3 << 16)'
+        value: b1 | (b2 << 8) | (b3 << 16)
