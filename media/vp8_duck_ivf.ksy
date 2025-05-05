@@ -1,6 +1,6 @@
 meta:
-  id: vp8_ivf
-  title: VP8 raw file
+  id: vp8_duck_ivf
+  title: Duck IVF (container format for VP8)
   file-extension: ivf
   xref:
     justsolve: VP8
