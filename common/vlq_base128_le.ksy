@@ -22,7 +22,7 @@ doc: |
     <https://lucene.apache.org/core/3_5_0/fileformats.html#VInt>
   * Apache Avro uses this as a basis for integer encoding, adding ZigZag on
     top of it for signed ints
-    <https://avro.apache.org/docs/current/spec.html#binary_encode_primitive>
+    <https://avro.apache.org/docs/1.12.0/specification/#primitive-types-1>
 
   More information on this encoding is available at <https://en.wikipedia.org/wiki/LEB128>
 
