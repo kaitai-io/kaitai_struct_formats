@@ -1,6 +1,9 @@
 meta:
   id: vlq_base128_be
   title: Variable length quantity, unsigned integer, base128, big-endian
+  xref:
+    justsolve: Variable-length_quantity
+    wikidata: Q7915686
   license: CC0-1.0
   ks-version: 0.9
   bit-endian: be
