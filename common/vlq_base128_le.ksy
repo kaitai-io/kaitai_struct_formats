@@ -2,7 +2,7 @@ meta:
   id: vlq_base128_le
   title: Variable length quantity, unsigned/signed integer, base128, little-endian
   license: CC0-1.0
-  ks-version: 0.9
+  ks-version: '0.10'
   bit-endian: be
 doc: |
   A variable-length unsigned/signed integer using base128 encoding. 1-byte groups
@@ -23,11 +23,29 @@ doc: |
 
   More information on this encoding is available at <https://en.wikipedia.org/wiki/LEB128>
 
-  This particular implementation supports serialized values to up 8 bytes long.
+  This particular implementation supports integer values up to 64 bits (i.e. the
+  maximum unsigned value supported is `2**64`), which implies that serialized
+  values can be up to 10 bytes in length.
+
+  If the most significant 10th byte (`groups[9]`) is present, its `has_next`
+  must be `false` (otherwise we would have 11 or more bytes, which is not
+  supported) and its `value` can be only `0` or `1` (because a 9-byte VLQ can
+  represent `9 * 7 = 63` bits already, so the 10th byte can only add 1 bit,
+  since only integers up to 64 bits are supported). These restrictions are
+  enforced by this implementation. They were inspired by the Protoscope tool,
+  see <https://github.com/protocolbuffers/protoscope/blob/8e7a6aafa2c9958527b1e0747e66e1bfff045819/writer.go#L644-L648>.
 -webide-representation: '{value:dec}'
 seq:
   - id: groups
-    type: group
+    # NOTE: with KSC 0.11, handling `_index == 9` as a special case is needed
+    # for PHP, otherwise `TypeError: Argument #3 ($multiplier) must be of type
+    # int, float given` would occur.
+    type: |
+      group(
+        _index,
+        _index != 0 ? groups[_index - 1].interm_value : 0,
+        _index != 0 ? (_index == 9 ? 0x8000_0000_0000_0000 : groups[_index - 1].multiplier * 128) : 1
+      )
     repeat: until
     repeat-until: not _.has_next
 types:
@@ -35,29 +53,87 @@ types:
     -webide-representation: '{value}'
     doc: |
       One byte group, clearly divided into 7-bit "value" chunk and 1-bit "continuation" flag.
+    params:
+      - id: idx
+        type: s4
+      - id: prev_interm_value
+        type: u8
+      - id: multiplier
+        type: u8
     seq:
       - id: has_next
         type: b1
-        doc: If true, then we have more bytes to read
+        valid: 'idx == 9 ? false : has_next'
+        doc: |
+          If `true`, then we have more bytes to read.
+
+          Since this implementation only supports serialized values up to 10
+          bytes, this must be `false` in the 10th group (`groups[9]`).
       - id: value
         type: b7
-        doc: The 7-bit (base128) numeric value chunk of this group
+        valid:
+          # # As of KSC 0.11, this causes `if (!(_value <= (Idx == 9 ? 1 :
+          # # 127))) { throw new ValidationGreaterThanError(...); }` to be
+          # # generated in the C# code, which fails to compile with the message
+          # # `error CS0034: Operator '<=' is ambiguous on operands of type
+          # # 'ulong' and 'int'`. To work around that, we add type casting
+          # # (`.as<u8>`).
+          # max: 'idx == 9 ? 1 : 0b111_1111'
+          max: '(idx == 9 ? 1 : 0b111_1111).as<u8>'
+        doc: |
+          The 7-bit (base128) numeric value chunk of this group
+
+          Since this implementation only supports integer values up to 64 bits,
+          the `value` in the 10th group (`groups[9]`) can only be `0` or `1`
+          (otherwise the width of the represented value would be 65 bits or
+          more, which is not supported).
+    instances:
+      interm_value:
+        # We intentionally use addition (`+`) and multiplication (`*`), not
+        # bitwise OR (`|`) and left shift (`<<`), in order to get better
+        # precision in JavaScript, especially with respect to the Web IDE. Using
+        # any bitwise operators (like `|` and `<<`) in JavaScript truncates the
+        # result to a signed 32-bit integer (except `>>>`, which yields an
+        # unsigned 32-bit integer).
+        #
+        # Avoiding bitwise operators allows greater precision than 32 bits. We
+        # are still limited by the fact that the built-in `Number` type in
+        # JavaScript can only exactly represent integers from `-2**53 + 1` to
+        # `2**53 - 1` (these bounds are available as constants
+        # `Number.MIN_SAFE_INTEGER` and `Number.MAX_SAFE_INTEGER`), so for any
+        # integer that requires more than 53 bits of precision, we get
+        # approximate values. But 53 bits is still better than 32.
+        #
+        # Full 64-bit integer support in JavaScript is only possible via the
+        # `BigInt` type: https://github.com/kaitai-io/kaitai_struct/issues/183
+        value: (prev_interm_value + value * multiplier).as<u8>
 instances:
   len:
     value: groups.size
   value:
-    value: |
-      (groups[0].value
-      + (len >= 2 ? (groups[1].value << 7) : 0)
-      + (len >= 3 ? (groups[2].value << 14) : 0)
-      + (len >= 4 ? (groups[3].value << 21) : 0)
-      + (len >= 5 ? (groups[4].value << 28) : 0)
-      + (len >= 6 ? (groups[5].value << 35) : 0)
-      + (len >= 7 ? (groups[6].value << 42) : 0)
-      + (len >= 8 ? (groups[7].value << 49) : 0)).as<u8>
+    value: groups.last.interm_value
     doc: Resulting unsigned value as normal integer
   sign_bit:
-    value: '(1.as<u8> << (7 * len - 1)).as<u8>'
+    value: '(len == 10 ? 0x8000_0000_0000_0000 : groups.last.multiplier * 0b100_0000).as<u8>'
   value_signed:
-    value: '((value ^ sign_bit).as<s8> - sign_bit.as<s8>).as<s8>'
-    doc-ref: https://graphics.stanford.edu/~seander/bithacks.html#VariableSignExtend
+    # NOTE 1: the expression `-(sign_bit - (value - sign_bit))` performing
+    # signed extension is carefully written to avoid overflows in statically
+    # typed languages like C++ (where they would cause undefined behavior) or
+    # Nim. The goal is to achieve mathematically exactly `value - 2 * sign_bit`.
+    #
+    # NOTE 2: the `sign_bit > 0` check is a hack for PHP (it is required only
+    # because KSC 0.11 does not abstract from the fact that PHP has only
+    # **signed** 64-bit integers, which should be considered a bug because it
+    # reduces portability between target languages). Since PHP only has signed
+    # 64-bit integers, `sign_bit` will be `-0x8000_0000_0000_0000` if
+    # `len == 10`, so the `value >= sign_bit` condition that is supposed to
+    # detect whether the sign bit is set will not work (in reality, it will be
+    # true for any `value`). However, the sign extension would only cause the
+    # value to overflow and become a `float`. The fix in this case is to return
+    # `value` as is, since it already represents the correct signed value.
+    value: 'sign_bit > 0 and value >= sign_bit ? -(sign_bit - (value - sign_bit)).as<s8> : value.as<s8>'
+    # # We don't use this anymore again because of JavaScript as explained
+    # # above. Since it relies on bitwise XOR (`^`), it would truncate the value
+    # # to 32 bits in the Web IDE.
+    # value: '((value ^ sign_bit).as<s8> - sign_bit.as<s8>).as<s8>'
+    # doc-ref: https://graphics.stanford.edu/~seander/bithacks.html#VariableSignExtend
