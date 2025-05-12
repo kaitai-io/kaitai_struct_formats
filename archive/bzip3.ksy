@@ -2,8 +2,7 @@ meta:
   id: bzip3
   title: Bzip3 header
   file-extension: bz3
-  license: LGPL-3.0
-  encoding: UTF-8
+  license: CC0-1.0
   endian: le
 doc:
   bzip3 is a decompression tool and library. Depending on whether or not the
@@ -25,11 +24,11 @@ types:
     seq:
       - id: signature
         contents: 'BZ3v1'
-      - id: block_size
+      - id: max_block_size
         type: u4
         valid:
-          min: 66560
-          max: 535822336
+          min: 66_560 # 65 KiB
+          max: 535_822_336 # 511 MiB
   compressed_data_block:
     seq:
       - id: len_compressed
@@ -37,9 +36,9 @@ types:
       - id: len_uncompressed
         type: u4
         valid:
-          max: _root.header.block_size
+          max: _root.header.max_block_size
       - id: data
         size: len_compressed
     instances:
       is_last:
-        value: len_uncompressed < _root.header.block_size
+        value: len_uncompressed < _root.header.max_block_size
