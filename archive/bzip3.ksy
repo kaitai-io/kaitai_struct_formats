@@ -59,4 +59,4 @@ types:
         size: len_compressed
     instances:
       is_last:
-        value: len_uncompressed < _root.header.max_block_size
+        value: len_uncompressed <= _root.header.max_block_size
