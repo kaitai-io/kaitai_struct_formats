@@ -319,12 +319,14 @@ types:
       )
       ```
     doc-ref: https://www.sqlite.org/fileformat2.html#pointer_map_or_ptrmap_pages
+  pointer_map_entry:
     seq:
       - id: type
         type: u1
         enum: ptrmap_page_type
       - id: page_number
         type: u4
+    doc-ref: https://www.sqlite.org/fileformat2.html#pointer_map_or_ptrmap_pages
   btree_page_pointer:
     seq:
       - id: page_number
