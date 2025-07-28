@@ -242,8 +242,10 @@ types:
     instances:
       first_linked_page_number:
         value: pointer_map_page_number + 1
+      pointer_map_page_entries_max:
+        value: _root.header.usable_size / 5
       last_linked_page_number_max:
-        value: pointer_map_page_number + _root.header.pointer_map_page_entries_max
+        value: pointer_map_page_number + pointer_map_page_entries_max
       last_linked_page_number:
         value: |
           last_linked_page_number_max <= _root.header.num_pages
