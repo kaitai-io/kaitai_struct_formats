@@ -391,17 +391,21 @@ types:
     seq:
       - id: ofs_content
         type: u2
-    instances:
-      content:
-        # ofs_content is relative to page
-        pos: ((_parent.page_number - 1) * _root.header.page_size) + ofs_content
-        type:
-          switch-on: _parent.page_type
-          cases:
-            btree_page_type::table_leaf_page: table_leaf_cell
-            btree_page_type::table_interior_page: table_interior_cell
-            btree_page_type::index_leaf_page: index_leaf_cell
-            btree_page_type::index_interior_page: index_interior_cell
+# FIXME this breaks serialization:
+#     _io__raw_header = KaitaiStream(BytesIO(bytearray((self.header_size.value - 1))))
+#                                            ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ValueError: negative count
+#     instances:
+#       content:
+#         # ofs_content is relative to page
+#         pos: ((_parent.page_number - 1) * _root.header.page_size) + ofs_content
+#         type:
+#           switch-on: _parent.page_type
+#           cases:
+#             btree_page_type::table_leaf_page: table_leaf_cell
+#             btree_page_type::table_interior_page: table_interior_cell
+#             btree_page_type::index_leaf_page: index_leaf_cell
+#             btree_page_type::index_interior_page: index_interior_cell
   table_leaf_cell:
     doc-ref: 'https://www.sqlite.org/fileformat2.html#b_tree_pages'
     seq:
