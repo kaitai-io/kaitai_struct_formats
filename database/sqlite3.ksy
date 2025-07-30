@@ -371,7 +371,7 @@ types:
         doc: |
           The right-most pointer. This value appears in the header of interior
           b-tree pages only and is omitted from all other pages.
-      - id: cells
+      - id: cell_pointers
         type: cell_pointer
         repeat: expr
         repeat-expr: num_cells
