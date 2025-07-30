@@ -115,8 +115,10 @@ instances:
       db = parser_sqlite3.Sqlite3.from_file(database)
       # patch the internal cache attribute of db.pages
       db._m_pages = PagesList(db)
+      db._read()
       # now, this will parse **only** the first page
       page = db.pages[0]
+      page._read()
 types:
   database_header:
     seq:
