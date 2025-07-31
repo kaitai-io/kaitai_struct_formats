@@ -15,7 +15,7 @@ doc-ref: https://android.googlesource.com/platform/frameworks/native/+/master/op
 
 seq:
   - id: magic
-    contents: "EGL$"
+    contents: EGL$
   - id: crc32
     type: u4
     doc: crc32 of `contents`
@@ -27,7 +27,7 @@ types:
   alignment:
     seq:
       - id: alignment
-        size: "(_io.pos + 3) & ~3 - _io.pos"
+        size: (_io.pos + 3) & ~3 - _io.pos
         doc: garbage from memory
   prefixed_string:
     seq:
@@ -46,7 +46,7 @@ types:
     seq:
       - id: magic
         -orig-id: mMagicNumber, blobCacheMagic
-        contents: ["$bB_"]
+        contents: $bB_
       - id: version
         type: u4
         -orig-id: mBlobCacheVersion, blobCacheVersion

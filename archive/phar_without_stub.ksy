@@ -51,10 +51,10 @@ doc: |
   depends on the application that created the phar, and on the
   standard encoding of the system on which the phar was created.
 doc-ref:
-  - 'https://www.php.net/manual/en/phar.fileformat.php'
-  - 'https://github.com/php/php-src/tree/master/ext/phar'
-  - 'https://svn.php.net/viewvc/pecl/phar/'
-  - 'https://svn.php.net/viewvc/pear/packages/PHP_Archive/'
+  - https://www.php.net/manual/en/phar.fileformat.php
+  - https://github.com/php/php-src/tree/master/ext/phar
+  - https://svn.php.net/viewvc/pecl/phar/
+  - https://svn.php.net/viewvc/pear/packages/PHP_Archive/
 seq:
   - id: manifest
     type: manifest
@@ -307,4 +307,4 @@ types:
         enum: signature_type
         doc: The signature type.
       - id: magic
-        contents: "GBMB"
+        contents: GBMB

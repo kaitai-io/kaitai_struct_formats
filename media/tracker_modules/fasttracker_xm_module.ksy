@@ -57,7 +57,7 @@ types:
         doc: Tracker name
       - id: version_number
         type: version
-        doc: "Format versions below [0x01, 0x04] have a LOT of differences. Check this field!"
+        doc: Format versions below [0x01, 0x04] have a LOT of differences. Check this field!
       - id: header_size
         type: u4
         doc: Header size << Calculated FROM THIS OFFSET, not from the beginning of the file! >>
@@ -82,13 +82,13 @@ types:
         type: u2
       - id: num_channels
         type: u2
-        doc: "(2,4,6,8,10,...,32)"
+        doc: (2,4,6,8,10,...,32)
       - id: num_patterns
         type: u2
-        doc: "(max 256)"
+        doc: (max 256)
       - id: num_instruments
         type: u2
-        doc: "(max 128)"
+        doc: (max 128)
       - id: flags
         type: flags
       - id: default_tempo
@@ -97,7 +97,7 @@ types:
         type: u2
       - id: pattern_order_table
         type: u1
-        doc: "max 256"
+        doc: max 256
         repeat: expr
         #repeat-expr: song_length
         repeat-expr: 256
@@ -107,7 +107,7 @@ types:
         type: b15
       - id: freq_table_type
         type: b1
-        doc: "0 = Amiga frequency table (see below); 1 = Linear frequency table"
+        doc: 0 = Amiga frequency table (see below); 1 = Linear frequency table
   pattern:
     seq:
       - id: header
@@ -126,19 +126,19 @@ types:
         types:
           header_main:
             seq:
-                - id: packing_type
-                  type: u1
-                  doc: Packing type (always 0)
-                - id: num_rows_raw
-                  type:
-                    switch-on: _root.preheader.version_number.value
-                    cases:
-                      0x0102: u1
-                      _: u2
-                  doc: Number of rows in pattern (1..256)
-                - id: len_packed_pattern
-                  type: u2
-                  doc: Packed pattern data size
+              - id: packing_type
+                type: u1
+                doc: Packing type (always 0)
+              - id: num_rows_raw
+                type:
+                  switch-on: _root.preheader.version_number.value
+                  cases:
+                    0x0102: u1
+                    _: u2
+                doc: Number of rows in pattern (1..256)
+              - id: len_packed_pattern
+                type: u2
+                doc: Packed pattern data size
             instances:
               num_rows:
                 value: 'num_rows_raw + (_root.preheader.version_number.value == 0x0102 ? 1 : 0)'

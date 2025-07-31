@@ -14,7 +14,7 @@ seq:
     type: cfb_header
 instances:
   sector_size:
-    value: '1 << header.sector_shift'
+    value: 1 << header.sector_shift
   fat:
     pos: sector_size
     size: header.size_fat * sector_size

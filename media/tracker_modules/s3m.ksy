@@ -58,9 +58,9 @@ seq:
   - id: samples_format
     -orig-id: Ffi
     type: u2
-    doc: '1 = signed samples, 2 = unsigned samples'
+    doc: 1 = signed samples, 2 = unsigned samples
   - id: magic2
-    contents: 'SCRM'
+    contents: SCRM
   - id: global_volume
     -orig-id: g.v
     type: u1
@@ -134,7 +134,7 @@ types:
         type:
           switch-on: type
           cases:
-            'inst_types::sample': sampled
+            inst_types::sample: sampled
             _: adlib
       - id: tuning_hz
         type: u4
@@ -144,7 +144,7 @@ types:
         size: 28
         terminator: 0
       - id: magic
-        contents: 'SCRS'
+        contents: SCRS
     enums:
       inst_types:
         1: sample

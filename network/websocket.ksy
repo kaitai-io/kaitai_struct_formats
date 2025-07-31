@@ -26,7 +26,7 @@ types:
         -orig-id: fin
         type: b1
       - id: reserved
-        -orig-id: 'rsv1, rsv2, rsv3'
+        -orig-id: rsv1, rsv2, rsv3
         type: b3
       - id: opcode
         enum: opcode
@@ -57,12 +57,12 @@ types:
         type: frame_header
       - id: payload_bytes
         size: header.len_payload
-        if: 'header.opcode != opcode::text'
+        if: header.opcode != opcode::text
       - id: payload_text
         size: header.len_payload
         type: str
         encoding: UTF-8
-        if: 'header.opcode == opcode::text'
+        if: header.opcode == opcode::text
 
   dataframe:
     seq:
@@ -70,12 +70,12 @@ types:
         type: frame_header
       - id: payload_bytes
         size: header.len_payload
-        if: '_root.initial_frame.header.opcode != opcode::text'
+        if: _root.initial_frame.header.opcode != opcode::text
       - id: payload_text
         size: header.len_payload
         type: str
         encoding: UTF-8
-        if: '_root.initial_frame.header.opcode == opcode::text'
+        if: _root.initial_frame.header.opcode == opcode::text
 
 enums:
   opcode:
