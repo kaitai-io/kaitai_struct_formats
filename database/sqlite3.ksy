@@ -49,6 +49,9 @@ doc-ref: https://www.sqlite.org/fileformat2.html
 seq:
   - id: header
     type: database_header
+  # no. allow parsing only the header to save memory
+  # - id: first_page
+  #   type: btree_page(1)
 instances:
   pages:
     type:
@@ -60,8 +63,11 @@ instances:
         # This is unfortunate, but unavoidable since there's no way to recognize these types at
         # this point in the parser.
         2: btree_page(_index + 1)
-    pos: 0
-    size: header.page_size
+    # The first 100 bytes of the database file comprise the database file header
+    pos: 100
+    # size: header.page_size
+    # the first page is 100 bytes smaller than all other pages
+    size: '(_index == 0) ? (header.page_size - 100) : header.page_size'
     repeat: expr
     repeat-expr: header.num_pages
     doc: |
@@ -347,9 +353,10 @@ types:
       - id: page_number
         type: u4
     seq:
-      - id: database_header
-        type: database_header
-        if: page_number == 1
+      # no. the database header is not part of the first page
+      # - id: database_header
+      #   type: database_header
+      #   if: page_number == 1
       - id: page_type
         type: u1
         enum: btree_page_type
