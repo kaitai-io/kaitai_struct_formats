@@ -279,14 +279,14 @@ types:
             'bits::b32': u4
             'bits::b64': u8
       # e_phoff
-      - id: program_header_offset
+      - id: ofs_program_headers
         type:
           switch-on: _root.bits
           cases:
             'bits::b32': u4
             'bits::b64': u8
       # e_shoff
-      - id: section_header_offset
+      - id: ofs_section_headers
         type:
           switch-on: _root.bits
           cases:
@@ -702,13 +702,13 @@ types:
             if: _parent.has_addend
     instances:
       program_headers:
-        pos: program_header_offset
+        pos: ofs_program_headers
         size: program_header_size
         type: program_header
         repeat: expr
         repeat-expr: num_program_headers
       section_headers:
-        pos: section_header_offset
+        pos: ofs_section_headers
         size: section_header_size
         type: section_header
         repeat: expr
