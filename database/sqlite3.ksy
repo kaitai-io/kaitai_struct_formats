@@ -371,6 +371,7 @@ types:
         doc: |
           The start of the cell content area. A zero value for this integer is interpreted as 65536.
           The interpreted value is available as `cell_content_area`.
+          The offset is relative to the current page.
       - id: num_frag_free_bytes
         type: u1
         doc: The number of fragmented free bytes within the cell content area.
@@ -388,8 +389,13 @@ types:
       ofs_cell_content_area:
         value: 'ofs_cell_content_area_raw == 0 ? 65536 : ofs_cell_content_area_raw'
       cell_content_area:
-        pos: ofs_cell_content_area
+        # pos: ofs_cell_content_area
+        pos: 'page_number == 1 ? (ofs_cell_content_area - 100) : ofs_cell_content_area'
         size: _root.header.usable_size - ofs_cell_content_area
+        doc: |
+          We parse the first page separate from the 100 byte database header,
+          so for the first page, we have to subtract 100 from the offset,
+          to make the offset relative to our "page".
       reserved_space:
         pos: _root.header.page_size - _root.header.page_reserved_space_size
         size-eos: true
