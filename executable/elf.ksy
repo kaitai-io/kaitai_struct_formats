@@ -299,13 +299,13 @@ types:
       - id: e_ehsize
         type: u2
       # e_phentsize
-      - id: len_program_headers
+      - id: program_header_size
         type: u2
       # e_phnum
       - id: num_program_headers
         type: u2
       # e_shentsize
-      - id: len_section_headers
+      - id: section_header_size
         type: u2
       # e_shnum
       - id: num_section_headers
@@ -703,13 +703,13 @@ types:
     instances:
       program_headers:
         pos: program_header_offset
-        size: len_program_headers
+        size: program_header_size
         type: program_header
         repeat: expr
         repeat-expr: num_program_headers
       section_headers:
         pos: section_header_offset
-        size: len_section_headers
+        size: section_header_size
         type: section_header
         repeat: expr
         repeat-expr: num_section_headers
