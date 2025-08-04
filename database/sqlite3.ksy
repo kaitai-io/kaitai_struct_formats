@@ -470,12 +470,42 @@ types:
             1: overflow_record(payload_size.value, _root.header.index_max_overflow_payload_size)
   record:
     doc-ref: 'https://sqlite.org/fileformat2.html#record_format'
+    doc: |
+      A record contains a header and a body, in that order.
+
+      The header begins with a single varint
+      which determines the total number of bytes in the header.
+      The varint value is the size of the header in bytes
+      including the size varint itself.
+
+      Following the size varint are one or more additional varints, one per column.
+      These additional varints are called "serial type" numbers
+      and determine the datatype of each column
     seq:
       - id: header_size
         type: vlq_base128_be
       - id: header
         type: record_header
-        size: header_size.value - 1
+        # FIXME sizeof(header_size) != 1
+        # size: header_size.value - 1
+        # FIXME error: Name(identifier(sizeof))
+        # size: header_size.value - sizeof(header_size)
+        # (2 << (1 * 6)) = 128
+        # (2 << (2 * 6)) = 8192
+        # (2 << (3 * 6)) = 524288
+        # (2 << (4 * 6)) = 33554432
+        # (2 << (5 * 6)) = 2147483648
+        # (2 << (6 * 6)) = 137438953472
+        # max page_size = 65536
+        # header_size.value == 0 ? 0 : # TODO?
+        size: |
+          header_size.value < 128 ? (header_size.value - 1) :
+          header_size.value < 8192 ? (header_size.value - 2) :
+          header_size.value < 524288 ? (header_size.value - 3) :
+          header_size.value < 33554432 ? (header_size.value - 4) :
+          header_size.value < 2147483648 ? (header_size.value - 5) :
+          header_size.value < 137438953472 ? (header_size.value - 6) :
+          1/0
       - id: values
         type: value(header.value_types[_index])
         repeat: expr
