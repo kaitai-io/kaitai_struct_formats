@@ -254,7 +254,7 @@ enums:
     0x0003: masknotpen
     0x0004: notcopypen
     0x0005: maskpennot
-    0x0006: not
+    0x0006: not_
     0x0007: xorpen
     0x0008: notmaskpen
     0x0009: maskpen
