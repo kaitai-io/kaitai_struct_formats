@@ -6,6 +6,9 @@ meta:
     - mdmp
   license: CC0-1.0
   endian: le
+  imports:
+    - /windows/windows_suite_mask
+    - /windows/windows_version_info
 doc: |
   Windows MiniDump (MDMP) file provides a concise way to store process
   core dumps, which is useful for debugging. Given its small size,
@@ -98,27 +101,27 @@ types:
       - id: os_type
         -orig-id: ProductType
         type: u1
-      - id: os_ver_major
-        -orig-id: MajorVersion
-        type: u4
-      - id: os_ver_minor
-        -orig-id: MinorVersion
-        type: u4
-      - id: os_build
-        -orig-id: BuildNumber
-        type: u4
-      - id: os_platform
-        -orig-id: PlatformId
-        type: u4
+      - id: const_size_version_info
+        type: windows_version_info::internal::basic
+
       - id: ofs_service_pack
         -orig-id: CSDVersionRva
         type: u4
       - id: os_suite_mask
-        type: u2
+        size: 2
+        type: windows_suite_mask
       - id: reserved2
         type: u2
       # TODO: the rest of CPU information
     instances:
+      os_ver_major:
+        value: const_size_version_info.major
+      os_ver_minor:
+        value: const_size_version_info.minor
+      os_build:
+        value: const_size_version_info.build
+      os_platform:
+        value: const_size_version_info.platform
       service_pack:
         io: _root._io
         pos: ofs_service_pack
