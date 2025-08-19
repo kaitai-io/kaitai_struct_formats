@@ -11,6 +11,7 @@ meta:
   license: CC0-1.0
   ks-version: 0.8
   imports:
+    - /network/bluetooth_frame
     - /network/ethernet_frame
     - /network/packet_ppi
   endian: le
@@ -80,6 +81,7 @@ types:
           cases:
             'linktype::ppi': packet_ppi
             'linktype::ethernet': ethernet_frame
+            'linktype::bluetooth_hci_h4_with_phdr': bluetooth_frame
         doc-ref: 'https://wiki.wireshark.org/Development/LibpcapFileFormat#Packet_Data'
 enums:
   linktype:
