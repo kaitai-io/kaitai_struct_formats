@@ -8,6 +8,8 @@ meta:
     wikidata: Q463244
   license: CC0-1.0
   endian: le
+  imports:
+    - /windows/windows_filetime
 doc: |
   This spec allows to parse files used by Microsoft Windows family of
   operating systems to store parts of its "registry". "Registry" is a
@@ -42,7 +44,7 @@ types:
       - id: secondary_sequence_number # Matches the primary sequence number if the hive was properly synchronized
         type: u4
       - id: last_modification_date_and_time # Contains a FILETIME in UTC
-        type: filetime
+        type: windows_filetime
       - id: major_version
         type: u4
       - id: minor_version
@@ -96,7 +98,7 @@ types:
         type: u4
         doc: 0 most of the time, can contain remnant data
       - id: timestamp
-        type: filetime
+        type: windows_filetime
         doc: Only the root (first) hive bin seems to contain a valid FILETIME
       - id: unknown4
         type: u4
@@ -136,7 +138,7 @@ types:
             type: u2
             enum: nk_flags
           - id: last_key_written_date_and_time
-            type: filetime
+            type: windows_filetime
           - id: unknown1 # empty value
             type: u4
           - id: parent_key_offset # The offset value is in bytes and relative from the start of the hive bin data
@@ -284,8 +286,3 @@ types:
       - id: cells
         type: hive_bin_cell
         repeat: eos
-  filetime:
-    seq:
-      - id: value
-        type: u8
-    -webide-representation: "{value}"
