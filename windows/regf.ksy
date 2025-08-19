@@ -16,11 +16,11 @@ doc: |
 
   Typically, registry files are stored in:
 
-  * System-wide: several files in `%SystemRoot%\System32\Config\`
+  * System-wide: several files in `%SystemRoot%\\System32\\Config\\`
   * User-wide:
-    * `%USERPROFILE%\Ntuser.dat`
-    * `%USERPROFILE%\Local Settings\Application Data\Microsoft\Windows\Usrclass.dat` (localized, Windows 2000, Server 2003 and Windows XP)
-    * `%USERPROFILE%\AppData\Local\Microsoft\Windows\Usrclass.dat` (non-localized, Windows Vista and later)
+    * `%USERPROFILE%\\Ntuser.dat`
+    * `%USERPROFILE%\\Local Settings\\Application Data\\Microsoft\\Windows\\Usrclass.dat` (localized, Windows 2000, Server 2003 and Windows XP)
+    * `%USERPROFILE%\\AppData\\Local\\Microsoft\\Windows\\Usrclass.dat` (non-localized, Windows Vista and later)
 
   Note that one typically can't access files directly on a mounted
   filesystem with a running Windows OS.
@@ -30,19 +30,21 @@ seq:
     type: file_header
   - id: hive_bins
     type: hive_bin
-    size: 4096
     repeat: eos
 types:
   file_header:
     seq:
       - id: signature
         contents: "regf"
-      - id: primary_sequence_number # Matches the secondary sequence number if the hive was properly synchronized
+      - id: primary_sequence_number
         type: u4
-      - id: secondary_sequence_number # Matches the primary sequence number if the hive was properly synchronized
+        doc: Matches the secondary sequence number if the hive was properly synchronized
+      - id: secondary_sequence_number
         type: u4
-      - id: last_modification_date_and_time # Contains a FILETIME in UTC
-        type: filetime
+        doc: Matches the primary sequence number if the hive was properly synchronized
+      - id: last_modification_date_and_time
+        type: winfiletime
+        doc: Contains a FILETIME in UTC
       - id: major_version
         type: u4
       - id: minor_version
@@ -57,20 +59,26 @@ types:
         type: u4
       - id: hive_bins_data_size
         type: u4
-      - id: clustering_factor # Logical sector size of the underlying disk in bytes divided by 512
+      - id: clustering_factor
         type: u4
-      - id: unknown1 # Sometimes contains the last part of the filename in UTF-16 LE most of the time with an end-of-string character, but not always. Unused bytes are 0.
+        doc: Logical sector size of the underlying disk in bytes divided by 512
+      - id: unknown1
         size: 64
-      - id: unknown2 # Can contain remnant data, Padding used for the checksum?
+        doc: Sometimes contains the last part of the filename in UTF-16 LE most of the time with an end-of-string character, but not always. Unused bytes are 0.
+      - id: unknown2
         size: 396
-      - id: checksum # XOR-32 of the previous 508 bytes
+        doc: Can contain remnant data, Padding used for the checksum?
+      - id: checksum
         type: u4
+        doc: XOR-32 of the previous 508 bytes
       - id: reserved
         size: 3576
-      - id: boot_type # This field has no meaning on a disk
+      - id: boot_type
         type: u4
-      - id: boot_recover # This field has no meaning on a disk
+        doc: This field has no meaning on a disk
+      - id: boot_recover
         type: u4
+        doc: This field has no meaning on a disk
     enums:
       file_type:
         0: normal
@@ -79,8 +87,6 @@ types:
         1: direct_memory_load
   hive_bin_header:
     seq:
-      - id: signature
-        contents: "hbin"
       - id: offset
         type: u4
         doc: |
@@ -96,36 +102,49 @@ types:
         type: u4
         doc: 0 most of the time, can contain remnant data
       - id: timestamp
-        type: filetime
+        type: winfiletime
         doc: Only the root (first) hive bin seems to contain a valid FILETIME
       - id: unknown4
         type: u4
         doc: Contains number of bytes
   hive_bin_cell:
-    -webide-representation: "{identifier}"
     seq:
       - id: cell_size_raw
         type: s4
-      - id: identifier
-        type: str
-        size: 2
-        encoding: ascii
+      - id: identifier_raw
+        type: u2
+        enum: data_flags
       - id: data
         size: cell_size - 2 - 4
         type:
           switch-on: identifier
           cases:
-            "'nk'": named_key
-            "'lh'": sub_key_list_lh_lf
-            "'lf'": sub_key_list_lh_lf
-            "'li'": sub_key_list_li
-            "'ri'": sub_key_list_ri
-            "'vk'": sub_key_list_vk
-            "'sk'": sub_key_list_sk
+            data_flags::nk: named_key
+            data_flags::lh: sub_key_list_lh_lf
+            data_flags::lf: sub_key_list_lh_lf
+            data_flags::li: sub_key_list_li
+            data_flags::ri: sub_key_list_ri
+            data_flags::vk: sub_key_list_vk
+            data_flags::sk: sub_key_list_sk
+      - id: padding
+        size: (8 - _io.pos) % 8
+    enums:
+      data_flags:
+        0x6B6E: nk
+        0x686C: lh
+        0x666C: lf
+        0x696C: li
+        0x6972: ri
+        0x6B76: vk
+        0x6B73: sk
+        0x0000: nll
+    -webide-representation: "{identifier}"
     instances:
       cell_size:
         value: "(cell_size_raw < 0 ? -1 : +1) * cell_size_raw"
         -webide-parse-mode: eager
+      identifier:
+        value: "(cell_size_raw > 0 ? data_flags::nll : identifier_raw)"
       is_allocated:
         value: "cell_size_raw < 0"
         -webide-parse-mode: eager
@@ -136,19 +155,26 @@ types:
             type: u2
             enum: nk_flags
           - id: last_key_written_date_and_time
-            type: filetime
-          - id: unknown1 # empty value
+            type: winfiletime
+          - id: unknown1
             type: u4
-          - id: parent_key_offset # The offset value is in bytes and relative from the start of the hive bin data
+            doc: empty value
+          - id: parent_key_offset
             type: u4
+            doc: The offset value is in bytes and relative from the start of the hive bin data
           - id: number_of_sub_keys
             type: u4
-          - id: number_of_volatile_sub_keys # The offset value is in bytes and relative from the start of the hive bin data / Refers to a sub keys list or contains -1 (0xffffffff) if empty.
+          - id: number_of_volatile_sub_keys
             type: u4
-          - id: sub_keys_list_offset # The offset value is in bytes and relative from the start of the hive bin data / Refers to a sub keys list or contains -1 (0xffffffff) if empty.
+            doc: The offset value is in bytes and relative from the start of the hive bin data / Refers to a sub keys list or contains -1 (0xffffffff) if empty.
+          - id: sub_keys_list_offset
+            type: u4
+            doc: The offset value is in bytes and relative from the start of the hive bin data / Refers to a sub keys list or contains -1 (0xffffffff) if empty.
+          - id: volatile_sub_keys_list_offset
             type: u4
           - id: number_of_values
             type: u4
+            doc: The offset value is in bytes and relative from the start of the hive bin data / Refers to a sub keys list or contains -1 (0xffffffff) if empty.
           - id: values_list_offset
             type: u4
           - id: security_key_offset
@@ -163,18 +189,17 @@ types:
             type: u4
           - id: largest_value_data_size
             type: u4
-          - id: unknown2 # Some run-time caching index or hash?
+          - id: unknown2
             type: u4
+            doc: Some run-time caching index or hash?
           - id: key_name_size
             type: u2
           - id: class_name_size
             type: u2
-          - id: unknown_string_size
-            type: u4
-          - id: unknown_string
+          - id: key_name
             type: str
-            size: unknown_string_size
-            encoding: ascii
+            encoding: iso-8859-1
+            size: key_name_size
         enums:
           nk_flags:
             0x0001: key_is_volatile   # Is volatile key
@@ -200,10 +225,12 @@ types:
         types:
           item:
             seq:
-              - id: named_key_offset # The offset value is in bytes and relative from the start of the hive bin data
+              - id: named_key_offset
                 type: u4
-              - id: hash_value # A different hash function is used for different sub key list types
+                doc: The offset value is in bytes and relative from the start of the hive bin data
+              - id: hash_value
                 type: u4
+                doc: A different hash function is used for different sub key list types
       sub_key_list_li:
         seq:
           - id: count
@@ -215,8 +242,9 @@ types:
         types:
           item:
             seq:
-              - id: named_key_offset # The offset value is in bytes and relative from the start of the hive bin data
+              - id: named_key_offset
                 type: u4
+                doc: The offset value is in bytes and relative from the start of the hive bin data
       sub_key_list_ri:
         seq:
           - id: count
@@ -228,28 +256,32 @@ types:
         types:
           item:
             seq:
-              - id: sub_key_list_offset # The offset value is in bytes and relative from the start of the hive bin data
+              - id: sub_key_list_offset
                 type: u4
+                doc: The offset value is in bytes and relative from the start of the hive bin data
       sub_key_list_vk:
         seq:
-          - id: value_name_size # If the value name size is 0 the value name is "(default)"
+          - id: value_name_size
             type: u2
+            doc: If the value name size is 0 the value name is "(default)"
           - id: data_size
             type: u4
-          - id: data_offset # The offset value is in bytes and relative from the start of the hive bin data.
+          - id: data_offset
             type: u4
+            doc: The offset value is in bytes and relative from the start of the hive bin data.
           - id: data_type
             type: u4
             enum: data_type_enum
           - id: flags
             type: u2
             enum: vk_flags
-          - id: padding # unknown
+          - id: padding
             type: u2
+            doc: unknown
           - id: value_name
             size: value_name_size
             type: str
-            encoding: ascii
+            encoding: iso-8859-1
             if: "flags == vk_flags::value_comp_name"
         enums:
           data_type_enum:
@@ -279,13 +311,38 @@ types:
             type: u4
   hive_bin:
     seq:
+      - id: signature
+        type: u4
+      - id: hive_bin_content
+        type:
+          switch-on: signature
+          cases:
+            0x6E696268: hive_bin_filled # hbin
+            _ : hive_bin_empty
+  hive_bin_filled:
+    seq:
       - id: header
         type: hive_bin_header
       - id: cells
+        size: header.size - 0x20
+        type: hive_bin_cells
+  hive_bin_cells:
+    seq:
+      - id: cells
         type: hive_bin_cell
         repeat: eos
-  filetime:
+  hive_bin_empty:
     seq:
-      - id: value
+      - id: content
+        size: 0x1000 - 0x4
+  winfiletime:
+    doc: |
+      timestamp: timestamp * (1e-07) --> seconds
+      offset: 11644473600
+    seq:
+      - id: ts
         type: u8
+    instances:
+      unixts:
+        value: (ts * 1e-07) - 11644473600
     -webide-representation: "{value}"
