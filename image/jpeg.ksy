@@ -61,10 +61,10 @@ types:
         type:
           switch-on: marker
           cases:
-            'marker_enum::app0': segment_app0
-            'marker_enum::app1': segment_app1
-            'marker_enum::sof0': segment_sof0
-            'marker_enum::sos': segment_sos
+            marker_enum::app0: segment_app0
+            marker_enum::app1: segment_app1
+            marker_enum::sof0: segment_sof0
+            marker_enum::sos: segment_sos
       - id: image_data
         size-eos: true
         if: marker == marker_enum::sos

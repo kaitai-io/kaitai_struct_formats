@@ -34,7 +34,7 @@ types:
       charset.
     seq:
       - id: magic
-        contents: 'TAG'
+        contents: TAG
       - id: title
         size: 30
         doc: Song title

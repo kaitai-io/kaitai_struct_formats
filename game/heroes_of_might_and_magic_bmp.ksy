@@ -12,4 +12,4 @@ seq:
   - id: height
     type: u2
   - id: data
-    size: 'width * height'
+    size: width * height

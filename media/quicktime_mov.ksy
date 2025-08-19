@@ -10,7 +10,7 @@ meta:
     wikidata: Q942350
   license: CC0-1.0
   endian: be
-doc-ref: 'https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/QTFFChap1/qtff1.html#//apple_ref/doc/uid/TP40000939-CH203-BBCGDDDF'
+doc-ref: https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/QTFFChap1/qtff1.html#//apple_ref/doc/uid/TP40000939-CH203-BBCGDDDF
 seq:
   - id: atoms
     type: atom_list
@@ -36,24 +36,24 @@ types:
           switch-on: atom_type
           cases:
             # Atom types which actually just contain other atoms inside it
-            'atom_type::dinf': atom_list
-            'atom_type::mdia': atom_list
-            'atom_type::minf': atom_list
-            'atom_type::moof': atom_list
-            'atom_type::moov': atom_list
-            'atom_type::stbl': atom_list
-            'atom_type::traf': atom_list
-            'atom_type::trak': atom_list
+            atom_type::dinf: atom_list
+            atom_type::mdia: atom_list
+            atom_type::minf: atom_list
+            atom_type::moof: atom_list
+            atom_type::moov: atom_list
+            atom_type::stbl: atom_list
+            atom_type::traf: atom_list
+            atom_type::trak: atom_list
 
             # Leaf atoms that have some distinct format inside
-            'atom_type::ftyp': ftyp_body
-            'atom_type::tkhd': tkhd_body
-            'atom_type::mvhd': mvhd_body
+            atom_type::ftyp: ftyp_body
+            atom_type::tkhd: tkhd_body
+            atom_type::mvhd: mvhd_body
     instances:
       len:
         value: 'len32 == 0 ? (_io.size - 8) : (len32 == 1 ? len64 - 16 : len32 - 8)'
   ftyp_body:
-    doc-ref: 'https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/QTFFChap1/qtff1.html#//apple_ref/doc/uid/TP40000939-CH203-CJBCBIFF'
+    doc-ref: https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/QTFFChap1/qtff1.html#//apple_ref/doc/uid/TP40000939-CH203-CJBCBIFF
     seq:
       - id: major_brand
         type: u4
@@ -65,7 +65,7 @@ types:
         enum: brand
         repeat: eos
   mvhd_body:
-    doc-ref: 'https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/QTFFChap2/qtff2.html#//apple_ref/doc/uid/TP40000939-CH204-BBCGFGJG'
+    doc-ref: https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/QTFFChap2/qtff2.html#//apple_ref/doc/uid/TP40000939-CH204-BBCGFGJG
     seq:
       - id: version
         type: u1
@@ -127,7 +127,7 @@ types:
           track added to this movie. Note that 0 is not a valid track
           ID value.
   tkhd_body:
-    doc-ref: 'https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/QTFFChap2/qtff2.html#//apple_ref/doc/uid/TP40000939-CH204-25550'
+    doc-ref: https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/QTFFChap2/qtff2.html#//apple_ref/doc/uid/TP40000939-CH204-25550
     seq:
       - id: version
         type: u1

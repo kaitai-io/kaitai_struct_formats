@@ -36,11 +36,11 @@ types:
         type:
           switch-on: payload_type
           cases:
-            'payload_type::sr': sr_packet
-            'payload_type::rr': rr_packet
-            'payload_type::sdes': sdes_packet
-            'payload_type::psfb': psfb_packet
-            'payload_type::rtpfb': rtpfb_packet
+            payload_type::sr: sr_packet
+            payload_type::rr: rr_packet
+            payload_type::sdes: sdes_packet
+            payload_type::psfb: psfb_packet
+            payload_type::rtpfb: rtpfb_packet
 
   sr_packet:
     seq:
@@ -133,7 +133,7 @@ types:
         type:
           switch-on: fmt
           cases:
-            'rtpfb_subtype::transport_feedback': rtpfb_transport_feedback_packet
+            rtpfb_subtype::transport_feedback: rtpfb_transport_feedback_packet
         size-eos: true
     instances:
       fmt:
@@ -190,7 +190,7 @@ types:
         type:
           switch-on: fmt
           cases:
-            'psfb_subtype::afb': psfb_afb_packet
+            psfb_subtype::afb: psfb_afb_packet
         size-eos: true
     instances:
       fmt:

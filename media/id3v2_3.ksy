@@ -38,7 +38,7 @@ types:
     doc-ref: Section 3.1. ID3v2 header
     seq:
       - id: magic
-        contents: 'ID3'
+        contents: ID3
       - id: version_major
         type: u1
       - id: version_revision
@@ -95,7 +95,7 @@ types:
         size: size
     instances:
       is_invalid:
-        value: "id == '\x00\x00\x00\x00'"
+        value: "id == '\0\0\0\0'"
     types:
       flags:
         seq:

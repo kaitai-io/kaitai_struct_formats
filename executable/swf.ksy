@@ -40,7 +40,7 @@ seq:
     enum: compressions
   - id: signature
     -orig-id: Signature
-    contents: "WS"
+    contents: WS
   - id: version
     -orig-id: Version
     type: u1
@@ -99,12 +99,12 @@ types:
         type:
           switch-on: record_header.tag_type
           cases:
-            'tag_type::define_sound': define_sound_body
-            'tag_type::do_abc': do_abc_body
-            'tag_type::script_limits': script_limits_body
-            'tag_type::symbol_class': symbol_class_body
-            'tag_type::set_background_color': rgb
-            'tag_type::export_assets': symbol_class_body
+            tag_type::define_sound: define_sound_body
+            tag_type::do_abc: do_abc_body
+            tag_type::script_limits: script_limits_body
+            tag_type::symbol_class: symbol_class_body
+            tag_type::set_background_color: rgb
+            tag_type::export_assets: symbol_class_body
   define_sound_body:
     seq:
       - id: id
@@ -181,10 +181,10 @@ types:
         if: small_len == 0x3f
     instances:
       tag_type:
-        value: 'tag_code_and_length >> 6'
+        value: tag_code_and_length >> 6
         enum: tag_type
       small_len:
-        value: 'tag_code_and_length & 0b111111'
+        value: tag_code_and_length & 0b111111
       len:
         value: 'small_len == 0x3f ? big_len : small_len'
 enums:

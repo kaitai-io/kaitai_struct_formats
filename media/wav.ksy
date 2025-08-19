@@ -73,23 +73,23 @@ doc-ref:
   - https://web.archive.org/web/20101031101749/http://www.ebu.ch/fr/technical/publications/userguides/bwf_user_guide.php
 seq:
   - id: chunk
-    type: 'riff::chunk'
+    type: riff::chunk
 instances:
   chunk_id:
     value: chunk.id
     enum: fourcc
   is_riff_chunk:
-    value: 'chunk_id == fourcc::riff'
+    value: chunk_id == fourcc::riff
   parent_chunk_data:
     io: chunk.data_slot._io
     pos: 0
-    type: 'riff::parent_chunk_data'
+    type: riff::parent_chunk_data
     if: is_riff_chunk
   form_type:
     value: parent_chunk_data.form_type
     enum: fourcc
   is_form_type_wave:
-    value: 'is_riff_chunk and form_type == fourcc::wave'
+    value: is_riff_chunk and form_type == fourcc::wave
   subchunks:
     io: parent_chunk_data.subchunks_slot._io
     pos: 0
@@ -100,7 +100,7 @@ types:
   chunk_type:
     seq:
       - id: chunk
-        type: 'riff::chunk'
+        type: riff::chunk
     instances:
       chunk_id:
         value: chunk.id
@@ -111,21 +111,21 @@ types:
         type:
           switch-on: chunk_id
           cases:
-            'fourcc::fmt': format_chunk_type
-            'fourcc::cue': cue_chunk_type
-            'fourcc::data': data_chunk_type
-            'fourcc::list': list_chunk_type
-            'fourcc::fact': fact_chunk_type
-            'fourcc::pmx': pmx_chunk_type
-            'fourcc::ixml': ixml_chunk_type
-            'fourcc::bext': bext_chunk_type
-            'fourcc::axml': axml_chunk_type
-            'fourcc::afsp': afsp_chunk_type
+            fourcc::fmt: format_chunk_type
+            fourcc::cue: cue_chunk_type
+            fourcc::data: data_chunk_type
+            fourcc::list: list_chunk_type
+            fourcc::fact: fact_chunk_type
+            fourcc::pmx: pmx_chunk_type
+            fourcc::ixml: ixml_chunk_type
+            fourcc::bext: bext_chunk_type
+            fourcc::axml: axml_chunk_type
+            fourcc::afsp: afsp_chunk_type
 
   list_chunk_type:
     seq:
       - id: parent_chunk_data
-        type: 'riff::parent_chunk_data'
+        type: riff::parent_chunk_data
     instances:
       form_type:
         value: parent_chunk_data.form_type
@@ -136,13 +136,13 @@ types:
         type:
           switch-on: form_type
           cases:
-            'fourcc::info': info_chunk_type
+            fourcc::info: info_chunk_type
         repeat: eos
 
   info_chunk_type:
     seq:
       - id: chunk
-        type: 'riff::chunk'
+        type: riff::chunk
     instances:
       chunk_data:
         io: chunk.data_slot._io

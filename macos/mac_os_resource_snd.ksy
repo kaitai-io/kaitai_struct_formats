@@ -11,7 +11,7 @@ doc: |
   Sound resources were introduced in Classic MacOS with the Sound Manager program.
   They can contain sound commands to generate sounds with given frequencies as well as sampled sound data.
   They are mostly found in resource forks, but can occasionally appear standalone or embedded in other files.
-doc-ref: "https://developer.apple.com/library/archive/documentation/mac/pdf/Sound/Sound_Manager.pdf"
+doc-ref: https://developer.apple.com/library/archive/documentation/mac/pdf/Sound/Sound_Manager.pdf
 seq:
   - id: format
     type: u2
@@ -248,7 +248,7 @@ types:
           This field is unused. You should set it to 0.
           Inside Macintosh (Volume VI, 1991) specifies it as:
           Indicates the resource ID number of the 'snth' resource that was used to compress the packets contained in the compressed sound header.
-        doc-ref: "https://vintageapple.org/inside_o/pdf/Inside_Macintosh_Volume_VI_1991.pdf Page 22-49, absolute page number 1169 in the PDF"
+        doc-ref: https://vintageapple.org/inside_o/pdf/Inside_Macintosh_Volume_VI_1991.pdf Page 22-49, absolute page number 1169 in the PDF
     instances:
       compression_type:
         value: compression_id

@@ -1,10 +1,10 @@
 meta:
   id: specpr
-  title: "SPECtrum Processing Routines Data Format 3/4/88"
+  title: SPECtrum Processing Routines Data Format 3/4/88
   file-extension: spec
   license: Unlicense
   #encoding: "utf-8"
-  encoding: "ascii"
+  encoding: ascii
   endian: be
 doc: |
   Specpr records are fixed format, 1536 bytes/record. Record number
@@ -22,7 +22,7 @@ seq:
     repeat: eos
 types:
   icflag:
-    doc: "it is big endian"
+    doc: it is big endian
     seq:
       - id: reserved
         type: b26
@@ -77,23 +77,23 @@ types:
         type: str
         size: 40
         pad-right: 0x20
-        doc: "Title which describes the data"
+        doc: Title which describes the data
       - id: usernm
         type: str
         size: 8
-        doc: "The name of the user who created the data record"
+        doc: The name of the user who created the data record
   coarse_timestamp:
     seq:
-     - id: scaled_seconds
-       type: s4
+      - id: scaled_seconds
+        type: s4
     instances:
       seconds:
         value: scaled_seconds * 24000.
   illum_angle:
     seq:
-     - id: angl
-       type: s4
-       doc: >
+      - id: angl
+        type: s4
+        doc: >
           (Integer*4 number, in arc-seconds*6000).
           (90 degrees=1944000000; -90 deg <= angle <= 90 deg)
     instances:
@@ -109,16 +109,16 @@ types:
         type: identifiers
       - id: iscta
         type: coarse_timestamp
-        doc: "Civil or Universal time when data was last processed"
+        doc: Civil or Universal time when data was last processed
       - id: isctb
         type: coarse_timestamp
-        doc: "Civil or Universal time at the start of the spectral run"
+        doc: Civil or Universal time at the start of the spectral run
       - id: jdatea
         type: s4
-        doc: "Date when data was last processed. Stored as integer*4 Julian Day number *10"
+        doc: Date when data was last processed. Stored as integer*4 Julian Day number *10
       - id: jdateb
         type: s4
-        doc: "Date when the spectral run began. Stored as integer*4 Julian Day number *10"
+        doc: Date when the spectral run began. Stored as integer*4 Julian Day number *10
       - id: istb
         type: coarse_timestamp
         doc: "Siderial time when the spectral run started. See flag #05."
@@ -130,44 +130,44 @@ types:
         doc: "Declination coordinates of an astronomical object, or latitude on a planetary surface (integer*4 number in arc-seconds *1000). See flag #06."
       - id: itchan
         type: s4
-        doc: "Total number of channels in the spectrum (integer*4 value from 1 to 4852)"
+        doc: Total number of channels in the spectrum (integer*4 value from 1 to 4852)
       - id: irmas
         type: s4
         doc: "The equivalent atmospheric thickness through which the observation was obtained (=1.0 overhead scaled: airmass*1000; integer*4)."
       - id: revs
         type: s4
-        doc: "The number of independent spectral scans which were added to make the spectrum (integer*4 number)."
+        doc: The number of independent spectral scans which were added to make the spectrum (integer*4 number).
       - id: iband
         type: s4
-        doc: "The channel numbers which define the band normalization (scaling to unity). (integers*4)."
+        doc: The channel numbers which define the band normalization (scaling to unity). (integers*4).
         repeat: expr
         repeat-expr: 2
       - id: irwav
         type: s4
-        doc: "The record number within the file where the wavelengths are found (integer*4)."
+        doc: The record number within the file where the wavelengths are found (integer*4).
       - id: irespt
         type: s4
-        doc: "The record pointer to where the resolution can be found (or horizontal error bar) (integer*4)."
+        doc: The record pointer to where the resolution can be found (or horizontal error bar) (integer*4).
       - id: irecno
         type: s4
-        doc: "The record number within the file where the data is located (integer*4 number)."
+        doc: The record number within the file where the data is located (integer*4 number).
       - id: itpntr
         type: s4
-        doc: "Text data record pointer. This pointer points to a data record where additional text describing the data may be found.  (32 bit integer)"
+        doc: Text data record pointer. This pointer points to a data record where additional text describing the data may be found.  (32 bit integer)
       - id: ihist
         type: str
         size: 60
         pad-right: 0x20
-        doc: "The program automatic 60 character history."
+        doc: The program automatic 60 character history.
       - id: mhist
         type: str
         size: 74
-        doc: "Manual history. Program automatic for large history requirements."
+        doc: Manual history. Program automatic for large history requirements.
         repeat: expr
         repeat-expr: 4
       - id: nruns
         type: s4
-        doc: "The number of independent spectral runs which were summed or averaged to make this spectrum (integer*4)."
+        doc: The number of independent spectral runs which were summed or averaged to make this spectrum (integer*4).
       - id: siangl
         type: illum_angle
         doc: >
@@ -189,72 +189,72 @@ types:
                 integrating sphere = 2000000000
       - id: iwtrns
         type: s4
-        doc: "Weighted number of runs (the number of runs of the spectrum with the minimum runs which was used in processing this spectrum, integer*4)."
+        doc: Weighted number of runs (the number of runs of the spectrum with the minimum runs which was used in processing this spectrum, integer*4).
       - id: itimch
         type: s4
-        doc: "The time observed in the sample beam for each half chop in milliseconds (for chopping spectrometers only). (integer*4)"
+        doc: The time observed in the sample beam for each half chop in milliseconds (for chopping spectrometers only). (integer*4)
       - id: xnrm
         type: f4
-        doc: "The band normalization factor. For data scaled to 1.0, multiply by this number to recover photometric level (32 bit real number)."
+        doc: The band normalization factor. For data scaled to 1.0, multiply by this number to recover photometric level (32 bit real number).
       - id: scatim
         type: f4
-        doc: "The time it takes to make one scan of the entire spectrum in seconds (32 bit real number)."
+        doc: The time it takes to make one scan of the entire spectrum in seconds (32 bit real number).
       - id: timint
         type: f4
-        doc: "Total integration time (usually=scatime * nruns) (32 bit real number)."
+        doc: Total integration time (usually=scatime * nruns) (32 bit real number).
       - id: tempd
         type: f4
-        doc: "Temperature in degrees Kelvin (32 bit real number)."
+        doc: Temperature in degrees Kelvin (32 bit real number).
       - id: data
         type: f4
-        doc: "The spectral data (256 channels of 32 bit real data numbers)."
+        doc: The spectral data (256 channels of 32 bit real data numbers).
         repeat: expr
         repeat-expr: 256
     instances:
       phase_angle_arcsec:
         value: sphase / 1500.
-        doc: "The phase angle between iangl and eangl in seconds"
+        doc: The phase angle between iangl and eangl in seconds
   data_continuation:
     seq:
       - id: cdata
         type: f4
         repeat: expr
         repeat-expr: 383
-        doc: "The continuation of the data values (383 channels of 32 bit real numbers)."
+        doc: The continuation of the data values (383 channels of 32 bit real numbers).
   text_initial:
     seq:
       - id: ids
         type: identifiers
       - id: itxtpt
         type: u4
-        doc: "Text data record pointer. This pointer points  to a data record where additional text may be may be found."
+        doc: Text data record pointer. This pointer points  to a data record where additional text may be may be found.
       - id: itxtch
         type: s4
-        doc: "The number of text characters (maximum= 19860)."
+        doc: The number of text characters (maximum= 19860).
       - id: itext
         type: str
         size: 1476
-        doc: "1476 characters of text.  Text has embedded newlines so the number of lines available is limited only by the number of characters available."
+        doc: 1476 characters of text.  Text has embedded newlines so the number of lines available is limited only by the number of characters available.
   text_continuation:
     seq:
       - id: tdata
         type: str
         size: 1532
-        doc: "1532 characters of text."
+        doc: 1532 characters of text.
   record:
     seq:
-    - id: icflag
-      type: icflag
-      doc: "Total number of bytes comprising the document."
-    - id: content
-      size: 1536 - 4
-      type:
-        switch-on: icflag.type
-        cases:
-          'record_type::data_initial': data_initial
-          'record_type::data_continuation': data_continuation
-          'record_type::text_initial': text_initial
-          'record_type::text_continuation': text_continuation
+      - id: icflag
+        type: icflag
+        doc: Total number of bytes comprising the document.
+      - id: content
+        size: 1536 - 4
+        type:
+          switch-on: icflag.type
+          cases:
+            record_type::data_initial: data_initial
+            record_type::data_continuation: data_continuation
+            record_type::text_initial: text_initial
+            record_type::text_continuation: text_continuation
 enums:
   record_type: # if I use 0b notation it doesn't work
     0: data_initial

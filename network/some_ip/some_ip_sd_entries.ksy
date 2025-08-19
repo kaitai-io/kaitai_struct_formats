@@ -20,16 +20,16 @@ seq:
 types:
   sd_entry:
     seq:
-    - id: header
-      type: sd_entry_header
-    - id: content
-      type:
-        switch-on: header.type
-        cases:
-          entry_types::find : sd_service_entry
-          entry_types::offer : sd_service_entry
-          entry_types::subscribe : sd_eventgroup_entry
-          entry_types::subscribe_ack : sd_eventgroup_entry
+      - id: header
+        type: sd_entry_header
+      - id: content
+        type:
+          switch-on: header.type
+          cases:
+            entry_types::find: sd_service_entry
+            entry_types::offer: sd_service_entry
+            entry_types::subscribe: sd_eventgroup_entry
+            entry_types::subscribe_ack: sd_eventgroup_entry
 
     types:
       sd_entry_header:

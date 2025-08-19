@@ -42,7 +42,7 @@ types:
   header:
     seq:
       - id: magic
-        contents: 'ID3'
+        contents: ID3
       - id: version_major
         type: u1
       - id: version_revision
@@ -98,7 +98,7 @@ types:
   footer:
     seq:
       - id: magic
-        contents: '3DI'
+        contents: 3DI
       - id: version_major
         type: u1
       - id: version_revision
@@ -167,7 +167,7 @@ types:
             type: b1
     instances:
       is_invalid:
-        value: "id == '\x00\x00\x00\x00'"
+        value: "id == '\0\0\0\0'"
 
   # Section 6.2. Synchsafe integers
   u1be_synchsafe:

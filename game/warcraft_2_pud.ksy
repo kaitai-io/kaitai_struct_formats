@@ -59,7 +59,7 @@ types:
       map.
     seq:
       - id: magic
-        contents: ["WAR2 MAP", 0, 0]
+        contents: [WAR2 MAP, 0, 0]
       - id: unused
         size: 2
         doc: unused (always set to $0a and $ff by editor, but can be anything for the game)

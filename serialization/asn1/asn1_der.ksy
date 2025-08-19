@@ -31,7 +31,7 @@ doc: |
   * <http://oid-info.com/>
   * <https://www.alvestrand.no/objectid/top.html>
 doc-ref: https://www.itu.int/itu-t/recommendations/rec.aspx?rec=12483&lang=en
--webide-representation: 't={type_tag}, b={body}'
+-webide-representation: t={type_tag}, b={body}
 seq:
   - id: type_tag
     type: u1
@@ -43,15 +43,15 @@ seq:
     type:
       switch-on: type_tag
       cases:
-        'type_tag::object_id': body_object_id
-        'type_tag::sequence_10': body_sequence
-        'type_tag::sequence_30': body_sequence
-        'type_tag::set': body_sequence
-        'type_tag::utf8string': body_utf8string
-        'type_tag::printable_string': body_printable_string
+        type_tag::object_id: body_object_id
+        type_tag::sequence_10: body_sequence
+        type_tag::sequence_30: body_sequence
+        type_tag::set: body_sequence
+        type_tag::utf8string: body_utf8string
+        type_tag::printable_string: body_printable_string
 types:
   len_encoded:
-    -webide-representation: 'v={result:dec}'
+    -webide-representation: v={result:dec}
     seq:
       - id: b1
         type: u1

@@ -24,11 +24,11 @@ seq:
     type: shell_item
     repeat: until
     repeat-until: _.len_data == 0
-    doc-ref: 'https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.2.1'
+    doc-ref: https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.2.1
 types:
   shell_item:
     -orig-id: ItemID
-    doc-ref: 'https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.2.2'
+    doc-ref: https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.2.2
     seq:
       - id: len_data
         type: u2
@@ -52,7 +52,7 @@ types:
             0x20: volume_body
             0x30: file_entry_body
   root_folder_body:
-    doc-ref: 'https://github.com/libyal/libfwsi/blob/main/documentation/Windows%20Shell%20Item%20format.asciidoc#32-root-folder-shell-item'
+    doc-ref: https://github.com/libyal/libfwsi/blob/main/documentation/Windows%20Shell%20Item%20format.asciidoc#32-root-folder-shell-item
     seq:
       - id: sort_index
         type: u1
@@ -60,12 +60,12 @@ types:
         size: 16
       # TODO: various extensions
   volume_body:
-    doc-ref: 'https://github.com/libyal/libfwsi/blob/main/documentation/Windows%20Shell%20Item%20format.asciidoc#33-volume-shell-item'
+    doc-ref: https://github.com/libyal/libfwsi/blob/main/documentation/Windows%20Shell%20Item%20format.asciidoc#33-volume-shell-item
     seq:
       - id: flags
         type: u1
   file_entry_body:
-    doc-ref: 'https://github.com/libyal/libfwsi/blob/main/documentation/Windows%20Shell%20Item%20format.asciidoc#34-file-entry-shell-item'
+    doc-ref: https://github.com/libyal/libfwsi/blob/main/documentation/Windows%20Shell%20Item%20format.asciidoc#34-file-entry-shell-item
     seq:
       - type: u1
       - id: file_size

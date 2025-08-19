@@ -18,7 +18,7 @@ doc: |
   in Windows shell to create "shortcuts" to another files, usually for
   purposes of running a program from some other directory, sometimes
   with certain preconfigured arguments and some other options.
-doc-ref: 'https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf'
+doc-ref: https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf
 seq:
   - id: header
     type: file_header
@@ -51,7 +51,7 @@ seq:
 types:
   file_header:
     -orig-id: ShellLinkHeader
-    doc-ref: 'https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.1'
+    doc-ref: https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.1
     seq:
       - id: len_header
         -orig-id: HeaderSize
@@ -97,7 +97,7 @@ types:
       - id: reserved
         contents: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   link_flags:
-    doc-ref: 'https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.1.1'
+    doc-ref: https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.1.1
     seq:
       # Byte #0
       - id: is_unicode
@@ -135,7 +135,7 @@ types:
       - type: b2
   link_target_id_list:
     -orig-id: LinkTargetIDList
-    doc-ref: 'https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.2'
+    doc-ref: https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.2
     seq:
       - id: len_id_list
         -orig-id: IDListSize
@@ -146,7 +146,7 @@ types:
         type: windows_shell_items
   link_info:
     -orig-id: LinkInfo
-    doc-ref: 'https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.3'
+    doc-ref: https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.3
     seq:
       - id: len_all
         -orig-id: LinkInfoSize
@@ -156,7 +156,7 @@ types:
         type: all
     types:
       all:
-        doc-ref: 'https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.3'
+        doc-ref: https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.3
         seq:
           - id: len_header
             -orig-id: LinkInfoHeaderSize
@@ -176,7 +176,7 @@ types:
             terminator: 0
             if: header.flags.has_volume_id_and_local_base_path
       header:
-        doc-ref: 'https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.3'
+        doc-ref: https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.3
         seq:
           - id: flags
             -orig-id: LinkInfoFlags
@@ -203,7 +203,7 @@ types:
             if: not _io.eof
       link_info_flags:
         -orig-id: LinkInfoFlags
-        doc-ref: 'https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.3'
+        doc-ref: https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.3
         seq:
           - id: reserved1
             type: b6
@@ -217,7 +217,7 @@ types:
             type: b24
       volume_id_spec:
         -orig-id: VolumeID
-        doc-ref: 'https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.3.1'
+        doc-ref: https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.3.1
         seq:
           - id: len_all
             -orig-id: VolumeIDSize
@@ -227,7 +227,7 @@ types:
             type: volume_id_body
       volume_id_body:
         -orig-id: VolumeID
-        doc-ref: 'https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.3.1'
+        doc-ref: https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-SHLLINK/[MS-SHLLINK].pdf Section 2.3.1
         seq:
           - id: drive_type
             -orig-id: DriveType

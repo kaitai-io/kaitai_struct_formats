@@ -70,11 +70,11 @@ types:
         type:
           switch-on: stream_type
           cases:
-            'stream_types::system_info': system_info
-            'stream_types::misc_info': misc_info
-            'stream_types::thread_list': thread_list
-            'stream_types::memory_list': memory_list
-            'stream_types::exception': exception_stream
+            stream_types::system_info: system_info
+            stream_types::misc_info: misc_info
+            stream_types::thread_list: thread_list
+            stream_types::memory_list: memory_list
+            stream_types::exception: exception_stream
             # TODO: support more stream types
   system_info:
     doc: |

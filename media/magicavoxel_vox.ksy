@@ -36,11 +36,11 @@ types:
         type:
           switch-on: chunk_id
           cases:
-            'chunk_type::pack': pack
-            'chunk_type::size': size
-            'chunk_type::xyzi': xyzi
-            'chunk_type::rgba': rgba
-            'chunk_type::matt': matt
+            chunk_type::pack: pack
+            chunk_type::size: size
+            chunk_type::xyzi: xyzi
+            chunk_type::rgba: rgba
+            chunk_type::matt: matt
       - id: children_chunks
         if: num_bytes_of_children_chunks != 0
         type: chunk
@@ -130,21 +130,21 @@ types:
         type: f4
     instances:
       has_plastic:
-        value: '(property_bits & 1) != 0'
+        value: (property_bits & 1) != 0
       has_roughness:
-        value: '(property_bits & 2) != 0'
+        value: (property_bits & 2) != 0
       has_specular:
-        value: '(property_bits & 4) != 0'
+        value: (property_bits & 4) != 0
       has_ior:
-        value: '(property_bits & 8) != 0'
+        value: (property_bits & 8) != 0
       has_attenuation:
-        value: '(property_bits & 16) != 0'
+        value: (property_bits & 16) != 0
       has_power:
-        value: '(property_bits & 32) != 0'
+        value: (property_bits & 32) != 0
       has_glow:
-        value: '(property_bits & 64) != 0'
+        value: (property_bits & 64) != 0
       has_is_total_power:
-        value: '(property_bits & 128) != 0'
+        value: (property_bits & 128) != 0
 enums:
   chunk_type:
     0x4d41494e: main

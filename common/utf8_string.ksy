@@ -30,7 +30,7 @@ seq:
     repeat: eos
 types:
   utf8_codepoint:
-    -webide-representation: 'U+{value_as_int:hex}'
+    -webide-representation: U+{value_as_int:hex}
     params:
       - id: ofs
         type: u8
@@ -58,13 +58,13 @@ types:
             0
           )
       raw1:
-        value: 'bytes[1] & 0b0011_1111'
+        value: bytes[1] & 0b0011_1111
         if: len_bytes >= 2
       raw2:
-        value: 'bytes[2] & 0b0011_1111'
+        value: bytes[2] & 0b0011_1111
         if: len_bytes >= 3
       raw3:
-        value: 'bytes[3] & 0b0011_1111'
+        value: bytes[3] & 0b0011_1111
         if: len_bytes >= 4
       value_as_int:
         value: >

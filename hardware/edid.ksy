@@ -44,7 +44,7 @@ seq:
     type: u1
   - id: chromacity
     type: chromacity_info
-    doc: 'Phosphor or filter chromaticity structure, which provides info on colorimetry and white point'
+    doc: Phosphor or filter chromaticity structure, which provides info on colorimetry and white point
     doc-ref: Standard, section 3.7
   - id: est_timings
     type: est_timings_info
@@ -120,21 +120,21 @@ types:
     instances:
       # Raw chromacity coordinates as 10-bit integers
       red_x_int:
-        value: '(red_x_9_2 << 2) | red_x_1_0'
+        value: (red_x_9_2 << 2) | red_x_1_0
       red_y_int:
-        value: '(red_y_9_2 << 2) | red_y_1_0'
+        value: (red_y_9_2 << 2) | red_y_1_0
       green_x_int:
-        value: '(green_x_9_2 << 2) | green_x_1_0'
+        value: (green_x_9_2 << 2) | green_x_1_0
       green_y_int:
-        value: '(green_y_9_2 << 2) | green_y_1_0'
+        value: (green_y_9_2 << 2) | green_y_1_0
       blue_x_int:
-        value: '(blue_x_9_2 << 2) | blue_x_1_0'
+        value: (blue_x_9_2 << 2) | blue_x_1_0
       blue_y_int:
-        value: '(blue_y_9_2 << 2) | blue_y_1_0'
+        value: (blue_y_9_2 << 2) | blue_y_1_0
       white_x_int:
-        value: '(white_x_9_2 << 2) | white_x_1_0'
+        value: (white_x_9_2 << 2) | white_x_1_0
       white_y_int:
-        value: '(white_y_9_2 << 2) | white_y_1_0'
+        value: (white_y_9_2 << 2) | white_y_1_0
       # User-friendly chromacity coordinates as floating point fractions
       red_x:
         value: red_x_int / 1024.0
@@ -259,11 +259,11 @@ types:
         3: ratio_16_9
 instances:
   mfg_id_ch1:
-    value: '(mfg_bytes & 0b0111110000000000) >> 10'
+    value: (mfg_bytes & 0b0111110000000000) >> 10
   mfg_id_ch2:
-    value: '(mfg_bytes & 0b0000001111100000) >> 5'
+    value: (mfg_bytes & 0b0000001111100000) >> 5
   mfg_id_ch3:
-    value: '(mfg_bytes & 0b0000000000011111)'
+    value: (mfg_bytes & 0b0000000000011111)
   mfg_str:
     value: '[mfg_id_ch1 + 0x40, mfg_id_ch2 + 0x40, mfg_id_ch3 + 0x40].as<bytes>.to_s("ASCII")'
   mfg_year:

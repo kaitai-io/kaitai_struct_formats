@@ -1,6 +1,6 @@
 meta:
   id: tr_dos_image
-  title: "TR-DOS flat-file disk image"
+  title: TR-DOS flat-file disk image
   file-extension: trd
   xref:
     justsolve: TRD

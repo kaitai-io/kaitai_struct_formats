@@ -18,7 +18,7 @@ types:
   hccapx_record:
     seq:
       - id: magic
-        contents: "HCPX"
+        contents: HCPX
       - id: version
         type: u4
         doc: The version number of the .hccapx file format.

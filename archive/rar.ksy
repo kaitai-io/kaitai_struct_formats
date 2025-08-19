@@ -55,10 +55,10 @@ types:
     seq:
       - id: magic1
         contents:
-          - 'Rar!'
+          - Rar!
           - 0x1a
           - 0x07
-        doc: "Fixed part of file's magic signature that doesn't change with RAR version"
+        doc: Fixed part of file's magic signature that doesn't change with RAR version
       - id: version
         type: u1
         doc: |
@@ -94,14 +94,14 @@ types:
         type:
           switch-on: block_type
           cases:
-            'block_types::file_header': block_file_header
+            block_types::file_header: block_file_header
       - id: add_body
         size: add_size
         if: has_add
         doc: Additional content in this block
     instances:
       has_add:
-        value: 'flags & 0x8000 != 0'
+        value: flags & 0x8000 != 0
         doc: True if block has additional content attached to it
       header_size:
         value: 'has_add ? 11 : 7'
@@ -138,17 +138,16 @@ types:
       - id: high_pack_size
         type: u4
         doc: Compressed file size, high 32 bits, only if 64-bit header flag is present
-        if: '_parent.flags & 0x100 != 0'
+        if: _parent.flags & 0x100 != 0
       - id: file_name
         size: name_size
       - id: salt
         type: u8
-        if: '_parent.flags & 0x400 != 0'
+        if: _parent.flags & 0x400 != 0
 #     - id: ext_time
 #       variable size
 #       if: '_parent.flags & 0x1000 != 0'
-  block_v5:
-    {}
+  block_v5: {}
     # not yet implemented
 enums:
   block_types:

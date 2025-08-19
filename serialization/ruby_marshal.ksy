@@ -23,7 +23,7 @@ doc: |
 
   From internal perspective, serialized stream consists of a simple
   magic header and a record.
-doc-ref: 'https://docs.ruby-lang.org/en/2.4.0/marshal_rdoc.html#label-Stream+Format'
+doc-ref: https://docs.ruby-lang.org/en/2.4.0/marshal_rdoc.html#label-Stream+Format
 seq:
   - id: version
     contents: [4, 8]
@@ -43,16 +43,16 @@ types:
         type:
           switch-on: code
           cases:
-            'codes::bignum': bignum
-            'codes::instance_var': instance_var
-            'codes::packed_int': packed_int
-            'codes::ruby_array': ruby_array
-            'codes::ruby_hash': ruby_hash
-            'codes::ruby_string': ruby_string
-            'codes::ruby_struct': ruby_struct
-            'codes::ruby_symbol': ruby_symbol
-            'codes::ruby_symbol_link': packed_int
-            'codes::ruby_object_link': packed_int
+            codes::bignum: bignum
+            codes::instance_var: instance_var
+            codes::packed_int: packed_int
+            codes::ruby_array: ruby_array
+            codes::ruby_hash: ruby_hash
+            codes::ruby_string: ruby_string
+            codes::ruby_struct: ruby_struct
+            codes::ruby_symbol: ruby_symbol
+            codes::ruby_symbol_link: packed_int
+            codes::ruby_object_link: packed_int
   packed_int:
     doc: |
       Ruby uses sophisticated system to pack integers: first `code`
@@ -80,7 +80,7 @@ types:
       Values beyond that are serialized as bignum (even if they
       technically might be not Bignum class in Ruby implementation,
       i.e. if they fit into 64 bits on a 64-bit platform).
-    doc-ref: 'https://docs.ruby-lang.org/en/2.4.0/marshal_rdoc.html#label-Fixnum+and+long'
+    doc-ref: https://docs.ruby-lang.org/en/2.4.0/marshal_rdoc.html#label-Fixnum+and+long
     seq:
       - id: code
         type: u1
@@ -119,7 +119,7 @@ types:
           code == 0x03 ? (encoded2 << 16 | encoded) :
           encoded
   ruby_symbol:
-    doc-ref: 'https://docs.ruby-lang.org/en/2.4.0/marshal_rdoc.html#label-Symbols+and+Byte+Sequence'
+    doc-ref: https://docs.ruby-lang.org/en/2.4.0/marshal_rdoc.html#label-Symbols+and+Byte+Sequence
     seq:
       - id: len
         type: packed_int
@@ -128,7 +128,7 @@ types:
         type: str
         encoding: UTF-8
   ruby_string:
-    doc-ref: 'https://docs.ruby-lang.org/en/2.4.0/marshal_rdoc.html#label-String'
+    doc-ref: https://docs.ruby-lang.org/en/2.4.0/marshal_rdoc.html#label-String
     seq:
       - id: len
         type: packed_int
@@ -143,7 +143,7 @@ types:
         repeat: expr
         repeat-expr: num_elements.value
   ruby_hash:
-    doc-ref: 'https://docs.ruby-lang.org/en/2.4.0/marshal_rdoc.html#label-Hash+and+Hash+with+Default+Value'
+    doc-ref: https://docs.ruby-lang.org/en/2.4.0/marshal_rdoc.html#label-Hash+and+Hash+with+Default+Value
     seq:
       - id: num_pairs
         type: packed_int
@@ -152,7 +152,7 @@ types:
         repeat: expr
         repeat-expr: num_pairs.value
   bignum:
-    doc-ref: 'https://docs.ruby-lang.org/en/2.4.0/marshal_rdoc.html#label-Bignum'
+    doc-ref: https://docs.ruby-lang.org/en/2.4.0/marshal_rdoc.html#label-Bignum
     seq:
       - id: sign
         type: u1
@@ -164,7 +164,7 @@ types:
         size: len_div_2.value * 2
         doc: Bytes that represent the number, see ruby-lang.org docs for reconstruction algorithm.
   ruby_struct:
-    doc-ref: 'https://docs.ruby-lang.org/en/2.4.0/marshal_rdoc.html#label-Struct'
+    doc-ref: https://docs.ruby-lang.org/en/2.4.0/marshal_rdoc.html#label-Struct
     seq:
       - id: name
         type: record
@@ -177,7 +177,7 @@ types:
         repeat: expr
         repeat-expr: num_members.value
   instance_var:
-    doc-ref: 'https://docs.ruby-lang.org/en/2.4.0/marshal_rdoc.html#label-Instance+Variables'
+    doc-ref: https://docs.ruby-lang.org/en/2.4.0/marshal_rdoc.html#label-Instance+Variables
     seq:
       - id: obj
         type: record
