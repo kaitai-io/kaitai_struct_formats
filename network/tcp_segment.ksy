@@ -50,6 +50,15 @@ types:
   flags:
     doc: |
       TCP header flags as defined "TCP Header Flags" registry.
+    to-string: |
+      (cwr ? "|CWR" : "") +
+      (ece ? "|ECE" : "") +
+      (urg ? "|URG" : "") +
+      (ack ? "|ACK" : "") +
+      (psh ? "|PSH" : "") +
+      (rst ? "|RST" : "") +
+      (syn ? "|SYN" : "") +
+      (fin ? "|FIN" : "")
     seq:
       - id: cwr
         type: b1
@@ -75,12 +84,3 @@ types:
       - id: fin
         type: b1
         doc: No more data from sender
-    to-string: |
-      (cwr ? "|CWR" : "") +
-      (ece ? "|ECE" : "") +
-      (urg ? "|URG" : "") +
-      (ack ? "|ACK" : "") +
-      (psh ? "|PSH" : "") +
-      (rst ? "|RST" : "") +
-      (syn ? "|SYN" : "") +
-      (fin ? "|FIN" : "")
