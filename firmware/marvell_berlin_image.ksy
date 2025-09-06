@@ -13,7 +13,9 @@ doc: |
   berlin_tools/enc_tool_z2a0 binary from the Chromecast 1 bootloader source code
   release (linked below).
 
-doc-ref: https://drive.google.com/file/d/0B3j4zj2IQp7MeFZFTk5uVzFjbHM/view?usp=drive_link
+doc-ref:
+  - https://drive.google.com/file/d/0B3j4zj2IQp7MeFZFTk5uVzFjbHM/view?usp=drive_link
+  - https://fail0verflow.com/blog/2022/ps4-psvr/
 
 seq:
   - id: parent_key_id
@@ -24,9 +26,8 @@ seq:
   - id: key_data
     size: 0x38
     doc: |
-      AES encryption key, wrapped into a 24-byte blob using a custom algorithm
-      that involves 6 rounds of ECB encryption and some word-swapping and XOR
-      that I can't be bothered to figure out; see keyWrap() in enc_tool_z2a0
+      AES-128 encryption key, wrapped into 24 bytes using the algorithm from
+      RFC 3394 and an internal wrapping key. See keyWrap() in enc_tool_z2a0.
   - id: signing_key_id
     type: u4
   - id: sign_type
