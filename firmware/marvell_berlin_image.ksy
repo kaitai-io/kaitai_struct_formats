@@ -32,6 +32,7 @@ seq:
     type: u4
   - id: sign_type
     type: u1
+    enum: sign_type
   - id: sign_len
     type: u1
   - id: reserved1
@@ -49,3 +50,8 @@ seq:
     size: sign_len
   - id: data
     size: image_size - sign_len
+
+enums:
+  sign_type:
+    0: aes_cmac
+    2: rsa_pss
