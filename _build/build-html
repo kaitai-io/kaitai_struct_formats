@@ -32,6 +32,7 @@ class FormatPagesGenerator
     'php' => {name: 'PHP', ext: 'php'},
     'python' => {name: 'Python', ext: 'py'},
     'ruby' => {name: 'Ruby', ext: 'rb'},
+    'rust' => {name: 'Rust', ext: 'rs'},
   }
 
   CATS = {
@@ -310,7 +311,7 @@ class FormatPagesGenerator
       ["#{file_id}.h", "#{file_id}.cpp"]
     when 'csharp', 'java', 'javascript', 'perl', 'php'
       ["#{ucc(file_id)}.#{LANGS[lang][:ext]}"]
-    when 'go', 'graphviz', 'lua', 'nim', 'ruby', 'python'
+    when 'go', 'graphviz', 'lua', 'nim', 'python', 'ruby', 'rust'
       ["#{file_id}.#{LANGS[lang][:ext]}"]
     else
       []
