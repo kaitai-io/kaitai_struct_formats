@@ -25,12 +25,14 @@ class FormatPagesGenerator
     'go' => {name: 'Go', ext: 'go'},
     'graphviz' => {name: 'GraphViz', ext: 'dot'},
     'java' => {name: 'Java', ext: 'java'},
+    'java-write' => {name: 'Java (read-write)', lexer: 'java', ext: 'java'},
     'javascript' => {name: 'JavaScript', ext: 'js'},
     'lua' => {name: 'Lua', ext: 'lua'},
     'nim' => {name: 'Nim', ext: 'nim'},
     'perl' => {name: 'Perl', ext: 'pm'},
     'php' => {name: 'PHP', ext: 'php'},
     'python' => {name: 'Python', ext: 'py'},
+    'python-write' => {name: 'Python (read-write)', lexer: 'python', ext: 'py'},
     'ruby' => {name: 'Ruby', ext: 'rb'},
     'rust' => {name: 'Rust', ext: 'rs'},
   }
@@ -298,7 +300,7 @@ class FormatPagesGenerator
   def source_file_gen_names(file_id, lang)
     src_files = source_file_names(file_id, lang)
     case lang
-    when 'go', 'java'
+    when 'go', 'java', 'java-write'
       src_files.map { |file| "src/#{file}" }
     else
       src_files
@@ -309,9 +311,9 @@ class FormatPagesGenerator
     case lang
     when 'cpp_stl_98', 'cpp_stl_11'
       ["#{file_id}.h", "#{file_id}.cpp"]
-    when 'csharp', 'java', 'javascript', 'perl', 'php'
+    when 'csharp', 'java', 'java-write', 'javascript', 'perl', 'php'
       ["#{ucc(file_id)}.#{LANGS[lang][:ext]}"]
-    when 'go', 'graphviz', 'lua', 'nim', 'python', 'ruby', 'rust'
+    when 'go', 'graphviz', 'lua', 'nim', 'python', 'python-write', 'ruby', 'rust'
       ["#{file_id}.#{LANGS[lang][:ext]}"]
     else
       []

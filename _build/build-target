@@ -11,3 +11,8 @@ TARGET_DIR=$(realpath "$2")
 mkdir -p "$TARGET_DIR"
 
 find "$KSY_DIR" -name "*.ksy" | xargs ksc -- -I "$KSY_DIR" -t all --ksc-json-output --outdir "$TARGET_DIR" >"$TARGET_DIR"/log.json
+find "$KSY_DIR" -name "*.ksy" | xargs ksc -- -I "$KSY_DIR" -w -t java -t python --ksc-json-output --outdir "$TARGET_DIR"/.tmp-write >"$TARGET_DIR"/log-write.json
+for lang in java python; do
+	mv -vT -- "$TARGET_DIR"/.tmp-write/"$lang" "$TARGET_DIR"/"$lang"-write
+done
+rmdir -v -- "$TARGET_DIR"/.tmp-write
