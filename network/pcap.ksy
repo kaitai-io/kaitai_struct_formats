@@ -9,11 +9,10 @@ meta:
     pronom: fmt/779
     wikidata: Q28009435
   license: CC0-1.0
-  ks-version: 0.8
+  ks-version: '0.11'
   imports:
     - /network/ethernet_frame
     - /network/packet_ppi
-  endian: le
 doc: |
   PCAP (named after libpcap / winpcap) is a popular format for saving
   network traffic grabbed by network sniffers. It is typically
@@ -21,6 +20,9 @@ doc: |
   [Wireshark](https://www.wireshark.org/).
 doc-ref: https://wiki.wireshark.org/Development/LibpcapFileFormat
 seq:
+  - id: magic_number
+    type: u4be
+    enum: magic
   - id: hdr
     type: header
   - id: packets
@@ -28,10 +30,16 @@ seq:
     repeat: eos
 types:
   header:
+    meta:
+      endian:
+        switch-on: _root.magic_number
+        cases:
+          'magic::le_microseconds': le
+          'magic::le_nanoseconds': le
+          'magic::be_microseconds': be
+          'magic::be_nanoseconds': be
     doc-ref: 'https://wiki.wireshark.org/Development/LibpcapFileFormat#Global_Header'
     seq:
-      - id: magic_number
-        contents: [0xd4, 0xc3, 0xb2, 0xa1]
       - id: version_major
         type: u2
         valid:
@@ -61,12 +69,33 @@ types:
           Link-layer header type, specifying the type of headers at
           the beginning of the packet.
   packet:
+    meta:
+      endian:
+        switch-on: _root.magic_number
+        cases:
+          'magic::le_microseconds': le
+          'magic::le_nanoseconds': le
+          'magic::be_microseconds': be
+          'magic::be_nanoseconds': be
     doc-ref: 'https://wiki.wireshark.org/Development/LibpcapFileFormat#Record_.28Packet.29_Header'
     seq:
       - id: ts_sec
         type: u4
+        doc: |
+          Timestamp of a packet in seconds since 1970-01-01 00:00:00 UTC (UNIX timestamp).
+
+          In practice, some captures are not following that (e.g. because the device lacks
+          a real-time clock), so this field might represent time since device boot, start of
+          capture, or other arbitrary epoch.
       - id: ts_usec
         type: u4
+        doc: |
+          Depending on `_root.magic_number`, units for this field change:
+
+          * If it's `le_microseconds` or `be_microseconds`, this field
+            contains microseconds.
+          * If it's `le_nanoseconds` or `be_nanoseconds`, this field
+            contains nanoseconds.
       - id: incl_len
         type: u4
         doc: Number of bytes of packet data actually captured and saved in the file.
@@ -296,3 +325,9 @@ enums:
     297: zwave_tap
     298: silabs_debug_channel
     299: fira_uci
+  magic:
+    # https://stackoverflow.com/a/17932578
+    0xd4c3b2a1: le_microseconds
+    0x4d3cb2a1: le_nanoseconds
+    0xa1b2c3d4: be_microseconds
+    0xa1b23c4d: be_nanoseconds
