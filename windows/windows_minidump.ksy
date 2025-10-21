@@ -74,6 +74,7 @@ types:
             'stream_types::misc_info': misc_info
             'stream_types::thread_list': thread_list
             'stream_types::memory_list': memory_list
+            'stream_types::memory_64_list': memory_64_list
             'stream_types::exception': exception_stream
             # TODO: support more stream types
   system_info:
@@ -208,12 +209,24 @@ types:
         type: location_descriptor
   memory_list:
     -orig-id: MINIDUMP_MEMORY_LIST
-    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_memory64_list
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_memory_list
     seq:
       - id: num_mem_ranges
         type: u4
       - id: mem_ranges
         type: memory_descriptor
+        repeat: expr
+        repeat-expr: num_mem_ranges
+  memory_64_list:
+    -orig-id: MINIDUMP_MEMORY64_LIST
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_memory64_list
+    seq:
+      - id: num_mem_ranges
+        type: u8
+      - id: ofs_base
+        type: u8
+      - id: mem_ranges
+        type: memory_descriptor_64
         repeat: expr
         repeat-expr: num_mem_ranges
   exception_stream:
@@ -276,6 +289,16 @@ types:
         type: u8
       - id: memory
         type: location_descriptor
+  memory_descriptor_64:
+    -orig-id: MINIDUMP_MEMORY_DESCRIPTOR64
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_memory_descriptor64
+    seq:
+      - id: addr_memory_range
+        -orig-id: StartOfMemoryRange
+        type: u8
+      - id: len_data
+        -orig-id: DataSize
+        type: u8
   location_descriptor:
     -orig-id: MINIDUMP_LOCATION_DESCRIPTOR
     doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_location_descriptor
