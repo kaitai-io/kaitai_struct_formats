@@ -285,7 +285,7 @@ types:
     doc: |
       Length prefixed string, between 0 and 2**64-1 bytes long.
 
-      The contents are deserilised into a `bytearray` object.
+      The contents are deserialised into a `bytearray` object.
     seq:
       - id: len
         type: u8
