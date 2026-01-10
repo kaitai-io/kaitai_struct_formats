@@ -51,7 +51,7 @@ types:
         doc: Year of release
       - id: comment
         size: 30
-        doc: Arbitary comment
+        doc: Arbitrary comment
       - id: genre
         type: u1
         enum: genre_enum
@@ -124,7 +124,7 @@ types:
         64: native_american
         65: cabaret
         66: new_wave
-        67: psychadelic
+        67: psychedelic
         68: rave
         69: showtunes
         70: trailer

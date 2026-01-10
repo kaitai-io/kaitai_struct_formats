@@ -105,7 +105,7 @@ types:
           - id: wrap
             -orig-id: ELF_LOGFILE_HEADER_WRAP
             type: b1
-            doc: True if wrapping of record has occured.
+            doc: True if wrapping of record has occurred.
           - id: dirty
             -orig-id: ELF_LOGFILE_HEADER_DIRTY
             type: b1
@@ -154,7 +154,7 @@ types:
       - id: time_written
         -orig-id: TimeWritten
         type: u4
-        doc: Time when thsi record was written into the log file, POSIX timestamp format.
+        doc: Time when this record was written into the log file, POSIX timestamp format.
       - id: event_id
         -orig-id: EventID
         type: u4

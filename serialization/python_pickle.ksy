@@ -142,7 +142,7 @@ types:
         terminator: 0x0a # "\n"
 
   decimalnl_long:
-    doc: Integer, encoded with the ASCII chracters [0-9-], followed by 'L'.
+    doc: Integer, encoded with the ASCII characters [0-9-], followed by 'L'.
     seq:
       - id: val
         type: str
@@ -225,8 +225,8 @@ types:
       Instead, opcodes and types with a known encoding are used.
       When unpickling
 
-      - `pickle.Unpickler` objects default to ASCII, which can be overriden
-      - `pickletools.dis` uses latin1, and cannot be overriden
+      - `pickle.Unpickler` objects default to ASCII, which can be overridden
+      - `pickletools.dis` uses latin1, and cannot be overridden
     doc-ref: https://github.com/python/cpython/blob/bb8071a4cae/Lib/pickle.py#L486-L495
     seq:
       - id: len
