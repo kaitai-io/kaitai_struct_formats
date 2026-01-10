@@ -44,7 +44,7 @@ instances:
     value: |
       (ether_type_1 == ether_type_enum::ieee_802_1q_tpid) ? ether_type_2 : ether_type_1
     doc: |
-      Ether type can be specied in several places in the frame. If
+      Ether type can be specified in several places in the frame. If
       first location bears special marker (0x8100), then it is not the
       real ether frame yet, an additional payload (`tci`) is expected
       and real ether type is upcoming next.

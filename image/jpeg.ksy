@@ -31,7 +31,7 @@ doc: |
 
   Format is organized as a container format, serving multiple
   "segments", each starting with a magic and a marker. JFIF standard
-  dictates order and mandatory apperance of segments:
+  dictates order and mandatory appearance of segments:
 
   * SOI
   * APP0 (with JFIF magic)

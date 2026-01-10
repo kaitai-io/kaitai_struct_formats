@@ -185,7 +185,7 @@ types:
               - id: sector_size
                 type: u4
           flags:
-            seq: #little endian assummed
+            seq: #little endian assumed
               - id: reserved0
                 type: b15
               - id: zero_expand

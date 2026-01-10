@@ -495,7 +495,7 @@ enums:
       -orig-id: RPMTAG_DESCRIPTION
       doc: |
         Specifies the description of the package. The description value
-        pointed to by this index record contains a full desription of
+        pointed to by this index record contains a full description of
         the package.
     1006:
       id: build_time
@@ -770,7 +770,7 @@ enums:
     1082:
       id: changelog_text
       -orig-id: RPMTAG_CHANGELOGTEXT
-      doc: Specifies the changes asssociated with a changelog entry.
+      doc: Specifies the changes associated with a changelog entry.
     1083:
       id: broken_md5_internal
       -orig-id: RPMTAG_BROKENMD5
@@ -789,7 +789,7 @@ enums:
       -orig-id: RPMTAG_POSTINPROG
       doc: |
         Specifies the name of the interpreter to which the postinstall
-        scriptlet will be passed. The intepreter pointed to by this
+        scriptlet will be passed. The interpreter pointed to by this
         index record shall be `/bin/sh`.
     1087:
       id: pre_uninstall_interpreter

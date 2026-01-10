@@ -1895,7 +1895,7 @@ enums:
         specific, and should have been in the range DT_LOPROC-DT_HIPROC
         instead of here. When the error was fixed,
         DT_DEPRECATED_SPARC_REGISTER was created to maintain backward
-        compatability.
+        compatibility.
       doc-ref:
         - https://github.com/illumos/illumos-gate/blob/1d806c5f41/usr/src/cmd/sgs/libconv/common/dynamic.c#L522-L528
         - https://github.com/illumos/illumos-gate/blob/1d806c5f41/usr/src/boot/sys/sys/elf_common.h#L634-L635

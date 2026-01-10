@@ -138,10 +138,10 @@ types:
         doc: "the object file has no undefined references"
       incr_link:
         value: value & 0x2 != 0
-        doc: "the object file is the output of an incremental link against a base file and can't be link edited again"
+        doc: "the object file is the output of an incremental link against a base file and can't be link-edited again"
       dyld_link:
         value: value & 0x4 != 0
-        doc: "the object file is input for the dynamic linker and can't be staticly link edited again"
+        doc: "the object file is input for the dynamic linker and can't be statically link-edited again"
       bind_at_load:
         value: value & 0x8 != 0
         doc: "the object file's undefined references are bound by the dynamic linker when loaded."
@@ -162,7 +162,7 @@ types:
         doc: "the executable is forcing all images to use flat name space bindings"
       no_multi_defs:
         value: value & 0x200 != 0
-        doc: "this umbrella guarantees no multiple defintions of symbols in its sub-images so the two-level namespace hints can always be used."
+        doc: "this umbrella guarantees no multiple definitions of symbols in its sub-images so the two-level namespace hints can always be used."
       no_fix_prebinding:
         value: value & 0x400 != 0
         doc: "do not have dyld notify the prebinding agent about this executable"

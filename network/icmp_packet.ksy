@@ -43,8 +43,8 @@ types:
         3: port_unreachable
         4: fragmentation_needed_and_df_set
         5: source_route_failed
-        6: dst_net_unkown
-        7: sdt_host_unkown
+        6: dst_net_unknown
+        7: sdt_host_unknown
         8: src_isolated
         9: net_prohibited_by_admin
         10: host_prohibited_by_admin
