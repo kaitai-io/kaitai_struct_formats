@@ -23,7 +23,7 @@ class FormatPagesGenerator
     'cpp_stl_98' => {name: 'C++98/STL', lexer: 'cpp', canonical: CPP_STL_CANONICAL},
     'csharp' => {name: 'C#', ext: 'cs'},
     'go' => {name: 'Go', ext: 'go'},
-    'graphviz' => {name: 'GraphViz', ext: 'dot'},
+    'graphviz' => {name: 'Graphviz', ext: 'dot'},
     'java' => {name: 'Java', ext: 'java'},
     'java-write' => {name: 'Java (read-write)', lexer: 'java', ext: 'java'},
     'javascript' => {name: 'JavaScript', ext: 'js'},
@@ -184,7 +184,7 @@ class FormatPagesGenerator
       sample_ext = sample_file_ext(meta['file-extension'])
       format_name = get_format_name(meta)
       page_title = "#{format_name}: " + (if cur_lang == 'graphviz'
-        "GraphViz block diagram (.dot) source: Kaitai Struct"
+        "Graphviz block diagram (.dot) source: Kaitai Struct"
       else
         "#{LANGS[cur_lang][:name]} parsing library"
       end)
