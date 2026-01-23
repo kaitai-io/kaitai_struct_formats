@@ -142,7 +142,7 @@ instances:
     pos: ofs_gl_cmds
     # in http://tfc.duke.free.fr/coding/src/md2.c initially read as `int *`
     # (a pool of `int`s) => hence `s4`
-    size: 4 * num_gl_cmds # FIXME: replace `4` with `sizeof<s4>` once `sizeof` is implemented for GraphViz
+    size: sizeof<s4> * num_gl_cmds
     type: gl_cmds_list
   anim_names:
     value: |
