@@ -9,6 +9,8 @@ meta:
     wikidata: Q5156830
   license: CC0-1.0
   endian: le
+  imports:
+    - /windows/windows_filetime
 seq:
   - id: header
     type: cfb_header
@@ -106,11 +108,11 @@ types:
         type: u4
         doc: User-defined flags for storage or root storage objects
       - id: time_create
-        type: u8
-        doc: Creation time, in Windows FILETIME format (number of 100-nanosecond intervals since January 1, 1601, UTC)
+        type: windows_filetime
+        doc: Creation time.
       - id: time_mod
-        type: u8
-        doc: Modification time, in Windows FILETIME format (number of 100-nanosecond intervals since January 1, 1601, UTC).
+        type: windows_filetime
+        doc: Modification time.
       - id: ofs
         type: s4
         doc: For stream object, number of starting sector. For a root storage object, first sector of the mini stream, if the mini stream exists.
