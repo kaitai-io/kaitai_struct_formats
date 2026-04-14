@@ -40,11 +40,11 @@ types:
         type: u4
       - id: rtlt  
         size: 6
-      - id: f_d
+      - id: bias_doppler_raw
         size: 6
       - id: agc
         type: u2
-      - id: f_tx
+      - id: tx_freq
         type: u4
       - id: tx_ant_size
         type: b4
@@ -60,7 +60,7 @@ types:
         enum: antenna_geom
       - id: rx_pad_id
         type: b4
-      - id: mode_sys
+      - id: system_unique_modes
         type: u2
       - id: validity
         type: validity_bits
@@ -88,17 +88,17 @@ types:
         value: angle_one * 8.381903173e-8
       angle_two_cnv:
         value: angle_two * 8.381903173e-8
-      f_d_cnts:
-        value: ((f_d[0] * 0x10000000000) +
-                (f_d[1] * 0x100000000)   +
-                (f_d[2] * 0x1000000)     +
-                (f_d[3] * 0x10000)       +
-                (f_d[4] * 0x100)         +
-                (f_d[5]))
-      rec_freq_mhz:
-        value: f_d_cnts*.0001 - 240000
-      f_tx_mhz:
-        value: f_tx * 10e-6
+      bias_doppler_cnts:
+        value: ((bias_doppler_raw[0] * 0x10000000000) +
+                (bias_doppler_raw[1] * 0x100000000)   +
+                (bias_doppler_raw[2] * 0x1000000)     +
+                (bias_doppler_raw[3] * 0x10000)       +
+                (bias_doppler_raw[4] * 0x100)         +
+                (bias_doppler_raw[5]))
+      rx_freq_mhz:
+        value: bias_doppler_cnts*.0001 - 240000
+      tx_freq_mhz:
+        value: tx_freq * 10e-6
         
     types:
       validity_bits:
@@ -158,5 +158,3 @@ types:
         0x6: tdrss
         0x7: stgt_wsgtu
         0x8: tdrss_ttc
-      
-        
