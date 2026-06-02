@@ -448,8 +448,16 @@ types:
           any-of:
             - compression_attach_methods::none
             - compression_attach_methods::zlib
-      - id: data
+      - id: data_plain
         size-eos: true
+        if: compression == compression_attach_methods::none
+      - id: data_zlib
+        size-eos: true
+        process: zlib
+        if: compression == compression_attach_methods::zlib
+    instances:
+      data:
+        value: 'compression == compression_attach_methods::none ? data_plain : data_zlib'
     enums:
       compression_attach_methods:
         0: none
