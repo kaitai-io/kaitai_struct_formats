@@ -422,6 +422,25 @@ types:
       - id: file_name
         type: strz
         encoding: utf-8
+        valid:
+          # See https://github.com/skeeto/scratch/blob/58470254f4a95cdf7a53888e405c851c21eb2cae/pngattach/pngattach.c#L466-L468
+          expr: _.length != 0 and _.substring(0, 1) != "."
+        doc: |
+          From the [official
+          specification](https://github.com/skeeto/scratch/tree/58470254f4a95cdf7a53888e405c851c21eb2cae/pngattach#atch-chunk-specification):
+
+          > The name can be any length that fits in the chunk, and should be
+          > encoded with UTF-8. It's up to each implementation to determine how
+          > to appropriately interpret the bytestring for the local system.
+
+          > The name must be at least one byte long, not counting the null
+          > terminator. It cannot begin with a period (`0x2e`), nor contain
+          > control bytes (anything less than `0x20`), nor slash (`0x2f`), nor
+          > backslash (`0x5c`), i.e. no directory hierarchies.
+
+          As of Kaitai Struct 0.11, we cannot easily check whether a string
+          contains certain characters, so we only enforce that the file name is
+          not empty and that it doesn't start with a period.
       - id: compression
         type: u1
         enum: compression_attach_methods
