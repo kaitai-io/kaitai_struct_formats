@@ -446,13 +446,13 @@ types:
         enum: compression_attach_methods
         valid:
           any-of:
-            - compression_attach_methods::no_compression
+            - compression_attach_methods::none
             - compression_attach_methods::zlib
       - id: data
         size-eos: true
     enums:
       compression_attach_methods:
-        0: no_compression
+        0: none
         1: zlib
 enums:
   color_type:
