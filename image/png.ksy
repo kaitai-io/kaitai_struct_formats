@@ -103,7 +103,7 @@ types:
             # evernote/skitch chunks
             '"skRf"': evernote_skrf_chunk
 
-            # pngattach: https://nullprogram.com/blog/2021/12/31/
+            # pngattach
             '"atCh"': atch_chunk
       - id: crc
         size: 4
@@ -415,6 +415,9 @@ types:
       - id: data
         size-eos: true
   atch_chunk:
+    doc-ref:
+      - https://github.com/skeeto/scratch/tree/58470254f4a95cdf7a53888e405c851c21eb2cae/pngattach
+      - https://nullprogram.com/blog/2021/12/31/ A new protocol and tool for PNG file attachments
     seq:
       - id: name
         type: strz
