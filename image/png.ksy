@@ -100,7 +100,8 @@ types:
             '"mkTS"': adobe_fireworks_chunk
             '"prVW"': adobe_fireworks_chunk
 
-            # evernote/skitch chunks
+            # Evernote/Skitch chunks
+            '"skMf"': evernote_skmf_chunk
             '"skRf"': evernote_skrf_chunk
 
             # pngattach
@@ -408,12 +409,38 @@ types:
       - id: preview_data
         process: zlib
         size-eos: true
+  evernote_skmf_chunk:
+    doc-ref: https://web.archive.org/web/20210302212148/https://discussion.evernote.com/forums/topic/88532-how-to-extract-annotation-information-from-annotated-evernoteskitch-images/#comment-451501
+    seq:
+      - id: json
+        type: str
+        encoding: UTF-8
+        size-eos: true
+        doc: |
+          JSON document with information about editable annotations (text,
+          lines, paths, etc.) in Evernote/Skitch.
+
+          It refers to the original image stored in the `skRf` chunk (which
+          usually follows immediately after `skMf`) via the
+          `.children[0].children[0].uri` JSON property. This has the format
+          `"skitch+uuid:///$UUID"`, where `$UUID` is a random UUIDv4 value that
+          matches the `uuid` field in `evernote_skrf_chunk` (i.e. in the first
+          16 bytes of the `skRf` chunk).
   evernote_skrf_chunk:
+    doc-ref: https://web.archive.org/web/20210302212148/https://discussion.evernote.com/forums/topic/88532-how-to-extract-annotation-information-from-annotated-evernoteskitch-images/#comment-451501
+    -webide-representation: '{uuid:uuid}'
     seq:
       - id: uuid
         size: 16
-      - id: data
+        doc: |
+          Random UUIDv4 value used to identify the image. It is referenced by
+          the `skMf` chunk - see the documentation for the `json` field in
+          `evernote_skmf_chunk`.
+      - id: orig_img
         size-eos: true
+        doc: |
+          The original source image without annotations. It's usually a PNG
+          image as well, but it can also be a JPEG or possibly other formats.
   atch_chunk:
     doc-ref:
       - https://github.com/skeeto/scratch/tree/58470254f4a95cdf7a53888e405c851c21eb2cae/pngattach
