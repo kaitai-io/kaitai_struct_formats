@@ -10,6 +10,7 @@ meta:
     justsolve:
       - PNG
       - APNG
+      - Fireworks_PNG
     loc: fdd000153
     mime:
       - image/png
@@ -61,6 +62,8 @@ types:
         type: str
         size: 4
         encoding: UTF-8
+        valid:
+          expr: type != "\0\0\0\0"
       - id: body
         size: len
         type:
@@ -92,6 +95,18 @@ types:
             '"acTL"': animation_control_chunk
             '"fcTL"': frame_control_chunk
             '"fdAT"': frame_data_chunk
+
+            # Adobe Fireworks chunks
+            '"mkBS"': adobe_fireworks_chunk
+            '"mkTS"': adobe_fireworks_chunk
+            '"prVW"': adobe_fireworks_chunk
+
+            # Evernote/Skitch chunks
+            '"skMf"': evernote_skmf_chunk
+            '"skRf"': evernote_skrf_chunk
+
+            # pngattach
+            '"atCh"': atch_chunk
       - id: crc
         size: 4
   ihdr_chunk:
@@ -99,8 +114,12 @@ types:
     seq:
       - id: width
         type: u4
+        valid:
+          min: 1
       - id: height
         type: u4
+        valid:
+          min: 1
       - id: bit_depth
         type: u1
       - id: color_type
@@ -385,6 +404,92 @@ types:
           Frame data for the frame. At least one fdAT chunk is required for
           each frame. The compressed datastream is the concatenation of the
           contents of the data fields of all the fdAT chunks within a frame.
+  adobe_fireworks_chunk:
+    doc-ref: https://stackoverflow.com/questions/4242402/the-fireworks-png-format-any-insight-any-libs/51683285#51683285
+    seq:
+      - id: preview_data
+        process: zlib
+        size-eos: true
+  evernote_skmf_chunk:
+    doc-ref: https://web.archive.org/web/20210302212148/https://discussion.evernote.com/forums/topic/88532-how-to-extract-annotation-information-from-annotated-evernoteskitch-images/#comment-451501
+    seq:
+      - id: json
+        type: str
+        encoding: UTF-8
+        size-eos: true
+        doc: |
+          JSON document with information about editable annotations (text,
+          lines, paths, etc.) in Evernote/Skitch.
+
+          It refers to the original image stored in the `skRf` chunk (which
+          usually follows immediately after `skMf`) via the
+          `.children[0].children[0].uri` JSON property. This has the format
+          `"skitch+uuid:///$UUID"`, where `$UUID` is a random UUIDv4 value that
+          matches the `uuid` field in `evernote_skrf_chunk` (i.e. in the first
+          16 bytes of the `skRf` chunk).
+  evernote_skrf_chunk:
+    doc-ref: https://web.archive.org/web/20210302212148/https://discussion.evernote.com/forums/topic/88532-how-to-extract-annotation-information-from-annotated-evernoteskitch-images/#comment-451501
+    -webide-representation: '{uuid:uuid}'
+    seq:
+      - id: uuid
+        size: 16
+        doc: |
+          Random UUIDv4 value used to identify the image. It is referenced by
+          the `skMf` chunk - see the documentation for the `json` field in
+          `evernote_skmf_chunk`.
+      - id: orig_img
+        size-eos: true
+        doc: |
+          The original source image without annotations. It's usually a PNG
+          image as well, but it can also be a JPEG or possibly other formats.
+  atch_chunk:
+    doc-ref:
+      - https://github.com/skeeto/scratch/tree/58470254f4a95cdf7a53888e405c851c21eb2cae/pngattach
+      - https://nullprogram.com/blog/2021/12/31/ A new protocol and tool for PNG file attachments
+    seq:
+      - id: file_name
+        type: strz
+        encoding: utf-8
+        valid:
+          # See https://github.com/skeeto/scratch/blob/58470254f4a95cdf7a53888e405c851c21eb2cae/pngattach/pngattach.c#L466-L468
+          expr: _.length != 0 and _.substring(0, 1) != "."
+        doc: |
+          From the [official
+          specification](https://github.com/skeeto/scratch/tree/58470254f4a95cdf7a53888e405c851c21eb2cae/pngattach#atch-chunk-specification):
+
+          > The name can be any length that fits in the chunk, and should be
+          > encoded with UTF-8. It's up to each implementation to determine how
+          > to appropriately interpret the bytestring for the local system.
+
+          > The name must be at least one byte long, not counting the null
+          > terminator. It cannot begin with a period (`0x2e`), nor contain
+          > control bytes (anything less than `0x20`), nor slash (`0x2f`), nor
+          > backslash (`0x5c`), i.e. no directory hierarchies.
+
+          As of Kaitai Struct 0.11, we cannot easily check whether a string
+          contains certain characters, so we only enforce that the file name is
+          not empty and that it doesn't start with a period.
+      - id: compression
+        type: u1
+        enum: compression_attach_methods
+        valid:
+          any-of:
+            - compression_attach_methods::none
+            - compression_attach_methods::zlib
+      - id: data_plain
+        size-eos: true
+        if: compression == compression_attach_methods::none
+      - id: data_zlib
+        size-eos: true
+        process: zlib
+        if: compression == compression_attach_methods::zlib
+    instances:
+      data:
+        value: 'compression == compression_attach_methods::none ? data_plain : data_zlib'
+    enums:
+      compression_attach_methods:
+        0: none
+        1: zlib
 enums:
   color_type:
     0: greyscale
