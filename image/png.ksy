@@ -10,6 +10,7 @@ meta:
     justsolve:
       - PNG
       - APNG
+      - Fireworks_PNG
     loc: fdd000153
     mime:
       - image/png
