@@ -152,7 +152,7 @@ types:
       - id: b
         type: u1
   cicp_chunk:
-    doc-ref: https://w3c.github.io/PNG-spec/#cICP-chunk
+    doc-ref: https://www.w3.org/TR/png/#cICP-chunk
     seq:
       - id: colour_primaries
         type: u1
@@ -163,7 +163,7 @@ types:
       - id: video_full_range_flag
         type: u1
   clli_chunk:
-    doc-ref: https://w3c.github.io/PNG-spec/#cLLi-chunk
+    doc-ref: https://www.w3.org/TR/png/#cLLI-chunk
     seq:
       - id: maximum_content_light_level
         type: u4
@@ -200,7 +200,7 @@ types:
       gamma_ratio:
         value: 100000.0 / gamma_int
   mdcv_chunk:
-    doc-ref: https://w3c.github.io/PNG-spec/#mDCv-chunk
+    doc-ref: https://www.w3.org/TR/png/#mDCV-chunk
     seq:
       - id: colour_primaries
         size: 12
