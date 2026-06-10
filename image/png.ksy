@@ -156,7 +156,7 @@ types:
       - https://www.w3.org/TR/png/#cICP-chunk
       - https://w3c.github.io/png/Implementation_Report_3e/#cicp
     seq:
-      - id: colour_primaries
+      - id: color_primaries
         type: u1
       - id: transfer_function
         type: u1
@@ -208,7 +208,7 @@ types:
       - https://www.w3.org/TR/png/#mDCV-chunk
       - https://w3c.github.io/png/Implementation_Report_3e/#mastering
     seq:
-      - id: colour_primaries
+      - id: color_primaries
         size: 12
       - id: white_point_chromaticity
         type: u4
