@@ -296,13 +296,21 @@ types:
         doc: |
           Keyword translated into language specified in
           `language_tag`. Line breaks are not allowed.
-      - id: text
-        type:
-          switch-on: compression_flag
-          cases:
-            0: international_text
-            1: international_text_compressed
+      - id: text_plain
         size-eos: true
+        type: international_text
+        if: compression_flag == 0
+      - id: text_zlib
+        size-eos: true
+        process: zlib
+        type: international_text
+        if: compression_flag == 1
+        -affected-by:
+          - 374 # `process/switch-on` would help here
+          - 706 # `process` does not work with `type: str`
+    instances:
+      text:
+        value: '(compression_flag == 0 ? text_plain : text_zlib).text'
         doc: |
           Text contents ("value" of this key-value pair), written in
           language specified in `language_tag`. Line breaks are
@@ -313,15 +321,6 @@ types:
         type: str
         encoding: UTF-8
         size-eos: true
-        doc: |
-          Text contents ("value" of this key-value pair), written in
-          language specified in `language_tag`. Line breaks are
-          allowed.
-  international_text_compressed:
-    seq:
-      - id: text
-        size-eos: true
-        process: zlib
         doc: |
           Text contents ("value" of this key-value pair), written in
           language specified in `language_tag`. Line breaks are
