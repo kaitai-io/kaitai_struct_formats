@@ -165,28 +165,37 @@ types:
       - id: video_full_range_flag
         type: u1
   clli_chunk:
+    -webide-representation: 'MaxCLL = {max_content_light_level:dec} cd/m^2, MaxFALL = {max_frame_average_light_level:dec} cd/m^2'
     doc-ref:
       - https://www.w3.org/TR/png/#cLLI-chunk
       - https://w3c.github.io/png/Implementation_Report_3e/#light
     seq:
-      - id: max_content_light_level
+      - id: max_content_light_level_int
+        type: u4
+      - id: max_frame_average_light_level_int
+        type: u4
+    instances:
+      max_content_light_level:
+        value: max_content_light_level_int * 0.0001
         -orig-id: MaxCLL
-        type: u4
-      - id: max_frame_average_light_level
+        doc: Maximum Content Light Level (MaxCLL), in cd/m^2
+      max_frame_average_light_level:
+        value: max_frame_average_light_level_int * 0.0001
         -orig-id: MaxFALL
-        type: u4
+        doc: Maximum Frame Average Light Level (MaxFALL), in cd/m^2
   chrm_chunk:
     doc-ref: https://www.w3.org/TR/png/#11cHRM
     seq:
       - id: white_point
-        type: point
+        type: chrm_chromaticity
       - id: red
-        type: point
+        type: chrm_chromaticity
       - id: green
-        type: point
+        type: chrm_chromaticity
       - id: blue
-        type: point
-  point:
+        type: chrm_chromaticity
+  chrm_chromaticity:
+    -webide-representation: '({x:dec}, {y:dec})'
     seq:
       - id: x_int
         type: u4
@@ -210,14 +219,37 @@ types:
       - https://www.w3.org/TR/png/#mDCV-chunk
       - https://w3c.github.io/png/Implementation_Report_3e/#mastering
     seq:
-      - id: color_primaries
-        size: 12
-      - id: white_point_chromaticity
+      - id: red
+        type: mdcv_chromaticity
+      - id: green
+        type: mdcv_chromaticity
+      - id: blue
+        type: mdcv_chromaticity
+      - id: white_point
+        type: mdcv_chromaticity
+      - id: max_luminance_int
         type: u4
-      - id: max_luminance
+      - id: min_luminance_int
         type: u4
-      - id: min_luminance
-        type: u4
+    instances:
+      max_luminance:
+        value: max_luminance_int * 0.0001
+        doc: Maximum luminance in cd/m^2
+      min_luminance:
+        value: min_luminance_int * 0.0001
+        doc: Minimum luminance in cd/m^2
+  mdcv_chromaticity:
+    -webide-representation: '({x:dec}, {y:dec})'
+    seq:
+      - id: x_int
+        type: u2
+      - id: y_int
+        type: u2
+    instances:
+      x:
+        value: x_int * 0.00002
+      y:
+        value: y_int * 0.00002
   srgb_chunk:
     doc-ref: https://www.w3.org/TR/png/#11sRGB
     seq:
