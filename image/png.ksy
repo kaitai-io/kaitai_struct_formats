@@ -158,12 +158,39 @@ types:
     seq:
       - id: color_primaries
         type: u1
+        doc: |
+          values above 22 are reserved, see
+          <https://github.com/pnggroup/pngcheck/blob/bd33ad6490269df07cac81e5305f4ebf56c2b637/pngcheck.c#L3322-L3325>
       - id: transfer_function
         type: u1
+        doc: |
+          values above 18 are reserved, see
+          <https://github.com/pnggroup/pngcheck/blob/bd33ad6490269df07cac81e5305f4ebf56c2b637/pngcheck.c#L3326-L3329>
       - id: matrix_coefficients
         type: u1
+        valid: 0 # https://github.com/pnggroup/pngcheck/blob/bd33ad6490269df07cac81e5305f4ebf56c2b637/pngcheck.c#L3314-L3317
+        doc: |
+          From the [official
+          specification](https://www.w3.org/TR/2025/REC-png-3-20250624/#cICP-chunk):
+
+          > RGB is currently the only supported color model in PNG, and as such
+          > `Matrix Coefficients` shall be set to `0`.
       - id: video_full_range_flag
         type: u1
+        valid:
+          any-of: [0, 1] # https://github.com/pnggroup/pngcheck/blob/bd33ad6490269df07cac81e5305f4ebf56c2b637/pngcheck.c#L3318-L3321
+        doc: |
+          From the [official
+          specification](https://www.w3.org/TR/2025/REC-png-3-20250624/#cICP-chunk):
+
+          > If `Video Full Range Flag` value is `1`, then the image is a
+          > full-range image. Typically, images in the RGB color representation
+          > are stored in the full-range signal quantization, therefore the vast
+          > majority of computer graphics and web images, including those used
+          > in traditional PNG workflows, are full-range images.
+
+          > If `Video Full Range Flag` value is `0`, then the image is a
+          > narrow-range image.
   clli_chunk:
     -webide-representation: 'MaxCLL = {max_content_light_level:dec} cd/m^2, MaxFALL = {max_frame_average_light_level:dec} cd/m^2'
     doc-ref:
