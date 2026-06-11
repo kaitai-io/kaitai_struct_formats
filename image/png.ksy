@@ -169,9 +169,11 @@ types:
       - https://www.w3.org/TR/png/#cLLI-chunk
       - https://w3c.github.io/png/Implementation_Report_3e/#light
     seq:
-      - id: maximum_content_light_level
+      - id: max_content_light_level
+        -orig-id: MaxCLL
         type: u4
-      - id: maximum_frame_average_light_level
+      - id: max_frame_average_light_level
+        -orig-id: MaxFALL
         type: u4
   chrm_chunk:
     doc-ref: https://www.w3.org/TR/png/#11cHRM
@@ -212,9 +214,9 @@ types:
         size: 12
       - id: white_point_chromaticity
         type: u4
-      - id: maximum_luminance
+      - id: max_luminance
         type: u4
-      - id: minimum_luminance
+      - id: min_luminance
         type: u4
   srgb_chunk:
     doc-ref: https://www.w3.org/TR/png/#11sRGB
