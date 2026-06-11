@@ -79,10 +79,10 @@ types:
             # Ancillary chunks
             '"cHRM"': chrm_chunk
             '"cICP"': cicp_chunk
-            '"cLLi"': clli_chunk
+            '"cLLI"': clli_chunk
             '"gAMA"': gama_chunk
             # iCCP
-            '"mDCv"': mdcv_chunk
+            '"mDCV"': mdcv_chunk
             # sBIT
             '"sRGB"': srgb_chunk
             '"bKGD"': bkgd_chunk
