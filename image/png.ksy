@@ -47,7 +47,7 @@ seq:
   - id: ihdr
     type: ihdr_chunk
   - id: ihdr_crc
-    size: 4
+    type: u4
   # The rest of the chunks
   - id: chunks
     type: chunk
@@ -116,7 +116,7 @@ types:
             # https://github.com/hackerfactor/SEAL/blob/master/FORMATS.md#png
             # seAl
       - id: crc
-        size: 4
+        type: u4
   ihdr_chunk:
     doc-ref: https://www.w3.org/TR/png/#11IHDR
     seq:
