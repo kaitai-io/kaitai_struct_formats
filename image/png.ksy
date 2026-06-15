@@ -26,7 +26,7 @@ meta:
       - Q178051 # PNG
       - Q433224 # APNG
   license: CC0-1.0
-  ks-version: 0.9
+  ks-version: 0.11
   endian: be
 doc: |
   Test files for APNG can be found at the following locations:
@@ -55,6 +55,7 @@ seq:
     repeat-until: _.type == "IEND" or _io.eof
 types:
   chunk:
+    -webide-representation: "{type}"
     seq:
       - id: len
         type: u4
@@ -77,8 +78,11 @@ types:
 
             # Ancillary chunks
             '"cHRM"': chrm_chunk
+            '"cICP"': cicp_chunk
+            '"cLLI"': clli_chunk
             '"gAMA"': gama_chunk
             # iCCP
+            '"mDCV"': mdcv_chunk
             # sBIT
             '"sRGB"': srgb_chunk
             '"bKGD"': bkgd_chunk
@@ -107,6 +111,10 @@ types:
 
             # pngattach
             '"atCh"': atch_chunk
+
+            # https://exiftool.org/TagNames/XMP.html#SEAL
+            # https://github.com/hackerfactor/SEAL/blob/master/FORMATS.md#png
+            # seAl
       - id: crc
         size: 4
   ihdr_chunk:
@@ -122,6 +130,8 @@ types:
           min: 1
       - id: bit_depth
         type: u1
+        valid:
+          any-of: [1, 2, 4, 8, 16]
       - id: color_type
         type: u1
         enum: color_type
@@ -145,18 +155,78 @@ types:
         type: u1
       - id: b
         type: u1
+  cicp_chunk:
+    doc-ref:
+      - https://www.w3.org/TR/png/#cICP-chunk
+      - https://w3c.github.io/png/Implementation_Report_3e/#cicp
+    seq:
+      - id: color_primaries
+        type: u1
+        doc: |
+          values above 22 are reserved, see
+          <https://github.com/pnggroup/pngcheck/blob/bd33ad6490269df07cac81e5305f4ebf56c2b637/pngcheck.c#L3322-L3325>
+      - id: transfer_function
+        type: u1
+        doc: |
+          values above 18 are reserved, see
+          <https://github.com/pnggroup/pngcheck/blob/bd33ad6490269df07cac81e5305f4ebf56c2b637/pngcheck.c#L3326-L3329>
+      - id: matrix_coefficients
+        type: u1
+        valid: 0 # https://github.com/pnggroup/pngcheck/blob/bd33ad6490269df07cac81e5305f4ebf56c2b637/pngcheck.c#L3314-L3317
+        doc: |
+          From the [official
+          specification](https://www.w3.org/TR/2025/REC-png-3-20250624/#cICP-chunk):
+
+          > RGB is currently the only supported color model in PNG, and as such
+          > `Matrix Coefficients` shall be set to `0`.
+      - id: video_full_range_flag
+        type: u1
+        valid:
+          any-of: [0, 1] # https://github.com/pnggroup/pngcheck/blob/bd33ad6490269df07cac81e5305f4ebf56c2b637/pngcheck.c#L3318-L3321
+        doc: |
+          From the [official
+          specification](https://www.w3.org/TR/2025/REC-png-3-20250624/#cICP-chunk):
+
+          > If `Video Full Range Flag` value is `1`, then the image is a
+          > full-range image. Typically, images in the RGB color representation
+          > are stored in the full-range signal quantization, therefore the vast
+          > majority of computer graphics and web images, including those used
+          > in traditional PNG workflows, are full-range images.
+
+          > If `Video Full Range Flag` value is `0`, then the image is a
+          > narrow-range image.
+  clli_chunk:
+    -webide-representation: 'MaxCLL = {max_content_light_level:dec} cd/m^2, MaxFALL = {max_frame_average_light_level:dec} cd/m^2'
+    doc-ref:
+      - https://www.w3.org/TR/png/#cLLI-chunk
+      - https://w3c.github.io/png/Implementation_Report_3e/#light
+    seq:
+      - id: max_content_light_level_int
+        type: u4
+      - id: max_frame_average_light_level_int
+        type: u4
+    instances:
+      max_content_light_level:
+        value: max_content_light_level_int * 0.0001
+        -orig-id: MaxCLL
+        doc: Maximum Content Light Level (MaxCLL), in cd/m^2
+      max_frame_average_light_level:
+        value: max_frame_average_light_level_int * 0.0001
+        -orig-id: MaxFALL
+        doc: Maximum Frame Average Light Level (MaxFALL), in cd/m^2
   chrm_chunk:
     doc-ref: https://www.w3.org/TR/png/#11cHRM
     seq:
       - id: white_point
-        type: point
+        type: chrm_chromaticity
       - id: red
-        type: point
+        type: chrm_chromaticity
       - id: green
-        type: point
+        type: chrm_chromaticity
       - id: blue
-        type: point
-  point:
+        type: chrm_chromaticity
+  chrm_chromaticity:
+    -webide-representation: '({x:dec}, {y:dec})'
     seq:
       - id: x_int
         type: u4
@@ -175,6 +245,42 @@ types:
     instances:
       gamma_ratio:
         value: 100000.0 / gamma_int
+  mdcv_chunk:
+    doc-ref:
+      - https://www.w3.org/TR/png/#mDCV-chunk
+      - https://w3c.github.io/png/Implementation_Report_3e/#mastering
+    seq:
+      - id: red
+        type: mdcv_chromaticity
+      - id: green
+        type: mdcv_chromaticity
+      - id: blue
+        type: mdcv_chromaticity
+      - id: white_point
+        type: mdcv_chromaticity
+      - id: max_luminance_int
+        type: u4
+      - id: min_luminance_int
+        type: u4
+    instances:
+      max_luminance:
+        value: max_luminance_int * 0.0001
+        doc: Maximum luminance in cd/m^2
+      min_luminance:
+        value: min_luminance_int * 0.0001
+        doc: Minimum luminance in cd/m^2
+  mdcv_chromaticity:
+    -webide-representation: '({x:dec}, {y:dec})'
+    seq:
+      - id: x_int
+        type: u2
+      - id: y_int
+        type: u2
+    instances:
+      x:
+        value: x_int * 0.00002
+      y:
+        value: y_int * 0.00002
   srgb_chunk:
     doc-ref: https://www.w3.org/TR/png/#11sRGB
     seq:
@@ -272,6 +378,8 @@ types:
         doc: Indicates purpose of the following text data.
       - id: compression_flag
         type: u1
+        valid:
+          any-of: [0, 1]
         doc: |
           0 = text is uncompressed, 1 = text is compressed with a
           method specified in `compression_method`.
@@ -291,6 +399,27 @@ types:
         doc: |
           Keyword translated into language specified in
           `language_tag`. Line breaks are not allowed.
+      - id: text_plain
+        size-eos: true
+        type: international_text
+        if: compression_flag == 0
+      - id: text_zlib
+        size-eos: true
+        process: zlib
+        type: international_text
+        if: compression_flag == 1
+        -affected-by:
+          - 374 # `process/switch-on` would help here
+          - 706 # `process` does not work with `type: str`
+    instances:
+      text:
+        value: '(compression_flag == 0 ? text_plain : text_zlib).text'
+        doc: |
+          Text contents ("value" of this key-value pair), written in
+          language specified in `language_tag`. Line breaks are
+          allowed.
+  international_text:
+    seq:
       - id: text
         type: str
         encoding: UTF-8
@@ -473,9 +602,7 @@ types:
         type: u1
         enum: compression_attach_methods
         valid:
-          any-of:
-            - compression_attach_methods::none
-            - compression_attach_methods::zlib
+          in-enum: true
       - id: data_plain
         size-eos: true
         if: compression == compression_attach_methods::none
