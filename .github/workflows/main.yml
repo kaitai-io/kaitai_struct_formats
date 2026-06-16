@@ -25,6 +25,7 @@ jobs:
       - uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f # v1.310.0
         with:
           ruby-version: '4.0'
+          working-directory: _build  # Used to resolve `Gemfile.lock` and install Bundler accordingly
       - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
           python-version: '3.x'
