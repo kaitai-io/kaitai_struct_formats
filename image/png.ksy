@@ -368,7 +368,7 @@ types:
     doc: |
       International text chunk effectively allows to store key-value string pairs in
       PNG container. Both "key" (keyword) and "value" (text) parts are
-      given in pre-defined subset of iso8859-1 without control
+      given in pre-defined subset of ISO-8859-1 without control
       characters.
     doc-ref: https://www.w3.org/TR/png/#11iTXt
     seq:
@@ -432,18 +432,18 @@ types:
     doc: |
       Text chunk effectively allows to store key-value string pairs in
       PNG container. Both "key" (keyword) and "value" (text) parts are
-      given in pre-defined subset of iso8859-1 without control
+      given in pre-defined subset of ISO-8859-1 without control
       characters.
     doc-ref: https://www.w3.org/TR/png/#11tEXt
     seq:
       - id: keyword
         type: strz
-        encoding: iso8859-1
+        encoding: ISO-8859-1
         doc: Indicates purpose of the following text data.
       - id: text
         type: str
         size-eos: true
-        encoding: iso8859-1
+        encoding: ISO-8859-1
   compressed_text_chunk:
     doc: |
       Compressed text chunk effectively allows to store key-value
@@ -578,7 +578,7 @@ types:
     seq:
       - id: file_name
         type: strz
-        encoding: utf-8
+        encoding: UTF-8
         valid:
           # See https://github.com/skeeto/scratch/blob/58470254f4a95cdf7a53888e405c851c21eb2cae/pngattach/pngattach.c#L466-L468
           expr: _.length != 0 and _.substring(0, 1) != "."
