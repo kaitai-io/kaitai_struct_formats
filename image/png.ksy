@@ -439,7 +439,7 @@ types:
           - 706 # `process` does not work with `type: str`
     instances:
       text:
-        value: '(compression_flag == 0 ? text_plain : text_zlib).text'
+        value: '(compression_flag == 0 ? text_plain : text_zlib).value'
         doc: |
           Text string (the "value" of this key-value pair), written in language
           specified in `language_tag`.
@@ -452,7 +452,7 @@ types:
           discouraged.
   international_text:
     seq:
-      - id: text
+      - id: value
         type: str
         encoding: UTF-8
         size-eos: true
@@ -526,9 +526,25 @@ types:
       - id: compression_method
         type: u1
         enum: compression_methods
-      - id: text_datastream
-        process: zlib
+      - id: text
         size-eos: true
+        process: zlib
+        type: compressed_text
+        -affected-by: 706 # `process` does not work with `type: str`
+  compressed_text:
+    seq:
+      - id: value
+        type: str
+        encoding: ISO-8859-1
+        size-eos: true
+        doc: |
+          Text string (the "value" of this key-value pair).
+
+          Although it is not null-terminated (unlike the keyword), it must not
+          contain a zero byte (U+0000 NULL character). A newline should be
+          represented by a single U+000A LINE FEED (LF) character (aka `\n`).
+          The remaining control characters (U+0001..U+0009, U+000B..0+001F,
+          U+007F..U+009F) are discouraged.
   animation_control_chunk:
     doc-ref: https://wiki.mozilla.org/APNG_Specification#.60acTL.60:_The_Animation_Control_Chunk
     seq:
