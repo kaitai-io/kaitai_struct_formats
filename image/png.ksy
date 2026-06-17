@@ -366,16 +366,27 @@ types:
         type: u1
   international_text_chunk:
     doc: |
-      International text chunk effectively allows to store key-value string pairs in
-      PNG container. Both "key" (keyword) and "value" (text) parts are
-      given in pre-defined subset of ISO-8859-1 without control
-      characters.
+      International textual data (`iTXt`) chunk effectively allows you to store
+      key-value string pairs in the PNG container.
+
+      The "key" part (`keyword`) is restricted to printable ISO-8859-1 (Latin-1)
+      characters and spaces. The translated keyword and the "value" part
+      (`text`) are stored in UTF-8 and thus can store text in any language -
+      this language can be indicated via the language tag (`language_tag`).
     doc-ref: https://www.w3.org/TR/png/#11iTXt
     seq:
       - id: keyword
         type: strz
-        encoding: UTF-8
-        doc: Indicates purpose of the following text data.
+        encoding: ISO-8859-1
+        doc: |
+          Indicates the type of information represented by the text string.
+
+          Keywords must consist exclusively of printable ISO-8859-1 (Latin-1)
+          characters and spaces; that is, only code points 0x20-0x7E and
+          0xA1-0xFF are allowed. To reduce the chances for human misreading of a
+          keyword, leading spaces, trailing spaces, and consecutive spaces are
+          not permitted.
+        doc-ref: https://www.w3.org/TR/2025/REC-png-3-20250624/#11keywords
       - id: compression_flag
         type: u1
         valid:
@@ -430,31 +441,53 @@ types:
           allowed.
   text_chunk:
     doc: |
-      Text chunk effectively allows to store key-value string pairs in
-      PNG container. Both "key" (keyword) and "value" (text) parts are
-      given in pre-defined subset of ISO-8859-1 without control
-      characters.
+      Textual data (`tEXt`) chunk effectively allows you to store key-value
+      string pairs in the PNG container.
+
+      Both the "key" (`keyword`) and "value" (`text`) parts are restricted to
+      printable ISO-8859-1 (Latin-1) characters and ASCII spaces, with the
+      exception that `text` can also contain newlines (U+000A LINE FEED (LF)
+      characters) and U+00A0 NON-BREAKING SPACE characters.
     doc-ref: https://www.w3.org/TR/png/#11tEXt
     seq:
       - id: keyword
         type: strz
         encoding: ISO-8859-1
-        doc: Indicates purpose of the following text data.
+        doc: |
+          Indicates the type of information represented by the text string.
+
+          Keywords must consist exclusively of printable ISO-8859-1 (Latin-1)
+          characters and spaces; that is, only code points 0x20-0x7E and
+          0xA1-0xFF are allowed. To reduce the chances for human misreading of a
+          keyword, leading spaces, trailing spaces, and consecutive spaces are
+          not permitted.
+        doc-ref: https://www.w3.org/TR/2025/REC-png-3-20250624/#11keywords
       - id: text
         type: str
         size-eos: true
         encoding: ISO-8859-1
   compressed_text_chunk:
     doc: |
-      Compressed text chunk effectively allows to store key-value
-      string pairs in PNG container, compressing "value" part (which
-      can be quite lengthy) with zlib compression.
+      Compressed textual data (`zTXt`) chunk effectively allows you to store
+      key-value string pairs in the PNG container, compressing the "value" part
+      (which can be quite lengthy) with zlib compression.
+
+      The `zTXt` and `tEXt` chunks are semantically equivalent, but the `zTXt`
+      chunk is recommended for storing large blocks of text.
     doc-ref: https://www.w3.org/TR/png/#11zTXt
     seq:
       - id: keyword
         type: strz
-        encoding: UTF-8
-        doc: Indicates purpose of the following text data.
+        encoding: ISO-8859-1
+        doc: |
+          Indicates the type of information represented by the text string.
+
+          Keywords must consist exclusively of printable ISO-8859-1 (Latin-1)
+          characters and spaces; that is, only code points 0x20-0x7E and
+          0xA1-0xFF are allowed. To reduce the chances for human misreading of a
+          keyword, leading spaces, trailing spaces, and consecutive spaces are
+          not permitted.
+        doc-ref: https://www.w3.org/TR/2025/REC-png-3-20250624/#11keywords
       - id: compression_method
         type: u1
         enum: compression_methods
