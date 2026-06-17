@@ -62,7 +62,7 @@ types:
       - id: type
         type: str
         size: 4
-        encoding: UTF-8
+        encoding: ASCII
         valid:
           expr: type != "\0\0\0\0"
       - id: body
