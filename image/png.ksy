@@ -401,15 +401,30 @@ types:
         type: strz
         encoding: ASCII
         doc: |
-          Human language used in `translated_keyword` and `text`
-          attributes - should be a language code conforming to ISO
-          646.IRV:1991.
+          Human language used in the `translated_keyword` and `text` fields.
+
+          From the [official
+          specification](https://www.w3.org/TR/2025/REC-png-3-20250624/#11iTXt):
+
+          > The language tag is a well-formed language tag defined by [RFC 5646:
+          > BCP 47: Tags for Identifying
+          > Languages](https://www.rfc-editor.org/info/rfc5646/). Unlike the
+          > keyword, the language tag is case-insensitive. Subtags must appear
+          > in the [IANA language subtag
+          > registry](https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry).
+          > If the language tag is empty, the language is unspecified. Examples
+          > of language tags include: `en`, `en-GB`, `es-419`, `zh-Hans`,
+          > `zh-Hans-CN`, `tlh-Cyrl-AQ`, `ar-AE-u-nu-latn`, and `x-private`.
       - id: translated_keyword
         type: strz
         encoding: UTF-8
         doc: |
-          Keyword translated into language specified in
-          `language_tag`. Line breaks are not allowed.
+          The keyword (`keyword`) translated into the language specified in
+          `language_tag`.
+
+          It must not contain a zero byte (U+0000 NULL character). Line breaks
+          should not appear. The remaining control characters (U+0001..U+0009,
+          U+000B..0+001F, U+007F..U+009F) are discouraged.
       - id: text_plain
         size-eos: true
         type: international_text
@@ -426,9 +441,15 @@ types:
       text:
         value: '(compression_flag == 0 ? text_plain : text_zlib).text'
         doc: |
-          Text contents ("value" of this key-value pair), written in
-          language specified in `language_tag`. Line breaks are
-          allowed.
+          Text string (the "value" of this key-value pair), written in language
+          specified in `language_tag`.
+
+          Although it is not null-terminated (unlike other textual data in the
+          `iTXt` chunk), it must not contain a zero byte
+          (U+0000 NULL character). A newline should be represented by a single
+          U+000A LINE FEED (LF) character (aka `\n`). The remaining control
+          characters (U+0001..U+0009, U+000B..0+001F, U+007F..U+009F) are
+          discouraged.
   international_text:
     seq:
       - id: text
@@ -436,9 +457,15 @@ types:
         encoding: UTF-8
         size-eos: true
         doc: |
-          Text contents ("value" of this key-value pair), written in
-          language specified in `language_tag`. Line breaks are
-          allowed.
+          Text string (the "value" of this key-value pair), written in language
+          specified in `_parent.language_tag`.
+
+          Although it is not null-terminated (unlike other textual data in the
+          `iTXt` chunk), it must not contain a zero byte
+          (U+0000 NULL character). A newline should be represented by a single
+          U+000A LINE FEED (LF) character (aka `\n`). The remaining control
+          characters (U+0001..U+0009, U+000B..0+001F, U+007F..U+009F) are
+          discouraged.
   text_chunk:
     doc: |
       Textual data (`tEXt`) chunk effectively allows you to store key-value
@@ -466,6 +493,14 @@ types:
         type: str
         size-eos: true
         encoding: ISO-8859-1
+        doc: |
+          Text string (the "value" of this key-value pair).
+
+          Although it is not null-terminated (unlike the keyword), it must not
+          contain a zero byte (U+0000 NULL character). A newline should be
+          represented by a single U+000A LINE FEED (LF) character (aka `\n`).
+          The remaining control characters (U+0001..U+0009, U+000B..0+001F,
+          U+007F..U+009F) are discouraged.
   compressed_text_chunk:
     doc: |
       Compressed textual data (`zTXt`) chunk effectively allows you to store
