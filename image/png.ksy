@@ -365,6 +365,7 @@ types:
       - id: second
         type: u1
   international_text_chunk:
+    -webide-representation: '{keyword}'
     doc: |
       International textual data (`iTXt`) chunk effectively allows you to store
       key-value string pairs in the PNG container.
@@ -467,6 +468,7 @@ types:
           characters (U+0001..U+0009, U+000B..0+001F, U+007F..U+009F) are
           discouraged.
   text_chunk:
+    -webide-representation: '{keyword}'
     doc: |
       Textual data (`tEXt`) chunk effectively allows you to store key-value
       string pairs in the PNG container.
@@ -502,6 +504,7 @@ types:
           The remaining control characters (U+0001..U+0009, U+000B..0+001F,
           U+007F..U+009F) are discouraged.
   compressed_text_chunk:
+    -webide-representation: '{keyword}'
     doc: |
       Compressed textual data (`zTXt`) chunk effectively allows you to store
       key-value string pairs in the PNG container, compressing the "value" part
