@@ -59,12 +59,28 @@ types:
     seq:
       - id: len
         type: u4
-      - id: type
-        type: str
+      - id: type_raw
         size: 4
-        encoding: ASCII
         valid:
-          expr: type != "\0\0\0\0"
+          expr: |
+            (
+              (_[0] >= 0x41 and _[0] <= 0x5a) or
+              (_[0] >= 0x61 and _[0] <= 0x7a)
+            ) and (
+              (_[1] >= 0x41 and _[1] <= 0x5a) or
+              (_[1] >= 0x61 and _[1] <= 0x7a)
+            ) and (
+              (_[2] >= 0x41 and _[2] <= 0x5a) or
+              (_[2] >= 0x61 and _[2] <= 0x7a)
+            ) and (
+              (_[3] >= 0x41 and _[3] <= 0x5a) or
+              (_[3] >= 0x61 and _[3] <= 0x7a)
+            )
+        doc: |
+          Each byte of a chunk type is restricted to the hexadecimal values
+          0x41..0x5a and 0x61..0x7a, i.e. uppercase and lowercase ASCII letters
+          (`A-Z` and `a-z`).
+        doc-ref: https://www.w3.org/TR/2025/REC-png-3-20250624/#table51
       - id: body
         size: len
         type:
@@ -117,6 +133,9 @@ types:
             # seAl
       - id: crc
         type: u4
+    instances:
+      type:
+        value: type_raw.to_s('ASCII')
   ihdr_chunk:
     doc-ref: https://www.w3.org/TR/png/#11IHDR
     seq:
