@@ -136,6 +136,29 @@ types:
     instances:
       type:
         value: type_raw.to_s('ASCII')
+      is_ancillary:
+        value: type_raw[0] & 0x20 != 0
+        doc: |
+          false = critical chunk, true = ancillary chunk
+      is_private:
+        value: type_raw[1] & 0x20 != 0
+        doc: |
+          false = public chunk (defined by the W3C), true = private chunk (can
+          be defined by anyone)
+      reserved_bit:
+        value: type_raw[2] & 0x20 != 0
+        doc: |
+          Should be `false`, i.e. all chunk types should have uppercase third
+          letters (the lowercase third letter is reserved for possible future
+          extensions to the PNG standard)
+      is_safe_to_copy:
+        value: type_raw[3] & 0x20 != 0
+        doc: |
+          Defines whether the chunk may be copied if the image data (i.e.
+          pixels) is modified. This tells PNG editors how to handle unknown
+          chunks - see section [14.2 Behavior of PNG
+          editors](https://www.w3.org/TR/2025/REC-png-3-20250624/#14Ordering) in
+          the official specification.
   ihdr_chunk:
     doc-ref: https://www.w3.org/TR/png/#11IHDR
     seq:
