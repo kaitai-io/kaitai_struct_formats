@@ -257,13 +257,23 @@ types:
       y:
         value: y_int / 100000.0
   gama_chunk:
+    -webide-representation: '{gamma:dec} (= 1/{inv_gamma:dec})'
     doc-ref: https://www.w3.org/TR/png/#11gAMA
     seq:
       - id: gamma_int
         type: u4
+        doc: |
+          Image gamma multiplied by 100000 (a gamma value of 1/2.2 is stored as
+          45455)
     instances:
-      gamma_ratio:
+      gamma:
+        value: gamma_int / 100000.0
+        doc: Image gamma, typically 0.45455 = 1/2.2
+      inv_gamma:
         value: 100000.0 / gamma_int
+        doc: |
+          Inverse of the image gamma (1 / gamma), typically 2.2 (not considering
+          rounding)
   mdcv_chunk:
     doc-ref:
       - https://www.w3.org/TR/png/#mDCV-chunk
