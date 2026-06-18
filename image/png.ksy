@@ -262,6 +262,8 @@ types:
     seq:
       - id: gamma_int
         type: u4
+        valid:
+          expr: _ != 0
         doc: |
           Image gamma multiplied by 100000 (a gamma value of 1/2.2 is stored as
           45455)
