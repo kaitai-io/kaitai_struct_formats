@@ -452,6 +452,15 @@ types:
       - id: compression_method
         type: u1
         enum: compression_methods
+        # The [specification](https://www.w3.org/TR/2025/REC-png-3-20250624/#11iTXt)
+        # says that for uncompressed text (i.e. when `compression_flag == 0`),
+        # decoders must ignore the compression method.
+        #
+        # We reflect this in the validation check: we require that the
+        # compression method be 0 (zlib) only if `compression_flag == 1`;
+        # otherwise, we disable the check by turning it into the tautology
+        # `compression_method == compression_method` (which is always true).
+        valid: 'compression_flag == 1 ? compression_methods::zlib : compression_method'
       - id: language_tag
         type: strz
         encoding: ASCII
@@ -583,6 +592,7 @@ types:
       - id: compression_method
         type: u1
         enum: compression_methods
+        valid: compression_methods::zlib
       - id: text
         size-eos: true
         process: zlib
