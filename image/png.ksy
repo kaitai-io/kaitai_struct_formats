@@ -648,10 +648,14 @@ types:
       - id: dispose_op
         type: u1
         enum: dispose_op_values
+        valid:
+          in-enum: true
         doc: Type of frame area disposal to be done after rendering this frame
       - id: blend_op
         type: u1
         enum: blend_op_values
+        valid:
+          in-enum: true
         doc: Type of frame area rendering for this frame
     instances:
       delay:
