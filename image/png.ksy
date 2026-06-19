@@ -177,12 +177,23 @@ types:
       - id: color_type
         type: u1
         enum: color_type
+        valid:
+          in-enum: true
       - id: compression_method
         type: u1
+        enum: compression_methods
+        valid:
+          in-enum: true
       - id: filter_method
         type: u1
+        enum: filter_method
+        valid:
+          in-enum: true
       - id: interlace_method
         type: u1
+        enum: interlace_method
+        valid:
+          in-enum: true
   plte_chunk:
     doc-ref: https://www.w3.org/TR/png/#11PLTE
     seq:
@@ -341,6 +352,8 @@ types:
       - id: render_intent
         type: u1
         enum: intent
+        valid:
+          in-enum: true
     enums:
       intent:
         0: perceptual
@@ -400,6 +413,8 @@ types:
       - id: unit
         type: u1
         enum: phys_unit
+        valid:
+          in-enum: true
   time_chunk:
     doc: |
       Time chunk stores time stamp of last modification of this image,
@@ -822,3 +837,16 @@ enums:
         a simple OVER operation as described in [Alpha Channel
         Processing](https://www.w3.org/TR/png/#13Alpha-channel-processing).
       doc-ref: https://www.w3.org/TR/png/#fcTL-chunk
+  # https://www.w3.org/TR/png/#9Filters
+  filter_method:
+    0:
+      id: base
+      -orig-id: PNG_FILTER_TYPE_BASE
+      doc: Single row per-byte filtering
+      doc-ref:
+        - https://github.com/pnggroup/libpng/blob/dd5d363ae1fc7778f2734bf51b10d3fe65028671/png.h#L599
+        - https://www.w3.org/TR/png/#9Filter-types
+  # https://www.w3.org/TR/png/#8InterlaceMethods
+  interlace_method:
+    0: none
+    1: adam7
