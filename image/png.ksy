@@ -603,7 +603,7 @@ types:
           The remaining control characters (U+0001..U+0009, U+000B..0+001F,
           U+007F..U+009F) are discouraged.
   animation_control_chunk:
-    doc-ref: https://wiki.mozilla.org/APNG_Specification#.60acTL.60:_The_Animation_Control_Chunk
+    doc-ref: https://www.w3.org/TR/png/#acTL-chunk
     seq:
       - id: num_frames
         type: u4
@@ -612,7 +612,7 @@ types:
         type: u4
         doc: Number of times to loop, 0 indicates infinite looping.
   frame_control_chunk:
-    doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fcTL.60:_The_Frame_Control_Chunk
+    doc-ref: https://www.w3.org/TR/png/#fcTL-chunk
     seq:
       - id: sequence_number
         type: u4
@@ -658,7 +658,7 @@ types:
         value: 'delay_num / (delay_den == 0 ? 100.0 : delay_den)'
         doc: Time to display this frame, in seconds
   frame_data_chunk:
-    doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fdAT.60:_The_Frame_Data_Chunk
+    doc-ref: https://www.w3.org/TR/png/#fdAT-chunk
     seq:
       - id: sequence_number
         type: u4
@@ -776,26 +776,28 @@ enums:
       doc: |
         No disposal is done on this frame before rendering the next;
         the contents of the output buffer are left as is.
-      doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fcTL.60:_The_Frame_Control_Chunk
+      doc-ref: https://www.w3.org/TR/png/#fcTL-chunk
     1:
       id: background
       doc: |
         The frame's region of the output buffer is to be cleared to
         fully transparent black before rendering the next frame.
-      doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fcTL.60:_The_Frame_Control_Chunk
+      doc-ref: https://www.w3.org/TR/png/#fcTL-chunk
     2:
       id: previous
       doc: |
         The frame's region of the output buffer is to be reverted
         to the previous contents before rendering the next frame.
-      doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fcTL.60:_The_Frame_Control_Chunk
+      doc-ref: https://www.w3.org/TR/png/#fcTL-chunk
   blend_op_values:
     0:
       id: source
       doc: |
         All color components of the frame, including alpha,
         overwrite the current contents of the frame's output buffer region.
+      doc-ref: https://www.w3.org/TR/png/#fcTL-chunk
     1:
       id: over
       doc: |
         The frame is composited onto the output buffer based on its alpha
+      doc-ref: https://www.w3.org/TR/png/#fcTL-chunk
