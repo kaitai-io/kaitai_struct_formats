@@ -773,18 +773,21 @@ enums:
   dispose_op_values:
     0:
       id: none
+      -orig-id: APNG_DISPOSE_OP_NONE
       doc: |
         No disposal is done on this frame before rendering the next;
         the contents of the output buffer are left as is.
       doc-ref: https://www.w3.org/TR/png/#fcTL-chunk
     1:
       id: background
+      -orig-id: APNG_DISPOSE_OP_BACKGROUND
       doc: |
         The frame's region of the output buffer is to be cleared to
         fully transparent black before rendering the next frame.
       doc-ref: https://www.w3.org/TR/png/#fcTL-chunk
     2:
       id: previous
+      -orig-id: APNG_DISPOSE_OP_PREVIOUS
       doc: |
         The frame's region of the output buffer is to be reverted
         to the previous contents before rendering the next frame.
@@ -792,12 +795,16 @@ enums:
   blend_op_values:
     0:
       id: source
+      -orig-id: APNG_BLEND_OP_SOURCE
       doc: |
         All color components of the frame, including alpha,
         overwrite the current contents of the frame's output buffer region.
       doc-ref: https://www.w3.org/TR/png/#fcTL-chunk
     1:
       id: over
+      -orig-id: APNG_BLEND_OP_OVER
       doc: |
-        The frame is composited onto the output buffer based on its alpha
+        The frame is composited onto the output buffer based on its alpha, using
+        a simple OVER operation as described in [Alpha Channel
+        Processing](https://www.w3.org/TR/png/#13Alpha-channel-processing).
       doc-ref: https://www.w3.org/TR/png/#fcTL-chunk
