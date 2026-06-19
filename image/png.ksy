@@ -632,7 +632,9 @@ types:
     seq:
       - id: num_frames
         type: u4
-        doc: Number of frames, must be equal to the number of `frame_control_chunk`s
+        doc: |
+          Number of frames, must be equal to the number of `fcTL` chunks (i.e.
+          `frame_control_chunk` objects)
       - id: num_plays
         type: u4
         doc: Number of times to loop, 0 indicates infinite looping.
@@ -641,7 +643,22 @@ types:
     seq:
       - id: sequence_number
         type: u4
-        doc: Sequence number of the animation chunk
+        # NOTE: whenever you update this `doc`, be sure to also update its copy
+        # in `frame_data_chunk`
+        doc: |
+          Sequence number of the animation chunk, starting from 0.
+
+          The `fcTL` and `fdAT` chunks have a 4-byte sequence number. Both chunk
+          types share the sequence. The purpose of this number is to detect (and
+          optionally correct) sequence errors in an Animated PNG, since the PNG
+          specification does not impose ordering restrictions on ancillary
+          chunks (which means that a PNG editor is technically allowed to
+          reorder them arbitrarily, see [14.2 Behavior of PNG
+          editors](https://www.w3.org/TR/png/#14Ordering) in the spec).
+
+          The first `fcTL` chunk must contain sequence number 0, and the
+          sequence numbers in the remaining `fcTL` and `fdAT` chunks must be in
+          ascending order, with no gaps or duplicates.
       - id: width
         type: u4
         valid:
@@ -691,18 +708,30 @@ types:
     seq:
       - id: sequence_number
         type: u4
+        # NOTE: whenever you update this `doc`, be sure to also update its copy
+        # in `frame_control_chunk`
         doc: |
-          Sequence number of the animation chunk. The fcTL and fdAT chunks
-          have a 4 byte sequence number. Both chunk types share the sequence.
-          The first fcTL chunk must contain sequence number 0, and the sequence
-          numbers in the remaining fcTL and fdAT chunks must be in order, with
-          no gaps or duplicates.
+          Sequence number of the animation chunk, starting from 0.
+
+          The `fcTL` and `fdAT` chunks have a 4-byte sequence number. Both chunk
+          types share the sequence. The purpose of this number is to detect (and
+          optionally correct) sequence errors in an Animated PNG, since the PNG
+          specification does not impose ordering restrictions on ancillary
+          chunks (which means that a PNG editor is technically allowed to
+          reorder them arbitrarily, see [14.2 Behavior of PNG
+          editors](https://www.w3.org/TR/png/#14Ordering) in the spec).
+
+          The first `fcTL` chunk must contain sequence number 0, and the
+          sequence numbers in the remaining `fcTL` and `fdAT` chunks must be in
+          ascending order, with no gaps or duplicates.
       - id: frame_data
         size-eos: true
         doc: |
-          Frame data for the frame. At least one fdAT chunk is required for
-          each frame. The compressed datastream is the concatenation of the
-          contents of the data fields of all the fdAT chunks within a frame.
+          Frame data for the frame. At least one `fdAT` chunk is required for
+          each frame, except for the first frame, if that frame is represented
+          by an `IDAT` chunk. The compressed datastream for each frame is the
+          concatenation of the contents of the data fields of all the `fdAT`
+          chunks within a frame.
   adobe_fireworks_chunk:
     doc-ref: https://stackoverflow.com/questions/4242402/the-fireworks-png-format-any-insight-any-libs/51683285#51683285
     seq:
