@@ -102,7 +102,7 @@ types:
             '"sBIT"': sbit_chunk
             '"sRGB"': srgb_chunk
             '"bKGD"': bkgd_chunk
-            # hIST
+            '"hIST"': hist_chunk
             # tRNS
             '"pHYs"': phys_chunk
             # sPLT
@@ -456,6 +456,27 @@ types:
     seq:
       - id: palette_index
         type: u1
+  hist_chunk:
+    doc: |
+      Image histogram (`hIST`) chunk gives the approximate usage frequency of
+      each color in the palette. A histogram chunk can appear only when a `PLTE`
+      chunk appears.
+    doc-ref: https://www.w3.org/TR/png/#11hIST
+    seq:
+      - id: usage_freqs
+        type: u2
+        repeat: eos
+        doc: |
+          Usage frequencies of each color in the palette.
+
+          There must be exactly one entry for each entry in the `PLTE` chunk. Each
+          entry is proportional to the fraction of pixels in the image that have
+          that palette index; the exact scale factor is chosen by the encoder.
+
+          Histogram entries are approximate, with the exception that a zero
+          entry specifies that the corresponding palette entry is not used at
+          all in the image. A histogram entry must be nonzero if there are any
+          pixels of that color.
   phys_chunk:
     doc: |
       Physical pixel dimensions (`pHYs`) chunk specifies the intended physical
