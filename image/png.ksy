@@ -47,7 +47,7 @@ seq:
   - id: ihdr
     type: ihdr_chunk
   - id: ihdr_crc
-    size: 4
+    type: u4
   # The rest of the chunks
   - id: chunks
     type: chunk
@@ -59,12 +59,28 @@ types:
     seq:
       - id: len
         type: u4
-      - id: type
-        type: str
+      - id: type_raw
         size: 4
-        encoding: UTF-8
         valid:
-          expr: type != "\0\0\0\0"
+          expr: |
+            (
+              (_[0] >= 0x41 and _[0] <= 0x5a) or
+              (_[0] >= 0x61 and _[0] <= 0x7a)
+            ) and (
+              (_[1] >= 0x41 and _[1] <= 0x5a) or
+              (_[1] >= 0x61 and _[1] <= 0x7a)
+            ) and (
+              (_[2] >= 0x41 and _[2] <= 0x5a) or
+              (_[2] >= 0x61 and _[2] <= 0x7a)
+            ) and (
+              (_[3] >= 0x41 and _[3] <= 0x5a) or
+              (_[3] >= 0x61 and _[3] <= 0x7a)
+            )
+        doc: |
+          Each byte of a chunk type is restricted to the hexadecimal values
+          0x41..0x5a and 0x61..0x7a, i.e. uppercase and lowercase ASCII letters
+          (`A-Z` and `a-z`).
+        doc-ref: https://www.w3.org/TR/2025/REC-png-3-20250624/#table51
       - id: body
         size: len
         type:
@@ -116,7 +132,33 @@ types:
             # https://github.com/hackerfactor/SEAL/blob/master/FORMATS.md#png
             # seAl
       - id: crc
-        size: 4
+        type: u4
+    instances:
+      type:
+        value: type_raw.to_s('ASCII')
+      is_ancillary:
+        value: type_raw[0] & 0x20 != 0
+        doc: |
+          false = critical chunk, true = ancillary chunk
+      is_private:
+        value: type_raw[1] & 0x20 != 0
+        doc: |
+          false = public chunk (defined by the W3C), true = private chunk (can
+          be defined by anyone)
+      reserved_bit:
+        value: type_raw[2] & 0x20 != 0
+        doc: |
+          Should be `false`, i.e. all chunk types should have uppercase third
+          letters (the lowercase third letter is reserved for possible future
+          extensions to the PNG standard)
+      is_safe_to_copy:
+        value: type_raw[3] & 0x20 != 0
+        doc: |
+          Defines whether the chunk may be copied if the image data (i.e.
+          pixels) is modified. This tells PNG editors how to handle unknown
+          chunks - see section [14.2 Behavior of PNG
+          editors](https://www.w3.org/TR/2025/REC-png-3-20250624/#14Ordering) in
+          the official specification.
   ihdr_chunk:
     doc-ref: https://www.w3.org/TR/png/#11IHDR
     seq:
@@ -135,12 +177,23 @@ types:
       - id: color_type
         type: u1
         enum: color_type
+        valid:
+          in-enum: true
       - id: compression_method
         type: u1
+        enum: compression_methods
+        valid:
+          in-enum: true
       - id: filter_method
         type: u1
+        enum: filter_method
+        valid:
+          in-enum: true
       - id: interlace_method
         type: u1
+        enum: interlace_method
+        valid:
+          in-enum: true
   plte_chunk:
     doc-ref: https://www.w3.org/TR/png/#11PLTE
     seq:
@@ -238,13 +291,25 @@ types:
       y:
         value: y_int / 100000.0
   gama_chunk:
+    -webide-representation: '{gamma:dec} (= 1/{inv_gamma:dec})'
     doc-ref: https://www.w3.org/TR/png/#11gAMA
     seq:
       - id: gamma_int
         type: u4
+        valid:
+          expr: _ != 0
+        doc: |
+          Image gamma multiplied by 100000 (a gamma value of 1/2.2 is stored as
+          45455)
     instances:
-      gamma_ratio:
+      gamma:
+        value: gamma_int / 100000.0
+        doc: Image gamma, typically 0.45455 = 1/2.2
+      inv_gamma:
         value: 100000.0 / gamma_int
+        doc: |
+          Inverse of the image gamma (1 / gamma), typically 2.2 (not considering
+          rounding)
   mdcv_chunk:
     doc-ref:
       - https://www.w3.org/TR/png/#mDCV-chunk
@@ -287,6 +352,8 @@ types:
       - id: render_intent
         type: u1
         enum: intent
+        valid:
+          in-enum: true
     enums:
       intent:
         0: perceptual
@@ -329,8 +396,9 @@ types:
         type: u1
   phys_chunk:
     doc: |
-      "Physical size" chunk stores data that allows to translate
-      logical pixels into physical units (meters, etc) and vice-versa.
+      Physical pixel dimensions (`pHYs`) chunk specifies the intended physical
+      size of the pixels (in meters) or pixel aspect ratio for display of the
+      image.
     doc-ref: https://www.w3.org/TR/png/#11pHYs
     seq:
       - id: pixels_per_unit_x
@@ -346,6 +414,17 @@ types:
       - id: unit
         type: u1
         enum: phys_unit
+        valid:
+          in-enum: true
+    instances:
+      dots_per_inch_x:
+        value: pixels_per_unit_x * 0.0254
+        if: unit == phys_unit::meter
+        doc: Horizontal resolution (DPI)
+      dots_per_inch_y:
+        value: pixels_per_unit_y * 0.0254
+        if: unit == phys_unit::meter
+        doc: Vertical resolution (DPI)
   time_chunk:
     doc: |
       Time chunk stores time stamp of last modification of this image,
@@ -365,17 +444,29 @@ types:
       - id: second
         type: u1
   international_text_chunk:
+    -webide-representation: '{keyword}'
     doc: |
-      International text chunk effectively allows to store key-value string pairs in
-      PNG container. Both "key" (keyword) and "value" (text) parts are
-      given in pre-defined subset of iso8859-1 without control
-      characters.
+      International textual data (`iTXt`) chunk effectively allows you to store
+      key-value string pairs in the PNG container.
+
+      The "key" part (`keyword`) is restricted to printable ISO-8859-1 (Latin-1)
+      characters and spaces. The translated keyword and the "value" part
+      (`text`) are stored in UTF-8 and thus can store text in any language -
+      this language can be indicated via the language tag (`language_tag`).
     doc-ref: https://www.w3.org/TR/png/#11iTXt
     seq:
       - id: keyword
         type: strz
-        encoding: UTF-8
-        doc: Indicates purpose of the following text data.
+        encoding: ISO-8859-1
+        doc: |
+          Indicates the type of information represented by the text string.
+
+          Keywords must consist exclusively of printable ISO-8859-1 (Latin-1)
+          characters and spaces; that is, only code points 0x20-0x7E and
+          0xA1-0xFF are allowed. To reduce the chances for human misreading of a
+          keyword, leading spaces, trailing spaces, and consecutive spaces are
+          not permitted.
+        doc-ref: https://www.w3.org/TR/2025/REC-png-3-20250624/#11keywords
       - id: compression_flag
         type: u1
         valid:
@@ -386,19 +477,43 @@ types:
       - id: compression_method
         type: u1
         enum: compression_methods
+        # The [specification](https://www.w3.org/TR/2025/REC-png-3-20250624/#11iTXt)
+        # says that for uncompressed text (i.e. when `compression_flag == 0`),
+        # decoders must ignore the compression method.
+        #
+        # We reflect this in the validation check: we require that the
+        # compression method be 0 (zlib) only if `compression_flag == 1`;
+        # otherwise, we disable the check by turning it into the tautology
+        # `compression_method == compression_method` (which is always true).
+        valid: 'compression_flag == 1 ? compression_methods::zlib : compression_method'
       - id: language_tag
         type: strz
         encoding: ASCII
         doc: |
-          Human language used in `translated_keyword` and `text`
-          attributes - should be a language code conforming to ISO
-          646.IRV:1991.
+          Human language used in the `translated_keyword` and `text` fields.
+
+          From the [official
+          specification](https://www.w3.org/TR/2025/REC-png-3-20250624/#11iTXt):
+
+          > The language tag is a well-formed language tag defined by [RFC 5646:
+          > BCP 47: Tags for Identifying
+          > Languages](https://www.rfc-editor.org/info/rfc5646/). Unlike the
+          > keyword, the language tag is case-insensitive. Subtags must appear
+          > in the [IANA language subtag
+          > registry](https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry).
+          > If the language tag is empty, the language is unspecified. Examples
+          > of language tags include: `en`, `en-GB`, `es-419`, `zh-Hans`,
+          > `zh-Hans-CN`, `tlh-Cyrl-AQ`, `ar-AE-u-nu-latn`, and `x-private`.
       - id: translated_keyword
         type: strz
         encoding: UTF-8
         doc: |
-          Keyword translated into language specified in
-          `language_tag`. Line breaks are not allowed.
+          The keyword (`keyword`) translated into the language specified in
+          `language_tag`.
+
+          It must not contain a zero byte (U+0000 NULL character). Line breaks
+          should not appear. The remaining control characters (U+0001..U+0009,
+          U+000B..0+001F, U+007F..U+009F) are discouraged.
       - id: text_plain
         size-eos: true
         type: international_text
@@ -413,69 +528,147 @@ types:
           - 706 # `process` does not work with `type: str`
     instances:
       text:
-        value: '(compression_flag == 0 ? text_plain : text_zlib).text'
+        value: '(compression_flag == 0 ? text_plain : text_zlib).value'
         doc: |
-          Text contents ("value" of this key-value pair), written in
-          language specified in `language_tag`. Line breaks are
-          allowed.
+          Text string (the "value" of this key-value pair), written in language
+          specified in `language_tag`.
+
+          Although it is not null-terminated (unlike other textual data in the
+          `iTXt` chunk), it must not contain a zero byte
+          (U+0000 NULL character). A newline should be represented by a single
+          U+000A LINE FEED (LF) character (aka `\n`). The remaining control
+          characters (U+0001..U+0009, U+000B..0+001F, U+007F..U+009F) are
+          discouraged.
   international_text:
     seq:
-      - id: text
+      - id: value
         type: str
         encoding: UTF-8
         size-eos: true
         doc: |
-          Text contents ("value" of this key-value pair), written in
-          language specified in `language_tag`. Line breaks are
-          allowed.
+          Text string (the "value" of this key-value pair), written in language
+          specified in `_parent.language_tag`.
+
+          Although it is not null-terminated (unlike other textual data in the
+          `iTXt` chunk), it must not contain a zero byte
+          (U+0000 NULL character). A newline should be represented by a single
+          U+000A LINE FEED (LF) character (aka `\n`). The remaining control
+          characters (U+0001..U+0009, U+000B..0+001F, U+007F..U+009F) are
+          discouraged.
   text_chunk:
+    -webide-representation: '{keyword}'
     doc: |
-      Text chunk effectively allows to store key-value string pairs in
-      PNG container. Both "key" (keyword) and "value" (text) parts are
-      given in pre-defined subset of iso8859-1 without control
-      characters.
+      Textual data (`tEXt`) chunk effectively allows you to store key-value
+      string pairs in the PNG container.
+
+      Both the "key" (`keyword`) and "value" (`text`) parts are restricted to
+      printable ISO-8859-1 (Latin-1) characters and ASCII spaces, with the
+      exception that `text` can also contain newlines (U+000A LINE FEED (LF)
+      characters) and U+00A0 NON-BREAKING SPACE characters.
     doc-ref: https://www.w3.org/TR/png/#11tEXt
     seq:
       - id: keyword
         type: strz
-        encoding: iso8859-1
-        doc: Indicates purpose of the following text data.
+        encoding: ISO-8859-1
+        doc: |
+          Indicates the type of information represented by the text string.
+
+          Keywords must consist exclusively of printable ISO-8859-1 (Latin-1)
+          characters and spaces; that is, only code points 0x20-0x7E and
+          0xA1-0xFF are allowed. To reduce the chances for human misreading of a
+          keyword, leading spaces, trailing spaces, and consecutive spaces are
+          not permitted.
+        doc-ref: https://www.w3.org/TR/2025/REC-png-3-20250624/#11keywords
       - id: text
         type: str
         size-eos: true
-        encoding: iso8859-1
+        encoding: ISO-8859-1
+        doc: |
+          Text string (the "value" of this key-value pair).
+
+          Although it is not null-terminated (unlike the keyword), it must not
+          contain a zero byte (U+0000 NULL character). A newline should be
+          represented by a single U+000A LINE FEED (LF) character (aka `\n`).
+          The remaining control characters (U+0001..U+0009, U+000B..0+001F,
+          U+007F..U+009F) are discouraged.
   compressed_text_chunk:
+    -webide-representation: '{keyword}'
     doc: |
-      Compressed text chunk effectively allows to store key-value
-      string pairs in PNG container, compressing "value" part (which
-      can be quite lengthy) with zlib compression.
+      Compressed textual data (`zTXt`) chunk effectively allows you to store
+      key-value string pairs in the PNG container, compressing the "value" part
+      (which can be quite lengthy) with zlib compression.
+
+      The `zTXt` and `tEXt` chunks are semantically equivalent, but the `zTXt`
+      chunk is recommended for storing large blocks of text.
     doc-ref: https://www.w3.org/TR/png/#11zTXt
     seq:
       - id: keyword
         type: strz
-        encoding: UTF-8
-        doc: Indicates purpose of the following text data.
+        encoding: ISO-8859-1
+        doc: |
+          Indicates the type of information represented by the text string.
+
+          Keywords must consist exclusively of printable ISO-8859-1 (Latin-1)
+          characters and spaces; that is, only code points 0x20-0x7E and
+          0xA1-0xFF are allowed. To reduce the chances for human misreading of a
+          keyword, leading spaces, trailing spaces, and consecutive spaces are
+          not permitted.
+        doc-ref: https://www.w3.org/TR/2025/REC-png-3-20250624/#11keywords
       - id: compression_method
         type: u1
         enum: compression_methods
-      - id: text_datastream
-        process: zlib
+        valid: compression_methods::zlib
+      - id: text
         size-eos: true
+        process: zlib
+        type: compressed_text
+        -affected-by: 706 # `process` does not work with `type: str`
+  compressed_text:
+    seq:
+      - id: value
+        type: str
+        encoding: ISO-8859-1
+        size-eos: true
+        doc: |
+          Text string (the "value" of this key-value pair).
+
+          Although it is not null-terminated (unlike the keyword), it must not
+          contain a zero byte (U+0000 NULL character). A newline should be
+          represented by a single U+000A LINE FEED (LF) character (aka `\n`).
+          The remaining control characters (U+0001..U+0009, U+000B..0+001F,
+          U+007F..U+009F) are discouraged.
   animation_control_chunk:
-    doc-ref: https://wiki.mozilla.org/APNG_Specification#.60acTL.60:_The_Animation_Control_Chunk
+    doc-ref: https://www.w3.org/TR/png/#acTL-chunk
     seq:
       - id: num_frames
         type: u4
-        doc: Number of frames, must be equal to the number of `frame_control_chunk`s
+        doc: |
+          Number of frames, must be equal to the number of `fcTL` chunks (i.e.
+          `frame_control_chunk` objects)
       - id: num_plays
         type: u4
         doc: Number of times to loop, 0 indicates infinite looping.
   frame_control_chunk:
-    doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fcTL.60:_The_Frame_Control_Chunk
+    doc-ref: https://www.w3.org/TR/png/#fcTL-chunk
     seq:
       - id: sequence_number
         type: u4
-        doc: Sequence number of the animation chunk
+        # NOTE: whenever you update this `doc`, be sure to also update its copy
+        # in `frame_data_chunk`
+        doc: |
+          Sequence number of the animation chunk, starting from 0.
+
+          The `fcTL` and `fdAT` chunks have a 4-byte sequence number. Both chunk
+          types share the sequence. The purpose of this number is to detect (and
+          optionally correct) sequence errors in an Animated PNG, since the PNG
+          specification does not impose ordering restrictions on ancillary
+          chunks (which means that a PNG editor is technically allowed to
+          reorder them arbitrarily, see [14.2 Behavior of PNG
+          editors](https://www.w3.org/TR/png/#14Ordering) in the spec).
+
+          The first `fcTL` chunk must contain sequence number 0, and the
+          sequence numbers in the remaining `fcTL` and `fdAT` chunks must be in
+          ascending order, with no gaps or duplicates.
       - id: width
         type: u4
         valid:
@@ -507,32 +700,48 @@ types:
       - id: dispose_op
         type: u1
         enum: dispose_op_values
+        valid:
+          in-enum: true
         doc: Type of frame area disposal to be done after rendering this frame
       - id: blend_op
         type: u1
         enum: blend_op_values
+        valid:
+          in-enum: true
         doc: Type of frame area rendering for this frame
     instances:
       delay:
         value: 'delay_num / (delay_den == 0 ? 100.0 : delay_den)'
         doc: Time to display this frame, in seconds
   frame_data_chunk:
-    doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fdAT.60:_The_Frame_Data_Chunk
+    doc-ref: https://www.w3.org/TR/png/#fdAT-chunk
     seq:
       - id: sequence_number
         type: u4
+        # NOTE: whenever you update this `doc`, be sure to also update its copy
+        # in `frame_control_chunk`
         doc: |
-          Sequence number of the animation chunk. The fcTL and fdAT chunks
-          have a 4 byte sequence number. Both chunk types share the sequence.
-          The first fcTL chunk must contain sequence number 0, and the sequence
-          numbers in the remaining fcTL and fdAT chunks must be in order, with
-          no gaps or duplicates.
+          Sequence number of the animation chunk, starting from 0.
+
+          The `fcTL` and `fdAT` chunks have a 4-byte sequence number. Both chunk
+          types share the sequence. The purpose of this number is to detect (and
+          optionally correct) sequence errors in an Animated PNG, since the PNG
+          specification does not impose ordering restrictions on ancillary
+          chunks (which means that a PNG editor is technically allowed to
+          reorder them arbitrarily, see [14.2 Behavior of PNG
+          editors](https://www.w3.org/TR/png/#14Ordering) in the spec).
+
+          The first `fcTL` chunk must contain sequence number 0, and the
+          sequence numbers in the remaining `fcTL` and `fdAT` chunks must be in
+          ascending order, with no gaps or duplicates.
       - id: frame_data
         size-eos: true
         doc: |
-          Frame data for the frame. At least one fdAT chunk is required for
-          each frame. The compressed datastream is the concatenation of the
-          contents of the data fields of all the fdAT chunks within a frame.
+          Frame data for the frame. At least one `fdAT` chunk is required for
+          each frame, except for the first frame, if that frame is represented
+          by an `IDAT` chunk. The compressed datastream for each frame is the
+          concatenation of the contents of the data fields of all the `fdAT`
+          chunks within a frame.
   adobe_fireworks_chunk:
     doc-ref: https://stackoverflow.com/questions/4242402/the-fireworks-png-format-any-insight-any-libs/51683285#51683285
     seq:
@@ -578,7 +787,7 @@ types:
     seq:
       - id: file_name
         type: strz
-        encoding: utf-8
+        encoding: UTF-8
         valid:
           # See https://github.com/skeeto/scratch/blob/58470254f4a95cdf7a53888e405c851c21eb2cae/pngattach/pngattach.c#L466-L468
           expr: _.length != 0 and _.substring(0, 1) != "."
@@ -632,29 +841,51 @@ enums:
   dispose_op_values:
     0:
       id: none
+      -orig-id: APNG_DISPOSE_OP_NONE
       doc: |
         No disposal is done on this frame before rendering the next;
         the contents of the output buffer are left as is.
-      doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fcTL.60:_The_Frame_Control_Chunk
+      doc-ref: https://www.w3.org/TR/png/#fcTL-chunk
     1:
       id: background
+      -orig-id: APNG_DISPOSE_OP_BACKGROUND
       doc: |
         The frame's region of the output buffer is to be cleared to
         fully transparent black before rendering the next frame.
-      doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fcTL.60:_The_Frame_Control_Chunk
+      doc-ref: https://www.w3.org/TR/png/#fcTL-chunk
     2:
       id: previous
+      -orig-id: APNG_DISPOSE_OP_PREVIOUS
       doc: |
         The frame's region of the output buffer is to be reverted
         to the previous contents before rendering the next frame.
-      doc-ref: https://wiki.mozilla.org/APNG_Specification#.60fcTL.60:_The_Frame_Control_Chunk
+      doc-ref: https://www.w3.org/TR/png/#fcTL-chunk
   blend_op_values:
     0:
       id: source
+      -orig-id: APNG_BLEND_OP_SOURCE
       doc: |
         All color components of the frame, including alpha,
         overwrite the current contents of the frame's output buffer region.
+      doc-ref: https://www.w3.org/TR/png/#fcTL-chunk
     1:
       id: over
+      -orig-id: APNG_BLEND_OP_OVER
       doc: |
-        The frame is composited onto the output buffer based on its alpha
+        The frame is composited onto the output buffer based on its alpha, using
+        a simple OVER operation as described in [Alpha Channel
+        Processing](https://www.w3.org/TR/png/#13Alpha-channel-processing).
+      doc-ref: https://www.w3.org/TR/png/#fcTL-chunk
+  # https://www.w3.org/TR/png/#9Filters
+  filter_method:
+    0:
+      id: base
+      -orig-id: PNG_FILTER_TYPE_BASE
+      doc: Single row per-byte filtering
+      doc-ref:
+        - https://github.com/pnggroup/libpng/blob/dd5d363ae1fc7778f2734bf51b10d3fe65028671/png.h#L599
+        - https://www.w3.org/TR/png/#9Filter-types
+  # https://www.w3.org/TR/png/#8InterlaceMethods
+  interlace_method:
+    0: none
+    1: adam7
