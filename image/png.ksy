@@ -99,7 +99,7 @@ types:
             '"gAMA"': gama_chunk
             # iCCP
             '"mDCV"': mdcv_chunk
-            # sBIT
+            '"sBIT"': sbit_chunk
             '"sRGB"': srgb_chunk
             '"bKGD"': bkgd_chunk
             # hIST
@@ -346,6 +346,68 @@ types:
         value: x_int * 0.00002
       y:
         value: y_int * 0.00002
+  sbit_chunk:
+    doc: |
+      Significant bits (`sBIT`) chunk stores the original number of significant
+      bits of the sample values (which can be less than or equal to the sample
+      depth). This allows PNG decoders to recover the original data losslessly
+      even if the data had a sample depth not directly supported by PNG.
+    doc-ref: https://www.w3.org/TR/png/#11sBIT
+    seq:
+      - id: significant_bits
+        type:
+          switch-on: _root.ihdr.color_type
+          cases:
+            color_type::greyscale: sbit_greyscale(false)
+            color_type::truecolor: sbit_truecolor(false)
+            color_type::indexed: sbit_truecolor(false)
+            color_type::greyscale_alpha: sbit_greyscale(true)
+            color_type::truecolor_alpha: sbit_truecolor(true)
+    instances:
+      sample_depth:
+        value: '_root.ihdr.color_type == color_type::indexed ? 8 : _root.ihdr.bit_depth'
+  sbit_greyscale:
+    params:
+      - id: has_alpha
+        type: bool
+    seq:
+      - id: grey
+        type: u1
+        valid:
+          min: 1
+          max: _parent.sample_depth
+      - id: alpha
+        type: u1
+        valid:
+          min: 1
+          max: _parent.sample_depth
+        if: has_alpha
+  sbit_truecolor:
+    params:
+      - id: has_alpha
+        type: bool
+    seq:
+      - id: red
+        type: u1
+        valid:
+          min: 1
+          max: _parent.sample_depth
+      - id: green
+        type: u1
+        valid:
+          min: 1
+          max: _parent.sample_depth
+      - id: blue
+        type: u1
+        valid:
+          min: 1
+          max: _parent.sample_depth
+      - id: alpha
+        type: u1
+        valid:
+          min: 1
+          max: _parent.sample_depth
+        if: has_alpha
   srgb_chunk:
     doc-ref: https://www.w3.org/TR/png/#11sRGB
     seq:
