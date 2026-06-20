@@ -396,8 +396,9 @@ types:
         type: u1
   phys_chunk:
     doc: |
-      "Physical size" chunk stores data that allows to translate
-      logical pixels into physical units (meters, etc) and vice-versa.
+      Physical pixel dimensions (`pHYs`) chunk specifies the intended physical
+      size of the pixels (in meters) or pixel aspect ratio for display of the
+      image.
     doc-ref: https://www.w3.org/TR/png/#11pHYs
     seq:
       - id: pixels_per_unit_x
@@ -415,6 +416,15 @@ types:
         enum: phys_unit
         valid:
           in-enum: true
+    instances:
+      dots_per_inch_x:
+        value: pixels_per_unit_x * 0.0254
+        if: unit == phys_unit::meter
+        doc: Horizontal resolution (DPI)
+      dots_per_inch_y:
+        value: pixels_per_unit_y * 0.0254
+        if: unit == phys_unit::meter
+        doc: Vertical resolution (DPI)
   time_chunk:
     doc: |
       Time chunk stores time stamp of last modification of this image,
