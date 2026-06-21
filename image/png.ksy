@@ -103,7 +103,7 @@ types:
             '"sRGB"': srgb_chunk
             '"bKGD"': bkgd_chunk
             '"hIST"': hist_chunk
-            # tRNS
+            '"tRNS"': trns_chunk
             '"pHYs"': phys_chunk
             # sPLT
             '"tIME"': time_chunk
@@ -477,6 +477,76 @@ types:
           entry specifies that the corresponding palette entry is not used at
           all in the image. A histogram entry must be nonzero if there are any
           pixels of that color.
+  trns_chunk:
+    doc: |
+      Transparency (`tRNS`) chunk specifies either alpha values that are
+      associated with palette entries (for indexed-color images) or a single
+      transparent color (for greyscale and truecolor images).
+
+      A `tRNS` chunk must not appear for color types
+      `color_type::greyscale_alpha` = 4 and `color_type::truecolor_alpha` = 6,
+      since a full alpha channel is already present in those cases.
+    doc-ref: https://www.w3.org/TR/png/#11tRNS
+    seq:
+      - id: palette_alphas
+        type: u1
+        repeat: eos
+        if: _root.ihdr.color_type == color_type::indexed
+        doc: |
+          Alpha values associated with palette entries in the `PLTE` chunk.
+
+          Each entry indicates that pixels of the corresponding palette index
+          shall be treated as having the specified alpha value. Alpha values
+          have the same interpretation as in an 8-bit full alpha channel: 0 is
+          fully transparent, 255 is fully opaque, regardless of image bit depth.
+
+          The `tRNS` chunk must not contain more alpha values than there are
+          palette entries, but it may contain fewer values than there are
+          palette entries. In this case, the alpha value for all remaining
+          palette entries is assumed to be 255. If all palette indices are
+          opaque, the `tRNS` chunk may be omitted.
+      - id: transparent_color
+        type:
+          switch-on: _root.ihdr.color_type
+          cases:
+            color_type::greyscale: trns_greyscale_color
+            color_type::truecolor: trns_truecolor_color
+        doc: |
+          Pixels of the specified grey sample value or RGB sample values are
+          treated as transparent (equivalent to alpha value 0); all other pixels
+          are to be treated as fully opaque (alpha value `2^{bitdepth} - 1`).
+
+          If the image bit depth is less than 16, the least significant bits of
+          these sample values are used. Encoders should set the other bits to 0,
+          and decoders must mask the other bits to 0 before the value is used.
+
+          Note: in this Kaitai Struct implementation, the bitmask used to
+          implement this masking is stored in the value instance `sample_mask`.
+    instances:
+      sample_mask:
+        value: (1 << _root.ihdr.bit_depth) - 1
+  trns_greyscale_color:
+    seq:
+      - id: grey_raw
+        type: u2
+    instances:
+      grey:
+        value: grey_raw & _parent.sample_mask
+  trns_truecolor_color:
+    seq:
+      - id: red_raw
+        type: u2
+      - id: green_raw
+        type: u2
+      - id: blue_raw
+        type: u2
+    instances:
+      red:
+        value: red_raw & _parent.sample_mask
+      green:
+        value: green_raw & _parent.sample_mask
+      blue:
+        value: blue_raw & _parent.sample_mask
   phys_chunk:
     doc: |
       Physical pixel dimensions (`pHYs`) chunk specifies the intended physical
