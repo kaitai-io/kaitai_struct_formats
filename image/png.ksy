@@ -27,6 +27,8 @@ meta:
       - Q433224 # APNG
   license: CC0-1.0
   ks-version: 0.11
+  imports:
+    - icc_4
   endian: be
 doc: |
   Test files for APNG can be found at the following locations:
@@ -97,7 +99,7 @@ types:
             '"cICP"': cicp_chunk
             '"cLLI"': clli_chunk
             '"gAMA"': gama_chunk
-            # iCCP
+            '"iCCP"': iccp_chunk
             '"mDCV"': mdcv_chunk
             '"sBIT"': sbit_chunk
             '"sRGB"': srgb_chunk
@@ -310,6 +312,63 @@ types:
         doc: |
           Inverse of the image gamma (1 / gamma), typically 2.2 (not considering
           rounding)
+  iccp_chunk:
+    -webide-representation: '{profile_name}'
+    doc: |
+      Embedded ICC profile (`iCCP`) chunk.
+
+      If the `iCCP` chunk is present, the image samples conform to the color
+      space represented by the embedded ICC profile as defined by the
+      International Color Consortium.
+
+      This chunk is ignored unless it is the [highest-precedence color
+      chunk](https://www.w3.org/TR/png/#color-chunk-precendence) understood by
+      the decoder. Unless a `cICP` chunk exists, a PNG datastream should contain
+      at most one embedded profile, whether specified explicitly with an `iCCP`
+      or implicitly with an `sRGB` chunk.
+
+      It is recommended that the `sRGB` and `iCCP` chunks do not appear
+      simultaneously in a PNG datastream.
+    doc-ref: https://www.w3.org/TR/png/#11iCCP
+    seq:
+      - id: profile_name
+        type: strz
+        encoding: ISO-8859-1
+        doc: |
+          Any convenient name for referring to the profile. It is
+          case-sensitive.
+
+          Profile names must contain only printable ISO-8859-1 (Latin-1)
+          characters and spaces; that is, only code points 0x20-0x7E and
+          0xA1-0xFF are allowed. Leading, trailing, and consecutive spaces are
+          not permitted.
+      - id: compression_method
+        type: u1
+        enum: compression_methods
+        valid: compression_methods::zlib
+      - id: profile
+        size-eos: true
+        process: zlib
+        type: icc_4
+        doc: |
+          Embedded ICC profile.
+
+          The color space of the ICC profile must be:
+
+          * an RGB color space for color images (color types
+            `color_type::truecolor` = 2, `color_type::indexed` = 3, and
+            `color_type::truecolor_alpha` = 6), or
+          * a greyscale color space for greyscale images (color types
+            `color_type::greyscale` = 0 and `color_type::greyscale_alpha` = 4).
+
+          Note that the imported `icc_4.ksy` spec currently in use here supports
+          only the ICC.1 v4 specification (as the name suggests), not ICC.1 v2.
+          This means that PNG files with an embedded v2 profile (for example
+          https://github.com/web-platform-tests/wpt/blob/495d9d7716298588ff49d6e701bf27c5134bde06/css/css-color/support/swap-990000-iCCP.png)
+          will fail to parse.
+
+          TODO: extend `icc_4.ksy` to support both v4 and v2 profiles, rename it
+          to `icc.ksy`, and use it here.
   mdcv_chunk:
     doc-ref:
       - https://www.w3.org/TR/png/#mDCV-chunk
