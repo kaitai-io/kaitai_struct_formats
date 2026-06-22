@@ -107,7 +107,7 @@ types:
             '"hIST"': hist_chunk
             '"tRNS"': trns_chunk
             '"pHYs"': phys_chunk
-            # sPLT
+            '"sPLT"': splt_chunk
             '"tIME"': time_chunk
             '"iTXt"': international_text_chunk
             '"tEXt"': text_chunk
@@ -637,6 +637,99 @@ types:
         value: pixels_per_unit_y * 0.0254
         if: unit == phys_unit::meter
         doc: Vertical resolution (DPI)
+  splt_chunk:
+    -webide-representation: '{palette_name}'
+    doc: |
+      Suggested palette (`sPLT`) chunk.
+
+      Multiple `sPLT` chunks are permitted, but each must have a different
+      palette name.
+    doc-ref:
+      - https://www.w3.org/TR/png/#11sPLT
+      - https://www.w3.org/TR/png/#12Suggested-palettes
+    seq:
+      - id: palette_name
+        type: strz
+        encoding: ISO-8859-1
+        doc: |
+          Any convenient name for referring to the palette. It is
+          case-sensitive. The palette name may aid the choice of the appropriate
+          suggested palette when more than one appears in a PNG datastream.
+
+          Palette names must contain only printable ISO-8859-1 (Latin-1)
+          characters and spaces; that is, only code points 0x20-0x7E and
+          0xA1-0xFF are allowed. Leading, trailing, and consecutive spaces are
+          not permitted.
+      - id: sample_depth
+        type: u1
+        valid:
+          any-of: [8, 16]
+      - id: entries
+        type: splt_entry
+        repeat: eos
+        doc: |
+          There may be any number of entries. Entries must appear "in decreasing
+          order of frequency" (note: strictly speaking, I think the W3C
+          specification actually meant "non-increasing"). There is no
+          requirement that the entries all be used by the image, nor that they
+          all be different.
+
+          The color samples are not premultiplied by alpha, nor are they
+          precomposited against any background.
+
+          Entries in `sPLT` use the same gamma value and chromaticity values as
+          the PNG image, but may fall outside the range of values used in the
+          color space of the PNG image; for example, in a greyscale PNG image,
+          each `sPLT` entry would typically have equal red, green, and blue
+          values, but this is not required. Similarly, `sPLT` entries can have
+          non-opaque alpha values even when the PNG image does not use
+          transparency.
+  splt_entry:
+    seq:
+      - id: red
+        type:
+          switch-on: _parent.sample_depth
+          cases:
+            8: u1
+            _: u2
+      - id: green
+        type:
+          switch-on: _parent.sample_depth
+          cases:
+            8: u1
+            _: u2
+      - id: blue
+        type:
+          switch-on: _parent.sample_depth
+          cases:
+            8: u1
+            _: u2
+      - id: alpha
+        type:
+          switch-on: _parent.sample_depth
+          cases:
+            8: u1
+            _: u2
+        doc: |
+          An alpha value of 0 means fully transparent. An alpha value of 255
+          (when `_parent.sample_depth` is 8) or 65535 (when
+          `_parent.sample_depth` is 16) means fully opaque.
+      - id: freq
+        type: u2
+        doc: |
+          Each frequency value is proportional to the fraction of the pixels in
+          the image for which that palette entry is the closest match in RGBA
+          space, before the image has been composited against any background.
+
+          The exact scale factor is chosen by the PNG encoder; it is recommended
+          that the resulting range of individual values reasonably fills the
+          range 0 to 65535.
+
+          Zero is a valid frequency meaning that the color is "least important"
+          or that it is rarely, if ever, used. When all the frequencies are
+          zero, they are meaningless, that is to say, nothing may be inferred
+          about the actual frequencies with which the colors appear in the PNG
+          image.
   time_chunk:
     doc: |
       Time chunk stores time stamp of last modification of this image,
