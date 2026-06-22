@@ -29,6 +29,7 @@ meta:
   ks-version: 0.11
   imports:
     - icc_4
+    - exif
   endian: be
 doc: |
   Test files for APNG can be found at the following locations:
@@ -108,6 +109,7 @@ types:
             '"tRNS"': trns_chunk
             '"pHYs"': phys_chunk
             '"sPLT"': splt_chunk
+            '"eXIf"': exif_chunk
             '"tIME"': time_chunk
             '"iTXt"': international_text_chunk
             '"tEXt"': text_chunk
@@ -730,6 +732,19 @@ types:
           zero, they are meaningless, that is to say, nothing may be inferred
           about the actual frequencies with which the colors appear in the PNG
           image.
+  exif_chunk:
+    doc: |
+      Exchangeable Image File (Exif) Profile (`eXIf`) chunk.
+
+      Only one `eXIf` chunk is allowed in a PNG datastream.
+
+      The `eXIf` chunk contains metadata concerning the original image data. If
+      the image has been edited subsequent to creation of the Exif profile, this
+      data might no longer apply to the PNG image data.
+    doc-ref: https://www.w3.org/TR/png/#eXIf
+    seq:
+      - id: exif
+        type: exif
   time_chunk:
     doc: |
       Time chunk stores time stamp of last modification of this image,
