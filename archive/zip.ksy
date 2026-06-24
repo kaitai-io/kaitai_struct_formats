@@ -282,11 +282,11 @@ types:
             doc: Unix timestamp
           - id: access_time
             type: u4
-            if: flags.has_access_time
+            if: flags.has_access_time and _parent.len_body > 5
             doc: Unix timestamp
           - id: create_time
             type: u4
-            if: flags.has_create_time
+            if: flags.has_create_time and _parent.len_body > 5
             doc: Unix timestamp
         types:
           info_flags:
