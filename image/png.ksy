@@ -27,6 +27,9 @@ meta:
       - Q433224 # APNG
   license: CC0-1.0
   ks-version: 0.11
+  imports:
+    - icc_4
+    - exif
   endian: be
 doc: |
   Test files for APNG can be found at the following locations:
@@ -97,15 +100,16 @@ types:
             '"cICP"': cicp_chunk
             '"cLLI"': clli_chunk
             '"gAMA"': gama_chunk
-            # iCCP
+            '"iCCP"': iccp_chunk
             '"mDCV"': mdcv_chunk
-            # sBIT
+            '"sBIT"': sbit_chunk
             '"sRGB"': srgb_chunk
             '"bKGD"': bkgd_chunk
-            # hIST
-            # tRNS
+            '"hIST"': hist_chunk
+            '"tRNS"': trns_chunk
             '"pHYs"': phys_chunk
-            # sPLT
+            '"sPLT"': splt_chunk
+            '"eXIf"': exif_chunk
             '"tIME"': time_chunk
             '"iTXt"': international_text_chunk
             '"tEXt"': text_chunk
@@ -310,6 +314,63 @@ types:
         doc: |
           Inverse of the image gamma (1 / gamma), typically 2.2 (not considering
           rounding)
+  iccp_chunk:
+    -webide-representation: '{profile_name}'
+    doc: |
+      Embedded ICC profile (`iCCP`) chunk.
+
+      If the `iCCP` chunk is present, the image samples conform to the color
+      space represented by the embedded ICC profile as defined by the
+      International Color Consortium.
+
+      This chunk is ignored unless it is the [highest-precedence color
+      chunk](https://www.w3.org/TR/png/#color-chunk-precendence) understood by
+      the decoder. Unless a `cICP` chunk exists, a PNG datastream should contain
+      at most one embedded profile, whether specified explicitly with an `iCCP`
+      or implicitly with an `sRGB` chunk.
+
+      It is recommended that the `sRGB` and `iCCP` chunks do not appear
+      simultaneously in a PNG datastream.
+    doc-ref: https://www.w3.org/TR/png/#11iCCP
+    seq:
+      - id: profile_name
+        type: strz
+        encoding: ISO-8859-1
+        doc: |
+          Any convenient name for referring to the profile. It is
+          case-sensitive.
+
+          Profile names must contain only printable ISO-8859-1 (Latin-1)
+          characters and spaces; that is, only code points 0x20-0x7E and
+          0xA1-0xFF are allowed. Leading, trailing, and consecutive spaces are
+          not permitted.
+      - id: compression_method
+        type: u1
+        enum: compression_methods
+        valid: compression_methods::zlib
+      - id: profile
+        size-eos: true
+        process: zlib
+        type: icc_4
+        doc: |
+          Embedded ICC profile.
+
+          The color space of the ICC profile must be:
+
+          * an RGB color space for color images (color types
+            `color_type::truecolor` = 2, `color_type::indexed` = 3, and
+            `color_type::truecolor_alpha` = 6), or
+          * a greyscale color space for greyscale images (color types
+            `color_type::greyscale` = 0 and `color_type::greyscale_alpha` = 4).
+
+          Note that the imported `icc_4.ksy` spec currently in use here supports
+          only the ICC.1 v4 specification (as the name suggests), not ICC.1 v2.
+          This means that PNG files with an embedded v2 profile (for example
+          https://github.com/web-platform-tests/wpt/blob/495d9d7716298588ff49d6e701bf27c5134bde06/css/css-color/support/swap-990000-iCCP.png)
+          will fail to parse.
+
+          TODO: extend `icc_4.ksy` to support both v4 and v2 profiles, rename it
+          to `icc.ksy`, and use it here.
   mdcv_chunk:
     doc-ref:
       - https://www.w3.org/TR/png/#mDCV-chunk
@@ -346,6 +407,68 @@ types:
         value: x_int * 0.00002
       y:
         value: y_int * 0.00002
+  sbit_chunk:
+    doc: |
+      Significant bits (`sBIT`) chunk stores the original number of significant
+      bits of the sample values (which can be less than or equal to the sample
+      depth). This allows PNG decoders to recover the original data losslessly
+      even if the data had a sample depth not directly supported by PNG.
+    doc-ref: https://www.w3.org/TR/png/#11sBIT
+    seq:
+      - id: significant_bits
+        type:
+          switch-on: _root.ihdr.color_type
+          cases:
+            color_type::greyscale: sbit_greyscale(false)
+            color_type::truecolor: sbit_truecolor(false)
+            color_type::indexed: sbit_truecolor(false)
+            color_type::greyscale_alpha: sbit_greyscale(true)
+            color_type::truecolor_alpha: sbit_truecolor(true)
+    instances:
+      sample_depth:
+        value: '_root.ihdr.color_type == color_type::indexed ? 8 : _root.ihdr.bit_depth'
+  sbit_greyscale:
+    params:
+      - id: has_alpha
+        type: bool
+    seq:
+      - id: grey
+        type: u1
+        valid:
+          min: 1
+          max: _parent.sample_depth
+      - id: alpha
+        type: u1
+        valid:
+          min: 1
+          max: _parent.sample_depth
+        if: has_alpha
+  sbit_truecolor:
+    params:
+      - id: has_alpha
+        type: bool
+    seq:
+      - id: red
+        type: u1
+        valid:
+          min: 1
+          max: _parent.sample_depth
+      - id: green
+        type: u1
+        valid:
+          min: 1
+          max: _parent.sample_depth
+      - id: blue
+        type: u1
+        valid:
+          min: 1
+          max: _parent.sample_depth
+      - id: alpha
+        type: u1
+        valid:
+          min: 1
+          max: _parent.sample_depth
+        if: has_alpha
   srgb_chunk:
     doc-ref: https://www.w3.org/TR/png/#11sRGB
     seq:
@@ -394,6 +517,97 @@ types:
     seq:
       - id: palette_index
         type: u1
+  hist_chunk:
+    doc: |
+      Image histogram (`hIST`) chunk gives the approximate usage frequency of
+      each color in the palette. A histogram chunk can appear only when a `PLTE`
+      chunk appears.
+    doc-ref: https://www.w3.org/TR/png/#11hIST
+    seq:
+      - id: usage_freqs
+        type: u2
+        repeat: eos
+        doc: |
+          Usage frequencies of each color in the palette.
+
+          There must be exactly one entry for each entry in the `PLTE` chunk. Each
+          entry is proportional to the fraction of pixels in the image that have
+          that palette index; the exact scale factor is chosen by the encoder.
+
+          Histogram entries are approximate, with the exception that a zero
+          entry specifies that the corresponding palette entry is not used at
+          all in the image. A histogram entry must be nonzero if there are any
+          pixels of that color.
+  trns_chunk:
+    doc: |
+      Transparency (`tRNS`) chunk specifies either alpha values that are
+      associated with palette entries (for indexed-color images) or a single
+      transparent color (for greyscale and truecolor images).
+
+      A `tRNS` chunk must not appear for color types
+      `color_type::greyscale_alpha` = 4 and `color_type::truecolor_alpha` = 6,
+      since a full alpha channel is already present in those cases.
+    doc-ref: https://www.w3.org/TR/png/#11tRNS
+    seq:
+      - id: palette_alphas
+        type: u1
+        repeat: eos
+        if: _root.ihdr.color_type == color_type::indexed
+        doc: |
+          Alpha values associated with palette entries in the `PLTE` chunk.
+
+          Each entry indicates that pixels of the corresponding palette index
+          shall be treated as having the specified alpha value. Alpha values
+          have the same interpretation as in an 8-bit full alpha channel: 0 is
+          fully transparent, 255 is fully opaque, regardless of image bit depth.
+
+          The `tRNS` chunk must not contain more alpha values than there are
+          palette entries, but it may contain fewer values than there are
+          palette entries. In this case, the alpha value for all remaining
+          palette entries is assumed to be 255. If all palette indices are
+          opaque, the `tRNS` chunk may be omitted.
+      - id: transparent_color
+        type:
+          switch-on: _root.ihdr.color_type
+          cases:
+            color_type::greyscale: trns_greyscale_color
+            color_type::truecolor: trns_truecolor_color
+        doc: |
+          Pixels of the specified grey sample value or RGB sample values are
+          treated as transparent (equivalent to alpha value 0); all other pixels
+          are to be treated as fully opaque (alpha value `2^{bitdepth} - 1`).
+
+          If the image bit depth is less than 16, the least significant bits of
+          these sample values are used. Encoders should set the other bits to 0,
+          and decoders must mask the other bits to 0 before the value is used.
+
+          Note: in this Kaitai Struct implementation, the bitmask used to
+          implement this masking is stored in the value instance `sample_mask`.
+    instances:
+      sample_mask:
+        value: (1 << _root.ihdr.bit_depth) - 1
+  trns_greyscale_color:
+    seq:
+      - id: grey_raw
+        type: u2
+    instances:
+      grey:
+        value: grey_raw & _parent.sample_mask
+  trns_truecolor_color:
+    seq:
+      - id: red_raw
+        type: u2
+      - id: green_raw
+        type: u2
+      - id: blue_raw
+        type: u2
+    instances:
+      red:
+        value: red_raw & _parent.sample_mask
+      green:
+        value: green_raw & _parent.sample_mask
+      blue:
+        value: blue_raw & _parent.sample_mask
   phys_chunk:
     doc: |
       Physical pixel dimensions (`pHYs`) chunk specifies the intended physical
@@ -425,6 +639,112 @@ types:
         value: pixels_per_unit_y * 0.0254
         if: unit == phys_unit::meter
         doc: Vertical resolution (DPI)
+  splt_chunk:
+    -webide-representation: '{palette_name}'
+    doc: |
+      Suggested palette (`sPLT`) chunk.
+
+      Multiple `sPLT` chunks are permitted, but each must have a different
+      palette name.
+    doc-ref:
+      - https://www.w3.org/TR/png/#11sPLT
+      - https://www.w3.org/TR/png/#12Suggested-palettes
+    seq:
+      - id: palette_name
+        type: strz
+        encoding: ISO-8859-1
+        doc: |
+          Any convenient name for referring to the palette. It is
+          case-sensitive. The palette name may aid the choice of the appropriate
+          suggested palette when more than one appears in a PNG datastream.
+
+          Palette names must contain only printable ISO-8859-1 (Latin-1)
+          characters and spaces; that is, only code points 0x20-0x7E and
+          0xA1-0xFF are allowed. Leading, trailing, and consecutive spaces are
+          not permitted.
+      - id: sample_depth
+        type: u1
+        valid:
+          any-of: [8, 16]
+      - id: entries
+        type: splt_entry
+        repeat: eos
+        doc: |
+          There may be any number of entries. Entries must appear "in decreasing
+          order of frequency" (note: strictly speaking, I think the W3C
+          specification actually meant "non-increasing"). There is no
+          requirement that the entries all be used by the image, nor that they
+          all be different.
+
+          The color samples are not premultiplied by alpha, nor are they
+          precomposited against any background.
+
+          Entries in `sPLT` use the same gamma value and chromaticity values as
+          the PNG image, but may fall outside the range of values used in the
+          color space of the PNG image; for example, in a greyscale PNG image,
+          each `sPLT` entry would typically have equal red, green, and blue
+          values, but this is not required. Similarly, `sPLT` entries can have
+          non-opaque alpha values even when the PNG image does not use
+          transparency.
+  splt_entry:
+    seq:
+      - id: red
+        type:
+          switch-on: _parent.sample_depth
+          cases:
+            8: u1
+            _: u2
+      - id: green
+        type:
+          switch-on: _parent.sample_depth
+          cases:
+            8: u1
+            _: u2
+      - id: blue
+        type:
+          switch-on: _parent.sample_depth
+          cases:
+            8: u1
+            _: u2
+      - id: alpha
+        type:
+          switch-on: _parent.sample_depth
+          cases:
+            8: u1
+            _: u2
+        doc: |
+          An alpha value of 0 means fully transparent. An alpha value of 255
+          (when `_parent.sample_depth` is 8) or 65535 (when
+          `_parent.sample_depth` is 16) means fully opaque.
+      - id: freq
+        type: u2
+        doc: |
+          Each frequency value is proportional to the fraction of the pixels in
+          the image for which that palette entry is the closest match in RGBA
+          space, before the image has been composited against any background.
+
+          The exact scale factor is chosen by the PNG encoder; it is recommended
+          that the resulting range of individual values reasonably fills the
+          range 0 to 65535.
+
+          Zero is a valid frequency meaning that the color is "least important"
+          or that it is rarely, if ever, used. When all the frequencies are
+          zero, they are meaningless, that is to say, nothing may be inferred
+          about the actual frequencies with which the colors appear in the PNG
+          image.
+  exif_chunk:
+    doc: |
+      Exchangeable Image File (Exif) Profile (`eXIf`) chunk.
+
+      Only one `eXIf` chunk is allowed in a PNG datastream.
+
+      The `eXIf` chunk contains metadata concerning the original image data. If
+      the image has been edited subsequent to creation of the Exif profile, this
+      data might no longer apply to the PNG image data.
+    doc-ref: https://www.w3.org/TR/png/#eXIf
+    seq:
+      - id: exif
+        type: exif
   time_chunk:
     doc: |
       Time chunk stores time stamp of last modification of this image,
