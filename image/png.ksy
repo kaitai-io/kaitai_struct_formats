@@ -32,6 +32,14 @@ meta:
     - exif
   endian: be
 doc: |
+  NOTICE: Many of the documentation comments (or docstrings) in this file were
+  copied from or derived from the [Portable Network Graphics (PNG) Specification
+  (Third Edition)](https://www.w3.org/TR/2025/REC-png-3-20250624/).
+  Copyright © 1996-2025 [World Wide Web Consortium](https://www.w3.org/).
+  <https://www.w3.org/copyright/software-license-2023/>
+
+  ---
+
   Test files for APNG can be found at the following locations:
 
     * <https://philip.html5.org/tests/apng/tests.html>
