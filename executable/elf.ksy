@@ -101,52 +101,76 @@ types:
       mask_proc:
         value: value & 0xf0000000 != 0
   section_header_flags:
+    doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l468
     params:
       - id: value
         type: u4
     instances:
       write:
+        -orig-id: SHF_WRITE
         value: value & 0x01 != 0
-        doc: "writable"
+        doc: Writable
       alloc:
+        -orig-id: SHF_ALLOC
         value: value & 0x02 != 0
-        doc: "occupies memory during execution"
+        doc: Occupies memory during execution
       exec_instr:
+        -orig-id: SHF_EXECINSTR
         value: value & 0x04 != 0
-        doc: "executable"
+        doc: Executable
       merge:
+        -orig-id: SHF_MERGE
         value: value & 0x10 != 0
-        doc: "might be merged"
+        doc: Might be merged
       strings:
+        -orig-id: SHF_STRINGS
         value: value & 0x20 != 0
-        doc: "contains nul-terminated strings"
+        doc: Contains nul-terminated strings
       info_link:
+        -orig-id: SHF_INFO_LINK
         value: value & 0x40 != 0
-        doc: "'sh_info' contains SHT index"
+        doc: |
+          `sh_info` contains SHT index
       link_order:
+        -orig-id: SHF_LINK_ORDER
         value: value & 0x80 != 0
-        doc: "preserve order after combining"
-      os_non_conforming:
+        doc: Preserve order after combining
+      os_nonconforming:
+        -orig-id: SHF_OS_NONCONFORMING
         value: value & 0x100 != 0
-        doc: "non-standard OS specific handling required"
+        doc: Non-standard OS specific handling required
       group:
+        -orig-id: SHF_GROUP
         value: value & 0x200 != 0
-        doc: "section is member of a group"
+        doc: Section is member of a group
       tls:
+        -orig-id: SHF_TLS
         value: value & 0x400 != 0
-        doc: "section hold thread-local data"
-      ordered:
-        value: value & 0x04000000 != 0
-        doc: "special ordering requirement (Solaris)"
-      exclude:
-        value: value & 0x08000000 != 0
-        doc: "section is excluded unless referenced or allocated (Solaris)"
+        doc: Section hold thread-local data
+      compressed:
+        -orig-id: SHF_COMPRESSED
+        value: value & 0x800 != 0
+        doc: Section with compressed data
       mask_os:
-        value: value & 0x0ff00000 != 0
-        doc: "OS-specific"
+        -orig-id: SHF_MASKOS
+        value: value & 0x0ff0_0000 != 0
+        doc: OS-specific
       mask_proc:
-        value: value & 0xf0000000 != 0
-        doc: "Processor-specific"
+        -orig-id: SHF_MASKPROC
+        value: value & 0xf000_0000 != 0
+        doc: Processor-specific
+      retain:
+        -orig-id: SHF_GNU_RETAIN
+        value: value & 0x0020_0000 != 0
+        doc: Not to be GCed by linker
+      ordered:
+        -orig-id: SHF_ORDERED
+        value: value & 0x4000_0000 != 0
+        doc: Special ordering requirement (Solaris)
+      exclude:
+        -orig-id: SHF_EXCLUDE
+        value: value & 0x8000_0000 != 0
+        doc: Section is excluded unless referenced or allocated (Solaris)
   dt_flag_values:
     doc-ref:
       - 'https://refspecs.linuxbase.org/elf/gabi4+/ch5.dynamic.html Figure 5-11: DT_FLAGS values'
