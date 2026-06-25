@@ -101,7 +101,9 @@ types:
       mask_proc:
         value: value & 0xf0000000 != 0
   section_header_flags:
-    doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l468
+    doc-ref:
+      - https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/common.h;h=1ae68221a89723773b4ec5bf17c7455def7b90b8;hb=refs/tags/binutils-2_46_1#l614
+      - https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l468
     params:
       - id: value
         type: u4
@@ -109,7 +111,7 @@ types:
       write:
         -orig-id: SHF_WRITE
         value: value & 0x01 != 0
-        doc: Writable
+        doc: Writable data during execution
       alloc:
         -orig-id: SHF_ALLOC
         value: value & 0x02 != 0
@@ -117,24 +119,24 @@ types:
       exec_instr:
         -orig-id: SHF_EXECINSTR
         value: value & 0x04 != 0
-        doc: Executable
+        doc: Executable machine instructions
       merge:
         -orig-id: SHF_MERGE
         value: value & 0x10 != 0
-        doc: Might be merged
+        doc: Data in this section can be merged
       strings:
         -orig-id: SHF_STRINGS
         value: value & 0x20 != 0
-        doc: Contains nul-terminated strings
+        doc: Contains null-terminated character strings
       info_link:
         -orig-id: SHF_INFO_LINK
         value: value & 0x40 != 0
         doc: |
-          `sh_info` contains SHT index
+          `sh_info` holds section header table index
       link_order:
         -orig-id: SHF_LINK_ORDER
         value: value & 0x80 != 0
-        doc: Preserve order after combining
+        doc: Preserve section ordering when linking
       os_nonconforming:
         -orig-id: SHF_OS_NONCONFORMING
         value: value & 0x100 != 0
@@ -142,31 +144,41 @@ types:
       group:
         -orig-id: SHF_GROUP
         value: value & 0x200 != 0
-        doc: Section is member of a group
+        doc: Member of a section group
       tls:
         -orig-id: SHF_TLS
         value: value & 0x400 != 0
-        doc: Section hold thread-local data
+        doc: |
+          Thread-local storage section (`.tbss` or `.tdata` according to [ELF
+          Handling For Thread-Local
+          Storage](https://www.akkadia.org/drepper/tls.pdf))
       compressed:
         -orig-id: SHF_COMPRESSED
         value: value & 0x800 != 0
         doc: Section with compressed data
+
       mask_os:
         -orig-id: SHF_MASKOS
         value: value & 0x0ff0_0000 != 0
-        doc: OS-specific
-      mask_proc:
-        -orig-id: SHF_MASKPROC
-        value: value & 0xf000_0000 != 0
-        doc: Processor-specific
+        doc: OS-specific semantics
       retain:
         -orig-id: SHF_GNU_RETAIN
         value: value & 0x0020_0000 != 0
-        doc: Not to be GCed by linker
+        doc: Section should not be garbage collected by the linker
+      gnu_mbind:
+        -orig-id: SHF_GNU_MBIND
+        value: value & 0x0100_0000 != 0
+        doc: Mbind section
+
+      mask_proc:
+        -orig-id: SHF_MASKPROC
+        value: value & 0xf000_0000 != 0
+        doc: Processor-specific semantics
       ordered:
         -orig-id: SHF_ORDERED
         value: value & 0x4000_0000 != 0
         doc: Special ordering requirement (Solaris)
+        doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l485
       exclude:
         -orig-id: SHF_EXCLUDE
         value: value & 0x8000_0000 != 0
