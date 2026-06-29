@@ -1587,6 +1587,9 @@ enums:
       id: moxie_old
       -orig-id: EM_MOXIE_OLD
       doc: Old, unofficial value for Moxie
+  # https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l715
+  # https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/common.h;h=1ae68221a89723773b4ec5bf17c7455def7b90b8;hb=refs/tags/binutils-2_46_1#l472
+  # https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/program-header.html#GUID-49F99618-9CDC-4A08-A94C-E2AA264AA01A__CHAPTER6-69880
   ph_type:
     0: null_type
     1: load
@@ -1597,14 +1600,27 @@ enums:
     6: phdr
     7: tls
     # 0x60000000: lo_os
-    0x6474e550: gnu_eh_frame
-    0x6474e551: gnu_stack
-    0x6474e552: gnu_relro
-    0x6474e553: gnu_property
+    0x6474e550:
+      id: gnu_eh_frame
+      -orig-id:
+        - PT_GNU_EH_FRAME
+        - PT_SUNW_EH_FRAME
+    0x6474e551:
+      id: gnu_stack
+      -orig-id: PT_GNU_STACK
+    0x6474e552:
+      id: gnu_relro
+      -orig-id: PT_GNU_RELRO
+    0x6474e553:
+      id: gnu_property
+      -orig-id: PT_GNU_PROPERTY
     0x65041580: pax_flags
     # 0x6fffffff: hi_os
     # 0x70000000: lo_proc
-    0x70000001: arm_exidx
+    0x70000001:
+      id: arm_exidx
+      -orig-id: PT_ARM_EXIDX
+      doc-ref: https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/arm.h;h=091eea5d5d83fa656bcfe2603a8452c2615e7389;hb=refs/tags/binutils-2_46_1#l41
     # 0x7fffffff: hi_proc
   # https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/section-headers.html#GUID-2CBE4879-2E76-426E-BB7F-CF0CB1D87C52__CHAPTER6-73445
   # https://github.com/illumos/illumos-gate/blob/1d806c5f41/usr/src/boot/sys/sys/elf_common.h#L377-L462
