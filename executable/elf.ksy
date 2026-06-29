@@ -102,6 +102,7 @@ types:
         value: value & 0xf0000000 != 0
   section_header_flags:
     doc-ref:
+      - https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/section-headers.html#GUID-2CBE4879-2E76-426E-BB7F-CF0CB1D87C52__CHAPTER6-10675
       - https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/common.h;h=1ae68221a89723773b4ec5bf17c7455def7b90b8;hb=refs/tags/binutils-2_46_1#l614
       - https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l468
     params:
@@ -110,20 +111,20 @@ types:
     instances:
       write:
         -orig-id: SHF_WRITE
-        value: value & 0x01 != 0
-        doc: Writable data during execution
+        value: value & 0x1 != 0
+        doc: Writable during execution
       alloc:
         -orig-id: SHF_ALLOC
-        value: value & 0x02 != 0
+        value: value & 0x2 != 0
         doc: Occupies memory during execution
       exec_instr:
         -orig-id: SHF_EXECINSTR
-        value: value & 0x04 != 0
+        value: value & 0x4 != 0
         doc: Executable machine instructions
       merge:
         -orig-id: SHF_MERGE
         value: value & 0x10 != 0
-        doc: Data in this section can be merged
+        doc: Data in this section can be merged to eliminate duplication
       strings:
         -orig-id: SHF_STRINGS
         value: value & 0x20 != 0
@@ -132,7 +133,7 @@ types:
         -orig-id: SHF_INFO_LINK
         value: value & 0x40 != 0
         doc: |
-          `sh_info` holds section header table index
+          Section header's `sh_info` field holds a section header table index
       link_order:
         -orig-id: SHF_LINK_ORDER
         value: value & 0x80 != 0
@@ -140,7 +141,7 @@ types:
       os_nonconforming:
         -orig-id: SHF_OS_NONCONFORMING
         value: value & 0x100 != 0
-        doc: Non-standard OS specific handling required
+        doc: Special OS-specific handling required
       group:
         -orig-id: SHF_GROUP
         value: value & 0x200 != 0
@@ -165,10 +166,14 @@ types:
         -orig-id: SHF_GNU_RETAIN
         value: value & 0x0020_0000 != 0
         doc: Section should not be garbage collected by the linker
+        doc-ref:
+          - https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/common.h;h=1ae68221a89723773b4ec5bf17c7455def7b90b8;hb=refs/tags/binutils-2_46_1#l630
+          - https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l484
       gnu_mbind:
         -orig-id: SHF_GNU_MBIND
         value: value & 0x0100_0000 != 0
         doc: Mbind section
+        doc-ref: https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/common.h;h=1ae68221a89723773b4ec5bf17c7455def7b90b8;hb=refs/tags/binutils-2_46_1#l631
 
       mask_proc:
         -orig-id: SHF_MASKPROC
@@ -177,8 +182,17 @@ types:
       ordered:
         -orig-id: SHF_ORDERED
         value: value & 0x4000_0000 != 0
-        doc: Special ordering requirement (Solaris)
-        doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l485
+        doc: |
+          Special ordering requirement (Solaris)
+
+          From <https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/section-headers.html#GUID-2CBE4879-2E76-426E-BB7F-CF0CB1D87C52__CHAPTER6-10675>:
+
+          > `SHF_ORDERED` is an older version of the functionality provided by
+          > `SHF_LINK_ORDER`, and has been superseded by `SHF_LINK_ORDER`.
+          > `SHF_ORDERED` is no longer supported.
+        doc-ref:
+          - https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l485
+          - https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/section-headers.html#GUID-2CBE4879-2E76-426E-BB7F-CF0CB1D87C52__CHAPTER6-10675
       exclude:
         -orig-id: SHF_EXCLUDE
         value: value & 0x8000_0000 != 0
