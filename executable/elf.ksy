@@ -1597,15 +1597,15 @@ enums:
     6: phdr
     7: tls
     # 0x60000000: lo_os
+    0x6474e550: gnu_eh_frame
+    0x6474e551: gnu_stack
+    0x6474e552: gnu_relro
+    0x6474e553: gnu_property
     0x65041580: pax_flags
     # 0x6fffffff: hi_os
     # 0x70000000: lo_proc
     0x70000001: arm_exidx
     # 0x7fffffff: hi_proc
-    0x6474e550: gnu_eh_frame
-    0x6474e551: gnu_stack
-    0x6474e552: gnu_relro
-    0x6474e553: gnu_property
   # https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/section-headers.html#GUID-2CBE4879-2E76-426E-BB7F-CF0CB1D87C52__CHAPTER6-73445
   # https://github.com/illumos/illumos-gate/blob/1d806c5f41/usr/src/boot/sys/sys/elf_common.h#L377-L462
   sh_type:
