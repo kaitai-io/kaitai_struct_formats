@@ -1600,6 +1600,12 @@ enums:
     6: phdr
     7: tls
     # 0x60000000: lo_os
+    0x6464e550:
+      id: sunw_unwind
+      -orig-id: PT_SUNW_UNWIND
+      doc: |
+        Equivalent to `PT_SUNW_EH_FRAME` (`ph_type::gnu_eh_frame`)
+      doc-ref: https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/program-header.html#GUID-49F99618-9CDC-4A08-A94C-E2AA264AA01A__CHAPTER6-69880
     0x6474e550:
       id: gnu_eh_frame
       -orig-id:
@@ -1614,6 +1620,9 @@ enums:
     0x6474e553:
       id: gnu_property
       -orig-id: PT_GNU_PROPERTY
+    0x6474e554:
+      id: gnu_sframe
+      -orig-id: PT_GNU_SFRAME
     0x65041580: pax_flags
     # 0x6fffffff: hi_os
     # 0x70000000: lo_proc
