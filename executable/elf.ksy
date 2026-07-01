@@ -236,6 +236,7 @@ types:
         value: value & 0x0000_0001 != 0
         doc: Set `RTLD_NOW` for this object.
       rtld_global:
+        -affected-by: 90 # `global` is a keyword in Python
         -orig-id: DF_1_GLOBAL
         value: value & 0x0000_0002 != 0
         doc: Set `RTLD_GLOBAL` for this object.
@@ -243,19 +244,19 @@ types:
         -orig-id: DF_1_GROUP
         value: value & 0x0000_0004 != 0
         doc: Set `RTLD_GROUP` for this object.
-      nodelete:
+      no_delete:
         -orig-id: DF_1_NODELETE
         value: value & 0x0000_0008 != 0
         doc: Set `RTLD_NODELETE` for this object.
-      loadfltr:
+      load_fltr:
         -orig-id: DF_1_LOADFLTR
         value: value & 0x0000_0010 != 0
         doc: Trigger filtee loading at runtime.
-      initfirst:
+      init_first:
         -orig-id: DF_1_INITFIRST
         value: value & 0x0000_0020 != 0
         doc: Set `RTLD_INITFIRST` for this object.
-      noopen:
+      no_open:
         -orig-id: DF_1_NOOPEN
         value: value & 0x0000_0040 != 0
         doc: Set `RTLD_NOOPEN` for this object.
@@ -276,56 +277,56 @@ types:
         -orig-id: DF_1_INTERPOSE
         value: value & 0x0000_0400 != 0
         doc: Object is used to interpose.
-      nodeflib:
+      no_def_lib:
         -orig-id: DF_1_NODEFLIB
         value: value & 0x0000_0800 != 0
         doc: Ignore the default library search path.
-      nodump:
+      no_dump:
         -orig-id: DF_1_NODUMP
         value: value & 0x0000_1000 != 0
         doc: Object can't be dldump'ed.
-      confalt:
+      conf_alt:
         -orig-id: DF_1_CONFALT
         value: value & 0x0000_2000 != 0
         doc: Configuration alternative created.
         doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l1023
-      endfiltee:
+      end_filtee:
         -orig-id: DF_1_ENDFILTEE
         value: value & 0x0000_4000 != 0
         doc: Filtee terminates filters search.
-      dispreldne:
+      disp_rel_dne:
         -orig-id: DF_1_DISPRELDNE
         value: value & 0x0000_8000 != 0
         doc: Displacement relocation done (applied at build time).
-      disprelpnd:
+      disp_rel_pnd:
         -orig-id: DF_1_DISPRELPND
         value: value & 0x0001_0000 != 0
         doc: Displacement relocation pending (applied at runtime).
-      nodirect:
+      no_direct:
         -orig-id: DF_1_NODIRECT
         value: value & 0x0002_0000 != 0
         doc: Object contains non-direct bindings.
-      ignmuldef:
+      ign_mul_def:
         -orig-id: DF_1_IGNMULDEF
         value: value & 0x0004_0000 != 0
-      noksyms:
+      no_ksyms:
         -orig-id: DF_1_NOKSYMS
         value: value & 0x0008_0000 != 0
-      nohdr:
+      no_hdr:
         -orig-id: DF_1_NOHDR
         value: value & 0x0010_0000 != 0
       edited:
         -orig-id: DF_1_EDITED
         value: value & 0x0020_0000 != 0
         doc: Object is modified after built.
-      noreloc:
+      no_reloc:
         -orig-id: DF_1_NORELOC
         value: value & 0x0040_0000 != 0
-      symintpose:
+      sym_intpose:
         -orig-id: DF_1_SYMINTPOSE
         value: value & 0x0080_0000 != 0
         doc: Object has individual symbol interposers.
-      globaudit:
+      glob_audit:
         -orig-id: DF_1_GLOBAUDIT
         value: value & 0x0100_0000 != 0
         doc: Global auditing required.
@@ -347,11 +348,11 @@ types:
         -orig-id: DF_1_KMOD
         value: value & 0x1000_0000 != 0
         doc: Object is a kernel module.
-      weakfilter:
+      weak_filter:
         -orig-id: DF_1_WEAKFILTER
         value: value & 0x2000_0000 != 0
         doc: Object is a weak standard filter.
-      nocommon:
+      no_common:
         -orig-id: DF_1_NOCOMMON
         value: value & 0x4000_0000 != 0
         doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l1040
