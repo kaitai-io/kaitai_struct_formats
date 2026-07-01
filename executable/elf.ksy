@@ -224,93 +224,138 @@ types:
         value: value & 0x00000010 != 0
         doc: object uses static thread-local storage scheme
   dt_flag_1_values:
+    doc-ref:
+      - https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l1008
+      - https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/dynamic-section.html#GUID-4336A69A-D905-4FCE-A398-80375A9E6464__CHAPTER6-TBL-53
     params:
       - id: value
         type: u4
     instances:
       now:
-        value: value & 0x00000001 != 0
-        doc: "Set RTLD_NOW for this object."
+        -orig-id: DF_1_NOW
+        value: value & 0x0000_0001 != 0
+        doc: Set `RTLD_NOW` for this object.
       rtld_global:
-        value: value & 0x00000002 != 0
-        doc: "Set RTLD_GLOBAL for this object."
+        -orig-id: DF_1_GLOBAL
+        value: value & 0x0000_0002 != 0
+        doc: Set `RTLD_GLOBAL` for this object.
       group:
-        value: value & 0x00000004 != 0
-        doc: "Set RTLD_GROUP for this object."
+        -orig-id: DF_1_GROUP
+        value: value & 0x0000_0004 != 0
+        doc: Set `RTLD_GROUP` for this object.
       nodelete:
-        value: value & 0x00000008 != 0
-        doc: "Set RTLD_NODELETE for this object."
+        -orig-id: DF_1_NODELETE
+        value: value & 0x0000_0008 != 0
+        doc: Set `RTLD_NODELETE` for this object.
       loadfltr:
-        value: value & 0x00000010 != 0
-        doc: "Trigger filtee loading at runtime."
+        -orig-id: DF_1_LOADFLTR
+        value: value & 0x0000_0010 != 0
+        doc: Trigger filtee loading at runtime.
       initfirst:
-        value: value & 0x00000020 != 0
-        doc: "Set RTLD_INITFIRST for this object"
+        -orig-id: DF_1_INITFIRST
+        value: value & 0x0000_0020 != 0
+        doc: Set `RTLD_INITFIRST` for this object.
       noopen:
-        value: value & 0x00000040 != 0
-        doc: "Set RTLD_NOOPEN for this object."
+        -orig-id: DF_1_NOOPEN
+        value: value & 0x0000_0040 != 0
+        doc: Set `RTLD_NOOPEN` for this object.
       origin:
-        value: value & 0x00000080 != 0
-        doc: "$ORIGIN must be handled."
+        -orig-id: DF_1_ORIGIN
+        value: value & 0x0000_0080 != 0
+        doc: |
+          `$ORIGIN` must be handled.
       direct:
-        value: value & 0x00000100 != 0
-        doc: "Direct binding enabled."
+        -orig-id: DF_1_DIRECT
+        value: value & 0x0000_0100 != 0
+        doc: Direct binding enabled.
       trans:
-        value: value & 0x00000200 != 0
+        -orig-id: DF_1_TRANS
+        value: value & 0x0000_0200 != 0
+        doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l1019
       interpose:
-        value: value & 0x00000400 != 0
-        doc: "Object is used to interpose."
+        -orig-id: DF_1_INTERPOSE
+        value: value & 0x0000_0400 != 0
+        doc: Object is used to interpose.
       nodeflib:
-        value: value & 0x00000800 != 0
-        doc: "Ignore default lib search path."
+        -orig-id: DF_1_NODEFLIB
+        value: value & 0x0000_0800 != 0
+        doc: Ignore the default library search path.
       nodump:
-        value: value & 0x00001000 != 0
-        doc: "Object can't be dldump'ed."
+        -orig-id: DF_1_NODUMP
+        value: value & 0x0000_1000 != 0
+        doc: Object can't be dldump'ed.
       confalt:
-        value: value & 0x00002000 != 0
-        doc: "Configuration alternative created."
+        -orig-id: DF_1_CONFALT
+        value: value & 0x0000_2000 != 0
+        doc: Configuration alternative created.
+        doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l1023
       endfiltee:
-        value: value & 0x00004000 != 0
-        doc: "Filtee terminates filters search."
+        -orig-id: DF_1_ENDFILTEE
+        value: value & 0x0000_4000 != 0
+        doc: Filtee terminates filters search.
       dispreldne:
-        value: value & 0x00008000 != 0
-        doc: "Disp reloc applied at build time."
+        -orig-id: DF_1_DISPRELDNE
+        value: value & 0x0000_8000 != 0
+        doc: Displacement relocation done (applied at build time).
       disprelpnd:
-        value: value & 0x00010000 != 0
-        doc: "Disp reloc applied at run-time."
+        -orig-id: DF_1_DISPRELPND
+        value: value & 0x0001_0000 != 0
+        doc: Displacement relocation pending (applied at runtime).
       nodirect:
-        value: value & 0x00020000 != 0
-        doc: "Object has no-direct binding."
+        -orig-id: DF_1_NODIRECT
+        value: value & 0x0002_0000 != 0
+        doc: Object contains non-direct bindings.
       ignmuldef:
-        value: value & 0x00040000 != 0
+        -orig-id: DF_1_IGNMULDEF
+        value: value & 0x0004_0000 != 0
       noksyms:
-        value: value & 0x00080000 != 0
+        -orig-id: DF_1_NOKSYMS
+        value: value & 0x0008_0000 != 0
       nohdr:
-        value: value & 0x00100000 != 0
+        -orig-id: DF_1_NOHDR
+        value: value & 0x0010_0000 != 0
       edited:
-        value: value & 0x00200000 != 0
-        doc: "Object is modified after built."
+        -orig-id: DF_1_EDITED
+        value: value & 0x0020_0000 != 0
+        doc: Object is modified after built.
       noreloc:
-        value: value & 0x00400000 != 0
+        -orig-id: DF_1_NORELOC
+        value: value & 0x0040_0000 != 0
       symintpose:
-        value: value & 0x00800000 != 0
-        doc: "Object has individual interposers."
+        -orig-id: DF_1_SYMINTPOSE
+        value: value & 0x0080_0000 != 0
+        doc: Object has individual symbol interposers.
       globaudit:
-        value: value & 0x01000000 != 0
-        doc: "Global auditing required."
+        -orig-id: DF_1_GLOBAUDIT
+        value: value & 0x0100_0000 != 0
+        doc: Global auditing required.
       singleton:
-        value: value & 0x02000000 != 0
-        doc: "Singleton symbols are used."
+        -orig-id: DF_1_SINGLETON
+        value: value & 0x0200_0000 != 0
+        doc: Singleton symbols are used.
       stub:
-        value: value & 0x04000000 != 0
+        -orig-id: DF_1_STUB
+        value: value & 0x0400_0000 != 0
+        doc: |
+          Object is a stub.
+          See [Stub Objects](https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/stub-objects.html).
       pie:
-        value: value & 0x08000000 != 0
+        -orig-id: DF_1_PIE
+        value: value & 0x0800_0000 != 0
+        doc: Object is a Position Independent Executable (PIE).
       kmod:
-        value: value & 0x10000000 != 0
+        -orig-id: DF_1_KMOD
+        value: value & 0x1000_0000 != 0
+        doc: Object is a kernel module.
       weakfilter:
-        value: value & 0x20000000 != 0
+        -orig-id: DF_1_WEAKFILTER
+        value: value & 0x2000_0000 != 0
+        doc: Object is a weak standard filter.
       nocommon:
-        value: value & 0x40000000 != 0
+        -orig-id: DF_1_NOCOMMON
+        value: value & 0x4000_0000 != 0
+        doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l1040
+        doc: No COMMON symbols exist.
   endian_elf:
     meta:
       endian:
