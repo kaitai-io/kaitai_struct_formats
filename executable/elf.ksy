@@ -835,24 +835,132 @@ enums:
     1: le
     # ELFDATA2MSB
     2: be
+  # https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/common.h;h=1ae68221a89723773b4ec5bf17c7455def7b90b8;hb=refs/tags/binutils-2_46_1#l60
+  # https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l134
+  # https://github.com/llvm/llvm-project/blob/ca7933e47d3a3451d81e72ac174dcb5aa28b59d1/llvm/include/llvm/BinaryFormat/ELF.h#L344 (Git tag "llvmorg-22.1.8")
+  # https://gabi.xinuos.com/v42/elf/b-osabi.html
   os_abi:
-    0: system_v
-    1: hp_ux
-    2: netbsd
-    3: gnu
-    6: solaris
-    7: aix
-    8: irix
-    9: freebsd
-    0xa: tru64 # Compaq TRU64 UNIX
-    0xb: modesto # Novell Modesto
-    0xc: openbsd
-    0xd: openvms
-    0xe: nsk # Hewlett-Packard Non-Stop Kernel
-    0xf: aros # Amiga Research OS
-    0x10: fenixos # The FenixOS highly scalable multi-core OS
-    0x11: cloudabi # Nuxi CloudABI
-    0x12: openvos # Stratus Technologies OpenVOS
+    0:
+      id: system_v
+      -orig-id:
+        - ELFOSABI_SYSV
+        - ELFOSABI_NONE
+      doc: UNIX System V ABI
+    1:
+      id: hp_ux
+      -orig-id: ELFOSABI_HPUX
+      doc: HP-UX
+    2:
+      id: netbsd
+      -orig-id: ELFOSABI_NETBSD
+      doc: NetBSD
+    3:
+      id: gnu
+      -orig-id:
+        - ELFOSABI_GNU
+        - ELFOSABI_LINUX
+      doc: Object uses GNU ELF extensions.
+    6:
+      id: solaris
+      -orig-id: ELFOSABI_SOLARIS
+      doc: Solaris
+    7:
+      id: aix
+      -orig-id: ELFOSABI_AIX
+      doc: IBM AIX
+    8:
+      id: irix
+      -orig-id: ELFOSABI_IRIX
+      doc: IRIX by Silicon Graphics (SGI)
+    9:
+      id: freebsd
+      -orig-id: ELFOSABI_FREEBSD
+      doc: FreeBSD
+    10:
+      id: tru64
+      -orig-id: ELFOSABI_TRU64
+      doc: Compaq TRU64 UNIX
+    11:
+      id: modesto
+      -orig-id: ELFOSABI_MODESTO
+      doc: Novell Modesto
+    12:
+      id: openbsd
+      -orig-id: ELFOSABI_OPENBSD
+      doc: OpenBSD
+    13:
+      id: openvms
+      -orig-id: ELFOSABI_OPENVMS
+      doc: OpenVMS
+    14:
+      id: nsk
+      -orig-id: ELFOSABI_NSK
+      doc: Hewlett-Packard NonStop Kernel
+    15:
+      id: aros
+      -orig-id: ELFOSABI_AROS
+      doc: AROS Research Operating System
+    16:
+      id: fenixos
+      -orig-id: ELFOSABI_FENIXOS
+      doc: FenixOS
+    17:
+      id: cloudabi
+      -orig-id: ELFOSABI_CLOUDABI
+      doc: Nuxi CloudABI
+    18:
+      id: openvos
+      -orig-id: ELFOSABI_OPENVOS
+      doc: Stratus Technologies OpenVOS
+    51:
+      id: cuda
+      -orig-id: ELFOSABI_CUDA
+      doc: NVIDIA CUDA architecture
+      doc-ref:
+        - https://github.com/llvm/llvm-project/blob/ca7933e47d3a3451d81e72ac174dcb5aa28b59d1/llvm/include/llvm/BinaryFormat/ELF.h#L364 Git tag "llvmorg-22.1.8"
+        - https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/common.h;h=1ae68221a89723773b4ec5bf17c7455def7b90b8;hb=refs/tags/binutils-2_46_1#l79
+        - 'https://docs.nvidia.com/cuda/cuda-binary-utilities/index.html search for `"ei_osabi": 51,`'
+    # 64-255: Architecture-specific value range
+    64:
+      id: arm_aeabi
+      -orig-id: ELFOSABI_ARM_AEABI
+      doc: ARM EABI (symbol versioning extensions)
+    # 64:
+    #   id: amdgpu_hsa
+    #   -orig-id: ELFOSABI_AMDGPU_HSA
+    #   doc: AMD HSA runtime
+    #   doc-ref: https://github.com/llvm/llvm-project/blob/ca7933e47d3a3451d81e72ac174dcb5aa28b59d1/llvm/include/llvm/BinaryFormat/ELF.h#L367 Git tag "llvmorg-22.1.8"
+    # 64:
+    #   id: c6000_elfabi
+    #   -orig-id: ELFOSABI_C6000_ELFABI
+    #   doc: Bare-metal TMS320C6000
+    65:
+      id: arm_fdpic
+      -orig-id: ELFOSABI_ARM_FDPIC
+      doc: ARM FDPIC
+      doc-ref: https://github.com/llvm/llvm-project/blob/ca7933e47d3a3451d81e72ac174dcb5aa28b59d1/llvm/include/llvm/BinaryFormat/ELF.h#L371 Git tag "llvmorg-22.1.8"
+    # 65:
+    #   id: amdgpu_pal
+    #   -orig-id: ELFOSABI_AMDGPU_PAL
+    #   doc: AMD PAL runtime
+    #   doc-ref: https://github.com/llvm/llvm-project/blob/ca7933e47d3a3451d81e72ac174dcb5aa28b59d1/llvm/include/llvm/BinaryFormat/ELF.h#L368 Git tag "llvmorg-22.1.8"
+    # 65:
+    #   id: c6000_linux
+    #   -orig-id: ELFOSABI_C6000_LINUX
+    #   doc: Linux TMS320C6000
+    66:
+      id: amdgpu_mesa3d
+      -orig-id: ELFOSABI_AMDGPU_MESA3D
+      doc: AMD GCN GPUs (GFX6+) for MESA runtime
+      doc-ref: https://github.com/llvm/llvm-project/blob/ca7933e47d3a3451d81e72ac174dcb5aa28b59d1/llvm/include/llvm/BinaryFormat/ELF.h#L369 Git tag "llvmorg-22.1.8"
+    97:
+      id: arm
+      -orig-id: ELFOSABI_ARM
+      doc: ARM
+    255:
+      id: standalone
+      -orig-id: ELFOSABI_STANDALONE
+      doc: Standalone (embedded) application
   # e_type
   obj_type:
     # ET_NONE
