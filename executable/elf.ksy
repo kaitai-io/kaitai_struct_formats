@@ -1786,10 +1786,22 @@ enums:
     0x65041580: pax_flags
     # 0x6fffffff: hi_os
     # 0x70000000: lo_proc
+    0x70000000:
+      id: arm_archext
+      -orig-id: PT_ARM_ARCHEXT
+      doc: Platform architecture compatibility information
+      doc-ref:
+        - https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/arm.h;h=091eea5d5d83fa656bcfe2603a8452c2615e7389;hb=refs/tags/binutils-2_46_1#l40
+        - https://github.com/ARM-software/abi-aa/blob/daa7a94ca55973736c0e434a67a6e4bbcd35d7fa/aaelf32/aaelf32.rst#61program-header Git tag "2025Q4"
     0x70000001:
       id: arm_exidx
-      -orig-id: PT_ARM_EXIDX
-      doc-ref: https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/arm.h;h=091eea5d5d83fa656bcfe2603a8452c2615e7389;hb=refs/tags/binutils-2_46_1#l41
+      -orig-id:
+        - PT_ARM_EXIDX
+        - PT_ARM_UNWIND
+      doc: Exception unwind tables
+      doc-ref:
+        - https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/arm.h;h=091eea5d5d83fa656bcfe2603a8452c2615e7389;hb=refs/tags/binutils-2_46_1#l41
+        - https://github.com/ARM-software/abi-aa/blob/daa7a94ca55973736c0e434a67a6e4bbcd35d7fa/aaelf32/aaelf32.rst#61program-header Git tag "2025Q4"
     # 0x7fffffff: hi_proc
   # https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/section-headers.html#GUID-2CBE4879-2E76-426E-BB7F-CF0CB1D87C52__CHAPTER6-73445
   # https://github.com/illumos/illumos-gate/blob/1d806c5f41/usr/src/boot/sys/sys/elf_common.h#L377-L462
