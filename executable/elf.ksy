@@ -22,7 +22,7 @@ meta:
   license: CC0-1.0
   ks-version: 0.9
 doc-ref:
-  - https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;hb=0f62fe0532
+  - https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43
   - https://refspecs.linuxfoundation.org/elf/gabi4+/contents.html
   - https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/elf-application-binary-interface.html
 seq:
@@ -101,52 +101,102 @@ types:
       mask_proc:
         value: value & 0xf0000000 != 0
   section_header_flags:
+    doc-ref:
+      - https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/section-headers.html#GUID-2CBE4879-2E76-426E-BB7F-CF0CB1D87C52__CHAPTER6-10675
+      - https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/common.h;h=1ae68221a89723773b4ec5bf17c7455def7b90b8;hb=refs/tags/binutils-2_46_1#l614
+      - https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l468
     params:
       - id: value
         type: u4
     instances:
       write:
-        value: value & 0x01 != 0
-        doc: "writable"
+        -orig-id: SHF_WRITE
+        value: value & 0x1 != 0
+        doc: Writable during execution
       alloc:
-        value: value & 0x02 != 0
-        doc: "occupies memory during execution"
+        -orig-id: SHF_ALLOC
+        value: value & 0x2 != 0
+        doc: Occupies memory during execution
       exec_instr:
-        value: value & 0x04 != 0
-        doc: "executable"
+        -orig-id: SHF_EXECINSTR
+        value: value & 0x4 != 0
+        doc: Executable machine instructions
       merge:
+        -orig-id: SHF_MERGE
         value: value & 0x10 != 0
-        doc: "might be merged"
+        doc: Data in this section can be merged to eliminate duplication
       strings:
+        -orig-id: SHF_STRINGS
         value: value & 0x20 != 0
-        doc: "contains nul-terminated strings"
+        doc: Contains null-terminated character strings
       info_link:
+        -orig-id: SHF_INFO_LINK
         value: value & 0x40 != 0
-        doc: "'sh_info' contains SHT index"
+        doc: |
+          Section header's `sh_info` field holds a section header table index
       link_order:
+        -orig-id: SHF_LINK_ORDER
         value: value & 0x80 != 0
-        doc: "preserve order after combining"
-      os_non_conforming:
+        doc: Preserve section ordering when linking
+      os_nonconforming:
+        -orig-id: SHF_OS_NONCONFORMING
         value: value & 0x100 != 0
-        doc: "non-standard OS specific handling required"
+        doc: Special OS-specific handling required
       group:
+        -orig-id: SHF_GROUP
         value: value & 0x200 != 0
-        doc: "section is member of a group"
+        doc: Member of a section group
       tls:
+        -orig-id: SHF_TLS
         value: value & 0x400 != 0
-        doc: "section hold thread-local data"
-      ordered:
-        value: value & 0x04000000 != 0
-        doc: "special ordering requirement (Solaris)"
-      exclude:
-        value: value & 0x08000000 != 0
-        doc: "section is excluded unless referenced or allocated (Solaris)"
+        doc: |
+          Thread-local storage section (`.tbss` or `.tdata` according to [ELF
+          Handling For Thread-Local
+          Storage](https://www.akkadia.org/drepper/tls.pdf))
+      compressed:
+        -orig-id: SHF_COMPRESSED
+        value: value & 0x800 != 0
+        doc: Section with compressed data
+
       mask_os:
-        value: value & 0x0ff00000 != 0
-        doc: "OS-specific"
+        -orig-id: SHF_MASKOS
+        value: value & 0x0ff0_0000 != 0
+        doc: OS-specific semantics
+      retain:
+        -orig-id: SHF_GNU_RETAIN
+        value: value & 0x0020_0000 != 0
+        doc: Section should not be garbage collected by the linker
+        doc-ref:
+          - https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/common.h;h=1ae68221a89723773b4ec5bf17c7455def7b90b8;hb=refs/tags/binutils-2_46_1#l630
+          - https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l484
+      gnu_mbind:
+        -orig-id: SHF_GNU_MBIND
+        value: value & 0x0100_0000 != 0
+        doc: Mbind section
+        doc-ref: https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/common.h;h=1ae68221a89723773b4ec5bf17c7455def7b90b8;hb=refs/tags/binutils-2_46_1#l631
+
       mask_proc:
-        value: value & 0xf0000000 != 0
-        doc: "Processor-specific"
+        -orig-id: SHF_MASKPROC
+        value: value & 0xf000_0000 != 0
+        doc: Processor-specific semantics
+      ordered:
+        -orig-id: SHF_ORDERED
+        value: value & 0x4000_0000 != 0
+        doc: |
+          Special ordering requirement (Solaris)
+
+          From <https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/section-headers.html#GUID-2CBE4879-2E76-426E-BB7F-CF0CB1D87C52__CHAPTER6-10675>:
+
+          > `SHF_ORDERED` is an older version of the functionality provided by
+          > `SHF_LINK_ORDER`, and has been superseded by `SHF_LINK_ORDER`.
+          > `SHF_ORDERED` is no longer supported.
+        doc-ref:
+          - https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l485
+          - https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/section-headers.html#GUID-2CBE4879-2E76-426E-BB7F-CF0CB1D87C52__CHAPTER6-10675
+      exclude:
+        -orig-id: SHF_EXCLUDE
+        value: value & 0x8000_0000 != 0
+        doc: Section is excluded unless referenced or allocated (Solaris)
   dt_flag_values:
     doc-ref:
       - 'https://refspecs.linuxbase.org/elf/gabi4+/ch5.dynamic.html Figure 5-11: DT_FLAGS values'
@@ -174,87 +224,139 @@ types:
         value: value & 0x00000010 != 0
         doc: object uses static thread-local storage scheme
   dt_flag_1_values:
+    doc-ref:
+      - https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l1008
+      - https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/dynamic-section.html#GUID-4336A69A-D905-4FCE-A398-80375A9E6464__CHAPTER6-TBL-53
     params:
       - id: value
         type: u4
     instances:
       now:
-        value: value & 0x00000001 != 0
-        doc: "Set RTLD_NOW for this object."
+        -orig-id: DF_1_NOW
+        value: value & 0x0000_0001 != 0
+        doc: Set `RTLD_NOW` for this object.
       rtld_global:
-        value: value & 0x00000002 != 0
-        doc: "Set RTLD_GLOBAL for this object."
+        -affected-by: 90 # `global` is a keyword in Python
+        -orig-id: DF_1_GLOBAL
+        value: value & 0x0000_0002 != 0
+        doc: Set `RTLD_GLOBAL` for this object.
       group:
-        value: value & 0x00000004 != 0
-        doc: "Set RTLD_GROUP for this object."
-      nodelete:
-        value: value & 0x00000008 != 0
-        doc: "Set RTLD_NODELETE for this object."
-      loadfltr:
-        value: value & 0x00000010 != 0
-        doc: "Trigger filtee loading at runtime."
-      initfirst:
-        value: value & 0x00000020 != 0
-        doc: "Set RTLD_INITFIRST for this object"
-      noopen:
-        value: value & 0x00000040 != 0
-        doc: "Set RTLD_NOOPEN for this object."
+        -orig-id: DF_1_GROUP
+        value: value & 0x0000_0004 != 0
+        doc: Set `RTLD_GROUP` for this object.
+      no_delete:
+        -orig-id: DF_1_NODELETE
+        value: value & 0x0000_0008 != 0
+        doc: Set `RTLD_NODELETE` for this object.
+      load_fltr:
+        -orig-id: DF_1_LOADFLTR
+        value: value & 0x0000_0010 != 0
+        doc: Trigger filtee loading at runtime.
+      init_first:
+        -orig-id: DF_1_INITFIRST
+        value: value & 0x0000_0020 != 0
+        doc: Set `RTLD_INITFIRST` for this object.
+      no_open:
+        -orig-id: DF_1_NOOPEN
+        value: value & 0x0000_0040 != 0
+        doc: Set `RTLD_NOOPEN` for this object.
       origin:
-        value: value & 0x00000080 != 0
-        doc: "$ORIGIN must be handled."
+        -orig-id: DF_1_ORIGIN
+        value: value & 0x0000_0080 != 0
+        doc: |
+          `$ORIGIN` must be handled.
       direct:
-        value: value & 0x00000100 != 0
-        doc: "Direct binding enabled."
+        -orig-id: DF_1_DIRECT
+        value: value & 0x0000_0100 != 0
+        doc: Direct binding enabled.
       trans:
-        value: value & 0x00000200 != 0
+        -orig-id: DF_1_TRANS
+        value: value & 0x0000_0200 != 0
+        doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l1019
       interpose:
-        value: value & 0x00000400 != 0
-        doc: "Object is used to interpose."
-      nodeflib:
-        value: value & 0x00000800 != 0
-        doc: "Ignore default lib search path."
-      nodump:
-        value: value & 0x00001000 != 0
-        doc: "Object can't be dldump'ed."
-      confalt:
-        value: value & 0x00002000 != 0
-        doc: "Configuration alternative created."
-      endfiltee:
-        value: value & 0x00004000 != 0
-        doc: "Filtee terminates filters search."
-      dispreldne:
-        value: value & 0x00008000 != 0
-        doc: "Disp reloc applied at build time."
-      disprelpnd:
-        value: value & 0x00010000 != 0
-        doc: "Disp reloc applied at run-time."
-      nodirect:
-        value: value & 0x00020000 != 0
-        doc: "Object has no-direct binding."
-      ignmuldef:
-        value: value & 0x00040000 != 0
-      noksyms:
-        value: value & 0x00080000 != 0
-      nohdr:
-        value: value & 0x00100000 != 0
+        -orig-id: DF_1_INTERPOSE
+        value: value & 0x0000_0400 != 0
+        doc: Object is used to interpose.
+      no_def_lib:
+        -orig-id: DF_1_NODEFLIB
+        value: value & 0x0000_0800 != 0
+        doc: Ignore the default library search path.
+      no_dump:
+        -orig-id: DF_1_NODUMP
+        value: value & 0x0000_1000 != 0
+        doc: Object can't be dldump'ed.
+      conf_alt:
+        -orig-id: DF_1_CONFALT
+        value: value & 0x0000_2000 != 0
+        doc: Configuration alternative created.
+        doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l1023
+      end_filtee:
+        -orig-id: DF_1_ENDFILTEE
+        value: value & 0x0000_4000 != 0
+        doc: Filtee terminates filters search.
+      disp_rel_dne:
+        -orig-id: DF_1_DISPRELDNE
+        value: value & 0x0000_8000 != 0
+        doc: Displacement relocation done (applied at build time).
+      disp_rel_pnd:
+        -orig-id: DF_1_DISPRELPND
+        value: value & 0x0001_0000 != 0
+        doc: Displacement relocation pending (applied at runtime).
+      no_direct:
+        -orig-id: DF_1_NODIRECT
+        value: value & 0x0002_0000 != 0
+        doc: Object contains non-direct bindings.
+      ign_mul_def:
+        -orig-id: DF_1_IGNMULDEF
+        value: value & 0x0004_0000 != 0
+      no_ksyms:
+        -orig-id: DF_1_NOKSYMS
+        value: value & 0x0008_0000 != 0
+      no_hdr:
+        -orig-id: DF_1_NOHDR
+        value: value & 0x0010_0000 != 0
       edited:
-        value: value & 0x00200000 != 0
-        doc: "Object is modified after built."
-      noreloc:
-        value: value & 0x00400000 != 0
-      symintpose:
-        value: value & 0x00800000 != 0
-        doc: "Object has individual interposers."
-      globaudit:
-        value: value & 0x01000000 != 0
-        doc: "Global auditing required."
+        -orig-id: DF_1_EDITED
+        value: value & 0x0020_0000 != 0
+        doc: Object is modified after built.
+      no_reloc:
+        -orig-id: DF_1_NORELOC
+        value: value & 0x0040_0000 != 0
+      sym_intpose:
+        -orig-id: DF_1_SYMINTPOSE
+        value: value & 0x0080_0000 != 0
+        doc: Object has individual symbol interposers.
+      glob_audit:
+        -orig-id: DF_1_GLOBAUDIT
+        value: value & 0x0100_0000 != 0
+        doc: Global auditing required.
       singleton:
-        value: value & 0x02000000 != 0
-        doc: "Singleton symbols are used."
+        -orig-id: DF_1_SINGLETON
+        value: value & 0x0200_0000 != 0
+        doc: Singleton symbols are used.
       stub:
-        value: value & 0x04000000 != 0
+        -orig-id: DF_1_STUB
+        value: value & 0x0400_0000 != 0
+        doc: |
+          Object is a stub.
+          See [Stub Objects](https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/stub-objects.html).
       pie:
-        value: value & 0x08000000 != 0
+        -orig-id: DF_1_PIE
+        value: value & 0x0800_0000 != 0
+        doc: Object is a Position Independent Executable (PIE).
+      kmod:
+        -orig-id: DF_1_KMOD
+        value: value & 0x1000_0000 != 0
+        doc: Object is a kernel module.
+      weak_filter:
+        -orig-id: DF_1_WEAKFILTER
+        value: value & 0x2000_0000 != 0
+        doc: Object is a weak standard filter.
+      no_common:
+        -orig-id: DF_1_NOCOMMON
+        value: value & 0x4000_0000 != 0
+        doc-ref: https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l1040
+        doc: No COMMON symbols exist.
   endian_elf:
     meta:
       endian:
@@ -733,24 +835,132 @@ enums:
     1: le
     # ELFDATA2MSB
     2: be
+  # https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/common.h;h=1ae68221a89723773b4ec5bf17c7455def7b90b8;hb=refs/tags/binutils-2_46_1#l60
+  # https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l134
+  # https://github.com/llvm/llvm-project/blob/ca7933e47d3a3451d81e72ac174dcb5aa28b59d1/llvm/include/llvm/BinaryFormat/ELF.h#L344 (Git tag "llvmorg-22.1.8")
+  # https://gabi.xinuos.com/v42/elf/b-osabi.html
   os_abi:
-    0: system_v
-    1: hp_ux
-    2: netbsd
-    3: gnu
-    6: solaris
-    7: aix
-    8: irix
-    9: freebsd
-    0xa: tru64 # Compaq TRU64 UNIX
-    0xb: modesto # Novell Modesto
-    0xc: openbsd
-    0xd: openvms
-    0xe: nsk # Hewlett-Packard Non-Stop Kernel
-    0xf: aros # Amiga Research OS
-    0x10: fenixos # The FenixOS highly scalable multi-core OS
-    0x11: cloudabi # Nuxi CloudABI
-    0x12: openvos # Stratus Technologies OpenVOS
+    0:
+      id: system_v
+      -orig-id:
+        - ELFOSABI_SYSV
+        - ELFOSABI_NONE
+      doc: UNIX System V ABI
+    1:
+      id: hp_ux
+      -orig-id: ELFOSABI_HPUX
+      doc: HP-UX
+    2:
+      id: netbsd
+      -orig-id: ELFOSABI_NETBSD
+      doc: NetBSD
+    3:
+      id: gnu
+      -orig-id:
+        - ELFOSABI_GNU
+        - ELFOSABI_LINUX
+      doc: Object uses GNU ELF extensions.
+    6:
+      id: solaris
+      -orig-id: ELFOSABI_SOLARIS
+      doc: Solaris
+    7:
+      id: aix
+      -orig-id: ELFOSABI_AIX
+      doc: IBM AIX
+    8:
+      id: irix
+      -orig-id: ELFOSABI_IRIX
+      doc: IRIX by Silicon Graphics (SGI)
+    9:
+      id: freebsd
+      -orig-id: ELFOSABI_FREEBSD
+      doc: FreeBSD
+    10:
+      id: tru64
+      -orig-id: ELFOSABI_TRU64
+      doc: Compaq TRU64 UNIX
+    11:
+      id: modesto
+      -orig-id: ELFOSABI_MODESTO
+      doc: Novell Modesto
+    12:
+      id: openbsd
+      -orig-id: ELFOSABI_OPENBSD
+      doc: OpenBSD
+    13:
+      id: openvms
+      -orig-id: ELFOSABI_OPENVMS
+      doc: OpenVMS
+    14:
+      id: nsk
+      -orig-id: ELFOSABI_NSK
+      doc: Hewlett-Packard NonStop Kernel
+    15:
+      id: aros
+      -orig-id: ELFOSABI_AROS
+      doc: AROS Research Operating System
+    16:
+      id: fenixos
+      -orig-id: ELFOSABI_FENIXOS
+      doc: FenixOS
+    17:
+      id: cloudabi
+      -orig-id: ELFOSABI_CLOUDABI
+      doc: Nuxi CloudABI
+    18:
+      id: openvos
+      -orig-id: ELFOSABI_OPENVOS
+      doc: Stratus Technologies OpenVOS
+    51:
+      id: cuda
+      -orig-id: ELFOSABI_CUDA
+      doc: NVIDIA CUDA architecture
+      doc-ref:
+        - https://github.com/llvm/llvm-project/blob/ca7933e47d3a3451d81e72ac174dcb5aa28b59d1/llvm/include/llvm/BinaryFormat/ELF.h#L364 Git tag "llvmorg-22.1.8"
+        - https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/common.h;h=1ae68221a89723773b4ec5bf17c7455def7b90b8;hb=refs/tags/binutils-2_46_1#l79
+        - 'https://docs.nvidia.com/cuda/cuda-binary-utilities/index.html search for `"ei_osabi": 51,`'
+    # 64-255: Architecture-specific value range
+    64:
+      id: arm_aeabi
+      -orig-id: ELFOSABI_ARM_AEABI
+      doc: ARM EABI (symbol versioning extensions)
+    # 64:
+    #   id: amdgpu_hsa
+    #   -orig-id: ELFOSABI_AMDGPU_HSA
+    #   doc: AMD HSA runtime
+    #   doc-ref: https://github.com/llvm/llvm-project/blob/ca7933e47d3a3451d81e72ac174dcb5aa28b59d1/llvm/include/llvm/BinaryFormat/ELF.h#L367 Git tag "llvmorg-22.1.8"
+    # 64:
+    #   id: c6000_elfabi
+    #   -orig-id: ELFOSABI_C6000_ELFABI
+    #   doc: Bare-metal TMS320C6000
+    65:
+      id: arm_fdpic
+      -orig-id: ELFOSABI_ARM_FDPIC
+      doc: ARM FDPIC
+      doc-ref: https://github.com/llvm/llvm-project/blob/ca7933e47d3a3451d81e72ac174dcb5aa28b59d1/llvm/include/llvm/BinaryFormat/ELF.h#L371 Git tag "llvmorg-22.1.8"
+    # 65:
+    #   id: amdgpu_pal
+    #   -orig-id: ELFOSABI_AMDGPU_PAL
+    #   doc: AMD PAL runtime
+    #   doc-ref: https://github.com/llvm/llvm-project/blob/ca7933e47d3a3451d81e72ac174dcb5aa28b59d1/llvm/include/llvm/BinaryFormat/ELF.h#L368 Git tag "llvmorg-22.1.8"
+    # 65:
+    #   id: c6000_linux
+    #   -orig-id: ELFOSABI_C6000_LINUX
+    #   doc: Linux TMS320C6000
+    66:
+      id: amdgpu_mesa3d
+      -orig-id: ELFOSABI_AMDGPU_MESA3D
+      doc: AMD GCN GPUs (GFX6+) for MESA runtime
+      doc-ref: https://github.com/llvm/llvm-project/blob/ca7933e47d3a3451d81e72ac174dcb5aa28b59d1/llvm/include/llvm/BinaryFormat/ELF.h#L369 Git tag "llvmorg-22.1.8"
+    97:
+      id: arm
+      -orig-id: ELFOSABI_ARM
+      doc: ARM
+    255:
+      id: standalone
+      -orig-id: ELFOSABI_STANDALONE
+      doc: Standalone (embedded) application
   # e_type
   obj_type:
     # ET_NONE
@@ -1537,6 +1747,9 @@ enums:
       id: moxie_old
       -orig-id: EM_MOXIE_OLD
       doc: Old, unofficial value for Moxie
+  # https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/elf.h;h=46a01281cb0fb5322d5124f0443c11dea4d5b721;hb=refs/tags/glibc-2.43#l715
+  # https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/common.h;h=1ae68221a89723773b4ec5bf17c7455def7b90b8;hb=refs/tags/binutils-2_46_1#l472
+  # https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/program-header.html#GUID-49F99618-9CDC-4A08-A94C-E2AA264AA01A__CHAPTER6-69880
   ph_type:
     0: null_type
     1: load
@@ -1547,15 +1760,49 @@ enums:
     6: phdr
     7: tls
     # 0x60000000: lo_os
+    0x6464e550:
+      id: sunw_unwind
+      -orig-id: PT_SUNW_UNWIND
+      doc: |
+        Equivalent to `PT_SUNW_EH_FRAME` (`ph_type::gnu_eh_frame`)
+      doc-ref: https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/program-header.html#GUID-49F99618-9CDC-4A08-A94C-E2AA264AA01A__CHAPTER6-69880
+    0x6474e550:
+      id: gnu_eh_frame
+      -orig-id:
+        - PT_GNU_EH_FRAME
+        - PT_SUNW_EH_FRAME
+    0x6474e551:
+      id: gnu_stack
+      -orig-id: PT_GNU_STACK
+    0x6474e552:
+      id: gnu_relro
+      -orig-id: PT_GNU_RELRO
+    0x6474e553:
+      id: gnu_property
+      -orig-id: PT_GNU_PROPERTY
+    0x6474e554:
+      id: gnu_sframe
+      -orig-id: PT_GNU_SFRAME
     0x65041580: pax_flags
     # 0x6fffffff: hi_os
     # 0x70000000: lo_proc
-    0x70000001: arm_exidx
+    0x70000000:
+      id: arm_archext
+      -orig-id: PT_ARM_ARCHEXT
+      doc: Platform architecture compatibility information
+      doc-ref:
+        - https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/arm.h;h=091eea5d5d83fa656bcfe2603a8452c2615e7389;hb=refs/tags/binutils-2_46_1#l40
+        - https://github.com/ARM-software/abi-aa/blob/daa7a94ca55973736c0e434a67a6e4bbcd35d7fa/aaelf32/aaelf32.rst#61program-header Git tag "2025Q4"
+    0x70000001:
+      id: arm_exidx
+      -orig-id:
+        - PT_ARM_EXIDX
+        - PT_ARM_UNWIND
+      doc: Exception unwind tables
+      doc-ref:
+        - https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=include/elf/arm.h;h=091eea5d5d83fa656bcfe2603a8452c2615e7389;hb=refs/tags/binutils-2_46_1#l41
+        - https://github.com/ARM-software/abi-aa/blob/daa7a94ca55973736c0e434a67a6e4bbcd35d7fa/aaelf32/aaelf32.rst#61program-header Git tag "2025Q4"
     # 0x7fffffff: hi_proc
-    0x6474e550: gnu_eh_frame
-    0x6474e551: gnu_stack
-    0x6474e552: gnu_relro
-    0x6474e553: gnu_property
   # https://docs.oracle.com/en/operating-systems/solaris/oracle-solaris/11.4/linkers-libraries/section-headers.html#GUID-2CBE4879-2E76-426E-BB7F-CF0CB1D87C52__CHAPTER6-73445
   # https://github.com/illumos/illumos-gate/blob/1d806c5f41/usr/src/boot/sys/sys/elf_common.h#L377-L462
   sh_type:
