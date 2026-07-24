@@ -7,6 +7,7 @@ meta:
     - dos
   license: CC0-1.0
   endian: le
+  bit-endian: be
 doc: |
   fileinfo.fi files store detailed file description alongside file names
   that are displayed by the fi.exe program. This format was used by Norton
@@ -31,20 +32,22 @@ types:
       - id: checksum
         type: u2
         doc: Simple checksum of remaining header bytes.
-      - id: bitmask
-        size: 128
-        doc: >-
+      - id: record_in_use
+        type: b1
+        repeat: expr
+        repeat-expr: 1024
+        doc: |
           Bit mask of valid records, starting with the highest bit in the first
           byte and ending with the lowest bit in the bitmask_len byte. This
-          structure limits the number of records in the file to 1024.
+          structure limits the number of records in the file to 1024, although
+          Norton Utilities capped the maximum at 769.
   record:
     seq:
       - id: file_name
         size: 12
-        type: str
-        terminator: 0
+        type: strz
         encoding: IBM437
-        doc: >-
+        doc: |
           This contains the short 8.3 MS-DOS file name.  The first character
           is set to 0xE5 and the appropriate bit in the bitmask is cleared when
           the entry has been deleted. Even though file names must be ASCII, the
@@ -53,7 +56,7 @@ types:
       - id: comment
         size: 65
         terminator: 0
-        doc: >-
+        doc: |
           This is not defined as a string because the encoding is unknown; it
           is often IBM437 but can be something else depending on the code page
           in use when the entry was created.
