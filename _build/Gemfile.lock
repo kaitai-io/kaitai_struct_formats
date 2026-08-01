@@ -9,7 +9,9 @@ GEM
     commonmarker (2.9.0-x86_64-darwin)
     commonmarker (2.9.0-x86_64-linux)
     commonmarker (2.9.0-x86_64-linux-musl)
-    pygments.rb (4.0.0)
+    logger (1.7.0)
+    pygments.rb (5.0.0)
+      logger (~> 1.7)
 
 PLATFORMS
   aarch64-linux
@@ -35,7 +37,8 @@ CHECKSUMS
   commonmarker (2.9.0-x86_64-darwin) sha256=0a9914ccfd2f5d2a59c7bd0dda4fe90eb084cf513b477e499008e09ec9d6edd6
   commonmarker (2.9.0-x86_64-linux) sha256=8cfe92970eef585a19ddf6613224b91cab64d6029834661bda801f877c9c7f43
   commonmarker (2.9.0-x86_64-linux-musl) sha256=293921398b839f79ceaf55010e061357e34f053822c3b003cd0be6686176335e
-  pygments.rb (4.0.0) sha256=f48bb03a28cf5eaa56e8d3d5a49b76a978199a51bd8643cc4b32fbb7ffecee57
+  logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
+  pygments.rb (5.0.0) sha256=33b3b0a0da0b4b5d12cedbb2b355b0685bb0a545fb7efb29868945c18148ef6e
 
 BUNDLED WITH
   4.0.17
