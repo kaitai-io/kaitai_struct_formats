@@ -15,6 +15,15 @@ meta:
       - Q26383099 # Exif image file
       - Q196465 # Exchangeable image file format
   license: CC0-1.0
+doc-ref:
+  - https://www.cipa.jp/std/documents/download_e.html?CIPA_DC-008-2026-E Exif Version 3.1
+  - https://www.cipa.jp/std/documents/download_e.html?CIPA_DC-008-2024-E Exif Version 3.0
+  - https://web.archive.org/web/20190624045241id_/https://www.cipa.jp/std/documents/e/DC-008-Translation-2019-E.pdf Exif Version 2.32
+  - https://web.archive.org/web/20190712232333id_/https://www.cipa.jp/std/documents/e/DC-008-Translation-2016-E.pdf Exif Version 2.31
+  - https://www.cipa.jp/std/documents/e/DC-008-2012_E_C.pdf Exif Version 2.3 (with Corrigendum at the end)
+  - https://web.archive.org/web/20051228234707id_/https://tsc.jeita.or.jp/avs/data/cp3451_1.pdf Exif Version 2.21 (2003 draft)
+  - https://web.archive.org/web/20131018091152id_/https://exif.org/Exif2-2.PDF Exif Version 2.2
+  - https://web.archive.org/web/20131111073619id_/https://exif.org/Exif2-1.PDF Exif Version 2.1
 seq:
   - id: endianness
     type: u2le
