@@ -3,13 +3,17 @@ meta:
   xref:
     forensicswiki: exif
     justsolve: Exif
-    loc: fdd000146
+    loc:
+      - fdd000618 # Exif family
+      - fdd000146 # Exif 2.2
     pronom:
       - x-fmt/398 # Exif 2.0
       - x-fmt/390 # Exif 2.1
       - x-fmt/391 # Exif 2.2
-      - fmt/645 # Exif 2.21 ("2.2.1" in PRONOM is misspelled)
-    wikidata: Q26383099
+      - fmt/645 # Exif 2.21
+    wikidata:
+      - Q26383099 # Exif image file
+      - Q196465 # Exchangeable image file format
   license: CC0-1.0
 seq:
   - id: endianness
