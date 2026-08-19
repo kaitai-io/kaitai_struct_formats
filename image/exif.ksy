@@ -15,6 +15,7 @@ meta:
       - Q26383099 # Exif image file
       - Q196465 # Exchangeable image file format
   license: CC0-1.0
+  ks-version: '0.9'
 doc-ref:
   - https://www.cipa.jp/std/documents/download_e.html?CIPA_DC-008-2026-E Exif Version 3.1
   - https://www.cipa.jp/std/documents/download_e.html?CIPA_DC-008-2024-E Exif Version 3.0
