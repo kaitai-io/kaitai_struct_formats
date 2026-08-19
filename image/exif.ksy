@@ -1,5 +1,6 @@
 meta:
   id: exif
+  title: Exchangeable image file format (Exif)
   xref:
     forensicswiki: exif
     justsolve: Exif
