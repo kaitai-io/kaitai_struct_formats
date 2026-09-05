@@ -1,0 +1,59 @@
+digraph GIT {
+fontname="Helvetica";
+	subgraph cluster_refs_heads_master {
+	label="master";
+	fontsize=24;
+	color=blue;
+	style=dotted;
+"c53bcd49acf08c23db26b9c80f151e379731bf8f" -> "8ce778257432bfbf97b15c7d266915f6463b334b" [dir=back];
+"8ce778257432bfbf97b15c7d266915f6463b334b" -> "28b4268ab4bb3896de202784a72098e6593973e4" [dir=back];
+"28b4268ab4bb3896de202784a72098e6593973e4" -> "908e62e081dfcec3b0418e3316ddc27a32836548" [dir=back];
+"908e62e081dfcec3b0418e3316ddc27a32836548" -> "root"[dir=back];
+
+}
+	subgraph cluster_refs_heads_b {
+	label="b";
+	fontsize=24;
+	color=blue;
+	style=dotted;
+"71d8019dcadf124869cc98ea065a533441306f65" -> "c53bcd49acf08c23db26b9c80f151e379731bf8f"[dir=back];
+"71d8019dcadf124869cc98ea065a533441306f65" -> "fb77b9a5824c2f556103b5a6e29b609295d85bed" [dir=back];
+"c53bcd49acf08c23db26b9c80f151e379731bf8f" -> "8ce778257432bfbf97b15c7d266915f6463b334b" [dir=back];
+"fb77b9a5824c2f556103b5a6e29b609295d85bed" -> "8ce778257432bfbf97b15c7d266915f6463b334b" [dir=back];
+"8ce778257432bfbf97b15c7d266915f6463b334b" -> "28b4268ab4bb3896de202784a72098e6593973e4" [dir=back];
+"28b4268ab4bb3896de202784a72098e6593973e4" -> "908e62e081dfcec3b0418e3316ddc27a32836548" [dir=back];
+"908e62e081dfcec3b0418e3316ddc27a32836548" -> "root"[dir=back];
+
+}
+	subgraph cluster_refs_heads_a {
+	label="a";
+	fontsize=24;
+	color=blue;
+	style=dotted;
+"b8d40dfee36b19f575da15772e01d59e754e793b" -> "fb77b9a5824c2f556103b5a6e29b609295d85bed"[dir=back];
+"b8d40dfee36b19f575da15772e01d59e754e793b" -> "c53bcd49acf08c23db26b9c80f151e379731bf8f" [dir=back];
+"c53bcd49acf08c23db26b9c80f151e379731bf8f" -> "8ce778257432bfbf97b15c7d266915f6463b334b" [dir=back];
+"fb77b9a5824c2f556103b5a6e29b609295d85bed" -> "8ce778257432bfbf97b15c7d266915f6463b334b" [dir=back];
+"8ce778257432bfbf97b15c7d266915f6463b334b" -> "28b4268ab4bb3896de202784a72098e6593973e4" [dir=back];
+"28b4268ab4bb3896de202784a72098e6593973e4" -> "908e62e081dfcec3b0418e3316ddc27a32836548" [dir=back];
+"908e62e081dfcec3b0418e3316ddc27a32836548" -> "root"[dir=back];
+
+}
+	subgraph cluster_refs_heads_c {
+	label="c";
+	fontsize=24;
+	color=blue;
+	style=dotted;
+"240951bc4298251f2d994c3f2e85bc4b0edd3e8a" -> "root"[dir=back];
+
+}
+# Node list
+"240951bc4298251f2d994c3f2e85bc4b0edd3e8a" [label=" (HEAD -> c)\norphan_c",shape=tripleoctagon,style=filled,color=black,fillcolor=salmon]
+"b8d40dfee36b19f575da15772e01d59e754e793b" [label=" (a)\nMerge branch 'master' into a",shape=tripleoctagon,style=filled,color=black,fillcolor=salmon]
+"71d8019dcadf124869cc98ea065a533441306f65" [label=" (b)\nMerge branch 'a' into b",shape=tripleoctagon,style=filled,color=black,fillcolor=salmon]
+"c53bcd49acf08c23db26b9c80f151e379731bf8f" [label=" (master)\nmaster_4",shape=tripleoctagon,style=filled,color=black,fillcolor=salmon]
+"fb77b9a5824c2f556103b5a6e29b609295d85bed" [label="a_1",shape=box,style=filled,color=black,fillcolor=white]
+"8ce778257432bfbf97b15c7d266915f6463b334b" [label="3",shape=box,style=filled,color=black,fillcolor=white]
+"28b4268ab4bb3896de202784a72098e6593973e4" [label="2",shape=box,style=filled,color=black,fillcolor=white]
+"908e62e081dfcec3b0418e3316ddc27a32836548" [label="1",shape=box,style=filled,color=black,fillcolor=white]
+}
