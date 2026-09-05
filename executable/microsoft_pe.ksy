@@ -58,6 +58,11 @@ types:
         size: optional_hdr.data_dirs.certificate_table.size
         type: certificate_table
         if: optional_hdr.data_dirs.certificate_table.virtual_address != 0
+      debug_table:
+        pos: optional_hdr.data_dirs.debug.virtual_address - (sections[1].virtual_address - sections[1].pointer_to_raw_data)
+        size: optional_hdr.data_dirs.debug.size
+        type: debug_table_entries
+        if: optional_hdr.data_dirs.debug.virtual_address != 0
   coff_header:
     doc-ref: 3.3. COFF File Header (Object and Image)
     seq:
@@ -483,3 +488,80 @@ types:
         -orig-id: bCertificate
         size: length - 8
         doc: Contains a certificate, such as an Authenticode signature.
+  debug_table_entries:
+    seq:
+      - id: entry
+        type: debug_table_entry
+        repeat: eos
+  debug_table_entry:
+    doc-ref: 'https://www.debuginfo.com/articles/debuginfomatch.html'
+    seq:
+      - id: characteristics
+        -orig-id: Characteristics
+        type: u4
+      - id: time_date_stamp
+        -orig-id: TimeDateStamp
+        type: u4
+      - id: major_version
+        -orig-id: MajorVersion
+        type: u2
+      - id: minor_version
+        -orig-id: MinorVersion
+        type: u2
+      - id: type
+        -orig-id: Type
+        type: u4
+        enum: debug_entry_type
+      - id: size_of_data
+        -orig-id: SizeOfData
+        type: u4
+      - id: address_of_raw_data
+        -orig-id: AddressOfRawData
+        type: u4
+      - id: pointer_to_raw_data
+        -orig-id: PointerToRawData
+        type: u4
+    enums:
+      debug_entry_type:
+        0: unknown
+        1: coff
+        2: codeview
+        3: fpo
+        4: misc
+        5: exception
+        6: fixup
+        9: borland
+      cv_signature:
+        0x53445352: rsds
+    instances:
+      codeview_debug:
+        io: _root._io
+        pos: pointer_to_raw_data
+        size: size_of_data
+        type: codeview_debug_info
+        if: type == debug_entry_type::codeview
+    types:
+      codeview_debug_info:
+        seq:
+          - id: header
+            type: cv_header
+          - id: body
+            type:
+              switch-on: header.signature
+              cases:
+                'cv_signature::rsds': cv_info_pdb70
+      cv_header:
+        seq:
+          - id: signature
+            type: u4
+            enum: cv_signature
+      cv_info_pdb70:
+        seq:
+          - id: signature
+            size: 16
+          - id: age
+            type: u4
+          - id: pdb_file_name
+            type: strz
+            encoding: utf-8
+            size-eos: true
