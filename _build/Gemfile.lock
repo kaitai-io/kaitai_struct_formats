@@ -1,14 +1,14 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    commonmarker (2.9.0-aarch64-linux)
-    commonmarker (2.9.0-aarch64-linux-musl)
-    commonmarker (2.9.0-arm-linux)
-    commonmarker (2.9.0-arm64-darwin)
-    commonmarker (2.9.0-x64-mingw-ucrt)
-    commonmarker (2.9.0-x86_64-darwin)
-    commonmarker (2.9.0-x86_64-linux)
-    commonmarker (2.9.0-x86_64-linux-musl)
+    commonmarker (2.10.0-aarch64-linux)
+    commonmarker (2.10.0-aarch64-linux-musl)
+    commonmarker (2.10.0-arm-linux-gnu)
+    commonmarker (2.10.0-arm64-darwin)
+    commonmarker (2.10.0-x64-mingw-ucrt)
+    commonmarker (2.10.0-x86_64-darwin)
+    commonmarker (2.10.0-x86_64-linux)
+    commonmarker (2.10.0-x86_64-linux-musl)
     logger (1.7.0)
     pygments.rb (5.0.0)
       logger (~> 1.7)
@@ -29,14 +29,14 @@ DEPENDENCIES
 
 CHECKSUMS
   bundler (4.0.17) sha256=214e21431b5665dd2f99df8a5511c6b151d7a72e8015c8b38f8b775b61cbb6c1
-  commonmarker (2.9.0-aarch64-linux) sha256=e2b4aadb9a2cfa4e206582641ce3a49465549ac1ed4c289fdd63b78d8f24579c
-  commonmarker (2.9.0-aarch64-linux-musl) sha256=1cf4d2821f2a7e64945f1ed7c4eeced586fdb27ea7fe7337788802cf8f57cfca
-  commonmarker (2.9.0-arm-linux) sha256=290a000947cf9d154d0480c33c0a36bcef49ce4c2e74bb75e9d06f5afe93f670
-  commonmarker (2.9.0-arm64-darwin) sha256=1748dbfa4f5813b0d2a14bb4bbfa65a4ec293aa1c825016d60029ee0e132b046
-  commonmarker (2.9.0-x64-mingw-ucrt) sha256=65b85f36842e99f8c21cadbd787d533895763536870e169912c524d99786768e
-  commonmarker (2.9.0-x86_64-darwin) sha256=0a9914ccfd2f5d2a59c7bd0dda4fe90eb084cf513b477e499008e09ec9d6edd6
-  commonmarker (2.9.0-x86_64-linux) sha256=8cfe92970eef585a19ddf6613224b91cab64d6029834661bda801f877c9c7f43
-  commonmarker (2.9.0-x86_64-linux-musl) sha256=293921398b839f79ceaf55010e061357e34f053822c3b003cd0be6686176335e
+  commonmarker (2.10.0-aarch64-linux) sha256=eeb167dea203dee066eb0dd99b3fd2deb526c8b5e7297ad385f7a5d60f869478
+  commonmarker (2.10.0-aarch64-linux-musl) sha256=e95d9e87ea6306e21ffa11855a7bb55518538143b23a227fe3bb00b41873ce25
+  commonmarker (2.10.0-arm-linux-gnu) sha256=2165642969df6816625c5fa4470a8959345d715daf96dd063fc56913fdbb1b90
+  commonmarker (2.10.0-arm64-darwin) sha256=39ecc891d1e4308b5233cc28b40383de854a2bfbefe17d68e49174347a8aa79e
+  commonmarker (2.10.0-x64-mingw-ucrt) sha256=eccc49602f2073ec903d2f461639b9ef83f093a0a2404a3aa97deed4084636ae
+  commonmarker (2.10.0-x86_64-darwin) sha256=01e0830ed0319825ecdc16411c90acd3f661d1568dfc178731b3f64d0ce2363d
+  commonmarker (2.10.0-x86_64-linux) sha256=945c510c0bfca9022245928e2248468fe3ddad58c939be0c37b20082cc392880
+  commonmarker (2.10.0-x86_64-linux-musl) sha256=288cd4fb9f17eed2ffa73551ef241dcf594e0f484b2aee2a0999540333c0618e
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
   pygments.rb (5.0.0) sha256=33b3b0a0da0b4b5d12cedbb2b355b0685bb0a545fb7efb29868945c18148ef6e
 
