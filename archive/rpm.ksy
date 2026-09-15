@@ -283,6 +283,14 @@ enums:
   #   - <https://github.com/craigwblake/redline/blob/15afff5/src/main/java/org/redline_rpm/header/Architecture.java>
   #   - <https://web.archive.org/web/20210605105702/https://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/RPM_Guide/ch01s03.html>
   architectures:
+    0:
+      id: not_set
+      doc: |
+        Since RPM 6.0, `archnum` and `osnum` are no longer populated when
+        writing the lead, so they are left zeroed - see
+        <https://github.com/rpm-software-management/rpm/commit/5a685fb5eb085d5bc37723ec29ce72434db6bd4e>.
+        This applies to both v4 and v6 packages.
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v6.md#lead
     1:
       id: x86
       doc: x86 or x86_64
@@ -345,7 +353,15 @@ enums:
         - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/rpmrc.cc#L1507
   operating_systems:
     # these come from <https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/rpmrc.in#L306>
-    # in practice it will almost always be 1
+    # in practice it will almost always be 1 (or 0 if written by RPM 6.0+)
+    0:
+      id: not_set
+      doc: |
+        Since RPM 6.0, `archnum` and `osnum` are no longer populated when
+        writing the lead, so they are left zeroed - see
+        <https://github.com/rpm-software-management/rpm/commit/5a685fb5eb085d5bc37723ec29ce72434db6bd4e>.
+        This applies to both v4 and v6 packages.
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v6.md#lead
     1: linux
     2: irix
     255:
