@@ -41,34 +41,85 @@ seq:
   - size: 0
     if: ofs_payload < 0
   - id: signature_tags_steps
-    type: 'signature_tags_step(_index, _index < 1 ? -1 : signature_tags_steps[_index - 1].size_tag_idx)'
+    type: |
+      signature_tags_step(
+        _index,
+        _index != 0 ? signature_tags_steps[_index - 1].size_tag_idx : -1,
+        _index != 0 ? signature_tags_steps[_index - 1].long_size_tag_idx : -1
+      )
     repeat: expr
     repeat-expr: signature.header_record.num_index_records
+  - id: header_tags_steps
+    type: |
+      header_tags_step(
+        _index,
+        _index != 0 ? header_tags_steps[_index - 1].payload_size_tag_idx : -1
+      )
+    repeat: expr
+    repeat-expr: header.header_record.num_index_records
 instances:
   payload:
     pos: ofs_payload
     size: len_payload
-    if: has_signature_size_tag
+    if: has_payload
   len_payload:
-    value: 'signature_size_tag.body.as<record_type_uint32>.values[0] - len_header'
-    if: has_signature_size_tag
+    value: |
+      has_header_payload_size_tag
+        ? header_payload_size_tag.body.as<record_type_uint64>.values[0]
+        : has_signature_size_tag
+          ? signature_size_tag.body.as<record_type_uint32>.values[0] - len_header
+          : signature_long_size_tag.body.as<record_type_uint64>.values[0] - len_header
+    if: has_payload
+    doc: |
+      Size of the (compressed) payload in bytes. v6 packages store it in
+      `header_tags::payload_size`, v4/v3 packages in `signature_tags::size`
+      (which also includes the size of the header).
+
+      If the header and payload together or the uncompressed payload reach
+      4 GiB, v4 packages use `signature_tags::long_size` instead - see
+      <https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/signature.cc#L182-L212>.
+  has_payload:
+    value: |
+      has_header_payload_size_tag or
+      has_signature_size_tag or
+      has_signature_long_size_tag
   len_header:
     value: ofs_payload - ofs_header
   ofs_header:
     value: _io.pos
   ofs_payload:
     value: _io.pos
+
   has_signature_size_tag:
     value: signature_tags_steps.last.size_tag_idx != -1
   signature_size_tag:
     value: signature.index_records[signature_tags_steps.last.size_tag_idx]
     if: has_signature_size_tag
+
+  has_signature_long_size_tag:
+    value: signature_tags_steps.last.long_size_tag_idx != -1
+  signature_long_size_tag:
+    value: signature.index_records[signature_tags_steps.last.long_size_tag_idx]
+    if: has_signature_long_size_tag
+
+  has_header_payload_size_tag:
+    value: header_tags_steps.last.payload_size_tag_idx != -1
+  header_payload_size_tag:
+    value: header.index_records[header_tags_steps.last.payload_size_tag_idx]
+    if: has_header_payload_size_tag
 types:
   signature_tags_step:
+    doc: |
+      Finds the first `signature_tags::size` and `signature_tags::long_size`
+      index record. Since Kaitai Struct doesn't have a built-in way to search an
+      array directly, each step receives the indexes found so far via
+      parameters.
     params:
       - id: idx
         type: s4
       - id: prev_size_tag_idx
+        type: s4
+      - id: prev_long_size_tag_idx
         type: s4
     instances:
       size_tag_idx:
@@ -77,6 +128,28 @@ types:
             (_parent.signature.index_records[idx].signature_tag == signature_tags::size
             and _parent.signature.index_records[idx].record_type == record_types::uint32
             and _parent.signature.index_records[idx].num_values >= 1 ? idx : -1)
+      long_size_tag_idx:
+        value: |
+          prev_long_size_tag_idx != -1 ? prev_long_size_tag_idx :
+            (_parent.signature.index_records[idx].signature_tag == signature_tags::long_size
+            and _parent.signature.index_records[idx].record_type == record_types::uint64
+            and _parent.signature.index_records[idx].num_values >= 1 ? idx : -1)
+  header_tags_step:
+    doc: |
+      Like `signature_tags_step`, but looks for `header_tags::payload_size`,
+      which is where v6 packages store the payload size.
+    params:
+      - id: idx
+        type: s4
+      - id: prev_payload_size_tag_idx
+        type: s4
+    instances:
+      payload_size_tag_idx:
+        value: |
+          prev_payload_size_tag_idx != -1 ? prev_payload_size_tag_idx :
+            (_parent.header.index_records[idx].header_tag == header_tags::payload_size
+            and _parent.header.index_records[idx].record_type == record_types::uint64
+            and _parent.header.index_records[idx].num_values >= 1 ? idx : -1)
   dummy: {}
   lead:
     doc: |
