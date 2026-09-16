@@ -17,7 +17,14 @@ types:
   uheader:
     seq:
       - id: magic
-        contents: [0x27, 0x05, 0x19, 0x56]
+        type: u4
+        enum: magic_types
+        valid:
+          any-of:
+            - magic_types::uimage
+            - magic_types::bix
+            - magic_types::bix2
+            - magic_types::bix3
       - id: header_crc
         type: u4
       - id: timestamp
@@ -33,6 +40,37 @@ types:
       - id: os_type
         type: u1
         enum: uimage_os
+        valid:
+          any-of:
+            - uimage_os::invalid
+            - uimage_os::openbsd
+            - uimage_os::netbsd
+            - uimage_os::freebsd
+            - uimage_os::bsd4_4
+            - uimage_os::linux
+            - uimage_os::svr4
+            - uimage_os::esix
+            - uimage_os::solaris
+            - uimage_os::irix
+            - uimage_os::sco
+            - uimage_os::dell
+            - uimage_os::ncr
+            - uimage_os::lynxos
+            - uimage_os::vxworks
+            - uimage_os::psos
+            - uimage_os::qnx
+            - uimage_os::u_boot
+            - uimage_os::rtems
+            - uimage_os::artos
+            - uimage_os::unity
+            - uimage_os::integrity
+            - uimage_os::ose
+            - uimage_os::plan9
+            - uimage_os::openrtos
+            - uimage_os::arm_trusted_firmware
+            - uimage_os::tee
+            - uimage_os::opensbi
+            - uimage_os::efi
       - id: architecture
         type: u1
         enum: uimage_arch
@@ -42,10 +80,57 @@ types:
       - id: compression_type
         type: u1
         enum: uimage_comp
-      - id: name
+        valid:
+          any-of:
+            - uimage_comp::none
+            - uimage_comp::gzip
+            - uimage_comp::bzip2
+            - uimage_comp::lzma
+            - uimage_comp::lzo
+            - uimage_comp::lz4
+            - uimage_comp::zstd
+      - id: name_or_asus_info
         size: 32
+        type: name_or_asus_info
+    instances:
+      name:
+        value: name_or_asus_info.name
+      asus_info:
+        value: name_or_asus_info.asus_info
+  name_or_asus_info:
+    seq:
+      - id: name
         encoding: UTF-8
         type: strz
+    instances:
+      asus_info:
+        pos: 0
+        type: asus_firmware_information
+  asus_firmware_information:
+    seq:
+      - id: kernel_version
+        type: version
+      - id: fs_version
+        type: version
+      - id: product_id
+        type: strz
+        encoding: UTF-8
+        size: 12
+      - id: hardware_versions
+        type: version
+        repeat: expr
+        repeat-expr: 8
+    doc: |
+      ASUS has overloaded the name field and stores information about the
+      firmware here, including version information and the product ID.
+      This is documented in for example the GPL source code of the RT-AC55UHP
+      device, in the directory `release/src/asustools/mkimage.src/include/image.h`
+  version:
+    seq:
+      - id: major
+        type: u1
+      - id: minor
+        type: u1
 enums:
   uimage_os:
     0:
@@ -351,3 +436,17 @@ enums:
     40:
       id: sunxi_egon
       doc: Allwinner eGON Boot Image
+  magic_types:
+    0x27051956:
+      id: uimage
+      doc: The standard U-Boot header magic.
+    0x83800000:
+      id: bix
+      doc: An adapted magic used by ZyXEL and Cisco
+      doc-ref: https://github.com/ReFirmLabs/binwalk/pull/482/commits/f21282bce5b699fe627102a0b647416acd54933b
+    0x80800002:
+      id: bix2
+      doc: A variant of the .bix header found in the EnGenius ECS1112FP
+    0x93000000:
+      id: bix3
+      doc: A variant of the .bix header found in the EnGenius ECS1528FP
