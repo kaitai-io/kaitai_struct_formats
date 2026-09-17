@@ -11,7 +11,7 @@ meta:
     justsolve: RPM
     mime: application/x-rpm
     pronom: fmt/795 # v3
-    wikidata: Q492650
+    wikidata: Q11241282
   license: CC0-1.0
   ks-version: 0.9
   encoding: UTF-8
