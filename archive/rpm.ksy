@@ -386,9 +386,14 @@ types:
         type: u4
         valid:
           min: 1
+          # See https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/header.cc#L1953-L1970
+          max: '_parent.is_signature ? 32 : 0xffff'
       - id: len_storage_section
         -orig-id: hsize
         type: u4
+        valid:
+          # See https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/header.cc#L1953-L1970
+          max: '_parent.is_signature ? 64 * 1024 * 1024 : 0x0fff_ffff'
         doc: |
           Size of the storage area for the data
           pointed to by the Index Records.
