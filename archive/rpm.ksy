@@ -99,11 +99,15 @@ instances:
 
       The archive format is given by `header_tags::payload_format`, which is
       `"cpio"` for regular packages. In v4/v3 packages, it's a SVR4 cpio archive
-      with a CRC checksum. v6 packages and v4 packages with files over 4 GiB use
-      a stripped-down variant of cpio with the magic `07070X`. Its file headers
-      only hold the index of the file in the file lists of the RPM header, which
-      is the only place where the file names, sizes and other metadata are
-      stored.
+      without a checksum (the `070701` variant) - the [v4 format
+      documentation](https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v4.md?plain=1#L106-L107)
+      claims "with a CRC checksum", but that's not true since RPM 2.4.4
+      (released in 1997).
+
+      v6 packages and v4 packages with a file over 4 GiB use a stripped-down
+      variant of cpio with the magic `07070X`. Its file headers only hold the
+      index of the file in the file lists of the RPM header, which is the only
+      place where the file names, sizes and other metadata are stored.
     doc-ref:
       - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v6.md#payload
       - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v4.md#payload
@@ -211,8 +215,8 @@ types:
       constraints specified here, while RPM 4.20 and later only check the
       `magic` - see
       <https://github.com/rpm-software-management/rpm/commit/b3449a0774487a091bbe59e821b4004b06d4fa66>.
-      Nevertheless, RPM still writes values that passes these checks for
-      backwards compatibility, so any `.rpm` file should pass.
+      Nevertheless, RPM still writes values that pass these checks for backwards
+      compatibility, so any `.rpm` file should pass.
     doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_lead.md
     seq:
       - id: magic
@@ -569,7 +573,11 @@ enums:
     278:
       id: openpgp
       -orig-id: RPMSIGTAG_OPENPGP
-      doc: RPM v6 OpenPGP signature(s) of the header, base64 encoded (only v6).
+      doc: |
+        RPM v6 OpenPGP signature(s) of the header, base64 encoded. The default
+        signature type when signing v6 packages, but it can also be added to v4
+        packages using `rpmsign --rpmv6` - see
+        <https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/man/rpmsign.1.scd?plain=1#L86-L87>.
     279:
       id: sha3_256
       -orig-id: RPMSIGTAG_SHA3_256
@@ -1655,7 +1663,7 @@ enums:
       doc: |
         SHA-256 digest of the uncompressed payload.
 
-        Before RPM 6.0, this tag was called `RPMTAG_PAYLOADDIGESTALGO` - see
+        Before RPM 6.0, this tag was called `RPMTAG_PAYLOADDIGESTALT` - see
         <https://github.com/rpm-software-management/rpm/commit/f14557cd521ddf95994aa6518f006eeb3fc58d87>.
     5098:
       id: arch_suffix
