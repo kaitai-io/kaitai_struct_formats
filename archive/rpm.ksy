@@ -13,7 +13,7 @@ meta:
     pronom: fmt/795 # v3
     wikidata: Q11241282
   license: CC0-1.0
-  ks-version: 0.9
+  ks-version: '0.11'
   encoding: UTF-8
   endian: be
 doc: |
@@ -280,6 +280,9 @@ types:
       - id: record_type
         type: u4
         enum: record_types
+        valid:
+          # See https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/header.cc#L316-L317
+          in-enum: true
       - id: ofs_body
         type: u4
       - id: count
@@ -1747,9 +1750,8 @@ enums:
       id: payload_sha3_256_alt
       -orig-id: RPMTAG_PAYLOADSHA3_256ALT
       doc: SHA3-256 digest of the uncompressed payload.
+  # https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_header.md#index
   record_types:
-    # from LSB
-    0: not_implemented
     1: char
     2: uint8
     3: uint16
