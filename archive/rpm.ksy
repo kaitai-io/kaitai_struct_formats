@@ -17,16 +17,38 @@ meta:
   encoding: UTF-8
   endian: be
 doc: |
-  This parser is for the RPM version 3 file format which is the current version
-  of the file format used by RPM 2.1 and later (including RPM version 4.x, which
-  is the current version of the RPM tool). There are historical versions of the
-  RPM file format, as well as a currently abandoned fork (rpm5). These formats
-  are not covered by this specification.
+  An RPM package consists of the lead, the signature (contains digests and
+  signatures), the header (contains the package metadata) and the payload (a
+  compressed archive of the package files).
+
+  This structure is shared by all package format versions supported by this
+  Kaitai Struct implementation:
+
+  * v3, written by RPM 2.1 to 3.x.
+  * v4, written by RPM 4.x, and by RPM 6.x when the `%_rpmformat` macro is set
+    to 4 - see
+    <https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/man/rpmbuild-config.5.scd?plain=1#L189-L192>.
+    For example, Fedora 43 and 44 patch RPM 6.0 to keep producing v4 packages by
+    default - see
+    <https://src.fedoraproject.org/rpms/rpm/blob/7099d81c3b5ecf1777a43095be429cb198bcc566/f/rpm-6.0-rpmformat.patch>.
+  * v6, written by upstream RPM 6.0 by default - see
+    <https://github.com/rpm-software-management/rpm/commit/99d80a22d3d299bdc4418f7e61cd491731626d37>.
+
+  The versions differ mainly in the tags they use: v6 packages store all sizes
+  as 64-bit integers, carry only cryptographic data in the signature and always
+  use the stripped-down cpio archive format (see the `payload` instance).
+
+  The formats before v3, as well as the abandoned rpm5 fork, are not covered by
+  this implementation.
 doc-ref:
-  - https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/format.md
+  - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v6.md
+  - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v4.md
+  - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v3.md
+  - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/signatures_digests.md
+  - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/large_files.md
   - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/tags.md
   - https://refspecs.linuxbase.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic/pkgformat.html
-  - http://ftp.rpm.org/max-rpm/
+  - https://ftp.osuosl.org/pub/rpm/max-rpm/
 seq:
   - id: lead
     type: lead
@@ -62,6 +84,29 @@ instances:
     pos: ofs_payload
     size: len_payload
     if: has_payload
+    doc: |
+      Archive of the package files, compressed using the method specified by
+      `header_tags::payload_compressor`. If this tag is missing, it's almost
+      certainly uncompressed (except for some very old v3 packages built by RPM
+      3.0.3 or earlier, which didn't use the tag because the payload was always
+      gzipped; RPM 3.0.5 added support for bzip2 payloads and started writing
+      the tag). However, RPM reads the payload as gzip by default - see
+      <https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/rpmte.cc#L643-L645>.
+      Since zlib's gzip reader passes data that is not in gzip format through
+      unchanged (see
+      <https://github.com/madler/zlib/blob/da607da739fa6047df13e66a2af6b8bec7c2a498/zlib.h#L1386-L1389>),
+      this also works for uncompressed payloads.
+
+      The archive format is given by `header_tags::payload_format`, which is
+      `"cpio"` for regular packages. In v4/v3 packages, it's a SVR4 cpio archive
+      with a CRC checksum. v6 packages and v4 packages with files over 4 GiB use
+      a stripped-down variant of cpio with the magic `07070X`. Its file headers
+      only hold the index of the file in the file lists of the RPM header, which
+      is the only place where the file names, sizes and other metadata are
+      stored.
+    doc-ref:
+      - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v6.md#payload
+      - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v4.md#payload
   len_payload:
     value: |
       has_header_payload_size_tag
@@ -153,7 +198,7 @@ types:
   dummy: {}
   lead:
     doc: |
-      In 2021, Panu Matilainen (a RPM developer) [described this
+      In 2021, Panu Matilainen (an RPM developer) [described this
       structure](https://github.com/kaitai-io/kaitai_struct_formats/pull/469#discussion_r718288192)
       as follows:
 
@@ -162,10 +207,13 @@ types:
       > it's an rpm file in the first place, just ignore everything in it.
       > Literally everything.
 
-      The fields with `valid` constraints are important, because these are the
-      same validations that RPM does (which means that any valid `.rpm` file
-      must pass them), but otherwise you should not make decisions based on the
-      values given here.
+      RPM 4.19 and older rejected packages that didn't meet the `valid`
+      constraints specified here, while RPM 4.20 and later only check the
+      `magic` - see
+      <https://github.com/rpm-software-management/rpm/commit/b3449a0774487a091bbe59e821b4004b06d4fa66>.
+      Nevertheless, RPM still writes values that passes these checks for
+      backwards compatibility, so any `.rpm` file should pass.
+    doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_lead.md
     seq:
       - id: magic
         contents: [0xed, 0xab, 0xee, 0xdb]
@@ -188,6 +236,7 @@ types:
       - id: signature_type
         type: u2
         valid: 5
+        doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/rpmlead.cc#L20-L21
       - id: reserved
         size: 16
   rpm_version:
@@ -197,7 +246,8 @@ types:
         valid:
           min: 3
           max: 4
-        doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/lib/rpmlead.c#L102
+        doc: 3 in v3 and v4 packages, 4 in v6 packages.
+        doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/rpmlead.cc#L51-L52
       - id: minor
         type: u1
   header:
@@ -511,11 +561,11 @@ enums:
     278:
       id: openpgp
       -orig-id: RPMSIGTAG_OPENPGP
-      doc: OpenPGP signature(s) of the header, base64 encoded (only v6).
+      doc: RPM v6 OpenPGP signature(s) of the header, base64 encoded (only v6).
     279:
       id: sha3_256
       -orig-id: RPMSIGTAG_SHA3_256
-      doc: SHA3-256 digest of the header.
+      doc: SHA3-256 digest of the header (only v6).
     999:
       id: reserved
       -orig-id: RPMSIGTAG_RESERVED
