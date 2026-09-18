@@ -11,22 +11,44 @@ meta:
     justsolve: RPM
     mime: application/x-rpm
     pronom: fmt/795 # v3
-    wikidata: Q492650
+    wikidata: Q11241282
   license: CC0-1.0
-  ks-version: 0.9
+  ks-version: '0.11'
   encoding: UTF-8
   endian: be
 doc: |
-  This parser is for the RPM version 3 file format which is the current version
-  of the file format used by RPM 2.1 and later (including RPM version 4.x, which
-  is the current version of the RPM tool). There are historical versions of the
-  RPM file format, as well as a currently abandoned fork (rpm5). These formats
-  are not covered by this specification.
+  An RPM package consists of the lead, the signature (contains digests and
+  signatures), the header (contains the package metadata) and the payload (a
+  compressed archive of the package files).
+
+  This structure is shared by all package format versions supported by this
+  Kaitai Struct implementation:
+
+  * v3, written by RPM 2.1 to 3.x.
+  * v4, written by RPM 4.x, and by RPM 6.x when the `%_rpmformat` macro is set
+    to 4 - see
+    <https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/man/rpmbuild-config.5.scd?plain=1#L189-L192>.
+    For example, Fedora 43 and 44 patch RPM 6.0 to keep producing v4 packages by
+    default - see
+    <https://src.fedoraproject.org/rpms/rpm/blob/7099d81c3b5ecf1777a43095be429cb198bcc566/f/rpm-6.0-rpmformat.patch>.
+  * v6, written by upstream RPM 6.0 by default - see
+    <https://github.com/rpm-software-management/rpm/commit/99d80a22d3d299bdc4418f7e61cd491731626d37>.
+
+  The versions differ mainly in the tags they use: v6 packages store all sizes
+  as 64-bit integers, carry only cryptographic data in the signature and always
+  use the stripped-down cpio archive format (see the `payload` instance).
+
+  The formats before v3, as well as the abandoned rpm5 fork, are not covered by
+  this implementation.
 doc-ref:
-  - https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/format.md
-  - https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md
+  - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v6.md
+  - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v4.md
+  - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v3.md
+  - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/signatures_digests.md
+  - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/large_files.md
+  - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/tags.md
   - https://refspecs.linuxbase.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic/pkgformat.html
-  - http://ftp.rpm.org/max-rpm/
+  - https://ftp.osuosl.org/pub/rpm/max-rpm/
 seq:
   - id: lead
     type: lead
@@ -41,34 +63,117 @@ seq:
   - size: 0
     if: ofs_payload < 0
   - id: signature_tags_steps
-    type: 'signature_tags_step(_index, _index < 1 ? -1 : signature_tags_steps[_index - 1].size_tag_idx)'
+    type: |
+      signature_tags_step(
+        _index,
+        _index != 0 ? signature_tags_steps[_index - 1].size_tag_idx : -1,
+        _index != 0 ? signature_tags_steps[_index - 1].long_size_tag_idx : -1
+      )
     repeat: expr
     repeat-expr: signature.header_record.num_index_records
+  - id: header_tags_steps
+    type: |
+      header_tags_step(
+        _index,
+        _index != 0 ? header_tags_steps[_index - 1].payload_size_tag_idx : -1
+      )
+    repeat: expr
+    repeat-expr: header.header_record.num_index_records
 instances:
   payload:
     pos: ofs_payload
     size: len_payload
-    if: has_signature_size_tag
+    if: has_payload
+    doc: |
+      Archive of the package files, compressed using the method specified by
+      `header_tags::payload_compressor`. If this tag is missing, it's almost
+      certainly uncompressed (except for some very old v3 packages built by RPM
+      3.0.3 or earlier, which didn't use the tag because the payload was always
+      gzipped; RPM 3.0.5 added support for bzip2 payloads and started writing
+      the tag). However, RPM reads the payload as gzip by default - see
+      <https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/rpmte.cc#L643-L645>.
+      Since zlib's gzip reader passes data that is not in gzip format through
+      unchanged (see
+      <https://github.com/madler/zlib/blob/da607da739fa6047df13e66a2af6b8bec7c2a498/zlib.h#L1386-L1389>),
+      this also works for uncompressed payloads.
+
+      The archive format is given by `header_tags::payload_format`, which is
+      `"cpio"` for regular packages. In v4/v3 packages, it's a SVR4 cpio archive
+      without a checksum (the `070701` variant) - the [v4 format
+      documentation](https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v4.md?plain=1#L106-L107)
+      claims "with a CRC checksum", but that's not true since RPM 2.4.4
+      (released in 1997).
+
+      v6 packages and v4 packages with a file over 4 GiB use a stripped-down
+      variant of cpio with the magic `07070X`. Its file headers only hold the
+      index of the file in the file lists of the RPM header, which is the only
+      place where the file names, sizes and other metadata are stored.
+    doc-ref:
+      - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v6.md#payload
+      - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v4.md#payload
   len_payload:
-    value: 'signature_size_tag.body.as<record_type_uint32>.values[0] - len_header'
-    if: has_signature_size_tag
+    value: |
+      has_header_payload_size_tag
+        ? header_payload_size_tag.body.as<record_type_uint64>.values[0]
+        : has_signature_long_size_tag
+          ? signature_long_size_tag.body.as<record_type_uint64>.values[0] - len_header
+          : signature_size_tag.body.as<record_type_uint32>.values[0] - len_header
+    if: has_payload
+    doc: |
+      Size of the (compressed) payload in bytes. v6 packages store it in
+      `header_tags::payload_size`, v4/v3 packages in `signature_tags::size`
+      (which also includes the size of the header).
+
+      If the header and payload together or the uncompressed payload reach
+      4 GiB, v4 packages use `signature_tags::long_size` instead - see
+      <https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/signature.cc#L182-L212>.
+
+      RPM never writes both (so this is just a hypothetical scenario), but if
+      both are present, `signature_tags::long_size` takes precedence over
+      `signature_tags::size`, just like in RPM's `printSize()` function:
+      <https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/signature.cc#L36-L43>
+  has_payload:
+    value: |
+      has_header_payload_size_tag or
+      has_signature_long_size_tag or
+      has_signature_size_tag
   len_header:
     value: ofs_payload - ofs_header
   ofs_header:
     value: _io.pos
   ofs_payload:
     value: _io.pos
+
   has_signature_size_tag:
     value: signature_tags_steps.last.size_tag_idx != -1
   signature_size_tag:
     value: signature.index_records[signature_tags_steps.last.size_tag_idx]
     if: has_signature_size_tag
+
+  has_signature_long_size_tag:
+    value: signature_tags_steps.last.long_size_tag_idx != -1
+  signature_long_size_tag:
+    value: signature.index_records[signature_tags_steps.last.long_size_tag_idx]
+    if: has_signature_long_size_tag
+
+  has_header_payload_size_tag:
+    value: header_tags_steps.last.payload_size_tag_idx != -1
+  header_payload_size_tag:
+    value: header.index_records[header_tags_steps.last.payload_size_tag_idx]
+    if: has_header_payload_size_tag
 types:
   signature_tags_step:
+    doc: |
+      Finds the first `signature_tags::size` and `signature_tags::long_size`
+      index record. Since Kaitai Struct doesn't have a built-in way to search an
+      array directly, each step receives the indexes found so far via
+      parameters.
     params:
       - id: idx
         type: s4
       - id: prev_size_tag_idx
+        type: s4
+      - id: prev_long_size_tag_idx
         type: s4
     instances:
       size_tag_idx:
@@ -77,10 +182,32 @@ types:
             (_parent.signature.index_records[idx].signature_tag == signature_tags::size
             and _parent.signature.index_records[idx].record_type == record_types::uint32
             and _parent.signature.index_records[idx].num_values >= 1 ? idx : -1)
+      long_size_tag_idx:
+        value: |
+          prev_long_size_tag_idx != -1 ? prev_long_size_tag_idx :
+            (_parent.signature.index_records[idx].signature_tag == signature_tags::long_size
+            and _parent.signature.index_records[idx].record_type == record_types::uint64
+            and _parent.signature.index_records[idx].num_values >= 1 ? idx : -1)
+  header_tags_step:
+    doc: |
+      Like `signature_tags_step`, but looks for `header_tags::payload_size`,
+      which is where v6 packages store the payload size.
+    params:
+      - id: idx
+        type: s4
+      - id: prev_payload_size_tag_idx
+        type: s4
+    instances:
+      payload_size_tag_idx:
+        value: |
+          prev_payload_size_tag_idx != -1 ? prev_payload_size_tag_idx :
+            (_parent.header.index_records[idx].header_tag == header_tags::payload_size
+            and _parent.header.index_records[idx].record_type == record_types::uint64
+            and _parent.header.index_records[idx].num_values >= 1 ? idx : -1)
   dummy: {}
   lead:
     doc: |
-      In 2021, Panu Matilainen (a RPM developer) [described this
+      In 2021, Panu Matilainen (an RPM developer) [described this
       structure](https://github.com/kaitai-io/kaitai_struct_formats/pull/469#discussion_r718288192)
       as follows:
 
@@ -89,10 +216,13 @@ types:
       > it's an rpm file in the first place, just ignore everything in it.
       > Literally everything.
 
-      The fields with `valid` constraints are important, because these are the
-      same validations that RPM does (which means that any valid `.rpm` file
-      must pass them), but otherwise you should not make decisions based on the
-      values given here.
+      RPM 4.19 and older rejected packages that didn't meet the `valid`
+      constraints specified here, while RPM 4.20 and later only check the
+      `magic` - see
+      <https://github.com/rpm-software-management/rpm/commit/b3449a0774487a091bbe59e821b4004b06d4fa66>.
+      Nevertheless, RPM still writes values that pass these checks for backwards
+      compatibility, so any `.rpm` file should pass.
+    doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_lead.md
     seq:
       - id: magic
         contents: [0xed, 0xab, 0xee, 0xdb]
@@ -115,6 +245,7 @@ types:
       - id: signature_type
         type: u2
         valid: 5
+        doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/rpmlead.cc#L20-L21
       - id: reserved
         size: 16
   rpm_version:
@@ -124,7 +255,8 @@ types:
         valid:
           min: 3
           max: 4
-        doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/lib/rpmlead.c#L102
+        doc: 3 in v3 and v4 packages, 4 in v6 packages.
+        doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/rpmlead.cc#L51-L52
       - id: minor
         type: u1
   header:
@@ -157,6 +289,9 @@ types:
       - id: record_type
         type: u4
         enum: record_types
+        valid:
+          # See https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/header.cc#L316-L317
+          in-enum: true
       - id: ofs_body
         type: u4
       - id: count
@@ -263,9 +398,14 @@ types:
         type: u4
         valid:
           min: 1
+          # See https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/header.cc#L1953-L1970
+          max: '_parent.is_signature ? 32 : 0xffff'
       - id: len_storage_section
         -orig-id: hsize
         type: u4
+        valid:
+          # See https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/header.cc#L1953-L1970
+          max: '_parent.is_signature ? 64 * 1024 * 1024 : 0x0fff_ffff'
         doc: |
           Size of the storage area for the data
           pointed to by the Index Records.
@@ -274,7 +414,7 @@ enums:
     0: binary
     1: source
 
-  # these come (mostly) from <https://github.com/rpm-software-management/rpm/blob/afad3167/rpmrc.in#L170>
+  # these come (mostly) from <https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/rpmrc.in#L189>
   # (see <https://ftp.osuosl.org/pub/rpm/max-rpm/s1-rpm-multi-build-install-detection.html#S3-RPM-MULTI-XXX-CANON>
   # for `arch_canon` entry explanation)
   #
@@ -283,6 +423,14 @@ enums:
   #   - <https://github.com/craigwblake/redline/blob/15afff5/src/main/java/org/redline_rpm/header/Architecture.java>
   #   - <https://web.archive.org/web/20210605105702/https://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/RPM_Guide/ch01s03.html>
   architectures:
+    0:
+      id: not_set
+      doc: |
+        Since RPM 6.0, `archnum` and `osnum` are no longer populated when
+        writing the lead, so they are left zeroed - see
+        <https://github.com/rpm-software-management/rpm/commit/5a685fb5eb085d5bc37723ec29ce72434db6bd4e>.
+        This applies to both v4 and v6 packages.
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v6.md#lead
     1:
       id: x86
       doc: x86 or x86_64
@@ -292,7 +440,7 @@ enums:
       doc-ref:
         - https://github.com/eclipse/packager/blob/51ccdd3/rpm/src/main/java/org/eclipse/packager/rpm/Architecture.java#L24
         - https://github.com/file/file/blob/9b2538d/magic/Magdir/rpm#L14
-        - https://github.com/rpm-software-management/rpm/blob/afad3167/rpmrc.in#L188-L197
+        - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/rpmrc.in#L207-L216
     3: sparc
     4: mips
     5: ppc
@@ -303,7 +451,7 @@ enums:
       doc: SGI Inhouse Processors (IP)
       doc-ref:
         - https://github.com/file/file/blob/9b2538d/magic/Magdir/rpm#L19
-        - https://github.com/rpm-software-management/rpm/blob/afad3167/rpmrc.in#L219
+        - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/rpmrc.in#L238
     8: rs6000
     9: ia64
     10:
@@ -318,7 +466,7 @@ enums:
       -orig-id: m68kmint
       doc-ref:
         - https://github.com/craigwblake/redline/blob/15afff5/src/main/java/org/redline_rpm/header/Architecture.java#L18
-        - https://github.com/rpm-software-management/rpm/blob/afad3167/rpmrc.in#L240-L247
+        - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/rpmrc.in#L259-L266
     14: s390
     15: s390x
     16: ppc64
@@ -328,23 +476,32 @@ enums:
     20:
       id: mips_r6
       -orig-id: mipsr6
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/rpmrc.in#L266-L267
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/rpmrc.in#L285-L286
     21:
       id: mips64_r6
       -orig-id: mips64r6
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/rpmrc.in#L268-L269
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/rpmrc.in#L287-L288
     22: riscv
     23: loongarch64
+    24: e2k
     255:
       id: no_arch
       -orig-id: noarch
       doc: can be installed on any architecture
       doc-ref:
         - https://github.com/file/file/blob/9b2538d/magic/Magdir/rpm#L31
-        - https://github.com/rpm-software-management/rpm/blob/afad3167/lib/rpmrc.c#L1548
+        - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/rpmrc.cc#L1507
   operating_systems:
-    # these come from <https://github.com/rpm-software-management/rpm/blob/afad3167/rpmrc.in#L277>
-    # in practice it will almost always be 1
+    # these come from <https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/rpmrc.in#L306>
+    # in practice it will almost always be 1 (or 0 if written by RPM 6.0+)
+    0:
+      id: not_set
+      doc: |
+        Since RPM 6.0, `archnum` and `osnum` are no longer populated when
+        writing the lead, so they are left zeroed - see
+        <https://github.com/rpm-software-management/rpm/commit/5a685fb5eb085d5bc37723ec29ce72434db6bd4e>.
+        This applies to both v4 and v6 packages.
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v6.md#lead
     1: linux
     2: irix
     255:
@@ -361,11 +518,11 @@ enums:
 
         Moreover, this value is actually used in practice, see this sample file:
         <https://github.com/craigwblake/redline/blob/15afff5/src/test/resources/rpm-3-1.0-1.somearch.rpm>
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/lib/rpmrc.c#L1548
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/rpmrc.cc#L1507
 
   signature_tags:
-    # Tags from [lib/rpmtag.h](https://github.com/rpm-software-management/rpm/blob/afad3167/include/rpm/rpmtag.h#L423).
-    # the first three are shared with header_tags
+    # Tags from [`include/rpm/rpmtag.h`](https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/include/rpm/rpmtag.h#L440).
+    # The first three are shared with `header_tags`.
     62:
       id: signatures
       -orig-id: HEADER_SIGNATURES
@@ -386,7 +543,7 @@ enums:
     # 266:
     #   id: pubkeys_internal
     #   -orig-id: RPMTAG_PUBKEYS
-    #   doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md#internal--special
+    #   doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/tags.md#internal--special
     267:
       id: dsa
       -orig-id: RPMSIGTAG_DSA
@@ -418,6 +575,33 @@ enums:
     277:
       id: verity_signature_algo
       -orig-id: RPMTAG_VERITYSIGNATUREALGO
+    278:
+      id: openpgp
+      -orig-id: RPMSIGTAG_OPENPGP
+      doc: |
+        RPM v6 OpenPGP signature(s) of the header, base64 encoded. The default
+        signature type when signing v6 packages, but it can also be added to v4
+        packages using `rpmsign --rpmv6` - see
+        <https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/man/rpmsign.1.scd?plain=1#L86-L87>.
+    279:
+      id: sha3_256
+      -orig-id: RPMSIGTAG_SHA3_256
+      doc: SHA3-256 digest of the header (only v6).
+    999:
+      id: reserved
+      -orig-id: RPMSIGTAG_RESERVED
+      doc: |
+        Space reserved for signatures, consisting solely of zeros. Always the
+        last tag in the signature.
+
+        v6 packages use this tag instead of `signature_tags::reserved_space`
+        = 1008, which is used for the same purpose in v4 packages. In v6
+        packages, signature tag numbers above 999 are considered illegal, so
+        that signature tags don't clash with header tags - see
+        <https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v6.md?plain=1#L76-L77>.
+      doc-ref:
+        - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_v6.md?plain=1#L83-L84
+        - https://github.com/rpm-software-management/rpm/commit/a40b6e9a74b517370fda9aa5c9fc3db2276be563
     1000:
       id: size
       -orig-id: RPMSIGTAG_SIZE
@@ -454,7 +638,7 @@ enums:
       -orig-id: RPMSIGTAG_RESERVEDSPACE
       doc: Space reserved for signatures
   header_tags:
-    # Tags from [include/rpm/rpmtag.h](https://github.com/rpm-software-management/rpm/blob/afad3167/include/rpm/rpmtag.h).
+    # Tags from [`include/rpm/rpmtag.h`](https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/include/rpm/rpmtag.h).
     # This includes (almost) all tags. Some have `_unimplemented`, `_internal`
     # or `_obsolete` suffix (if more than one applies, the first applicable in
     # this order is used).
@@ -525,11 +709,11 @@ enums:
     1012:
       id: gif_obsolete
       -orig-id: RPMTAG_GIF
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md#deprecated--obsolete
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/tags.md#deprecated--obsolete
     1013:
       id: xpm_obsolete
       -orig-id: RPMTAG_XPM
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md#deprecated--obsolete
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/tags.md#deprecated--obsolete
     1014:
       id: license
       -orig-id: RPMTAG_LICENSE
@@ -590,7 +774,7 @@ enums:
     1027:
       id: old_file_names_obsolete
       -orig-id: RPMTAG_OLDFILENAMES
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md#deprecated--obsolete
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/tags.md#deprecated--obsolete
     1028:
       id: file_sizes
       -orig-id: RPMTAG_FILESIZES
@@ -655,7 +839,7 @@ enums:
     1043:
       id: icon_obsolete
       -orig-id: RPMTAG_ICON
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md#deprecated--obsolete
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/tags.md#deprecated--obsolete
     1044:
       id: source_rpm
       -orig-id: RPMTAG_SOURCERPM
@@ -941,7 +1125,7 @@ enums:
     1129:
       id: remove_tid_obsolete
       -orig-id: RPMTAG_REMOVETID
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md#deprecated--obsolete
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/tags.md#deprecated--obsolete
     1130:
       id: sha1_rhn_internal
       -orig-id: RPMTAG_SHA1RHN
@@ -994,20 +1178,36 @@ enums:
       id: depends_dict
       -orig-id: RPMTAG_DEPENDSDICT
     1146:
-      id: source_pkgid
-      -orig-id: RPMTAG_SOURCEPKGID
+      id: source_sig_md5
+      -orig-id:
+        - RPMTAG_SOURCESIGMD5
+        - RPMTAG_SOURCEPKGID # before RPM 6.0
+      doc: |
+        MD5 digest (16 bytes) of the header and payload of the source package
+        this binary package was built from, i.e. the value of
+        `signature_tags::md5` in that source package.
+
+        Only present in binary packages built in the same `rpmbuild` run as
+        their source package (e.g. `rpmbuild -ba`). Never present in v6
+        packages, because RPM does not calculate the MD5 digest for them.
+
+        Before RPM 6.0, this tag was called `RPMTAG_SOURCEPKGID` - see
+        <https://github.com/rpm-software-management/rpm/commit/79ba4a3c41702e46edd5a4ce7e17a1f3361eb0e7>.
+      doc-ref:
+        - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/build/pack.cc#L901-L902
+        - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/build/pack.cc#L799-L801
     1147:
       id: file_contexts_obsolete
       -orig-id: RPMTAG_FILECONTEXTS
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md#deprecated--obsolete
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/tags.md#deprecated--obsolete
     1148:
       id: fs_contexts_obsolete
       -orig-id: RPMTAG_FSCONTEXTS
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md#deprecated--obsolete
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/tags.md#deprecated--obsolete
     1149:
       id: re_contexts_obsolete
       -orig-id: RPMTAG_RECONTEXTS
-      doc-ref: https://github.com/rpm-software-management/rpm/blob/afad3167/docs/manual/tags.md#deprecated--obsolete
+      doc-ref: https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/tags.md#deprecated--obsolete
     1150:
       id: policies
       -orig-id: RPMTAG_POLICIES
@@ -1428,11 +1628,29 @@ enums:
       id: file_signature_length
       -orig-id: RPMTAG_FILESIGNATURELENGTH
     5092:
-      id: payload_digest
-      -orig-id: RPMTAG_PAYLOADDIGEST
+      id: payload_sha256
+      -orig-id:
+        - RPMTAG_PAYLOADSHA256
+        - RPMTAG_PAYLOADDIGEST # before RPM 6.0
+      doc: |
+        SHA-256 digest of the compressed payload.
+
+        Before RPM 6.0, this tag was called `RPMTAG_PAYLOADDIGEST` - see
+        <https://github.com/rpm-software-management/rpm/commit/f14557cd521ddf95994aa6518f006eeb3fc58d87>.
     5093:
-      id: payload_digest_algo
-      -orig-id: RPMTAG_PAYLOADDIGESTALGO
+      id: payload_sha256_algo_obsolete
+      -orig-id:
+        - RPMTAG_PAYLOADSHA256ALGO
+        - RPMTAG_PAYLOADDIGESTALGO # before RPM 6.0
+      doc: |
+        OpenPGP hash algorithm ID of `header_tags::payload_sha256`. Always 8
+        (SHA2-256), which makes this tag redundant. Not written to v6 packages.
+
+        Before RPM 6.0, this tag was called `RPMTAG_PAYLOADDIGESTALGO` - see
+        <https://github.com/rpm-software-management/rpm/commit/f14557cd521ddf95994aa6518f006eeb3fc58d87>.
+      doc-ref:
+        - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/build/pack.cc#L492-L495
+        - https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/include/rpm/rpmcrypto.h#L26
     5094:
       id: auto_installed_unimplemented
       -orig-id: RPMTAG_AUTOINSTALLED
@@ -1443,8 +1661,15 @@ enums:
       id: modularity_label
       -orig-id: RPMTAG_MODULARITYLABEL
     5097:
-      id: payload_digest_alt
-      -orig-id: RPMTAG_PAYLOADDIGESTALT
+      id: payload_sha256_alt
+      -orig-id:
+        - RPMTAG_PAYLOADSHA256ALT
+        - RPMTAG_PAYLOADDIGESTALT # before RPM 6.0
+      doc: |
+        SHA-256 digest of the uncompressed payload.
+
+        Before RPM 6.0, this tag was called `RPMTAG_PAYLOADDIGESTALT` - see
+        <https://github.com/rpm-software-management/rpm/commit/f14557cd521ddf95994aa6518f006eeb3fc58d87>.
     5098:
       id: arch_suffix
       -orig-id: RPMTAG_ARCHSUFFIX
@@ -1481,9 +1706,65 @@ enums:
     5109:
       id: sys_users
       -orig-id: RPMTAG_SYSUSERS
+    5110:
+      id: build_system_internal
+      -orig-id: RPMTAG_BUILDSYSTEM
+    5111:
+      id: build_option_internal
+      -orig-id: RPMTAG_BUILDOPTION
+    5112:
+      id: payload_size
+      -orig-id: RPMTAG_PAYLOADSIZE
+      doc: Size of the compressed payload in bytes (only v6).
+    5113:
+      id: payload_size_alt
+      -orig-id: RPMTAG_PAYLOADSIZEALT
+      doc: Size of the uncompressed payload in bytes (only v6).
+    5114:
+      id: rpm_format
+      -orig-id: RPMTAG_RPMFORMAT
+      doc: RPM package format version (only present in v6 packages).
+    5115:
+      id: file_mime_index
+      -orig-id: RPMTAG_FILEMIMEINDEX
+      doc: Index into `header_tags::mime_dict` (only v6).
+    5116:
+      id: mime_dict
+      -orig-id: RPMTAG_MIMEDICT
+      doc: Dictionary of MIME types (only v6).
+    5117:
+      id: file_mimes
+      -orig-id: RPMTAG_FILEMIMES
+    5118:
+      id: package_digests
+      -orig-id: RPMTAG_PACKAGEDIGESTS
+      doc: Package digests calculated during verification.
+    5119:
+      id: package_digest_algos
+      -orig-id: RPMTAG_PACKAGEDIGESTALGOS
+      doc: Algorithms used for `header_tags::package_digests`.
+    5120:
+      id: source_nevr
+      -orig-id: RPMTAG_SOURCENEVR
+      doc: Source RPM NEVR.
+    5121:
+      id: payload_sha512
+      -orig-id: RPMTAG_PAYLOADSHA512
+      doc: SHA-512 digest of the compressed payload.
+    5122:
+      id: payload_sha512_alt
+      -orig-id: RPMTAG_PAYLOADSHA512ALT
+      doc: SHA-512 digest of the uncompressed payload.
+    5123:
+      id: payload_sha3_256
+      -orig-id: RPMTAG_PAYLOADSHA3_256
+      doc: SHA3-256 digest of the compressed payload.
+    5124:
+      id: payload_sha3_256_alt
+      -orig-id: RPMTAG_PAYLOADSHA3_256ALT
+      doc: SHA3-256 digest of the uncompressed payload.
+  # https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/docs/manual/format_header.md#index
   record_types:
-    # from LSB
-    0: not_implemented
     1: char
     2: uint8
     3: uint16
