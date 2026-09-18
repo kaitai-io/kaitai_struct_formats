@@ -115,9 +115,9 @@ instances:
     value: |
       has_header_payload_size_tag
         ? header_payload_size_tag.body.as<record_type_uint64>.values[0]
-        : has_signature_size_tag
-          ? signature_size_tag.body.as<record_type_uint32>.values[0] - len_header
-          : signature_long_size_tag.body.as<record_type_uint64>.values[0] - len_header
+        : has_signature_long_size_tag
+          ? signature_long_size_tag.body.as<record_type_uint64>.values[0] - len_header
+          : signature_size_tag.body.as<record_type_uint32>.values[0] - len_header
     if: has_payload
     doc: |
       Size of the (compressed) payload in bytes. v6 packages store it in
@@ -127,11 +127,16 @@ instances:
       If the header and payload together or the uncompressed payload reach
       4 GiB, v4 packages use `signature_tags::long_size` instead - see
       <https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/signature.cc#L182-L212>.
+
+      RPM never writes both (so this is just a hypothetical scenario), but if
+      both are present, `signature_tags::long_size` takes precedence over
+      `signature_tags::size`, just like in RPM's `printSize()` function:
+      <https://github.com/rpm-software-management/rpm/blob/ec9ea8c43808c346da4b6cb454cdc58aef8e506a/lib/signature.cc#L36-L43>
   has_payload:
     value: |
       has_header_payload_size_tag or
-      has_signature_size_tag or
-      has_signature_long_size_tag
+      has_signature_long_size_tag or
+      has_signature_size_tag
   len_header:
     value: ofs_payload - ofs_header
   ofs_header:
