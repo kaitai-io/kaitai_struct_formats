@@ -52,12 +52,24 @@ seq:
     size: str_len
     if: is_str
   # ========================================================================
-  - id: num_array_elements_16
+  - id: len_byte_array8
+    type: u1
+    if: is_byte_array_8
+  - id: len_byte_array16
     type: u2
-    if: is_array_16
-  - id: num_array_elements_32
+    if: is_array_16 or is_byte_array_16
+  - id: len_byte_array32
     type: u4
-    if: is_array_32
+    if: is_array_32 or is_byte_array_32
+  - id: byte_array8
+    size: len_byte_array8
+    if: is_byte_array_8
+  - id: byte_array16
+    size: len_byte_array16
+    if: is_byte_array_16
+  - id: byte_array32
+    size: len_byte_array32
+    if: is_byte_array_32
   - id: array_elements
     type: msgpack
     repeat: expr
@@ -76,12 +88,6 @@ seq:
     repeat-expr: num_map_elements
     if: is_map
 instances:
-#  value:
-#    value: >-
-#      is_bool ? bool_value :
-#      is_int ? int_value :
-#      is_array ? array_elements :
-#      0
   is_nil:
     value: b1 == 0xc0
     doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-nil'
@@ -159,11 +165,22 @@ instances:
   is_array_32:
     value: b1 == 0xdd
     doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-array'
+  is_byte_array_8:
+    value: b1 == 0xc4
+    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-array'
+  is_byte_array_16:
+    value: b1 == 0xc5
+    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-array'
+  is_byte_array_32:
+    value: b1 == 0xc6
+    doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-array'
   num_array_elements:
     value: >-
       is_fix_array ? b1 & 0b0000_1111 :
-      is_array_16 ? num_array_elements_16 :
-      num_array_elements_32
+      is_byte_array_8 ? len_byte_array8 :
+      is_array_16 or is_byte_array_16 ? len_byte_array16 :
+      is_byte_array_32 ? len_byte_array32 :
+      len_byte_array32
     if: is_array
     doc-ref: 'https://github.com/msgpack/msgpack/blob/master/spec.md#formats-array'
   # ========================================================================
