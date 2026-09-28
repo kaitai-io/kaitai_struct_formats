@@ -102,6 +102,18 @@ types:
         pos: 4
         type: u1
   asus_firmware_information:
+    doc: |
+      ASUS firmware images [overlay the 32-byte image
+      name](https://github.com/drag0njoe/RT-AC55U/blob/cf5874684ab6995ee07e91a52dfdd0562fcc2655/release/src/asustools/mkimage.src/include/image.h#L185-L188)
+      with a [`TAIL`
+      structure](https://github.com/drag0njoe/RT-AC55U/blob/cf5874684ab6995ee07e91a52dfdd0562fcc2655/release/src/asustools/mkimage.src/include/image.h#L151-L171)
+      that contains version information and the product ID (model name).
+
+      The first 16 bytes have the same structure in all three known variants of
+      the `TAIL` structure. The meaning of the last 16 bytes differs across the
+      variants - therefore, for simplicity, this Kaitai Struct implementation
+      treats them as an opaque byte array named `extra_info`. For an overview of
+      the variants, see the documentation for `extra_info`.
     seq:
       - id: kernel_version
         type: version
@@ -111,15 +123,81 @@ types:
         type: strz
         encoding: UTF-8
         size: 12
-      - id: hardware_versions
-        type: version
-        repeat: expr
-        repeat-expr: 8
-    doc: |
-      ASUS has overloaded the name field and stores information about the
-      firmware here, including version information and the product ID.
-      This is documented in for example the GPL source code of the RT-AC55UHP
-      device, in the directory `release/src/asustools/mkimage.src/include/image.h`
+        doc: |
+          In the Ralink SDK variant (see `extra_info`), the product ID field is
+          actually 23 bytes long, but no known product ID is longer than 12
+          bytes.
+      - id: extra_info
+        size: 16
+        doc: |
+          The structure of these bytes varies among the three known variants of
+          the `TAIL` structure, and the header doesn't say which one is used:
+
+          * Plain: 8 hardware versions (using the `version` type) - see
+            <https://github.com/drag0njoe/RT-AC55U/blob/cf5874684ab6995ee07e91a52dfdd0562fcc2655/release/src/asustools/mkimage.src/include/image.h#L170>
+
+            Sample file: `RT-AC51U_3.0.0.4_380_8591-ga8dd632.trx` from
+            <https://dlcdnets.asus.com/pub/ASUS/wireless/RT-AC51U/FW_RT_AC51U_30043808591.zip>,
+            released on 2020-09-22 and listed on
+            <https://www.asus.com/supportonly/rt-ac51u/helpdesk_bios/>.
+
+            Source code links:
+
+            - [ASUS GPL source, RT-AC55UHP
+              3.0.0.4.382.51915](https://dlcdnets.asus.com/pub/ASUS/wireless/RT-AC55UHP/GPL_RT_AC55UHP_300438251915.zip)
+              (`asuswrt/release/src/asustools/mkimage.src/` in
+              `GPL_RT-AC55UHP_3.0.0.4.382.51915-g4086e57.tgz`)
+            - [ASUS GPL source, RT-AC55U 3.0.0.4.382.50702 (unofficial
+              mirror)](https://github.com/drag0njoe/RT-AC55U/tree/cf5874684ab6995ee07e91a52dfdd0562fcc2655/release/src/asustools/mkimage.src)
+
+          * `TRX_NEW` (a macro defined when building `mkimage`): the
+            build number and extended build number (`u2le` each), two key bytes
+            and 5 hardware versions - see
+            <https://github.com/drag0njoe/RT-AC55U/blob/cf5874684ab6995ee07e91a52dfdd0562fcc2655/release/src-qca/asustools/mkimage.src/include/image.h#L174-L180>
+
+            `mkimage` [overwrites the first 3 hardware
+            versions](https://github.com/drag0njoe/RT-AC55U/blob/cf5874684ab6995ee07e91a52dfdd0562fcc2655/release/src-qca/asustools/mkimage.src/mkimage.c#L546-L569)
+            with values derived from the key bytes.
+
+            Sample file: `RT-AC55UHP_3.0.0.4_382_52236-ga0f880d.trx` (build 382,
+            extended build 52236) from
+            <https://dlcdnets.asus.com/pub/ASUS/wireless/RT-AC55UHP/FW_RT_AC55UHP_300438252236.zip>,
+            released on 2020-06-04 and listed on
+            <https://www.asus.com/supportonly/rt-ac55uhp/helpdesk_bios/>.
+
+            Source code links:
+
+            - [ASUS GPL source, RT-AC55UHP
+              3.0.0.4.382.51915](https://dlcdnets.asus.com/pub/ASUS/wireless/RT-AC55UHP/GPL_RT_AC55UHP_300438251915.zip)
+              (`asuswrt/release/src-qca/asustools/mkimage.src/` in
+              `GPL_RT-AC55UHP_3.0.0.4.382.51915-g4086e57.tgz`)
+            - [ASUS GPL source, RT-AC55U 3.0.0.4.382.50702 (unofficial
+              mirror)](https://github.com/drag0njoe/RT-AC55U/tree/cf5874684ab6995ee07e91a52dfdd0562fcc2655/release/src-qca/asustools/mkimage.src)
+
+          * Ralink SDK: the rest of a 23-byte product ID (see `product_id`),
+            a version suffix letter and the kernel part size (called `ih_ksz`) -
+            see <https://github.com/andy-padavan/rt-n56u/blob/32a93db4026cc2cff585d7008373432d888fc1aa/trunk/tools/mkimage/include/image.h#L164-L165>
+
+            Sample file: `RP-N12_1.0.1.1f.trx` from
+            <https://dlcdnets.asus.com/pub/ASUS/wireless/RP-N12/FW_RP-N12_1.0.1.1f.zip>,
+            released on 2019-11-12 and listed on
+            <https://www.asus.com/supportonly/rp-n12/helpdesk_bios/>.
+
+            Source code links:
+
+            - [ASUS GPL source, RP-N12
+              1.0.1.1f](https://dlcdnets.asus.com/pub/ASUS/wireless/RP-N12/GPL_RP_N12_1011f.zip)
+              (`GPL_RP-N12_source.1011f/user/mkimage/include/image.h` in
+              `GPL_RP-N12_source.1011f.tar.bz2`)
+            - [rt-n56u custom firmware by Andy
+              Padavan](https://github.com/andy-padavan/rt-n56u/blob/32a93db4026cc2cff585d7008373432d888fc1aa/trunk/tools/mkimage/include/image.h)
+
+          In the plain and `TRX_NEW` variants, the last 4 bytes may instead
+          contain the offset of the root file system, which is [written by
+          `mkimage -r`](https://github.com/drag0njoe/RT-AC55U/blob/cf5874684ab6995ee07e91a52dfdd0562fcc2655/release/src/asustools/mkimage.src/mkimage.c#L527-L542)
+          as the magic byte 0xA9
+          ([`ROOTFS_OFFSET_MAGIC`](https://github.com/drag0njoe/RT-AC55U/blob/cf5874684ab6995ee07e91a52dfdd0562fcc2655/release/src/asustools/mkimage.src/include/image.h#L154-L159))
+          followed by the offset as a 24-bit big-endian integer.
   version:
     seq:
       - id: major
