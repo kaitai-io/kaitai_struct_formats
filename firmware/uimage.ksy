@@ -47,9 +47,13 @@ types:
       - id: architecture
         type: u1
         enum: uimage_arch
+        valid:
+          in-enum: true
       - id: image_type
         type: u1
         enum: uimage_type
+        valid:
+          in-enum: true
       - id: compression_type
         type: u1
         enum: uimage_comp
