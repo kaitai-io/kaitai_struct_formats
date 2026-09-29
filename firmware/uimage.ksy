@@ -1,6 +1,16 @@
 meta:
   id: uimage
   title: U-Boot Image wrapper
+  application: U-Boot
+  file-extension:
+    - bin
+    - img
+    - scr # U-Boot scripts (`mkimage -T script`), e.g. `boot.scr`
+    - trx # ASUS firmware
+    - bix # firmware of switches based on the Realtek switch SDK
+    - uimg
+  xref:
+    wikidata: Q105856758
   license: CC0-1.0
   ks-version: '0.11'
   endian: be
