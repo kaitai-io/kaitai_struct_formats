@@ -114,6 +114,7 @@ types:
       variants - therefore, for simplicity, this Kaitai Struct implementation
       treats them as an opaque byte array named `extra_info`. For an overview of
       the variants, see the documentation for `extra_info`.
+    -webide-representation: '{product_id} {kernel_version}.{fs_version}'
     seq:
       - id: kernel_version
         type: version
@@ -199,6 +200,7 @@ types:
           ([`ROOTFS_OFFSET_MAGIC`](https://github.com/drag0njoe/RT-AC55U/blob/cf5874684ab6995ee07e91a52dfdd0562fcc2655/release/src/asustools/mkimage.src/include/image.h#L154-L159))
           followed by the offset as a 24-bit big-endian integer.
   version:
+    -webide-representation: '{major:dec}.{minor:dec}'
     seq:
       - id: major
         type: u1
