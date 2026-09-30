@@ -113,7 +113,7 @@ types:
           `RT-AX52_3.0.0.4_388_34015-g9488655.trx` from
           <https://dlcdnets.asus.com/pub/ASUS/wireless/RT-AX52/FW_RT-AX52_300438834015.zip>,
           released on 2026-03-20 and listed on
-          <https://www.asus.com/supportonly/rt-ax52/helpdesk_bios/>.
+          <https://www.asus.com/supportonly/rt-ax52/helpdesk_bios?model2Name=RT-AX52>.
       byte0:
         pos: 0
         type: u1
