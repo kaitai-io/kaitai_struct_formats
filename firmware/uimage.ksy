@@ -15,9 +15,13 @@ meta:
   ks-version: '0.11'
   endian: be
 doc: |
-  The new uImage format allows more flexibility in handling images of various
-  types (kernel, ramdisk, etc.), it also enhances integrity protection of images
-  with sha1 and md5 checksums.
+  The legacy U-Boot image format (uImage), as created by `mkimage`: a 64-byte
+  header followed by the image data (e.g. a Linux kernel, a ramdisk or a
+  script). The header describes the data (OS, CPU architecture, image type,
+  compression, load and entry point addresses, name) and protects both the
+  header and the data with CRC-32 checksums.
+
+  U-Boot's newer FIT (Flattened Image Tree) format is not covered by this spec.
 doc-ref: https://github.com/u-boot/u-boot/blob/ece349ade2973e220f524ce59e59711cc919263f/include/image.h Git tag "v2026.07"
 seq:
   - id: header
