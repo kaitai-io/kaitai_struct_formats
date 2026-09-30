@@ -409,6 +409,23 @@ enums:
     4: lzo
     5: lz4
     6: zstd
+    9:
+      id: mz
+      doc: |
+        `IH_COMP_MZ` of the U-Boot fork for SigmaStar (formerly MStar) SoCs,
+        not defined in upstream U-Boot. Used e.g. in I-O DATA TS-NS240W and
+        TS-NS320W network camera firmware.
+      doc-ref:
+        - https://github.com/OpenIPC/u-boot-sigmastar/blob/bf77aff5d44f34d14b89b3f4014aa8dda9834794/include/image.h#L253 SigmaStar U-Boot (OpenIPC's copy)
+        - https://lib.iodata.jp/lib/soft/t/tsns240w_f10302.exe I-O DATA TS-NS240W firmware 1.03.02
+    10:
+      id: xip
+      doc: |
+        `IH_COMP_XIP` of the U-Boot fork for SigmaStar (formerly MStar) SoCs,
+        not defined in upstream U-Boot. No firmware image with this value was
+        found among the ones surveyed (September 2026), so it may not be used
+        in practice.
+      doc-ref: https://github.com/OpenIPC/u-boot-sigmastar/blob/bf77aff5d44f34d14b89b3f4014aa8dda9834794/include/image.h#L254 SigmaStar U-Boot (OpenIPC's copy)
   uimage_type:
     0:
       id: invalid
