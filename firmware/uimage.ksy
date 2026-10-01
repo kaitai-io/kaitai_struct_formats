@@ -972,9 +972,9 @@ enums:
     0x80800002:
       id: engenius_ecs1112fp
       doc: |
-        EnGenius ECS1112FP (`image/series_vmlinux.bix` in the tar archive that
-        follows a 64-byte header in the `.imag` firmware file, i.e. at offset
-        0x240).
+        EnGenius ECS1112FP: the uImage is `image/series_vmlinux.bix`, the first
+        member of the tar archive that follows a 64-byte header in the `.imag`
+        firmware file, so it starts at offset 0x240 of the file.
       doc-ref: https://www.engeniustech.com/wp_firmware/ECS1112FP-RTL83xx_fw_1.1.40-2.01.149_20201008-1903.imag EnGenius ECS1112FP firmware
     0x83011300:
       id: engenius_ews1200_28tfp_old_fw
@@ -1128,13 +1128,13 @@ enums:
       doc: |
         Default of the Realtek switch SDK for RTL930x
         (`CONFIG_IH_MAGIC_NUMBER`), used e.g. by TRENDnet and Ubiquiti UISP-S
-        switches. EnGenius ECS1528FP (`image/series_vmlinux.bix` in the tar
-        archive that follows a 64-byte header in the `.imag` firmware file, i.e.
-        at offset 0x240). OpenWrt devices `sirivision_sr-st3408f`,
-        `sirivision_sr-st3808f`, `keeplink_kp-9000-8xm`, `plasmacloud-common`,
-        `vimin_vm-s100-0800ms`, `xikestor_sks8300-8t`,
-        `xikestor_sks8300-12e2t2x`, `xikestor_sks8310-8x`,
-        `sirivision_sr-st31212f`.
+        switches. EnGenius ECS1528FP: the uImage is `image/series_vmlinux.bix`,
+        the first member of the tar archive that follows a 64-byte header in the
+        `.imag` firmware file, so it starts at offset 0x240 of the file. OpenWrt
+        devices `sirivision_sr-st3408f`, `sirivision_sr-st3808f`,
+        `keeplink_kp-9000-8xm`, `plasmacloud-common`, `vimin_vm-s100-0800ms`,
+        `xikestor_sks8300-8t`, `xikestor_sks8300-12e2t2x`,
+        `xikestor_sks8310-8x`, `sirivision_sr-st31212f`.
       doc-ref:
         - https://www.engeniustech.com/wp_firmware/ECS1528FP-RTL93xx_fw_1.1.40-3.01.149_20201008-1907.imag EnGenius ECS1528FP firmware
         - https://github.com/openwrt/openwrt/blob/138fabb79f8d68d65e40c8b8d0c0494b19053d0f/target/linux/realtek/image/rtl930x.mk#L27 OpenWrt, `sirivision_sr-st3408f`
