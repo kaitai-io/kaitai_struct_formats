@@ -593,7 +593,10 @@ enums:
   # https://downloads.openwrt.org/releases/
   # https://downloads.openwrt.org/snapshots/targets/ (devices added since the last release)
   # https://openwrt.org/docs/techref/targets/realtek (switches based on the Realtek switch SDK)
-  # https://www.engeniustech.com/wp_firmware/ (`*.bix`)
+  # https://www.engeniustech.com/wp_firmware/ (`*.bix`, `*.imag`)
+  # https://www.engeniustech.com/eu/downloads (EnGenius; also newer firmware than above. Its search box queries:)
+  #   `https://www.engeniustech.com/eu/wp-admin/admin-ajax.php?action=perform_search&keyword=<substring>` (models)
+  #   `https://www.engeniustech.com/eu/download-result?post_id=<post ID>` (a model's files, with checksums)
   # https://downloads.trendnet.com/
   # https://www.allnet.de/en/allnet-brand/support/downloads-search/ (ALLNET; each product's page links its files)
   # https://fw-update.ubnt.com/api/firmware-latest (Ubiquiti; the latest firmware of every product)
@@ -972,10 +975,21 @@ enums:
     0x80800002:
       id: engenius_ecs1112fp
       doc: |
-        EnGenius ECS1112FP (`image/series_vmlinux.bix` in the tar archive that
-        follows a 64-byte header in the `.imag` firmware file, i.e. at offset
-        0x240).
+        EnGenius ECS1112FP: the uImage is `image/series_vmlinux.bix`, the first
+        member of the tar archive that follows a 64-byte header in the `.imag`
+        firmware file, so it starts at offset 0x240 of the file.
       doc-ref: https://www.engeniustech.com/wp_firmware/ECS1112FP-RTL83xx_fw_1.1.40-2.01.149_20201008-1903.imag EnGenius ECS1112FP firmware
+    0x80800003:
+      id: engenius_fitswitch
+      doc: |
+        EnGenius FitSwitch series, i.e. EWS2910P-FIT, EWS2910FP-FIT,
+        EWS7928P-FIT, EWS7928FP-FIT, EWS7952P-FIT and EWS7952FP-FIT: the uImage
+        is `image/series_vmlinux.bix`, the first member of the tar archive that
+        follows a 64-byte header in the `.imag` firmware file, so it starts at
+        offset 0x240 of the file.
+      doc-ref:
+        - https://www.engeniustech.com/wp_firmware/EWS-RTL83xx-FIT_fw_2.0.03-2.03.007.imag EnGenius FitSwitch firmware 2.0.03.007
+        - https://www.engeniustech.com/eu/download-result?post_id=320868 EnGenius EWS2910FP-FIT downloads (firmware 2.0.15, `EWS-RTL83xx-FIT_fw_2.0.15-2.03.019_20250620-1105.imag`, which the pages of all FitSwitch models offer)
     0x83011300:
       id: engenius_ews1200_28tfp_old_fw
       doc: EnGenius EWS1200-28TFP firmware 1.05.45 to 1.06.21.
@@ -1128,13 +1142,13 @@ enums:
       doc: |
         Default of the Realtek switch SDK for RTL930x
         (`CONFIG_IH_MAGIC_NUMBER`), used e.g. by TRENDnet and Ubiquiti UISP-S
-        switches. EnGenius ECS1528FP (`image/series_vmlinux.bix` in the tar
-        archive that follows a 64-byte header in the `.imag` firmware file, i.e.
-        at offset 0x240). OpenWrt devices `sirivision_sr-st3408f`,
-        `sirivision_sr-st3808f`, `keeplink_kp-9000-8xm`, `plasmacloud-common`,
-        `vimin_vm-s100-0800ms`, `xikestor_sks8300-8t`,
-        `xikestor_sks8300-12e2t2x`, `xikestor_sks8310-8x`,
-        `sirivision_sr-st31212f`.
+        switches. EnGenius ECS1528FP: the uImage is `image/series_vmlinux.bix`,
+        the first member of the tar archive that follows a 64-byte header in the
+        `.imag` firmware file, so it starts at offset 0x240 of the file. OpenWrt
+        devices `sirivision_sr-st3408f`, `sirivision_sr-st3808f`,
+        `keeplink_kp-9000-8xm`, `plasmacloud-common`, `vimin_vm-s100-0800ms`,
+        `xikestor_sks8300-8t`, `xikestor_sks8300-12e2t2x`,
+        `xikestor_sks8310-8x`, `sirivision_sr-st31212f`.
       doc-ref:
         - https://www.engeniustech.com/wp_firmware/ECS1528FP-RTL93xx_fw_1.1.40-3.01.149_20201008-1907.imag EnGenius ECS1528FP firmware
         - https://github.com/openwrt/openwrt/blob/138fabb79f8d68d65e40c8b8d0c0494b19053d0f/target/linux/realtek/image/rtl930x.mk#L27 OpenWrt, `sirivision_sr-st3408f`
