@@ -736,7 +736,7 @@ enums:
       -orig-id: UBIFS_COMPR_ZSTD
       doc: zstd compression
   inode_types:
-    0: 
+    0:
       id: regular
       -orig-id: UBIFS_ITYPE_REG
       doc: regular file
@@ -769,7 +769,7 @@ enums:
       id: inode
       -orig-id: UBIFS_INO_NODE
       doc: inode node
-    1: 
+    1:
       id: data
       -orig-id: UBIFS_DATA_NODE
       doc: data node
