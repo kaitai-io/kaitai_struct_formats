@@ -4,6 +4,9 @@ meta:
   xref:
     justsolve: UBIFS
     wikidata: Q1018125
+  tags:
+    - filesystem
+    - linux
   license: GPL-2.0-only
   endian: le
   encoding: UTF-8
