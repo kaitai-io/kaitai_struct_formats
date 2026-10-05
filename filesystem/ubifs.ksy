@@ -1,6 +1,9 @@
 meta:
   id: ubifs
   title: UBIFS
+  xref:
+    justsolve: UBIFS
+    wikidata: Q1018125
   license: GPL-2.0-only
   endian: le
   encoding: UTF-8
