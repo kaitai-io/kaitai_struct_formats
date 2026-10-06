@@ -642,7 +642,19 @@ types:
           to the user to check if the correct key is passed
       - id: hash_algo
         type: u2
-        doc: The hash algo used for this filesystem (one of enum hash_algo)
+        enum: hash_algos
+        if: authenticated
+        doc: The hash algo used for this filesystem
+        doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L549-L573 Git tag "v7.2"
+      - id: hash_algo_unused
+        -orig-id: hash_algo
+        type: u2
+        if: not authenticated
+        doc: |
+          Unused field (would only be meaningful in an authenticated file
+          system, see `hash_algo`). The kernel writes it as 0xffff, `mkfs.ubifs`
+          writes it as 0.
+        doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L183-L191 Git tag "v7.2"
       - id: hash_mst
         size: 64
         doc: |
@@ -923,3 +935,74 @@ enums:
       id: extended_attribute
       -orig-id: UBIFS_XENT_KEY
       doc: extended attribute node key
+  # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/include/uapi/linux/hash_info.h#L17-L42 (Git tag "v7.2")
+  hash_algos:
+    0:
+      id: md4
+      -orig-id: HASH_ALGO_MD4
+    1:
+      id: md5
+      -orig-id: HASH_ALGO_MD5
+    2:
+      id: sha1
+      -orig-id: HASH_ALGO_SHA1
+    3:
+      id: ripe_md_160
+      -orig-id: HASH_ALGO_RIPE_MD_160
+    4:
+      id: sha256
+      -orig-id: HASH_ALGO_SHA256
+    5:
+      id: sha384
+      -orig-id: HASH_ALGO_SHA384
+    6:
+      id: sha512
+      -orig-id: HASH_ALGO_SHA512
+    7:
+      id: sha224
+      -orig-id: HASH_ALGO_SHA224
+    8:
+      id: ripe_md_128
+      -orig-id: HASH_ALGO_RIPE_MD_128
+    9:
+      id: ripe_md_256
+      -orig-id: HASH_ALGO_RIPE_MD_256
+    10:
+      id: ripe_md_320
+      -orig-id: HASH_ALGO_RIPE_MD_320
+    11:
+      id: wp_256
+      -orig-id: HASH_ALGO_WP_256
+    12:
+      id: wp_384
+      -orig-id: HASH_ALGO_WP_384
+    13:
+      id: wp_512
+      -orig-id: HASH_ALGO_WP_512
+    14:
+      id: tgr_128
+      -orig-id: HASH_ALGO_TGR_128
+    15:
+      id: tgr_160
+      -orig-id: HASH_ALGO_TGR_160
+    16:
+      id: tgr_192
+      -orig-id: HASH_ALGO_TGR_192
+    17:
+      id: sm3_256
+      -orig-id: HASH_ALGO_SM3_256
+    18:
+      id: streebog_256
+      -orig-id: HASH_ALGO_STREEBOG_256
+    19:
+      id: streebog_512
+      -orig-id: HASH_ALGO_STREEBOG_512
+    20:
+      id: sha3_256
+      -orig-id: HASH_ALGO_SHA3_256
+    21:
+      id: sha3_384
+      -orig-id: HASH_ALGO_SHA3_384
+    22:
+      id: sha3_512
+      -orig-id: HASH_ALGO_SHA3_512
