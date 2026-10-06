@@ -11,12 +11,12 @@ meta:
   endian: le
   encoding: UTF-8
 doc: |
-  The UBIFS file system is a file system for flash file systems. It works on
-  top of UBI (Unsorted Block Images), which works as an abstraction layer so
-  UBIFS does not need to care about low level details. This specification only
-  covers UBIFS, not UBI.
+  UBIFS is a file system for raw flash memory devices. It works on top of
+  UBI (Unsorted Block Images), which works as an abstraction layer so UBIFS
+  does not need to care about low level details. This specification only covers
+  UBIFS, not UBI.
 
-  A UBIFS image is divided in several Logical Erase Blocks (LEB). The first
+  A UBIFS image is divided into several Logical Erase Blocks (LEB). The first
   LEB (LEB0) contains the superblock node, which includes information about LEB
   size, amongst others. The next two LEBs (LEB1 and LEB2) comprise the so called
   "master area" and both contain a copy of the master node, which includes
