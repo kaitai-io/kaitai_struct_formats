@@ -129,7 +129,13 @@ types:
         doc: UBIFS node magic number (%UBIFS_NODE_MAGIC)
       - id: crc
         type: u4
-        doc: CRC-32 checksum of the node header
+        doc: |
+          CRC-32 checksum of the whole node except `magic` and `crc` (i.e.
+          starting at offset 8). It is computed with an initial register value
+          of 0xFFFFFFFF and no final XOR, so it is the bitwise NOT of a standard
+          CRC-32 (e.g.
+          [`zlib.crc32()`](https://docs.python.org/3/library/zlib.html#zlib.crc32)
+          in Python).
       - id: sequence_number
         -orig-id: sqnum
         type: u8
