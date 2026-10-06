@@ -120,6 +120,8 @@ types:
 
   # Common types
   common_header:
+    -orig-id: ubifs_ch
+    doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L443-L464 Git tag "v7.2"
     seq:
       - id: magic
         type: u4
@@ -154,12 +156,16 @@ types:
 
   # Node types
   commit_start_header:
+    -orig-id: ubifs_cs_node
+    doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L833-L841 Git tag "v7.2"
     seq:
       - id: commit_number
         -orig-id: cmt_no
         type: u8
         doc: commit number
   data_header:
+    -orig-id: ubifs_data_node
+    doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L567-L584 Git tag "v7.2"
     seq:
       - id: key
         type: longkey
@@ -179,6 +185,8 @@ types:
       - id: data
         size-eos: true
   directory_header:
+    -orig-id: ubifs_dent_node
+    doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L541-L565 Git tag "v7.2"
     seq:
       - id: key
         type: longkey
@@ -207,6 +215,8 @@ types:
         type: strz
         doc: zero-terminated name
   index_header:
+    -orig-id: ubifs_idx_node
+    doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L819-L831 Git tag "v7.2"
     seq:
       - id: num_children
         -orig-id: child_cnt
@@ -221,6 +231,8 @@ types:
         repeat-expr: num_children
         doc: LEB number / offset / length / key branches
   inode_header:
+    -orig-id: ubifs_ino_node
+    doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L480-L539 Git tag "v7.2"
     seq:
       - id: key
         type: longkey
@@ -334,6 +346,8 @@ types:
       is_fifo:
         value: mode & 0o0170000 == 0o10000
   master_header:
+    -orig-id: ubifs_mst_node
+    doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L685-L756 Git tag "v7.2"
     seq:
       - id: highest_inum
         type: u8
@@ -464,6 +478,8 @@ types:
         value: flags & 4 == 4
         doc: written by recovery
   orphan_header:
+    -orig-id: ubifs_orph_node
+    doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L843-L853 Git tag "v7.2"
     seq:
       - id: commit_number
         type: u8
@@ -473,11 +489,15 @@ types:
         repeat: eos
         doc: inode numbers of orphans
   padding_header:
+    -orig-id: ubifs_pad_node
+    doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L606-L615 Git tag "v7.2"
     seq:
       - id: len_padding
         type: u4
         doc: how many bytes after this node are unused (because padded)
   reference_header:
+    -orig-id: ubifs_ref_node
+    doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L758-L772 Git tag "v7.2"
     seq:
       - id: leb_number
         -orig-id: lnum
@@ -498,6 +518,8 @@ types:
         doc: reserved for future, zeroes
     doc: logical eraseblock reference node.
   signature_header:
+    -orig-id: ubifs_sig_node
+    doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L784-L799 Git tag "v7.2"
     seq:
       - id: type
         type: u4
@@ -510,6 +532,8 @@ types:
       - id: signature
         size: len_signature
   superblock_header:
+    -orig-id: ubifs_sb_node
+    doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L617-L683 Git tag "v7.2"
     seq:
       - id: padding1
         size: 2
@@ -635,6 +659,8 @@ types:
         value: flags & 0x20 == 0x20
         doc: this filesystem contains hashes for authentication
   truncation_header:
+    -orig-id: ubifs_trun_node
+    doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L586-L604 Git tag "v7.2"
     seq:
       - id: inode_number
         -orig-id: inum
@@ -654,6 +680,8 @@ types:
     doc: This node exists only in the journal and never goes to the main area.
 
   branch:
+    -orig-id: ubifs_branch
+    doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L801-L817 Git tag "v7.2"
     seq:
       - id: target_leb
         -orig-id: lnum
@@ -684,6 +712,7 @@ types:
 
   # Key types
   key:
+    doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/key.h#L16-L22 Git tag "v7.2"
     seq:
       - id: inode_number
         type: u4
@@ -701,6 +730,7 @@ types:
       the node type. The last 29 bits are the block number (data entries)
       or the directory entry hash in case of a directory entry.
   longkey:
+    doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/key.h#L16-L22 Git tag "v7.2"
     seq:
       - id: inode_number
         type: u4
