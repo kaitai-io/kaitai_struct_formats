@@ -549,6 +549,7 @@ types:
         doc: reserved for future, zeroes
       - id: key_hash
         type: u1
+        enum: hashes
         doc: type of hash function used in keys
       - id: key_fmt
         type: u1
