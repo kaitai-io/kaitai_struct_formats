@@ -515,7 +515,7 @@ types:
       - id: journal_head_number
         -orig-id: jhead
         type: u4
-        doc: joural head number
+        doc: journal head number
       - id: padding
         type: padding_byte
         repeat: expr
