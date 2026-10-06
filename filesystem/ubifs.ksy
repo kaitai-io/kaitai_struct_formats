@@ -175,6 +175,7 @@ types:
         type: u4
         doc: uncompressed data size in bytes
       - id: compression
+        -orig-id: compr_type
         type: u2
         enum: compression
         doc: compression type (%UBIFS_COMPR_NONE, %UBIFS_COMPR_LZO, etc)
@@ -454,6 +455,7 @@ types:
         type: u4
         doc: count of LEBs used by file-system
       - id: hash_root_index
+        -orig-id: hash_root_idx
         size: 64
         doc: the hash of the root index node
       - id: hash_lpt
@@ -482,9 +484,11 @@ types:
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L843-L853 Git tag "v7.2"
     seq:
       - id: commit_number
+        -orig-id: cmt_no
         type: u8
         doc: commit number (also top bit is set on the last node of the commit)
       - id: inode_numbers
+        -orig-id: inos
         type: u8
         repeat: eos
         doc: inode numbers of orphans
@@ -493,6 +497,7 @@ types:
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L606-L615 Git tag "v7.2"
     seq:
       - id: len_padding
+        -orig-id: pad_len
         type: u4
         doc: how many bytes after this node are unused (because padded)
   reference_header:
@@ -524,18 +529,21 @@ types:
       - id: type
         type: u4
       - id: len_signature
+        -orig-id: len
         type: u4
       - id: padding
         type: padding_byte
         repeat: expr
         repeat-expr: 32
       - id: signature
+        -orig-id: sig
         size: len_signature
   superblock_header:
     -orig-id: ubifs_sb_node
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L617-L683 Git tag "v7.2"
     seq:
       - id: padding1
+        -orig-id: padding
         size: 2
         contents: [0x00, 0x00]
         doc: reserved for future, zeroes
@@ -596,6 +604,7 @@ types:
         type: u2
         enum: compression
       - id: padding2
+        -orig-id: padding1
         size: 2
         contents: [0x00, 0x00]
         doc: reserved for future, zeroes
@@ -608,9 +617,11 @@ types:
         type: u4
         doc: reserve pool GID
       - id: reserve_pool_size
+        -orig-id: rp_size
         type: u8
         doc: size of the reserved pool in bytes
       - id: time_granularity
+        -orig-id: time_gran
         type: u4
         doc: time granularity in nanoseconds
       - id: uuid
@@ -636,6 +647,7 @@ types:
           hash of the master node, only valid for signed images in which the
           master node does not contain a hmac
       - id: padding3
+        -orig-id: padding2
         type: padding_byte
         repeat: expr
         repeat-expr: 3774
