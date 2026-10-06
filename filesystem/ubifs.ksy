@@ -298,7 +298,7 @@ types:
           sum of lengths of all extended attribute names belonging
           to this inode
       - id: compression
-        -orig-type: compr_type
+        -orig-id: compr_type
         type: u2
         enum: compression
         doc: compression type used for this inode
@@ -600,11 +600,11 @@ types:
         contents: [0x00, 0x00]
         doc: reserved for future, zeroes
       - id: reserve_pool_uid
-        -orig: rp_uid
+        -orig-id: rp_uid
         type: u4
         doc: reserve pool UID
       - id: reserve_pool_gid
-        -orig: rp_gid
+        -orig-id: rp_gid
         type: u4
         doc: reserve pool GID
       - id: reserve_pool_size
