@@ -603,6 +603,7 @@ types:
         -orig-id: default_compr
         type: u2
         enum: compression
+        doc: default compression algorithm (%UBIFS_COMPR_LZO, etc)
       - id: padding1
         size: 2
         contents: [0x00, 0x00]
