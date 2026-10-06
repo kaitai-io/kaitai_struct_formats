@@ -754,6 +754,7 @@ types:
         value: key_value & 0x1fffffff
 
 enums:
+  # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L337-L352 (Git tag "v7.2")
   compression:
     0:
       id: no_compression
@@ -771,6 +772,7 @@ enums:
       id: zstd
       -orig-id: UBIFS_COMPR_ZSTD
       doc: zstd compression
+  # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L152-L173 (Git tag "v7.2")
   inode_types:
     0:
       id: regular
@@ -800,6 +802,7 @@ enums:
       id: socket
       -orig-id: UBIFS_ITYPE_SOCK
       doc: socket
+  # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L354-L393 (Git tag "v7.2")
   node_types:
     0:
       id: inode
@@ -857,6 +860,7 @@ enums:
       id: signature
       -orig-id: UBIFS_SIG_NODE
       doc: signature node
+  # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L175-L184 (Git tag "v7.2")
   hashes:
     0:
       id: r5
@@ -866,6 +870,7 @@ enums:
       id: test_hash
       -orig-id: UBIFS_KEY_HASH_TEST
       doc: test hash which just returns first 4 bytes of the name
+  # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L186-L193 (Git tag "v7.2")
   key_formats:
     0:
       id: simple
@@ -873,6 +878,7 @@ enums:
       doc: |
         The simple key format uses 29 bits for storing UBIFS
         block number and hash value.
+  # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L204-L219 (Git tag "v7.2")
   key_types:
     0:
       id: inode
