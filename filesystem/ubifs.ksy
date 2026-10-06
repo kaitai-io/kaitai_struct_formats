@@ -542,7 +542,7 @@ types:
     -orig-id: ubifs_sb_node
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L617-L683 Git tag "v7.2"
     seq:
-      - id: padding1
+      - id: padding0
         -orig-id: padding
         size: 2
         contents: [0x00, 0x00]
@@ -603,8 +603,7 @@ types:
         -orig-id: default_compr
         type: u2
         enum: compression
-      - id: padding2
-        -orig-id: padding1
+      - id: padding1
         size: 2
         contents: [0x00, 0x00]
         doc: reserved for future, zeroes
@@ -646,8 +645,7 @@ types:
         doc: |
           hash of the master node, only valid for signed images in which the
           master node does not contain a hmac
-      - id: padding3
-        -orig-id: padding2
+      - id: padding2
         type: padding_byte
         repeat: expr
         repeat-expr: 3774
