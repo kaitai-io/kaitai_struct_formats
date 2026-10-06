@@ -144,6 +144,7 @@ types:
         enum: node_types
       - id: group_type
         type: u1
+        enum: node_group_types
         doc: node group type
       - id: padding
         size: 2
@@ -872,6 +873,20 @@ enums:
       id: signature
       -orig-id: UBIFS_SIG_NODE
       doc: signature node
+  # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L408-L419 (Git tag "v7.2")
+  node_group_types:
+    0:
+      id: no_node_group
+      -orig-id: UBIFS_NO_NODE_GROUP
+      doc: this node is not part of a group
+    1:
+      id: in_node_group
+      -orig-id: UBIFS_IN_NODE_GROUP
+      doc: this node is a part of a group
+    2:
+      id: last_of_node_group
+      -orig-id: UBIFS_LAST_OF_NODE_GROUP
+      doc: this node is the last in a group
   # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L175-L184 (Git tag "v7.2")
   hashes:
     0:
