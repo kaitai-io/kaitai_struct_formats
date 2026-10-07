@@ -258,7 +258,7 @@ types:
         doc: access time seconds
       - id: ctime_sec
         type: u8
-        doc: creation time seconds
+        doc: status change time seconds
       - id: mtime_sec
         type: u8
         doc: modification time seconds
@@ -267,7 +267,7 @@ types:
         doc: access time nanoseconds
       - id: ctime_nsec
         type: u4
-        doc: creation time nanoseconds
+        doc: status change time nanoseconds
       - id: mtime_nsec
         type: u4
         doc: modification time nanoseconds
