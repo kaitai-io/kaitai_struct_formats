@@ -10,7 +10,6 @@ meta:
   ks-version: 0.9
   imports:
     - /serialization/asn1/asn1_der
-  endian: le
 doc-ref:
   - https://www.stonedcoder.org/~kd/lib/MachORuntime.pdf
   - https://opensource.apple.com/source/python_modules/python_modules-43/Modules/macholib-1.5.1/macholib-1.5.1.tar.gz
@@ -29,6 +28,9 @@ seq:
     type: load_command
     repeat: expr
     repeat-expr: header.ncmds
+instances:
+  is_big_endian:
+    value: magic == magic_type::macho_be_x86 or magic == magic_type::macho_be_x64
 enums:
   magic_type:
     # Note that for multiarch (a.k.a. fat) Mach-O files, which are the primary
@@ -208,6 +210,12 @@ types:
       app_extension_safe:
         value: value & 0x2000000 != 0
   mach_header:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     seq:
       - id: cputype
         type: u4
@@ -231,6 +239,12 @@ types:
         type: macho_flags(flags)
         -webide-parse-mode: eager
   load_command:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     -webide-representation: '{type}: {body}'
     seq:
       - id: type
@@ -285,40 +299,49 @@ types:
             'load_command_type::build_version'           : build_version_command
             'load_command_type::segment'                 : segment_command
   vm_prot:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     seq:
-      - id: strip_read
-        type: b1
+      - id: value
+        type: u4
+    instances:
+      strip_read:
+        value: value & 0x80 != 0
         doc: Special marker to support execute-only protection.
         -orig-id: VM_PROT_STRIP_READ
-      - id: is_mask
+      is_mask:
+        value: value & 0x40 != 0
         doc: Indicates to use value as a mask against the actual protection bits.
         -orig-id: VM_PROT_IS_MASK
-        type: b1
-      - id: reserved0
-        type: b1
+      reserved0:
+        value: value & 0x20 != 0
         doc: Reserved (unused) bit.
-      - id: copy
-        type: b1
+      copy:
+        value: value & 0x10 != 0
         doc: Used when write permission can not be obtained, to mark the entry as COW.
         -orig-id: VM_PROT_COPY
-      - id: no_change
-        type: b1
+      no_change:
+        value: value & 0x08 != 0
         doc: Used only by memory_object_lock_request to indicate no change to page locks.
         -orig-id: VM_PROT_NO_CHANGE
-      - id: execute
-        type: b1
+      execute:
+        value: value & 0x04 != 0
         doc: Execute permission.
         -orig-id: VM_PROT_EXECUTE
-      - id: write
-        type: b1
+      write:
+        value: value & 0x02 != 0
         doc: Write permission.
         -orig-id: VM_PROT_WRITE
-      - id: read
-        type: b1
+      read:
+        value: value & 0x01 != 0
         doc: Read permission.
         -orig-id: VM_PROT_READ
-      - id: reserved1
-        type: b24
+      reserved1:
+        value: value >> 8
         doc: Reserved (unused) bits.
   uleb128:
     -webide-representation: "{value:dec}"
@@ -367,6 +390,12 @@ types:
           ((b10 % 128) << 63))))))))))
         -webide-parse-mode: eager
   segment_command_64:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     -webide-representation: '{segname} ({initprot}): offs={fileoff}, size={filesize}'
     seq:
       - id: segname
@@ -544,6 +573,12 @@ types:
                 type: cf_string
                 repeat: eos
   dyld_info_command:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     -webide-representation: 'rebase={rebase_off}, bind={bind_off}, weakBind={weak_bind_off}, lazyBind={lazy_bind_off}, export={export_off}'
     seq:
       - id: rebase_off
@@ -716,6 +751,12 @@ types:
         0xb0: do_bind_add_address_immediate_scaled
         0xc0: do_bind_uleb_times_skipping_uleb
   symtab_command:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     -webide-representation: "symbols: {n_syms:dec}, strtab: {str_off}"
     seq:
       - id: sym_off
@@ -799,6 +840,12 @@ types:
             encoding: utf-8
             if: un != 0
   dysymtab_command:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     seq:
       - id: i_local_sym
         -orig-id: ilocalsym
@@ -862,6 +909,12 @@ types:
         repeat: expr
         repeat-expr: n_indirect_syms
   lc_str:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     -webide-representation: '{value}'
     seq:
       - id: length
@@ -882,17 +935,32 @@ types:
       - id: uuid
         size: 16
   version:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     -webide-representation: '{major:dec}.{minor:dec}'
     seq:
-      - id: p1
-        type: u1
-      - id: minor
-        type: u1
-      - id: major
-        type: u1
-      - id: release
-        type: u1
+      - id: value
+        type: u4
+    instances:
+      p1:
+        value: value & 0xff
+      minor:
+        value: (value >> 8) & 0xff
+      major:
+        value: (value >> 16) & 0xff
+      release:
+        value: (value >> 24) & 0xff
   encryption_info_command:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     seq:
       - id: cryptoff
         type: u4
@@ -904,6 +972,12 @@ types:
         type: u4
         if: _root.magic == magic_type::macho_be_x64 or _root.magic == magic_type::macho_le_x64
   twolevel_hints_command:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     seq:
       - id: offset
         type: u4
@@ -911,6 +985,12 @@ types:
         -orig-id: nhints
         type: u4
   linker_option_command:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     seq:
       - id: num_strings
         -orig-id: count
@@ -925,6 +1005,12 @@ types:
       - id: name
         type: lc_str
   routines_command_64:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     seq:
       - id: init_address
         type: u8
@@ -933,6 +1019,12 @@ types:
       - id: reserved
         size: 48 # u8 * 6
   routines_command:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     seq:
       - id: init_address
         type: u4
@@ -948,11 +1040,23 @@ types:
       - id: sdk
         type: version
   source_version_command:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     -webide-representation: 'v:{version:dec}'
     seq:
       - id: version
         type: u8
   entry_point_command:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     -webide-representation: 'entry_off={entry_off}, stack_size={stack_size}'
     seq:
       - id: entry_off
@@ -962,6 +1066,12 @@ types:
         -orig-id: stacksize
         type: u8
   dylib_command:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     -webide-representation: '{name}'
     seq:
       - id: name_offset
@@ -976,6 +1086,12 @@ types:
         type: strz
         encoding: utf-8
   rpath_command:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     -webide-representation: '{path}'
     seq:
       - id: path_offset
@@ -984,6 +1100,12 @@ types:
         type: strz
         encoding: utf-8
   linkedit_data_command:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     -webide-representation: 'offs={data_off}, size={data_size}'
     seq:
       - id: data_off
@@ -993,6 +1115,12 @@ types:
         -orig-id: datasize
         type: u4
   code_signature_command:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     -webide-representation: 'offs={data_off}, size={data_size}'
     seq:
       - id: data_off
@@ -1304,6 +1432,12 @@ types:
             repeat: expr
             repeat-expr: count
   build_version_command:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     seq:
       - id: platform
         type: u4
@@ -1325,6 +1459,12 @@ types:
           - id: version
             type: u4
   segment_command:
+    meta:
+      endian:
+        switch-on: _root.is_big_endian
+        cases:
+          true: be
+          false: le
     seq:
       - id: segname
         type: str
