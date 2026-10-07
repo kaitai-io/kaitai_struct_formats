@@ -36,22 +36,35 @@ doc-ref:
 seq:
   - id: sections
     type: pk_section
-    repeat: eos
+    repeat: until
+    repeat-until: _.section_type == section_types::end_of_central_dir
 types:
+  empty: {}
   pk_section:
     seq:
       - id: magic
         contents: 'PK'
       - id: section_type
         type: u2
+        enum: section_types
       - id: body
         type:
           switch-on: section_type
           cases:
-            0x0201: central_dir_entry
-            0x0403: local_file
-            0x0605: end_of_central_dir
-            0x0807: data_descriptor
+            section_types::central_dir_entry: central_dir_entry
+            section_types::local_file: local_file
+            section_types::end_of_central_dir: end_of_central_dir
+            section_types::data_descriptor: data_descriptor
+            section_types::archive_extra_data: archive_extra_data
+            section_types::digital_signature: digital_signature
+            section_types::zip64_end_of_central_dir: zip64_end_of_central_dir
+            section_types::zip64_end_of_central_dir_locator: zip64_end_of_central_dir_locator
+  archive_extra_data:
+    seq:
+      - id: len_extra_field
+        type: u4
+      - id: data
+        size: len_extra_field
   data_descriptor:
     seq:
       - id: crc32
@@ -60,6 +73,12 @@ types:
         type: u4
       - id: len_body_uncompressed
         type: u4
+  digital_signature:
+    seq:
+      - id: len_signature
+        type: u2
+      - id: signature
+        size: len_signature
   local_file:
     seq:
       - id: header
@@ -95,7 +114,14 @@ types:
         encoding: UTF-8
       - id: extra
         size: len_extra
-        type: extras
+        type:
+          switch-on: has_padding
+          cases:
+            false: extras(section_types::local_file)
+            true: empty
+    instances:
+      has_padding:
+        value: len_extra < 4 and len_extra != 0
     types:
       gp_flags:
         -orig-id: general purpose bit flag
@@ -190,11 +216,9 @@ types:
         encoding: UTF-8
       - id: extra
         size: len_extra
-        type: extras
+        type: extras(section_types::central_dir_entry)
       - id: comment
-        type: str
         size: len_comment
-        encoding: UTF-8
     instances:
       local_header:
         pos: ofs_local_header
@@ -217,10 +241,62 @@ types:
       - id: len_comment
         type: u2
       - id: comment
-        type: str
         size: len_comment
-        encoding: UTF-8
+  zip64_end_of_central_dir:
+    seq:
+      - id: len_record
+        type: u8
+        doc: size of zip64 end of central directory record
+      - id: zip64_end_of_central_dir_body
+        type: zip64_end_of_central_dir_body
+        size: len_record
+    types:
+      zip64_end_of_central_dir_body:
+        seq:
+          - id: version_made_by
+            type: u2
+          - id: version_needed_to_extract
+            type: u2
+          - id: this_disk
+            type: u4
+            doc: number of this disk
+          - id: disk_of_start_of_central_dir
+            type: u4
+            doc: number of the disk with the start of the central directory
+          - id: num_central_dir_entries_on_disk
+            type: u8
+            doc: total number of entries in the central directory on this disk
+          - id: num_central_dir_entries_total
+            type: u8
+            doc: total number of entries in the central directory
+          - id: len_central_dir
+            type: u8
+            doc: size of the central directory
+          - id: ofs_central_dir
+            type: u8
+            doc: |
+              offset of start of central directory with respect
+              to the starting disk number
+          - id: extensible_data
+            size-eos: true
+            doc: zip64 extensible data sector
+  zip64_end_of_central_dir_locator:
+    seq:
+      - id: disk_of_start_of_central_dir
+        type: u4
+        doc: |
+          number of the disk with the start of
+          the zip64 end of central directory
+      - id: ofs_zip64_end_of_central_dir
+        type: u8
+        doc: relative offset of the zip64 end of central directory record
+      - id: total_number_of_disks
+        type: u4
   extras:
+    params:
+      - id: type
+        type: u4
+        enum: section_types
     seq:
       - id: entries
         type: extra_field
@@ -239,8 +315,45 @@ types:
           cases:
             'extra_codes::ntfs': ntfs
             'extra_codes::extended_timestamp': extended_timestamp
+            'extra_codes::infozip_unicode_path': infozip_unicode_path
             'extra_codes::infozip_unix_var_size': infozip_unix_var_size
+            'extra_codes::aex_encryption': aex_encryption
+            'extra_codes::xceed_unicode': xceed_unicode
+            'extra_codes::alzip_code_page': alzip_code_page
+            #'extra_codes::zip64': zip64
     types:
+      aex_encryption:
+        doc-ref: http://www.winzip.com/aes_info.htm
+        seq:
+          - id: version_number
+            type: u2
+          - id: vendor_id
+            size: 2
+          - id: encryption_strength
+            type: u1
+            enum: encryption
+          - id: compression_method
+            type: u2
+            enum: compression
+        enums:
+          encryption:
+            1: bit_128
+            2: bit_192
+            3: bit_256
+      zip64:
+        seq:
+          - id: len_original
+            type: u8
+            doc: Original uncompressed file size
+          - id: len_compressed
+            type: u8
+            doc: Size of compressed data
+          - id: ofs_relative_header
+            type: u8
+            doc: Offset of local header record
+          - id: disk_start_number
+            type: u4
+            doc: Number of the disk on which this file starts
       ntfs:
         doc-ref: 'https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt#L191'
         seq:
@@ -282,11 +395,11 @@ types:
             doc: Unix timestamp
           - id: access_time
             type: u4
-            if: flags.has_access_time
+            if: flags.has_access_time and _parent._parent.type == section_types::local_file
             doc: Unix timestamp
           - id: create_time
             type: u4
-            if: flags.has_create_time
+            if: flags.has_create_time and _parent._parent.type == section_types::local_file
             doc: Unix timestamp
         types:
           info_flags:
@@ -299,6 +412,19 @@ types:
                 type: b1
               - id: reserved
                 type: b5
+      infozip_unicode_path:
+        seq:
+          - id: version
+            type: u1
+            doc: Version of this extra field, currently 1
+          - id: crc32
+            type: u4
+            doc: File name field CRC32 checksum
+          - id: name
+            size-eos: true
+            type: str
+            encoding: utf-8
+            doc: UTF-8 version of the entry file name
       infozip_unix_var_size:
         doc-ref: 'https://github.com/LuaDist/zip/blob/b710806/proginfo/extrafld.txt#L1339'
         seq:
@@ -317,6 +443,21 @@ types:
           - id: gid
             size: len_gid
             doc: GID (Group ID) for a file
+      xceed_unicode:
+        seq:
+          - id: magic
+            contents: 'NUCX'
+          - id: num_characters
+            type: u2
+          - id: data
+            size-eos: true
+            type: str
+            encoding: utf-16le
+      alzip_code_page:
+        doc-ref: 'https://github.com/icsharpcode/SharpZipLib/issues/657'
+        seq:
+          - id: code_page
+            type: u4
 enums:
   compression:
     0: none
@@ -361,11 +502,29 @@ enums:
     0x0066: ibm_s390_comp
     0x4690: poszip_4690
     0x5455: extended_timestamp
+    0x554e: xceed_unicode
+    0x5855: infozip_unix_old
     0x6542: beos
+    0x7075: infozip_unicode_path
     0x756e: asi_unix
     0x7855: infozip_unix
     0x7875: infozip_unix_var_size
+    0x9901: aex_encryption
     0xa11e: apache_commons_compress
     0xa220: microsoft_open_packaging_growth_hint
+    # http://hg.openjdk.java.net/jdk7/jdk7/jdk/file/00cd9dc3c2b5/src/share/classes/java/util/jar/JarOutputStream.java#l46
+    0xcafe: java_jar
+    # https://android.googlesource.com/platform/tools/apksig/+/87d6acee83378201b/src/main/java/com/android/apksig/ApkSigner.java#74
+    # https://developer.android.com/studio/command-line/zipalign
+    0xd935: zip_align
+    0xe57a: alzip_code_page
     0xfd4a: sms_qdos
-    0x9901: aex_encryption
+  section_types:
+    0x0201: central_dir_entry
+    0x0403: local_file
+    0x0505: digital_signature
+    0x0605: end_of_central_dir
+    0x0606: zip64_end_of_central_dir
+    0x0706: zip64_end_of_central_dir_locator
+    0x0806: archive_extra_data
+    0x0807: data_descriptor
