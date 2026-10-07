@@ -153,7 +153,6 @@ types:
         enum: node_group_types
         doc: node group type
       - id: padding
-        size: 2
         contents: [0x00, 0x00]
         doc: reserved for future, zeroes
   padding_byte:
@@ -298,7 +297,6 @@ types:
         type: u4
         doc: summarized size of all extended attributes in bytes
       - id: padding1
-        size: 4
         contents: [0x00, 0x00, 0x00, 0x00]
       - id: xattr_names
         type: u4
@@ -551,7 +549,6 @@ types:
     seq:
       - id: padding0
         -orig-id: padding
-        size: 2
         contents: [0x00, 0x00]
         doc: reserved for future, zeroes
       - id: key_hash
@@ -613,7 +610,6 @@ types:
         enum: compression
         doc: default compression algorithm (%UBIFS_COMPR_LZO, etc)
       - id: padding1
-        size: 2
         contents: [0x00, 0x00]
         doc: reserved for future, zeroes
       - id: reserve_pool_uid
