@@ -226,7 +226,7 @@ types:
     -orig-id: ubifs_idx_node
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L819-L831 Git tag "v7.2"
     seq:
-      - id: num_children
+      - id: num_branches
         -orig-id: child_cnt
         type: u2
         doc: number of child index nodes
@@ -236,7 +236,7 @@ types:
       - id: branches
         type: branch
         repeat: expr
-        repeat-expr: num_children
+        repeat-expr: num_branches
         doc: LEB number / offset / length / key branches
   inode_header:
     -orig-id: ubifs_ino_node
@@ -735,7 +735,7 @@ types:
           This can't be added to the struct type definition because @key is a
           dynamically sized element already.
     instances:
-      branch_target:
+      target:
         pos: target_leb * _root.super.node_header.leb_size + ofs_target
         size: len_target
         io: _root._io
