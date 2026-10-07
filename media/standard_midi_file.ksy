@@ -173,6 +173,7 @@ types:
       - id: pressure
         type: u1
   pitch_bend_event:
+    doc-ref: https://midi.org/summary-of-midi-1-0-messages
     seq:
       - id: b1
         type: u1
@@ -185,7 +186,6 @@ types:
       adj_bend_value:
         value: bend_value - 0x2000
         doc: Pitch bend value centered at zero (-8192..8191).
-    doc-ref: https://midi.org/summary-of-midi-1-0-messages
   time_code_quarter_frame_event:
     seq:
       - id: data
