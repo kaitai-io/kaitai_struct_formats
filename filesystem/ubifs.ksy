@@ -8,6 +8,7 @@ meta:
     - filesystem
     - linux
   license: GPL-2.0-only
+  ks-version: '0.11'
   endian: le
   encoding: UTF-8
 doc: |
