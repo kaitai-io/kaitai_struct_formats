@@ -184,6 +184,9 @@ types:
         -orig-id: compr_type
         type: u2
         enum: compression
+        valid:
+          # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/compress.c#L201-L204 (Git tag "v7.2")
+          in-enum: true
         doc: compression type (%UBIFS_COMPR_NONE, %UBIFS_COMPR_LZO, etc)
       - id: len_compressed_data
         -orig-id: compr_size
@@ -209,6 +212,9 @@ types:
         -orig-id: type
         type: u1
         enum: inode_types
+        valid:
+          # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/replay.c#L487-L488 (Git tag "v7.2")
+          in-enum: true
         doc: type of the target inode (%UBIFS_ITYPE_REG, %UBIFS_ITYPE_DIR, etc)
       - id: len_name
         -orig-id: nlen
@@ -307,6 +313,28 @@ types:
         -orig-id: compr_type
         type: u2
         enum: compression
+        valid:
+          # Values outside the enum are never written: Linux (v7.2)
+          # [writes](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/journal.c#L594)
+          # its in-memory copy, which is a
+          # [2-bit field](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs.h#L409),
+          # and `mkfs.ubifs` (mtd-utils v2.3.1)
+          # [writes](https://github.com/sigma-star/mtd-utils/blob/053ee1038e5dedae61a88cadfb7bdfe9894d8bb6/ubifs-utils/mkfs.ubifs/mkfs.ubifs.c#L1496)
+          # the compressor chosen with
+          # [`-x`](https://github.com/sigma-star/mtd-utils/blob/053ee1038e5dedae61a88cadfb7bdfe9894d8bb6/ubifs-utils/mkfs.ubifs/mkfs.ubifs.c#L665-L688)
+          # (or a default).
+          #
+          # The kernel itself accepts any value when reading: it
+          # [copies](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/super.c#L152)
+          # the value into that field, which keeps only its low 2 bits, so its
+          # [range check in
+          # `validate_inode()`](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/super.c#L80-L83)
+          # never fails.
+          #
+          # This `valid` is therefore deliberately stricter than the kernel. A
+          # value outside the enum means a corrupted file system, which isn't
+          # worth supporting by taking the value modulo 4 as the kernel does.
+          in-enum: true
         doc: compression type used for this inode
       - id: padding2
         type: padding_byte
@@ -554,13 +582,20 @@ types:
       - id: key_hash
         type: u1
         enum: hashes
+        valid:
+          # Linux (v7.2) [sets
+          # `c->key_hash`](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L691-L701)
+          # only for the values in the enum, and [`validate_sb()`
+          # rejects](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L384-L387)
+          # the superblock if it's left unset.
+          in-enum: true
         doc: type of hash function used in keys
       - id: key_fmt
         type: u1
         enum: key_formats
         valid:
-          any-of:
-            - key_formats::simple
+          # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L705-L713 (Git tag "v7.2")
+          in-enum: true
         doc: format of the key
       - id: flags
         type: u4
@@ -608,6 +643,30 @@ types:
         -orig-id: default_compr
         type: u2
         enum: compression
+        valid:
+          # Values outside the enum are never written: Linux (v7.2), when
+          # formatting an empty volume,
+          # [writes](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L209-L212)
+          # either a [2-bit field](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs.h#L950)
+          # (set by the `compr` mount option) or its
+          # [default compressor](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L54-L66),
+          # and `mkfs.ubifs` (mtd-utils v2.3.1)
+          # [writes](https://github.com/sigma-star/mtd-utils/blob/053ee1038e5dedae61a88cadfb7bdfe9894d8bb6/ubifs-utils/mkfs.ubifs/mkfs.ubifs.c#L2535)
+          # the compressor chosen with
+          # [`-x`](https://github.com/sigma-star/mtd-utils/blob/053ee1038e5dedae61a88cadfb7bdfe9894d8bb6/ubifs-utils/mkfs.ubifs/mkfs.ubifs.c#L665-L688)
+          # (or a default).
+          #
+          # The kernel itself accepts any value when reading: it
+          # [copies](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L728-L729)
+          # the value into a [2-bit field](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs.h#L1312),
+          # which keeps only its low 2 bits, so its
+          # [range check in `validate_sb()`](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L479-L482)
+          # never fails.
+          #
+          # This `valid` is therefore deliberately stricter than the kernel. A
+          # value outside the enum means a corrupted file system, which isn't
+          # worth supporting by taking the value modulo 4 as the kernel does.
+          in-enum: true
         doc: default compression algorithm (%UBIFS_COMPR_LZO, etc)
       - id: padding1
         contents: [0x00, 0x00]
@@ -645,6 +704,9 @@ types:
       - id: hash_algo
         type: u2
         enum: hash_algos
+        valid:
+          # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L568-L573 (Git tag "v7.2")
+          in-enum: true
         if: authenticated
         doc: The hash algo used for this filesystem
         doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L549-L573 Git tag "v7.2"
