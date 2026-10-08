@@ -18,6 +18,10 @@ doc: |
   format that saves whole state of suite: current scene, animations,
   all software settings, extensions, etc.
 
+  This specification supports the legacy little-endian layout and the
+  Blender 5.0+ layout with a 17-byte file header and 64-bit block lengths
+  and counts.
+
   Internally, .blend format is a hybrid semi-self-descriptive
   format. On top level, it contains a simple header and a sequence of
   file blocks, which more or less follow typical [TLV
@@ -35,45 +39,79 @@ instances:
     value: 'blocks[blocks.size - 2].body.as<dna1_body>.structs'
 types:
   header:
+    doc-ref: https://github.com/blender/blender/blob/v5.0.0/source/blender/blenloader_core/BLO_core_blend_header.hh
     seq:
       - id: magic
         contents: BLENDER
-      - id: ptr_size_id
+      - id: first_byte
         type: u1
-        enum: ptr_size
-        doc: Size of a pointer; all pointers in the file are stored in this format
-      - id: endian
+        doc: Legacy pointer size marker, or the first digit of the modern header size (17)
+      - id: modern_header_suffix
+        contents: '7-01v'
+        if: not is_legacy
+        doc: Remainder of the 17-byte header size, 64-bit pointer marker, format version 01 and little-endian marker
+      - id: endian_legacy
         type: u1
         doc: Type of byte ordering used
         enum: endian
+        if: is_legacy
       - id: version
         type: str
-        size: 3
+        size: 'is_legacy ? 3 : 4'
         encoding: ASCII
         doc: Blender version used to save this file
     instances:
+      is_legacy:
+        value: first_byte != 0x31
+        doc: Whether this file uses the 12-byte header and small block headers
+      file_format_version:
+        value: 'is_legacy ? 0 : 1'
+        doc: Low-level file format version, independent of the Blender application version
+      ptr_size_id:
+        value: 'is_legacy ? first_byte : 0x2d'
+        enum: ptr_size
+        doc: Size of a pointer; modern files always use 64-bit pointers
+      endian:
+        value: 'is_legacy ? endian_legacy : endian::le'
+        doc: Type of byte ordering used; modern files are always little-endian
       psize:
         value: 'ptr_size_id == ptr_size::bits_64 ? 8 : 4'
         doc: Number of bytes that a pointer occupies
   file_block:
+    doc-ref: https://github.com/blender/blender/blob/v5.0.0/source/blender/blenloader_core/BLO_core_bhead.hh
     seq:
       - id: code
         type: str
         size: 4
         encoding: ASCII
         doc: Identifier of the file block
-      - id: len_body
+      - id: len_body_small
         type: u4
+        if: _root.hdr.is_legacy
         doc: Total length of the data after the header of file block
+      - id: sdna_index_large
+        type: u4
+        if: not _root.hdr.is_legacy
+        doc: Index of the SDNA structure in a modern block header
       - id: mem_addr
         size: _root.hdr.psize
         doc: Memory address the structure was located when written to disk
-      - id: sdna_index
+      - id: sdna_index_small
         type: u4
+        if: _root.hdr.is_legacy
         doc: Index of the SDNA structure
-      - id: count
+      - id: len_body_large
+        type: s8
+        if: not _root.hdr.is_legacy
+        doc: Total length of the data after a modern block header
+      - id: count_small
         type: u4
-        doc: Number of structure located in this file-block
+        if: _root.hdr.is_legacy
+        doc: Number of structures in a legacy file block
+      - id: count_large
+        type: s8
+        if: not _root.hdr.is_legacy
+        doc: Number of structures in a modern file block
       - id: body
         size: len_body
         type:
@@ -81,6 +119,18 @@ types:
           cases:
             '"DNA1"': dna1_body
     instances:
+      len_body:
+        # Cast the legacy branch and the result to preserve 64-bit types in
+        # generated Go and Rust code; the outer cast fixes the instance type.
+        value: '(_root.hdr.is_legacy ? len_body_small.as<s8> : len_body_large).as<s8>'
+        doc: Total length of the data after the header of file block
+      sdna_index:
+        value: '(_root.hdr.is_legacy ? sdna_index_small : sdna_index_large).as<u4>'
+        doc: Index of the SDNA structure
+      count:
+        # As with len_body, both casts keep the generated value at 64 bits.
+        value: '(_root.hdr.is_legacy ? count_small.as<s8> : count_large).as<s8>'
+        doc: Number of structures in this file block
       sdna_struct:
         value: _root.sdna_structs[sdna_index]
         if: sdna_index != 0
