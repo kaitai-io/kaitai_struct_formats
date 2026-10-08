@@ -115,9 +115,9 @@ types:
             node_types::reference: reference_header
             node_types::index: index_header
             node_types::commit_start: commit_start_header
-            #node_types::orphan:
-            #node_types::authentication
-            #node_types::signature
+            node_types::orphan: orphan_header
+            node_types::authentication: authentication_header
+            node_types::signature: signature_header
 
   # Common types
   common_header:
@@ -526,6 +526,19 @@ types:
         type: u8
         repeat: eos
         doc: inode numbers of orphans
+  authentication_header:
+    -orig-id: ubifs_auth_node
+    doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L774-L782 Git tag "v7.2"
+    seq:
+      - id: hmac
+        size-eos: true
+        doc: |
+          HMAC authenticating the journal before this node, keyed with the
+          file system's authentication key (which is not stored on flash).
+          The kernel [uses](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/auth.c#L275-L276)
+          HMAC with the hash algorithm in `<superblock_header>.hash_algo`
+          ([checked when mounting](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L575-L580)),
+          so `hmac` is as long as its digest, e.g. 32 bytes for SHA-256.
   padding_header:
     -orig-id: ubifs_pad_node
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L606-L615 Git tag "v7.2"
