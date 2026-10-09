@@ -463,8 +463,20 @@ types:
         -orig-id: gc_lnum
         type: u4
         doc: |
-          LEB reserved for garbage collection (%-1 value means the
-          LEB was not reserved and should be reserved on mount)
+          LEB reserved for garbage collection, which must be in the main area.
+
+          The [comment above `struct ubifs_mst_node`](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L695-L696)
+          says that -1 (`0xffff_ffff`) means the LEB was not reserved and should
+          be reserved on mount. However, Linux refuses to mount a file system
+          with -1. Linux
+          [stores](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/master.c#L362)
+          the field in an
+          [`int`](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs.h#L1424),
+          so `0xffff_ffff` becomes -1. Then -1 is rejected by the condition
+          `c->gc_lnum < c->main_first`, because the main area
+          [starts](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L775-L777)
+          after the superblock, master, log, LPT and orphan areas.
+        doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/master.c#L214-L217 Git tag "v7.2"
       - id: leb_index_head
         -orig-id: ihead_lnum
         type: u4
