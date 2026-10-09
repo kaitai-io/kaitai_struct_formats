@@ -29,30 +29,30 @@ doc-ref:
   - http://www.linux-mtd.infradead.org/doc/ubifs.pdf
 seq:
   - id: lebs
-    size: super.node_header.leb_size
+    size: superblock.node_header.leb_size
     repeat: expr
-    repeat-expr: super.node_header.num_leb
+    repeat-expr: superblock.node_header.num_leb
 
 # some instances to access important data structures directly
 instances:
-  super:
+  superblock:
     pos: 0
     type: superblock_node
     doc: |
       The superblock node will always be at the start of
       the first LEB.
   master_1:
-    pos: super.node_header.leb_size
+    pos: superblock.node_header.leb_size
     type: masterblock_node
-    size: super.node_header.leb_size
+    size: superblock.node_header.leb_size
     doc: |
       LEB1 contains a copy of the master node. Technically the master node
       could reside anywhere in the master area (LEB1 and LEB2), but on a
       cleanly generated system it will almost certainly be at the beginning
       of LEB1.
   master_2:
-    pos: super.node_header.leb_size * 2
-    size: super.node_header.leb_size
+    pos: superblock.node_header.leb_size * 2
+    size: superblock.node_header.leb_size
     type: masterblock_node
     doc: |
       LEB2 contains a copy of the master node. Technically the master node
@@ -60,8 +60,8 @@ instances:
       cleanly generated system it will almost certainly be at the beginning
       of LEB2.
   index:
-    pos: super.node_header.leb_size * master_1.node_header.leb_root
-    size: super.node_header.leb_size
+    pos: superblock.node_header.leb_size * master_1.node_header.leb_root
+    size: superblock.node_header.leb_size
     type: dummy
     doc: The LEB containing the index is declared in the master node.
   index_root:
@@ -814,7 +814,7 @@ types:
           dynamically sized element already.
     instances:
       target:
-        pos: target_leb * _root.super.node_header.leb_size + ofs_target
+        pos: target_leb * _root.superblock.node_header.leb_size + ofs_target
         size: len_target
         io: _root._io
         type: block
