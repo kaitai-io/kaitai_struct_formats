@@ -651,6 +651,12 @@ types:
       - id: fmt_version
         type: u4
         valid:
+          # Linux (v7.2) also
+          # [accepts](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L684-L689)
+          # version 3, but that was a development format: UBIFS
+          # [went into mainline](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L34-L35)
+          # kernel with version 4, and neither Linux nor `mkfs.ubifs` has written
+          # version 3 since.
           min: 4
         doc: UBIFS on-flash format version
       - id: default_compression
