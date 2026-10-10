@@ -297,11 +297,10 @@ types:
         type: image_data_mask
         if: has_mask
       - id: image_data_field
-        if: has_mask
-        size: _parent.header.linfo[idx].length_image_segment.to_i - image_data_mask.total_size
+        size: 'has_mask ? _parent.header.linfo[idx].length_image_segment.to_i - image_data_mask.total_size : _parent.header.linfo[idx].length_image_segment.to_i'
     instances:
       has_mask:
-        value: image_sub_header.img_compression.substring(0, 2) == 'MM'
+        value: image_sub_header.img_compression.substring(0, 1) == 'M' or image_sub_header.img_compression.substring(1, 2) == 'M'
   image_sub_header:
     seq:
       - id: file_part_type
@@ -371,6 +370,7 @@ types:
         -orig-id: igeolo
         type: str
         size: 60
+        if: image_coordinate_rep != ' '
       - id: num_img_comments
         -orig-id: nicom
         type: str
@@ -388,6 +388,7 @@ types:
         -orig-id: comrat
         type: str
         size: 4
+        if: img_compression.substring(0, 1) != 'N'
       - id: num_bands
         -orig-id: nbands
         type: str
@@ -630,11 +631,10 @@ types:
         type: str
         size: 3
         if: header_data_length.to_i != 0
-      - id: header_data
-        type: u1
-        if: header_data_length.to_i > 2
-        repeat: expr
-        repeat-expr: header_data_length.to_i - 3
+      - id: tres
+        type: tre_entries
+        size: header_data_length.to_i - 3
+        if: header_data_length.to_i != 0
   text_segment:
     params:
       - id: idx
@@ -821,3 +821,8 @@ types:
         type: str
         size: edata_length.to_i
         doc: 'REDATA or CEDATA'
+  tre_entries:
+    seq:
+      - id: entries
+        type: tre
+        repeat: eos
