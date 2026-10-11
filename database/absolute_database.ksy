@@ -160,16 +160,24 @@ types:
     doc: |
       General form of a data page (page_type = data) body: slot
       occupancy bitmap, padding up to the base of the slot area, then
-      fixed-size record slots. The four geometry constants are
-      per-table values derived from the table schema (which is kept
-      in the table's blob_data chain, see catalog_entry) and are not
-      recoverable from the page alone, so they come as parameters:
-      parse the page body (disk_page body bytes, see disk_page) with
-      this type, passing the geometry. A cleared bitmap bit marks a
-      deleted record; slot bytes are not zeroed and keep stale copies
-      of older data, so only records reachable from the table's
-      B-tree are live. The field layout inside a slot is derived from
-      the table schema and stays out of scope of this spec.
+      fixed-size record slots. All geometry hangs on one per-table
+      constant — the record tail reserve (tail = record stride minus
+      the sum of the schema field sizes; observed 0..5 bytes): the
+      record stride is schema_sum + tail, and the slot area base is
+      bitmap_width + tail — the same reserve is appended to the
+      bitmap block and to every record (verified on all 9 tables of
+      the examined database). The bitmap covers the page capacity
+      (capacity = (page body size - base) / record stride), not the
+      count of live records. The geometry constants derive from the
+      table schema (kept in the table's blob_data chain, see
+      catalog_entry) and are not recoverable from the page alone, so
+      they come as parameters: parse the page body (disk_page body
+      bytes, see disk_page) with this type, passing the geometry.
+      A cleared bitmap bit marks a deleted record; slot bytes are not
+      zeroed and keep stale copies of older data, so only records
+      reachable from the table's B-tree are live. The field layout
+      inside a slot is derived from the table schema and stays out of
+      scope of this spec.
     params:
       - id: len_slot_bitmap
         type: u1
@@ -179,17 +187,18 @@ types:
         doc: offset of the slot area from the start of the body
       - id: len_slots
         type: u2
-        doc: size of one record slot
+        doc: size of one record slot (schema field sizes + tail)
       - id: num_slots
         type: u1
+        doc: page capacity in record slots (not the count of live records)
     seq:
       - id: slot_bitmap
         size: len_slot_bitmap
         doc: bit i (LSB of byte i/8) set — slot i holds a live record
       - id: pad
         size: base - len_slot_bitmap
-        doc: purpose not established (observed 1..5 bytes, always wider
-          than the bitmap)
+        doc: equals the record tail reserve (the same constant that
+          pads every record's schema fields up to the slot stride)
       - id: slots
         size: len_slots
         repeat: expr
