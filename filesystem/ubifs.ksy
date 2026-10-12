@@ -569,7 +569,13 @@ types:
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L774-L782 Git tag "v7.2"
     seq:
       - id: hmac
-        size-eos: true
+        # When Linux (v7.2)
+        # [checks](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/replay.c#L616-L625)
+        # the `hmac`, it
+        # [compares](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs.h#L1609-L1613)
+        # as many bytes as the digest is long (`c->hmac_desc_len`), regardless
+        # of the node length.
+        size: _root.superblock.node_header.len_hash
         doc: |
           HMAC authenticating the journal before this node, keyed with the
           file system's authentication key (which is not stored on flash).
