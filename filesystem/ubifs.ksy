@@ -23,6 +23,26 @@ doc: |
   "master area" and both contain a copy of the master node, which includes
   information about where to find the index node, which is then used to access
   all the files on the file system.
+
+  **Limitations of this Kaitai Struct implementation:**
+
+  1. It only supports UBIFS images created by `mkfs.ubifs` (such as those in
+     firmware images built by OpenWrt), not file systems modified after
+     creation, e.g. by writing files to them on a running Linux system. The
+     Linux kernel appends a new copy of the master node to LEB1 and LEB2
+     whenever it mounts the file system read-write, unmounts it, or commits
+     changes (updates the index on flash to include them). When mounting, Linux
+     uses the
+     [last copy](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/master.c#L84-L165),
+     whereas this implementation reads the first one (`master_1`), which still
+     describes the file system as it was created. Changes made since then are
+     therefore not visible via `index_root`.
+  2. Changes that have not been committed yet are not in the index at all, so
+     they are not visible via `index_root` either. Until they are committed,
+     UBIFS keeps them only in the journal. This only matters for file systems
+     that were not unmounted cleanly, because unmounting
+     [commits](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/super.c#L486-L493)
+     all changes.
 doc-ref:
   - https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h Git tag "v7.2"
   - https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/key.h Git tag "v7.2"
