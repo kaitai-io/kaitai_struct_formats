@@ -276,7 +276,12 @@ types:
         type: branch
         repeat: expr
         repeat-expr: num_branches
-        doc: LEB number / offset / length / key branches
+        doc: |
+          LEB number / offset / length / key branches
+
+          All branches have the same size, which is 20 bytes (with the simple
+          key format) plus the hash length in an authenticated file system.
+        doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/misc.h#L186-L205 Git tag "v7.2"
   inode_header:
     -orig-id: ubifs_ino_node
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L480-L539 Git tag "v7.2"
@@ -800,6 +805,60 @@ types:
       authenticated:
         value: flags & 0x20 == 0x20
         doc: this filesystem contains hashes for authentication
+      len_hash:
+        # Linux (v7.2) sets `c->hash_len` to the
+        # [digest size](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/auth.c#L309)
+        # of the hash algorithm it is told to use at mount time. Mounting
+        # [fails](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L568-L580)
+        # unless that algorithm is the one in `hash_algo`, so the superblock
+        # determines it. Without authentication, `c->hash_len` stays 0.
+        #
+        # Digest sizes are as in the kernel's
+        # [`hash_digest_size`](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/lib/crypto/hash_info.c#L38-L62)
+        # table. Every value of `hash_algos` is listed, so the final `-1` is
+        # unreachable. It is only there because the ternary operator needs an
+        # "else" value, and if a value added to the enum later is not added
+        # here, `-1` makes parsing fail (on a negative size) instead of
+        # silently using a wrong length.
+        value: |
+          not authenticated
+            ? 0 :
+          hash_algo == hash_algos::md4 or
+          hash_algo == hash_algos::md5 or
+          hash_algo == hash_algos::ripe_md_128 or
+          hash_algo == hash_algos::tgr_128
+            ? 16 :
+          hash_algo == hash_algos::sha1 or
+          hash_algo == hash_algos::ripe_md_160 or
+          hash_algo == hash_algos::tgr_160
+            ? 20 :
+          hash_algo == hash_algos::tgr_192
+            ? 24 :
+          hash_algo == hash_algos::sha224
+            ? 28 :
+          hash_algo == hash_algos::sha256 or
+          hash_algo == hash_algos::ripe_md_256 or
+          hash_algo == hash_algos::wp_256 or
+          hash_algo == hash_algos::sm3_256 or
+          hash_algo == hash_algos::streebog_256 or
+          hash_algo == hash_algos::sha3_256
+            ? 32 :
+          hash_algo == hash_algos::ripe_md_320
+            ? 40 :
+          hash_algo == hash_algos::sha384 or
+          hash_algo == hash_algos::wp_384 or
+          hash_algo == hash_algos::sha3_384
+            ? 48 :
+          hash_algo == hash_algos::sha512 or
+          hash_algo == hash_algos::wp_512 or
+          hash_algo == hash_algos::streebog_512 or
+          hash_algo == hash_algos::sha3_512
+            ? 64
+            : -1
+        doc: |
+          Length in bytes of the hash of a node (`c->hash_len` in Linux), e.g.
+          in each branch of an index node. In an authenticated file system, it
+          is determined by `hash_algo`. Otherwise, it is 0.
   truncation_header:
     -orig-id: ubifs_trun_node
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L586-L604 Git tag "v7.2"
@@ -841,10 +900,12 @@ types:
         # assume "simple key length" as "simple key" is
         # the only key supported right now
         type: key
+      - id: hash
+        size: _root.superblock.node_header.len_hash
         doc: |
-          In an authenticated UBIFS we have the hash of the referenced node after @key.
-          This can't be added to the struct type definition because @key is a
-          dynamically sized element already.
+          Hash of the target node. It is empty in a file system without
+          authentication (see `<superblock_header>.len_hash`).
+        doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs.h#L1642-L1654 Git tag "v7.2"
     instances:
       target:
         pos: target_leb * _root.superblock.node_header.leb_size + ofs_target
@@ -1052,6 +1113,9 @@ enums:
       id: extended_attribute
       -orig-id: UBIFS_XENT_KEY
       doc: extended attribute node key
+  # When adding a value here, also add its digest size to
+  # `<superblock_header>.len_hash`, otherwise `len_hash` becomes `-1`, and
+  # parsing an authenticated file system fails.
   # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/include/uapi/linux/hash_info.h#L17-L42 (Git tag "v7.2")
   hash_algos:
     0:
