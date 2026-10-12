@@ -21,8 +21,8 @@ doc: |
   LEB (LEB0) contains the superblock node, which includes information about LEB
   size, amongst others. The next two LEBs (LEB1 and LEB2) comprise the so called
   "master area" and both contain a copy of the master node, which includes
-  information about where to find the index node, which is then used to access
-  all the files on the file system.
+  information about where to find the root index node, which is then used to
+  access all the files on the file system.
 
   **Limitations of this Kaitai Struct implementation:**
 
@@ -66,29 +66,42 @@ instances:
     type: masterblock_node
     size: superblock.node_header.leb_size
     doc: |
-      LEB1 contains a copy of the master node. Technically the master node
-      could reside anywhere in the master area (LEB1 and LEB2), but on a
-      cleanly generated system it will almost certainly be at the beginning
-      of LEB1.
+      The first copy of the master node in LEB1. This Kaitai Struct
+      implementation uses it to locate `index_root`. In an image created by
+      `mkfs.ubifs`, it is the only copy in LEB1.
+    doc-ref: https://github.com/sigma-star/mtd-utils/blob/053ee1038e5dedae61a88cadfb7bdfe9894d8bb6/ubifs-utils/mkfs.ubifs/mkfs.ubifs.c#L2627-L2633 Git tag "v2.3.1"
   master_2:
     pos: superblock.node_header.leb_size * 2
     size: superblock.node_header.leb_size
     type: masterblock_node
     doc: |
-      LEB2 contains a copy of the master node. Technically the master node
-      could reside anywhere in the master area (LEB1 and LEB2), but on a
-      cleanly generated system it will almost certainly be at the beginning
-      of LEB2.
+      The first copy of the master node in LEB2. In an image created by
+      `mkfs.ubifs`, it is the same as `master_1` except for the sequence
+      number and CRC in the common header. Linux keeps the master node in both
+      LEB1 and LEB2 for redundancy, and when mounting, it checks that the
+      copies in both match.
+    doc-ref:
+      - https://github.com/sigma-star/mtd-utils/blob/053ee1038e5dedae61a88cadfb7bdfe9894d8bb6/ubifs-utils/mkfs.ubifs/mkfs.ubifs.c#L2627-L2633 Git tag "v2.3.1"
+      - https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/master.c#L114-L130 Git tag "v7.2"
   index:
     pos: superblock.node_header.leb_size * master_1.node_header.leb_root
     size: superblock.node_header.leb_size
     type: dummy
-    doc: The LEB containing the index is declared in the master node.
+    doc: |
+      The LEB containing the root index node, as given by `leb_root` in
+      `master_1`.
+
+      This instance only provides the substream for `index_root`, which can then
+      use `ofs_root` (an offset within the LEB) as its `pos` directly.
   index_root:
     pos: master_1.node_header.ofs_root
     io: index._io
     type: index_block
-    doc: The offset into the index LEB for the root index
+    doc: |
+      The root index node, in the `index` LEB at the offset given by
+      `ofs_root` in `master_1`. All other index nodes, and through them all
+      the files, are reached from it by recursively following the `target` of
+      each of the `branches`.
 
 types:
   dummy: {}
