@@ -243,10 +243,17 @@ types:
       - id: key
         size: 16
         type: key
+        valid:
+          # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/replay.c#L497-L500 (Git tag "v7.2")
+          expr: _.type == key_types::directory or _.type == key_types::extended_attribute
         doc: node key
       - id: inode_number
         -orig-id: inum
         type: u8
+        valid:
+          # Linux (v7.2) [rejects](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/replay.c#L491)
+          # values above [`MAX_INUM`](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs.h#L84).
+          max: 0xffff_ffff
         doc: target inode number
       - id: padding1
         contents: [0x00]
