@@ -217,6 +217,10 @@ types:
       - id: len_uncompressed
         -orig-id: size
         type: u4
+        valid:
+          # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/file.c#L64-L66 (Git tag "v7.2")
+          min: 1
+          max: 4096
         doc: uncompressed data size in bytes
       - id: compression
         -orig-id: compr_type
