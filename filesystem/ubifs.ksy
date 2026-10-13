@@ -961,6 +961,15 @@ types:
       - id: type
         type: b3
         enum: key_types
+        valid:
+          # Linux (v7.2) [rejects other key types in
+          # branches](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/tnc_misc.c#L347-L357).
+          # The key in an inode, data, directory entry or extended attribute
+          # entry node has the same type, because
+          # [`ubifs_tnc_read_node()`](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/tnc_misc.c#L500-L508)
+          # checks that the node's key equals the key in the branch that
+          # points to the node.
+          in-enum: true
         doc: Type of the key, which matches the type of the node.
       - id: unused
         size-eos: true
