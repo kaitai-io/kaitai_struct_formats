@@ -110,6 +110,8 @@ types:
     seq:
       - id: header
         type: common_header
+        valid:
+          expr: _.node_type == node_types::master
       - id: node_header
         size: header.len_full_node - header._sizeof
         type: master_header
@@ -117,6 +119,8 @@ types:
     seq:
       - id: header
         type: common_header
+        valid:
+          expr: _.node_type == node_types::index
       - id: node_header
         size: header.len_full_node - header._sizeof
         type: index_header
@@ -124,6 +128,8 @@ types:
     seq:
       - id: header
         type: common_header
+        valid:
+          expr: _.node_type == node_types::superblock
       - id: node_header
         size: header.len_full_node - header._sizeof
         type: superblock_header
