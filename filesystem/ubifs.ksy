@@ -692,18 +692,36 @@ types:
         doc: count of LEBs used by file-system
       - id: max_leb_cnt
         type: u4
+        valid:
+          # Linux (v7.2)
+          # [rejects](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L428-L432)
+          # a `max_leb_cnt` smaller than the LEB count. Linux may first
+          # [increase the LEB
+          # count](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L756-L767),
+          # but never above `max_leb_cnt`, so Linux rejects the superblock
+          # exactly when `num_leb` is greater than `max_leb_cnt`.
+          min: num_leb
         doc: maximum count of LEBs used by file-system
       - id: max_bud_bytes
         type: u8
         doc: maximum amount of data stored in buds
       - id: log_lebs
         type: u4
+        valid:
+          # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L406-L412 (Git tag "v7.2")
+          min: 2
         doc: log size in logical eraseblocks
       - id: lpt_lebs
         type: u4
+        valid:
+          # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L406-L412 (Git tag "v7.2")
+          min: 2
         doc: number of LEBs used for lprops table
       - id: orph_lebs
         type: u4
+        valid:
+          # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L406-L412 (Git tag "v7.2")
+          min: 1
         doc: number of LEBs used for recording orphans
       - id: jhead_cnt
         type: u4
