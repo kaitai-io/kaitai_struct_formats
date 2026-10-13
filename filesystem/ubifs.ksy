@@ -276,8 +276,7 @@ types:
       - id: name
         size: len_name
         doc: |
-          Name, followed by a [zero byte that is not counted in
-          `len_name`](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/replay.c#L487-L489).
+          Name of the entry.
 
           It is kept as bytes rather than decoded as a string: names in a
           directory whose inode has `<inode_header>.encrypted` set are
@@ -290,6 +289,11 @@ types:
           crafted, since an accidental corruption would most likely fail the
           node's
           [CRC check](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/io.c#L287-L293).
+      - id: name_terminator
+        contents: [0x00]
+        doc: |
+          Zero byte after `name`, [not counted in
+          `len_name`](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/replay.c#L487-L489).
   index_header:
     -orig-id: ubifs_idx_node
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L819-L831 Git tag "v7.2"
