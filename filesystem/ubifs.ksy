@@ -938,9 +938,17 @@ types:
         doc: reserved for future, zeroes
       - id: old_size
         type: u8
+        valid:
+          # Linux (v7.2) [requires `new_size` to be
+          # smaller](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/replay.c#L786-L791),
+          # so `old_size` can't be 0.
+          min: 1
         doc: size before truncation
       - id: new_size
         type: u8
+        valid:
+          # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/replay.c#L786-L791 (Git tag "v7.2")
+          max: old_size - 1
         doc: size after truncation
     doc: This node exists only in the journal and never goes to the main area.
 
