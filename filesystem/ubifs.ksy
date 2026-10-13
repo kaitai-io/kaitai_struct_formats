@@ -931,24 +931,28 @@ types:
     seq:
       - id: inode_number
         type: u4
+        doc: |
+          Number of the inode that the node belongs to: the parent directory
+          for a directory entry, the inode that the attribute belongs to for an
+          extended attribute entry.
       - id: value
         # With `meta/bit-endian: le`, the first field gets the least
         # significant bits, so `value` comes before `type`.
         type: b29
+        doc: |
+          Block number for a data node, hash of the name (see
+          `<superblock_header>.key_hash`) for a directory or extended
+          attribute entry, 0 for an inode node.
       - id: type
         type: b3
         enum: key_types
+        doc: Type of the key, which matches the type of the node.
       - id: unused
         size-eos: true
         doc: |
           Rest of the field holding the key: 8 zero bytes in `inode_header`,
           `directory_header` and `data_header`, empty in `branch`.
     doc: |
-      Keys are 64-bits long. The first 32-bits are the inode number, or the
-      parent inode number in case of a directory entry. The next 3 bits are
-      the node type. The last 29 bits are the block number (data entries)
-      or the directory entry hash in case of a directory entry.
-
       Inode nodes (`inode_header`), directory and extended attribute entry
       nodes (`directory_header`) and data nodes (`data_header`) store keys in a
       16-byte field (`UBIFS_MAX_KEY_LEN`). The simple key format, the only one
