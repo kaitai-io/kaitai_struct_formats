@@ -644,6 +644,9 @@ types:
     seq:
       - id: type
         type: u4
+        # `UBIFS_SIGNATURE_TYPE_PKCS7`, the only type that Linux supports:
+        # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/auth.c#L226-L231 (Git tag "v7.2")
+        valid: 1
       - id: len_signature
         -orig-id: len
         type: u4
