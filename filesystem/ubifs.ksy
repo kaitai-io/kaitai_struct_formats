@@ -208,7 +208,8 @@ types:
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L567-L584 Git tag "v7.2"
     seq:
       - id: key
-        type: longkey
+        size: 16
+        type: key
         doc: node key
       - id: len_uncompressed
         -orig-id: size
@@ -233,7 +234,8 @@ types:
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L541-L565 Git tag "v7.2"
     seq:
       - id: key
-        type: longkey
+        size: 16
+        type: key
         doc: node key
       - id: inode_number
         -orig-id: inum
@@ -287,7 +289,8 @@ types:
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L480-L539 Git tag "v7.2"
     seq:
       - id: key
-        type: longkey
+        size: 16
+        type: key
         doc: node key
       - id: sequence_number
         -orig-id: creat_sqnum
@@ -651,9 +654,8 @@ types:
       - id: key_fmt
         type: u1
         enum: key_formats
-        valid:
-          # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L705-L713 (Git tag "v7.2")
-          in-enum: true
+        # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L705-L713 (Git tag "v7.2")
+        valid: key_formats::simple
         doc: format of the key
       - id: flags
         type: u4
@@ -903,8 +905,11 @@ types:
         type: u4
         doc: target node length
       - id: key
-        # assume "simple key length" as "simple key" is
-        # the only key supported right now
+        # In Linux (v7.2), keys in branches take up only
+        # [`c->key_len`](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L707)
+        # bytes, which is 8 (`UBIFS_SK_LEN`) for the simple key format, the
+        # only one there is (see `<superblock_header>.key_fmt`).
+        size: 8
         type: key
       - id: hash
         size: _root.superblock.node_header.len_hash
@@ -927,40 +932,31 @@ types:
         type: u4
       - id: key_value
         type: u4
+      - id: unused
+        size-eos: true
+        doc: |
+          Rest of the field holding the key: 8 zero bytes in `inode_header`,
+          `directory_header` and `data_header`, empty in `branch`.
     instances:
       type:
         value: key_value >> 29
         enum: key_types
       value:
         value: key_value & 0x1fffffff
-    doc: |
-      Keys are 64-bits long. The first 32-bits are the inode number, or the
-      parent inode number in case of a directory entry. The next 3 bits are
-      the node type. The last 29 bits are the block number (data entries)
-      or the directory entry hash in case of a directory entry.
-  longkey:
-    doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/key.h#L16-L22 Git tag "v7.2"
-    seq:
-      - id: inode_number
-        type: u4
-      - id: key_value
-        type: u4
-      - id: unused
-        size: 8
     doc: |
       Keys are 64-bits long. The first 32-bits are the inode number, or the
       parent inode number in case of a directory entry. The next 3 bits are
       the node type. The last 29 bits are the block number (data entries)
       or the directory entry hash in case of a directory entry.
 
-      In case of a "longkey" (16 bytes) the last two bytes are currently
-      unused.
-    instances:
-      type:
-        value: key_value >> 29
-        enum: key_types
-      value:
-        value: key_value & 0x1fffffff
+      Inode nodes (`inode_header`), directory and extended attribute entry
+      nodes (`directory_header`) and data nodes (`data_header`) store keys in a
+      16-byte field (`UBIFS_MAX_KEY_LEN`). The simple key format, the only one
+      there is (see `<superblock_header>.key_fmt`), uses only the first 8
+      bytes, and Linux (v7.2)
+      [zeroes](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/key.h#L432-L440)
+      the rest. Branches of index nodes (`branch`)
+      [store only these 8 bytes](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/key.h#L448-L455).
 
 enums:
   # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L337-L352 (Git tag "v7.2")
