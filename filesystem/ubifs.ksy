@@ -790,6 +790,10 @@ types:
       - id: time_granularity
         -orig-id: time_gran
         type: u4
+        valid:
+          # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L489-L493 (Git tag "v7.2")
+          min: 1
+          max: 1_000_000_000
         doc: time granularity in nanoseconds
       - id: uuid
         size: 16
