@@ -10,6 +10,7 @@ meta:
   license: GPL-2.0-only
   ks-version: '0.11'
   endian: le
+  bit-endian: le
   encoding: UTF-8
 doc: |
   UBIFS is a file system for raw flash memory devices. It works on top of
@@ -930,19 +931,18 @@ types:
     seq:
       - id: inode_number
         type: u4
-      - id: key_value
-        type: u4
+      - id: value
+        # With `meta/bit-endian: le`, the first field gets the least
+        # significant bits, so `value` comes before `type`.
+        type: b29
+      - id: type
+        type: b3
+        enum: key_types
       - id: unused
         size-eos: true
         doc: |
           Rest of the field holding the key: 8 zero bytes in `inode_header`,
           `directory_header` and `data_header`, empty in `branch`.
-    instances:
-      type:
-        value: key_value >> 29
-        enum: key_types
-      value:
-        value: key_value & 0x1fffffff
     doc: |
       Keys are 64-bits long. The first 32-bits are the inode number, or the
       parent inode number in case of a directory entry. The next 3 bits are
