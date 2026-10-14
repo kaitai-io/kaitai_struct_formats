@@ -167,7 +167,7 @@ types:
       - id: magic
         type: u4
         valid: 0x06101831
-        doc: UBIFS node magic number (%UBIFS_NODE_MAGIC)
+        doc: UBIFS node magic number (`UBIFS_NODE_MAGIC`)
       - id: crc
         type: u4
         doc: |
@@ -229,7 +229,9 @@ types:
         valid:
           # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/compress.c#L201-L204 (Git tag "v7.2")
           in-enum: true
-        doc: compression type (%UBIFS_COMPR_NONE, %UBIFS_COMPR_LZO, etc)
+        doc: |
+          compression type (`compression::no_compression`, `compression::lzo`,
+          etc.)
       - id: len_compressed_data
         -orig-id: compr_size
         type: u2
@@ -265,7 +267,9 @@ types:
         valid:
           # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/replay.c#L487-L488 (Git tag "v7.2")
           in-enum: true
-        doc: type of the target inode (%UBIFS_ITYPE_REG, %UBIFS_ITYPE_DIR, etc)
+        doc: |
+          type of the target inode (`inode_types::regular`,
+          `inode_types::directory`, etc.)
       - id: len_name
         -orig-id: nlen
         type: u2
@@ -364,7 +368,9 @@ types:
         doc: access flags
       - id: flags
         type: u4
-        doc: per-inode flags (%UBIFS_COMPR_FL, %UBIFS_SYNC_FL, etc)
+        doc: |
+          per-inode flags (see the instances `compressed`, `synchronous`,
+          etc.)
       - id: len_data
         -orig-id: data_len
         type: u4
@@ -463,7 +469,9 @@ types:
         doc: commit number
       - id: flags
         type: u4
-        doc: various flags (%UBIFS_MST_DIRTY, etc)
+        doc: |
+          various flags (see the instances `dirty`, `no_orphans` and
+          `recovery`)
       - id: leb_log
         -orig-id: log_lnum
         type: u4
@@ -475,7 +483,7 @@ types:
       - id: ofs_root
         -orig-id: root_offs
         type: u4
-        doc: offset within @root_lnum
+        doc: offset within the LEB `leb_root`
       - id: len_root
         -orig-id: root_len
         type: u4
@@ -698,7 +706,7 @@ types:
         doc: format of the key
       - id: flags
         type: u4
-        doc: file-system flags (%UBIFS_FLG_BIGLPT, etc)
+        doc: file-system flags (see the instances `biglpt`, `space_fixup`, etc.)
       - id: min_io_size
         type: u4
         doc: minimal input/output unit size
@@ -790,7 +798,7 @@ types:
           # value outside the enum means a corrupted file system, which isn't
           # worth supporting by taking the value modulo 4 as the kernel does.
           in-enum: true
-        doc: default compression algorithm (%UBIFS_COMPR_LZO, etc)
+        doc: default compression algorithm (`compression::lzo`, etc.)
       - id: padding1
         contents: [0x00, 0x00]
         doc: reserved for future, zeroes
@@ -964,7 +972,7 @@ types:
       - id: ofs_target
         -orig-id: offs
         type: u4
-        doc: offset within @lnum
+        doc: offset within the LEB `target_leb`
       - id: len_target
         -orig-id: len
         type: u4
