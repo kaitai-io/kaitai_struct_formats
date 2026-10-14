@@ -424,31 +424,31 @@ types:
       # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L309-L332 (Git tag "v7.2")
       compressed:
         -orig-id: UBIFS_COMPR_FL
-        value: flags & 0x01 == 0x01
+        value: flags & 0x01 != 0
         doc: use compression for this inode
       synchronous:
         -orig-id: UBIFS_SYNC_FL
-        value: flags & 0x02 == 0x02
+        value: flags & 0x02 != 0
         doc: I/O on this inode has to be synchronous
       immutable:
         -orig-id: UBIFS_IMMUTABLE_FL
-        value: flags & 0x04 == 0x04
+        value: flags & 0x04 != 0
         doc: inode is immutable
       append:
         -orig-id: UBIFS_APPEND_FL
-        value: flags & 0x08 == 0x08
+        value: flags & 0x08 != 0
         doc: writes to the inode may only append data
       dirsync:
         -orig-id: UBIFS_DIRSYNC_FL
-        value: flags & 0x10 == 0x10
+        value: flags & 0x10 != 0
         doc: I/O on this directory inode has to be synchronous
       xattr:
         -orig-id: UBIFS_XATTR_FL
-        value: flags & 0x20 == 0x20
+        value: flags & 0x20 != 0
         doc: this inode is the inode for an extended attribute value
       encrypted:
         -orig-id: UBIFS_CRYPT_FL
-        value: flags & 0x40 == 0x40
+        value: flags & 0x40 != 0
         doc: use encryption for this inode
       is_socket:
         value: mode & 0o0170000 == 0o140000
@@ -604,15 +604,15 @@ types:
       # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L395-L406 (Git tag "v7.2")
       dirty:
         -orig-id: UBIFS_MST_DIRTY
-        value: flags & 1 == 1
+        value: flags & 1 != 0
         doc: master node is dirty
       no_orphans:
         -orig-id: UBIFS_MST_NO_ORPHS
-        value: flags & 2 == 2
+        value: flags & 2 != 0
         doc: no orphan inodes present
       recovery:
         -orig-id: UBIFS_MST_RCVRY
-        value: flags & 4 == 4
+        value: flags & 4 != 0
         doc: written by recovery
   orphan_header:
     -orig-id: ubifs_orph_node
@@ -878,25 +878,25 @@ types:
       # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L421-L437 (Git tag "v7.2")
       biglpt:
         -orig-id: UBIFS_FLG_BIGLPT
-        value: flags & 0x02 == 0x02
+        value: flags & 0x02 != 0
         doc: if "big" LPT model is used if set
       space_fixup:
         -orig-id: UBIFS_FLG_SPACE_FIXUP
-        value: flags & 0x04 == 0x04
+        value: flags & 0x04 != 0
         doc: first-mount "fixup" of free space within LEBs needed
       double_hash:
         -orig-id: UBIFS_FLG_DOUBLE_HASH
-        value: flags & 0x08 == 0x08
+        value: flags & 0x08 != 0
         doc: |
           store a 32bit cookie in directory entry nodes to
           support 64bit cookies for lookups by hash
       encrypted:
         -orig-id: UBIFS_FLG_ENCRYPTION
-        value: flags & 0x10 == 0x10
+        value: flags & 0x10 != 0
         doc: filesystem contains encrypted files
       authenticated:
         -orig-id: UBIFS_FLG_AUTHENTICATION
-        value: flags & 0x20 == 0x20
+        value: flags & 0x20 != 0
         doc: this filesystem contains hashes for authentication
       len_hash:
         # Linux (v7.2) sets `c->hash_len` to the
