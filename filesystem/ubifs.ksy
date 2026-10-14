@@ -384,7 +384,9 @@ types:
         doc: group ID
       - id: mode
         type: u4
-        doc: access flags
+        doc: |
+          file type and permissions, as in `st_mode` (see the `is_*`
+          instances for the file type)
       - id: flags
         type: u4
         doc: |
