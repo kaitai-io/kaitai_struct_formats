@@ -595,11 +595,16 @@ types:
       - id: leb_save_table
         -orig-id: lsave_lnum
         type: u4
-        doc: LEB number of LPT's save table (big model only)
+        doc: |
+          LEB number of LPT's save table. Present in every master node, but
+          only meaningful if `<superblock_header>.biglpt` is set: only then
+          does Linux [check the location of the save table](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/master.c#L252-L256).
       - id: ofs_save_table
         -orig-id: lsave_offs
         type: u4
-        doc: offset of LPT's save table (big model only)
+        doc: |
+          offset of LPT's save table (only meaningful if
+          `<superblock_header>.biglpt` is set, see `leb_save_table`)
       - id: leb_last_lpt_scan
         -orig-id: lscan_lnum
         type: u4
