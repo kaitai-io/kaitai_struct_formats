@@ -44,16 +44,17 @@ doc: |
      that were not unmounted cleanly, because unmounting
      [commits](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/super.c#L486-L493)
      all changes.
+  3. Parsing doesn't advance the stream position. This implementation reads
+     the image only through instances, so that parsing doesn't copy the
+     whole image into memory. To find where the image ends, e.g. when
+     carving it out of a larger file, use `len_image`. For the same reason,
+     parsing doesn't fail if the image is truncated. To detect that, check
+     that the stream is at least `len_image` bytes long
+     (`_io.size >= len_image`).
 doc-ref:
   - https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h Git tag "v7.2"
   - https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/key.h Git tag "v7.2"
   - http://www.linux-mtd.infradead.org/doc/ubifs.pdf
-seq:
-  - id: lebs
-    size: superblock.node_header.leb_size
-    repeat: expr
-    repeat-expr: superblock.node_header.num_lebs
-
 # some instances to access important data structures directly
 instances:
   superblock:
@@ -111,6 +112,25 @@ instances:
       `ofs_root` in `master_1`. All other index nodes, and through them all
       the files, are reached from it by recursively following the `target` of
       each of the `branches`.
+  len_image:
+    value: superblock.node_header.leb_size * superblock.node_header.num_lebs
+    doc: |
+      Length of the file system image in bytes:
+      `<superblock_header>.num_lebs` LEBs of `<superblock_header>.leb_size`
+      bytes each. Use it to find where the image ends and to detect a
+      truncated image (see the top-level `doc`).
+  lebs:
+    pos: 0
+    size: superblock.node_header.leb_size
+    repeat: expr
+    repeat-expr: superblock.node_header.num_lebs
+    doc: |
+      All LEBs of the file system: `lebs[n]` is LEB number `n`, which starts
+      at offset `n * <superblock_header>.leb_size`.
+
+      Accessing this instance reads the whole image into memory. To get a
+      single LEB, it's cheaper to read `<superblock_header>.leb_size` bytes
+      at the offset of that LEB.
 
 types:
   dummy: {}
