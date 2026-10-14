@@ -323,7 +323,7 @@ types:
         size: 16
         type: key
         doc: node key
-      - id: sequence_number
+      - id: creation_sequence_number
         -orig-id: creat_sqnum
         type: u8
         doc: sequence number at time of creation
