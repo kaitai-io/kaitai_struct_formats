@@ -477,19 +477,27 @@ types:
         -orig-id: UBIFS_CRYPT_FL
         value: flags & 0x40 != 0
         doc: use encryption for this inode
+      # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/include/uapi/linux/stat.h#L9-L27 (Git tag "v7.2")
       is_socket:
+        -orig-id: S_ISSOCK
         value: mode & 0o0170000 == 0o140000
       is_link:
+        -orig-id: S_ISLNK
         value: mode & 0o0170000 == 0o120000
       is_regular:
+        -orig-id: S_ISREG
         value: mode & 0o0170000 == 0o100000
       is_block_device:
+        -orig-id: S_ISBLK
         value: mode & 0o0170000 == 0o60000
       is_dir:
+        -orig-id: S_ISDIR
         value: mode & 0o0170000 == 0o40000
       is_character_device:
+        -orig-id: S_ISCHR
         value: mode & 0o0170000 == 0o20000
       is_fifo:
+        -orig-id: S_ISFIFO
         value: mode & 0o0170000 == 0o10000
   master_header:
     -orig-id: ubifs_mst_node
