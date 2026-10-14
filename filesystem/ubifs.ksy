@@ -52,7 +52,7 @@ seq:
   - id: lebs
     size: superblock.node_header.leb_size
     repeat: expr
-    repeat-expr: superblock.node_header.num_leb
+    repeat-expr: superblock.node_header.num_lebs
 
 # some instances to access important data structures directly
 instances:
@@ -375,7 +375,8 @@ types:
         -orig-id: data_len
         type: u4
         doc: inode data length
-      - id: xattr_cnt
+      - id: num_xattrs
+        -orig-id: xattr_cnt
         type: u4
         doc: count of extended attributes this inode has
       - id: xattr_size
@@ -577,13 +578,15 @@ types:
         -orig-id: lscan_lnum
         type: u4
         doc: LEB number of last LPT scan
-      - id: empty_lebs
+      - id: num_empty_lebs
+        -orig-id: empty_lebs
         type: u4
         doc: number of empty logical eraseblocks
-      - id: idx_lebs
+      - id: num_index_lebs
+        -orig-id: idx_lebs
         type: u4
         doc: number of indexing logical eraseblocks
-      - id: num_leb
+      - id: num_lebs
         -orig-id: leb_cnt
         type: u4
         doc: count of LEBs used by file-system
@@ -725,50 +728,56 @@ types:
       - id: leb_size
         type: u4
         doc: logical eraseblock size in bytes
-      - id: num_leb
+      - id: num_lebs
         -orig-id: leb_cnt
         type: u4
         doc: count of LEBs used by file-system
-      - id: max_leb_cnt
+      - id: max_num_lebs
+        -orig-id: max_leb_cnt
         type: u4
         valid:
           # Linux (v7.2)
           # [rejects](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L428-L432)
-          # a `max_leb_cnt` smaller than the LEB count. Linux may first
+          # a `max_num_lebs` smaller than the LEB count. Linux may first
           # [increase the LEB
           # count](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L756-L767),
-          # but never above `max_leb_cnt`, so Linux rejects the superblock
-          # exactly when `num_leb` is greater than `max_leb_cnt`.
-          min: num_leb
+          # but never above `max_num_lebs`, so Linux rejects the superblock
+          # exactly when `num_lebs` is greater than `max_num_lebs`.
+          min: num_lebs
         doc: maximum count of LEBs used by file-system
       - id: max_bud_bytes
         type: u8
         doc: maximum amount of data stored in buds
-      - id: log_lebs
+      - id: num_log_lebs
+        -orig-id: log_lebs
         type: u4
         valid:
           # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L406-L412 (Git tag "v7.2")
           min: 2
         doc: log size in logical eraseblocks
-      - id: lpt_lebs
+      - id: num_lpt_lebs
+        -orig-id: lpt_lebs
         type: u4
         valid:
           # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L406-L412 (Git tag "v7.2")
           min: 2
         doc: number of LEBs used for lprops table
-      - id: orph_lebs
+      - id: num_orphan_lebs
+        -orig-id: orph_lebs
         type: u4
         valid:
           # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L406-L412 (Git tag "v7.2")
           min: 1
         doc: number of LEBs used for recording orphans
-      - id: jhead_cnt
+      - id: num_journal_heads
+        -orig-id: jhead_cnt
         type: u4
         doc: count of journal heads
       - id: fanout
         type: u4
         doc: tree fanout (max. number of links per indexing node)
-      - id: lsave_cnt
+      - id: num_save_table_entries
+        -orig-id: lsave_cnt
         type: u4
         doc: number of LEB numbers in LPT's save table
       - id: fmt_version
