@@ -247,6 +247,14 @@ types:
         doc: compressed data size in bytes, only valid when data is encrypted
       - id: data
         size-eos: true
+        doc: |
+          One block (up to 4096 bytes) of the file, block number `key.value`,
+          compressed as given by `compression`. Blocks missing from the index
+          are holes (zeros). In an encrypted inode, the compressed data is
+          padded
+          and [encrypted](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/crypto.c#L38-L59),
+          and `len_compressed_data` is the length of the compressed data
+          before padding.
   directory_header:
     -orig-id: ubifs_dent_node
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L541-L565 Git tag "v7.2"
@@ -432,6 +440,13 @@ types:
         doc: reserved for future, zeroes
       - id: data
         size: len_data
+        doc: |
+          Target of a [symbolic link](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/dir.c#L1220-L1241),
+          (encrypted if the inode is encrypted), device number of a device node
+          ([`union ubifs_dev_desc`](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L466-L478):
+          4 bytes from Linux, 8 from `mkfs.ubifs`), or value of an
+          [extended attribute](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/xattr.c#L115-L121)
+          (in its own inode, see `xattr`). Empty otherwise.
     instances:
       # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L309-L332 (Git tag "v7.2")
       compressed:
@@ -1111,7 +1126,10 @@ enums:
     2:
       id: zlib
       -orig-id: UBIFS_COMPR_ZLIB
-      doc: zlib compression
+      doc: |
+        zlib compression, stored as
+        [raw deflate](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/crypto/deflate.c#L125-L127)
+        data, i.e. without the zlib header and checksum
     3:
       id: zstd
       -orig-id: UBIFS_COMPR_ZSTD
