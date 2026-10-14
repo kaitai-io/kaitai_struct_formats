@@ -9,9 +9,9 @@ meta:
     - linux
   license: GPL-2.0-only
   ks-version: '0.11'
+  encoding: UTF-8
   endian: le
   bit-endian: le
-  encoding: UTF-8
 doc: |
   UBIFS is a file system for raw flash memory devices. It works on top of
   UBI (Unsorted Block Images), which works as an abstraction layer so UBIFS
@@ -64,8 +64,8 @@ instances:
       the first LEB.
   master_1:
     pos: superblock.node_header.leb_size
-    type: masterblock_node
     size: superblock.node_header.leb_size
+    type: masterblock_node
     doc: |
       The first copy of the master node in LEB1. This Kaitai Struct
       implementation uses it to locate `index_root`. In an image created by
@@ -95,8 +95,8 @@ instances:
       This instance only provides the substream for `index_root`, which can then
       use `ofs_root` (an offset within the LEB) as its `pos` directly.
   index_root:
-    pos: master_1.node_header.ofs_root
     io: index._io
+    pos: master_1.node_header.ofs_root
     type: index_block
     doc: |
       The root index node, in the `index` LEB at the offset given by
@@ -187,8 +187,8 @@ types:
         doc: full node length
       - id: node_type
         type: u1
-        doc: node type
         enum: node_types
+        doc: node type
       - id: group_type
         type: u1
         enum: node_group_types
@@ -659,6 +659,7 @@ types:
         doc: how many bytes after this node are unused (because padded)
   reference_header:
     -orig-id: ubifs_ref_node
+    doc: logical eraseblock reference node.
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L758-L772 Git tag "v7.2"
     seq:
       - id: leb_number
@@ -676,7 +677,6 @@ types:
       - id: padding
         size: 28
         doc: reserved for future, zeroes
-    doc: logical eraseblock reference node.
   signature_header:
     -orig-id: ubifs_sig_node
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L784-L799 Git tag "v7.2"
@@ -963,6 +963,7 @@ types:
           is determined by `hash_algo`. Otherwise, it is 0.
   truncation_header:
     -orig-id: ubifs_trun_node
+    doc: This node exists only in the journal and never goes to the main area.
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L586-L604 Git tag "v7.2"
     seq:
       - id: inode_number
@@ -986,7 +987,6 @@ types:
           # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/replay.c#L786-L791 (Git tag "v7.2")
           max: old_size - 1
         doc: size after truncation
-    doc: This node exists only in the journal and never goes to the main area.
 
   branch:
     -orig-id: ubifs_branch
@@ -1019,13 +1019,22 @@ types:
         doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs.h#L1642-L1654 Git tag "v7.2"
     instances:
       target:
+        io: _root._io
         pos: target_leb * _root.superblock.node_header.leb_size + ofs_target
         size: len_target
-        io: _root._io
         type: block
 
   # Key types
   key:
+    doc: |
+      Inode nodes (`inode_header`), directory and extended attribute entry
+      nodes (`directory_header`) and data nodes (`data_header`) store keys in a
+      16-byte field (`UBIFS_MAX_KEY_LEN`). The simple key format, the only one
+      there is (see `<superblock_header>.key_fmt`), uses only the first 8
+      bytes, and Linux (v7.2)
+      [zeroes](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/key.h#L432-L440)
+      the rest. Branches of index nodes (`branch`)
+      [store only these 8 bytes](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/key.h#L448-L455).
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/key.h#L16-L22 Git tag "v7.2"
     seq:
       - id: inode_number
@@ -1060,15 +1069,6 @@ types:
         doc: |
           Rest of the field holding the key: 8 zero bytes in `inode_header`,
           `directory_header` and `data_header`, empty in `branch`.
-    doc: |
-      Inode nodes (`inode_header`), directory and extended attribute entry
-      nodes (`directory_header`) and data nodes (`data_header`) store keys in a
-      16-byte field (`UBIFS_MAX_KEY_LEN`). The simple key format, the only one
-      there is (see `<superblock_header>.key_fmt`), uses only the first 8
-      bytes, and Linux (v7.2)
-      [zeroes](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/key.h#L432-L440)
-      the rest. Branches of index nodes (`branch`)
-      [store only these 8 bytes](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/key.h#L448-L455).
 
 enums:
   # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L337-L352 (Git tag "v7.2")
