@@ -146,7 +146,8 @@ types:
             node_types::inode: inode_header
             node_types::data: data_header
             node_types::directory: directory_header
-            # Extended attribute entry nodes are identical to directory entry nodes
+            # Extended attribute entry nodes are identical to directory entry
+            # nodes
             node_types::extended_attribute: directory_header
             node_types::truncation: truncation_header
             node_types::padding: padding_header
@@ -247,7 +248,9 @@ types:
         type: key
         valid:
           # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/replay.c#L497-L500 (Git tag "v7.2")
-          expr: _.type == key_types::directory or _.type == key_types::extended_attribute
+          expr: |
+            _.type == key_types::directory or
+            _.type == key_types::extended_attribute
         doc: node key
       - id: inode_number
         -orig-id: inum
@@ -787,8 +790,8 @@ types:
           # [accepts](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/sb.c#L684-L689)
           # version 3, but that was a development format: UBIFS
           # [went into mainline](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L34-L35)
-          # kernel with version 4, and neither Linux nor `mkfs.ubifs` has written
-          # version 3 since.
+          # kernel with version 4, and neither Linux nor `mkfs.ubifs` has
+          # written version 3 since.
           min: 4
         doc: UBIFS on-flash format version
       - id: default_compression
