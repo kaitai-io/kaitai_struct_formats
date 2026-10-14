@@ -476,7 +476,7 @@ types:
         -orig-id: root_offs
         type: u4
         doc: offset within @root_lnum
-      - id: root_indexing_length
+      - id: len_root
         -orig-id: root_len
         type: u4
         doc: root indexing node length
@@ -502,7 +502,7 @@ types:
         -orig-id: ihead_lnum
         type: u4
         doc: LEB number of index head
-      - id: ofs_ihead
+      - id: ofs_index_head
         -orig-id: ihead_offs
         type: u4
         doc: offset of index head
@@ -545,7 +545,7 @@ types:
         -orig-id: ltab_lnum
         type: u4
         doc: LEB number of LPT's own lprops table
-      - id: ofs_ltab
+      - id: ofs_lprops_table
         -orig-id: ltab_offs
         type: u4
         doc: offset of LPT's own lprops table
@@ -553,7 +553,7 @@ types:
         -orig-id: lsave_lnum
         type: u4
         doc: LEB number of LPT's save table (big model only)
-      - id: ofs_lsave
+      - id: ofs_save_table
         -orig-id: lsave_offs
         type: u4
         doc: offset of LPT's save table (big model only)
@@ -567,7 +567,8 @@ types:
       - id: idx_lebs
         type: u4
         doc: number of indexing logical eraseblocks
-      - id: leb_cnt
+      - id: num_leb
+        -orig-id: leb_cnt
         type: u4
         doc: count of LEBs used by file-system
       - id: hash_root_index
