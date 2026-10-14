@@ -83,7 +83,7 @@ instances:
       copies in both match.
     doc-ref:
       - https://github.com/sigma-star/mtd-utils/blob/053ee1038e5dedae61a88cadfb7bdfe9894d8bb6/ubifs-utils/mkfs.ubifs/mkfs.ubifs.c#L2627-L2633 Git tag "v2.3.1"
-      - https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/master.c#L114-L130 Git tag "v7.2"
+      - https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/master.c#L115-L130 Git tag "v7.2"
   index:
     pos: superblock.node_header.leb_size * master_1.node_header.leb_root
     size: superblock.node_header.leb_size
