@@ -98,6 +98,14 @@ instances:
     io: index._io
     pos: master_1.node_header.ofs_root
     type: index_block
+    valid:
+      # Linux (v7.2) [loads](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/tnc.c#L1216-L1218)
+      # the root index node like any other index node, with
+      # [`read_znode()`](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/tnc_misc.c#L290-L300).
+      # The expected length is
+      # [taken from](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/master.c#L360)
+      # `<master_header>.len_root`, so Linux rejects any other length.
+      expr: _.header.len_full_node == master_1.node_header.len_root
     doc: |
       The root index node, in the `index` LEB at the offset given by
       `ofs_root` in `master_1`. All other index nodes, and through them all
@@ -1026,6 +1034,22 @@ types:
         pos: target_leb * _root.superblock.node_header.leb_size + ofs_target
         size: len_target
         type: block
+        valid:
+          # Linux (v7.2) reads the target with `ubifs_read_node()`, which
+          # [rejects](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/io.c#L1107-L1123)
+          # a node of a different type or length than expected. The
+          # expected length is `len_target`. The expected type is an index
+          # node if the index node holding this branch is above level 0
+          # ([`read_znode()`](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/tnc_misc.c#L290-L300)),
+          # and otherwise the type in `key`
+          # ([`ubifs_tnc_read_node()`](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/tnc_misc.c#L478-L492)).
+          # Key types 0-3 have the same values as the corresponding node
+          # types.
+          expr: |
+            _.header.len_full_node == len_target and
+            (_parent.level != 0
+              ? _.header.node_type == node_types::index
+              : _.header.node_type.to_i == key.type.to_i)
 
   # Key types
   key:
