@@ -190,10 +190,6 @@ types:
       - id: padding
         contents: [0x00, 0x00]
         doc: reserved for future, zeroes
-  padding_byte:
-    seq:
-      - id: padding
-        contents: [0x00]
 
   # Node types
   commit_start_header:
@@ -393,9 +389,7 @@ types:
           in-enum: true
         doc: compression type used for this inode
       - id: padding2
-        type: padding_byte
-        repeat: expr
-        repeat-expr: 26
+        size: 26
         doc: reserved for future, zeroes
       - id: data
         size: len_data
@@ -554,9 +548,7 @@ types:
         size: 64
         doc: HMAC to authenticate the master node
       - id: padding
-        type: padding_byte
-        repeat: expr
-        repeat-expr: 152
+        size: 152
         doc: reserved for future, zeroes
     instances:
       dirty:
@@ -625,9 +617,7 @@ types:
         type: u4
         doc: journal head number
       - id: padding
-        type: padding_byte
-        repeat: expr
-        repeat-expr: 28
+        size: 28
         doc: reserved for future, zeroes
     doc: logical eraseblock reference node.
   signature_header:
@@ -640,9 +630,7 @@ types:
         -orig-id: len
         type: u4
       - id: padding
-        type: padding_byte
-        repeat: expr
-        repeat-expr: 32
+        size: 32
       - id: signature
         -orig-id: sig
         size: len_signature
@@ -805,9 +793,7 @@ types:
           hash of the master node, only valid for signed images in which the
           master node does not contain a hmac
       - id: padding2
-        type: padding_byte
-        repeat: expr
-        repeat-expr: 3774
+        size: 3774
         doc: reserved for future, zeroes
     instances:
       biglpt:
@@ -890,9 +876,7 @@ types:
         type: u4
         doc: truncated inode number
       - id: padding
-        type: padding_byte
-        repeat: expr
-        repeat-expr: 12
+        size: 12
         doc: reserved for future, zeroes
       - id: old_size
         type: u8
