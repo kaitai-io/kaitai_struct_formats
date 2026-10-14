@@ -705,6 +705,11 @@ types:
         doc: reserved for future, zeroes
   signature_header:
     -orig-id: ubifs_sig_node
+    doc: |
+      Signature of the superblock node of a file system signed when it was
+      created (`mkfs.ubifs` with a key). Linux
+      [expects it](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/auth.c#L198-L216)
+      as the first node after the superblock node in LEB0.
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L784-L799 Git tag "v7.2"
     seq:
       - id: type
@@ -712,14 +717,21 @@ types:
         # `UBIFS_SIGNATURE_TYPE_PKCS7`, the only type that Linux supports:
         # https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/auth.c#L226-L231 (Git tag "v7.2")
         valid: 1
+        doc: type of the signature
       - id: len_signature
         -orig-id: len
         type: u4
+        doc: length of `signature` in bytes
       - id: padding
         size: 32
+        doc: reserved for future, zeroes
       - id: signature
         -orig-id: sig
         size: len_signature
+        doc: |
+          [PKCS #7 signature](https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/auth.c#L233-L236)
+          of the whole superblock node (4096 bytes, including the common
+          header)
   superblock_header:
     -orig-id: ubifs_sb_node
     doc-ref: https://github.com/torvalds/linux/blob/8d3ae59288f1e7d58d76558a6ee96d533bc5019f/fs/ubifs/ubifs-media.h#L617-L683 Git tag "v7.2"
