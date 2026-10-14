@@ -1058,7 +1058,7 @@ types:
     instances:
       target:
         io: _root._io
-        pos: target_leb * _root.superblock.node_header.leb_size + ofs_target
+        pos: _root.superblock.node_header.leb_size * target_leb + ofs_target
         size: len_target
         type: block
         valid:
