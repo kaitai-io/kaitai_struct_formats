@@ -709,7 +709,7 @@ enums:
     25: snom
 
   adc_mode:
-    0xFF: off
+    0xFF: 'off'
     0: height
     1: dfl
     2: lateral_f
