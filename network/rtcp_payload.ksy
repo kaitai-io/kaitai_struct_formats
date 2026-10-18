@@ -62,7 +62,7 @@ types:
         repeat-expr: _parent.subtype
     instances:
       ntp:
-        value: (ntp_msw << 32) & ntp_lsw
+        value: (ntp_msw.as<u8> * 0x1_0000_0000 + ntp_lsw).as<u8>
 
   rr_packet:
     seq:
@@ -78,7 +78,7 @@ types:
       - id: ssrc_source
         type: u4
       - id: lost_val
-        type: u1
+        type: u4
       - id: highest_seq_num_received
         type: u4
       - id: interarrival_jitter
@@ -91,7 +91,7 @@ types:
       fraction_lost:
         value: lost_val >> 24
       cumulative_packets_lost:
-        value: lost_val & 0x00ffffff
+        value: '(lost_val & 0x00800000) != 0 ? (lost_val & 0x00ffffff).as<s4> - 0x01000000 : (lost_val & 0x00ffffff).as<s4>'
 
   sdes_packet:
     seq:
