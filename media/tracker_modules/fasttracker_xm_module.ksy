@@ -261,7 +261,7 @@ types:
                 doc: Value of the point
         enums:
           type:
-            0: on
+            0: 'on'
             1: sustain
             2: loop
       samples_data:
