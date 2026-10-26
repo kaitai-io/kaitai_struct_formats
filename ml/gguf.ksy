@@ -89,7 +89,8 @@ types:
       - id: data
         size: size
         type: str
-        encoding: ascii
+        encoding: UTF-8
+        doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/docs/gguf.md?plain=1#L235-L236 Git tag "v0.27.0"
 
   gguf_array:
     # Note that this is more permissive than the parser defined
