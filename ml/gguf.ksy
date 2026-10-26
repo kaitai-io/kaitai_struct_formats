@@ -16,8 +16,7 @@ doc: |
   to be unambiguous by containing all the information needed to load a
   model. It is also designed to be extensible, so that new information
   can be added to models without breaking compatibility.
-doc-ref:
-  - https://github.com/ggerganov/ggml/blob/master/docs/gguf.md
+doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/docs/gguf.md Git tag "v0.27.0"
 seq:
   - id: magic
     contents: GGUF
