@@ -5,7 +5,6 @@ meta:
   license: CC0-1.0
   ks-version: '0.10'
   endian: le
-  bit-endian: le
 doc: |
   GGUF is a file format for storing machine learning models for inference with
   the GGML library, or executors based on GGML. Models are typically developed
@@ -112,8 +111,12 @@ types:
     # that do not support variant types.
     -webide-representation: '{value}'
     seq:
-      - id: value
-        type: b1
+      - id: value_raw
+        type: u1
+    instances:
+      value:
+        value: value_raw != 0
+        doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L321 Git tag "v0.27.0"
 
   gguf_uint8:
     # This type is used as a work-around for languages (like C++)
