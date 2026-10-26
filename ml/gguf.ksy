@@ -3,7 +3,7 @@ meta:
   title: GGML model file
   file-extension: gguf
   license: CC0-1.0
-  ks-version: 0.10
+  ks-version: '0.10'
   endian: le
   bit-endian: le
 doc: |
