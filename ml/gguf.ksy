@@ -223,7 +223,8 @@ types:
       padding:
         # This hardcodes the default GGUF file alignment (32).
         pos: offset
-        size: 32 - (offset % 32)
+        size: (32 - offset % 32) % 32
+        doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/docs/gguf.md?plain=1#L301-L303 Git tag "v0.27.0"
       data:
         pos: offset + padding.size
         size-eos: true
