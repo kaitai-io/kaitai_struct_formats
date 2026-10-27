@@ -268,13 +268,24 @@ enums:
     11: gguf_type_int64
     12: gguf_type_float64
 
+  # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/include/ggml.h#L389-L434 (Git tag "v0.27.0")
   ggml_type:
     0: ggml_type_f32
     1: ggml_type_f16
     2: ggml_type_q4_0
     3: ggml_type_q4_1
-    4: ggml_type_q4_2
-    5: ggml_type_q4_3
+    4:
+      id: ggml_type_q4_2
+      doc: |
+        Removed from ggml in May 2023, before GGUF was introduced. ggml
+        rejects it.
+      doc-ref: https://github.com/ggml-org/llama.cpp/commit/b9fd7eee57df101d4a3e3eabc9fd6c2cb13c9ca1
+    5:
+      id: ggml_type_q4_3
+      doc: |
+        Removed from ggml in April 2023, before GGUF was introduced. ggml
+        rejects it.
+      doc-ref: https://github.com/ggml-org/llama.cpp/commit/36d19a603b221d1bd7897fcb10e823e2103b052d
     6: ggml_type_q5_0
     7: ggml_type_q5_1
     8: ggml_type_q8_0
@@ -299,3 +310,49 @@ enums:
     27: ggml_type_i64
     28: ggml_type_f64
     29: ggml_type_iq1_m
+    30: ggml_type_bf16
+    31:
+      id: ggml_type_q4_0_4_4
+      doc: |
+        Removed from ggml in December 2024 in favor of repacking
+        `ggml_type_q4_0` at load time. ggml rejects it, although files with
+        it exist, e.g.
+        [`Qwen2.5-0.5B-Instruct-Q4_0_4_4.gguf`](https://huggingface.co/bartowski/Qwen2.5-0.5B-Instruct-GGUF/blob/41ba88dbac95fed2528c92514c131d73eb5a174b/Qwen2.5-0.5B-Instruct-Q4_0_4_4.gguf).
+      doc-ref: https://github.com/ggml-org/llama.cpp/commit/19d8762ab61df8286367588a80b9c7db4cb568db
+    32:
+      id: ggml_type_q4_0_4_8
+      doc: |
+        Removed from ggml in December 2024 in favor of repacking
+        `ggml_type_q4_0` at load time. ggml rejects it, although files with
+        it exist, e.g.
+        [`Qwen2.5-0.5B-Instruct-Q4_0_4_8.gguf`](https://huggingface.co/bartowski/Qwen2.5-0.5B-Instruct-GGUF/blob/41ba88dbac95fed2528c92514c131d73eb5a174b/Qwen2.5-0.5B-Instruct-Q4_0_4_8.gguf).
+      doc-ref: https://github.com/ggml-org/llama.cpp/commit/19d8762ab61df8286367588a80b9c7db4cb568db
+    33:
+      id: ggml_type_q4_0_8_8
+      doc: |
+        Removed from ggml in December 2024 in favor of repacking
+        `ggml_type_q4_0` at load time. ggml rejects it, although files with
+        it exist, e.g.
+        [`Qwen2.5-0.5B-Instruct-Q4_0_8_8.gguf`](https://huggingface.co/bartowski/Qwen2.5-0.5B-Instruct-GGUF/blob/41ba88dbac95fed2528c92514c131d73eb5a174b/Qwen2.5-0.5B-Instruct-Q4_0_8_8.gguf).
+      doc-ref: https://github.com/ggml-org/llama.cpp/commit/19d8762ab61df8286367588a80b9c7db4cb568db
+    34: ggml_type_tq1_0
+    35: ggml_type_tq2_0
+    36:
+      id: ggml_type_iq4_nl_4_4
+      doc: |
+        Supported by ggml only from November to December 2024, and only for
+        repacking tensors in memory - it was never written to files. ggml
+        rejects it.
+      doc-ref: https://github.com/ggml-org/llama.cpp/commit/19d8762ab61df8286367588a80b9c7db4cb568db
+    37:
+      id: ggml_type_iq4_nl_4_8
+      doc: Reserved by ggml, but never supported. ggml rejects it.
+      doc-ref: https://github.com/ggml-org/llama.cpp/commit/c202cef1686182a78f8f4e253ab8d0c0ffe2fcc8
+    38:
+      id: ggml_type_iq4_nl_8_8
+      doc: Reserved by ggml, but never supported. ggml rejects it.
+      doc-ref: https://github.com/ggml-org/llama.cpp/commit/c202cef1686182a78f8f4e253ab8d0c0ffe2fcc8
+    39: ggml_type_mxfp4
+    40: ggml_type_nvfp4
+    41: ggml_type_q1_0
+    42: ggml_type_q2_0
