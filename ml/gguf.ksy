@@ -30,7 +30,7 @@ seq:
     type: u8
     doc: The number of key-value pairs in the file header
   - id: kv
-    type: gguf_kv
+    type: 'gguf_kv(_index != 0 ? kv[_index - 1].alignment : 32)'
     repeat: expr
     repeat-expr: num_kv
     doc: Key-value pairs
@@ -42,6 +42,14 @@ seq:
   - id: data
     type: gguf_tensor_data(_io.pos)
     doc: Tensor data
+instances:
+  alignment:
+    -orig-id: ALIGNMENT # used in the `gguf.md` document
+    value: 'kv.size != 0 ? kv.last.alignment : 32'
+    doc: |
+      Global alignment - from the `general.alignment` key, or 32 if there's no
+      such key.
+    doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L622-L630 Git tag "v0.27.0"
 
 types:
   gguf_value:
@@ -71,6 +79,9 @@ types:
 
   gguf_kv:
     -webide-representation: '{key}: {value}'
+    params:
+      - id: prev_alignment
+        type: u4
     seq:
       - id: key
         type: gguf_str
@@ -79,6 +90,19 @@ types:
         enum: gguf_type
       - id: value
         type: gguf_value(type)
+        valid:
+          # `general.alignment` must be a `uint32`:
+          # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L622-L629 (Git tag "v0.27.0")
+          expr: |
+            key.data == "general.alignment"
+              ? type == gguf_type::gguf_type_uint32
+              : true
+    instances:
+      alignment:
+        value: |
+          key.data == "general.alignment"
+            ? value.value.as<gguf_uint32>.value
+            : prev_alignment
 
   gguf_str:
     -webide-representation: '"{data}"'
@@ -221,9 +245,8 @@ types:
         type: u8
     instances:
       padding:
-        # This hardcodes the default GGUF file alignment (32).
         pos: offset
-        size: (32 - offset % 32) % 32
+        size: (_root.alignment - offset % _root.alignment) % _root.alignment
         doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/docs/gguf.md?plain=1#L301-L303 Git tag "v0.27.0"
       data:
         pos: offset + padding.size
