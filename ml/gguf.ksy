@@ -229,6 +229,9 @@ types:
         type: gguf_str
       - id: num_dims
         type: u4
+        valid:
+          # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L679-L684 (Git tag "v0.27.0")
+          max: 4
       - id: dims
         type: gguf_uint64
         repeat: expr
