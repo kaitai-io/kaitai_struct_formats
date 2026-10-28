@@ -42,7 +42,7 @@ seq:
     repeat-expr: num_kv
     doc: Key-value pairs
   - id: infos
-    type: gguf_tensor_info
+    type: 'gguf_tensor_info(_index != 0 ? infos[_index - 1].expected_next_offset : 0)'
     repeat: expr
     repeat-expr: num_infos
     doc: Tensor metadata
@@ -257,6 +257,9 @@ types:
 
   gguf_tensor_info:
     -webide-representation: '{type}[{dims}] {name}'
+    params:
+      - id: expected_offset
+        type: u8
     seq:
       - id: name
         type: gguf_str
@@ -290,6 +293,10 @@ types:
             (num_dims > 0 ? dims[0].value : 1) % num_elements_per_block == 0
       - id: offset
         type: u8
+        # Each tensor's data must start right where the previous tensor's padded
+        # data ends (the first tensor's data offset must be 0), as in ggml:
+        # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L790-L820 (Git tag "v0.27.0")
+        valid: expected_offset
         doc: Offset of the tensor's data, relative to `_root.ofs_tensor_data`
     instances:
       num_elements:
@@ -329,6 +336,12 @@ types:
         value: num_elements / num_elements_per_block
       len_data:
         value: len_block * num_blocks
+      len_padding:
+        value: (_root.alignment - len_data % _root.alignment) % _root.alignment
+        doc: Number of padding bytes after the data
+      expected_next_offset:
+        value: offset + len_data + len_padding
+        doc: '`offset` that the next tensor must have'
       data:
         pos: _root.ofs_tensor_data + offset
         size: len_data
