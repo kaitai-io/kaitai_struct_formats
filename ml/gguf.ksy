@@ -165,6 +165,11 @@ types:
     seq:
       - id: value_raw
         type: u1
+        valid:
+          # ggml doesn't check this, but `gguf.md` says that anything other than
+          # 0 or 1 is invalid:
+          # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/docs/gguf.md?plain=1#L213-L216 (Git tag "v0.27.0")
+          max: 1
     instances:
       value:
         value: value_raw != 0
