@@ -272,12 +272,12 @@ types:
           # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L679-L684 (Git tag "v0.27.0")
           max: 4
       - id: dims
-        type: gguf_int64
+        type: s8
         valid:
           # ggml reads them as `int64_t` too (even though `gguf.md` says
           # `uint64_t`) and rejects negative ones:
           # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L691-L697 (Git tag "v0.27.0")
-          expr: _.value >= 0
+          min: 0
         repeat: expr
         repeat-expr: num_dims
       - id: type
@@ -290,7 +290,7 @@ types:
           expr: |
             _.to_i < 43 and
             num_elements_per_block != 0 and
-            (num_dims > 0 ? dims[0].value : 1) % num_elements_per_block == 0
+            (num_dims > 0 ? dims[0] : 1) % num_elements_per_block == 0
       - id: offset
         type: u8
         # Each tensor's data must start right where the previous tensor's padded
@@ -301,10 +301,10 @@ types:
     instances:
       num_elements:
         value: |
-          (num_dims > 0 ? dims[0].value : 1) *
-          (num_dims > 1 ? dims[1].value : 1) *
-          (num_dims > 2 ? dims[2].value : 1) *
-          (num_dims > 3 ? dims[3].value : 1)
+          (num_dims > 0 ? dims[0] : 1) *
+          (num_dims > 1 ? dims[1] : 1) *
+          (num_dims > 2 ? dims[2] : 1) *
+          (num_dims > 3 ? dims[3] : 1)
       # `num_elements_per_block` and `len_block` are the `.blck_size` and
       # `.type_size` fields of `type_traits[type]` in ggml, see
       # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/ggml.c#L643-L957 (Git tag "v0.27.0")
