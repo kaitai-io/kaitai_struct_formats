@@ -39,10 +39,18 @@ seq:
     repeat: expr
     repeat-expr: num_infos
     doc: Tensor metadata
-  - id: data
-    type: gguf_tensor_data(_io.pos)
-    doc: Tensor data
+  - id: padding
+    size: (alignment - _io.pos % alignment) % alignment
+    if: num_infos > 0
+    doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L780-L785 Git tag "v0.27.0"
+  - size: 0
+    if: ofs_tensor_data < 0
 instances:
+  ofs_tensor_data:
+    value: _io.pos
+    doc: |
+      Offset of the tensor data. Each tensor's `offset` is relative to this
+      position.
   alignment:
     -orig-id: ALIGNMENT # used in the `gguf.md` document
     value: 'kv.size != 0 ? kv.last.alignment : 32'
@@ -241,19 +249,48 @@ types:
         enum: ggml_type
       - id: offset
         type: u8
-
-  gguf_tensor_data:
-    params:
-      - id: offset
-        type: u8
+        doc: Offset of the tensor's data, relative to `_root.ofs_tensor_data`
     instances:
-      padding:
-        pos: offset
-        size: (_root.alignment - offset % _root.alignment) % _root.alignment
-        doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/docs/gguf.md?plain=1#L301-L303 Git tag "v0.27.0"
+      num_elements:
+        value: |
+          (num_dims > 0 ? dims[0].value : 1) *
+          (num_dims > 1 ? dims[1].value : 1) *
+          (num_dims > 2 ? dims[2].value : 1) *
+          (num_dims > 3 ? dims[3].value : 1)
+      # `num_elements_per_block` and `len_block` are the `.blck_size` and
+      # `.type_size` fields of `type_traits[type]` in ggml, see
+      # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/ggml.c#L643-L957 (Git tag "v0.27.0")
+      #
+      # For removed types, both fields are 0, as in ggml.
+      num_elements_per_block:
+        -orig-id: blck_size
+        value: |
+          [
+            1, 1, 32, 32, 0, 0, 32, 32, 32, 32,
+            256, 256, 256, 256, 256, 256, 256, 256, 256, 256,
+            32, 256, 256, 256, 1, 1, 1, 1, 1, 256,
+            1, 0, 0, 0, 256, 256, 0, 0, 0, 32,
+            64, 128, 64
+          ][type.to_i]
+        doc: Number of elements in a block
+      len_block:
+        -orig-id: type_size
+        value: |
+          [
+            4, 2, 18, 20, 0, 0, 22, 24, 34, 36,
+            84, 110, 144, 176, 210, 292, 66, 74, 98, 50,
+            18, 110, 82, 136, 1, 2, 4, 8, 8, 56,
+            2, 0, 0, 0, 54, 66, 0, 0, 0, 17,
+            36, 18, 18
+          ][type.to_i]
+        doc: Size of a block in bytes
+      num_blocks:
+        value: num_elements / num_elements_per_block
+      len_data:
+        value: len_block * num_blocks
       data:
-        pos: offset + padding.size
-        size-eos: true
+        pos: _root.ofs_tensor_data + offset
+        size: len_data
 
 enums:
   gguf_type:
