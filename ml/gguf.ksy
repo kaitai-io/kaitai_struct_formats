@@ -22,7 +22,14 @@ seq:
     doc: GGUF file magic
   - id: version
     type: u4
-    doc: File format version
+    valid:
+      # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L494-L519 (Git tag "v0.27.0")
+      min: 2
+      max: 3
+    doc: |
+      File format version. Version 1 used 32-bit counts and lengths, which
+      this Kaitai Struct implementation doesn't support, and neither does
+      ggml.
   - id: num_infos
     type: u8
     doc: The number of tensors in the file
