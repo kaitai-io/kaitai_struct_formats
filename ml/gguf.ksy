@@ -100,17 +100,27 @@ types:
     seq:
       - id: key
         type: gguf_str
+        valid:
+          # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L571-L574 (Git tag "v0.27.0")
+          expr: _.size != 0
       - id: type
         type: u4
         enum: gguf_type
+        valid:
+          # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L593-L612 (Git tag "v0.27.0")
+          in-enum: true
       - id: value
         type: gguf_value(type)
         valid:
-          # `general.alignment` must be a `uint32`:
-          # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L622-L629 (Git tag "v0.27.0")
+          # `general.alignment` must be a `uint32` and a power of 2:
+          # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L622-L636 (Git tag "v0.27.0")
           expr: |
             key.data == "general.alignment"
-              ? type == gguf_type::gguf_type_uint32
+              ? (
+                type == gguf_type::gguf_type_uint32 and
+                _.value.as<gguf_uint32>.value != 0 and
+                _.value.as<gguf_uint32>.value & (_.value.as<gguf_uint32>.value - 1) == 0
+              )
               : true
     instances:
       alignment:
@@ -138,6 +148,9 @@ types:
       - id: type
         type: u4
         enum: gguf_type
+        valid:
+          # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L593-L612 (Git tag "v0.27.0")
+          in-enum: true
       - id: num_elems
         type: u8
       - id: elems
