@@ -345,6 +345,13 @@ types:
       data:
         pos: _root.ofs_tensor_data + offset
         size: len_data
+      padding:
+        pos: _root.ofs_tensor_data + offset + len_data
+        size: len_padding
+        doc: |
+          Padding after the data. ggml requires it even after the last tensor
+          when reading the tensor data.
+        doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L884-L893 Git tag "v0.27.0"
 
 enums:
   gguf_type:
