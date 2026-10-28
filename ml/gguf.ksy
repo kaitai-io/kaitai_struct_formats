@@ -260,18 +260,34 @@ types:
     seq:
       - id: name
         type: gguf_str
+        valid:
+          # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L657-L661 (Git tag "v0.27.0")
+          expr: _.size < 64
       - id: num_dims
         type: u4
         valid:
           # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L679-L684 (Git tag "v0.27.0")
           max: 4
       - id: dims
-        type: gguf_uint64
+        type: gguf_int64
+        valid:
+          # ggml reads them as `int64_t` too (even though `gguf.md` says
+          # `uint64_t`) and rejects negative ones:
+          # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L691-L697 (Git tag "v0.27.0")
+          expr: _.value >= 0
         repeat: expr
         repeat-expr: num_dims
       - id: type
         type: u4
         enum: ggml_type
+        valid:
+          # ggml accepts only types it can still read (`num_elements_per_block`
+          # must not be 0), and only rows consisting of whole blocks:
+          # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L729-L746 (Git tag "v0.27.0")
+          expr: |
+            _.to_i < 43 and
+            num_elements_per_block != 0 and
+            (num_dims > 0 ? dims[0].value : 1) % num_elements_per_block == 0
       - id: offset
         type: u8
         doc: Offset of the tensor's data, relative to `_root.ofs_tensor_data`
