@@ -164,7 +164,7 @@ types:
           Nested arrays are supported. Although ggml (v0.27.0) doesn't support them,
           they are explicitly allowed by `gguf.md` - see
           <https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/docs/gguf.md?plain=1#L221>.
-        -webide-representation: '[{elems}]'
+        -webide-representation: '{num_elems:dec} elements'
         seq:
           - id: type
             type: u4
