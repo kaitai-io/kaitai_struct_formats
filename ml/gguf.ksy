@@ -33,6 +33,21 @@ instances:
   is_big_endian:
     # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L499-L509 (Git tag "v0.27.0")
     value: version_le & 0xffff == 0
+  len_file:
+    value: |
+      body.ofs_tensor_data + (
+        body.num_tensor_infos != 0
+          ? body.tensor_infos.last.expected_next_offset
+          : 0
+      )
+    doc: |
+      Length of the file (computed from the header), including the padding after
+      the last tensor's data.
+
+      This Kaitai Struct implementation stops parsing where the tensor data
+      starts (which is read lazily, i.e. only on demand). Without reading the
+      tensor data, you can use this expected file size to check whether the file
+      has been truncated, to carve the file out of a larger one, etc.
 types:
   gguf_body:
     meta:
@@ -70,7 +85,7 @@ types:
         doc: Tensor metadata
       - id: padding
         size: (alignment - _io.pos % alignment) % alignment
-        if: num_tensor_infos > 0
+        if: num_tensor_infos != 0
         doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L780-L785 Git tag "v0.27.0"
       - size: 0
         if: ofs_tensor_data < 0
