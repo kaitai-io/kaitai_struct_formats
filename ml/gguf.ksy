@@ -117,19 +117,19 @@ types:
             type:
               switch-on: type
               cases:
-                'gguf_type::uint8': gguf_uint8
-                'gguf_type::int8': gguf_int8
-                'gguf_type::uint16': gguf_uint16
-                'gguf_type::int16': gguf_int16
-                'gguf_type::uint32': gguf_uint32
-                'gguf_type::int32': gguf_int32
-                'gguf_type::float32': gguf_float32
-                'gguf_type::bool': gguf_bool
-                'gguf_type::string': gguf_str
-                'gguf_type::array': gguf_array
-                'gguf_type::uint64': gguf_uint64
-                'gguf_type::int64': gguf_int64
-                'gguf_type::float64': gguf_float64
+                gguf_type::uint8: gguf_uint8
+                gguf_type::int8: gguf_int8
+                gguf_type::uint16: gguf_uint16
+                gguf_type::int16: gguf_int16
+                gguf_type::uint32: gguf_uint32
+                gguf_type::int32: gguf_int32
+                gguf_type::float32: gguf_float32
+                gguf_type::bool: gguf_bool
+                gguf_type::string: gguf_str
+                gguf_type::array: gguf_array
+                gguf_type::uint64: gguf_uint64
+                gguf_type::int64: gguf_int64
+                gguf_type::float64: gguf_float64
 
       gguf_kv:
         -orig-id: gguf_metadata_kv_t
