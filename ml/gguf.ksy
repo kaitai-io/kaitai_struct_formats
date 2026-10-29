@@ -305,7 +305,7 @@ types:
       gguf_tensor_info:
         -orig-id: gguf_tensor_info_t
         doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/docs/gguf.md?plain=1#L305-L325 Git tag "v0.27.0"
-        -webide-representation: '{type}[{dims}] {name}'
+        -webide-representation: '{name}: {type}[{dump_dims}]'
         params:
           - id: expected_offset
             type: u8
@@ -349,6 +349,16 @@ types:
             valid: expected_offset
             doc: Offset of the tensor's data, relative to `_parent.ofs_tensor_data`
         instances:
+          dump_dims:
+            value: |
+              (num_dims > 0 ? dims[0].to_s : "")
+              + (num_dims > 1 ? " x " + dims[1].to_s : "")
+              + (num_dims > 2 ? " x " + dims[2].to_s : "")
+              + (num_dims > 3 ? " x " + dims[3].to_s : "")
+            doc: |
+              `dims` joined with the string `" x "`. This is necessary for
+              `-webide-representation`, which cannot format `dims` directly -
+              see <https://github.com/kaitai-io/kaitai_struct_webide/issues/160>.
           num_elements:
             value: |
               (num_dims > 0 ? dims[0] : 1) *
