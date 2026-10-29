@@ -3,7 +3,7 @@ meta:
   title: GGML model file
   file-extension: gguf
   license: CC0-1.0
-  ks-version: '0.10'
+  ks-version: '0.11'
 doc: |
   GGUF is a file format for storing machine learning models for inference with
   the GGML library, or executors based on GGML. Models are typically developed
