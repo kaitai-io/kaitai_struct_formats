@@ -85,6 +85,8 @@ types:
 
     types:
       gguf_value:
+        -orig-id: gguf_metadata_value_t
+        doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/docs/gguf.md?plain=1#L239-L260 Git tag "v0.27.0"
         -webide-representation: '{value}'
         params:
           - id: type
@@ -110,6 +112,8 @@ types:
                 'gguf_type::float64': gguf_float64
 
       gguf_kv:
+        -orig-id: gguf_metadata_kv_t
+        doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/docs/gguf.md?plain=1#L262-L275 Git tag "v0.27.0"
         -webide-representation: '{key}: {value}'
         params:
           - id: prev_alignment
@@ -149,6 +153,8 @@ types:
                 : prev_alignment
 
       gguf_str:
+        -orig-id: gguf_string_t
+        doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/docs/gguf.md?plain=1#L232-L237 Git tag "v0.27.0"
         -webide-representation: '"{value}"'
         seq:
           - id: len_value
@@ -157,7 +163,6 @@ types:
             size: len_value
             type: str
             encoding: UTF-8
-            doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/docs/gguf.md?plain=1#L235-L236 Git tag "v0.27.0"
 
       gguf_array:
         doc: |
@@ -278,6 +283,8 @@ types:
             type: f8
 
       gguf_tensor_info:
+        -orig-id: gguf_tensor_info_t
+        doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/docs/gguf.md?plain=1#L305-L325 Git tag "v0.27.0"
         -webide-representation: '{type}[{dims}] {name}'
         params:
           - id: expected_offset
@@ -377,6 +384,7 @@ types:
             doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L884-L893 Git tag "v0.27.0"
 
 enums:
+  # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/include/gguf.h#L53-L68 (Git tag "v0.27.0")
   gguf_type:
     0: uint8
     1: int8
