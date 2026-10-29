@@ -141,14 +141,17 @@ types:
         doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/docs/gguf.md?plain=1#L235-L236 Git tag "v0.27.0"
 
   gguf_array:
-    # Note that this is more permissive than the parser defined
-    # by the GGML library which does not permit nested arrays.
+    doc: |
+      Nested arrays are supported. Although ggml (v0.27.0) doesn't support them,
+      they are explicitly allowed by `gguf.md` - see
+      <https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/docs/gguf.md?plain=1#L221>.
     -webide-representation: '[{elems}]'
     seq:
       - id: type
         type: u4
         enum: gguf_type
         valid:
+          # Like ggml, except that nested arrays are allowed (see the `doc` above):
           # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L593-L612 (Git tag "v0.27.0")
           in-enum: true
       - id: num_elems
