@@ -1,6 +1,6 @@
 meta:
   id: gguf
-  title: GGML model file
+  title: GGUF (GGML Universal File)
   file-extension: gguf
   license: CC0-1.0
   ks-version: '0.11'
