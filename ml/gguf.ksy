@@ -2,6 +2,11 @@ meta:
   id: gguf
   title: GGUF (GGML Universal File)
   file-extension: gguf
+  xref:
+    pronom:
+      - fmt/2097 # GGUF v2
+      - fmt/2098 # GGUF v3
+    wikidata: Q127427530
   license: CC0-1.0
   ks-version: '0.11'
 doc: |
