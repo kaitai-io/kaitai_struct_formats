@@ -95,19 +95,19 @@ types:
             type:
               switch-on: type
               cases:
-                'gguf_type::gguf_type_uint8': gguf_uint8
-                'gguf_type::gguf_type_int8': gguf_int8
-                'gguf_type::gguf_type_uint16': gguf_uint16
-                'gguf_type::gguf_type_int16': gguf_int16
-                'gguf_type::gguf_type_uint32': gguf_uint32
-                'gguf_type::gguf_type_int32': gguf_int32
-                'gguf_type::gguf_type_float32': gguf_float32
-                'gguf_type::gguf_type_bool': gguf_bool
-                'gguf_type::gguf_type_string': gguf_str
-                'gguf_type::gguf_type_array': gguf_array
-                'gguf_type::gguf_type_uint64': gguf_uint64
-                'gguf_type::gguf_type_int64': gguf_int64
-                'gguf_type::gguf_type_float64': gguf_float64
+                'gguf_type::uint8': gguf_uint8
+                'gguf_type::int8': gguf_int8
+                'gguf_type::uint16': gguf_uint16
+                'gguf_type::int16': gguf_int16
+                'gguf_type::uint32': gguf_uint32
+                'gguf_type::int32': gguf_int32
+                'gguf_type::float32': gguf_float32
+                'gguf_type::bool': gguf_bool
+                'gguf_type::string': gguf_str
+                'gguf_type::array': gguf_array
+                'gguf_type::uint64': gguf_uint64
+                'gguf_type::int64': gguf_int64
+                'gguf_type::float64': gguf_float64
 
       gguf_kv:
         -webide-representation: '{key}: {value}'
@@ -135,7 +135,7 @@ types:
               expr: |
                 key.value == "general.alignment"
                   ? (
-                    type == gguf_type::gguf_type_uint32 and
+                    type == gguf_type::uint32 and
                     _.value.as<gguf_uint32>.value != 0 and
                     _.value.as<gguf_uint32>.value & (_.value.as<gguf_uint32>.value - 1) == 0
                   )
@@ -378,105 +378,105 @@ types:
 
 enums:
   gguf_type:
-    0: gguf_type_uint8
-    1: gguf_type_int8
-    2: gguf_type_uint16
-    3: gguf_type_int16
-    4: gguf_type_uint32
-    5: gguf_type_int32
-    6: gguf_type_float32
-    7: gguf_type_bool
-    8: gguf_type_string
-    9: gguf_type_array
-    10: gguf_type_uint64
-    11: gguf_type_int64
-    12: gguf_type_float64
+    0: uint8
+    1: int8
+    2: uint16
+    3: int16
+    4: uint32
+    5: int32
+    6: float32
+    7: bool
+    8: string
+    9: array
+    10: uint64
+    11: int64
+    12: float64
 
   # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/include/ggml.h#L389-L434 (Git tag "v0.27.0")
   ggml_type:
-    0: ggml_type_f32
-    1: ggml_type_f16
-    2: ggml_type_q4_0
-    3: ggml_type_q4_1
+    0: f32
+    1: f16
+    2: q4_0
+    3: q4_1
     4:
-      id: ggml_type_q4_2
+      id: q4_2
       doc: |
         Removed from ggml in May 2023, before GGUF was introduced. ggml
         rejects it.
       doc-ref: https://github.com/ggml-org/llama.cpp/commit/b9fd7eee57df101d4a3e3eabc9fd6c2cb13c9ca1
     5:
-      id: ggml_type_q4_3
+      id: q4_3
       doc: |
         Removed from ggml in April 2023, before GGUF was introduced. ggml
         rejects it.
       doc-ref: https://github.com/ggml-org/llama.cpp/commit/36d19a603b221d1bd7897fcb10e823e2103b052d
-    6: ggml_type_q5_0
-    7: ggml_type_q5_1
-    8: ggml_type_q8_0
-    9: ggml_type_q8_1
-    10: ggml_type_q2_k
-    11: ggml_type_q3_k
-    12: ggml_type_q4_k
-    13: ggml_type_q5_k
-    14: ggml_type_q6_k
-    15: ggml_type_q8_k
-    16: ggml_type_iq2_xxs
-    17: ggml_type_iq2_xs
-    18: ggml_type_iq3_xxs
-    19: ggml_type_iq1_s
-    20: ggml_type_iq4_nl
-    21: ggml_type_iq3_s
-    22: ggml_type_iq2_s
-    23: ggml_type_iq4_xs
-    24: ggml_type_i8
-    25: ggml_type_i16
-    26: ggml_type_i32
-    27: ggml_type_i64
-    28: ggml_type_f64
-    29: ggml_type_iq1_m
-    30: ggml_type_bf16
+    6: q5_0
+    7: q5_1
+    8: q8_0
+    9: q8_1
+    10: q2_k
+    11: q3_k
+    12: q4_k
+    13: q5_k
+    14: q6_k
+    15: q8_k
+    16: iq2_xxs
+    17: iq2_xs
+    18: iq3_xxs
+    19: iq1_s
+    20: iq4_nl
+    21: iq3_s
+    22: iq2_s
+    23: iq4_xs
+    24: i8
+    25: i16
+    26: i32
+    27: i64
+    28: f64
+    29: iq1_m
+    30: bf16
     31:
-      id: ggml_type_q4_0_4_4
+      id: q4_0_4_4
       doc: |
         Removed from ggml in December 2024 in favor of repacking
-        `ggml_type_q4_0` at load time. ggml rejects it, although files with
-        it exist, e.g.
+        `ggml_type::q4_0` at load time. ggml rejects it, although files with it
+        exist, e.g.
         [`Qwen2.5-0.5B-Instruct-Q4_0_4_4.gguf`](https://huggingface.co/bartowski/Qwen2.5-0.5B-Instruct-GGUF/blob/41ba88dbac95fed2528c92514c131d73eb5a174b/Qwen2.5-0.5B-Instruct-Q4_0_4_4.gguf).
       doc-ref: https://github.com/ggml-org/llama.cpp/commit/19d8762ab61df8286367588a80b9c7db4cb568db
     32:
-      id: ggml_type_q4_0_4_8
+      id: q4_0_4_8
       doc: |
         Removed from ggml in December 2024 in favor of repacking
-        `ggml_type_q4_0` at load time. ggml rejects it, although files with
-        it exist, e.g.
+        `ggml_type::q4_0` at load time. ggml rejects it, although files with it
+        exist, e.g.
         [`Qwen2.5-0.5B-Instruct-Q4_0_4_8.gguf`](https://huggingface.co/bartowski/Qwen2.5-0.5B-Instruct-GGUF/blob/41ba88dbac95fed2528c92514c131d73eb5a174b/Qwen2.5-0.5B-Instruct-Q4_0_4_8.gguf).
       doc-ref: https://github.com/ggml-org/llama.cpp/commit/19d8762ab61df8286367588a80b9c7db4cb568db
     33:
-      id: ggml_type_q4_0_8_8
+      id: q4_0_8_8
       doc: |
         Removed from ggml in December 2024 in favor of repacking
-        `ggml_type_q4_0` at load time. ggml rejects it, although files with
-        it exist, e.g.
+        `ggml_type::q4_0` at load time. ggml rejects it, although files with it
+        exist, e.g.
         [`Qwen2.5-0.5B-Instruct-Q4_0_8_8.gguf`](https://huggingface.co/bartowski/Qwen2.5-0.5B-Instruct-GGUF/blob/41ba88dbac95fed2528c92514c131d73eb5a174b/Qwen2.5-0.5B-Instruct-Q4_0_8_8.gguf).
       doc-ref: https://github.com/ggml-org/llama.cpp/commit/19d8762ab61df8286367588a80b9c7db4cb568db
-    34: ggml_type_tq1_0
-    35: ggml_type_tq2_0
+    34: tq1_0
+    35: tq2_0
     36:
-      id: ggml_type_iq4_nl_4_4
+      id: iq4_nl_4_4
       doc: |
         Supported by ggml only from November to December 2024, and only for
         repacking tensors in memory - it was never written to files. ggml
         rejects it.
       doc-ref: https://github.com/ggml-org/llama.cpp/commit/19d8762ab61df8286367588a80b9c7db4cb568db
     37:
-      id: ggml_type_iq4_nl_4_8
+      id: iq4_nl_4_8
       doc: Reserved by ggml, but never supported. ggml rejects it.
       doc-ref: https://github.com/ggml-org/llama.cpp/commit/c202cef1686182a78f8f4e253ab8d0c0ffe2fcc8
     38:
-      id: ggml_type_iq4_nl_8_8
+      id: iq4_nl_8_8
       doc: Reserved by ggml, but never supported. ggml rejects it.
       doc-ref: https://github.com/ggml-org/llama.cpp/commit/c202cef1686182a78f8f4e253ab8d0c0ffe2fcc8
-    39: ggml_type_mxfp4
-    40: ggml_type_nvfp4
-    41: ggml_type_q1_0
-    42: ggml_type_q2_0
+    39: mxfp4
+    40: nvfp4
+    41: q1_0
+    42: q2_0
