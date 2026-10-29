@@ -264,7 +264,7 @@ types:
       gguf_float32:
         # This type is used as a work-around for languages (like C++)
         # that do not support variant types.
-        -webide-representation: '{value}'
+        -webide-representation: '{value:dec}'
         seq:
           - id: value
             type: f4
@@ -272,7 +272,7 @@ types:
       gguf_float64:
         # This type is used as a work-around for languages (like C++)
         # that do not support variant types.
-        -webide-representation: '{value}'
+        -webide-representation: '{value:dec}'
         seq:
           - id: value
             type: f8
