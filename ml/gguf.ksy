@@ -120,6 +120,7 @@ types:
             valid:
               # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L571-L574 (Git tag "v0.27.0")
               expr: _.size != 0
+            -affected-by: 1260 # this `valid/expr` doesn't compile in C++11
           - id: type
             type: u4
             enum: gguf_type
@@ -139,6 +140,7 @@ types:
                     _.value.as<gguf_uint32>.value & (_.value.as<gguf_uint32>.value - 1) == 0
                   )
                   : true
+            -affected-by: 1260 # this `valid/expr` doesn't compile in C++11
         instances:
           alignment:
             value: |
@@ -286,6 +288,7 @@ types:
             valid:
               # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L657-L661 (Git tag "v0.27.0")
               expr: _.size < 64
+            -affected-by: 1260 # this `valid/expr` doesn't compile in C++11
           - id: num_dims
             type: u4
             valid:
