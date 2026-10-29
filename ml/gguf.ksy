@@ -47,7 +47,7 @@ types:
           File format version. Version 1 used 32-bit counts and lengths, which
           this Kaitai Struct implementation doesn't support, and neither does
           ggml.
-      - id: num_infos
+      - id: num_tensor_infos
         type: u8
         doc: The number of tensors in the file
       - id: num_kv
@@ -58,14 +58,14 @@ types:
         repeat: expr
         repeat-expr: num_kv
         doc: Key-value pairs
-      - id: infos
-        type: 'gguf_tensor_info(_index != 0 ? infos[_index - 1].expected_next_offset : 0)'
+      - id: tensor_infos
+        type: 'gguf_tensor_info(_index != 0 ? tensor_infos[_index - 1].expected_next_offset : 0)'
         repeat: expr
-        repeat-expr: num_infos
+        repeat-expr: num_tensor_infos
         doc: Tensor metadata
       - id: padding
         size: (alignment - _io.pos % alignment) % alignment
-        if: num_infos > 0
+        if: num_tensor_infos > 0
         doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L780-L785 Git tag "v0.27.0"
       - size: 0
         if: ofs_tensor_data < 0
