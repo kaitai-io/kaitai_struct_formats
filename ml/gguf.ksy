@@ -119,7 +119,7 @@ types:
             type: gguf_str
             valid:
               # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L571-L574 (Git tag "v0.27.0")
-              expr: _.size != 0
+              expr: _.len_value != 0
             -affected-by: 1260 # this `valid/expr` doesn't compile in C++11
           - id: type
             type: u4
@@ -133,7 +133,7 @@ types:
               # `general.alignment` must be a `uint32` and a power of 2:
               # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L622-L636 (Git tag "v0.27.0")
               expr: |
-                key.data == "general.alignment"
+                key.value == "general.alignment"
                   ? (
                     type == gguf_type::gguf_type_uint32 and
                     _.value.as<gguf_uint32>.value != 0 and
@@ -144,17 +144,17 @@ types:
         instances:
           alignment:
             value: |
-              key.data == "general.alignment"
+              key.value == "general.alignment"
                 ? value.value.as<gguf_uint32>.value
                 : prev_alignment
 
       gguf_str:
-        -webide-representation: '"{data}"'
+        -webide-representation: '"{value}"'
         seq:
-          - id: size
+          - id: len_value
             type: u8
-          - id: data
-            size: size
+          - id: value
+            size: len_value
             type: str
             encoding: UTF-8
             doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/docs/gguf.md?plain=1#L235-L236 Git tag "v0.27.0"
@@ -287,7 +287,7 @@ types:
             type: gguf_str
             valid:
               # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L657-L661 (Git tag "v0.27.0")
-              expr: _.size < 64
+              expr: _.len_value < 64
             -affected-by: 1260 # this `valid/expr` doesn't compile in C++11
           - id: num_dims
             type: u4
