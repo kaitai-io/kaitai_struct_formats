@@ -50,13 +50,13 @@ types:
       - id: num_tensor_infos
         type: u8
         doc: The number of tensors in the file
-      - id: num_kv
+      - id: num_kv_pairs
         type: u8
         doc: The number of key-value pairs in the file header
-      - id: kv
-        type: 'gguf_kv(_index != 0 ? kv[_index - 1].alignment : 32)'
+      - id: kv_pairs
+        type: 'gguf_kv(_index != 0 ? kv_pairs[_index - 1].alignment : 32)'
         repeat: expr
-        repeat-expr: num_kv
+        repeat-expr: num_kv_pairs
         doc: Key-value pairs
       - id: tensor_infos
         type: 'gguf_tensor_info(_index != 0 ? tensor_infos[_index - 1].expected_next_offset : 0)'
@@ -77,7 +77,7 @@ types:
           position.
       alignment:
         -orig-id: ALIGNMENT # used in the `gguf.md` document
-        value: 'kv.size != 0 ? kv.last.alignment : 32'
+        value: 'kv_pairs.size != 0 ? kv_pairs.last.alignment : 32'
         doc: |
           Global alignment - from the `general.alignment` key, or 32 if there's no
           such key.
