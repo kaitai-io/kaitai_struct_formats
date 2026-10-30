@@ -58,6 +58,11 @@ class FormatPagesGenerator
     'machine_code' => {title: 'CPU / Machine Code Disassembly', icon: 'industry'},
     'macos' => {title: 'macOS-specific', icon: 'apple'},
     'media' => {title: 'Multimedia Files', icon: 'video-camera'},
+    # The `brain` icon (https://fontawesome.com/v5/icons/classic/solid/brain)
+    # would be better than `share-alt`, but it's only available since
+    # Font Awesome 5.2.0, and as of this writing we're still using 4.7.0 (see
+    # `_build/header.html.erb`)
+    'ml' => {title: 'Machine Learning', icon: 'share-alt'},
     'network' => {title: 'Networking Protocols', icon: 'sitemap'},
     'scientific' => {title: 'Scientific Applications', icon: 'flask'},
     'security' => {title: 'Security', icon: 'lock'},
