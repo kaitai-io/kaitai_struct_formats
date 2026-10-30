@@ -10,15 +10,14 @@ meta:
   license: CC0-1.0
   ks-version: '0.11'
 doc: |
-  GGUF is a file format for storing machine learning models for inference with
-  the GGML library, or executors based on GGML. Models are typically developed
-  using PyTorch or some other framework, and then converted to GGUF for use in
-  GGML.
+  GGUF is the file format of the [ggml](https://github.com/ggml-org/ggml)
+  tensor library for storing machine learning models, used for example by
+  [llama.cpp](https://github.com/ggml-org/llama.cpp) for inference. It
+  replaced the older GGML, GGMF and GGJT formats.
 
-  GGUF is a successor file format to GGML, GGMF and GGJT, and is designed
-  to be unambiguous by containing all the information needed to load a
-  model. It is also designed to be extensible, so that new information
-  can be added to models without breaking compatibility.
+  A GGUF file consists of a header with metadata as key-value pairs (model
+  architecture, hyperparameters, tokenizer, etc.), a description of each
+  tensor (name, dimensions, type and offset), and finally the tensor data.
 doc-ref: https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/docs/gguf.md Git tag "v0.27.0"
 seq:
   - id: magic
