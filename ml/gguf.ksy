@@ -79,12 +79,21 @@ types:
         type: 'gguf_kv(_index != 0 ? kv_pairs[_index - 1].alignment : 32)'
         repeat: expr
         repeat-expr: num_kv_pairs
-        doc: Key-value pairs
+        doc: |
+          Key-value pairs. ggml (v0.27.0)
+          [rejects](https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L575-L578)
+          duplicate keys, but this Kaitai Struct implementation can't detect
+          them. If there are multiple `general.alignment` keys, the last one is
+          used for the `alignment` value instance.
       - id: tensor_infos
         type: 'gguf_tensor_info(_index != 0 ? tensor_infos[_index - 1].expected_next_offset : 0)'
         repeat: expr
         repeat-expr: num_tensor_infos
-        doc: Tensor metadata
+        doc: |
+          Tensor metadata. ggml (v0.27.0)
+          [rejects](https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/gguf.cpp#L664-L669)
+          duplicate tensor names, but this Kaitai Struct implementation can't
+          detect them.
       - id: padding
         size: (alignment - _io.pos % alignment) % alignment
         if: num_tensor_infos != 0
