@@ -35,11 +35,14 @@ instances:
     value: version_le & 0xffff == 0
   len_file:
     value: |
-      body.ofs_tensor_data + (
-        body.num_tensor_infos != 0
-          ? body.tensor_infos.last.expected_next_offset
-          : 0
-      )
+      (
+        body.ofs_tensor_data + (
+          body.num_tensor_infos != 0
+            ? body.tensor_infos.last.expected_next_offset
+            : 0
+        )
+      ).as<u8>
+    -affected-by: 1333 # the cast can be removed once this is resolved
     doc: |
       Length of the file (computed from the header), including the padding after
       the last tensor's data.
@@ -91,7 +94,8 @@ types:
         if: ofs_tensor_data < 0
     instances:
       ofs_tensor_data:
-        value: _io.pos
+        # `u8` because it's added to `offset`
+        value: _io.pos.as<u8>
         doc: |
           Offset of the tensor data. Each tensor's `offset` is relative to this
           position.
@@ -361,10 +365,13 @@ types:
               see <https://github.com/kaitai-io/kaitai_struct_webide/issues/160>.
           num_elements:
             value: |
-              (num_dims > 0 ? dims[0] : 1) *
-              (num_dims > 1 ? dims[1] : 1) *
-              (num_dims > 2 ? dims[2] : 1) *
-              (num_dims > 3 ? dims[3] : 1)
+              (
+                (num_dims > 0 ? dims[0] : 1) *
+                (num_dims > 1 ? dims[1] : 1) *
+                (num_dims > 2 ? dims[2] : 1) *
+                (num_dims > 3 ? dims[3] : 1)
+              ).as<s8>
+            -affected-by: 1333 # the cast can be removed once this is resolved
           # `num_elements_per_block` and `len_block` are the `.blck_size` and
           # `.type_size` fields of `type_traits[type]` in ggml, see
           # https://github.com/ggml-org/ggml/blob/a05c9922613c6a2230dbb1d0de679519ecafb4f0/src/ggml.c#L643-L957 (Git tag "v0.27.0")
@@ -393,14 +400,17 @@ types:
               ][type.to_i]
             doc: Size of a block in bytes
           num_blocks:
-            value: num_elements / num_elements_per_block
+            value: (num_elements / num_elements_per_block).as<s8>
+            -affected-by: 1333 # the cast can be removed once this is resolved
           len_data:
-            value: len_block * num_blocks
+            # `u8` (not `s8`) because it's added to `offset`
+            value: (len_block * num_blocks).as<u8>
           len_padding:
             value: (_parent.alignment - len_data % _parent.alignment) % _parent.alignment
             doc: Number of padding bytes after the data
           expected_next_offset:
-            value: offset + len_data + len_padding
+            value: (offset + len_data + len_padding).as<u8>
+            -affected-by: 1333 # the cast can be removed once this is resolved
             doc: '`offset` that the next tensor must have'
           data:
             pos: _parent.ofs_tensor_data + offset
