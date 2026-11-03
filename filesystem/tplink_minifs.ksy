@@ -17,6 +17,16 @@ doc: |
   The meta information of a file contains an offset to the directory name,
   a file name, the LZMA blob (numbering starts at 0), the offset of the file
   in the uncompressed data and the size of the uncompressed file.
+
+  This Kaitai Struct implementation was written independently of the paper
+  [Reverse Engineered MiniFS File System](https://arxiv.org/abs/2407.05064v1).
+  It was started in the firmware analysis project
+  [BANG](https://github.com/armijnhemel/binaryanalysis-ng) (Binary Analysis
+  Next Generation) in
+  [2021](https://github.com/armijnhemel/binaryanalysis-ng/commit/531203a076e3761116320b77b2b9c64a9dca6186)
+  and submitted to the Kaitai Struct format gallery in
+  [September 2023](https://github.com/kaitai-io/kaitai_struct_formats/pull/682),
+  whereas the paper was published in July 2024.
 doc-ref:
   - https://arxiv.org/html/2407.05064v1#S4
   - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py
