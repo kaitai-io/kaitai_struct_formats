@@ -44,14 +44,6 @@ instances:
     repeat-expr: _root.inodes.last.cur_max_lzma_blob + 1
 types:
   dummy: {}
-  lzma_blob:
-    params:
-      - id: index
-        type: u4
-    instances:
-      data:
-        pos: _root.lzma_metas[index].ofs_blob
-        size: _root.lzma_metas[index].len_blob
   header:
     seq:
       - id: magic
@@ -110,3 +102,11 @@ types:
     instances:
       ofs_end:
         value: ofs_blob + len_blob
+  lzma_blob:
+    params:
+      - id: index
+        type: u4
+    instances:
+      data:
+        pos: _root.lzma_metas[index].ofs_blob
+        size: _root.lzma_metas[index].len_blob
