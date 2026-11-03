@@ -32,30 +32,12 @@ doc-ref:
   - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py
 seq:
   - id: header
-    size: 32
     type: header
-  - id: filenames
-    size: header.len_filenames
-    type: filenames
-  - id: inodes
-    type: 'inode(_index != 0 ? inodes[_index - 1].cur_max_lzma_blob : 0)'
-    repeat: expr
-    repeat-expr: header.num_files
-  - id: lzma_metas
-    type: 'lzma_meta(_index != 0 ? lzma_metas[_index - 1].ofs_end : 0)'
-    repeat: expr
-    repeat-expr: inodes.last.cur_max_lzma_blob + 1
-    doc: Count starts at 0, so there is one more blob than the highest blob number
-    doc-ref: https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L129-L130
-  - id: lzma_blobs_area
-    size: lzma_metas.last.ofs_end
-    type: dummy
-instances:
-  lzma_blobs:
-    io: _root.lzma_blobs_area._io
-    type: lzma_blob(_index)
-    repeat: expr
-    repeat-expr: _root.inodes.last.cur_max_lzma_blob + 1
+  - id: body
+    type:
+      switch-on: header.version
+      cases:
+        3: body_v3
 types:
   dummy: {}
   header:
@@ -71,8 +53,32 @@ types:
         type: u4
       - id: unknown_2
         type: u4
+  body_v3:
+    seq:
       - id: len_filenames
         type: u4
+      - id: filenames
+        size: len_filenames
+        type: filenames
+      - id: inodes
+        type: 'inode(_index != 0 ? inodes[_index - 1].cur_max_lzma_blob : 0)'
+        repeat: expr
+        repeat-expr: _root.header.num_files
+      - id: lzma_metas
+        type: 'lzma_meta(_index != 0 ? lzma_metas[_index - 1].ofs_end : 0)'
+        repeat: expr
+        repeat-expr: inodes.last.cur_max_lzma_blob + 1
+        doc: Count starts at 0, so there is one more blob than the highest blob number
+        doc-ref: https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L129-L130
+      - id: lzma_blobs_area
+        size: lzma_metas.last.ofs_end
+        type: dummy
+    instances:
+      lzma_blobs:
+        io: lzma_blobs_area._io
+        type: lzma_blob(_index)
+        repeat: expr
+        repeat-expr: inodes.last.cur_max_lzma_blob + 1
   filenames:
     doc-ref: https://arxiv.org/html/2407.05064v1#S4.SS2
     seq:
@@ -101,11 +107,11 @@ types:
       cur_max_lzma_blob:
         value: 'lzma_blob > prev_max_lzma_blob ? lzma_blob : prev_max_lzma_blob'
       filename:
-        io: _root.filenames._io
+        io: _parent.filenames._io
         pos: ofs_name
         type: strz
       directory_name:
-        io: _root.filenames._io
+        io: _parent.filenames._io
         pos: ofs_directory
         type: strz
   lzma_meta:
@@ -135,5 +141,5 @@ types:
         type: u4
     instances:
       data:
-        pos: _root.lzma_metas[index].ofs_blob
-        size: _root.lzma_metas[index].len_blob
+        pos: _parent.lzma_metas[index].ofs_blob
+        size: _parent.lzma_metas[index].len_blob
