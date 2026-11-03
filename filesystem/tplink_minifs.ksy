@@ -65,7 +65,7 @@ types:
     seq:
       - id: magic
         contents: "MINIFS\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
-      - id: unknown_1
+      - id: version
         type: u4
       - id: num_files
         type: u4
