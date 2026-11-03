@@ -17,6 +17,9 @@ doc: |
   The meta information of a file contains an offset to the directory name,
   a file name, the LZMA blob (numbering starts at 0), the offset of the file
   in the uncompressed data and the size of the uncompressed file.
+doc-ref:
+  - https://arxiv.org/html/2407.05064v1#S4
+  - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py
 seq:
   - id: header
     size: 32
@@ -33,6 +36,7 @@ seq:
     repeat: expr
     repeat-expr: inodes.last.cur_max_lzma_blob + 1
     doc: Count starts at 0, so there is one more blob than the highest blob number
+    doc-ref: https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L129-L130
   - id: lzma_blobs_area
     size: lzma_metas.last.ofs_end
     type: dummy
@@ -45,6 +49,9 @@ instances:
 types:
   dummy: {}
   header:
+    doc-ref:
+      - https://arxiv.org/html/2407.05064v1#S4.SS1
+      - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L27-L34
     seq:
       - id: magic
         contents: "MINIFS\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
@@ -57,11 +64,15 @@ types:
       - id: len_filenames
         type: u4
   filenames:
+    doc-ref: https://arxiv.org/html/2407.05064v1#S4.SS2
     seq:
       - id: filename
         type: strz
         repeat: eos
   inode:
+    doc-ref:
+      - https://arxiv.org/html/2407.05064v1#S4.SS3
+      - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L36-L42
     params:
       - id: prev_max_lzma_blob
         type: u4
@@ -88,6 +99,9 @@ types:
         pos: ofs_directory
         type: strz
   lzma_meta:
+    doc-ref:
+      - https://arxiv.org/html/2407.05064v1#S4.SS4
+      - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L44-L48
     params:
       - id: prev_ofs_end
         type: u4
@@ -103,6 +117,9 @@ types:
       ofs_end:
         value: ofs_blob + len_blob
   lzma_blob:
+    doc-ref:
+      - https://arxiv.org/html/2407.05064v1#S4.SS5
+      - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L175-L187
     params:
       - id: index
         type: u4
