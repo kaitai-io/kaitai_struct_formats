@@ -2,8 +2,8 @@ meta:
   id: tplink_minifs
   title: TP-Link MINIFS
   license: CC0-1.0
-  endian: be
   encoding: ASCII
+  endian: be
 doc: |
   MINIFS is a file system found in certain TP-Link firmware files, such as
   RE450(V4)_210531.zip, for TP-Link's own TPOS RTOS.
