@@ -62,11 +62,13 @@ types:
         size: len_filenames
         type: filenames
       - id: inodes
-        type: 'inode(_index != 0 ? inodes[_index - 1].cur_max_lzma_blob : 0)'
+        type: 'inode((_index != 0 ? inodes[_index - 1].cur_max_lzma_blob : 0).as<u4>)'
+        -affected-by: 1333
         repeat: expr
         repeat-expr: _root.header.num_files
       - id: lzma_metas
-        type: 'lzma_meta(_index != 0 ? lzma_metas[_index - 1].ofs_end : 0)'
+        type: 'lzma_meta((_index != 0 ? lzma_metas[_index - 1].ofs_end : 0).as<u4>)'
+        -affected-by: 1333
         repeat: expr
         repeat-expr: inodes.last.cur_max_lzma_blob + 1
         doc: Count starts at 0, so there is one more blob than the highest blob number
@@ -139,7 +141,7 @@ types:
       - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L175-L187
     params:
       - id: index
-        type: u4
+        type: s4
     instances:
       data:
         pos: _parent.lzma_metas[index].ofs_blob
