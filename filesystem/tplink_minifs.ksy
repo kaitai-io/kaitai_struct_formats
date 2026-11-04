@@ -109,7 +109,7 @@ types:
     instances:
       cur_max_lzma_blob:
         value: 'lzma_blob > prev_max_lzma_blob ? lzma_blob : prev_max_lzma_blob'
-      filename:
+      file_name:
         io: _parent.name_table._io
         pos: ofs_name
         type: strz
