@@ -32,7 +32,8 @@ doc-ref:
   - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py
 seq:
   - id: header
-    type: header
+    type: minifs_header
+    -affected-by: 86
   - id: body
     type:
       switch-on: header.version
@@ -40,7 +41,7 @@ seq:
         3: body_v3
 types:
   dummy: {}
-  header:
+  minifs_header:
     doc-ref:
       - https://arxiv.org/html/2407.05064v1#S4.SS1
       - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L27-L34
