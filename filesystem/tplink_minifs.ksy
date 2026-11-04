@@ -8,10 +8,10 @@ doc: |
   MINIFS is a file system found in certain TP-Link firmware files, such as
   RE450(V4)_210531.zip, for TP-Link's own TPOS RTOS.
 
-  It consists of a header, followed by a list of file names, followed by
-  meta information for each file, meta information about the LZMA compressed
-  blobs including length, offset and uncompressed length, and then a number
-  of LZMA compressed blobs.
+  It consists of a header, followed by a table of directory paths and file
+  names, followed by meta information for each file, meta information about
+  the LZMA compressed blobs including length, offset and uncompressed length,
+  and then a number of LZMA compressed blobs.
 
   The LZMA blobs can contain the concatenated contents of multiple files.
   The meta information of a file contains an offset to the directory path,
@@ -56,11 +56,11 @@ types:
         type: u4
   body_v3:
     seq:
-      - id: len_filenames
+      - id: len_name_table
         type: u4
-      - id: filenames
-        size: len_filenames
-        type: filenames
+      - id: name_table
+        size: len_name_table
+        type: name_table
       - id: inodes
         type: 'inode((_index != 0 ? inodes[_index - 1].cur_max_lzma_blob : 0).as<u4>)'
         -affected-by: 1333
@@ -82,7 +82,7 @@ types:
         type: lzma_blob(_index)
         repeat: expr
         repeat-expr: inodes.last.cur_max_lzma_blob + 1
-  filenames:
+  name_table:
     doc-ref: https://arxiv.org/html/2407.05064v1#S4.SS2
     seq:
       - id: filename
@@ -110,11 +110,11 @@ types:
       cur_max_lzma_blob:
         value: 'lzma_blob > prev_max_lzma_blob ? lzma_blob : prev_max_lzma_blob'
       filename:
-        io: _parent.filenames._io
+        io: _parent.name_table._io
         pos: ofs_name
         type: strz
       directory_path:
-        io: _parent.filenames._io
+        io: _parent.name_table._io
         pos: ofs_directory
         type: strz
   lzma_meta:
