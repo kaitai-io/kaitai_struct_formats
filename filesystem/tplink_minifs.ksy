@@ -85,7 +85,7 @@ types:
   name_table:
     doc-ref: https://arxiv.org/html/2407.05064v1#S4.SS2
     seq:
-      - id: filename
+      - id: names
         type: strz
         repeat: eos
   inode:
