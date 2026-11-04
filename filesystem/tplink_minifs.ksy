@@ -96,9 +96,9 @@ types:
       - id: prev_max_lzma_blob
         type: u4
     seq:
-      - id: ofs_directory
+      - id: ofs_directory_path
         type: u4
-      - id: ofs_name
+      - id: ofs_file_name
         type: u4
       - id: lzma_blob
         type: u4
@@ -111,11 +111,11 @@ types:
         value: 'lzma_blob > prev_max_lzma_blob ? lzma_blob : prev_max_lzma_blob'
       file_name:
         io: _parent.name_table._io
-        pos: ofs_name
+        pos: ofs_file_name
         type: strz
       directory_path:
         io: _parent.name_table._io
-        pos: ofs_directory
+        pos: ofs_directory_path
         type: strz
   lzma_meta:
     doc-ref:
