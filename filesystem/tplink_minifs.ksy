@@ -83,6 +83,15 @@ types:
         repeat: expr
         repeat-expr: inodes.last.cur_max_lzma_blob + 1
   name_table:
+    doc: |
+      Table of null-terminated directory paths and file names, referenced by
+      `<inode>.ofs_directory_path` and `<inode>.ofs_file_name`. In all images
+      examined, each non-empty string occurs only once, which saves space in
+      flash memory, as many files share a directory or a name.
+
+      In all images examined, the table is padded with null bytes to a multiple
+      of 4 bytes, so `names` can end with up to 3 empty strings (one for each
+      padding byte).
     doc-ref: https://arxiv.org/html/2407.05064v1#S4.SS2
     seq:
       - id: names
