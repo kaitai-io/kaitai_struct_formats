@@ -5,10 +5,25 @@ meta:
   encoding: ASCII
   endian: be
 doc: |
-  MINIFS is a file system found in certain TP-Link firmware files, such as
-  RE450(V4)_210531.zip, for TP-Link's own TPOS RTOS.
+  MINIFS is a file system found in certain firmware files from TP-Link
+  (including its Mercusys brand) and Mercury. Such firmware contains an RTOS
+  kernel, e.g. VxWorks in
+  [`RE450(V4)_210531.zip`](https://static.tp-link.com/firmware/2021/202107/20210709/RE450(V4)_210531.zip)
+  ([archived](https://web.archive.org/web/20261105175157/https://static.tp-link.com/firmware/2021/202107/20210709/RE450(V4)_210531.zip))
+  or TPOS, TP-Link's RTOS, in
+  [`TL-WA850RE(EU)_V7.0_250808.zip`](https://static.tp-link.com/upload/firmware/2025/202509/20250919/TL-WA850RE(EU)_V7.0_250808.zip)
+  ([archived](https://web.archive.org/web/20260903180047/https://static.tp-link.com/upload/firmware/2025/202509/20250919/TL-WA850RE(EU)_V7.0_250808.zip)).
 
-  It consists of a header, followed by a table of directory paths and file
+  According to a TP-Link manager quoted in a
+  [2021 article](https://shiftdelete.net/tp-link-mercusys-ile-ilgili-hedeflerini-paylasti)
+  ([archived](https://web.archive.org/web/20230513175833/https://shiftdelete.net/tp-link-mercusys-ile-ilgili-hedeflerini-paylasti)),
+  Mercusys has been sold in China as Mercury since 2001. All Mercury images
+  examined contain a certificate with `O=tplink` in its issuer and subject.
+
+  All versions share the same header, and its `version` field determines the
+  layout of the rest of the image.
+
+  In version 3, the header is followed by a table of directory paths and file
   names, followed by meta information for each file, meta information about
   the LZMA compressed blobs including length, offset and uncompressed length,
   and then a number of LZMA compressed blobs.
@@ -17,6 +32,9 @@ doc: |
   The meta information of a file contains an offset to the directory path,
   a file name, the LZMA blob (numbering starts at 0), the offset of the file
   in the uncompressed data and the size of the uncompressed file.
+
+  In version 1, the header is followed by a record with the path, the compressed
+  length and the offset of each file, and then one LZMA blob per file.
 
   This Kaitai Struct implementation was written independently of the paper
   [Reverse Engineered MiniFS File System](https://arxiv.org/abs/2407.05064v1).
@@ -38,6 +56,7 @@ seq:
     type:
       switch-on: header.version
       cases:
+        1: body_v1
         3: body_v3
 types:
   dummy: {}
@@ -54,6 +73,46 @@ types:
         type: u4
       - id: unknown_2
         type: u4
+  body_v1:
+    doc-ref: https://arxiv.org/html/2407.05064v1#S2.SS2
+    seq:
+      - id: inodes
+        type: 'inode_v1((_index != 0 ? inodes[_index - 1].ofs_end : 0).as<u4>)'
+        -affected-by: 1333
+        repeat: expr
+        repeat-expr: _root.header.num_files
+      - id: blobs_area
+        size: inodes.last.ofs_end
+        type: dummy
+  inode_v1:
+    params:
+      - id: prev_ofs_end
+        type: u4
+    seq:
+      - id: path
+        size: 80
+        type: strz
+      - id: len_blob
+        type: u4
+      - id: ofs_blob
+        type: u4
+        valid: prev_ofs_end
+        doc: Relative to the start of `<body_v1>.blobs_area`.
+    instances:
+      ofs_end:
+        value: ofs_blob + len_blob
+      blob:
+        io: _parent.blobs_area._io
+        pos: ofs_blob
+        size: len_blob
+        doc: |
+          An LZMA stream in the `.lzma` format (also known as LZMA_Alone) with
+          the contents of the file.
+
+          In all images examined, the `.lzma` header specifies the properties
+          lc = 0, lp = 0, pb = 2 and an 8 MiB dictionary, so it starts with the
+          bytes `5A 00 00 80 00`. It also specifies the uncompressed size of the
+          stream, and there is no end-of-payload marker.
   body_v3:
     seq:
       - id: len_name_table
