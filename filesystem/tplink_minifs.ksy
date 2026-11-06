@@ -213,6 +213,9 @@ types:
         value: inodes.last.cur_max_lzma_blob + 1
         doc: Count starts at 0, so there is one more blob than the highest blob number
         doc-ref: https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L129-L130
+      len_lzma_meta:
+        value: 'has_8_byte_lzma_metas ? 8 : 12'
+        doc: The size of each record in `lzma_metas` (8 or 12 bytes).
       has_8_byte_lzma_metas:
         value: len_first_blob_uncompressed_if_8_byte_metas == 0xffff_ffff_ffff_ffff
         doc: |
