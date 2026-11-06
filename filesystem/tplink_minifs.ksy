@@ -128,7 +128,8 @@ types:
         size: len_blob
         doc: |
           An LZMA stream in the `.lzma` format (also known as LZMA_Alone) with
-          the contents of the file.
+          the contents of the file. Decompress it in the same way as
+          `<lzma_meta>.blob`.
 
           In all images examined, the `.lzma` header specifies the properties
           lc = 0, lp = 0, pb = 2 and an 8 MiB dictionary, so it starts with the
@@ -176,7 +177,8 @@ types:
         size: len_data
         doc: |
           With `compression_type::lzma`, an LZMA stream in the `.lzma` format
-          (also known as LZMA_Alone).
+          (also known as LZMA_Alone). Decompress it in the same way as
+          `<lzma_meta>.blob`.
 
           In all images examined, the `.lzma` header specifies the properties
           lc = 0, lp = 0, pb = 2 and an 8 MiB dictionary, so it starts with the
