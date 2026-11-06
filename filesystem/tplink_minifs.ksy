@@ -193,11 +193,6 @@ types:
         value: inodes.last.cur_max_lzma_blob + 1
         doc: Count starts at 0, so there is one more blob than the highest blob number
         doc-ref: https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L129-L130
-      lzma_blobs:
-        io: lzma_blobs_area._io
-        type: lzma_blob(_index)
-        repeat: expr
-        repeat-expr: num_lzma_blobs
   lzma_meta:
     doc-ref:
       - https://arxiv.org/html/2407.05064v1#S4.SS4
@@ -216,6 +211,13 @@ types:
     instances:
       ofs_end:
         value: ofs_blob + len_blob
+      blob:
+        io: _parent.lzma_blobs_area._io
+        pos: ofs_blob
+        size: len_blob
+        doc-ref:
+          - https://arxiv.org/html/2407.05064v1#S4.SS5
+          - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L175-L187
   name_table:
     doc: |
       Table of null-terminated directory paths and file names, referenced by
@@ -260,17 +262,6 @@ types:
         io: _parent.name_table._io
         pos: ofs_directory_path
         type: strz
-  lzma_blob:
-    doc-ref:
-      - https://arxiv.org/html/2407.05064v1#S4.SS5
-      - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L175-L187
-    params:
-      - id: index
-        type: s4
-    instances:
-      data:
-        pos: _parent.lzma_metas[index].ofs_blob
-        size: _parent.lzma_metas[index].len_blob
 enums:
   # https://github.com/zh-explorer/tp_research/blob/a42f9d0427ad0c453a7060f3236c4174bb883441/Minifs.py#L31
   compression_type:
