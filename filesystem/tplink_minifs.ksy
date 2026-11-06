@@ -81,8 +81,13 @@ types:
         type: u4
       - id: num_files
         type: u4
-      - id: unknown_2
+      - id: len_largest_file
         type: u4
+        doc: |
+          The uncompressed size of the largest file. In all images examined with
+          version 3, the inodes are sorted by size in descending order, so it is
+          also the size of the first file. In all images examined with versions
+          1 and 2, the value is rounded up to a multiple of 4.
   body_v1:
     doc-ref: https://arxiv.org/html/2407.05064v1#S2.SS2
     seq:
