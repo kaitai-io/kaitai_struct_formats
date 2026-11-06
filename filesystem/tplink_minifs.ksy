@@ -79,6 +79,12 @@ types:
         contents: "MINIFS\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
       - id: version
         type: u4
+        valid:
+          any-of:
+            - 1
+            - 2
+            # https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L192-L194
+            - 3
       - id: num_files
         type: u4
       - id: len_largest_file
