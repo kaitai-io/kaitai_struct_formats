@@ -33,6 +33,9 @@ doc: |
   a file name, the LZMA blob (numbering starts at 0), the offset of the file
   in the uncompressed data and the size of the uncompressed file.
 
+  Some version 3 images have no uncompressed length in the meta information
+  about the blobs (see `has_8_byte_lzma_metas` in `body_v3`).
+
   In version 2, the header is followed by the length of the files area and a
   meta information record for each file, each followed directly by the file's
   data. Unlike versions 1 and 3, version 2 stores no paths or file names at
@@ -180,6 +183,8 @@ types:
         -affected-by: 1333
         repeat: expr
         repeat-expr: _root.header.num_files
+      - size: 0
+        if: ofs_lzma_metas < 0
       - id: lzma_metas
         type: 'lzma_meta((_index != 0 ? lzma_metas[_index - 1].ofs_end : 0).as<u4>)'
         -affected-by: 1333
@@ -189,10 +194,75 @@ types:
         size: lzma_metas.last.ofs_end
         type: dummy
     instances:
+      ofs_lzma_metas:
+        value: _io.pos
       num_lzma_blobs:
         value: inodes.last.cur_max_lzma_blob + 1
         doc: Count starts at 0, so there is one more blob than the highest blob number
         doc-ref: https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L129-L130
+      has_8_byte_lzma_metas:
+        value: len_first_blob_uncompressed_if_8_byte_metas == 0xffff_ffff_ffff_ffff
+        doc: |
+          Whether each record in `lzma_metas` lacks `len_blob_uncompressed` and
+          is therefore 8 bytes in size instead of 12.
+
+          The MINIFS header doesn't say which size is used (both use version 3),
+          so this Kaitai Struct implementation infers it using a heuristic based
+          on the `.lzma` header of the first blob. Bytes 5 to 12 of that header
+          are the uncompressed size, which was unknown (all bits set) for all
+          blobs in all version 3 images examined. So with 8-byte records,
+          `len_first_blob_uncompressed_if_8_byte_metas` has all bits set. With
+          12-byte records, the same 8 bytes aren't the uncompressed size. With 3
+          or more blobs, they include a whole offset or length in `lzma_metas`,
+          which would have to be 4 GiB. With 1 or 2 blobs, they include the
+          first blob's dictionary size, which is 8 MiB in all images examined.
+
+          An image with 8-byte records and a known uncompressed size would be
+          rejected, or misparsed if it has a single blob and other data follows it.
+
+          In the images examined, 8-byte records occur in firmware files with
+          modification times from 2018 to 2022 (as stored in their ZIPs), e.g. in
+          [`MW301R(EU)_V2_180821.zip`](https://static.mercusys.com/software/MW301R(EU)_V2_180821.zip)
+          ([archived](https://web.archive.org/web/20261105093950/https://static.mercusys.com/software/MW301R(EU)_V2_180821.zip)),
+          listed on <https://www.mercusys.com/en/download/mw301r/v2/>
+          ([archived](https://web.archive.org/web/20261105142659/https://www.mercusys.com/en/download/mw301r/v2/)).
+
+          As far as we know, this implementation is the first description of
+          8-byte records. The other descriptions and tools found either assume
+          12 bytes or don't read `lzma_metas` at all. So there is no reference
+          to compare it with, and the evidence comes from the images. In all 49
+          distinct images examined with 8-byte records, the bytes at each
+          record's offset and length are exactly one complete LZMA stream. Each
+          such stream decompresses to exactly the length that the files packed
+          into it need. The file that ends last in it ends exactly where the
+          decompressed data ends. In addition:
+
+          * 2614 of the 7230 files in these 49 images have the same path and
+            contents as a file in an image with 12-byte records. For example,
+            49 files are the same in the image with 8-byte records in
+            [`TL-WA850RE(EU)_V7_201029.zip`](https://static.tp-link.com/2021/202102/20210209/TL-WA850RE(EU)_V7_201029.zip)
+            ([archived](https://web.archive.org/web/20220326032207/https://static.tp-link.com/2021/202102/20210209/TL-WA850RE(EU)_V7_201029.zip))
+            and the image with 12-byte records in
+            [`TL-WA850RE(EU)_V7.0_250808.zip`](https://static.tp-link.com/upload/firmware/2025/202509/20250919/TL-WA850RE(EU)_V7.0_250808.zip)
+            ([archived](https://web.archive.org/web/20260903180047/https://static.tp-link.com/upload/firmware/2025/202509/20250919/TL-WA850RE(EU)_V7.0_250808.zip)).
+          * The repository
+            [NurMohammadDuari/mw325r-hack-lab](https://github.com/NurMohammadDuari/mw325r-hack-lab/tree/024da680dbf4f9ca287d562622f02d7d8875bd45)
+            has the [files](https://github.com/NurMohammadDuari/mw325r-hack-lab/tree/024da680dbf4f9ca287d562622f02d7d8875bd45/extracted-minifs)
+            of the image with 8-byte records in
+            [`MW325R(EU)_V2_20111620201211065426.zip`](https://static.mercusys.com/software/MW325R(EU)_V2_20111620201211065426.zip)
+            ([archived](https://web.archive.org/web/20261105093427/https://static.mercusys.com/software/MW325R(EU)_V2_20111620201211065426.zip)).
+            They match the files parsed by this implementation in all 92 files
+            that can be compared. Its
+            [extractor](https://github.com/NurMohammadDuari/mw325r-hack-lab/blob/024da680dbf4f9ca287d562622f02d7d8875bd45/analysis/minifs_extract.py)
+            finds the blobs by searching for LZMA headers instead of reading
+            `lzma_metas`.
+      len_first_blob_uncompressed_if_8_byte_metas:
+        pos: ofs_lzma_metas + 8 * num_lzma_blobs + 5
+        type: u8le
+        doc: |
+          The uncompressed size in the `.lzma` header of the first blob, if
+          `lzma_metas` have 8-byte records. It follows the properties byte and the
+          4-byte dictionary size.
   lzma_meta:
     doc-ref:
       - https://arxiv.org/html/2407.05064v1#S4.SS4
@@ -208,6 +278,7 @@ types:
         type: u4
       - id: len_blob_uncompressed
         type: u4
+        if: not _parent.has_8_byte_lzma_metas
     instances:
       ofs_end:
         value: ofs_blob + len_blob
