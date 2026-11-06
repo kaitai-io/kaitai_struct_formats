@@ -184,18 +184,20 @@ types:
         type: 'lzma_meta((_index != 0 ? lzma_metas[_index - 1].ofs_end : 0).as<u4>)'
         -affected-by: 1333
         repeat: expr
-        repeat-expr: inodes.last.cur_max_lzma_blob + 1
-        doc: Count starts at 0, so there is one more blob than the highest blob number
-        doc-ref: https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L129-L130
+        repeat-expr: num_lzma_blobs
       - id: lzma_blobs_area
         size: lzma_metas.last.ofs_end
         type: dummy
     instances:
+      num_lzma_blobs:
+        value: inodes.last.cur_max_lzma_blob + 1
+        doc: Count starts at 0, so there is one more blob than the highest blob number
+        doc-ref: https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L129-L130
       lzma_blobs:
         io: lzma_blobs_area._io
         type: lzma_blob(_index)
         repeat: expr
-        repeat-expr: inodes.last.cur_max_lzma_blob + 1
+        repeat-expr: num_lzma_blobs
   name_table:
     doc: |
       Table of null-terminated directory paths and file names, referenced by
