@@ -29,8 +29,8 @@ doc: |
   and then a number of LZMA compressed blobs.
 
   The LZMA blobs can contain the concatenated contents of multiple files.
-  The meta information of a file contains an offset to the directory path,
-  a file name, the LZMA blob (numbering starts at 0), the offset of the file
+  The meta information of a file contains the offsets of its directory path
+  and file name, the LZMA blob (numbering starts at 0), the offset of the file
   in the uncompressed data and the size of the uncompressed file.
 
   Some version 3 images have no uncompressed length in the meta information
