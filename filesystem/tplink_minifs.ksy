@@ -198,6 +198,24 @@ types:
         type: lzma_blob(_index)
         repeat: expr
         repeat-expr: num_lzma_blobs
+  lzma_meta:
+    doc-ref:
+      - https://arxiv.org/html/2407.05064v1#S4.SS4
+      - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L44-L48
+    params:
+      - id: prev_ofs_end
+        type: u4
+    seq:
+      - id: ofs_blob
+        type: u4
+        valid: prev_ofs_end
+      - id: len_blob
+        type: u4
+      - id: len_blob_uncompressed
+        type: u4
+    instances:
+      ofs_end:
+        value: ofs_blob + len_blob
   name_table:
     doc: |
       Table of null-terminated directory paths and file names, referenced by
@@ -242,24 +260,6 @@ types:
         io: _parent.name_table._io
         pos: ofs_directory_path
         type: strz
-  lzma_meta:
-    doc-ref:
-      - https://arxiv.org/html/2407.05064v1#S4.SS4
-      - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L44-L48
-    params:
-      - id: prev_ofs_end
-        type: u4
-    seq:
-      - id: ofs_blob
-        type: u4
-        valid: prev_ofs_end
-      - id: len_blob
-        type: u4
-      - id: len_blob_uncompressed
-        type: u4
-    instances:
-      ofs_end:
-        value: ofs_blob + len_blob
   lzma_blob:
     doc-ref:
       - https://arxiv.org/html/2407.05064v1#S4.SS5
