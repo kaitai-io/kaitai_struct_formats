@@ -33,6 +33,11 @@ doc: |
   a file name, the LZMA blob (numbering starts at 0), the offset of the file
   in the uncompressed data and the size of the uncompressed file.
 
+  In version 2, the header is followed by the length of the files area and a
+  meta information record for each file, each followed directly by the file's
+  data. Unlike versions 1 and 3, version 2 stores no paths or file names at
+  all, only the MD5 hash of each file's path.
+
   In version 1, the header is followed by a record with the path, the compressed
   length and the offset of each file, and then one LZMA blob per file.
 
@@ -46,8 +51,9 @@ doc: |
   [September 2023](https://github.com/kaitai-io/kaitai_struct_formats/pull/682),
   whereas the paper was published in July 2024.
 doc-ref:
-  - https://arxiv.org/html/2407.05064v1#S4
-  - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py
+  - https://arxiv.org/html/2407.05064v1#S4 The paper, section 4 (version 3)
+  - https://github.com/zh-explorer/tp_research/blob/a42f9d0427ad0c453a7060f3236c4174bb883441/Minifs.py tp_research's `Minifs.py` (version 2)
+  - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py unblob's MiniFS handler (version 3)
 seq:
   - id: header
     type: minifs_header
@@ -57,6 +63,7 @@ seq:
       switch-on: header.version
       cases:
         1: body_v1
+        2: body_v2
         3: body_v3
 types:
   dummy: {}
@@ -108,6 +115,54 @@ types:
         doc: |
           An LZMA stream in the `.lzma` format (also known as LZMA_Alone) with
           the contents of the file.
+
+          In all images examined, the `.lzma` header specifies the properties
+          lc = 0, lp = 0, pb = 2 and an 8 MiB dictionary, so it starts with the
+          bytes `5A 00 00 80 00`. It also specifies the uncompressed size of the
+          stream, and there is no end-of-payload marker.
+  body_v2:
+    seq:
+      - id: len_files_area
+        type: u4
+      - id: files_area
+        size: len_files_area
+        type: files_area_v2
+  files_area_v2:
+    seq:
+      - id: files
+        type: file_v2
+        repeat: expr
+        repeat-expr: _root.header.num_files
+  file_v2:
+    doc-ref: https://github.com/zh-explorer/tp_research/blob/a42f9d0427ad0c453a7060f3236c4174bb883441/Minifs.py#L41-L52
+    seq:
+      - id: path_md5
+        size: 16
+        doc: |
+          The MD5 hash of the absolute path of the file, e.g. of
+          `/conf/priv-key.pem`.
+
+          Version 2 images store only these hashes, not the paths, so a path can
+          only be found by hashing candidate paths and comparing.
+          [`Minifs.py`](https://github.com/zh-explorer/tp_research/blob/a42f9d0427ad0c453a7060f3236c4174bb883441/Minifs.py#L181-L209)
+          takes the candidates from path-like strings in the files' contents.
+      - id: len_data
+        type: u4
+      - id: ofs_data
+        type: u4
+        # `data` follows `len_data_uncompressed` and `compression` (8 bytes)
+        valid: _io.pos + 8
+        doc: Offset of `data` relative to the start of `<body_v2>.files_area`.
+      - id: len_data_uncompressed
+        type: u4
+      - id: compression
+        type: u4
+        enum: compression_type
+      - id: data
+        size: len_data
+        doc: |
+          With `compression_type::lzma`, an LZMA stream in the `.lzma` format
+          (also known as LZMA_Alone).
 
           In all images examined, the `.lzma` header specifies the properties
           lc = 0, lp = 0, pb = 2 and an 8 MiB dictionary, so it starts with the
@@ -214,3 +269,13 @@ types:
       data:
         pos: _parent.lzma_metas[index].ofs_blob
         size: _parent.lzma_metas[index].len_blob
+enums:
+  # https://github.com/zh-explorer/tp_research/blob/a42f9d0427ad0c453a7060f3236c4174bb883441/Minifs.py#L31
+  compression_type:
+    0:
+      id: lzma
+      doc: The only value in all images examined.
+    2:
+      id: raw
+    4:
+      id: lzma_2014
