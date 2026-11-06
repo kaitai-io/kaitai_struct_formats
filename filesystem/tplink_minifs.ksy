@@ -74,6 +74,7 @@ types:
     doc-ref:
       - https://arxiv.org/html/2407.05064v1#S4.SS1
       - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L27-L34
+    -webide-representation: 'version {version:dec}, {num_files:dec} files'
     seq:
       - id: magic
         contents: "MINIFS\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
@@ -106,6 +107,7 @@ types:
         size: inodes.last.ofs_end
         type: dummy
   inode_v1:
+    -webide-representation: '{path} ({len_blob:dec} bytes compressed)'
     params:
       - id: prev_ofs_end
         type: u4
@@ -150,6 +152,7 @@ types:
         repeat-expr: _root.header.num_files
   file_v2:
     doc-ref: https://github.com/zh-explorer/tp_research/blob/a42f9d0427ad0c453a7060f3236c4174bb883441/Minifs.py#L41-L52
+    -webide-representation: '{len_data_uncompressed:dec} bytes, {compression}'
     seq:
       - id: path_md5
         size: 16
@@ -185,6 +188,7 @@ types:
           bytes `5A 00 00 80 00`. It also specifies the uncompressed size of the
           stream, and there is no end-of-payload marker.
   body_v3:
+    -webide-representation: '{num_lzma_blobs:dec} blobs, {len_lzma_meta:dec}-byte records'
     seq:
       - id: len_name_table
         type: u4
@@ -283,6 +287,7 @@ types:
     doc-ref:
       - https://arxiv.org/html/2407.05064v1#S4.SS4
       - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L44-L48
+    -webide-representation: '{len_blob:dec} bytes at {ofs_blob}'
     params:
       - id: prev_ofs_end
         type: u4
@@ -336,6 +341,7 @@ types:
     doc-ref:
       - https://arxiv.org/html/2407.05064v1#S4.SS3
       - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L36-L42
+    -webide-representation: '/{directory_path}/{file_name} ({len_file:dec} bytes, blob {lzma_blob:dec})'
     params:
       - id: prev_max_lzma_blob
         type: u4
@@ -357,10 +363,12 @@ types:
         io: _parent.name_table._io
         pos: ofs_file_name
         type: strz
+        -webide-parse-mode: eager
       directory_path:
         io: _parent.name_table._io
         pos: ofs_directory_path
         type: strz
+        -webide-parse-mode: eager
 enums:
   # https://github.com/zh-explorer/tp_research/blob/a42f9d0427ad0c453a7060f3236c4174bb883441/Minifs.py#L31
   compression_type:
