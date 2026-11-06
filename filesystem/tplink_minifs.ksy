@@ -297,6 +297,18 @@ types:
         io: _parent.lzma_blobs_area._io
         pos: ofs_blob
         size: len_blob
+        doc: |
+          An LZMA stream in the `.lzma` format (also known as LZMA_Alone):
+          a 13-byte header followed by the compressed data. Decompress it
+          with a ready-made LZMA decoder that reads this header, e.g. in
+          Python with `lzma.decompress(blob, format=lzma.FORMAT_ALONE)`. The
+          size of the decompressed data is `len_blob_uncompressed`, if present.
+
+          In all images examined with `header.version` = 3, the `.lzma` header
+          specifies the properties lc = 3, lp = 0, pb = 2 and an 8 MiB
+          dictionary, so it starts with the bytes `5D 00 00 80 00`. The
+          uncompressed size in the header is unknown (`0xFFFF_FFFF_FFFF_FFFF`),
+          so the stream ends with an end-of-payload marker.
         doc-ref:
           - https://arxiv.org/html/2407.05064v1#S4.SS5
           - https://github.com/onekey-sec/unblob/blob/678dbce13dcabe3b4ff16b2b958d6f2cfce9ae3f/python/unblob/handlers/filesystem/minifs.py#L175-L187
