@@ -1,11 +1,11 @@
 meta:
   id: tplink_minifs
-  title: TP-Link MINIFS
+  title: TP-Link MiniFS
   license: CC0-1.0
   encoding: ASCII
   endian: be
 doc: |
-  MINIFS is a file system found in certain firmware files from TP-Link
+  MiniFS is a file system found in certain firmware files from TP-Link
   (including its Mercusys brand) and Mercury. Such firmware contains an RTOS
   kernel, e.g. VxWorks in
   [`RE450(V4)_210531.zip`](https://static.tp-link.com/firmware/2021/202107/20210709/RE450(V4)_210531.zip)
@@ -226,7 +226,7 @@ types:
           Whether each record in `lzma_metas` lacks `len_blob_uncompressed` and
           is therefore 8 bytes in size instead of 12.
 
-          The MINIFS header doesn't say which size is used (both use version 3),
+          The MiniFS header doesn't say which size is used (both use version 3),
           so this Kaitai Struct implementation infers it using a heuristic based
           on the `.lzma` header of the first blob. Bytes 5 to 12 of that header
           are the uncompressed size, which was unknown (all bits set) for all
