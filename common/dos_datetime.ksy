@@ -39,9 +39,9 @@ doc: |
     - [cab](http://justsolve.archiveteam.org/wiki/Cabinet)
 
 doc-ref:
-  - https://docs.microsoft.com/en-us/windows/win32/sysinfo/ms-dos-date-and-time
-  - https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-dosdatetimetofiletime
-  - https://github.com/reactos/reactos/blob/c6b6444/dll/win32/kernel32/client/time.c#L82-L87 DosDateTimeToFileTime
+  - https://learn.microsoft.com/en-us/windows/win32/sysinfo/ms-dos-date-and-time
+  - https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-dosdatetimetofiletime
+  - https://github.com/reactos/reactos/blob/c6b64448ce4/dll/win32/kernel32/client/time.c#L82-L87 DosDateTimeToFileTime
   - https://download.microsoft.com/download/0/8/4/084c452b-b772-4fe5-89bb-a0cbf082286a/fatgen103.doc page 25/34
 -webide-representation: "{date} {time}"
 seq:

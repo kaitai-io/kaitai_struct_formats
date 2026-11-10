@@ -7,15 +7,15 @@ meta:
     pronom: fmt/394
     wikidata: Q307271
   license: MIT
-  ks-version: 0.8
+  ks-version: 0.9
   encoding: UTF-8
   endian: be
 doc: |
   Apple macOS '.DS_Store' file format.
-doc-ref: |
-  https://en.wikipedia.org/wiki/.DS_Store
-  https://metacpan.org/pod/distribution/Mac-Finder-DSStore/DSStoreFormat.pod
-  https://0day.work/parsing-the-ds_store-file-format
+doc-ref:
+  - https://en.wikipedia.org/wiki/.DS_Store
+  - https://metacpan.org/dist/Mac-Finder-DSStore/view/DSStoreFormat.pod
+  - https://0day.work/parsing-the-ds_store-file-format/
 seq:
   - id: alignment_header
     contents: [0x00, 0x00, 0x00, 0x01]
@@ -81,7 +81,7 @@ types:
           offset:
             value: (address_raw & ~_root.block_address_mask) + 4
           size:
-            value: 1 << address_raw & _root.block_address_mask
+            value: 1 << (address_raw & _root.block_address_mask)
       directory_entry:
         seq:
           - id: len_name
@@ -167,7 +167,7 @@ types:
         instances:
           block:
             io: _root._io
-            pos: _root.buddy_allocator_body.block_addresses[block_id].offset
+            pos: _root.buddy_allocator_body.block_addresses[block_id.as<u4>].offset
             type: block
             if: mode > 0
         types:

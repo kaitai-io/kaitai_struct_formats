@@ -1,19 +1,24 @@
-# http://www.stonedcoder.org/~kd/lib/MachORuntime.pdf
-# https://opensource.apple.com/source/python_modules/python_modules-43/Modules/macholib-1.5.1/macholib-1.5.1.tar.gz
-# https://github.com/comex/cs/blob/master/macho_cs.py
-# https://opensource.apple.com/source/Security/Security-55471/libsecurity_codesigning/requirements.grammar.auto.html
-# https://github.com/apple/darwin-xnu/blob/xnu-2782.40.9/bsd/sys/codesign.h
 meta:
   id: mach_o
   xref:
+    justsolve: Mach-O
     pronom:
       - fmt/692 # Mach-O 32bit
       - fmt/693 # Mach-O 64bit
     wikidata: Q2627217
   license: MIT
+  ks-version: 0.9
   imports:
     - /serialization/asn1/asn1_der
   endian: le
+doc-ref:
+  - https://www.stonedcoder.org/~kd/lib/MachORuntime.pdf
+  - https://opensource.apple.com/source/python_modules/python_modules-43/Modules/macholib-1.5.1/macholib-1.5.1.tar.gz
+  - https://github.com/comex/cs/blob/07a88f9/macho_cs.py
+  - https://opensource.apple.com/source/Security/Security-55471/libsecurity_codesigning/requirements.grammar.auto.html
+  - https://github.com/apple/darwin-xnu/blob/xnu-2782.40.9/bsd/sys/codesign.h
+  - https://opensource.apple.com/source/dyld/dyld-852/src/ImageLoaderMachO.cpp.auto.html
+  - https://opensource.apple.com/source/dyld/dyld-852/src/ImageLoaderMachOCompressed.cpp.auto.html
 seq:
   - id: magic
     type: u4be
@@ -26,12 +31,13 @@ seq:
     repeat-expr: header.ncmds
 enums:
   magic_type:
+    # Note that for multiarch (a.k.a. fat) Mach-O files, which are the primary
+    # kind you find on macOS today, you should instead use mach_o_fat.ksy, which
+    # parses the fat header and embeds mach_o.ksy to parse each arch.
     0xFEEDFACE: macho_be_x86 # MH_MAGIC:    mach-o, big-endian,    x86
     0xCEFAEDFE: macho_le_x86 # MH_CIGAM:    mach-o, little-endian, x86
     0xFEEDFACF: macho_be_x64 # MH_MAGIC_64: mach-o, big-endian,    x64
     0xCFFAEDFE: macho_le_x64 # MH_CIGAM_64: mach-o, little-endian, x64
-    0xCAFEBABE: fat_be       # FAT_MAGIC:   fat,    big-endian
-    0xBEBAFECA: fat_le       # FAT_CIGAM:   fat,    little-endian
   cpu_type:
     0xffffffff: any
     1:          vax
@@ -132,10 +138,10 @@ types:
         doc: "the object file has no undefined references"
       incr_link:
         value: value & 0x2 != 0
-        doc: "the object file is the output of an incremental link against a base file and can't be link edited again"
+        doc: "the object file is the output of an incremental link against a base file and can't be link-edited again"
       dyld_link:
         value: value & 0x4 != 0
-        doc: "the object file is input for the dynamic linker and can't be staticly link edited again"
+        doc: "the object file is input for the dynamic linker and can't be statically link-edited again"
       bind_at_load:
         value: value & 0x8 != 0
         doc: "the object file's undefined references are bound by the dynamic linker when loaded."
@@ -156,7 +162,7 @@ types:
         doc: "the executable is forcing all images to use flat name space bindings"
       no_multi_defs:
         value: value & 0x200 != 0
-        doc: "this umbrella guarantees no multiple defintions of symbols in its sub-images so the two-level namespace hints can always be used."
+        doc: "this umbrella guarantees no multiple definitions of symbols in its sub-images so the two-level namespace hints can always be used."
       no_fix_prebinding:
         value: value & 0x400 != 0
         doc: "do not have dyld notify the prebinding agent about this executable"
@@ -566,21 +572,31 @@ types:
         pos: rebase_off
         size: rebase_size
         type: rebase_data
+        if: rebase_size != 0
       bind:
         io: _root._io
         pos: bind_off
         size: bind_size
         type: bind_data
+        if: bind_size != 0
+      weak_bind:
+        io: _root._io
+        pos: weak_bind_off
+        size: weak_bind_size
+        type: bind_data
+        if: weak_bind_size != 0
       lazy_bind:
         io: _root._io
         pos: lazy_bind_off
         size: lazy_bind_size
-        type: lazy_bind_data
+        type: bind_data
+        if: lazy_bind_size != 0
       exports:
         io: _root._io
         pos: export_off
         size: export_size
         type: export_node
+        if: export_size != 0
     types:
       rebase_data:
         seq:
@@ -654,12 +670,6 @@ types:
             value: "opcode_and_immediate & 0x0f"
             -webide-parse-mode: eager
       bind_data:
-        seq:
-          - id: items
-            type: bind_item
-            repeat: until
-            repeat-until: _.opcode == bind_opcode::done
-      lazy_bind_data:
         seq:
           - id: items
             type: bind_item
@@ -1106,7 +1116,7 @@ types:
           - id: value
             size: length
           - id: padding
-            size: 4 - (length & 3)
+            size: -length % 4
       match:
         -webide-representation: "{match_op} {data.value:str}"
         seq:

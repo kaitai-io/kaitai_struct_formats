@@ -7,16 +7,22 @@ meta:
   endian: le
 doc: |
   Parse UEFI variables db and dbx that contain signatures, certificates and
-  hashes. On a Linux system using UEFI, these variables are readable from
-  /sys/firmware/efi/efivars/db-d719b2cb-3d3a-4596-a3bc-dad00e67656f,
-  /sys/firmware/efi/efivars/dbDefault-8be4df61-93ca-11d2-aa0d-00e098032b8c,
-  /sys/firmware/efi/efivars/dbx-d719b2cb-3d3a-4596-a3bc-dad00e67656f and
-  /sys/firmware/efi/efivars/dbxDefault-8be4df61-93ca-11d2-aa0d-00e098032b8c.
-  ("d719b2cb-3d3a-4596-a3bc-dad00e67656f" is defined as
-  EFI_IMAGE_SECURITY_DATABASE_GUID and "8be4df61-93ca-11d2-aa0d-00e098032b8c"
-  as EFI_GLOBAL_VARIABLE).
+  hashes. On a Linux system using UEFI, these variables are readable from:
+
+  ```
+  /sys/firmware/efi/efivars/db-d719b2cb-3d3a-4596-a3bc-dad00e67656f
+  /sys/firmware/efi/efivars/dbDefault-8be4df61-93ca-11d2-aa0d-00e098032b8c
+  /sys/firmware/efi/efivars/dbx-d719b2cb-3d3a-4596-a3bc-dad00e67656f
+  /sys/firmware/efi/efivars/dbxDefault-8be4df61-93ca-11d2-aa0d-00e098032b8c
+  ```
+
+  Note:
+
+  * `d719b2cb-3d3a-4596-a3bc-dad00e67656f` is defined as `EFI_IMAGE_SECURITY_DATABASE_GUID`
+  * `8be4df61-93ca-11d2-aa0d-00e098032b8c` is defined as `EFI_GLOBAL_VARIABLE`
+
   Each file contains an EFI attribute (32-bit integer) followed by a list of
-  EFI_SIGNATURE_LIST structures.
+  `EFI_SIGNATURE_LIST` structures.
 doc-ref: https://uefi.org/sites/default/files/resources/UEFI_Spec_2_8_final.pdf
 seq:
   - id: var_attributes

@@ -4,7 +4,7 @@ meta:
   license: CC0-1.0
   endian: be
 doc: This spec can be used to parse utmp, wtmp and other similar as created by IBM AIX.
-doc-ref: https://www.ibm.com/support/knowledgecenter/en/ssw_aix_71/com.ibm.aix.files/utmp.h.htm
+doc-ref: https://www.ibm.com/docs/en/aix/7.1?topic=files-utmph-file
 seq:
   - id: records
     type: record

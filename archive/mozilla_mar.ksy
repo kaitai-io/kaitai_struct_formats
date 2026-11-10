@@ -2,6 +2,9 @@ meta:
   id: mozilla_mar
   title: Mozilla ARchive
   file-extension: mar
+  xref:
+    justsolve: Mozilla_Archive
+    wikidata: Q28777700
   license: CC0-1.0
   endian: be
 doc: |

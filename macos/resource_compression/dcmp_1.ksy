@@ -31,7 +31,7 @@ doc: |
   The `'dcmp' (0)` format also appears to be generally preferred over `'dcmp' (1)`,
   with the latter only being used in resource files that contain mostly unaligned data,
   such as text.
-doc-ref: 'https://github.com/dgelessus/python-rsrcfork/tree/master/rsrcfork/compress/dcmp1.py'
+doc-ref: 'https://github.com/dgelessus/python-rsrcfork/blob/f891a6e/src/rsrcfork/compress/dcmp1.py'
 seq:
   - id: chunks
     type: chunk

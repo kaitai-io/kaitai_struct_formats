@@ -12,7 +12,7 @@ doc: |
 
   * variable width (i.e. one code point might be represented by 1 to 4
     bytes)
-  * backward compatiblity with ASCII
+  * backward compatibility with ASCII
   * basic validity checking (and thus distinguishing from other legacy
     8-bit encodings)
   * maintaining sort order of codepoints if sorted as a byte array

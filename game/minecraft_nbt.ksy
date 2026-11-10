@@ -5,7 +5,7 @@ meta:
   file-extension:
     - nbt
     - dat
-    - schematic # https://minecraft.gamepedia.com/Schematic_file_format
+    - schematic # https://minecraft.wiki/w/Schematic_file_format
     - schem
   xref:
     justsolve: Minecraft_NBT_format
@@ -17,14 +17,14 @@ meta:
 doc: |
   A structured binary format native to Minecraft for saving game data and transferring
   it over the network (in multiplayer), such as player data
-  ([`<player>.dat`](https://minecraft.gamepedia.com/Player.dat_format); contains
+  ([`<player>.dat`](https://minecraft.wiki/w/Player.dat_format); contains
   e.g. player's inventory and location), saved worlds
   ([`level.dat`](
-    https://minecraft.gamepedia.com/Java_Edition_level_format#level.dat_format
-  ) and [Chunk format](https://minecraft.gamepedia.com/Chunk_format#NBT_structure)),
+    https://minecraft.wiki/w/Java_Edition_level_format#level.dat_format
+  ) and [Chunk format](https://minecraft.wiki/w/Chunk_format#NBT_structure)),
   list of saved multiplayer servers
-  ([`servers.dat`](https://minecraft.gamepedia.com/Servers.dat_format)) and so on -
-  see <https://minecraft.gamepedia.com/NBT_format#Uses>.
+  ([`servers.dat`](https://minecraft.wiki/w/Servers.dat_format)) and so on -
+  see <https://minecraft.wiki/w/NBT_format#Uses>.
 
   The entire file should be _gzip_-compressed (in accordance with the original
   specification [NBT.txt](
@@ -86,7 +86,7 @@ doc: |
 doc-ref:
   - https://wiki.vg/NBT
   - https://web.archive.org/web/20110723210920/https://www.minecraft.net/docs/NBT.txt
-  - https://minecraft.gamepedia.com/NBT_format
+  - https://minecraft.wiki/w/NBT_format
 seq:
   - id: root_check
     size: 0
@@ -143,7 +143,7 @@ types:
     seq:
       - id: len_data
         type: u2
-        doc: unsigned according to https://wiki.vg/NBT#Specification
+        doc: unsigned according to <https://wiki.vg/NBT#Specification>
       - id: data
         size: len_data
         type: str
@@ -213,8 +213,8 @@ enums:
       id: end
       -affected-by: 90
       doc: |
-        As of KSC 0.9, this enum key causes a syntax error in Lua.
-        See https://github.com/kaitai-io/kaitai_struct/issues/90#issuecomment-766440975
+        As of KSC 0.9, this enum key causes a syntax error in Lua. See
+        <https://github.com/kaitai-io/kaitai_struct/issues/90#issuecomment-766440975>
         for more info.
     1: byte
     2: short

@@ -2,7 +2,7 @@ meta:
   id: windows_shell_items
   title: Windows Shell Items
   xref:
-    forensicswiki: Shell_Item
+    forensicswiki: shell_item
   license: CC0-1.0
   endian: le
 doc: |
@@ -17,7 +17,7 @@ doc: |
 
   The format is mostly undocumented, and is known to vary between
   various Windows versions.
-doc-ref: https://github.com/libyal/libfwsi/blob/master/documentation/Windows%20Shell%20Item%20format.asciidoc
+doc-ref: https://github.com/libyal/libfwsi/blob/main/documentation/Windows%20Shell%20Item%20format.asciidoc
 seq:
   - id: items
     -orig-id: IDList
@@ -52,7 +52,7 @@ types:
             0x20: volume_body
             0x30: file_entry_body
   root_folder_body:
-    doc-ref: 'https://github.com/libyal/libfwsi/blob/master/documentation/Windows%20Shell%20Item%20format.asciidoc#32-root-folder-shell-item'
+    doc-ref: 'https://github.com/libyal/libfwsi/blob/main/documentation/Windows%20Shell%20Item%20format.asciidoc#32-root-folder-shell-item'
     seq:
       - id: sort_index
         type: u1
@@ -60,12 +60,12 @@ types:
         size: 16
       # TODO: various extensions
   volume_body:
-    doc-ref: 'https://github.com/libyal/libfwsi/blob/master/documentation/Windows%20Shell%20Item%20format.asciidoc#33-volume-shell-item'
+    doc-ref: 'https://github.com/libyal/libfwsi/blob/main/documentation/Windows%20Shell%20Item%20format.asciidoc#33-volume-shell-item'
     seq:
       - id: flags
         type: u1
   file_entry_body:
-    doc-ref: 'https://github.com/libyal/libfwsi/blob/master/documentation/Windows%20Shell%20Item%20format.asciidoc#34-file-entry-shell-item'
+    doc-ref: 'https://github.com/libyal/libfwsi/blob/main/documentation/Windows%20Shell%20Item%20format.asciidoc#34-file-entry-shell-item'
     seq:
       - type: u1
       - id: file_size

@@ -20,7 +20,7 @@ doc: |
   software due to simplicity and availability of Creative's recording
   / editing tools.
 doc-ref: 'https://wiki.multimedia.cx/index.php?title=Creative_Voice'
-# http://fabiensanglard.net/reverse_engineering_strike_commander/docs/Creative%20Voice%20(VOC)%20file%20format.txt
+# https://fabiensanglard.net/reverse_engineering_strike_commander/docs/Creative%20Voice%20(VOC)%20file%20format.txt
 seq:
   - id: magic
     contents:

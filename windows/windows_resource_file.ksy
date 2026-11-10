@@ -42,7 +42,7 @@ types:
       Each resource has a `type` and a `name`, which can be used to
       identify it, and a `value`. Both `type` and `name` can be a
       number or a string.
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/menurc/resourceheader
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/menurc/resourceheader
     seq:
       - id: value_size
         -orig-id: DataSize
@@ -95,7 +95,7 @@ types:
           it as enum value, if applicable.
     enums:
       predef_types:
-        # https://docs.microsoft.com/en-us/windows/win32/menurc/resource-types
+        # https://learn.microsoft.com/en-us/windows/win32/menurc/resource-types
         # Win16
         1: cursor
         2: bitmap

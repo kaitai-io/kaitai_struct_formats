@@ -3,7 +3,7 @@ meta:
   title: Windows Event Log (EVT)
   file-extension: evt
   xref:
-    forensicswiki: Windows_Event_Log_(EVT)
+    forensicswiki: windows_event_log_(evt)
     justsolve: Windows_Event_Log
   tags:
     - windows
@@ -26,14 +26,14 @@ doc: |
   file using relevant option in Event Viewer application.
 
   A Windows application can submit an entry into these logs using
-  [ReportEventA](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-reporteventa)
+  [ReportEventA](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-reporteventa)
   function of Windows API.
 
   Internally, EVT files consist of a fixed-size header and event
   records. There are several usage scenarios (non-wrapping vs wrapping
   log files) which result in slightly different organization of
   records.
-doc-ref: https://docs.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format
+doc-ref: https://learn.microsoft.com/en-us/windows/win32/eventlog/event-log-file-format
 seq:
   - id: header
     type: header
@@ -42,7 +42,7 @@ seq:
     repeat: eos
 types:
   header:
-    doc-ref: https://docs.microsoft.com/en-us/previous-versions/windows/desktop/legacy/bb309024(v=vs.85)
+    doc-ref: https://learn.microsoft.com/en-us/previous-versions/windows/desktop/legacy/bb309024(v=vs.85)
     seq:
       - id: len_header
         -orig-id: HeaderSize
@@ -105,7 +105,7 @@ types:
           - id: wrap
             -orig-id: ELF_LOGFILE_HEADER_WRAP
             type: b1
-            doc: True if wrapping of record has occured.
+            doc: True if wrapping of record has occurred.
           - id: dirty
             -orig-id: ELF_LOGFILE_HEADER_DIRTY
             type: b1
@@ -113,7 +113,7 @@ types:
               True if write operation was in progress, but log file
               wasn't properly closed.
   record:
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-eventlogrecord
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-eventlogrecord
     seq:
       - id: len_record
         -orig-id: Length
@@ -141,7 +141,7 @@ types:
         type: u4
         doc: Size of whole record again.
   record_body:
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-eventlogrecord
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-eventlogrecord
     seq:
       - id: idx
         -orig-id: RecordNumber
@@ -154,7 +154,7 @@ types:
       - id: time_written
         -orig-id: TimeWritten
         type: u4
-        doc: Time when thsi record was written into the log file, POSIX timestamp format.
+        doc: Time when this record was written into the log file, POSIX timestamp format.
       - id: event_id
         -orig-id: EventID
         type: u4
@@ -166,7 +166,7 @@ types:
         type: u2
         enum: event_types
         doc: Type of event.
-        doc-ref: https://docs.microsoft.com/en-us/windows/win32/eventlog/event-types
+        doc-ref: https://learn.microsoft.com/en-us/windows/win32/eventlog/event-types
       - id: num_strings
         -orig-id: NumStrings
         type: u2
@@ -174,7 +174,7 @@ types:
       - id: event_category
         -orig-id: EventCategory
         type: u2
-        doc-ref: https://docs.microsoft.com/en-us/windows/win32/eventlog/event-categories
+        doc-ref: https://learn.microsoft.com/en-us/windows/win32/eventlog/event-categories
       - id: reserved
         -orig-id: ReservedFlags, ClosingRecordNumber
         size: 6
@@ -211,7 +211,7 @@ types:
         4: info
         5: warning
   cursor_record_body:
-    doc-ref: 'http://www.forensicswiki.xyz/page/Windows_Event_Log_(EVT)#Cursor_Record'
+    doc-ref: 'https://forensics.wiki/windows_event_log_(evt)/#cursor-record'
     seq:
       - id: magic
         contents: [0x22, 0x22, 0x22, 0x22, 0x33, 0x33, 0x33, 0x33, 0x44, 0x44, 0x44, 0x44]

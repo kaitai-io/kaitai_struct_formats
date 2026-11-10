@@ -2,7 +2,7 @@ meta:
   id: apple_single_double
   title: AppleSingle / AppleDouble
   xref:
-    forensicswiki: AppleDouble_header_file
+    forensicswiki: appledouble_header_file
     justsolve: AppleDouble
     rfc: 1740
     wikidata: Q4781113

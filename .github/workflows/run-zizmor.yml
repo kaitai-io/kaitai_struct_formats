@@ -1,0 +1,18 @@
+# See https://github.com/kaitai-io/.github/blob/0bf3b93ceb1d254f5b3333eb9b7c40d92fcef16e/.github/workflows/self-zizmor.yml
+name: GitHub Actions security analysis with zizmor
+
+on:
+  push:
+    branches:
+      - master
+  pull_request: {}
+
+permissions: {}
+
+jobs:
+  zizmor:
+    uses: kaitai-io/.github/.github/workflows/zizmor.yml@main # zizmor: ignore[unpinned-uses]
+    permissions:
+      security-events: write # Required for upload-sarif (used by zizmor-action) to upload SARIF files.
+      contents: read # Only needed for private repos. Needed to clone the repo.
+      actions: read # Only needed for private repos. Needed for upload-sarif to read workflow run info.

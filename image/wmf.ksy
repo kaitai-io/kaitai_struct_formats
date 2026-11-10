@@ -19,7 +19,7 @@ doc: |
   Device Interface) function calls, which, if played back, result in
   an image being drawn on a given surface (display, off-screen buffer,
   printer, etc).
-doc-ref: http://www.digitalpreservation.gov/formats/digformatspecs/WindowsMetafileFormat(wmf)Specification.pdf
+doc-ref: https://www.loc.gov/preservation/digital/formats/digformatspecs/WindowsMetafileFormat(wmf)Specification.pdf
 seq:
   - id: special_header
     type: special_header

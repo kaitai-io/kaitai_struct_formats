@@ -29,7 +29,7 @@ doc: |
 doc-ref:
   - 'http://www.alysis.us/arctechnology.htm'
   - 'http://preserve.mactech.com/articles/mactech/Vol.09/09.01/ResCompression/index.html'
-  - 'https://github.com/dgelessus/python-rsrcfork/tree/master/rsrcfork/compress'
+  - 'https://github.com/dgelessus/python-rsrcfork/tree/f891a6e/src/rsrcfork/compress'
 seq:
   - id: header
     type: header

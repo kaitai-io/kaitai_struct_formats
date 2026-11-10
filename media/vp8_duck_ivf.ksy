@@ -1,19 +1,21 @@
 meta:
-  id: vp8_ivf
-  title: VP8 raw file
+  id: vp8_duck_ivf
+  title: Duck IVF (container format for VP8)
   file-extension: ivf
   xref:
-    wikidata: Q61774549
+    justsolve: VP8
+    loc: fdd000578
+    wikidata: Q1063970
   license: CC0-1.0
   ks-version: 0.7
   endian: le
 doc: |
-  IVF is a simple container format for raw VP8 data, which is an open
-  and royalty-free video compression format, currently developed by
-  Google.
+  Duck IVF is a simple container format for raw VP8 data, which is an open and
+  royalty-free video compression format, currently developed by Google.
 
-  Test .ivf files are available at https://chromium.googlesource.com/webm/vp8-test-vectors
-doc-ref: https://wiki.multimedia.cx/index.php/IVF
+  Test .ivf files are available at
+  <https://chromium.googlesource.com/webm/vp8-test-vectors>
+doc-ref: https://wiki.multimedia.cx/index.php/Duck_IVF
 seq:
 ## header start
   - id: magic1

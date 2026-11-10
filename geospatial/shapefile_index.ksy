@@ -3,6 +3,7 @@ meta:
   title: Shapefile index file
   file-extension: shx
   xref:
+    justsolve: Shapefile
     loc: fdd000280 # ESRI Shapefile
     pronom: fmt/277
     wikidata: Q27487109

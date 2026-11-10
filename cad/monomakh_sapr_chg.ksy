@@ -7,7 +7,7 @@ meta:
   endian: le
 doc: |
   CHG is a container format file used by
-  [MONOMAKH-SAPR](https://www.liraland.com/mono/index.php), a software
+  [MONOMAKH-SAPR](https://www.liraland.com/mono/), a software
   package for analysis & design of reinforced concrete multi-storey
   buildings with arbitrary configuration in plan.
 

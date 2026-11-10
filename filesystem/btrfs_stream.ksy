@@ -18,7 +18,7 @@ doc: |
   for converting one subvolume into another.
   This spec can be used to disassemble the binary diff created by the `btrfs send` command.
   If you want a text representation you may want to checkout `btrfs receive --dump` instead.
-doc-ref: https://btrfs.wiki.kernel.org/index.php/Design_notes_on_Send/Receive
+doc-ref: https://archive.kernel.org/oldwiki/btrfs.wiki.kernel.org/index.php/Design_notes_on_Send/Receive.html
 
 seq:
   - id: header
@@ -107,7 +107,7 @@ types:
             size: 16
 
 # enum btrfs_send_cmd
-# https://git.kernel.org/pub/scm/linux/kernel/git/kdave/btrfs-progs.git/tree/send.h
+# https://git.kernel.org/pub/scm/linux/kernel/git/kdave/btrfs-progs.git/tree/kernel-shared/send.h?id=979bda6f#n69
 enums:
   command:
     0x00: unspec

@@ -11,7 +11,7 @@ meta:
 doc: |
   A TrueType font file contains data, in table format, that comprises
   an outline font.
-doc-ref: https://www.microsoft.com/typography/tt/ttf_spec/ttch02.doc
+doc-ref: https://web.archive.org/web/20160410081432/https://www.microsoft.com/typography/tt/ttf_spec/ttch02.doc
 seq:
   - id: offset_table
     type: offset_table
@@ -77,7 +77,7 @@ types:
     doc: >
       cmap - Character To Glyph Index Mapping Table
       This table defines the mapping of character codes to the glyph index values used in the font.
-    -webide-represetation: "hello"
+    -webide-representation: "hello"
     seq:
       - id: version_number
         type: u2
@@ -824,6 +824,14 @@ types:
       - id: num_glyphs
         type: u2
         doc: 'The number of glyphs in the font.'
+      - id: version10_body
+        type: maxp_version10_body
+        if: is_version10
+    instances:
+      is_version10:
+        value: table_version_number.major == 1 and table_version_number.minor == 0
+  maxp_version10_body:
+    seq:
       - id: max_points
         type: u2
         doc: 'Maximum points in a non-composite glyph.'
@@ -887,7 +895,7 @@ types:
           - id: glyph_names
             type: pascal_string
             repeat: until
-            repeat-until: _.length == 0
+            repeat-until: _.length == 0 or _io.eof
     seq:
       - id: format
         type: fixed

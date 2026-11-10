@@ -69,7 +69,7 @@ doc: |
   (jbyrd@giganticsoftware.com), and it is likely to contain bugs.
 doc-ref:
   - http://soundfile.sapp.org/doc/WaveFormat/
-  - http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html
+  - https://www.mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html
   - https://web.archive.org/web/20101031101749/http://www.ebu.ch/fr/technical/publications/userguides/bwf_user_guide.php
 seq:
   - id: chunk
@@ -361,10 +361,10 @@ types:
         type: str
         encoding: UTF-8
         doc: XMP data
-        doc-ref: https://wwwimages2.adobe.com/content/dam/acom/en/devnet/xmp/pdfs/XMP%20SDK%20Release%20cc-2016-08/XMPSpecificationPart3.pdf
+        doc-ref: https://github.com/adobe/XMP-Toolkit-SDK/blob/v2022.06/docs/XMPSpecificationPart3.pdf
 
   afsp_chunk_type:
-    doc-ref: http://www-mmsp.ece.mcgill.ca/Documents/Downloads/AFsp/
+    doc-ref: https://www.mmsp.ece.mcgill.ca/Documents/Downloads/AFsp/
     seq:
       - id: magic
         contents: "AFsp"
@@ -379,8 +379,8 @@ types:
           format (e.g. "`program: CopyAudio`"). The list of existing information
           record types are available in the `doc-ref` links.
         doc-ref:
-          - http://www-mmsp.ece.mcgill.ca/Documents/Software/Packages/AFsp/libtsp/AFsetInfo.html
-          - http://www-mmsp.ece.mcgill.ca/Documents/Software/Packages/AFsp/libtsp/AFprintInfoRecs.html
+          - https://www.mmsp.ece.mcgill.ca/Documents/Software/Packages/AFsp/libtsp/AF/AFsetInfo.html
+          - https://www.mmsp.ece.mcgill.ca/Documents/Software/Packages/AFsp/libtsp/AF/AFprintInfoRecs.html
 
 enums:
   w_format_tag_type:

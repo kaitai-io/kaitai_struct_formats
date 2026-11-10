@@ -10,7 +10,7 @@ can also be found there.</p>
 <% class_name = ucc(file_id) %>
 
 <%= code cur_lang, <<-CODE
-var data = #{ class_name }.FromFile("path/to/local/file.#{ meta['file-extension'] || meta['id'] }");
+var data = #{ class_name }.FromFile("path/to/local/file.#{sample_ext}");
 CODE
 %>
 

@@ -2,7 +2,7 @@ meta:
   id: nt_mdt_pal
   file-extension: pal
   endian: be
-  encoding: UTF-16
+  encoding: UTF-16LE
   title: NT-MDT palette format
   application:
     - Nova

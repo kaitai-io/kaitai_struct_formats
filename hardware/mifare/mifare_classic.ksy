@@ -13,7 +13,8 @@ doc-ref: |
   https://github.com/nfc-tools/libnfc
   https://www.nxp.com/docs/en/data-sheet/MF1S70YYX_V1.pdf
 doc: |
-  You can get a dump for testing by the link: https://github.com/zhovner/mfdread/raw/master/dump.mfd
+  You can get a dump for testing from this link:
+  <https://github.com/zhovner/mfdread/raw/master/dump.mfd>
 seq:
   - id: sectors
     size: ((_index >= 32)?4:1)*4*16 #sorry for this doubling of `block_size` (16), but we need `sector` be self-sufficient so we cannot use _root there

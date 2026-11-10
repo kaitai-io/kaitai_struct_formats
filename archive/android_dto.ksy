@@ -15,7 +15,7 @@ doc: |
   partition images and decompile them with dtc (device tree compiler).
 
 doc-ref:
-  - https://source.android.com/devices/architecture/dto/partitions
+  - https://source.android.com/docs/core/architecture/dto/partitions
   - https://android.googlesource.com/platform/system/libufdt/+/refs/tags/android-10.0.0_r47
 
 seq:

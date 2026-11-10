@@ -7,7 +7,7 @@ meta:
     - lvm tools
     - libvslvm
   xref:
-    forensicswiki: Linux_Logical_Volume_Manager_(LVM)
+    forensicswiki: linux_logical_volume_manager_(lvm)
     wikidata: Q6667482 # software, not format
   tags:
     - filesystem
@@ -26,7 +26,7 @@ doc: |
   sudo lvcreate --name lv_test1 vg_test
   sudo losetup -d /dev/loop1
   ```
-doc-ref: https://github.com/libyal/libvslvm/blob/master/documentation/Logical%20Volume%20Manager%20(LVM)%20format.asciidoc
+doc-ref: https://github.com/libyal/libvslvm/blob/main/documentation/Logical%20Volume%20Manager%20(LVM)%20format.asciidoc
 seq:
   - id: pv
     type: physical_volume

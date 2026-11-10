@@ -2,6 +2,7 @@ meta:
   id: rtcp_payload
   title: rtcp network payload (single udp packet)
   xref:
+    justsolve: RTP
     wikidata: Q749940
   license: CC0-1.0
   ks-version: 0.7
@@ -9,7 +10,7 @@ meta:
 
 doc: RTCP is the Real-Time Control Protocol
 
-doc-ref: https://tools.ietf.org/html/rfc3550
+doc-ref: https://www.rfc-editor.org/rfc/rfc3550
 
 seq:
   - id: rtcp_packets

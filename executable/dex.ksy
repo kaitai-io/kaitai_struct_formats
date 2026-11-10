@@ -3,6 +3,7 @@ meta:
   title: Android Dalvik VM executable (dex)
   file-extension: dex
   xref:
+    justsolve: Dalvik_Executable
     pronom: fmt/694
     wikidata: Q29000585
   tags:
@@ -20,7 +21,7 @@ doc: |
   This format is loosely similar to Java .class file format and
   generally holds the similar set of data: i.e. classes, methods,
   fields, annotations, etc.
-doc-ref: https://source.android.com/devices/tech/dalvik/dex-format
+doc-ref: https://source.android.com/docs/core/runtime/dex-format
 seq:
   - id: header
     type: header_item

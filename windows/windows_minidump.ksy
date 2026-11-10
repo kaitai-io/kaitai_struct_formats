@@ -1,6 +1,9 @@
 meta:
   id: windows_minidump
   title: Windows MiniDump
+  file-extension:
+    - dmp
+    - mdmp
   license: CC0-1.0
   endian: le
 doc: |
@@ -12,8 +15,8 @@ doc: |
 
   The file itself is a container, which contains a number of typed
   "streams", which contain some data according to its type attribute.
-doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_header
-# https://github.com/libyal/libmdmp/blob/master/documentation/Minidump%20(MDMP)%20format.asciidoc
+doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_header
+# https://github.com/libyal/libmdmp/blob/main/documentation/Minidump%20(MDMP)%20format.asciidoc
 seq:
   - id: magic1
     -orig-id: Signature
@@ -47,7 +50,7 @@ instances:
 types:
   dir:
     -orig-id: MINIDUMP_DIRECTORY
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_directory
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_directory
     seq:
       - id: stream_type
         -orig-id: StreamType
@@ -56,7 +59,7 @@ types:
       - id: len_data
         -orig-id: DataSize
         type: u4
-        doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_location_descriptor
+        doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_location_descriptor
       - id: ofs_data
         type: u4
         -orig-id: Rva
@@ -71,13 +74,14 @@ types:
             'stream_types::misc_info': misc_info
             'stream_types::thread_list': thread_list
             'stream_types::memory_list': memory_list
+            'stream_types::memory_64_list': memory_64_list
             'stream_types::exception': exception_stream
             # TODO: support more stream types
   system_info:
     doc: |
       "System info" stream provides basic information about the
       hardware and operating system which produces this dump.
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_system_info
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_system_info
     seq:
       - id: cpu_arch
         -orig-id: ProcessorArchitecture
@@ -129,8 +133,8 @@ types:
         9: amd64
         0xffff: unknown
   misc_info:
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_misc_info
-    # https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_misc_info_2
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_misc_info
+    # https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_misc_info_2
     seq:
       - id: len_info
         -orig-id: SizeOfInfo
@@ -167,7 +171,7 @@ types:
         type: u4
   thread_list:
     -orig-id: MINIDUMP_THREAD_LIST
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_thread_list
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_thread_list
     seq:
       - id: num_threads
         -orig-id: NumberOfThreads
@@ -179,7 +183,7 @@ types:
         repeat-expr: num_threads
   thread:
     -orig-id: MINIDUMP_THREAD
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_thread
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_thread
     seq:
       - id: thread_id
         -orig-id: ThreadId
@@ -205,7 +209,7 @@ types:
         type: location_descriptor
   memory_list:
     -orig-id: MINIDUMP_MEMORY_LIST
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_memory64_list
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_memory_list
     seq:
       - id: num_mem_ranges
         type: u4
@@ -213,9 +217,21 @@ types:
         type: memory_descriptor
         repeat: expr
         repeat-expr: num_mem_ranges
+  memory_64_list:
+    -orig-id: MINIDUMP_MEMORY64_LIST
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_memory64_list
+    seq:
+      - id: num_mem_ranges
+        type: u8
+      - id: ofs_base
+        type: u8
+      - id: mem_ranges
+        type: memory_descriptor_64
+        repeat: expr
+        repeat-expr: num_mem_ranges
   exception_stream:
     -orig-id: MINIDUMP_EXCEPTION_STREAM
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_exception_stream
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_exception_stream
     seq:
       - id: thread_id
         -orig-id: ThreadId
@@ -231,7 +247,7 @@ types:
         type: location_descriptor
   exception_record:
     -orig-id: MINIDUMP_EXCEPTION
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_exception
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_exception
     seq:
       - id: code
         -orig-id: ExceptionCode
@@ -266,16 +282,26 @@ types:
           15), but in reality only first `num_params` would be used.
   memory_descriptor:
     -orig-id: MINIDUMP_MEMORY_DESCRIPTOR
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_memory_descriptor
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_memory_descriptor
     seq:
       - id: addr_memory_range
         -orig-id: StartOfMemoryRange
         type: u8
       - id: memory
         type: location_descriptor
+  memory_descriptor_64:
+    -orig-id: MINIDUMP_MEMORY_DESCRIPTOR64
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_memory_descriptor64
+    seq:
+      - id: addr_memory_range
+        -orig-id: StartOfMemoryRange
+        type: u8
+      - id: len_data
+        -orig-id: DataSize
+        type: u8
   location_descriptor:
     -orig-id: MINIDUMP_LOCATION_DESCRIPTOR
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_location_descriptor
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_location_descriptor
     seq:
       - id: len_data
         -orig-id: DataSize
@@ -292,7 +318,7 @@ types:
     doc: |
       Specific string serialization scheme used in MiniDump format is
       actually a simple 32-bit length-prefixed UTF-16 string.
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_string
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_string
     seq:
       - id: len_str
         -orig-id: Length
@@ -304,7 +330,7 @@ types:
         encoding: UTF-16LE
 enums:
   stream_types:
-    # https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/ne-minidumpapiset-minidump_stream_type
+    # https://learn.microsoft.com/en-us/windows/win32/api/minidumpapiset/ne-minidumpapiset-minidump_stream_type
     0: unused
     1: reserved_0
     2: reserved_1
@@ -327,7 +353,7 @@ enums:
     19: token
     20: java_script_data
     21: system_memory_info
-    22: process_vm_vounters
+    22: process_vm_counters
     23: ipt_trace
     24: thread_names
     0x8000: ce_null

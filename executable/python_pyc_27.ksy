@@ -1,6 +1,6 @@
 # https://web.archive.org/web/20170825122655/http://demoseen.com/blog/2010-02-20_Python_Marshal_Format.html
-# https://github.com/python/cpython/blob/master/Lib/dis.py
-# https://github.com/python/cpython/blob/master/Lib/opcode.py
+# https://github.com/python/cpython/blob/main/Lib/dis.py
+# https://github.com/python/cpython/blob/main/Lib/opcode.py
 # https://github.com/python/cpython/blob/2.7/Lib/dis.py
 # https://github.com/python/cpython/blob/2.7/Lib/opcode.py
 meta:
@@ -8,6 +8,7 @@ meta:
   application: Python
   file-extension: pyc
   xref:
+    justsolve: Python
     pronom: fmt/939
     mime: application/x-python-code
     wikidata: Q28009469

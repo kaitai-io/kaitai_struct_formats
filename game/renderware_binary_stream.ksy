@@ -2,9 +2,14 @@ meta:
   id: renderware_binary_stream
   title: RenderWare binary stream
   application: Games based on RenderWare engine (Grand Theft Auto 3D series)
+  file-extension:
+    - dff
+    - txd
   xref:
+    justsolve: RenderWare_binary_stream_file
     wikidata: Q29960668
   endian: le
+  bit-endian: le
 doc-ref: https://gtamods.com/wiki/RenderWare_binary_stream_file
 seq:
   - id: code
@@ -25,6 +30,7 @@ seq:
         sections::geometry_list: list_with_header
         sections::texture_dictionary: list_with_header
         sections::texture_native: list_with_header
+        sections::atomic: list_with_header
 instances:
   version:
     value: 'library_id_stamp & 0xFFFF0000 != 0 ? (library_id_stamp >> 14 & 0x3FF00) + 0x30000 | (library_id_stamp >> 16 & 0x3F) : library_id_stamp << 8'
@@ -54,12 +60,28 @@ types:
             sections::geometry: struct_geometry
             sections::geometry_list: struct_geometry_list
             sections::texture_dictionary: struct_texture_dictionary
+            sections::atomic: struct_atomic
       - id: entries
         type: renderware_binary_stream
         repeat: eos
     instances:
       version:
         value: 'library_id_stamp & 0xFFFF0000 != 0 ? (library_id_stamp >> 14 & 0x3FF00) + 0x30000 | (library_id_stamp >> 16 & 0x3F) : library_id_stamp << 8'
+  struct_atomic:
+    doc-ref: https://gtamods.com/wiki/Atomic_(RW_Section)#Structure
+    seq:
+      - id: frame_index
+        type: u4
+      - id: geometry_index
+        type: u4
+      - id: flag_render
+        type: b1
+      - type: b1
+      - id: flag_collision_test
+        type: b1
+      - type: b29
+      - id: unused
+        type: u4
   struct_texture_dictionary:
     seq:
       - id: num_textures
@@ -139,13 +161,24 @@ types:
         repeat-expr: num_morph_targets
     instances:
       is_textured:
-        value: format & 0x00000004 != 0
+        value: format & 0x0000_0004 != 0
       is_prelit:
-        value: format & 0x00000008 != 0
+        value: format & 0x0000_0008 != 0
       is_textured2:
-        value: format & 0x00000080 != 0
+        value: format & 0x0000_0080 != 0
       is_native:
-        value: format & 0x01000000 != 0
+        value: format & 0x0100_0000 != 0
+      num_uv_layers_raw:
+        value: (format & 0x00ff_0000) >> 16
+      num_uv_layers:
+        value: |
+          num_uv_layers_raw == 0
+            ? is_textured2
+              ? 2
+              : is_textured
+                ? 1
+                : 0
+            : num_uv_layers_raw
   surface_properties:
     doc-ref: https://gtamods.com/wiki/RpGeometry
     seq:
@@ -162,16 +195,23 @@ types:
         repeat: expr
         repeat-expr: _parent.num_vertices
         if: _parent.is_prelit
-      - id: tex_coords
-        type: tex_coord
+      - id: uv_layers
+        type: uv_layer(_parent.num_vertices)
         repeat: expr
-        repeat-expr: _parent.num_vertices
-        if: _parent.is_textured or _parent.is_textured2
-        # FIXME: repeated for number of texture sets
+        repeat-expr: _parent.num_uv_layers
       - id: triangles
         type: triangle
         repeat: expr
         repeat-expr: _parent.num_triangles
+  uv_layer:
+    params:
+      - id: num_vertices
+        type: u4
+    seq:
+      - id: tex_coords
+        type: tex_coord
+        repeat: expr
+        repeat-expr: num_vertices
   rgba:
     seq:
       - id: r
@@ -376,22 +416,22 @@ enums:
     0x01bf: dictionary_tk
     0x01c0: uv_animation_linear
     0x01c1: uv_animation_parameter
-    0x0253f200: atomic_visibility_distance
-    0x0253f201: clump_visibility_distance
-    0x0253f202: frame_visibility_distance
-    0x0253f2f3: pipeline_set
-    0x0253f2f4: unused_5
-    0x0253f2f5: texdictionary_link
-    0x0253f2f6: specular_material
-    0x0253f2f7: unused_8
-    0x0253f2f8: effect_2d
-    0x0253f2f9: extra_vert_colour
-    0x0253f2fa: collision_model
-    0x0253f2fb: gta_hanim
-    0x0253f2fc: reflection_material
-    0x0253f2fd: breakable
-    0x0253f2fe: frame
-    0x0253f2ff: unused_16
+    0x0253_f200: atomic_visibility_distance
+    0x0253_f201: clump_visibility_distance
+    0x0253_f202: frame_visibility_distance
+    0x0253_f2f3: pipeline_set
+    0x0253_f2f4: unused_5
+    0x0253_f2f5: texdictionary_link
+    0x0253_f2f6: specular_material
+    0x0253_f2f7: unused_8
+    0x0253_f2f8: effect_2d
+    0x0253_f2f9: extra_vert_colour
+    0x0253_f2fa: collision_model
+    0x0253_f2fb: gta_hanim
+    0x0253_f2fc: reflection_material
+    0x0253_f2fd: breakable
+    0x0253_f2fe: frame
+    0x0253_f2ff: unused_16
     0x050e: bin_mesh_plg
     0x0510: native_data_plg
     0xf21e: zmodeler_lock

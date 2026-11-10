@@ -19,7 +19,7 @@ doc: |
   device. This metadata holds that mapping.
 
 doc-ref:
-  - https://source.android.com/devices/tech/ota/dynamic_partitions
+  - https://source.android.com/docs/core/ota/dynamic_partitions
   - https://android.googlesource.com/platform/system/core/+/refs/tags/android-11.0.0_r8/fs_mgr/liblp/include/liblp/metadata_format.h
 
 instances:

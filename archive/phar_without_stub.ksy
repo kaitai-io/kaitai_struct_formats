@@ -219,7 +219,7 @@ types:
         SHA-512 signature types.
       * 1.1.1: Supported since phar extension 2.0.0 (released 2009-07-29 and
         included with PHP 5.3 and later). (PHP_Archive 0.12.0 also supports
-        all features from API verison 1.1.1, but it reports API version 1.1.0.)
+        all features from API version 1.1.1, but it reports API version 1.1.0.)
         Adds the OpenSSL signature type and support for storing
         empty directories.
     seq:

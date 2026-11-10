@@ -50,7 +50,7 @@ doc: |
   such as custom file icons.
 doc-ref:
   - 'https://developer.apple.com/library/archive/documentation/mac/pdf/MoreMacintoshToolbox.pdf#page=151 Inside Macintosh, More Macintosh Toolbox, Resource Manager, Resource Manager Reference, Resource File Format'
-  - 'http://www.pagetable.com/?p=50 Inside Macintosh, Volume I, The Resource Manager, Format of a Resource File'
+  - 'https://www.pagetable.com/?p=50 Inside Macintosh, Volume I, The Resource Manager, Format of a Resource File'
   - 'https://github.com/kreativekorp/ksfl/wiki/Macintosh-Resource-File-Format'
   - 'https://github.com/dgelessus/mac_file_format_docs/blob/master/README.md#resource-forks'
 seq:

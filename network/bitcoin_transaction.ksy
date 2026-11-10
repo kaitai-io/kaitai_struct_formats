@@ -44,7 +44,7 @@ types:
       - id: output_id
         type: u4
         doc: |
-          ID indexing an ouput of the transaction refered by txid.
+          ID indexing an output of the transaction referred by txid.
           This output will be used as an input in the present transaction.
       - id: len_script
         type: u1
@@ -137,7 +137,7 @@ types:
       - id: amount
         type: u8
         doc: |
-          Number of Satoshis to be transfered.
+          Number of Satoshis to be transferred.
       - id: len_script
         type: u1
         doc: |

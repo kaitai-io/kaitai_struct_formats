@@ -3,7 +3,8 @@ meta:
   title: Windows registry database
   application: Windows NT and later
   xref:
-    forensicswiki: Windows_NT_Registry_File_(REGF)
+    justsolve: Windows_Registry
+    forensicswiki: windows_nt_registry_file_(regf)
     wikidata: Q463244
   license: CC0-1.0
   endian: le
@@ -23,7 +24,7 @@ doc: |
 
   Note that one typically can't access files directly on a mounted
   filesystem with a running Windows OS.
-doc-ref: 'https://github.com/libyal/libregf/blob/master/documentation/Windows%20NT%20Registry%20File%20(REGF)%20format.asciidoc'
+doc-ref: 'https://github.com/libyal/libregf/blob/main/documentation/Windows%20NT%20Registry%20File%20(REGF)%20format.asciidoc'
 seq:
   - id: header
     type: file_header

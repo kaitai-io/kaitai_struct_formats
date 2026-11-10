@@ -27,10 +27,10 @@ doc: |
   so typically it's simpler to use a pre-compiled list of them, such
   as:
 
-  * https://www.cs.auckland.ac.nz/~pgut001/dumpasn1.cfg
-  * http://oid-info.com/
-  * https://www.alvestrand.no/objectid/top.html
-doc-ref: https://www.itu.int/rec/T-REC-X.690-201508-I/en
+  * <https://www.cs.auckland.ac.nz/~pgut001/dumpasn1.cfg>
+  * <http://oid-info.com/>
+  * <https://www.alvestrand.no/objectid/top.html>
+doc-ref: https://www.itu.int/itu-t/recommendations/rec.aspx?rec=12483&lang=en
 -webide-representation: 't={type_tag}, b={body}'
 seq:
   - id: type_tag
@@ -87,7 +87,7 @@ types:
         encoding: ASCII # actually a subset of ASCII
   body_object_id:
     -webide-representation: '{first:dec}.{second:dec}.{rest}'
-    doc-ref: https://docs.microsoft.com/en-us/windows/desktop/SecCertEnroll/about-object-identifier
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/seccertenroll/about-object-identifier
     seq:
       - id: first_and_second
         type: u1

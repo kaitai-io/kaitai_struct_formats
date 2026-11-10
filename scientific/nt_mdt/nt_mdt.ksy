@@ -20,8 +20,8 @@ doc: |
 
   Some examples of mdt files can be downloaded at:
 
-  * http://www.ntmdt-si.ru/scan-gallery
-  * http://callistosoft.narod.ru/Resources/Mdt.zip
+  * <https://www.ntmdt-si.ru/resources/scan-gallery>
+  * <http://callistosoft.narod.ru/Resources/Mdt.zip>
 doc-ref: https://svn.code.sf.net/p/gwyddion/code/trunk/gwyddion/modules/file/nt-mdt.c
 seq:
   - id: signature
@@ -649,19 +649,19 @@ enums:
 
   data_type:
     0: unknown0
-    '-1': int8
+    -1: int8
     1: uint8
-    '-2': int16
+    -2: int16
     2: uint16
-    '-4': int32
+    -4: int32
     4: uint32
-    '-8': int64
+    -8: int64
     8: uint64
-    '-5892': float32
-    '-9990': float48
-    '-13320': float64
-    '-16138': float80
-    '-65544': floatfix
+    -5892: float32
+    -9990: float48
+    -13320: float64
+    -16138: float80
+    -65544: floatfix
 
 
   xml_scan_location:

@@ -20,7 +20,7 @@ doc: |
 
   There are at least 2 different versions of the format: v1 and
   v2. Netmon v3 seems to use the same file format as v1.
-doc-ref: https://docs.microsoft.com/en-us/windows/win32/netmon2/capturefile-header-values
+doc-ref: https://learn.microsoft.com/en-us/windows/win32/netmon2/capturefile-header-values
 seq:
   - id: signature
     contents: GMBU
@@ -92,7 +92,7 @@ types:
       A container for actually captured network data. Allow to
       timestamp individual frames and designates how much data from
       the original packet was actually written into the file.
-    doc-ref: https://docs.microsoft.com/en-us/windows/win32/netmon2/frame
+    doc-ref: https://learn.microsoft.com/en-us/windows/win32/netmon2/frame
     seq:
       - id: ts_delta
         type: u8

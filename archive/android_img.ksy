@@ -7,7 +7,7 @@ meta:
     - android
   license: CC0-1.0
   endian: le
-doc-ref: https://source.android.com/devices/bootloader/boot-image-header
+doc-ref: https://source.android.com/docs/core/architecture/bootloader/boot-image-header
 seq:
   - id: magic
     contents: ANDROID!

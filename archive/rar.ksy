@@ -4,7 +4,7 @@ meta:
   application: RAR archiver
   file-extension: rar
   xref:
-    forensicswiki: RAR
+    forensicswiki: rar
     justsolve: RAR
     loc: fdd000450
     mime:

@@ -34,7 +34,7 @@ doc: |
 
   The `'dcmp' (1)` compression format (see dcmp_1.ksy) is very similar to this format,
   with the main difference that it operates mostly on single bytes rather than two-byte units.
-doc-ref: 'https://github.com/dgelessus/python-rsrcfork/tree/master/rsrcfork/compress/dcmp0.py'
+doc-ref: 'https://github.com/dgelessus/python-rsrcfork/blob/f891a6e/src/rsrcfork/compress/dcmp0.py'
 seq:
   - id: chunks
     type: chunk

@@ -15,7 +15,7 @@ doc: |
   * Java's
     [Serializable](https://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html)
   * .NET
-    [BinaryFormatter](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.serialization.formatters.binary.binaryformatter)
+    [BinaryFormatter](https://learn.microsoft.com/en-us/dotnet/api/system.runtime.serialization.formatters.binary.binaryformatter?view=net-7.0)
   * Python's
     [marshal](https://docs.python.org/3/library/marshal.html),
     [pickle](https://docs.python.org/3/library/pickle.html) and
