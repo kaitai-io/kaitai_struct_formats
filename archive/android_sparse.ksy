@@ -9,15 +9,15 @@ meta:
   ks-version: 0.9
   endian: le
 doc: |
-    The Android sparse format is a format to more efficiently store files
-    for for example firmware updates to save on bandwidth. Files in sparse
-    format first have to be converted back to their original format.
+  The Android sparse format is a format to more efficiently store files
+  for for example firmware updates to save on bandwidth. Files in sparse
+  format first have to be converted back to their original format.
 
-    A tool to create images for testing can be found in the Android source code tree:
+  A tool to create images for testing can be found in the Android source code tree:
 
-    <https://android.googlesource.com/platform/system/core/+/e8d02c50d7/libsparse> - `img2simg.c`
+  <https://android.googlesource.com/platform/system/core/+/e8d02c50d7/libsparse> - `img2simg.c`
 
-    Note: this is not the same as the Android sparse data image format.
+  Note: this is not the same as the Android sparse data image format.
 doc-ref:
   - https://android.googlesource.com/platform/system/core/+/e8d02c50d7/libsparse/sparse_format.h
   - https://web.archive.org/web/20220322054458/https://source.android.com/devices/bootloader/images#sparse-image-format

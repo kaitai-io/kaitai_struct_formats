@@ -3,7 +3,7 @@ meta:
   title: cpio archive, old binary variant, little-endian
   file-extension: cpio
   xref:
-    forensicswiki: Cpio
+    forensicswiki: cpio
     justsolve: Cpio
     mime: application/x-cpio
     pronom: fmt/635

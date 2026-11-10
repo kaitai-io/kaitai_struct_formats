@@ -2,7 +2,8 @@ meta:
   id: gzip
   file-extension: gz
   xref:
-    forensicswiki: Gzip
+    forensicswiki: gzip
+    justsolve: Gzip
     mime: application/gzip
     pronom: x-fmt/266
     rfc: 1952

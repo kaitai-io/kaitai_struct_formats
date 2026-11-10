@@ -1,6 +1,8 @@
 meta:
   id: windows_systemtime
   title: Microsoft Windows SYSTEMTIME structure
+  xref:
+    justsolve: Windows_SYSTEMTIME
   license: CC0-1.0
   endian: le
 doc: |

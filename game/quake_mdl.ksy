@@ -7,7 +7,7 @@ meta:
     - 3d
     - game
   license: CC0-1.0
-  ks-version: 0.10
+  ks-version: '0.10'
   endian: le
 doc: |
   Quake 1 model format is used to store 3D models completely with

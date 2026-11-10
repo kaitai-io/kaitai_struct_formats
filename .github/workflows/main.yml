@@ -5,25 +5,36 @@ on:
     branches:
       - master
 
+# Cancel in-progress runs of the same workflow
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           submodules: true
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@14594264cd68ce8a2345dd349bc3d138a4ef85c8 # v1.327.0
         with:
-          ruby-version: '2.7'
-      - uses: actions/setup-python@v4
+          ruby-version: '4.0'
+          working-directory: _build  # Used to resolve `Gemfile.lock` and install Bundler accordingly
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: '3.x'
       - name: Install deps
         run: |
           sudo apt-get update
-          curl -fsSL -O https://github.com/kaitai-io/kaitai_struct_compiler/releases/download/0.10/kaitai-struct-compiler_0.10_all.deb
-          sha256sum --check --warn .github/checksums
-          sudo apt-get install ./kaitai-struct-compiler_0.10_all.deb
+          curl -fsSLO https://github.com/kaitai-io/kaitai_struct_compiler/releases/download/0.11/kaitai-struct-compiler_0.11_all.deb
+          sha256sum -c -w .github/kaitai-struct-compiler_0.11_all.deb.sha256
+          sudo apt-get install ./kaitai-struct-compiler_0.11_all.deb
           sudo apt-get install --no-install-recommends -y \
             git ssh \
             locales \
@@ -47,7 +58,7 @@ jobs:
         working-directory: _build
         run: ./build-target .. target
       - name: Upload build targets log
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: log.json
           path: _build/target/log.json

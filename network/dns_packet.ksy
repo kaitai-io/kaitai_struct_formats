@@ -11,7 +11,7 @@ doc: |
   (No support for Auth-Name + Add-Name for simplicity)
 seq:
   - id: transaction_id
-    doc: "ID to keep track of request/responces"
+    doc: "ID to keep track of request/responses"
     type: u2
   - id: flags
     type: packet_flags
@@ -186,7 +186,7 @@ types:
     seq:
       - id: primary_ns
         type: domain_name
-      - id: resoponsible_mailbox
+      - id: responsible_mailbox
         type: domain_name
       - id: serial
         type: u4

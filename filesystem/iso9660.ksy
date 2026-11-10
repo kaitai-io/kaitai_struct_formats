@@ -3,6 +3,7 @@ meta:
   title: ISO9660 CD filesystem
   file-extension: iso
   xref:
+    justsolve: ISO_9660
     loc: fdd000348
     pronom: fmt/468
     wikidata: Q815645

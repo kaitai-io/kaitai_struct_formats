@@ -3,6 +3,7 @@ meta:
   title: GL Transmission Format, binary container
   file-extension: glb
   xref:
+    justsolve: GlTF
     mime: model/gltf-binary
     wikidata: Q28135989
   license: MIT

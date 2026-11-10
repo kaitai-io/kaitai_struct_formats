@@ -649,19 +649,19 @@ enums:
 
   data_type:
     0: unknown0
-    '-1': int8
+    -1: int8
     1: uint8
-    '-2': int16
+    -2: int16
     2: uint16
-    '-4': int32
+    -4: int32
     4: uint32
-    '-8': int64
+    -8: int64
     8: uint64
-    '-5892': float32
-    '-9990': float48
-    '-13320': float64
-    '-16138': float80
-    '-65544': floatfix
+    -5892: float32
+    -9990: float48
+    -13320: float64
+    -16138: float80
+    -65544: floatfix
 
 
   xml_scan_location:

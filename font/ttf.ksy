@@ -77,7 +77,7 @@ types:
     doc: >
       cmap - Character To Glyph Index Mapping Table
       This table defines the mapping of character codes to the glyph index values used in the font.
-    -webide-represetation: "hello"
+    -webide-representation: "hello"
     seq:
       - id: version_number
         type: u2

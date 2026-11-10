@@ -7,7 +7,8 @@ meta:
     - VMWare Workstation
   file-extension: vdi
   xref:
-    forensicswiki: Virtual_Disk_Image_(VDI)
+    justsolve: VDI
+    forensicswiki: virtual_disk_image_(vdi)
     pronom: fmt/726
     wikidata: Q29209126
   license: GPL-3.0-or-later
@@ -184,7 +185,7 @@ types:
               - id: sector_size
                 type: u4
           flags:
-            seq: #little endian assummed
+            seq: #little endian assumed
               - id: reserved0
                 type: b15
               - id: zero_expand

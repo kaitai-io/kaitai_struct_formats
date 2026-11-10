@@ -8,6 +8,7 @@ meta:
   application: Python
   file-extension: pyc
   xref:
+    justsolve: Python
     pronom: fmt/939
     mime: application/x-python-code
     wikidata: Q28009469

@@ -5,7 +5,7 @@ meta:
   file-extension:
     - nbt
     - dat
-    - schematic # https://minecraft.fandom.com/wiki/Schematic_file_format
+    - schematic # https://minecraft.wiki/w/Schematic_file_format
     - schem
   xref:
     justsolve: Minecraft_NBT_format
@@ -17,14 +17,14 @@ meta:
 doc: |
   A structured binary format native to Minecraft for saving game data and transferring
   it over the network (in multiplayer), such as player data
-  ([`<player>.dat`](https://minecraft.fandom.com/wiki/Player.dat_format); contains
+  ([`<player>.dat`](https://minecraft.wiki/w/Player.dat_format); contains
   e.g. player's inventory and location), saved worlds
   ([`level.dat`](
-    https://minecraft.fandom.com/wiki/Java_Edition_level_format#level.dat_format
-  ) and [Chunk format](https://minecraft.fandom.com/wiki/Chunk_format#NBT_structure)),
+    https://minecraft.wiki/w/Java_Edition_level_format#level.dat_format
+  ) and [Chunk format](https://minecraft.wiki/w/Chunk_format#NBT_structure)),
   list of saved multiplayer servers
-  ([`servers.dat`](https://minecraft.fandom.com/wiki/Servers.dat_format)) and so on -
-  see <https://minecraft.fandom.com/wiki/NBT_format#Uses>.
+  ([`servers.dat`](https://minecraft.wiki/w/Servers.dat_format)) and so on -
+  see <https://minecraft.wiki/w/NBT_format#Uses>.
 
   The entire file should be _gzip_-compressed (in accordance with the original
   specification [NBT.txt](
@@ -86,7 +86,7 @@ doc: |
 doc-ref:
   - https://wiki.vg/NBT
   - https://web.archive.org/web/20110723210920/https://www.minecraft.net/docs/NBT.txt
-  - https://minecraft.fandom.com/wiki/NBT_format
+  - https://minecraft.wiki/w/NBT_format
 seq:
   - id: root_check
     size: 0

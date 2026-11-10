@@ -1,9 +1,11 @@
 meta:
   id: avi
   title: Microsoft AVI file
+  file-extension: avi
   xref:
     justsolve: AVI
     loc: fdd000059
+    mime: video/x-msvideo
     pronom: fmt/5
     wikidata: Q209054
   tags:

@@ -7,12 +7,13 @@ meta:
     - db3
     - sqlite3
   xref:
-    forensicswiki: SQLite_database_format
+    forensicswiki: sqlite_database_format
     justsolve: SQLite
     loc: fdd000461
     pronom: fmt/729
     wikidata: Q28600453
   license: CC0-1.0
+  ks-version: '0.9'
   imports:
     - /common/vlq_base128_be
   endian: be
@@ -190,7 +191,7 @@ types:
   serials:
     seq:
       - id: entries
-        type: vlq_base128_be
+        type: serial
         repeat: eos
   serial:
     seq:
@@ -206,8 +207,8 @@ types:
         if: code.value >= 12
   column_content:
     params:
-      - id: ser
-        type: struct
+      - id: serial_type
+        type: serial
     seq:
       - id: as_int
         type:
@@ -231,9 +232,6 @@ types:
         size: serial_type.len_content
         encoding: UTF-8
 #        if: _root.text_encoding == encodings::utf_8 and serial_type.is_string
-    instances:
-      serial_type:
-        value: ser.as<serial>
 enums:
   versions:
     1: legacy

@@ -123,7 +123,7 @@ types:
     instances:
       is_valid_service_discovery:
         value: message_id.value == 0xffff8100 and protocol_version == 0x01 and interface_version == 0x01 and message_type == message_type_enum::notification and return_code == return_code_enum::ok
-        doc: auxillary value
+        doc: auxiliary value
         doc-ref: AUTOSAR_PRS_SOMEIPServiceDiscoveryProtocol.pdf - section 4.1.2.1 General Requirements
 
     enums:
