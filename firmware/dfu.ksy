@@ -7,7 +7,7 @@ meta:
 doc: |
   Device Firmware Upgrade files
 
-  Test files: <https://micropython.org/download/espruino_pico/>
+  Test files: <https://micropython.org/download/ESPRUINO_PICO/>
 
   USB ids (vendor/product) can be found at <http://www.linux-usb.org/usb.ids>
 doc-ref: https://raw.githubusercontent.com/micropython/micropython/247d7e2/tools/pydfu.py
