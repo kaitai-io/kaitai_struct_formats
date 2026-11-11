@@ -38,6 +38,7 @@ types:
         repeat: expr
         repeat-expr: _root.header.num_files
   inode:
+    -webide-representation: '{name}'
     params:
       - id: ofs_start
         type: u4
