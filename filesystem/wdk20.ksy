@@ -44,7 +44,9 @@ types:
         type: u4
     seq:
       - id: unknown
-        size: 2
+        size: 1
+      - id: len_inode
+        type: u1
       - id: len_data
         type: u2
       - id: name
