@@ -24,4 +24,9 @@ types:
         size: 16
       - id: version
         size: 16
+        contents: ["5.00TP", 0,0,0,0,0,0,0,0,0,0]
+    instances:
+      version_str:
+        pos: 0x20
+        io: _parent.header._io
         type: strz
