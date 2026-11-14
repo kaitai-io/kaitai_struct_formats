@@ -16,7 +16,8 @@ doc: |
 
   This reverse-engineered parser covers the ordered protobuf field encoding
   observed in the linked macOS 15.4.1 fixtures. It does not accept arbitrary
-  protobuf field reordering or missing fields in create/update headers.
+  protobuf field reordering. Payload-free updates may omit payload length and
+  CRC fields and instead contain nil-property changes (protobuf field 7).
   Trailing header fields are preserved as bytes. CRCs are exposed but not
   validated. Binary plist payloads are preserved for a separate plist parser.
 doc-ref:
@@ -42,8 +43,8 @@ types:
         type: journal_header
         size: len_header
       - id: payload
-        size: 'header.entry_type.value == 2 ? 0 : header.payload_info.len_payload.value'
-        doc: Binary plist bytes, absent for observed deletion records
+        size: 'header.entry_type.value == 2 or header.payload_info.next_field_key != 0x28 ? 0 : header.payload_info.len_payload.value'
+        doc: Binary plist bytes, absent for deletions and nil-property-only updates
   journal_header:
     seq:
       - id: entry_type_key
@@ -69,15 +70,24 @@ types:
         contents: [0x20]
       - id: payload_version
         type: vlq_base128_le
-      - id: len_payload_key
-        contents: [0x28]
+      - id: next_field_key
+        type: u1
+        valid:
+          any-of: [0x28, 0x3a]
+        doc: Field 5 introduces a payload length; field 7 starts nil-property-only changes
       - id: len_payload
         type: vlq_base128_le
+        if: next_field_key == 0x28
       - id: payload_crc_key
         contents: [0x30]
+        if: next_field_key == 0x28
       - id: payload_crc
         type: vlq_base128_le
+        if: next_field_key == 0x28
         doc: CRC-32/ISO-HDLC of the payload
       - id: trailing_fields
         size-eos: true
-        doc: Additional protobuf fields, e.g. repeated field 7 (nil properties)
+        doc: |
+          Remaining protobuf bytes. For next_field_key 0x3a these start with
+          the first nil-property string length; the field key was already read.
+          Otherwise these contain additional fields, e.g. repeated field 7.
