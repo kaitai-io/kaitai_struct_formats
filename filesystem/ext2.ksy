@@ -39,12 +39,20 @@ types:
         type: u4
       - id: r_blocks_count
         type: u4
+        valid:
+          max: blocks_count
       - id: free_blocks_count
         type: u4
+        valid:
+          max: blocks_count
       - id: free_inodes_count
         type: u4
+        valid:
+          max: inodes_count
       - id: first_data_block
         type: u4
+        valid:
+          any-of: [0, 1]
       - id: log_block_size
         type: u4
       - id: log_frag_size
@@ -79,8 +87,11 @@ types:
         type: u4
       - id: creator_os
         type: u4
+        enum: os
       - id: rev_level
         type: u4
+        valid:
+          any-of: [0, 1]
       - id: def_resuid
         type: u2
       - id: def_resgid
@@ -90,6 +101,8 @@ types:
         type: u4
       - id: inode_size
         type: u2
+        valid:
+          max: block_size
       - id: block_group_nr
         type: u2
       - id: feature_compat
@@ -129,6 +142,7 @@ types:
         repeat-expr: 4
       - id: def_hash_version
         type: u1
+        enum: hashes
     instances:
       block_size:
         value: 1024 << log_block_size
@@ -142,6 +156,19 @@ types:
         1: act_continue
         2: act_ro
         3: act_panic
+      os:
+        0: linux
+        1: hurd
+        2: masix
+        3: freebsd
+        4: lites
+      hashes:
+        0: legacy
+        1: half_md4
+        2: tea
+        3: legacy_unsigned
+        4: half_md4_unsigned
+        5: tea_unsigned
   # https://www.nongnu.org/ext2-doc/ext2.html#BLOCK-GROUP-DESCRIPTOR-STRUCTURE
   # https://web.archive.org/web/20160804172310/http://virtualblueness.net/Ext2fs-overview/Ext2fs-overview-0.1-7.html
   bgd:
