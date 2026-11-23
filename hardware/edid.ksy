@@ -56,12 +56,22 @@ seq:
   - id: std_timings
     size: 2
     type: std_timing
+    repeat: expr
+    repeat-expr: 8
     doc: |
       Array of descriptions of so called "standard timings", which are
       used to specify up to 8 additional timings not included in
       "established timings".
+  - id: eighteen_byte_descriptors
+    size: 18
+    type: dtd_timing
     repeat: expr
-    repeat-expr: 8
+    repeat-expr: 4
+    doc: |
+      Array of 18 byte descriptors, which the first of them shall be
+      Detailed Timing Descriptor reflecting Preferred Timing Mode and
+      each of the rest is either a Detailed Timing Descriptor or
+      a Display Descriptor.
 types:
   chromacity_info:
     doc: |
@@ -257,6 +267,193 @@ types:
         1: ratio_4_3
         2: ratio_5_4
         3: ratio_16_9
+  dtd_timing:
+    seq:
+      - id: pixel_clock_mod
+        type: u2
+      - id: horiz_active_pixels_lo_b8
+        type: u1
+      - id: horiz_blanking_lo_b8
+        type: u1
+      - id: horiz_active_pixels_hi_b4
+        type: b4
+      - id: horiz_blanking_hi_b4
+        type: b4
+      - id: vert_active_lines_lo_b8
+        type: u1
+      - id: vert_blanking_lo_b8
+        type: u1
+      - id: vert_active_lines_hi_b4
+        type: b4
+      - id: vert_blanking_hi_b4
+        type: b4
+      - id: horiz_front_porch_lo_b8
+        type: u1
+      - id: horiz_sync_pulse_lo_b8
+        type: u1
+      - id: vert_front_porch_lo_b4
+        type: b4
+      - id: vert_sync_pulse_lo_b4
+        type: b4
+      - id: horiz_front_porch_hi_b2
+        type: b2
+      - id: horiz_sync_pulse_hi_b2
+        type: b2
+      - id: vert_front_porch_hi_b2
+        type: b2
+      - id: vert_sync_pulse_hi_b2
+        type: b2
+      - id: horiz_image_size_lo_b8
+        type: u1
+      - id: vert_image_size_lo_b8
+        type: u1
+      - id: horiz_image_size_hi_b4
+        type: b4
+      - id: vert_image_size_hi_b4
+        type: b4
+      - id: horiz_border_pixels
+        type: u1
+        doc: |
+          Right Horizontal Border or Left Horizontal Border
+        -unit: px
+      - id: vert_border_lines
+        type: u1
+        doc: |
+          Top Vertical Border or Bottom Vertical Border
+        -unit: lines
+      - id: dtd_features
+        type: dtd_features_bitmap
+    instances:
+      bytes_lookahead:
+        pos: 0
+        size: 2
+      is_dtd:
+        value: bytes_lookahead != [0x00, 0x00]
+      pixel_clock:
+        value: pixel_clock_mod * 10000
+        if: is_dtd
+        doc: Pixel clock
+        -unit: Hz
+      horiz_active_pixels:
+        value: (horiz_active_pixels_hi_b4 << 8) | horiz_active_pixels_lo_b8
+        if: is_dtd
+        doc: Horizontal active pixels
+        -unit: px
+      horiz_blanking:
+        value: (horiz_blanking_hi_b4 << 8) | horiz_blanking_lo_b8
+        if: is_dtd
+        doc: Horizontal blanking
+        -unit: px
+      vert_active_lines:
+        value: (vert_active_lines_hi_b4 << 8) | vert_active_lines_lo_b8
+        if: is_dtd
+        doc: Vertical active pixels
+        -unit: px
+      vert_blanking:
+        value: (vert_blanking_hi_b4 << 8) | vert_blanking_lo_b8
+        if: is_dtd
+        doc: Vertical blanking
+        -unit: px
+      horiz_front_porch:
+        value: (horiz_front_porch_hi_b2 << 8) | horiz_front_porch_lo_b8
+        if: is_dtd
+        doc: Horizontal front porch
+        -unit: px
+      horiz_sync_pulse:
+        value: (horiz_sync_pulse_hi_b2 << 8) | horiz_sync_pulse_lo_b8
+        if: is_dtd
+        doc: Horizontal sync pulse width
+        -unit: px
+      vert_front_porch:
+        value: (vert_front_porch_hi_b2 << 4) | vert_front_porch_lo_b4
+        if: is_dtd
+        doc: Vertical front porch
+        -unit: px
+      vert_sync_pulse:
+        value: (vert_sync_pulse_hi_b2 << 4)| vert_sync_pulse_lo_b4
+        if: is_dtd
+        doc: Vertical sync pulse width
+        -unit: px
+      horiz_image_size:
+        value: (horiz_image_size_hi_b4 << 8) | horiz_image_size_lo_b8
+        if: is_dtd
+        doc: Horizontal image size
+        -unit: mm
+      vert_image_size:
+        value: (vert_image_size_hi_b4 << 8) | vert_image_size_lo_b8
+        if: is_dtd
+        doc: Vertical image size
+        -unit: mm
+  dtd_features_bitmap:
+    seq:
+      - id: is_interlaced
+        type: b1
+      - id: stereo_viewing_support_mod
+        type: b2
+        doc: |
+          Upper 2 bits of Stereo Viewing Support
+      - id: is_digital_sync
+        type: b1
+      - id: sync_type_mod
+        type: b1
+      - id: serration_mod
+        type: b1
+      - id: horiz_sync_polarity_mod
+        type: b1
+      - id: stereo_viewing_support_bit
+        type: b1
+        doc: |
+          Lowest bit of Stereo Viewing Support
+    instances:
+      stereo_viewing_support:
+        value: stereo_viewing_support_mod != 0x00
+      stereo_viewing_mode:
+        value: stereo_viewing_support_bit.to_i | (stereo_viewing_support_mod << 1)
+        enum: stereo_viewing_modes
+        if: stereo_viewing_support
+      analog_sync_type:
+        value: sync_type_mod
+        enum: analog_sync_types
+        if: not is_digital_sync
+      digital_sync_type:
+        value: sync_type_mod
+        enum: digital_sync_types
+        if: is_digital_sync
+      with_serration:
+        value: serration_mod
+        if: not (sync_type_mod == true and is_digital_sync)
+      vert_sync_polarity:
+        value: serration_mod
+        enum: polarity
+        if: sync_type_mod == true and is_digital_sync
+      horiz_sync_polarity:
+        value: horiz_sync_polarity_mod
+        enum: polarity
+        if: is_digital_sync
+      sync_on_lines:
+        value: horiz_sync_polarity_mod
+        enum: sync_on_lines_modes
+        if: not is_digital_sync
+    enums:
+      sync_on_lines_modes:
+        0: sync_only_on_green
+        1: sync_on_each_rgb
+      polarity:
+        0: negative
+        1: positive
+      analog_sync_types:
+        0: analog_composite
+        1: bipolar_analog_composite
+      digital_sync_types:
+        0: digital_composite
+        1: digital_separate
+      stereo_viewing_modes:
+        2: field_seq_right_during_stereo_sync
+        4: field_seq_left_during_stereo_sync
+        3: two_way_interleaved_right_on_even
+        5: two_way_interleaved_left_on_even
+        6: four_way_interleaved
+        7: side_by_side_interleaved
 instances:
   mfg_id_ch1:
     value: '(mfg_bytes & 0b0111110000000000) >> 10'
@@ -264,8 +461,10 @@ instances:
     value: '(mfg_bytes & 0b0000001111100000) >> 5'
   mfg_id_ch3:
     value: '(mfg_bytes & 0b0000000000011111)'
-  mfg_str:
-    value: '[mfg_id_ch1 + 0x40, mfg_id_ch2 + 0x40, mfg_id_ch3 + 0x40].as<bytes>.to_s("ASCII")'
+# commented out until C++ and GraphViz target generators
+# correctly handle this
+#  mfg_str:
+#    value: '[mfg_id_ch1 + 0x40, mfg_id_ch2 + 0x40, mfg_id_ch3 + 0x40].as<bytes>.to_s("ASCII")'
   mfg_year:
     value: mfg_year_mod + 1990
   gamma:
