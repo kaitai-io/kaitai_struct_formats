@@ -7,7 +7,7 @@ meta:
 doc: |
     Nix Archive (NAR) format. A simple, reproducible binary archive
     format used by the Nix package manager to serialize file system objects.
-doc-ref: 'https://nixos.org/manual/nix/stable/command-ref/nix-store.html#nar-format'
+doc-ref: https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/doc/manual/source/protocols/nix-archive/index.md Git tag "2.36.0"
 
 seq:
   - id: magic
