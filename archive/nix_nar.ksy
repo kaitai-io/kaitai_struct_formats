@@ -2,6 +2,7 @@ meta:
   id: nix_nar
   title: Nix Archive (NAR)
   file-extension: nar
+  license: MIT
   endian: le
 doc: |
     Nix Archive (NAR) format. A simple, reproducible binary archive
