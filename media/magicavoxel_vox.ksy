@@ -41,6 +41,9 @@ types:
             'chunk_type::xyzi': xyzi
             'chunk_type::rgba': rgba
             'chunk_type::matt': matt
+            'chunk_type::ntrn': ntrn
+            'chunk_type::nshp': nshp
+            'chunk_type::ngrp': ngrp
       - id: children_chunks
         if: num_bytes_of_children_chunks != 0
         type: chunk
@@ -145,6 +148,78 @@ types:
         value: '(property_bits & 64) != 0'
       has_is_total_power:
         value: '(property_bits & 128) != 0'
+  ntrn:
+    seq:
+      - id: node_id
+        type: u4
+      - id: attributes
+        type: dict
+      - id: child_node_id
+        type: u4
+      - id: reserved_id
+        type: u4
+      - id: layer_id
+        type: u4
+      - id: num_frames
+        type: u4
+      - id: frames
+        type: dict
+        repeat: expr
+        repeat-expr: num_frames
+  nshp:
+    seq:
+      - id: node_id
+        type: u4
+      - id: attributes
+        type: dict
+      - id: num_models
+        type: u4
+      - id: models
+        type: model
+        repeat: expr
+        repeat-expr: num_models
+    types:
+      model:
+        seq:
+          - id: model_id
+            type: u4
+          - id: attributes
+            type: dict
+  ngrp:
+    seq:
+      - id: node_id
+        type: u4
+      - id: attributes
+        type: dict
+      - id: num_children
+        type: u4
+      - id: children
+        type: u4
+        repeat: expr
+        repeat-expr: num_children
+  dict:
+    seq:
+      - id: num_pairs
+        type: u4
+      - id: pairs
+        type: pair
+        repeat: expr
+        repeat-expr: num_pairs
+    types:
+      pair:
+        seq:
+          - id: key
+            type: pstring
+          - id: value
+            type: pstring
+  pstring:
+    seq:
+      - id: len
+        type: u4
+      - id: bytes
+        type: str
+        encoding: ascii
+        size: len
 enums:
   chunk_type:
     0x4d41494e: main
@@ -153,6 +228,9 @@ enums:
     0x58595a49: xyzi
     0x52474241: rgba
     0x4d415454: matt
+    0x6e54524e: ntrn
+    0x6e534850: nshp
+    0x6e475250: ngrp
   material_type:
     0: diffuse
     1: metal
