@@ -12,9 +12,9 @@ doc-ref: 'https://nixos.org/manual/nix/stable/command-ref/nix-store.html#nar-for
 seq:
   - id: magic
     type: padded_str
-    doc: "Magic string, must be 'nix-archive-1'."
     valid:
       expr: _.body == 'nix-archive-1'
+    doc: "Magic string, must be 'nix-archive-1'."
   - id: root_node
     type: node
     doc: "The root of the archive, which is always a single node."
@@ -28,8 +28,8 @@ types:
       - id: len_str
         type: u8
       - id: body
-        type: str
         size: len_str
+        type: str
         encoding: 'ascii'
       - id: padding
         size: (8 - (len_str % 8)) % 8
@@ -39,14 +39,14 @@ types:
     seq:
       - id: open_paren
         type: padded_str
-        doc: "Must be '(', a token starting the node definition."
         valid:
           expr: _.body == '('
+        doc: "Must be '(', a token starting the node definition."
       - id: type_key
         type: padded_str
-        doc: "Must be 'type'."
         valid:
           expr: _.body == 'type'
+        doc: "Must be 'type'."
       - id: type_val
         type: padded_str
         doc: "The type of the node: 'regular', 'directory', or 'symlink'."
@@ -132,14 +132,14 @@ types:
         seq:
           - id: key
             type: padded_str
-            doc: "Attribute key, e.g., 'executable' or 'contents'."
             valid:
               expr: _.body == 'executable' or _.body == 'contents'
+            doc: "Attribute key, e.g., 'executable' or 'contents'."
           - id: value
             type: padded_str
-            if: 'key.body == "executable"'
             valid:
               expr: _.body == ''
+            if: 'key.body == "executable"'
             doc: "Must be '' if key is 'executable'."
       file_content:
         doc: "The raw data of the file, prefixed by length."
@@ -166,9 +166,9 @@ types:
     seq:
       - id: target_key
         type: padded_str
-        doc: "Must be 'target'."
         valid:
           expr: _.body == 'target'
+        doc: "Must be 'target'."
       - id: target_val
         type: padded_str
         doc: "The destination path of the symlink."
