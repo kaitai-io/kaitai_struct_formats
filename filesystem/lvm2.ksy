@@ -13,17 +13,17 @@ meta:
     - filesystem
     - linux
   license: GFDL-1.3-or-later
-  encoding: ascii
+  encoding: ASCII
   endian: le
 doc: |
   ### Building a test file
 
   ```
-  dd if=/dev/zero of=image.img bs=512 count=$(( 4 * 1024 * 2 ))
+  dd if=/dev/zero of=image.img bs=512 count=$(( 8 * 1024 * 2 ))
   sudo losetup /dev/loop1 image.img
   sudo pvcreate /dev/loop1
   sudo vgcreate vg_test /dev/loop1
-  sudo lvcreate --name lv_test1 vg_test
+  sudo lvcreate --name lv_test1 vg_test -l100%FREE
   sudo losetup -d /dev/loop1
   ```
 doc-ref: https://github.com/libyal/libvslvm/blob/main/documentation/Logical%20Volume%20Manager%20(LVM)%20format.asciidoc
@@ -84,12 +84,12 @@ types:
               - id: data_area_descriptors
                 type: data_area_descriptor
                 repeat: until
-                repeat-until: _.size != 0 and _.offset != 0
+                repeat-until: _.size == 0 and _.offset == 0
                 doc: "The last descriptor in the list is terminator and consists of 0-byte values."
               - id: metadata_area_descriptors
                 type: metadata_area_descriptor
                 repeat: until
-                repeat-until: _.size != 0 and _.offset != 0
+                repeat-until: _.size == 0 and _.offset == 0
             types:
               data_area_descriptor:
                 seq:
@@ -103,6 +103,7 @@ types:
                       Can be 0. [yellow-background]*Does this represent all remaining available space?*
                 instances:
                   data:
+                    io: _root._io
                     pos: offset
                     size: size
                     type: str
@@ -117,6 +118,7 @@ types:
                     doc: Value in bytes
                 instances:
                   data:
+                    io: _root._io
                     pos: offset
                     size: size
                     type: metadata_area
@@ -130,7 +132,7 @@ types:
                   metadata_area_header:
                     seq:
                       - id: checksum
-                        type: metadata_area_header
+                        type: u4
                         doc: "CRC-32 for offset 4 to end of the metadata area header"
                       - id: signature
                         contents: " LVM2 x[5A%r0N*>"
@@ -145,15 +147,16 @@ types:
                         type: raw_location_descriptor
                         doc: "The last descriptor in the list is terminator and consists of 0-byte values."
                         repeat: until
-                        repeat-until: _.offset != 0 and _.size != 0 and _.checksum != 0 # and _.flags != 0
+                        repeat-until: _.offset == 0 and _.size == 0 and _.checksum == 0 # and _.flags == 0
                     instances:
-                      metadata:
+                      metadata_area:
+                        io: _root._io
                         pos: metadata_area_offset
                         size: metadata_area_size
                     types:
                       raw_location_descriptor:
                         -orig-id: "raw_locn"
-                        doc: "The data area size can be 0. It is assumed it represents the remaining  available data."
+                        doc: "The data area size can be 0. It is assumed it represents the remaining available data."
                         seq:
                           - id: offset
                             type: u8
@@ -170,3 +173,10 @@ types:
                         enums:
                           raw_location_descriptor_flags:
                             0x00000001: raw_location_ignored #The raw location descriptor should be ignored.
+                        instances:
+                          metadata:
+                            io: _root._io
+                            pos: offset + _parent.metadata_area_offset
+                            size: size
+                            type: strz
+                            if: size != 0
