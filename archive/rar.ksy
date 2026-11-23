@@ -16,9 +16,10 @@ meta:
       - fmt/613 # RAR 5.0
     wikidata: Q243303
   license: CC0-1.0
-  ks-version: 0.7
+  ks-version: '0.10'
   imports:
     - /common/dos_datetime
+    - /common/vlq_base128_le
   endian: le
 doc: |
   RAR is a archive format used by popular proprietary RAR archiver,
@@ -148,8 +149,52 @@ types:
 #       variable size
 #       if: '_parent.flags & 0x1000 != 0'
   block_v5:
-    {}
-    # not yet implemented
+    doc: |
+      Basic RAR5 block. Every RAR5 block starts with the same fields, so
+      blocks can be walked and skipped without knowing their type. The
+      type-specific header fields and the extra area are kept as raw
+      bytes in `header.rest` for now.
+    doc-ref: https://www.rarlab.com/technote.htm#arcblocks
+    seq:
+      - id: header_crc32
+        type: u4
+        doc: CRC32 of the header data, from `len_header` to the end of the header
+      - id: len_header
+        type: vlq_base128_le
+        doc: Size of the header data, from the block type to the end of the header
+      - id: header
+        size: len_header.value
+        type: block_v5_header
+      - id: data
+        size: header.len_data.value
+        if: header.has_data
+        doc: Data area, e.g. the packed contents of a file
+  block_v5_header:
+    seq:
+      - id: block_type
+        type: vlq_base128_le
+      - id: flags
+        type: vlq_base128_le
+        doc: Common header flags, 0x0001 = extra area present, 0x0002 = data area present
+      - id: len_extra
+        type: vlq_base128_le
+        if: has_extra
+        doc: Size of the extra area at the end of the header
+      - id: len_data
+        type: vlq_base128_le
+        if: has_data
+        doc: Size of the data area that follows the header
+      - id: rest
+        size-eos: true
+        doc: Type-specific header fields followed by the extra area
+    instances:
+      type:
+        value: block_type.value
+        enum: block_types_v5
+      has_extra:
+        value: 'flags.value & 0x0001 != 0'
+      has_data:
+        value: 'flags.value & 0x0002 != 0'
 enums:
   block_types:
     0x72: marker
@@ -162,6 +207,12 @@ enums:
     0x79: old_style_authenticity_info_79
     0x7a: subblock
     0x7b: terminator
+  block_types_v5:
+    1: main_archive_header
+    2: file_header
+    3: service_header
+    4: archive_encryption_header
+    5: end_of_archive_header
   oses:
     0: ms_dos
     1: os_2
