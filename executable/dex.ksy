@@ -624,6 +624,175 @@ types:
           The offset should be to a location in the data section.
 
           The format of the data is specified by "code_item" below.
+    instances:
+      method_body:
+        io: _root._io
+        pos: code_off.value
+        type: code_item
+  code_item:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#code-item'
+    seq:
+      - id: register_count
+        -orig-id: registers_size
+        type: u2
+        doc: The number of registers used by this code.
+      - id: ins_size
+        type: u2
+        doc: |
+          The number of words of incoming arguments to the method that this
+          code is for.
+      - id: outs_size
+        type: u2
+        doc: |
+          The number of words of outgoing argument space required by this
+          code for method invocation.
+      - id: tries_size
+        type: u2
+        doc: |
+          The number of try_items for this instance.
+
+          If non-zero, then these appear as the tries array just after the
+          insns in this instance.
+      - id: debug_info_off
+        type: u4
+        doc: |
+          Offset from the start of the file to the debug info (line numbers +
+          local variable info) sequence for this code, or 0 if there simply is
+          no information.
+
+          The offset, if non-zero, should be to a location in the data section.
+
+          The format of the data is specified by "debug_info_item".
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#debug-info-item'
+      - id: ops_size
+        -orig-id: insns_size
+        type: u4
+        doc: Size of the instructions list, in 16-bit code units.
+      - id: ops
+        -orig-id: insns
+        size: ops_size * 2
+        doc: |
+          Actual array of bytecode.
+
+          The format of code in an insns array is specified by the companion
+          document "Dalvik bytecode".
+
+          Note that though this is defined as an array of ushort, there are some
+          internal structures that prefer four-byte alignment. Also, if this
+          happens to be in an endian-swapped file, then the swapping is only
+          done on individual ushorts and not on the larger internal structures.
+        doc-ref: 'https://source.android.com/devices/tech/dalvik/dalvik-bytecode'
+      - id: padding
+        if: tries_size != 0 and ops_size % 2 == 1
+        contents:
+          - 0x00
+          - 0x00
+        doc: |
+          Two bytes of padding to make tries four-byte aligned.
+
+          This element is only present if tries_size is non-zero and ops_size
+          is odd.
+      - id: tries
+        if: tries_size != 0
+        type: try_item
+        repeat: expr
+        repeat-expr: tries_size
+        doc: |
+          Array indicating where in the code exceptions are caught and how to
+          handle them.
+
+          Elements of the array must be non-overlapping in range and in order
+          from low to high address.
+
+          This element is only present if tries_size is non-zero.
+      - id: handlers
+        if: tries_size != 0
+        type: encoded_catch_handler_list
+        doc: |
+          Bytes representing a list of lists of catch types and associated
+          handler addresses.
+
+          Each try_item has a byte-wise offset into this structure.
+
+          This element is only present if tries_size is non-zero.
+  try_item:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#type-item'
+    seq:
+      - id: start_addr
+        type: u4
+        doc: |
+          Start address of the block of code covered by this entry.
+
+          The address is a count of 16-bit code units to the start of the first
+          covered instruction.
+      - id: insn_count
+        type: u2
+        doc: |
+          Number of 16-bit code units covered by this entry.
+
+          The last code unit covered (inclusive) is start_addr + insn_count - 1.
+      - id: handler_off
+        type: u2
+        doc: |
+          Offset in bytes from the start of the associated
+          encoded_catch_hander_list to the encoded_catch_handler for this
+          entry.
+
+          This must be an offset to the start of an encoded_catch_handler.
+  encoded_catch_handler_list:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#encoded-catch-handler'
+    seq:
+      - id: size
+        type: vlq_base128_le
+        doc: Size of this list, in entries.
+      - id: list
+        type: encoded_catch_handler
+        repeat: expr
+        repeat-expr: size.value
+        doc: |
+          Actual list of handler lists, represented directly (not as offsets),
+          and concatenated sequentially.
+  encoded_catch_handler:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#encoded-catch-handler'
+    seq:
+      - id: size
+        type: vlq_base128_le
+        doc: |
+          Number of catch types in this list.
+
+          If non-positive, then this is the negative of the number of catch
+          types, and the catches are followed by a catch-all handler. For
+          example: A size of 0 means that there is a catch-all but no explicitly
+          typed catches. A size of 2 means that there are two explicitly typed
+          catches and no catch-all. And a size of -1 means that there is one
+          typed catch along with a catch-all.
+      - id: handlers
+        type: encoded_type_addr_pair
+        repeat: expr
+        repeat-expr: 'signed_size < 0 ? -signed_size : signed_size'
+        doc: |
+          Stream of abs(size) encoded items, one for each caught type, in the
+          order that the types should be tested.
+      - id: catch_all_addr
+        if: signed_size < 0
+        type: vlq_base128_le
+        doc: |
+          Bytecode address of the catch-all handler.
+
+          This element is only present if size is non-positive.
+    instances:
+      signed_size:
+        value: size.value_signed
+  encoded_type_addr_pair:
+    doc-ref: 'https://source.android.com/devices/tech/dalvik/dex-format#encoded-type-addr-pair'
+    seq:
+      - id: type_idx
+        type: vlq_base128_le
+        doc: |
+          Index into the type_ids list for the type of the exception to catch.
+      - id: addr
+        type: vlq_base128_le
+        doc: Bytecode address of the associated exception handler.
   class_data_item:
     seq:
       - id: static_fields_size
