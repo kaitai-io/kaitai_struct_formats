@@ -49,6 +49,9 @@ types:
         doc: "Must be 'type'."
       - id: type_val
         type: padded_str
+        valid:
+          # https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/src/libutil/archive.cc#L289 (Git tag "2.36.0")
+          expr: _.body == 'regular' or _.body == 'directory' or _.body == 'symlink'
         doc: "The type of the node: 'regular', 'directory', or 'symlink'."
       - id: body
         type:
