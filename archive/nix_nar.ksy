@@ -133,33 +133,29 @@ types:
   type_regular:
     doc: "A regular file node."
     seq:
-      # Read attributes (like 'executable') until we hit 'contents'
-      - id: attributes
-        type: reg_attribute
-        repeat: until
-        repeat-until: _.key.body == "contents"
-      # After the 'contents' token, read the file data
+      - id: first_key
+        type: padded_str
+        valid:
+          expr: _.body == 'executable' or _.body == 'contents'
+        doc: Either `executable` or `contents`.
+      - id: executable_val
+        type: padded_str
+        valid:
+          expr: _.body == ''
+        if: is_executable
+        doc: Must be empty.
+      - id: contents_key
+        type: padded_str
+        valid:
+          expr: _.body == 'contents'
+        if: is_executable
       - id: file_data
         type: file_content
     instances:
       is_executable:
-        value: 'attributes[0].key.body == "executable"'
-        doc: "True if the file has the 'executable' attribute."
+        value: first_key.body == 'executable'
+        doc: True if the file has the `executable` attribute.
     types:
-      reg_attribute:
-        doc: "An attribute of the file, e.g., 'executable' or 'contents'."
-        seq:
-          - id: key
-            type: padded_str
-            valid:
-              expr: _.body == 'executable' or _.body == 'contents'
-            doc: "Attribute key, e.g., 'executable' or 'contents'."
-          - id: value
-            type: padded_str
-            valid:
-              expr: _.body == ''
-            if: 'key.body == "executable"'
-            doc: "Must be '' if key is 'executable'."
       file_content:
         doc: "The raw data of the file, prefixed by length."
         seq:
