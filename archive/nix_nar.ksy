@@ -161,11 +161,8 @@ types:
         seq:
           - id: len_contents
             type: u8
-          # I got this trick from the kaitai gitter
-          # on how to get the absolute position of something.
-          # This fully relies on the property of instances that they are lazily evaluated
-          # and cached (once you first invoke an instance, it gets evaluated, the value is cached and will not change).
-          # https://matrix.to/#/!gxFYJoZuKcRouBfhlb:gitter.im/$f06uOlpq61a1TMnxcMaEH7dWnqdJiJHiRbYqVXiWipg?via=gitter.im&via=matrix.org&via=matrix.adawesome.tech
+          # The `if` is always false, so this field reads nothing. Its only
+          # purpose is to evaluate `nar_offset` right before `contents`.
           - size: 0
             if: nar_offset < 0
           - id: contents
@@ -175,6 +172,10 @@ types:
         instances:
           nar_offset:
             value: _io.pos
+            doc: |
+              Offset of `contents` in the stream. It corresponds to
+              [`narOffset`](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/src/libutil/include/nix/util/source-accessor.hh#L134-L138)
+              in Nix.
 
   type_symlink:
     doc: "A symbolic link node."
