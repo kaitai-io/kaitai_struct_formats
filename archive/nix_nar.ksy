@@ -34,6 +34,18 @@ types:
       - id: padding
         size: (8 - (len_str % 8)) % 8
 
+  padded_bytes:
+    doc: |
+      A byte sequence, prefixed with its length (u8le) and
+      padded with null bytes to the next 8-byte boundary.
+    seq:
+      - id: len_body
+        type: u8
+      - id: body
+        size: len_body
+      - id: padding
+        size: (8 - (len_body % 8)) % 8
+
   node:
     doc: "A single filesystem node (file, directory, or symlink)."
     seq:
@@ -94,8 +106,12 @@ types:
               expr: _.body == 'name'
             if: 'kind.body == "entry"'
           - id: name
-            type: padded_str
+            type: padded_bytes
             if: 'kind.body == "entry"'
+            doc: |
+              Name of the entry, as raw bytes. Nix 2.36.0
+              [doesn't check the encoding](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/src/libutil/archive.cc#L245-L248),
+              and real NARs contain names that aren't valid UTF-8.
           - id: node_key
             type: padded_str
             valid:
@@ -173,5 +189,7 @@ types:
           expr: _.body == 'target'
         doc: "Must be 'target'."
       - id: target_val
-        type: padded_str
-        doc: "The destination path of the symlink."
+        type: padded_bytes
+        doc: |
+          The destination path of the symlink, as raw bytes. Nix 2.36.0
+          [doesn't check the encoding](https://github.com/NixOS/nix/blob/88907193c54fcd5184cf59d14b693188e2875168/src/libutil/archive.cc#L280-L282).
